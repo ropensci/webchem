@@ -131,7 +131,7 @@ Without the fantastic web services `webchem` wouldn't be here.
 Therefore, kudos to the web service providers and developers!
 
 ### Related Projects
-If you're more familiar with python than with R, you should check out [Matt Swains](https://github.com/mcs07) repositories! [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
+If you're more familiar with python than with R, you should check out [Matt Swains](https://github.com/mcs07) repositories - [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
 
 
 ### Contributors
