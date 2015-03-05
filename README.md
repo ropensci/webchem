@@ -202,6 +202,6 @@ If you're more familiar with python than with R, you should check out [Matt Swai
 ### Meta
 
 * Please [report any issues, bugs or feature requests](https://github.com/edild/webchem/issues).
-* License: <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">webchem - a R package to retrieve chemical information from  the web</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/EDiLD/webchem" property="cc:attributionName" rel="cc:attributionURL">Eduard Szöcs</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+* License: MIT
 
 

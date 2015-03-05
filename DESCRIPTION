@@ -8,7 +8,7 @@ Maintainer: Eduard Szoecs <eduardszoecs@gmail.com>
 Description: Chemical information from around the web. This package interacts with a suite of web APIs for chemical information.
 URL: https://github.com/EDiLD/webchem
 BugReports: https://github.com/EDiLD/webchem/issues
-License: CC BY 4.0
+License: MIT + file LICENSE
 LazyLoad: yes
 LazyData: yes
 Imports:
