@@ -1,0 +1,16 @@
+# webchem
+[![Build Status](https://travis-ci.org/EDiLD/esmisc.png)](https://travis-ci.org/EDiLD/webchem)
+
+`webchem` is a R package chemical information from  the web. This package interacts with a suite of web APIs for chemical information.
+
+
+ containing misc functions of Eduard Szöcs.
+
+
+
+
+
+### Notes
+Chemspider needs a security token. Please register at RSC (https://www.rsc.org/rsc-id/register) for a security token.
+
+

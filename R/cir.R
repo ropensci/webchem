@@ -90,6 +90,7 @@
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
 #' @examples
+#' \dontrun{
 #' cir_query('Triclosan', 'cas')
 #' cir_query("3380-34-5", 'cas')
 #' cir_query("3380-34-5", 'cas', resolver = 'cas_number')
@@ -100,7 +101,7 @@
 #'
 #' reps <- c('smiles', 'cas', 'stdinchikey', 'mw', 'formula', 'xlogp2')
 #' sapply(reps, function(x) cir_query('Triclosan', x, first = TRUE))
-#'
+#'}
 #' @export
 cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
                       first = FALSE, verbose = TRUE, ...){
@@ -124,6 +125,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   }
   if(length(out) == 0){
     warning('No representation found... Returning NA.')
+    out <- NA
   }
   if(first)
     out <- out[1]

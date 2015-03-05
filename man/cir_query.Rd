@@ -99,6 +99,7 @@ A interface to the Chemical Identifier Resolver (CIR).
  }
 }
 \examples{
+\dontrun{
 cir_query('Triclosan', 'cas')
 cir_query("3380-34-5", 'cas')
 cir_query("3380-34-5", 'cas', resolver = 'cas_number')
@@ -109,6 +110,7 @@ cir_query('Triclosan', 'xlogp2')
 
 reps <- c('smiles', 'cas', 'stdinchikey', 'mw', 'formula', 'xlogp2')
 sapply(reps, function(x) cir_query('Triclosan', x, first = TRUE))
+}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
