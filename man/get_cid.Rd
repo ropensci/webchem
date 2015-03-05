@@ -22,7 +22,7 @@ a character vector.
 Return CompoundID (CID) for a search query, see \url{https://pubchem.ncbi.nlm.nih.gov/}.
 }
 \examples{
-\dontrun{
+\donttest{
 get_cid('Triclosan')
 }
 }

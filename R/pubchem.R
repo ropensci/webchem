@@ -12,7 +12,7 @@
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' get_cid('Triclosan')
 #' }
 get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
@@ -63,7 +63,7 @@ get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
 #' @seealso \code{\link{get_cid}} to retrieve Pubchem IDs.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' cid <- get_cid('Triclosan')
 #' cid_compinfo(cid[1])
 #' }

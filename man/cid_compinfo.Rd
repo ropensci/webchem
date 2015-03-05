@@ -28,7 +28,7 @@ BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount
 Convert CompoundID (CID) to SMILES, see \url{https://pubchem.ncbi.nlm.nih.gov/}
 }
 \examples{
-\dontrun{
+\donttest{
 cid <- get_cid('Triclosan')
 cid_compinfo(cid[1])
 }

@@ -29,7 +29,7 @@ A security token is neeeded. Please register at RSC
 for a security token.
 }
 \examples{
-\dontrun{
+\donttest{
 token <- '<YOUR-SECURITY-TOKEN>'
 # convert CAS to CSID
 csid <- get_csid("Triclosan", token = token)

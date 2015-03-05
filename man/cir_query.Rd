@@ -99,7 +99,7 @@ A interface to the Chemical Identifier Resolver (CIR).
  }
 }
 \examples{
-\dontrun{
+\donttest{
 cir_query('Triclosan', 'cas')
 cir_query("3380-34-5", 'cas')
 cir_query("3380-34-5", 'cas', resolver = 'cas_number')

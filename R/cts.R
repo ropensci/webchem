@@ -9,7 +9,7 @@
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' out <- cts_compinfo("DNYVWBJVOYZRCX-RNGZQALNSA-N")
 #' str(out)
 #' out[1:5]
@@ -52,7 +52,7 @@ cts_compinfo <- function(inchikey, verbose = FALSE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 #' str(out)
 #' out[1:5]

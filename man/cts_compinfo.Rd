@@ -20,7 +20,7 @@ a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and ex
 Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
 }
 \examples{
-\dontrun{
+\donttest{
 out <- cts_compinfo("DNYVWBJVOYZRCX-RNGZQALNSA-N")
 str(out)
 out[1:5]

@@ -19,7 +19,7 @@
 #' retrieve compound details from csid.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' token <- '<YOUR-SECURITY-TOKEN>'
 #' get_csid("Triclosan", token = token)
 #' # [1] "5363"
@@ -74,7 +74,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' \code{\link{csid_extcompinfo}} for extended compound information.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' token <- '<YOUR-SECURITY-TOKEN>'
 #' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
@@ -127,7 +127,7 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' \code{\link{csid_compinfo}} for extended compound information.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' token <- '<YOUR-SECURITY-TOKEN>'
 #' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)

@@ -27,7 +27,7 @@ a character vector.
 Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 }
 \examples{
-\dontrun{
+\donttest{
 cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 str(out)
 out[1:5]
