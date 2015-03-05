@@ -1,0 +1,19 @@
+language: c
+script: ./travis-tool.sh run_tests
+before_script:
+- curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+- chmod 755 ./travis-tool.sh
+- ./travis-tool.sh bootstrap
+- ./travis-tool.sh install_deps
+# Configuration options below this line are suggested options.
+notifications:
+email:
+recipients:
+- szoecs@uni-landau.de
+on_success: never
+on_failure: always
+# One can also restrict the branches to test, see
+# http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build
+branches:
+only:
+- master

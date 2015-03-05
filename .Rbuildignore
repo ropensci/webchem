@@ -1,2 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.gitignore
+.travis.yml
+README.html
+README.Rmd
+README.md
