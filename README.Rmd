@@ -25,7 +25,7 @@ PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.go
 Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
 
 #### API keys
-Chemspider functions require a security token. 
+ChemSpider functions require a security token. 
 Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
 
 ### Installation
@@ -62,7 +62,7 @@ cir_query('3380-34-5', 'smiles')
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 ```
 
-Convert InChiKey (Triclosan) to Chemspider ID and retrieve the number of rings
+Convert InChiKey (Triclosan) to ChemSpider ID and retrieve the number of rings
 ```{r}
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'chemspider_id', first = TRUE)
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
@@ -117,7 +117,7 @@ cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
 ```
 
 
-Moreover, we can a lot of information stored in the CTS database uisng InChIkey
+Moreover, we can a lot of information stored in the CTS database using InChIkey
 ```{r}
 info <- cts_compinfo(inchikey = inchk)
 info[1:5]
@@ -131,7 +131,7 @@ Without the fantastic web services `webchem` wouldn't be here.
 Therefore, kudos to the web service providers and developers!
 
 ### Related Projects
-If you're more familar with python than with R, you should check out [Matt Swains](https://github.com/mcs07) repositories! [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
+If you're more familiar with python than with R, you should check out [Matt Swains](https://github.com/mcs07) repositories! [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
 
 
 ### Contributors
