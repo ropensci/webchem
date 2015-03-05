@@ -1,0 +1,207 @@
+webchem
+=============
+
+
+[![Build Status](https://travis-ci.org/EDiLD/esmisc.png)](https://travis-ci.org/EDiLD/webchem)
+
+`webchem` is a R package to retrieve chemical information from  the web. 
+This package interacts with a suite of web APIs for chemical information.
+
+
+### Currently implemented in `webchem`
+
+Source | Functions | API Docs | API key
+------ | --------- | -------- | --------
+Chemical Identifier Resolver (CIR) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | [link](https://www.rsc.org/rsc-id/register )
+PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
+
+#### API keys
+Chemspider functions require a security token. 
+Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
+
+### Installation
+#### Install from CRAN (stable)
+`webchem` is currently not available on [CRAN](http://cran.r-project.org/).
+
+#### Install from Github (development)
+
+```r
+install.packages("devtools")
+library("devtools")
+install_github("edild/webchem")
+```
+
+### Quickstart
+
+
+```r
+library("webchem")
+```
+
+#### Chemical Identifier Resolver (CIR)
+
+CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
+Use `first` to return only the first hit.
+
+```r
+cir_query('Triclosan', 'cas')
+#> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
+cir_query('Triclosan', 'cas', first = TRUE)
+#> [1] "3380-34-5"
+cir_query('Triclosan', 'mw')
+#> [1] "289.5451"
+```
+
+Query SMILES and InChIKey from CAS (Triclosan).
+Inputs might by ambiguous and we can specify where to search using `resolver=`.
+
+```r
+cir_query('3380-34-5', 'smiles')
+#> [1] "C1=CC(=CC(=C1OC2=CC=C(C=C2Cl)Cl)O)Cl"
+cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
+#> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
+```
+
+Convert InChiKey (Triclosan) to Chemspider ID and retrieve the number of rings
+
+```r
+cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'chemspider_id', first = TRUE)
+#> [1] "5363"
+cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
+#> [1] "2"
+```
+
+
+#### ChemSpider
+
+
+You'll need a API key:
+
+```r
+token = '<YOUR TOKEN HERE'
+```
+
+Retrieve the ChemSpider ID of Triclosan
+
+```r
+(id <- get_csid('Triclosan', token = token))
+#> [1] "5363"
+```
+
+Use this ID to query information from ChemSpider
+
+```r
+csid_extcompinfo(id, token = token)
+#>                                                                          CSID 
+#>                                                                        "5363" 
+#>                                                                            MF 
+#>                                                      "C_{12}H_{7}Cl_{3}O_{2}" 
+#>                                                                        SMILES 
+#>                                              "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl" 
+#>                                                                         InChI 
+#> "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H" 
+#>                                                                      InChIKey 
+#>                                                   "XEFQLINVKFYRCS-UHFFFAOYAS" 
+#>                                                                   AverageMass 
+#>                                                                    "289.5418" 
+#>                                                               MolecularWeight 
+#>                                                                    "289.5418" 
+#>                                                              MonoisotopicMass 
+#>                                                                  "287.951172" 
+#>                                                                   NominalMass 
+#>                                                                         "288" 
+#>                                                                         ALogP 
+#>                                                                        "5.53" 
+#>                                                                         XLogP 
+#>                                                                           "5" 
+#>                                                                    CommonName 
+#>                                                                   "Triclosan"
+```
+
+
+#### PubChem
+
+Retrieve PubChem CID
+
+```r
+get_cid('Triclosan')
+#>  [1] "5564"     "131203"   "627458"   "15942656" "16220126" "16220128"
+#>  [7] "16220129" "16220130" "18413505" "22947105" "23656593" "24848164"
+#> [13] "25023954" "25023955" "25023956" "25023957" "25023958" "25023959"
+#> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
+#> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
+#> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
+cid <- get_cid('3380-34-5')
+```
+
+Use this CID to retrieve some chemical properties:
+
+```r
+props <- cid_compinfo(cid)
+props$InChIKey
+#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+props$MolecularWeight
+#> [1] "289.541780"
+props$IUPACName
+#> [1] "5-chloro-2-(2,4-dichlorophenoxy)phenol"
+```
+
+
+#### Chemical Translation Service (CTS)
+
+CTS allows to convert from nearly every possible identifier to nearly every possible identifier:
+
+```r
+cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
+#> [1] "5564"
+cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
+#> [1] "5363"
+(inchk <- cts_convert(query = 'Triclosan', from = 'Chemical Name', to = 'inchikey'))
+#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+```
+
+
+Moreover, we can a lot of information stored in the CTS database uisng InChIkey
+
+```r
+info <- cts_compinfo(inchikey = inchk)
+info[1:5]
+#> $inchikey
+#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+#> 
+#> $inchicode
+#> [1] "InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
+#> 
+#> $molweight
+#> [1] 289.5418
+#> 
+#> $exactmass
+#> [1] 287.9512
+#> 
+#> $formula
+#> [1] "C12H7Cl3O2"
+```
+
+
+
+
+### Acknowledgements
+Without the fantastic web services `webchem` wouldn't be here.
+Therefore, kudos to the web service providers and developers!
+
+### Related Projects
+If you're more familar with python than with R, you should check out [Matt Swains](https://github.com/mcs07) repositories! [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
+
+
+### Contributors
+
++ [Eduard Szöcs](https://github.com/EDiLD)
+
+### Meta
+
+* Please [report any issues, bugs or feature requests](https://github.com/edild/webchem/issues).
+* License: <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">webchem - a R package to retrieve chemical information from  the web</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/EDiLD/webchem" property="cc:attributionName" rel="cc:attributionURL">Eduard Szöcs</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+
+
