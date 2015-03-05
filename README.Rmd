@@ -1,16 +1,31 @@
-# webchem
+webchem
+=============
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE, 
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 [![Build Status](https://travis-ci.org/EDiLD/esmisc.png)](https://travis-ci.org/EDiLD/webchem)
 
 `webchem` is a R package chemical information from  the web. This package interacts with a suite of web APIs for chemical information.
 
 
- containing misc functions of Eduard Szöcs.
+## Currently implented in `webchem`
 
-
+Source | Functions | API Docs | API key
+------ | --------- | -------- | --------
+CIR | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | [link](https://www.rsc.org/rsc-id/register )
+PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+CTS | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
 
 
 
 ### Notes
-Chemspider needs a security token. Please register at RSC (https://www.rsc.org/rsc-id/register) for a security token.
+Chemspider functions require a security token. Please register at RSC (https://www.rsc.org/rsc-id/register) for a security token.
 
 
