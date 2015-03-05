@@ -204,4 +204,5 @@ If you're more familiar with python than with R, you should check out [Matt Swai
 * Please [report any issues, bugs or feature requests](https://github.com/edild/webchem/issues).
 * License: MIT
 
+[![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
 
