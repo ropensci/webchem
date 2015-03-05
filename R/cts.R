@@ -43,7 +43,7 @@ cts_compinfo <- function(inchikey, verbose = FALSE, ...){
 #' @import RCurl RJSONIO
 #' @param query character; query ID.
 #' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
-#'  \code{'PubChem CID'}, \code{'PubChem CID'}, \code{'CAS'}.
+#'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
 #' @param to character; type to convert to.
 #' @param first logical; return only first result be returned?
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -68,14 +68,16 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = FALSE, ...){
     message(qurl)
   h <- try(getURL(qurl))
   if(!inherits(h, "try-error")){
-    out <- fromJSON(h)[[1]]$result
-  } else{
+    out <- fromJSON(h)[[1]]
+  } else {
     warning('Problem with web service encountered... Returning NA.')
     out < NA
   }
-  if (length(out) == 0){
-    message("Not found. Returning NA.")
+  if('error' %in% names(out)){
+    message(out['error'], "Returning NA.")
     out <- NA
+  } else {
+    out <- out$result
   }
   return(out)
 }

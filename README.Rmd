@@ -11,21 +11,136 @@ knitr::opts_chunk$set(
 ```
 [![Build Status](https://travis-ci.org/EDiLD/esmisc.png)](https://travis-ci.org/EDiLD/webchem)
 
-`webchem` is a R package chemical information from  the web. This package interacts with a suite of web APIs for chemical information.
+`webchem` is a R package to retrieve chemical information from  the web. 
+This package interacts with a suite of web APIs for chemical information.
 
 
-## Currently implented in `webchem`
+### Currently implemented in `webchem`
 
 Source | Functions | API Docs | API key
 ------ | --------- | -------- | --------
-CIR | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+Chemical Identifier Resolver (CIR) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | [link](https://www.rsc.org/rsc-id/register )
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
-CTS | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
+Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
+
+#### API keys
+Chemspider functions require a security token. 
+Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
+
+### Installation
+#### Install from CRAN (stable)
+`webchem` is currently not available on [CRAN](http://cran.r-project.org/).
+
+#### Install from Github (development)
+```{r eval=FALSE}
+install.packages("devtools")
+library("devtools")
+install_github("edild/webchem")
+```
+
+### Quickstart
+
+```{r}
+library("webchem")
+```
+
+#### Chemical Identifier Resolver (CIR)
+
+CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
+Use `first` to return only the first hit.
+```{r}
+cir_query('Triclosan', 'cas')
+cir_query('Triclosan', 'cas', first = TRUE)
+cir_query('Triclosan', 'mw')
+```
+
+Query SMILES and InChIKey from CAS (Triclosan).
+Inputs might by ambiguous and we can specify where to search using `resolver=`.
+```{r}
+cir_query('3380-34-5', 'smiles')
+cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
+```
+
+Convert InChiKey (Triclosan) to Chemspider ID and retrieve the number of rings
+```{r}
+cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'chemspider_id', first = TRUE)
+cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
+```
+
+
+#### ChemSpider
+```{r echo=FALSE}
+token = '37bf5e57-9091-42f5-9274-650a64398aaf'
+```
+
+You'll need a API key:
+```{r eval=FALSE}
+token = '<YOUR TOKEN HERE'
+```
+
+Retrieve the ChemSpider ID of Triclosan
+```{r}
+(id <- get_csid('Triclosan', token = token))
+```
+
+Use this ID to query information from ChemSpider
+```{r}
+csid_extcompinfo(id, token = token)
+```
+
+
+#### PubChem
+
+Retrieve PubChem CID
+```{r}
+get_cid('Triclosan')
+cid <- get_cid('3380-34-5')
+```
+
+Use this CID to retrieve some chemical properties:
+```{r}
+props <- cid_compinfo(cid)
+props$InChIKey
+props$MolecularWeight
+props$IUPACName
+```
+
+
+#### Chemical Translation Service (CTS)
+
+CTS allows to convert from nearly every possible identifier to nearly every possible identifier:
+```{r}
+cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
+cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
+(inchk <- cts_convert(query = 'Triclosan', from = 'Chemical Name', to = 'inchikey'))
+```
+
+
+Moreover, we can a lot of information stored in the CTS database uisng InChIkey
+```{r}
+info <- cts_compinfo(inchikey = inchk)
+info[1:5]
+```
 
 
 
-### Notes
-Chemspider functions require a security token. Please register at RSC (https://www.rsc.org/rsc-id/register) for a security token.
+
+### Acknowledgements
+Without the fantastic web services `webchem` wouldn't be here.
+Therefore, kudos to the web service providers and developers!
+
+### Related Projects
+If you're more familar with python than with R, you should check out [Matt Swains](https://github.com/mcs07) repositories! [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
+
+
+### Contributors
+
++ [Eduard Szöcs](https://github.com/EDiLD)
+
+### Meta
+
+* Please [report any issues, bugs or feature requests](https://github.com/edild/webchem/issues).
+* License: <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">webchem - a R package to retrieve chemical information from  the web</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/EDiLD/webchem" property="cc:attributionName" rel="cc:attributionURL">Eduard Szöcs</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 
 

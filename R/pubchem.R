@@ -12,19 +12,21 @@
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \dontrun{
 #' get_cid('Triclosan')
+#' }
 get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
   if(length(query) > 1){
     stop('Cannot handle multiple input strings.')
   }
-  qurl <- paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&term=",
+  qurl <- paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=",
                 query, sep = "")
   if(verbose)
     print(qurl)
   Sys.sleep(0.3)
   h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE))
   if(!inherits(h, "try-error")){
-    out <- xpathSApply(h, "//IdList/Id", xmlValue)
+    out <- rev(xpathSApply(h, "//IdList/Id", xmlValue))
   } else{
     warning('Problem with web service encountered... Returning NA.')
     out < NA
@@ -37,7 +39,6 @@ get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
   if(first)
     out <- out[1]
   names(out) <- NULL
-  class(out) <- 'cid'
   return(out)
 }
 
@@ -70,7 +71,7 @@ cid_compinfo <- function(cid, first = FALSE, verbose = FALSE, ...){
   if(length(cid) > 1){
     stop('Cannot handle multiple input strings.')
   }
-  baseurl <- "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pccompound"
+  baseurl <- "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?retmax=100000&db=pccompound"
   qurl <- paste0(baseurl, '&ID=', cid)
   if(verbose)
     message(qurl)

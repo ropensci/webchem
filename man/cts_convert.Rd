@@ -10,7 +10,7 @@ cts_convert(query, from, to, first = FALSE, verbose = FALSE, ...)
 \item{query}{character; query ID.}
 
 \item{from}{character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
-\code{'PubChem CID'}, \code{'PubChem CID'}, \code{'CAS'}.}
+\code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.}
 
 \item{to}{character; type to convert to.}
 

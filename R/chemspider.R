@@ -46,11 +46,11 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
   }
   if(length(out) == 0){
     warning('No csid found... Returning NA.')
+    out <- NA
   }
   if(first)
     out <- out[1]
   names(out) <- NULL
-  class(out) <- 'csid'
   return(out)
 }
 
