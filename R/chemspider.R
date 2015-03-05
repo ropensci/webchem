@@ -129,7 +129,7 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' \code{\link{csid_compinfo}} for extended compound information.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Fails because no TOKEN is included
 #' token <- '<YOUR-SECURITY-TOKEN>'
 #' # convert CAS to CSID
