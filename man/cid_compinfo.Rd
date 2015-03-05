@@ -29,6 +29,7 @@ Convert CompoundID (CID) to SMILES, see \url{https://pubchem.ncbi.nlm.nih.gov/}
 }
 \examples{
 \donttest{
+# might fail if API is not available
 cid <- get_cid('Triclosan')
 cid_compinfo(cid[1])
 }

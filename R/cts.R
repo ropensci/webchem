@@ -10,6 +10,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' # might fail if API is not available
 #' out <- cts_compinfo("DNYVWBJVOYZRCX-RNGZQALNSA-N")
 #' str(out)
 #' out[1:5]
@@ -53,6 +54,7 @@ cts_compinfo <- function(inchikey, verbose = FALSE, ...){
 #' @export
 #' @examples
 #' \donttest{
+#' # might fail if API is not available
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 #' str(out)
 #' out[1:5]

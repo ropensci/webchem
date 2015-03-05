@@ -21,6 +21,7 @@ Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
 }
 \examples{
 \donttest{
+# might fail if API is not available
 out <- cts_compinfo("DNYVWBJVOYZRCX-RNGZQALNSA-N")
 str(out)
 out[1:5]

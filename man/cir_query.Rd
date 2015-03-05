@@ -100,6 +100,7 @@ A interface to the Chemical Identifier Resolver (CIR).
 }
 \examples{
 \donttest{
+# might fail if API is not available
 cir_query('Triclosan', 'cas')
 cir_query("3380-34-5", 'cas')
 cir_query("3380-34-5", 'cas', resolver = 'cas_number')

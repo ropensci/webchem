@@ -13,6 +13,7 @@
 #' @export
 #' @examples
 #' \donttest{
+#' # might fail if API is not available
 #' get_cid('Triclosan')
 #' }
 get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
@@ -64,6 +65,7 @@ get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
 #' @export
 #' @examples
 #' \donttest{
+#' # might fail if API is not available
 #' cid <- get_cid('Triclosan')
 #' cid_compinfo(cid[1])
 #' }

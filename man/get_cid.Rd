@@ -23,6 +23,7 @@ Return CompoundID (CID) for a search query, see \url{https://pubchem.ncbi.nlm.ni
 }
 \examples{
 \donttest{
+# might fail if API is not available
 get_cid('Triclosan')
 }
 }
