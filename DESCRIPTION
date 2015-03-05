@@ -3,7 +3,7 @@ Type: Package
 Title: Chemical Information from the Web
 Version: 0.0.1
 Date: 2015-03-05
-Author: Eduard Szöcs
+Author: Eduard Szoecs
 Maintainer: Eduard Szoecs <eduardszoecs@gmail.com>
 Description: Chemical information from around the web. This package interacts with a suite of web APIs for chemical information.
 URL: https://github.com/EDiLD/webchem
