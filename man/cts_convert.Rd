@@ -30,8 +30,6 @@ Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnl
 \donttest{
 # might fail if API is not available
 cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
-str(out)
-out[1:5]
 }
 }
 \author{

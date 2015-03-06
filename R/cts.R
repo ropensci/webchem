@@ -56,8 +56,6 @@ cts_compinfo <- function(inchikey, verbose = FALSE, ...){
 #' \donttest{
 #' # might fail if API is not available
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
-#' str(out)
-#' out[1:5]
 #' }
 cts_convert <- function(query, from, to, first = FALSE, verbose = FALSE, ...){
   if(length(from) > 1){
