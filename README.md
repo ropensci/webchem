@@ -97,18 +97,30 @@ Use this ID to query information from ChemSpider
 
 ```r
 csid_extcompinfo(id, token = token)
-#>                                                                          CSID                                                                            MF 
-#>                                                                        "5363"                                                      "C_{12}H_{7}Cl_{3}O_{2}" 
-#>                                                                        SMILES                                                                         InChI 
-#>                                              "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl" "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H" 
-#>                                                                      InChIKey                                                                   AverageMass 
-#>                                                   "XEFQLINVKFYRCS-UHFFFAOYAS"                                                                    "289.5418" 
-#>                                                               MolecularWeight                                                              MonoisotopicMass 
-#>                                                                    "289.5418"                                                                  "287.951172" 
-#>                                                                   NominalMass                                                                         ALogP 
-#>                                                                         "288"                                                                        "5.53" 
-#>                                                                         XLogP                                                                    CommonName 
-#>                                                                           "5"                                                                   "Triclosan"
+#>                                                                          CSID 
+#>                                                                        "5363" 
+#>                                                                            MF 
+#>                                                      "C_{12}H_{7}Cl_{3}O_{2}" 
+#>                                                                        SMILES 
+#>                                              "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl" 
+#>                                                                         InChI 
+#> "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H" 
+#>                                                                      InChIKey 
+#>                                                   "XEFQLINVKFYRCS-UHFFFAOYAS" 
+#>                                                                   AverageMass 
+#>                                                                    "289.5418" 
+#>                                                               MolecularWeight 
+#>                                                                    "289.5418" 
+#>                                                              MonoisotopicMass 
+#>                                                                  "287.951172" 
+#>                                                                   NominalMass 
+#>                                                                         "288" 
+#>                                                                         ALogP 
+#>                                                                        "5.53" 
+#>                                                                         XLogP 
+#>                                                                           "5" 
+#>                                                                    CommonName 
+#>                                                                   "Triclosan"
 ```
 
 
@@ -118,8 +130,11 @@ Retrieve PubChem CID
 
 ```r
 get_cid('Triclosan')
-#>  [1] "5564"     "131203"   "627458"   "15942656" "16220126" "16220128" "16220129" "16220130" "18413505" "22947105" "23656593" "24848164" "25023954" "25023955" "25023956"
-#> [16] "25023957" "25023958" "25023959" "25023960" "25023961" "25023962" "25023963" "25023964" "25023965" "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
+#>  [1] "5564"     "131203"   "627458"   "15942656" "16220126" "16220128"
+#>  [7] "16220129" "16220130" "18413505" "22947105" "23656593" "24848164"
+#> [13] "25023954" "25023955" "25023956" "25023957" "25023958" "25023959"
+#> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
+#> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
 #> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
 cid <- get_cid('3380-34-5')
 ```
@@ -180,7 +195,7 @@ Without the fantastic web services `webchem` wouldn't be here.
 Therefore, kudos to the web service providers and developers!
 
 ### Related Projects
-If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
+If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPy](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
 
 
 ### Contributors
