@@ -29,7 +29,10 @@ Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a secur
 
 ### Installation
 #### Install from CRAN (stable)
-`webchem` is currently not available on [CRAN](http://cran.r-project.org/).
+```{r eval=FALSE}
+install.packages("taxize")
+```
+
 
 #### Install from Github (development)
 ```{r eval=FALSE}
@@ -130,7 +133,7 @@ Without the fantastic web services `webchem` wouldn't be here.
 Therefore, kudos to the web service providers and developers!
 
 ### Related Projects
-If you're more familiar with python than with R, you should check out [Matt Swains](https://github.com/mcs07) repositories - [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
+If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPY](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
 
 
 ### Contributors
