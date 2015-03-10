@@ -61,6 +61,8 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = FALSE, ...){
   if(length(from) > 1){
     stop('Cannot handle multiple input strings.')
   }
+  if(is.null(query) | is.null(from) | is.null(to))
+    stop('Insufficient arguments passed!.')
   baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
   qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
   qurl <- URLencode(qurl)

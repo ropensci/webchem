@@ -2,7 +2,7 @@
 % Please edit documentation in R/pubchem.R
 \name{cid_compinfo}
 \alias{cid_compinfo}
-\title{Convert CID to SMILES}
+\title{Retrieve compound information from pubchem CID}
 \usage{
 cid_compinfo(cid, first = FALSE, verbose = FALSE, ...)
 }
@@ -25,7 +25,7 @@ AtomChiralDefCount, AtomChiralUndefCount, BondChiralCount, BondChiralDefCount,
 BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount
 }
 \description{
-Convert CompoundID (CID) to SMILES, see \url{https://pubchem.ncbi.nlm.nih.gov/}
+Retrieve compound information from pubchem CID, see \url{https://pubchem.ncbi.nlm.nih.gov/}
 }
 \examples{
 \donttest{

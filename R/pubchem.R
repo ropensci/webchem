@@ -45,9 +45,9 @@ get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
 
 
 
-#' Convert CID to SMILES
+#' Retrieve compound information from pubchem CID
 #'
-#' Convert CompoundID (CID) to SMILES, see \url{https://pubchem.ncbi.nlm.nih.gov/}
+#' Retrieve compound information from pubchem CID, see \url{https://pubchem.ncbi.nlm.nih.gov/}
 #' @import RCurl XML
 #' @param cid character; Pubchem ID (CID).
 #' @param first logical; return only first list items?
