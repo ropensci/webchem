@@ -4,7 +4,7 @@
 \alias{cts_compinfo}
 \title{Get record details from Chemical Translation Service (CTS)}
 \usage{
-cts_compinfo(inchikey, verbose = FALSE, ...)
+cts_compinfo(inchikey, verbose = TRUE, ...)
 }
 \arguments{
 \item{inchikey}{character, InChIkey.}

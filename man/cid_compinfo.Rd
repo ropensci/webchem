@@ -4,7 +4,7 @@
 \alias{cid_compinfo}
 \title{Retrieve compound information from pubchem CID}
 \usage{
-cid_compinfo(cid, first = FALSE, verbose = FALSE, ...)
+cid_compinfo(cid, first = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{cid}{character; Pubchem ID (CID).}

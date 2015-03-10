@@ -4,7 +4,7 @@
 \alias{get_cid}
 \title{Retrieve Pubchem Id (CID)}
 \usage{
-get_cid(query, first = FALSE, verbose = FALSE, ...)
+get_cid(query, first = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{query}{charachter; search term.}

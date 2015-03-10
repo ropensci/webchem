@@ -15,7 +15,7 @@
 #' str(out)
 #' out[1:5]
 #' }
-cts_compinfo <- function(inchikey, verbose = FALSE, ...){
+cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   if(length(inchikey) > 1){
     stop('Cannot handle multiple input strings.')
   }
@@ -57,7 +57,7 @@ cts_compinfo <- function(inchikey, verbose = FALSE, ...){
 #' # might fail if API is not available
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 #' }
-cts_convert <- function(query, from, to, first = FALSE, verbose = FALSE, ...){
+cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   if(length(from) > 1){
     stop('Cannot handle multiple input strings.')
   }

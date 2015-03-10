@@ -16,7 +16,7 @@
 #' # might fail if API is not available
 #' get_cid('Triclosan')
 #' }
-get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
+get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
   if(length(query) > 1){
     stop('Cannot handle multiple input strings.')
   }
@@ -69,7 +69,7 @@ get_cid <- function(query, first = FALSE, verbose = FALSE, ...){
 #' cid <- get_cid('Triclosan')
 #' cid_compinfo(cid[1])
 #' }
-cid_compinfo <- function(cid, first = FALSE, verbose = FALSE, ...){
+cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   if(length(cid) > 1){
     stop('Cannot handle multiple input strings.')
   }

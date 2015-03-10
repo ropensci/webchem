@@ -4,7 +4,7 @@
 \alias{cts_convert}
 \title{Convert Ids using Chemical Translation Service (CTS)}
 \usage{
-cts_convert(query, from, to, first = FALSE, verbose = FALSE, ...)
+cts_convert(query, from, to, first = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{query}{character; query ID.}
