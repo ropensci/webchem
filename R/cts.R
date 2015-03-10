@@ -85,5 +85,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
     message("Not found. Returning NA.")
     out <- NA
   }
+  if(first)
+    out <- out[1]
   return(out)
 }

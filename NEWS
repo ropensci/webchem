@@ -6,3 +6,6 @@ MINOR IMPROVEMENTS
 * fixed documentation
 * cts_convert() returns NA if no result was found.
 * set verbose = TRUE as default for all functions
+
+BUG FIXES
+* cts_convert() does not ignore 'first' argument.
