@@ -4,3 +4,4 @@ webchem 0.0.2
 MINOR IMPROVEMENTS
 * Added some checks for user input
 * fixed documentation
+* cts_convert() returns NA if no result was found.
