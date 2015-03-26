@@ -9,3 +9,4 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 * cts_convert() does not ignore 'first' argument.
+* get_csid() did not return NA, if there is a problem with the webservice

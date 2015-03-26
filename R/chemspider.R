@@ -41,9 +41,9 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
   h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE))
   if(!inherits(h, "try-error")){
     out <- unlist(xmlToList(h))
-  } else{
+  } else {
     warning('Problem with web service encountered... Returning NA.')
-    out < NA
+    out <- NA
   }
   if(length(out) == 0){
     warning('No csid found... Returning NA.')
