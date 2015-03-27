@@ -1,12 +1,18 @@
 webchem 0.0.2
 ======================
 
+NEW FEATURES
+
+* Query the PAN Pesticides Database with pan().
+
 MINOR IMPROVEMENTS
-* Added some checks for user input
-* fixed documentation
+
+* Added some checks for user input.
+* fixed documentation.
 * cts_convert() returns NA if no result was found.
-* set verbose = TRUE as default for all functions
+* set verbose = TRUE as default for all functions.
 
 BUG FIXES
+
 * cts_convert() does not ignore 'first' argument.
-* get_csid() did not return NA, if there is a problem with the webservice
+* get_csid() did not return NA, if there is a problem with the webservice.
