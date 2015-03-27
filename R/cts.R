@@ -2,7 +2,7 @@
 #'
 #' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
 #' @import RCurl RJSONIO
-#' @param inchikey character, InChIkey.
+#' @param inchikey character; InChIkey.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds

@@ -125,7 +125,7 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
+#' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
 #' \code{\link{csid_compinfo}} for extended compound information.
 #' @export
 #' @examples

@@ -7,7 +7,7 @@
 cts_compinfo(inchikey, verbose = TRUE, ...)
 }
 \arguments{
-\item{inchikey}{character, InChIkey.}
+\item{inchikey}{character; InChIkey.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

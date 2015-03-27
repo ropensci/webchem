@@ -45,7 +45,6 @@ lapply(csids, csid_extcompinfo, token = token)
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
-#'
 }
 \seealso{
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
