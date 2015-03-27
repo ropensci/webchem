@@ -1,3 +1,8 @@
+---
+output:
+  html_document:
+    keep_md: yes
+---
 webchem
 =============
 
@@ -13,34 +18,35 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/EDiLD/webchem)
 
 `webchem` is a R package to retrieve chemical information from  the web. 
-This package interacts with a suite of web APIs for chemical information.
+This package interacts with a suite of web APIs to retrieve chemical information.
 
 
 ### Currently implemented in `webchem`
 
-Source | Functions | API Docs | API key
+Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 Chemical Identifier Resolver (CIR) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | [link](https://www.rsc.org/rsc-id/register )
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
+PAN Pesticide Database | `pan()` | [link](http://www.pesticideinfo.org/) | none
 
 #### API keys
 ChemSpider functions require a security token. 
 Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
 
 ### Installation
-#### Install from CRAN (stable)
+#### Install from CRAN (stable version)
 ```{r eval=FALSE}
 install.packages("taxize")
 ```
 
 
-#### Install from Github (development)
+#### Install from Github (development version)
 ```{r eval=FALSE}
 install.packages("devtools")
 library("devtools")
-install_github("edild/webchem")
+install_github("ropensci/webchem")
 ```
 
 ### Quickstart
@@ -120,7 +126,6 @@ cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
 (inchk <- cts_convert(query = 'Triclosan', from = 'Chemical Name', to = 'inchikey'))
 ```
 
-
 Moreover, we can a lot of information stored in the CTS database using InChIkey
 ```{r}
 info <- cts_compinfo(inchikey = inchk)
@@ -129,10 +134,19 @@ info[1:5]
 
 
 
+#### PAN Pesticide Database
+`pan()` returns a list of 73 entries, here I extract only 4 of those:
+```{r}
+pan_list <- pan('lambda-Cyhalothrin', first = TRUE)
+pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
+```
+
+
 
 ### Acknowledgements
 Without the fantastic web services `webchem` wouldn't be here.
 Therefore, kudos to the web service providers and developers!
+
 
 ### Related Projects
 If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPy](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.

@@ -6,36 +6,37 @@ webchem
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/EDiLD/webchem)
 
 `webchem` is a R package to retrieve chemical information from  the web. 
-This package interacts with a suite of web APIs for chemical information.
+This package interacts with a suite of web APIs to retrieve chemical information.
 
 
 ### Currently implemented in `webchem`
 
-Source | Functions | API Docs | API key
+Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 Chemical Identifier Resolver (CIR) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | [link](https://www.rsc.org/rsc-id/register )
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
+PAN Pesticide Database | `pan()` | [link](http://www.pesticideinfo.org/) | none
 
 #### API keys
 ChemSpider functions require a security token. 
 Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
 
 ### Installation
-#### Install from CRAN (stable)
+#### Install from CRAN (stable version)
 
 ```r
 install.packages("taxize")
 ```
 
 
-#### Install from Github (development)
+#### Install from Github (development version)
 
 ```r
 install.packages("devtools")
 library("devtools")
-install_github("edild/webchem")
+install_github("ropensci/webchem")
 ```
 
 ### Quickstart
@@ -132,13 +133,16 @@ Retrieve PubChem CID
 
 ```r
 get_cid('Triclosan')
-#>  [1] "5564"     "131203"   "627458"   "15942656" "16220126" "16220128"
-#>  [7] "16220129" "16220130" "18413505" "22947105" "23656593" "24848164"
-#> [13] "25023954" "25023955" "25023956" "25023957" "25023958" "25023959"
-#> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
-#> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
-#> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
+#> [1] "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=Triclosan"
+#>  [1] "4093"     "5564"     "13190"    "131203"   "627458"   "15942656"
+#>  [7] "16220126" "16220128" "16220129" "16220130" "18413505" "22947105"
+#> [13] "23656593" "24848164" "25023954" "25023955" "25023956" "25023957"
+#> [19] "25023958" "25023959" "25023960" "25023961" "25023962" "25023963"
+#> [25] "25023964" "25023965" "25023966" "25023967" "25023968" "25023969"
+#> [31] "25023970" "25023971" "25023972" "25023973" "45040608" "45040609"
+#> [37] "67606151" "71752714"
 cid <- get_cid('3380-34-5')
+#> [1] "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=3380-34-5"
 ```
 
 Use this CID to retrieve some chemical properties:
@@ -167,7 +171,6 @@ cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
 #> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
 ```
 
-
 Moreover, we can a lot of information stored in the CTS database using InChIkey
 
 ```r
@@ -183,18 +186,39 @@ info[1:5]
 #> [1] 289.5418
 #> 
 #> $exactmass
-#> [1] 287.9512
+#> NULL
 #> 
 #> $formula
-#> [1] "C12H7Cl3O2"
+#> NULL
 ```
 
+
+
+#### PAN Pesticide Database
+`pan()` returns a list of 73 entries, here I extract only 4 of those:
+
+```r
+pan_list <- pan('lambda-Cyhalothrin', first = TRUE)
+pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
+#> $`CAS Number`
+#> [1] "91465-08-6"
+#> 
+#> $`Chemical Class`
+#> [1] "Pyrethroid"
+#> 
+#> $`Water Solubility (Avg, mg/L)`
+#> [1] "0.0050"
+#> 
+#> $`Adsorption Coefficient (Koc)`
+#> [1] "157000"
+```
 
 
 
 ### Acknowledgements
 Without the fantastic web services `webchem` wouldn't be here.
 Therefore, kudos to the web service providers and developers!
+
 
 ### Related Projects
 If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPy](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
