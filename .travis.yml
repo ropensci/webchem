@@ -1,12 +1,13 @@
-language: c
-script: ./travis-tool.sh run_tests
+language: r
 sudo: required
-before_script:
-- curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-- chmod 755 ./travis-tool.sh
-- ./travis-tool.sh bootstrap
-- ./travis-tool.sh install_deps
-# Configuration options below this line are suggested options.
+
+r_github_packages:
+ - jimhester/covr
+ - jeroenooms/curl
+
+after_success:
+  - Rscript -e 'library(covr); coveralls()'
+
 notifications:
 email:
 recipients:
