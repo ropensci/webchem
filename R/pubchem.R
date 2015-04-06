@@ -30,7 +30,7 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
     out <- rev(xpathSApply(h, "//IdList/Id", xmlValue))
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out < NA
+    out <- NA
   }
   # not found on ncbi
   if (length(out) == 0){
@@ -122,7 +122,7 @@ cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
       out <-lapply(out, function(x) x[1])
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out < NA
+    out <- NA
   }
   if (length(out) == 0){
     message("Not found. Returning NA.")

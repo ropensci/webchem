@@ -100,7 +100,7 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
     out <- unlist(xmlToList(h))
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out < NA
+    out <- NA
   }
   if (length(out) == 0){
     message("Not found. Returning NA.")

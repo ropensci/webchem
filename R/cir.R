@@ -122,7 +122,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
     out <- xpathSApply(h, "//data/item", xmlValue)
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out < NA
+    out <- NA
   }
   if(length(out) == 0){
     warning('No representation found... Returning NA.')

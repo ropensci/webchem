@@ -29,7 +29,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
     out <- fromJSON(h)
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out < NA
+    out <- NA
   }
   if (length(out) == 0){
     message("Not found. Returning NA.")
@@ -73,7 +73,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
     out <- fromJSON(h)[[1]]
   } else {
     warning('Problem with web service encountered... Returning NA.')
-    out < NA
+    out <- NA
   }
   if('error' %in% names(out)){
     message(out['error'], "Returning NA.")
