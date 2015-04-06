@@ -31,25 +31,25 @@
 #' sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' }
 get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
-  if(length(query) > 1){
+  if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
   qurl <- paste0(baseurl, 'query=', query, '&token=', token)
-  if(verbose)
+  if (verbose)
     message(qurl, '\n')
   h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE))
-  if(!inherits(h, "try-error")){
+  if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
   } else {
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   }
-  if(length(out) == 0){
+  if (length(out) == 0) {
     warning('No csid found... Returning NA.')
-    out <- NA
+    return(NA)
   }
-  if(first)
+  if (first)
     out <- out[1]
   names(out) <- NULL
   return(out)
@@ -88,23 +88,23 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' lapply(csids, csid_compinfo, token = token)
 #' }
 csid_compinfo <- function(csid, token, verbose = TRUE, ...){
-  if(length(csid) > 1){
+  if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- 'http://www.chemspider.com/Search.asmx/GetCompoundInfo?'
   qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
-  if(verbose)
+  if (verbose)
     message(qurl)
   h <- try(xmlParse(qurl, isURL = TRUE))
-  if(!inherits(h, "try-error")){
+  if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
-  } else{
+  } else {
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   }
-  if (length(out) == 0){
+  if (length(out) == 0) {
     message("Not found. Returning NA.")
-    out <- NA
+    return(NA)
   }
   return(out)
 }
@@ -143,23 +143,23 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' lapply(csids, csid_extcompinfo, token = token)
 #' }
 csid_extcompinfo <- function(csid, token, verbose = TRUE, ...){
-  if(length(csid) > 1){
+  if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- 'http://www.chemspider.com/MassSpecAPI.asmx/GetExtendedCompoundInfo?'
   qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
-  if(verbose)
+  if (verbose)
     message(qurl)
   h <- try(xmlParse(qurl, isURL = TRUE))
-  if(!inherits(h, "try-error")){
+  if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   }
-  if (length(out) == 0){
+  if (length(out) == 0) {
     message("Not found. Returning NA.")
-    out <- NA
+    return(NA)
   }
   return(out)
 }

@@ -16,24 +16,24 @@
 #' out[1:5]
 #' }
 cts_compinfo <- function(inchikey, verbose = TRUE, ...){
-  if(length(inchikey) > 1){
+  if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
   qurl <- paste0(baseurl, '/', inchikey)
-  if(verbose)
+  if (verbose)
     message(qurl)
   # Sys.sleep(0.3)
   h <- try(getURL(qurl))
-  if(!inherits(h, "try-error")){
+  if (!inherits(h, "try-error")) {
     out <- fromJSON(h)
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   }
-  if (length(out) == 0){
+  if (length(out) == 0) {
     message("Not found. Returning NA.")
-    out <- NA
+    return(NA)
   }
   return(out)
 }
@@ -58,34 +58,34 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 #' }
 cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
-  if(length(from) > 1){
+  if (length(from) > 1) {
     stop('Cannot handle multiple input strings.')
   }
-  if(is.null(query) | is.null(from) | is.null(to))
+  if (is.null(query) | is.null(from) | is.null(to))
     stop('Insufficient arguments passed!.')
   baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
   qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
   qurl <- URLencode(qurl)
-  if(verbose)
+  if (verbose)
     message(qurl)
   h <- try(getURL(qurl))
-  if(!inherits(h, "try-error")){
+  if (!inherits(h, "try-error")) {
     out <- fromJSON(h)[[1]]
   } else {
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   }
-  if('error' %in% names(out)){
+  if ('error' %in% names(out)) {
     message(out['error'], "Returning NA.")
-    out <- NA
+    return(NA)
   } else {
     out <- out$result
   }
-  if (length(out) == 0){
+  if (length(out) == 0) {
     message("Not found. Returning NA.")
-    out <- NA
+    return(NA)
   }
-  if(first)
+  if (first)
     out <- out[1]
   return(out)
 }

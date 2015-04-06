@@ -17,27 +17,27 @@
 #' get_cid('Triclosan')
 #' }
 get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
-  if(length(query) > 1){
+  if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   qurl <- paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=",
                 query, sep = "")
-  if(verbose)
+  if (verbose)
     print(qurl)
   Sys.sleep(0.3)
   h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE))
-  if(!inherits(h, "try-error")){
+  if (!inherits(h, "try-error")) {
     out <- rev(xpathSApply(h, "//IdList/Id", xmlValue))
   } else{
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   }
   # not found on ncbi
-  if (length(out) == 0){
+  if (length(out) == 0) {
     message("Not found. Returning NA.")
-    out <- NA
+    return(NA)
   }
-  if(first)
+  if (first)
     out <- out[1]
   names(out) <- NULL
   return(out)
@@ -70,16 +70,16 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
 #' cid_compinfo(cid[1])
 #' }
 cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
-  if(length(cid) > 1){
+  if (length(cid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?retmax=100000&db=pccompound"
   qurl <- paste0(baseurl, '&ID=', cid)
-  if(verbose)
+  if (verbose)
     message(qurl)
   Sys.sleep(0.3)
   h <- try(xmlParse(qurl, isURL = TRUE))
-  if(!inherits(h, "try-error")){
+  if (!inherits(h, "try-error")) {
     CID <- xpathSApply(h, '//Id', xmlValue)
     InChIKey <-  xpathSApply(h, "//Item[@Name='InChIKey']", xmlValue)
     InChI <- xpathSApply(h, "//Item[@Name='InChI']", xmlValue)
@@ -118,15 +118,15 @@ cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
                 BondChiralDefCount = BondChiralDefCount, BondChiralUndefCount = BondChiralUndefCount,
                 IsotopeAtomCount = IsotopeAtomCount, CovalentUnitCount = CovalentUnitCount,
                 TautomerCount = TautomerCount)
-    if(first)
-      out <-lapply(out, function(x) x[1])
-  } else{
+    if (first)
+      out <- lapply(out, function(x) x[1])
+  } else {
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   }
-  if (length(out) == 0){
+  if (length(out) == 0) {
     message("Not found. Returning NA.")
-    out <- NA
+    return(NA)
   }
   return(out)
 }
