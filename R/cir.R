@@ -106,36 +106,33 @@
 #' @export
 cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
                       first = FALSE, verbose = TRUE, ...){
-  if(length(identifier) > 1){
+  if (length(identifier) > 1) {
     stop('Cannot handle multiple input strings.')
   }
-  if(is.na(identifier)){
+  if (is.na(identifier)) {
     warning('Identifier is NA... Returning NA.')
-    out <- NA
-  } else {
-    baseurl <- "http://cactus.nci.nih.gov/chemical/structure"
-    qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
-    if(!is.null(resolver)){
-      qurl <- paste0(qurl, '?resolver=', resolver)
-    }
-    if(verbose)
-      message(qurl)
-    # Sys.sleep(0.1)
-    h <- try(xmlParse(qurl, isURL = TRUE))
-    if(!inherits(h, "try-error")){
-      out <- xpathSApply(h, "//data/item", xmlValue)
-    } else{
-      warning('Problem with web service encountered... Returning NA.')
-      out <- NA
-    }
-    if(length(out) == 0){
-      warning('No representation found... Returning NA.')
-      out <- NA
-    }
-    if(first)
-      out <- out[1]
+    return(NA)
   }
-  if(first)
+  baseurl <- "http://cactus.nci.nih.gov/chemical/structure"
+  qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
+  if (!is.null(resolver)) {
+    qurl <- paste0(qurl, '?resolver=', resolver)
+  }
+  if (verbose)
+    message(qurl)
+  # Sys.sleep(0.1)
+  h <- try(xmlParse(qurl, isURL = TRUE))
+  if (!inherits(h, "try-error")) {
+    out <- xpathSApply(h, "//data/item", xmlValue)
+  } else {
+    warning('Problem with web service encountered... Returning NA.')
+    out <- NA
+  }
+  if (length(out) == 0) {
+    warning('No representation found... Returning NA.')
+    out <- NA
+  }
+  if (first)
     out <- out[1]
   return(out)
 }

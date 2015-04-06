@@ -16,3 +16,5 @@ BUG FIXES
 
 * cts_convert() does not ignore 'first' argument.
 * get_csid() did not return NA, if there is a problem with the webservice.
+* cir_query() returned NA2+ if NA was given.
+* Many fixes in handling NA, when no hit was found.
