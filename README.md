@@ -4,6 +4,8 @@ webchem
 
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
+[![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
+
 
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
