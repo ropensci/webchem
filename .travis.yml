@@ -14,8 +14,6 @@ recipients:
 - szoecs@uni-landau.de
 on_success: never
 on_failure: always
-# One can also restrict the branches to test, see
-# http://about.travis-ci.org/docs/user/build-configuration/#Specify-branches-to-build
 branches:
 only:
 - master
