@@ -16,3 +16,5 @@ Imports:
     XML,
     RCurl,
     RJSONIO
+Suggests:
+    testthat
