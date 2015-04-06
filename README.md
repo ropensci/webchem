@@ -227,6 +227,7 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 ### Contributors
 
 + [Eduard Szöcs](https://github.com/EDiLD)
++ [Daniel Münch](https://github.com/Dahaniel)
 
 ### Meta
 
