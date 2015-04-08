@@ -38,7 +38,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
   qurl <- paste0(baseurl, 'query=', query, '&token=', token)
   if (verbose)
     message(qurl, '\n')
-  h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE))
+  h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
   } else {
@@ -95,7 +95,7 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
   if (verbose)
     message(qurl)
-  h <- try(xmlParse(qurl, isURL = TRUE))
+  h <- try(xmlParse(qurl, isURL = TRUE), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
   } else {
@@ -150,7 +150,7 @@ csid_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
   if (verbose)
     message(qurl)
-  h <- try(xmlParse(qurl, isURL = TRUE))
+  h <- try(xmlParse(qurl, isURL = TRUE), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
   } else{

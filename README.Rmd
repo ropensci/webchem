@@ -30,7 +30,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 Chemical Identifier Resolver (CIR) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | [link](https://www.rsc.org/rsc-id/register )
+ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
 PAN Pesticide Database | `pan()` | [link](http://www.pesticideinfo.org/) | none
