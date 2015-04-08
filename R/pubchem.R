@@ -23,9 +23,9 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
   qurl <- paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=",
                 query, sep = "")
   if (verbose)
-    print(qurl)
+    message(qurl)
   Sys.sleep(0.3)
-  h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE))
+  h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- rev(xpathSApply(h, "//IdList/Id", xmlValue))
   } else{
@@ -78,7 +78,7 @@ cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   if (verbose)
     message(qurl)
   Sys.sleep(0.3)
-  h <- try(xmlParse(qurl, isURL = TRUE))
+  h <- try(xmlParse(qurl, isURL = TRUE), silent = TRUE)
   if (!inherits(h, "try-error")) {
     CID <- xpathSApply(h, '//Id', xmlValue)
     InChIKey <-  xpathSApply(h, "//Item[@Name='InChIKey']", xmlValue)

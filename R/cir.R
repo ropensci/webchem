@@ -129,7 +129,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
     out <- NA
   }
   if (length(out) == 0) {
-    warning('No representation found... Returning NA.')
+    message('No representation found... Returning NA.')
     out <- NA
   }
   if (first)

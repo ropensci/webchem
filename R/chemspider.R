@@ -46,7 +46,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
     return(NA)
   }
   if (length(out) == 0) {
-    warning('No csid found... Returning NA.')
+    message('No csid found... Returning NA.')
     return(NA)
   }
   if (first)

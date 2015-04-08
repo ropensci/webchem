@@ -3,7 +3,7 @@ token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
 
 test_that("get_csid()", {
   expect_equal(get_csid("Triclosan", token = token), '5363')
-  expect_warning(get_csid("xxxxxxxxx", token = token))
+  expect_equal(get_csid("xxxxxxxxx", token = token), NA)
   expect_error(get_csid(c("a", "b"), token = token))
   expect_true(is.vector(get_csid("Triclosan", token = token)))
 })
@@ -22,4 +22,13 @@ test_that("csid_extcompinfo()", {
   expect_equal(length(csid_extcompinfo('5363', token = token)), 12)
   expect_warning(csid_extcompinfo('aaaa', token))
   expect_error(csid_extcompinfo(c("a", "b"), token = token))
+})
+
+
+test_that("csid_extcompinfo(get_cid())", {
+  expect_equal(csid_extcompinfo(get_csid('Triclosan', token = token),
+                                token = token)['AverageMass'],
+               c(AverageMass = '289.5418'))
+  expect_equal(length(csid_extcompinfo(get_csid('Triclosan', token = token),
+                                       token = token)), 12)
 })
