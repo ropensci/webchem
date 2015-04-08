@@ -11,7 +11,8 @@
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' out <- cts_compinfo("DNYVWBJVOYZRCX-RNGZQALNSA-N")
+#' out <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N")
+#' # = Triclosa
 #' str(out)
 #' out[1:5]
 #' }
@@ -24,7 +25,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   if (verbose)
     message(qurl)
   # Sys.sleep(0.3)
-  h <- try(getURL(qurl))
+  h <- try(getURL(qurl), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- fromJSON(h)
   } else{
@@ -33,6 +34,10 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   }
   if (length(out) == 0) {
     message("Not found. Returning NA.")
+    return(NA)
+  }
+  if (length(out) == 1 && grepl('invalid', out)) {
+    message("invalid InChIKey. Returning NA.")
     return(NA)
   }
   return(out)
@@ -51,6 +56,8 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' @param ... currently not used.
 #' @return a character vector.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @details See see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+#' for possible values of from and to.
 #' @export
 #' @examples
 #' \donttest{
@@ -58,17 +65,15 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 #' }
 cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
-  if (length(from) > 1) {
+  if (length(query) > 1 | length(from) > 1 | length(to) > 1) {
     stop('Cannot handle multiple input strings.')
   }
-  if (is.null(query) | is.null(from) | is.null(to))
-    stop('Insufficient arguments passed!.')
   baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
   qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
   qurl <- URLencode(qurl)
   if (verbose)
     message(qurl)
-  h <- try(getURL(qurl))
+  h <- try(getURL(qurl), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- fromJSON(h)[[1]]
   } else {

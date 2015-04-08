@@ -1,8 +1,5 @@
 context("pubchem")
 
-
-
-
 test_that("get_cid()", {
   expect_equal(get_cid('Triclosan')[1], '4093')
   expect_equal(length(get_cid('Triclosan', first = TRUE)), 1)
