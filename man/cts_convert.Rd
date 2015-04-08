@@ -26,6 +26,10 @@ a character vector.
 \description{
 Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 }
+\details{
+See see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+for possible values of from and to.
+}
 \examples{
 \donttest{
 # might fail if API is not available
