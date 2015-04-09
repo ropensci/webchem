@@ -121,11 +121,7 @@ cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
     if (first)
       out <- lapply(out, function(x) x[1])
   } else {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  if (length(out) == 0) {
-    message("Not found. Returning NA.")
+    warning('CID not found... Returning NA.')
     return(NA)
   }
   return(out)

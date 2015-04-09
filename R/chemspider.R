@@ -99,11 +99,7 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
   if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
   } else {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  if (length(out) == 0) {
-    message("Not found. Returning NA.")
+    warning('CSID not found... Returning NA.')
     return(NA)
   }
   return(out)
@@ -154,11 +150,7 @@ csid_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   if (!inherits(h, "try-error")) {
     out <- unlist(xmlToList(h))
   } else{
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  if (length(out) == 0) {
-    message("Not found. Returning NA.")
+    warning('CSID not found... Returning NA.')
     return(NA)
   }
   return(out)

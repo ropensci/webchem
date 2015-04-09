@@ -32,10 +32,6 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
-  if (length(out) == 0) {
-    message("Not found. Returning NA.")
-    return(NA)
-  }
   if (length(out) == 1 && grepl('invalid', out)) {
     message("invalid InChIKey. Returning NA.")
     return(NA)
