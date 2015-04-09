@@ -11,7 +11,8 @@ MINOR IMPROVEMENTS
 * fixed documentation.
 * cts_convert() returns NA if no result was found.
 * set verbose = TRUE as default for all functions.
-* Added unit tests
+* Added unit tests.
+* return silently NA if API is not reachable.
 
 BUG FIXES
 
