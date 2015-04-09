@@ -15,6 +15,11 @@
 #' \donttest{
 #' # might fail if API is not available
 #' get_cid('Triclosan')
+#'
+#' # multiple inputs
+#' comp <- c('Triclosan', 'Aspirin')
+#' sapply(comp, function(x) get_cid(x))
+#' sapply(comp, function(x) get_cid(x, first = TRUE))
 #' }
 get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
   if (length(query) > 1) {
@@ -68,6 +73,14 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
 #' # might fail if API is not available
 #' cid <- get_cid('Triclosan')
 #' cid_compinfo(cid[1])
+#'
+#' ###
+#' # multiple CIDS
+#' comp <- c('Triclosan', 'Aspirin')
+#' cids <- sapply(comp, function(x) get_cid(x, first = TRUE))
+#' (ll <- lapply(cids, cid_compinfo, first = TRUE))
+#' # as mtrix
+#' do.call(rbind, ll)
 #' }
 cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   if (length(cid) > 1) {

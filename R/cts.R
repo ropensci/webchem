@@ -15,6 +15,14 @@
 #' # = Triclosa
 #' str(out)
 #' out[1:5]
+#'
+#' ### multiple inputs
+#' comp <- c('Triclosan', 'Aspirin')
+#' inchkeys <- sapply(comp, function(x) cir_query(x, 'stdinchikey', first = TRUE))
+#' # ne to strip '#InChIKey='
+#' inchkeys <- gsub('InChIKey=', '', inchkeys)
+#' ll <- lapply(inchkeys, function(x) cts_compinfo(x)[1:5])
+#' do.call(rbind, ll)
 #' }
 cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   if (length(inchikey) > 1) {
@@ -59,6 +67,10 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' \donttest{
 #' # might fail if API is not available
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
+#'
+#' ### multiple inputs
+#' comp <- c('Triclosan', 'Aspirin')
+#' sapply(comp, function(x) cts_convert(x, 'Chemical Name', 'CAS', first = TRUE))
 #' }
 cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   if (length(query) > 1 | length(from) > 1 | length(to) > 1) {

@@ -1,6 +1,6 @@
 #' Query the PAN Pesticide database
 #'
-#'Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
+#' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
 #' @import RCurl XML
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param first logical; return only first result be returned?
@@ -48,6 +48,13 @@
 #'  pan('2,4-dichlorophenol')
 #'  # return only first hit
 #'  pan('2,4-dichlorophenol', first = TRUE)
+#'
+#' ### multiple inputs
+#' comp <- c('Triclosan', 'Aspirin')
+#' # retrive CAS
+#' sapply(comp, function(x) pan(x, first = TRUE)[[2]])
+#' ll <- lapply(comp, function(x) pan(x, first = TRUE)[c(2, 4, 5, 6)])
+#' do.call(rbind, ll)
 #' }
 pan <- function(query, first = FALSE, verbose = TRUE, ...){
   if (length(query) > 1) {

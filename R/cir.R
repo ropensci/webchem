@@ -100,8 +100,14 @@
 #' cir_query('Triclosan', 'aromatic')
 #' cir_query('Triclosan', 'xlogp2')
 #'
+#' # query multiple representations
 #' reps <- c('smiles', 'cas', 'stdinchikey', 'mw', 'formula', 'xlogp2')
 #' sapply(reps, function(x) cir_query('Triclosan', x, first = TRUE))
+#'
+#' # multiple inputs
+#' comp <- c('Triclosan', 'Aspirin')
+#' sapply(comp, function(x) cir_query(x, 'cas', first = TRUE))
+#'
 #'}
 #' @export
 cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
