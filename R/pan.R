@@ -80,7 +80,7 @@ pan <- function(query, first = FALSE, verbose = TRUE, ...){
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
-  nd <- getNodeSet(h, "//table[3]")
+  nd <- getNodeSet(h, "//table[contains(.,'Detailed Info')]")
   if (length(nd) == 0) {
     message('Not found... Returning NA.')
     return(NA)
