@@ -7,16 +7,16 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 
-* Added some checks for user input.
-* fixed documentation.
+* Added checks for user input.
+* Fixed documentation, added example for bulk processing.
 * cts_convert() returns NA if no result was found.
-* set verbose = TRUE as default for all functions.
+* Set 'verbose = TRUE' as default for all functions.
 * Added unit tests.
-* return silently NA if API is not reachable.
+* All functions return silently NA, if API is not reachable.
 
 BUG FIXES
 
 * cts_convert() does not ignore 'first' argument.
-* get_csid() did not return NA, if there is a problem with the webservice.
-* cir_query() returned NA2+ if NA was given.
-* Many fixes in handling NA, when no hit was found.
+* get_csid() did not return NA, if there was a problem with the API.
+* cir_query() returned 'NA2+' if NA was given.
+* Many fixes in NA handling, e.g. when no hit was found.
