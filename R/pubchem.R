@@ -25,6 +25,10 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
+  if (is.na(query)) {
+    warning('Identifier is NA... Returning NA.')
+    return(NA)
+  }
   qurl <- paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=",
                 query, sep = "")
   if (verbose)
