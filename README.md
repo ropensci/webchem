@@ -5,8 +5,8 @@ webchem
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
-[![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg)](https://coveralls.io/r/ropensci/webchem)
-
+[![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
+[![Openn Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
 
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
@@ -17,7 +17,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 Chemical Identifier Resolver (CIR) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | [link](https://www.rsc.org/rsc-id/register )
+ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
 PAN Pesticide Database | `pan()` | [link](http://www.pesticideinfo.org/) | none
@@ -136,7 +136,6 @@ Retrieve PubChem CID
 
 ```r
 get_cid('Triclosan')
-#> [1] "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=Triclosan"
 #>  [1] "4093"     "5564"     "13190"    "131203"   "627458"   "15942656"
 #>  [7] "16220126" "16220128" "16220129" "16220130" "18413505" "22947105"
 #> [13] "23656593" "24848164" "25023954" "25023955" "25023956" "25023957"
@@ -145,7 +144,6 @@ get_cid('Triclosan')
 #> [31] "25023970" "25023971" "25023972" "25023973" "45040608" "45040609"
 #> [37] "67606151" "71752714"
 cid <- get_cid('3380-34-5')
-#> [1] "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=3380-34-5"
 ```
 
 Use this CID to retrieve some chemical properties:
