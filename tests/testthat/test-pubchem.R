@@ -5,6 +5,7 @@ test_that("get_cid()", {
   expect_equal(length(get_cid('Triclosan', first = TRUE, verbose = FALSE)), 1)
   expect_equal(get_cid('xxxxx', verbose = FALSE), NA)
   expect_error(get_cid(c('xxxxx', 'aaaaaaa')))
+  expect_warning(get_cid(NA))
 })
 
 

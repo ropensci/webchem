@@ -37,6 +37,8 @@ get_csid("Triclosan", token = token)
 # attr(,"class")
 # [1] "csid"
 get_csid("3380-34-5", token = token)
+
+###
 # multiple inputs
 sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 }

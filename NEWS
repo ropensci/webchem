@@ -18,5 +18,5 @@ BUG FIXES
 
 * cts_convert() does not ignore 'first' argument.
 * get_csid() did not return NA, if there was a problem with the API.
-* cir_query() returned 'NA2+' if NA was given.
+* Many functions returned 'NA2+' if NA was given - now return NA by default.
 * Many fixes in NA handling, e.g. when no hit was found.

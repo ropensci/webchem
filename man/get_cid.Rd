@@ -25,6 +25,11 @@ Return CompoundID (CID) for a search query, see \url{https://pubchem.ncbi.nlm.ni
 \donttest{
 # might fail if API is not available
 get_cid('Triclosan')
+
+# multiple inputs
+comp <- c('Triclosan', 'Aspirin')
+sapply(comp, function(x) get_cid(x))
+sapply(comp, function(x) get_cid(x, first = TRUE))
 }
 }
 \author{

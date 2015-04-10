@@ -5,6 +5,7 @@ test_that("get_csid()", {
   expect_equal(get_csid("Triclosan", token = token, verbose = FALSE), '5363')
   expect_equal(get_csid("xxxxxxxxx", token = token, verbose = FALSE), NA)
   expect_error(get_csid(c("a", "b"), token = token))
+  expect_warning(get_csid(NA, token = token))
   expect_true(is.vector(get_csid("Triclosan", token = token, verbose = FALSE)))
 })
 

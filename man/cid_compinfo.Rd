@@ -32,6 +32,14 @@ Retrieve compound information from pubchem CID, see \url{https://pubchem.ncbi.nl
 # might fail if API is not available
 cid <- get_cid('Triclosan')
 cid_compinfo(cid[1])
+
+###
+# multiple CIDS
+comp <- c('Triclosan', 'Aspirin')
+cids <- sapply(comp, function(x) get_cid(x, first = TRUE))
+(ll <- lapply(cids, cid_compinfo, first = TRUE))
+# as mtrix
+do.call(rbind, ll)
 }
 }
 \author{

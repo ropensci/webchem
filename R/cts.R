@@ -76,6 +76,10 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   if (length(query) > 1 | length(from) > 1 | length(to) > 1) {
     stop('Cannot handle multiple input strings.')
   }
+  if (is.na(query)) {
+    warning('Identifier is NA... Returning NA.')
+    return(NA)
+  }
   baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
   qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
   qurl <- URLencode(qurl)

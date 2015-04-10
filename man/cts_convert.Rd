@@ -34,6 +34,10 @@ for possible values of from and to.
 \donttest{
 # might fail if API is not available
 cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
+
+### multiple inputs
+comp <- c('Triclosan', 'Aspirin')
+sapply(comp, function(x) cts_convert(x, 'Chemical Name', 'CAS', first = TRUE))
 }
 }
 \author{

@@ -33,11 +33,15 @@ token <- '<YOUR-SECURITY-TOKEN>'
 # convert CAS to CSID
 csid <- get_csid("Triclosan", token = token)
 csid_compinfo(csid, token)
-# multiple inpits
-csids <- get_csid("3380-34-5", token = token)
+
+###
+# multiple inputs
+csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 # fails:
 # csid_compinfo(csids, token = token)
-lapply(csids, csid_compinfo, token = token)
+(ll <- lapply(csids, csid_compinfo, token = token))
+# return a list, convert to matrix:
+do.call(rbind, ll)
 }
 }
 \author{

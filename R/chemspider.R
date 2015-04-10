@@ -36,6 +36,10 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
+  if (is.na(query)) {
+    warning('Identifier is NA... Returning NA.')
+    return(NA)
+  }
   baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
   qurl <- paste0(baseurl, 'query=', query, '&token=', token)
   if (verbose)
