@@ -3,11 +3,17 @@
 #' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
 #' @import RCurl XML
 #' @param query character; searchterm, e.g. chemical name or CAS.
-#' @param first logical; return only first result be returned?
+#' @param match character; \code{match="all"} returns all matches,
+#'   \code{match="first"} the first one and \code{match="best"} the hit with the lowest
+#'    Levenshtein distance between query and hit.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a named list of 73 entries, see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
+#' @return a named list of 73 entries,
+#'   see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
+#'   If \code{match="best"} an additional entry \code{match_score} with the normalized
+#'   Levenshtein distance (0 = perfect match, 1 = worst match).
 #'
+#
 #' Chemical Name and matching synonym; CAS Number; U.S. EPAPC Code; CA ChemCode;
 #' Use Type; Chemical Class; Molecular Weight; U.S. EPARegistered ; CA Reg Status;
 #' PIC; POPs; WHO Obsolete; EPA HAP; CA TAC; Ground Water Contaminant;
@@ -43,23 +49,30 @@
 #' @examples
 #' \donttest{
 #'  # might fail if API is not available
-#'  pan('xxxxx')
-#'  # returns NA with warning
-#'  pan('2,4-dichlorophenol')
+#'
+#'  # return all hits
+#'  pan('2,4-dichlorophenol')[c(1, 2, 5, 74)]
 #'  # return only first hit
-#'  pan('2,4-dichlorophenol', first = TRUE)
+#'  pan('2,4-dichlorophenol', match = 'first')[c(1, 2, 5, 74)]
+#'  # return only best hit
+#'  pan('2,4-dichlorophenol', match = 'best')[c(1, 2, 5, 74)]
+#'
+#'  # returns NA
+#'  pan('xxxxx')
 #'
 #' ### multiple inputs
 #' comp <- c('Triclosan', 'Aspirin')
 #' # retrive CAS
-#' sapply(comp, function(x) pan(x, first = TRUE)[[2]])
-#' ll <- lapply(comp, function(x) pan(x, first = TRUE)[c(2, 4, 5, 6)])
+#' sapply(comp, function(x) pan(x, match = 'best')[['CAS Number']])
+#' # multiple columns
+#' ll <- lapply(comp, function(x) pan(x, match = 'best')[c(1, 2, 5, 74)])
 #' do.call(rbind, ll)
 #' }
-pan <- function(query, first = FALSE, verbose = TRUE, ...){
+pan <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
+  match <- match.arg(match)
   baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
   baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',
                   'dDPR_Chem_Code=y&dUseList=y&dClassList=y&dMol_weight=y&',
@@ -102,7 +115,18 @@ pan <- function(query, first = FALSE, verbose = TRUE, ...){
   }, how = "replace" )
   out <- c(out[1:46],
            rapply(out[47:73], function(x) gsub(',', '', x), how = 'replace'))
-  if (first)
+  if (match == 'first')
     out <- lapply(out, '[', 1)
+  if (match == 'best') {
+    hits <- out[[1]]
+    # split synonyms
+    hits <- strsplit(hits, '\\n')
+    dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
+    take <- which.min(dists)
+    out <- lapply(out, '[', take)
+    out$match_score <- dists[take]
+  }
   return(out)
 }
+
+

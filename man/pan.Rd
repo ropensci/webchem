@@ -4,19 +4,24 @@
 \alias{pan}
 \title{Query the PAN Pesticide database}
 \usage{
-pan(query, first = FALSE, verbose = TRUE, ...)
+pan(query, match = c("all", "first", "best"), verbose = TRUE, ...)
 }
 \arguments{
 \item{query}{character; searchterm, e.g. chemical name or CAS.}
 
-\item{first}{logical; return only first result be returned?}
+\item{match}{character; \code{match="all"} returns all matches,
+\code{match="first"} the first one and \code{match="best"} the hit with the lowest
+ Levenshtein distance between query and hit.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{...}{currently not used.}
 }
 \value{
-a named list of 73 entries, see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
+a named list of 73 entries,
+  see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
+  If \code{match="best"} an additional entry \code{match_score} with the normalized
+  Levenshtein distance (0 = perfect match, 1 = worst match).
 
 Chemical Name and matching synonym; CAS Number; U.S. EPAPC Code; CA ChemCode;
 Use Type; Chemical Class; Molecular Weight; U.S. EPARegistered ; CA Reg Status;
@@ -55,17 +60,23 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
 \examples{
 \donttest{
  # might fail if API is not available
- pan('xxxxx')
- # returns NA with warning
- pan('2,4-dichlorophenol')
+
+ # return all hits
+ pan('2,4-dichlorophenol')[c(1, 2, 5, 74)]
  # return only first hit
- pan('2,4-dichlorophenol', first = TRUE)
+ pan('2,4-dichlorophenol', match = 'first')[c(1, 2, 5, 74)]
+ # return only best hit
+ pan('2,4-dichlorophenol', match = 'best')[c(1, 2, 5, 74)]
+
+ # returns NA
+ pan('xxxxx')
 
 ### multiple inputs
 comp <- c('Triclosan', 'Aspirin')
 # retrive CAS
-sapply(comp, function(x) pan(x, first = TRUE)[[2]])
-ll <- lapply(comp, function(x) pan(x, first = TRUE)[c(2, 4, 5, 6)])
+sapply(comp, function(x) pan(x, match = 'best')[['CAS Number']])
+# multiple columns
+ll <- lapply(comp, function(x) pan(x, match = 'best')[c(1, 2, 5, 74)])
 do.call(rbind, ll)
 }
 }
