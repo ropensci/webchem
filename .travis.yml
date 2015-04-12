@@ -9,8 +9,8 @@ after_success:
   - Rscript -e 'library(covr); coveralls()'
 
 notifications:
-email:
-recipients:
-- szoecs@uni-landau.de
-on_success: never
-on_failure: always
+  email:
+    recipients:
+    - szoecs@uni-landau.de
+    on_success: never
+    on_failure: always
