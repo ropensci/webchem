@@ -1,7 +1,7 @@
 #' Get record details from Chemical Translation Service (CTS)
 #'
 #' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
-#' @import RCurl RJSONIO
+#' @import RCurl jsonlite
 #' @param inchikey character; InChIkey.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
@@ -50,7 +50,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' Convert Ids using Chemical Translation Service (CTS)
 #'
 #' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
-#' @import RCurl RJSONIO
+#' @import RCurl jsonlite
 #' @param query character; query ID.
 #' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
 #'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
@@ -87,7 +87,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
     message(qurl)
   h <- try(getURL(qurl), silent = TRUE)
   if (!inherits(h, "try-error")) {
-    out <- fromJSON(h)[[1]]
+    out <- fromJSON(h)
   } else {
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
@@ -96,7 +96,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
     message(out['error'], "Returning NA.")
     return(NA)
   } else {
-    out <- out$result
+    out <- out$result[[1]]
   }
   if (length(out) == 0) {
     message("Not found. Returning NA.")
