@@ -72,6 +72,10 @@ pan <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
+  if (is.na(query)) {
+    warning('Identifier is NA... Returning NA.')
+    return(NA)
+  }
   match <- match.arg(match)
   baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
   baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',
