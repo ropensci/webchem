@@ -6,7 +6,8 @@ webchem
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
 [![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
-[![Openn Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
+[![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
+[![Open Issues](http://cranlogs.r-pkg.org/badges/webchem)](http://cranlogs.r-pkg.org/badges/webchem)
 
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
@@ -187,10 +188,10 @@ info[1:5]
 #> [1] 289.5418
 #> 
 #> $exactmass
-#> NULL
+#> [1] 287.9512
 #> 
 #> $formula
-#> NULL
+#> [1] "C12H7Cl3O2"
 ```
 
 
