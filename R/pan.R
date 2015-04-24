@@ -99,6 +99,7 @@ pan <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
   qurl = paste0(baseurl, baseq, 'ChemName=', query)
   if (verbose)
     message(paste0(baseurl, 'ChemName=', query), '\n')
+  Sys.sleep(0.1)
   h <- try(htmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
