@@ -31,7 +31,7 @@ Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a secur
 #### Install from CRAN (stable version)
 
 ```r
-install.packages("taxize")
+install.packages("webchem")
 ```
 
 
