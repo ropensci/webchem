@@ -4,6 +4,7 @@ sudo: required
 r_github_packages:
  - jimhester/covr
  - jeroenooms/curl
+ - jimhester/robustr
 
 after_success:
   - Rscript -e 'library(covr); coveralls()'
