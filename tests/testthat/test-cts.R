@@ -16,6 +16,7 @@ test_that("cts_convert()", {
   expect_equal(length(cts_convert('Triclosan', 'Chemical Name', 'CAS', first = TRUE, verbose = FALSE)), 1)
   expect_equal(cts_convert('xxxxxx', 'Chemical Name', 'CAS', verbose = FALSE), NA)
   expect_warning(cts_convert(NA, 'Chemical Name', 'CAS', verbose = FALSE))
+  expect_warning(cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchike', 'Chemical Name'))
 })
 
 test_that("cts_compinfo(cir_query())", {
