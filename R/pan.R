@@ -100,11 +100,12 @@ pan <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
   if (verbose)
     message(paste0(baseurl, 'ChemName=', query), '\n')
   Sys.sleep(0.1)
-  h <- try(htmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE), silent = TRUE)
-  if (inherits(h, "try-error")) {
+  cont <- try(getURLContent(qurl, .opts = list(timeout = 3)), silent = TRUE)
+  if (inherits(cont, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
+  h <- htmlParse(cont, useInternalNodes = TRUE)
   nd <- getNodeSet(h, "//table[contains(.,'Detailed Info')]")
   if (length(nd) == 0) {
     message('Not found... Returning NA.')

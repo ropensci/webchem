@@ -34,8 +34,9 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
   if (verbose)
     message(qurl)
   Sys.sleep(0.3)
-  h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE), silent = TRUE)
-  if (!inherits(h, "try-error")) {
+  cont <- try(getURLContent(qurl, .opts = list(timeout = 3)), silent = TRUE)
+  if (!inherits(cont, "try-error")) {
+    h <- xmlParse(cont, useInternalNodes = TRUE)
     out <- rev(xpathSApply(h, "//IdList/Id", xmlValue))
   } else{
     warning('Problem with web service encountered... Returning NA.')
