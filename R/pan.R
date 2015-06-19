@@ -47,7 +47,7 @@
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'  # might fail if API is not available
 #'
 #'  # return all hits
