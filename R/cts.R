@@ -94,7 +94,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
     return(NA)
   }
   if ('error' %in% names(out)) {
-    message('Error in query : \n', out['error'], "\n Returning NA.")
+    warning('Error in query : \n', out['error'], "\n Returning NA.")
     return(NA)
   } else {
     out <- out$result[[1]]

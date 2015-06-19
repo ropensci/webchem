@@ -1,6 +1,13 @@
 context("pan")
 
+check_api <- function() {
+  if (is.na(pan('2,4-dichlorophenol', verbose = FALSE))) {
+    skip("API not available")
+  }
+}
+
 test_that("pan()", {
+  check_api()
   expect_error(pan(c('xxxxx', 'aaaaaaa')))
   expect_warning(pan(NA))
   expect_equal(pan('xxxxx', verbose = FALSE), NA)
