@@ -36,6 +36,7 @@ ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
 PAN Pesticide Database | `pan()` | [link](http://www.pesticideinfo.org/) | none
+Allan Wood's Compendium of Pesticide Common Names | `allanwood()` | [link](http://www.alanwood.net/pesticides/) | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -145,6 +146,16 @@ info[1:5]
 ```{r}
 pan_list <- pan('lambda-Cyhalothrin', first = TRUE)
 pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
+```
+
+
+
+#### Allan Wood's Compendium of Pesticide Common Names
+
+`allanwood()` returns a list of 9 entries and can query common names and cas numbers:
+```{r}
+allanwood('Fluazinam', type = 'commonname')
+allanwood('79622-59-6', type = 'cas')$cname
 ```
 
 

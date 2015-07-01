@@ -23,6 +23,7 @@ ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
 PAN Pesticide Database | `pan()` | [link](http://www.pesticideinfo.org/) | none
+Allan Wood's Compendium of Pesticide Common Names | `allanwood()` | [link](http://www.alanwood.net/pesticides/) | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -79,7 +80,7 @@ Convert InChiKey (Triclosan) to ChemSpider ID and retrieve the number of rings
 
 ```r
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'chemspider_id', first = TRUE)
-#> [1] "5363"
+#> [1] "<!DOCTYPE"
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 #> [1] "2"
 ```
@@ -138,13 +139,12 @@ Retrieve PubChem CID
 
 ```r
 get_cid('Triclosan')
-#>  [1] "4093"     "5564"     "13190"    "131203"   "627458"   "15942656"
-#>  [7] "16220126" "16220128" "16220129" "16220130" "18413505" "22947105"
-#> [13] "23656593" "24848164" "25023954" "25023955" "25023956" "25023957"
-#> [19] "25023958" "25023959" "25023960" "25023961" "25023962" "25023963"
-#> [25] "25023964" "25023965" "25023966" "25023967" "25023968" "25023969"
-#> [31] "25023970" "25023971" "25023972" "25023973" "45040608" "45040609"
-#> [37] "67606151" "71752714"
+#>  [1] "5564"     "131203"   "627458"   "15942656" "16220126" "16220128"
+#>  [7] "16220129" "16220130" "18413505" "22947105" "23656593" "24848164"
+#> [13] "25023954" "25023955" "25023956" "25023957" "25023958" "25023959"
+#> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
+#> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
+#> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
 cid <- get_cid('3380-34-5')
 ```
 
@@ -214,6 +214,44 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 #> 
 #> $`Adsorption Coefficient (Koc)`
 #> [1] "157000"
+```
+
+
+
+#### Allan Wood's Compendium of Pesticide Common Names
+
+`allanwood()` returns a list of 9 entries and can query common names and cas numbers:
+
+```r
+allanwood('Fluazinam', type = 'commonname')
+#> $cname
+#> [1] "Fluazinam"
+#> 
+#> $status
+#> [1] "ISO 1750 (published)"
+#> 
+#> $pref_iupac_name
+#> [1] "3-chloro-N-[3-chloro-2,6-dinitro-4-(trifluoromethyl)phenyl]-5-(trifluoromethyl)pyridin-2-amine"
+#> 
+#> $iupac_name
+#> [1] "3-chloro-N-(3-chloro-5-trifluoromethyl-2-pyridyl)-α,α,α-trifluoro-2,6-dinitro-p-toluidine"
+#> 
+#> $cas
+#> [1] "79622-59-6"
+#> 
+#> $formula
+#> [1] "C13H4Cl2F6N4O4"
+#> 
+#> $activity
+#> [1] "fungicides (pyridine fungicides)"
+#> 
+#> $inchikey
+#> [1] "UZCGKGPEKUCDTF-UHFFFAOYSA-N"
+#> 
+#> $inch
+#> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
+allanwood('79622-59-6', type = 'cas')$cname
+#> [1] "fluazinam"
 ```
 
 
