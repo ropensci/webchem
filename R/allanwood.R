@@ -29,8 +29,8 @@ allanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     stop('currently not implemented!')
   }
   if (length(takelink) == 0) {
-    message('Not found! Returning NA.')
-    return(c(CAS = NA_character_, activity = NA_character_))
+    message('Not found! Returning NA.\n')
+    return(NA)
   }
   if (verbose)
     message('Querying ', takelink)
