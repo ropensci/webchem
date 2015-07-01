@@ -4,6 +4,7 @@ webchem 0.0.2
 NEW FEATURES
 
 * Query the PAN Pesticides Database with pan().
+* Query Allan Woods Compendium of Pesticide Common Names
 
 MINOR IMPROVEMENTS
 

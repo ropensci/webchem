@@ -1,6 +1,6 @@
 #' Query http://www.alanwood.net/pesticides
 #'
-#' Query http://www.alanwood.net/pesticides
+#' Query Allan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
 #' @import XML RCurl
 #'
 #' @param  x character; search string
@@ -9,6 +9,7 @@
 #' @return A list of eight entries: common-name, status, preferredd IUPAC Name,
 #'          IUPAC Name, cas, formula, activity, inchikey, inchi
 #'
+#' @note for type = 'cas' only the first link is returned
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
