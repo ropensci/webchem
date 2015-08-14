@@ -5,8 +5,8 @@ Type: Package
 Version: 0.0.2
 Date: 2015-08-14
 License: MIT + file LICENSE
-URL: https://github.com/EDiLD/webchem
-BugReports: https://github.com/EDiLD/webchem/issues
+URL: https://github.com/ropensci/webchem
+BugReports: https://github.com/ropensci/webchem/issues
 Authors@R: c(person("Eduard", "Szoecs", role = c("aut", "cre"),
     email = "eduardszoecs@gmail.com"),
     person("Daniel", "Muench", role = "ctb"))
