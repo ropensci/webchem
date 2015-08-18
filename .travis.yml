@@ -15,9 +15,3 @@ notifications:
     - szoecs@uni-landau.de
     on_success: never
     on_failure: always
-
-# whitelist
-branches:
-  only:
-    - master
-    - release
