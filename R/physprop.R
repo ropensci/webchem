@@ -81,6 +81,7 @@ physprop <- function(cas, verbose = TRUE){
 
   cas <- xpathApply(ttt, '//ul[@class="ph"]/li[starts-with(text(),"CAS")]',xmlValue)[[1]]
   cas <- sub(".*:.", "", cas)
+  cas <- sub("^[0]+", "", cas)
 
   cname <- xpathApply(ttt, '//ul[@class="ph"]/li[starts-with(text(),"Chem")]',xmlValue)[[1]]
   cname <- sub(".*:.", "", cname)
