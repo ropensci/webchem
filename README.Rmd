@@ -27,22 +27,23 @@ knitr::opts_chunk$set(
 This package interacts with a suite of web APIs to retrieve chemical information.
 
 
-### Currently implemented in `webchem`
+## Currently implemented in `webchem`
 
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
-Chemical Identifier Resolver (CIR) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-ChemSpider | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
-Chemical Translation Service (CTS) | `cts_convert()`, `cts_compinfo()` | [link](http://cts.fiehnlab.ucdavis.edu/) | none
-PAN Pesticide Database | `pan()` | [link](http://www.pesticideinfo.org/) | none
-Allan Wood's Compendium of Pesticide Common Names | `allanwood()` | [link](http://www.alanwood.net/pesticides/) | none
+[Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
+[PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
+[Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
+[PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
 Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
 
-### Installation
+## Installation
 #### Install from CRAN (stable version)
 ```{r eval=FALSE}
 install.packages("webchem")
@@ -56,7 +57,8 @@ library("devtools")
 install_github("ropensci/webchem")
 ```
 
-### Quickstart
+
+## Quickstart
 
 ```{r}
 library("webchem")
@@ -139,7 +141,6 @@ info[1:5]
 ```
 
 
-
 #### PAN Pesticide Database
 `pan()` returns a list of 73 entries, here I extract only 4 of those:
 ```{r}
@@ -156,6 +157,15 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 allanwood('Fluazinam', type = 'commonname')
 allanwood('79622-59-6', type = 'cas')$cname
 ```
+
+#### SRC PHYSPROP Database
+[SRCs PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) contains chemical structures, names and physical properties for over 41,000 chemicals.
+You can use `physprop()` to query this database using a CAS number:
+
+```{r}
+physprop('50-00-0')
+```
+
 
 
 
