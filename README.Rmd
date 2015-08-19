@@ -79,9 +79,8 @@ cir_query('3380-34-5', 'smiles')
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 ```
 
-Convert InChiKey (Triclosan) to ChemSpider ID and retrieve the number of rings
+Query the number of rings using the InChiKey (Triclosan) 
 ```{r}
-cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'chemspider_id', first = TRUE)
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 ```
 
