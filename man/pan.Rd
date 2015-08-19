@@ -59,7 +59,7 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
 }
 \examples{
 \dontrun{
- # might fail if pan API is not available
+ # might fail if API is not available
 
  # return all hits
  pan('2,4-dichlorophenol')[c(1, 2, 5, 74)]
