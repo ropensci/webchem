@@ -7,9 +7,9 @@
 physprop(cas, verbose = TRUE)
 }
 \arguments{
-\item{verbose}{logical; print message during processing to console?}
+\item{cas}{character; A CAS number to query.}
 
-\item{x}{character; A CAS number to query.}
+\item{verbose}{logical; print message during processing to console?}
 }
 \value{
 A list of 4 entries: cas (CAS-Number), cname (Chemical Name),

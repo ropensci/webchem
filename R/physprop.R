@@ -8,7 +8,7 @@
 #'
 #' @import XML RCurl
 #'
-#' @param x character; A CAS number to query.
+#' @param cas character; A CAS number to query.
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A list of 4 entries: cas (CAS-Number), cname (Chemical Name),
