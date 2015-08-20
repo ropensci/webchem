@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 .gitignore
 .travis.yml
+.travis.yml_old
 ^appveyor\.yml$
 README.html
 README.Rmd
