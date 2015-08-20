@@ -4,7 +4,7 @@ webchem 0.0.3
 NEW FEATURES
 
 * Query SRC PHYSPROP Database with physprop().
-* Query the ETOX ID with get_etoxid().
+* Query the ETOX ID with get_etoxid(); query basic information with etox_basic()
 
 MINOR IMPROVEMENTS
 

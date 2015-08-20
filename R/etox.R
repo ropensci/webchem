@@ -12,6 +12,7 @@
 #' substance name) and \code{distance} (the normalized string distance of the query to the match).
 #'
 #' @note If more than one reference is found only the first hit is taken.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -71,4 +72,58 @@ get_etoxid <- function(query, verbose = TRUE){
   attr(id, "matched") <- matched_sub
   attr(id, "distance") <- d
   return(id)
+}
+
+#' Get basic information from a ETOX ID
+#'
+#' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
+#' \url{http://webetox.uba.de/webETOX/index.do} for basic information
+#'
+#' @import XML RCurl
+#'
+#' @param id character; ETOX ID
+#' @param verbose logical; print message during processing to console?
+#'
+#' @return a list wit four entries: cas (the CAS numbers), ec (the EC number),
+#' gsbl (the gsbl number) and a data.frame synonys with synonyms.
+#'
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' \dontrun{
+#' id <- get_etoxid('Triclosan')
+#' etox_basic(id)
+#' }
+etox_basic <- function(id, verbose = TRUE){
+  # id <- '20179'
+  baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  qurl <- paste0(baseurl, id)
+  if (verbose)
+    message('Querying ', qurl)
+
+  Sys.sleep(0.1)
+  tt <- htmlParse(getURL(qurl))
+
+  if (any(grepl('Problem', xpathSApply(tt, '//h3', xmlValue)))) {
+    message('ID not found! Returning NA.\n')
+    return(NA)
+  }
+
+  tabs <- readHTMLTable(tt, header = FALSE, stringsAsFactors = FALSE)
+
+  binf <- tabs[[3]]
+  cas <- binf[, 1][binf[, 2] == 'CAS']
+  ec <- binf[, 1][grepl('EINEC', binf[, 2])]
+  gsbl <- binf[, 1][binf[, 2] == 'GSBL']
+
+  syns <- tabs[[2]][c(1, 3, 4)]
+  colnames(syns) <- syns[1, ]
+  syns <- syns[-1, ]
+  syns <- syns[syns[ , 2] == 'SYNONYM' & !is.na(syns[ , 2]), ]
+  syns <- syns[ , -2]
+  names(syns) <- c('name', 'language')
+
+  out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns)
+  return(out)
 }

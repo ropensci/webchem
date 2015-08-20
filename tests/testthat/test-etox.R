@@ -9,5 +9,13 @@ test_that("get_etoxid returns correct results", {
   expect_equal(c(xx), NA)
 })
 
+do2 <- etox_basic(do)
+xx2 <- etox_basic('xxx')
 
+test_that("etox_basic returns correct results", {
+  expect_equal(do2$cas, "3380-34-5")
+  expect_equal(length(do2), 4)
+  expect_is(do2$ec, 'data.frame')
+  expect_equal(xx2, NA)
+})
 

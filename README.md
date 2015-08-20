@@ -25,6 +25,7 @@ PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.go
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
 [Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
+[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -32,6 +33,7 @@ Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a secur
 
 ## Installation
 #### Install from CRAN (stable version)
+
 
 ```r
 install.packages("webchem")
@@ -48,7 +50,6 @@ install_github("ropensci/webchem")
 
 
 ## Quickstart
-
 
 ```r
 library("webchem")
@@ -91,11 +92,13 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 You'll need a API key:
 
+
 ```r
 token = '<YOUR TOKEN HERE'
 ```
 
 Retrieve the ChemSpider ID of Triclosan
+
 
 ```r
 (id <- get_csid('Triclosan', token = token))
@@ -103,6 +106,7 @@ Retrieve the ChemSpider ID of Triclosan
 ```
 
 Use this ID to query information from ChemSpider
+
 
 ```r
 csid_extcompinfo(id, token = token)
@@ -285,6 +289,63 @@ physprop('50-00-0')
 #> 5  EXP BETTERTON,EA & HOFFMAN,MR (1988)
 #> 6  EXP     KWOK,ESC & ATKINSON,R (1994)
 ```
+
+
+#### ETOX
+ETOX: Information System Ecotoxicology and Environmental Quality Targets is a database run by the Federal Environment Agency of Germany and provides data on synonyms, identifiers, Quality Targest and Effects.
+
+First we need to query a substance ID:
+
+
+```r
+id <- get_etoxid('Triclosan')
+id
+#> [1] "20179"
+#> attr(,"matched")
+#> [1] "Triclosan ( 20179 )"
+#> attr(,"distance")
+#> [1] 0.5263158
+```
+`get_etoxid` tries to find the best match for you (check the matched and distance attributes))
+
+With this substance ID we can query further information from ETOX, e.g.:
+
+
+```r
+etox_basic(id)
+#> $cas
+#> [1] "3380-34-5"
+#> 
+#> $ec
+#> [1] "222-182-2"
+#> 
+#> $gsbl
+#> [1] "117338"
+#> 
+#> $synonyms
+#>                                          name    language
+#> 3   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-     Deutsch
+#> 4     2,4,4'-Trichlor-2'-hydroxydiphenylether     Deutsch
+#> 5                              Irgasan DP 300     Deutsch
+#> 6                                   Vikol THP     Deutsch
+#> 7      2,4,4-Trichlor-2'-hydroxydiphenylether     Deutsch
+#> 8    2,4,4'-Trichloro-2'-hydroxydiphenylether     Deutsch
+#> 13     5-chloro-2-(2,4-dichlorophenoxy)phenol    Englisch
+#> 15     Chlor-2-(2,4-dichlorphenoxy)phenol, 5-   universal
+#> 16  Trichlor-2'-hydroxydiphenylether, 2,4,4'-   universal
+#> 17   Trichlor-2'-hydroxydiphenylether, 2,4,4-   universal
+#> 18 Trichloro-2'-hydroxydiphenylether, 2,4,4'-   universal
+#> 19      5-Chlor-2-(2,4-dichlorphenoxy)-phenol   universal
+#> 20    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5-   universal
+#> 21       5-Chlor-2-(2,4-dichlorphenoxy)phenol   universal
+#> 22                                  triclosán    Spanisch
+#> 23                                triklosaani    Finnisch
+#> 24                                 triclosano Italienisch
+#> 25                                  triklosan  Schwedisch
+```
+
+Which returns CAS, EC and GSBL numbers, as well as a synonym list.
+
 
 
 
