@@ -39,7 +39,7 @@ physprop <- function(cas, verbose = TRUE){
   qurl <- paste0(baseurl, query)
   if (verbose)
     message('Querying ', qurl)
-  ttt <- htmlParse(getURL(qurl), useInternalNodes = TRUE)
+  ttt <- htmlParse(getURL(qurl, .encoding = 'UTF-8'), useInternalNodes = TRUE)
   Sys.sleep(0.1)
 
   if (grepl('No records', xpathSApply(ttt, '//p', xmlValue)[3])) {
@@ -73,7 +73,7 @@ physprop <- function(cas, verbose = TRUE){
     } else {
       ref <- gsub('Ref.*:.(.*)', '\\1', ref)
     }
-    out <- data.frame(value, unit, temp, type, ref)
+    out <- data.frame(value, unit, temp, type, ref, stringsAsFactors = FALSE)
     return(out)
   }))
   prop$variable <- variables
