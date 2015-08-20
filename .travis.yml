@@ -25,7 +25,7 @@ after_failure:
   - ./pkg-build.sh dump_logs
 
 after_success:
-  - Rscript -e 'library(covr); coveralls()'
+  - ./pkg_build.sh run_script 'library(covr); coveralls()'
 
 notifications:
   email:
