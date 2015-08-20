@@ -17,7 +17,7 @@ install:
 script:
   - ./pkg-build.sh run_tests
 
-# print timings and sysinfo
+# print timings (of examples) and sysinfo
 after_script:
   - ./pkg-build.sh dump_logs_by_extension "timings"
   - ./pkg-build.sh dump_sysinfo
@@ -27,7 +27,7 @@ after_failure:
 
 # report to coveralls
 after_success:
-  - ./pkg-build.sh run_script -e 'covr::codecov()'
+  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov()'; fi
 
 notifications:
   email:
@@ -40,8 +40,8 @@ env:
   matrix:
     - RVERSION=oldrel
     - RVERSION=release
-    - RVERSION=devel
+    - RVERSION=devel COVERAGE=true
 
   global:
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran"
+    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran --run-donttest"
     - _R_CHECK_TIMINGS_="0"
