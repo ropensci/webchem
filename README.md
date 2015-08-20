@@ -261,7 +261,7 @@ You can use `physprop()` to query this database using a CAS number:
 ```r
 physprop('50-00-0')
 #> $cas
-#> [1] "000050-00-0"
+#> [1] "50-00-0"
 #> 
 #> $cname
 #> [1] "FORMALDEHYDE"
@@ -305,7 +305,7 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 
 ### Meta
 
-* Please [report any issues, bugs or feature requests](https://github.com/edild/webchem/issues).
+* Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
 * License: MIT
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
