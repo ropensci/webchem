@@ -18,8 +18,8 @@ script:
   - ./pkg-build.sh run_tests
 
 after_script:
-  - ./travis-tool.sh dump_logs_by_extension "timings"
-  - ./travis-tool.sh dump_sysinfo
+  - ./pkg-build.sh dump_logs_by_extension "timings"
+  - ./pkg-build.sh dump_sysinfo
 
 after_failure:
   - ./pkg-build.sh dump_logs
