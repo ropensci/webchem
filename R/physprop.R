@@ -39,7 +39,8 @@ physprop <- function(cas, verbose = TRUE){
   qurl <- paste0(baseurl, query)
   if (verbose)
     message('Querying ', qurl)
-  ttt <- htmlParse(getURL(qurl, .encoding = 'UTF-8'), useInternalNodes = TRUE)
+  ttt <- htmlParse(getURL(qurl, .encoding = 'UTF-8'), useInternalNodes = TRUE,
+                   encoding="UTF-8")
   Sys.sleep(0.1)
 
   if (grepl('No records', xpathSApply(ttt, '//p', xmlValue)[3])) {
