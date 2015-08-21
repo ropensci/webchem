@@ -190,6 +190,12 @@ etox_basic(id)
 
 Which returns CAS, EC and GSBL numbers, as well as a synonym list.
 
+We can also retrieve Quality Targets:
+
+```{r etox_targets}
+targets <- etox_targets(id)
+targets[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
+```
 
 
 

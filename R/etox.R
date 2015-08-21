@@ -8,7 +8,7 @@
 #' @param  query character; The searchterm
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A character vector, with the attributes \code{matched}  (the matched
+#' @return A character vector with the substance ID and additional attributes \code{matched}  (the matched
 #' substance name) and \code{distance} (the normalized string distance of the query to the match).
 #'
 #' @note If more than one reference is found only the first hit is taken.
@@ -99,11 +99,12 @@ etox_basic <- function(id, verbose = TRUE){
   # id <- '20179'
   baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
+  httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
     message('Querying ', qurl)
 
   Sys.sleep(0.1)
-  tt <- htmlParse(getURL(qurl))
+  tt <- htmlParse(getURL(qurl, httpheader = httpheader))
 
   if (any(grepl('Problem', xpathSApply(tt, '//h3', xmlValue)))) {
     message('ID not found! Returning NA.\n')
@@ -125,5 +126,57 @@ etox_basic <- function(id, verbose = TRUE){
   names(syns) <- c('name', 'language')
 
   out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns)
+  return(out)
+}
+
+
+#' Get Quality Targets from a ETOX ID
+#'
+#' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
+#' \url{http://webetox.uba.de/webETOX/index.do} for quality targets
+#'
+#' @import XML RCurl
+#'
+#' @param id character; ETOX ID
+#' @param verbose logical; print message during processing to console?
+#'
+#' @return A data.frame with quality targets from the ETOX database.
+#'
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' \dontrun{
+#' id <- get_etoxid('Triclosan')
+#' out <- etox_targets(id)
+#' out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
+#' 'Value_Target_LR', 'Unit')]
+#' }
+etox_targets <- function(id, verbose = TRUE){
+  # id <- '20179'
+  baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  qurl <- paste0(baseurl, id)
+  httpheader = c("Accept-Language" = "en-US,en;q=0.5")
+  if (verbose)
+    message('Querying ', qurl)
+
+  # get second id
+  Sys.sleep(0.1)
+  tt <- htmlParse(getURL(qurl, httpheader = httpheader))
+  if (any(grepl('Problem', xpathSApply(tt, '//h3', xmlValue)))) {
+    message('ID not found! Returning NA.\n')
+    return(NA)
+  }
+  link2 <- xpathSApply(tt, "//a[contains(.,'Quali')]/@href[contains(.,'stoff')]")
+  id2 <- gsub('.*=(\\d+)', '\\1', link2)
+
+  tt2 <-  htmlParse(getURL(paste0('http://webetox.uba.de', link2),
+                           httpheader = httpheader))
+  csvlink <- xpathSApply(tt2, "//a[contains(.,'Csv')]/@href")
+  cont <- getURL(paste0('http://webetox.uba.de', csvlink),
+                 httpheader = httpheader)
+  out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
+                    stringsAsFactors = FALSE)
+  out$Value_Target_LR <- as.numeric(out$Value_Target_LR)
   return(out)
 }

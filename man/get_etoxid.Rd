@@ -12,7 +12,7 @@ get_etoxid(query, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A character vector, with the attributes \code{matched}  (the matched
+A character vector with the substance ID and additional attributes \code{matched}  (the matched
 substance name) and \code{distance} (the normalized string distance of the query to the match).
 }
 \description{
