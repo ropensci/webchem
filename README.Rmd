@@ -38,6 +38,7 @@ PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.go
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
 [Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
+[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -45,13 +46,14 @@ Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a secur
 
 ## Installation
 #### Install from CRAN (stable version)
-```{r install_cran eval=FALSE}
+
+```{r install_cran, eval=FALSE}
 install.packages("webchem")
 ```
 
 
 #### Install from Github (development version)
-```{r install_github eval=FALSE}
+```{r install_github, eval=FALSE}
 install.packages("devtools")
 library("devtools")
 install_github("ropensci/webchem")
@@ -87,13 +89,13 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 
 #### ChemSpider
-```{r token echo=FALSE}
+```{r token, echo=FALSE}
 token = '37bf5e57-9091-42f5-9274-650a64398aaf'
 ```
 
 You'll need a API key:
 
-```{r api_key eval=FALSE}
+```{r api_key, eval=FALSE}
 token = '<YOUR TOKEN HERE'
 ```
 
@@ -166,6 +168,33 @@ You can use `physprop()` to query this database using a CAS number:
 
 ```{r physprop}
 physprop('50-00-0')
+```
+
+
+#### ETOX
+ETOX: Information System Ecotoxicology and Environmental Quality Targets is a database run by the Federal Environment Agency of Germany and provides data on synonyms, identifiers, Quality Targest and Effects.
+
+First we need to query a substance ID:
+
+```{r get_etoxid}
+id <- get_etoxid('Triclosan')
+id
+```
+`get_etoxid` tries to find the best match for you (check the matched and distance attributes))
+
+With this substance ID we can query further information from ETOX, e.g.:
+
+```{r etox_basic}
+etox_basic(id)
+```
+
+Which returns CAS, EC and GSBL numbers, as well as a synonym list.
+
+We can also retrieve Quality Targets:
+
+```{r etox_targets}
+targets <- etox_targets(id)
+targets[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 ```
 
 

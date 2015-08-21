@@ -25,6 +25,7 @@ PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.go
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
 [Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
+[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -32,6 +33,7 @@ Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a secur
 
 ## Installation
 #### Install from CRAN (stable version)
+
 
 ```r
 install.packages("webchem")
@@ -48,7 +50,6 @@ install_github("ropensci/webchem")
 
 
 ## Quickstart
-
 
 ```r
 library("webchem")
@@ -91,11 +92,13 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 You'll need a API key:
 
+
 ```r
 token = '<YOUR TOKEN HERE'
 ```
 
 Retrieve the ChemSpider ID of Triclosan
+
 
 ```r
 (id <- get_csid('Triclosan', token = token))
@@ -103,6 +106,7 @@ Retrieve the ChemSpider ID of Triclosan
 ```
 
 Use this ID to query information from ChemSpider
+
 
 ```r
 csid_extcompinfo(id, token = token)
@@ -284,6 +288,90 @@ physprop('50-00-0')
 #> 4  EXP   SERJEANT,EP & DEMPSEY,B (1979)
 #> 5  EXP BETTERTON,EA & HOFFMAN,MR (1988)
 #> 6  EXP     KWOK,ESC & ATKINSON,R (1994)
+```
+
+
+#### ETOX
+ETOX: Information System Ecotoxicology and Environmental Quality Targets is a database run by the Federal Environment Agency of Germany and provides data on synonyms, identifiers, Quality Targest and Effects.
+
+First we need to query a substance ID:
+
+
+```r
+id <- get_etoxid('Triclosan')
+id
+#> [1] "20179"
+#> attr(,"matched")
+#> [1] "Triclosan ( 20179 )"
+#> attr(,"distance")
+#> [1] 0.5263158
+```
+`get_etoxid` tries to find the best match for you (check the matched and distance attributes))
+
+With this substance ID we can query further information from ETOX, e.g.:
+
+
+```r
+etox_basic(id)
+#> $cas
+#> [1] "3380-34-5"
+#> 
+#> $ec
+#> [1] "222-182-2"
+#> 
+#> $gsbl
+#> [1] "117338"
+#> 
+#> $synonyms
+#>                                          name  language
+#> 5      5-chloro-2-(2,4-dichlorophenoxy)phenol   English
+#> 8   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-    German
+#> 9     2,4,4'-Trichlor-2'-hydroxydiphenylether    German
+#> 10                             Irgasan DP 300    German
+#> 11                                  Vikol THP    German
+#> 12     2,4,4-Trichlor-2'-hydroxydiphenylether    German
+#> 13   2,4,4'-Trichloro-2'-hydroxydiphenylether    German
+#> 15     Chlor-2-(2,4-dichlorphenoxy)phenol, 5- universal
+#> 16  Trichlor-2'-hydroxydiphenylether, 2,4,4'- universal
+#> 17   Trichlor-2'-hydroxydiphenylether, 2,4,4- universal
+#> 18 Trichloro-2'-hydroxydiphenylether, 2,4,4'- universal
+#> 19      5-Chlor-2-(2,4-dichlorphenoxy)-phenol universal
+#> 20    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5- universal
+#> 21       5-Chlor-2-(2,4-dichlorphenoxy)phenol universal
+#> 22                                  triclosán   Spanish
+#> 23                                triklosaani   Finnish
+#> 24                                 triclosano   Italian
+#> 25                                  triklosan   Swedish
+```
+
+Which returns CAS, EC and GSBL numbers, as well as a synonym list.
+
+We can also retrieve Quality Targets:
+
+
+```r
+targets <- etox_targets(id)
+targets[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
+#>   Substance    CAS_NO Country_or_Region      Designation Value_Target_LR
+#> 1 Triclosan 3380-34-5               AUS             PNEC           0.050
+#> 2 Triclosan 3380-34-5               CHE AA-QS_freshwater           0.020
+#> 3 Triclosan 3380-34-5               CHE           MAC-QS           0.020
+#> 4 Triclosan 3380-34-5               DEU           AA-EQS           0.020
+#> 5 Triclosan 3380-34-5               DEU          MAC-EQS           0.200
+#> 6 Triclosan 3380-34-5               DEU       QS_fw, eco           0.020
+#> 7 Triclosan 3380-34-5               DEU   MAC-QS_fw, eco           0.160
+#> 8 Triclosan 3380-34-5               DEU       QS_sw, eco           0.002
+#> 9 Triclosan 3380-34-5               DEU   MAC-QS_sw, eco           0.016
+#>   Unit
+#> 1 µg/l
+#> 2 µg/l
+#> 3 µg/l
+#> 4 µg/l
+#> 5 µg/l
+#> 6 µg/l
+#> 7 µg/l
+#> 8 µg/l
+#> 9 µg/l
 ```
 
 
