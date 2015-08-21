@@ -1,9 +1,16 @@
 context("physprop")
 
-fl <- physprop('50-00-0')
-xx <- physprop('xxxxx')
+check_physprop <- function(){
+  if (is.na(physprop('50-00-0')))
+    skip("Server is down!")
+}
+
 
 test_that("physprop returns correct results", {
+  check_physprop()
+
+  fl <- physprop('50-00-0')
+  xx <- physprop('xxxxx')
 
   expect_equal(fl$cas, "50-00-0")
   expect_equal(fl$cname, "FORMALDEHYDE")

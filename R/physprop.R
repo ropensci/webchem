@@ -39,8 +39,16 @@ physprop <- function(cas, verbose = TRUE){
   qurl <- paste0(baseurl, query)
   if (verbose)
     message('Querying ', qurl)
-  ttt <- htmlParse(getURL(qurl, .encoding = 'UTF-8'), useInternalNodes = TRUE,
-                   encoding="UTF-8")
+
+  # the server seems down from time to time - catch this problem (allow 2 seconds to connect)
+  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+              silent = TRUE)
+  if (inherits(cont, 'try-error')) {
+    warning('Web server seems to be down! \n Returning NA.')
+    return(NA)
+  }
+  ttt <- htmlParse(cont, useInternalNodes = TRUE,
+                   encoding = "UTF-8")
   Sys.sleep(0.1)
 
   if (grepl('No records', xpathSApply(ttt, '//p', xmlValue)[3])) {
