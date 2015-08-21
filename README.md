@@ -25,7 +25,7 @@ PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.go
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
 [Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
-[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()` | none | none
+[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -351,27 +351,17 @@ We can also retrieve Quality Targets:
 
 ```r
 targets <- etox_targets(id)
-targets[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
-#>   Substance    CAS_NO Country_or_Region      Designation Value_Target_LR
-#> 1 Triclosan 3380-34-5               AUS             PNEC           0.050
-#> 2 Triclosan 3380-34-5               CHE AA-QS_freshwater           0.020
-#> 3 Triclosan 3380-34-5               CHE           MAC-QS           0.020
-#> 4 Triclosan 3380-34-5               DEU           AA-EQS           0.020
-#> 5 Triclosan 3380-34-5               DEU          MAC-EQS           0.200
-#> 6 Triclosan 3380-34-5               DEU       QS_fw, eco           0.020
-#> 7 Triclosan 3380-34-5               DEU   MAC-QS_fw, eco           0.160
-#> 8 Triclosan 3380-34-5               DEU       QS_sw, eco           0.002
-#> 9 Triclosan 3380-34-5               DEU   MAC-QS_sw, eco           0.016
-#>   Unit
-#> 1 µg/l
-#> 2 µg/l
-#> 3 µg/l
-#> 4 µg/l
-#> 5 µg/l
-#> 6 µg/l
-#> 7 µg/l
-#> 8 µg/l
-#> 9 µg/l
+targets[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
+#>   Substance Country_or_Region      Designation Value_Target_LR Unit
+#> 1 Triclosan               AUS             PNEC           0.050 µg/l
+#> 2 Triclosan               CHE AA-QS_freshwater           0.020 µg/l
+#> 3 Triclosan               CHE           MAC-QS           0.020 µg/l
+#> 4 Triclosan               DEU           AA-EQS           0.020 µg/l
+#> 5 Triclosan               DEU          MAC-EQS           0.200 µg/l
+#> 6 Triclosan               DEU       QS_fw, eco           0.020 µg/l
+#> 7 Triclosan               DEU   MAC-QS_fw, eco           0.160 µg/l
+#> 8 Triclosan               DEU       QS_sw, eco           0.002 µg/l
+#> 9 Triclosan               DEU   MAC-QS_sw, eco           0.016 µg/l
 ```
 
 
