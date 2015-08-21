@@ -50,7 +50,7 @@ test_that("etox integration tests", {
   int3 <- etox_basic(xx)
   int4 <- etox_targets(xx)
   int5 <- etox_tests(do)
-  int6 <- etox_tests(x)
+  int6 <- etox_tests(xx)
 
   expect_equal(int1$cas, "3380-34-5")
   expect_equal(length(int1), 4)
