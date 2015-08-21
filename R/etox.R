@@ -13,6 +13,9 @@
 #'
 #' @note If more than one reference is found only the first hit is taken.
 #'
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
+#' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -87,7 +90,9 @@ get_etoxid <- function(query, verbose = TRUE){
 #' @return a list wit four entries: cas (the CAS numbers), ec (the EC number),
 #' gsbl (the gsbl number) and a data.frame synonys with synonyms.
 #'
-#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs.
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
+#' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -142,7 +147,9 @@ etox_basic <- function(id, verbose = TRUE){
 #'
 #' @return A data.frame with quality targets from the ETOX database.
 #'
-#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs.
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
+#' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -178,5 +185,58 @@ etox_targets <- function(id, verbose = TRUE){
   out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
                     stringsAsFactors = FALSE)
   out$Value_Target_LR <- as.numeric(out$Value_Target_LR)
+  return(out)
+}
+
+#' Get Tests from a ETOX ID
+#'
+#' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
+#' \url{http://webetox.uba.de/webETOX/index.do} for tests
+#'
+#' @import XML RCurl
+#'
+#' @param id character; ETOX ID
+#' @param verbose logical; print message during processing to console?
+#'
+#' @return A data.frame with test results from the ETOX database.
+#'
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
+#' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
+#'
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' \dontrun{
+#' id <- get_etoxid('Triclosan')
+#' out <- etox_tests(id)
+#' out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
+#' 'Endpoint', 'Value', 'Unit')]
+#' }
+etox_tests <- function(id, verbose = TRUE){
+  # id <- '20179'
+  baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  qurl <- paste0(baseurl, id)
+  httpheader = c("Accept-Language" = "en-US,en;q=0.5")
+  if (verbose)
+    message('Querying ', qurl)
+
+  # get second id
+  Sys.sleep(0.1)
+  tt <- htmlParse(getURL(qurl, httpheader = httpheader))
+  if (any(grepl('Problem', xpathSApply(tt, '//h3', xmlValue)))) {
+    message('ID not found! Returning NA.\n')
+    return(NA)
+  }
+  link2 <- xpathSApply(tt, "//a[contains(.,'Test')]/@href[contains(.,'stoff')]")
+  id2 <- gsub('.*=(\\d+)', '\\1', link2)
+
+  tt2 <-  htmlParse(getURL(paste0('http://webetox.uba.de', link2),
+                           httpheader = httpheader))
+  csvlink <- xpathSApply(tt2, "//a[contains(.,'Csv')]/@href")
+  cont <- getURL(paste0('http://webetox.uba.de', csvlink),
+                 httpheader = httpheader)
+  out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
+                    stringsAsFactors = FALSE)
+  out$Value <- as.numeric(out$Value)
   return(out)
 }

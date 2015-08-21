@@ -25,7 +25,7 @@ PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.go
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
 [Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
-[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()` | none | none
+[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -363,6 +363,66 @@ targets[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR',
 #> 8 Triclosan               DEU       QS_sw, eco           0.002 µg/l
 #> 9 Triclosan               DEU   MAC-QS_sw, eco           0.016 µg/l
 ```
+
+and results of ecotox tests:
+
+```r
+tests <- etox_tests(id)
+tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
+#>                           Organism                 Effect Duration
+#> 1              Anabaena flos-aquae           not reported        4
+#> 2          Brachionus calyciflorus           not reported        2
+#> 3          Brachionus calyciflorus           not reported        2
+#> 4          Brachionus calyciflorus           not reported        2
+#> 5                Brachydanio rerio Embryo-Larval-Toxicity       10
+#> 6               Ceriodaphnia dubia              Lethality        7
+#> 7               Ceriodaphnia dubia              Mortality        2
+#> 8               Ceriodaphnia dubia              Mortality        7
+#> 9               Ceriodaphnia dubia           not reported        7
+#> 10              Ceriodaphnia dubia           Reproduction        7
+#> 11              Ceriodaphnia dubia           Reproduction        7
+#> 12                   Daphnia magna              Mortality       21
+#> 13                   Daphnia magna           Reproduction       21
+#> 14         Desmodesmus subspicatus     Cell Proliferation        4
+#> 15          Dunaliella tertiolecta     Cell Proliferation        4
+#> 16          Dunaliella tertiolecta     Cell Proliferation        4
+#> 17             Oncorhynchus mykiss Embryo-Larval-Toxicity        4
+#> 18             Pimephales promelas              Mortality        4
+#> 19 Pseudokirchneriella subcapitata       Wachstumshemmung        3
+#> 20         Scenedesmus subspicatus                Biomass        3
+#> 21         Scenedesmus subspicatus           not reported        4
+#> 22         Scenedesmus subspicatus           not reported        4
+#> 23         Scenedesmus subspicatus           not reported        4
+#> 24         Scenedesmus subspicatus           Reproduction        3
+#> 25                 Hyalella azteca              Mortality       10
+#>    Time_Unit Endpoint   Value Unit
+#> 1          d     NOEC   0.810     
+#> 2          d     NOEC  50.000 µg/l
+#> 3          d     NOEC  50.000 µg/l
+#> 4          d     NOEC  50.000 µg/l
+#> 5          d     NOEC 200.000 µg/l
+#> 6          d     NOEC 339.000 µg/l
+#> 7          d     EC50 120.000 µg/l
+#> 8          d     NOEC  50.000 µg/l
+#> 9          d     NOEC   4.000 µg/l
+#> 10         d     NOEC   6.000 µg/l
+#> 11         d     NOEC 182.000 µg/l
+#> 12         d     NOEC 132.000 µg/l
+#> 13         d     NOEC  40.000 µg/l
+#> 14         d    ErC50   1.610 µg/l
+#> 15         d     NOEC   1.600 µg/l
+#> 16         d    EbC50   3.550 µg/l
+#> 17         d     NOEC  34.100 µg/l
+#> 18         d     LC50 260.000 µg/l
+#> 19         d     NOEC   0.200 µg/l
+#> 20         d     NOEC   0.500 µg/l
+#> 21         d     NOEC   0.690 µg/l
+#> 22         d     NOEC   0.742 µg/l
+#> 23         d     NOEC   2.380 µg/l
+#> 24         d     NOEC   0.500 µg/l
+#> 25         d     NOEC   5.000 µg/l
+```
+
 
 
 

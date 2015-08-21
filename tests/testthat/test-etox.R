@@ -31,14 +31,26 @@ test_that("etox_targets returns correct results", {
   expect_equal(xx3, NA)
 })
 
+test_that("etox_tests returns correct results", {
+  do4 <- etox_tests('20179')
+  xx4 <- etox_tests('xxxx')
+
+  expect_equal(do4$Substance[1], "Triclosan")
+  expect_equal(ncol(do4), 41)
+  expect_is(do4, 'data.frame')
+  expect_equal(xx4, NA)
+})
 
 test_that("etox integration tests", {
   do <- get_etoxid('Triclosan')
   xx <- get_etoxid('xxxxx')
+
   int1 <- etox_basic(do)
   int2 <- etox_targets(do)
   int3 <- etox_basic(xx)
   int4 <- etox_targets(xx)
+  int5 <- etox_tests(do)
+  int6 <- etox_tests(x)
 
   expect_equal(int1$cas, "3380-34-5")
   expect_equal(length(int1), 4)
@@ -48,6 +60,11 @@ test_that("etox integration tests", {
   expect_equal(ncol(int2), 32)
   expect_is(int2, 'data.frame')
 
+  expect_equal(int5$Substance[1], "Triclosan")
+  expect_equal(ncol(int5), 41)
+  expect_is(int5, 'data.frame')
+
   expect_equal(int3, NA)
   expect_equal(int4, NA)
+  expect_equal(int6, NA)
 })
