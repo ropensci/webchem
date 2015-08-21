@@ -45,13 +45,13 @@ Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a secur
 
 ## Installation
 #### Install from CRAN (stable version)
-```{r eval=FALSE}
+```{r install_cran eval=FALSE}
 install.packages("webchem")
 ```
 
 
 #### Install from Github (development version)
-```{r eval=FALSE}
+```{r install_github eval=FALSE}
 install.packages("devtools")
 library("devtools")
 install_github("ropensci/webchem")
@@ -59,8 +59,7 @@ install_github("ropensci/webchem")
 
 
 ## Quickstart
-
-```{r}
+```{r load}
 library("webchem")
 ```
 
@@ -68,7 +67,7 @@ library("webchem")
 
 CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
 Use `first` to return only the first hit.
-```{r}
+```{r cir_query1}
 cir_query('Triclosan', 'cas')
 cir_query('Triclosan', 'cas', first = TRUE)
 cir_query('Triclosan', 'mw')
@@ -76,34 +75,37 @@ cir_query('Triclosan', 'mw')
 
 Query SMILES and InChIKey from CAS (Triclosan).
 Inputs might by ambiguous and we can specify where to search using `resolver=`.
-```{r}
+```{r cir_query2}
 cir_query('3380-34-5', 'smiles')
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
-```{r}
+```{r cir_query3}
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 ```
 
 
 #### ChemSpider
-```{r echo=FALSE}
+```{r token echo=FALSE}
 token = '37bf5e57-9091-42f5-9274-650a64398aaf'
 ```
 
 You'll need a API key:
-```{r eval=FALSE}
+
+```{r api_key eval=FALSE}
 token = '<YOUR TOKEN HERE'
 ```
 
 Retrieve the ChemSpider ID of Triclosan
-```{r}
+
+```{r get_csid}
 (id <- get_csid('Triclosan', token = token))
 ```
 
 Use this ID to query information from ChemSpider
-```{r}
+
+```{r csid_extcompinfo}
 csid_extcompinfo(id, token = token)
 ```
 
@@ -111,13 +113,13 @@ csid_extcompinfo(id, token = token)
 #### PubChem
 
 Retrieve PubChem CID
-```{r}
+```{r get_cid}
 get_cid('Triclosan')
 cid <- get_cid('3380-34-5')
 ```
 
 Use this CID to retrieve some chemical properties:
-```{r}
+```{r cid_compinfo}
 props <- cid_compinfo(cid)
 props$InChIKey
 props$MolecularWeight
@@ -128,14 +130,14 @@ props$IUPACName
 #### Chemical Translation Service (CTS)
 
 CTS allows to convert from nearly every possible identifier to nearly every possible identifier:
-```{r}
+```{r cts_convert}
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
 (inchk <- cts_convert(query = 'Triclosan', from = 'Chemical Name', to = 'inchikey'))
 ```
 
 Moreover, we can a lot of information stored in the CTS database using InChIkey
-```{r}
+```{r cts_compinfo}
 info <- cts_compinfo(inchikey = inchk)
 info[1:5]
 ```
@@ -143,7 +145,7 @@ info[1:5]
 
 #### PAN Pesticide Database
 `pan()` returns a list of 73 entries, here I extract only 4 of those:
-```{r}
+```{r pan}
 pan_list <- pan('lambda-Cyhalothrin', first = TRUE)
 pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
 ```
@@ -153,7 +155,7 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 #### Allan Wood's Compendium of Pesticide Common Names
 
 `allanwood()` returns a list of 9 entries and can query common names and cas numbers:
-```{r}
+```{r allanwood}
 allanwood('Fluazinam', type = 'commonname')
 allanwood('79622-59-6', type = 'cas')$cname
 ```
@@ -162,7 +164,7 @@ allanwood('79622-59-6', type = 'cas')$cname
 [SRCs PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) contains chemical structures, names and physical properties for over 41,000 chemicals.
 You can use `physprop()` to query this database using a CAS number:
 
-```{r}
+```{r physprop}
 physprop('50-00-0')
 ```
 
@@ -185,7 +187,7 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 
 ### Meta
 
-* Please [report any issues, bugs or feature requests](https://github.com/edild/webchem/issues).
+* Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
 * License: MIT
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
