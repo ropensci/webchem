@@ -12,6 +12,7 @@
 #' substance name) and \code{distance} (the normalized string distance of the query to the match).
 #'
 #' @note If more than one reference is found only the first hit is taken.
+#' Before using this function, please read the disclaimer \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #'
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results.
@@ -90,6 +91,9 @@ get_etoxid <- function(query, verbose = TRUE){
 #' @return a list wit four entries: cas (the CAS numbers), ec (the EC number),
 #' gsbl (the gsbl number) and a data.frame synonys with synonyms.
 #'
+#' @note Before using this function, please read the disclaimer
+#' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+#'
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
 #'
@@ -141,12 +145,15 @@ etox_basic <- function(id, verbose = TRUE){
 #' \url{http://webetox.uba.de/webETOX/index.do} for quality targets
 #'
 #' @import XML RCurl
+#' @importFrom utils read.table
 #'
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A data.frame with quality targets from the ETOX database.
 #'
+#' @note Before using this function, please read the disclaimer
+#' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
 #'
@@ -194,11 +201,14 @@ etox_targets <- function(id, verbose = TRUE){
 #' \url{http://webetox.uba.de/webETOX/index.do} for tests
 #'
 #' @import XML RCurl
+#' @importFrom utils read.table
 #'
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A data.frame with test results from the ETOX database.
+#' @note Before using this function, please read the disclaimer
+#' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #'
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results

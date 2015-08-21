@@ -19,6 +19,10 @@ gsbl (the gsbl number) and a data.frame synonys with synonyms.
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 \url{http://webetox.uba.de/webETOX/index.do} for basic information
 }
+\note{
+Before using this function, please read the disclaimer
+\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+}
 \examples{
 \dontrun{
 id <- get_etoxid('Triclosan')

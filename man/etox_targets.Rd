@@ -18,6 +18,10 @@ A data.frame with quality targets from the ETOX database.
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 \url{http://webetox.uba.de/webETOX/index.do} for quality targets
 }
+\note{
+Before using this function, please read the disclaimer
+\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+}
 \examples{
 \dontrun{
 id <- get_etoxid('Triclosan')
