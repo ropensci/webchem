@@ -21,6 +21,7 @@ Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 }
 \note{
 If more than one reference is found only the first hit is taken.
+Before using this function, please read the disclaimer \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
