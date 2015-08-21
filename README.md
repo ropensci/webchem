@@ -323,29 +323,56 @@ etox_basic(id)
 #> [1] "117338"
 #> 
 #> $synonyms
-#>                                          name    language
-#> 3   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-     Deutsch
-#> 4     2,4,4'-Trichlor-2'-hydroxydiphenylether     Deutsch
-#> 5                              Irgasan DP 300     Deutsch
-#> 6                                   Vikol THP     Deutsch
-#> 7      2,4,4-Trichlor-2'-hydroxydiphenylether     Deutsch
-#> 8    2,4,4'-Trichloro-2'-hydroxydiphenylether     Deutsch
-#> 13     5-chloro-2-(2,4-dichlorophenoxy)phenol    Englisch
-#> 15     Chlor-2-(2,4-dichlorphenoxy)phenol, 5-   universal
-#> 16  Trichlor-2'-hydroxydiphenylether, 2,4,4'-   universal
-#> 17   Trichlor-2'-hydroxydiphenylether, 2,4,4-   universal
-#> 18 Trichloro-2'-hydroxydiphenylether, 2,4,4'-   universal
-#> 19      5-Chlor-2-(2,4-dichlorphenoxy)-phenol   universal
-#> 20    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5-   universal
-#> 21       5-Chlor-2-(2,4-dichlorphenoxy)phenol   universal
-#> 22                                  triclosán    Spanisch
-#> 23                                triklosaani    Finnisch
-#> 24                                 triclosano Italienisch
-#> 25                                  triklosan  Schwedisch
+#>                                          name  language
+#> 5      5-chloro-2-(2,4-dichlorophenoxy)phenol   English
+#> 8   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-    German
+#> 9     2,4,4'-Trichlor-2'-hydroxydiphenylether    German
+#> 10                             Irgasan DP 300    German
+#> 11                                  Vikol THP    German
+#> 12     2,4,4-Trichlor-2'-hydroxydiphenylether    German
+#> 13   2,4,4'-Trichloro-2'-hydroxydiphenylether    German
+#> 15     Chlor-2-(2,4-dichlorphenoxy)phenol, 5- universal
+#> 16  Trichlor-2'-hydroxydiphenylether, 2,4,4'- universal
+#> 17   Trichlor-2'-hydroxydiphenylether, 2,4,4- universal
+#> 18 Trichloro-2'-hydroxydiphenylether, 2,4,4'- universal
+#> 19      5-Chlor-2-(2,4-dichlorphenoxy)-phenol universal
+#> 20    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5- universal
+#> 21       5-Chlor-2-(2,4-dichlorphenoxy)phenol universal
+#> 22                                  triclosán   Spanish
+#> 23                                triklosaani   Finnish
+#> 24                                 triclosano   Italian
+#> 25                                  triklosan   Swedish
 ```
 
 Which returns CAS, EC and GSBL numbers, as well as a synonym list.
 
+We can also retrieve Quality Targets:
+
+
+```r
+targets <- etox_targets(id)
+targets[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
+#>   Substance    CAS_NO Country_or_Region      Designation Value_Target_LR
+#> 1 Triclosan 3380-34-5               AUS             PNEC           0.050
+#> 2 Triclosan 3380-34-5               CHE AA-QS_freshwater           0.020
+#> 3 Triclosan 3380-34-5               CHE           MAC-QS           0.020
+#> 4 Triclosan 3380-34-5               DEU           AA-EQS           0.020
+#> 5 Triclosan 3380-34-5               DEU          MAC-EQS           0.200
+#> 6 Triclosan 3380-34-5               DEU       QS_fw, eco           0.020
+#> 7 Triclosan 3380-34-5               DEU   MAC-QS_fw, eco           0.160
+#> 8 Triclosan 3380-34-5               DEU       QS_sw, eco           0.002
+#> 9 Triclosan 3380-34-5               DEU   MAC-QS_sw, eco           0.016
+#>   Unit
+#> 1 µg/l
+#> 2 µg/l
+#> 3 µg/l
+#> 4 µg/l
+#> 5 µg/l
+#> 6 µg/l
+#> 7 µg/l
+#> 8 µg/l
+#> 9 µg/l
+```
 
 
 
