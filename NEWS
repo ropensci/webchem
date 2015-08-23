@@ -6,6 +6,7 @@ NEW FEATURES
 * Query SRC PHYSPROP Database with physprop().
 * Query the ETOX ID with get_etoxid(); query basic information with etox_basic();
   quality targets with etox_targets() and test results with etox_tests().
+* Query PPDB with ppdb_query()
 
 MINOR IMPROVEMENTS
 

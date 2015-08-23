@@ -3,10 +3,10 @@
 \docType{data}
 \name{ppdb_idx}
 \alias{ppdb_idx}
-\title{Sappschot of the PPDB search index}
-\format{A data frame with 27383 rows and 2 variables:
+\title{PPDB search index}
+\format{A data frame with 53940 rows and 10 variables:
 \describe{
-  \item{match}{string}
+  \item{cas}{cas}
   \item{link}{matched link}
 }}
 \source{
@@ -16,8 +16,8 @@
 ppdb_idx
 }
 \description{
-A dataset containing matched strings and links to the PPDB \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}
-Build using \code{\link{ppdb_buildidx}} on 23th August 2015.
+A dataset containing the matched strings and links of the PPDB  \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}.
+This dataset has been created using code{\link{ppdb_buildidx}}
 }
 \seealso{
 \code{\link{ppdb_buildidx}}

@@ -9,7 +9,7 @@ ppdb_buildidx()
 \value{
 A dataframe with 2 variables:
 \describe{
-  \item{match}{string}
+  \item{cas}{string}
   \item{link}{matched link}
   ...
 }
@@ -27,7 +27,6 @@ Only use this to retrieve an updated index.
 \dontrun{
 # code used the build the index shipped with etox
 ppdb_idx <- ppdb_buildidx()
-save(ppdb_idx, file = 'ppdb_idx.Rdata')
 }
 }
 \author{
