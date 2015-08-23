@@ -16,6 +16,7 @@ LazyData: yes
 Imports:
     XML,
     RCurl,
-    jsonlite
+    jsonlite,
+    stringr
 Suggests:
     testthat
