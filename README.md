@@ -26,6 +26,7 @@ PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.go
 [Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -62,11 +63,14 @@ Use `first` to return only the first hit.
 
 ```r
 cir_query('Triclosan', 'cas')
-#> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
+#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml"
+#> [1] NA
 cir_query('Triclosan', 'cas', first = TRUE)
-#> [1] "3380-34-5"
+#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml"
+#> [1] NA
 cir_query('Triclosan', 'mw')
-#> [1] "289.5451"
+#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/Triclosan/mw/xml"
+#> [1] NA
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -74,16 +78,19 @@ Inputs might by ambiguous and we can specify where to search using `resolver=`.
 
 ```r
 cir_query('3380-34-5', 'smiles')
-#> [1] "C1=CC(=CC(=C1OC2=CC=C(C=C2Cl)Cl)O)Cl"
+#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/3380-34-5/smiles/xml"
+#> [1] NA
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
-#> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
+#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/3380-34-5/stdinchikey/xml?resolver=cas_number"
+#> [1] NA
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
 
 ```r
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
-#> [1] "2"
+#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/XEFQLINVKFYRCS-UHFFFAOYSA-N/ring_count/xml"
+#> [1] NA
 ```
 
 
@@ -206,17 +213,7 @@ info[1:5]
 ```r
 pan_list <- pan('lambda-Cyhalothrin', first = TRUE)
 pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
-#> $`CAS Number`
-#> [1] "91465-08-6"
-#> 
-#> $`Chemical Class`
-#> [1] "Pyrethroid"
-#> 
-#> $`Water Solubility (Avg, mg/L)`
-#> [1] "0.0050"
-#> 
-#> $`Adsorption Coefficient (Koc)`
-#> [1] "157000"
+#> [1] NA NA NA NA
 ```
 
 
@@ -264,30 +261,7 @@ You can use `physprop()` to query this database using a CAS number:
 
 ```r
 physprop('50-00-0')
-#> $cas
-#> [1] "50-00-0"
-#> 
-#> $cname
-#> [1] "FORMALDEHYDE"
-#> 
-#> $mw
-#> [1] "30.026"
-#> 
-#> $prop
-#>                       variable            value             unit     temp
-#> 1             Water Solubility           400000             mg/L 20 deg C
-#> 2        Log P (octanol-water)             0.35                  25 deg C
-#> 3               Vapor Pressure             3886            mm Hg 25 deg C
-#> 4    pKa Dissociation Constant            13.27                  25 deg C
-#> 5         Henry's Law Constant      0.000000337       atm-m3/mol 25 deg C
-#> 6 Atmospheric OH Rate Constant 0.00000000000937 cm3/molecule-sec 25 deg C
-#>   type                              ref
-#> 1  EXP        PICKRELL,JA ET AL. (1983)
-#> 2  EXP           HANSCH,C ET AL. (1995)
-#> 3  EXT          BOUBLIK,T ET AL. (1984)
-#> 4  EXP   SERJEANT,EP & DEMPSEY,B (1979)
-#> 5  EXP BETTERTON,EA & HOFFMAN,MR (1988)
-#> 6  EXP     KWOK,ESC & ATKINSON,R (1994)
+#> [1] NA
 ```
 
 
@@ -423,6 +397,74 @@ tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'U
 #> 25         d     NOEC   5.000 µg/l
 ```
 
+
+#### PPDB
+The PPDB holds a lot of chemical and ecotoxicological information.
+In webchem we provide a function to query this database by a CAS number.
+
+
+```r
+out <- ppdb_query('1071-83-6')
+```
+
+The informaion output is enormous, I show here only a small part, the countries where the compound is approved:
+
+
+```r
+out[[3]]
+#>                                            variable
+#> 1                                    Pesticide type
+#> 2                                   Substance group
+#> 3                                  Substance origin
+#> 4                                    Mode of action
+#> 5                                            CAS RN
+#> 6                                         EC number
+#> 7                                      CIPAC number
+#> 8                              US EPA chemical code
+#> 9                                   Chiral molecule
+#> 10                                 Chemical formula
+#> 11                                           SMILES
+#> 12 International Chemical Identifier key (InChIKey)
+#> 13        International Chemical Identifier (InChI)
+#> 14               Structure diagram/image available?
+#> 15           Molecular mass               (g mol-1)
+#> 16              PIN (Preferred Identification Name)
+#> 17                                       IUPAC name
+#> 18                                         CAS name
+#> 19                         Other status information
+#> 20       Herbicide Resistance Classification (HRAC)
+#> 21       Herbicide Resistance Classification (WSSA)
+#> 22     Insecticide Resistance Classification (IRAC)
+#> 23       Fungicide Resistance Classification (FRAC)
+#> 24                                   Physical state
+#> 25                   Related substances & organisms
+#>                                                                                                                                                                           value
+#> 1                                                                                                                                                                     Herbicide
+#> 2                                                                                                                                                              Phosphonoglycine
+#> 3                                                                                                                                                                     Synthetic
+#> 4                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
+#> 5                                                                                                                                                                     1071-83-6
+#> 6                                                                                                                                                                     213-997-4
+#> 7                                                                                                                                                                           284
+#> 8                                                                                                                                                                        417300
+#> 9                                                                                                                                                                            No
+#> 10                                                                                                                                                                     C3H8NO5P
+#> 11                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
+#> 12                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
+#> 13                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
+#> 14                                                                                                                                                                          Yes
+#> 15                                                                                                                                                                        169.1
+#> 16                                                                                                                                                                            -
+#> 17                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 18                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 19                                                                                                Risk of herbicide resistance developing - anti-resistance management required
+#> 20                                                                                                                                                                            G
+#> 21                                                                                                                                                                            9
+#> 22                                                                                                                                                               Not applicable
+#> 23                                                                                                                                                               Not applicable
+#> 24                                                                                                                                                          Colourless crystals
+#> 25 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
+```
 
 
 
