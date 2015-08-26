@@ -1,3 +1,9 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    self_contained: no
+---
 webchem
 =============
 
@@ -23,7 +29,7 @@ Source | Function(s | API Docs | API key
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
-[Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
+[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 
@@ -221,40 +227,15 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 
 
 
-#### Allan Wood's Compendium of Pesticide Common Names
+#### Alan Wood's Compendium of Pesticide Common Names
 
-`allanwood()` returns a list of 9 entries and can query common names and cas numbers:
+`alanwood()` returns a list of 9 entries and can query common names and cas numbers:
 
 ```r
-allanwood('Fluazinam', type = 'commonname')
-#> $cname
-#> [1] "Fluazinam"
-#> 
-#> $status
-#> [1] "ISO 1750 (published)"
-#> 
-#> $pref_iupac_name
-#> [1] "3-chloro-N-[3-chloro-2,6-dinitro-4-(trifluoromethyl)phenyl]-5-(trifluoromethyl)pyridin-2-amine"
-#> 
-#> $iupac_name
-#> [1] "3-chloro-N-(3-chloro-5-trifluoromethyl-2-pyridyl)-α,α,α-trifluoro-2,6-dinitro-p-toluidine"
-#> 
-#> $cas
-#> [1] "79622-59-6"
-#> 
-#> $formula
-#> [1] "C13H4Cl2F6N4O4"
-#> 
-#> $activity
-#> [1] "fungicides (pyridine fungicides)"
-#> 
-#> $inchikey
-#> [1] "UZCGKGPEKUCDTF-UHFFFAOYSA-N"
-#> 
-#> $inch
-#> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
-allanwood('79622-59-6', type = 'cas')$cname
-#> [1] "fluazinam"
+alanwood('Fluazinam', type = 'commonname')
+#> Error in eval(expr, envir, enclos): konnte Funktion "alanwood" nicht finden
+alanwood('79622-59-6', type = 'cas')$cname
+#> Error in eval(expr, envir, enclos): konnte Funktion "alanwood" nicht finden
 ```
 
 #### SRC PHYSPROP Database
