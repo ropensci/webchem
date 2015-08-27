@@ -1,9 +1,3 @@
----
-output:
-  html_document:
-    keep_md: yes
-    self_contained: no
----
 webchem
 =============
 
@@ -232,44 +226,19 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 `alanwood()` returns a list of 9 entries and can query common names and cas numbers:
 
 ```r
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-allanwood('Fluazinam', type = 'commonname')
-=======
 alanwood('Fluazinam', type = 'commonname')
->>>>>>> Stashed changes
 #> $cname
 #> [1] "Fluazinam"
 #> 
 #> $status
 #> [1] "ISO 1750 (published)"
-=======
-alanwood('Fluazinam', type = 'commonname')
-#> Error in eval(expr, envir, enclos): konnte Funktion "alanwood" nicht finden
-alanwood('79622-59-6', type = 'cas')$cname
-#> Error in eval(expr, envir, enclos): konnte Funktion "alanwood" nicht finden
-```
-
-#### SRC PHYSPROP Database
-[SRCs PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) contains chemical structures, names and physical properties for over 41,000 chemicals.
-You can use `physprop()` to query this database using a CAS number:
-
-
-```r
-physprop('50-00-0')
-#> $cas
-#> [1] "50-00-0"
->>>>>>> master
 #> 
-#> $cname
-#> [1] "FORMALDEHYDE"
+#> $pref_iupac_name
+#> [1] "3-chloro-N-[3-chloro-2,6-dinitro-4-(trifluoromethyl)phenyl]-5-(trifluoromethyl)pyridin-2-amine"
 #> 
-#> $mw
-#> [1] "30.026"
+#> $iupac_name
+#> [1] "3-chloro-N-(3-chloro-5-trifluoromethyl-2-pyridyl)-α,α,α-trifluoro-2,6-dinitro-p-toluidine"
 #> 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 #> $cas
 #> [1] "79622-59-6"
 #> 
@@ -296,23 +265,6 @@ You can use `physprop()` to query this database using a CAS number:
 ```r
 physprop('50-00-0')
 #> [1] NA
-=======
-#> $prop
-#>                       variable            value             unit     temp
-#> 1             Water Solubility           400000             mg/L 20 deg C
-#> 2        Log P (octanol-water)             0.35                  25 deg C
-#> 3               Vapor Pressure             3886            mm Hg 25 deg C
-#> 4    pKa Dissociation Constant            13.27                  25 deg C
-#> 5         Henry's Law Constant      0.000000337       atm-m3/mol 25 deg C
-#> 6 Atmospheric OH Rate Constant 0.00000000000937 cm3/molecule-sec 25 deg C
-#>   type                              ref
-#> 1  EXP        PICKRELL,JA ET AL. (1983)
-#> 2  EXP           HANSCH,C ET AL. (1995)
-#> 3  EXT          BOUBLIK,T ET AL. (1984)
-#> 4  EXP   SERJEANT,EP & DEMPSEY,B (1979)
-#> 5  EXP BETTERTON,EA & HOFFMAN,MR (1988)
-#> 6  EXP     KWOK,ESC & ATKINSON,R (1994)
->>>>>>> master
 ```
 
 
@@ -338,10 +290,6 @@ With this substance ID we can query further information from ETOX, e.g.:
 
 ```r
 etox_basic(id)
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> master
 #> $cas
 #> [1] "3380-34-5"
 #> 
