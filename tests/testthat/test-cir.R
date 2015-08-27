@@ -1,6 +1,17 @@
 context("cir")
 
+chk_cir <- function(){
+  qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
+  Sys.sleep(0.2)
+  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+              silent = TRUE)
+  if (inherits(cont, 'try-error'))
+    skip("Server is down!")
+}
+
 test_that("cir()", {
+  chk_cir()
+
   expect_equal(cir_query('Triclosan', 'mw', verbose = FALSE), '289.5451')
   expect_error(cir_query(c('Triclosan', 'Benzol'), 'mw'))
   expect_equal(cir_query('xxxxxxx', 'mw', verbose = FALSE), NA)
