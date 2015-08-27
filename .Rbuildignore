@@ -1,8 +1,20 @@
+# RStudio
 ^.*\.Rproj$
 ^\.Rproj\.user$
+
+# Git
 .gitignore
+
+# Travis
 .travis.yml
+pkg-build.sh
+
+# appveyor
 ^appveyor\.yml$
+travis-tool.sh.cmd
+
+# READMES
 README.html
 README.Rmd
 README.md
+README_files

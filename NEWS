@@ -1,10 +1,26 @@
+webchem 0.0.3
+======================
+
+NEW FEATURES
+
+* Query SRC PHYSPROP Database with physprop().
+* Query the ETOX ID with get_etoxid(); query basic information with etox_basic();
+  quality targets with etox_targets() and test results with etox_tests().
+
+MINOR IMPROVEMENTS
+
+BUG FIXES
+
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood()
+
+
 webchem 0.0.2
 ======================
 
 NEW FEATURES
 
 * Query the PAN Pesticides Database with pan().
-* Query Allan Woods Compendium of Pesticide Common Names
+* Query Allan Woods Compendium of Pesticide Common Names with allanwood().
 
 MINOR IMPROVEMENTS
 

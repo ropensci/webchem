@@ -1,6 +1,6 @@
 #' Query http://www.alanwood.net/pesticides
 #'
-#' Query Allan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
+#' Query Alan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
 #' @import XML RCurl
 #'
 #' @param  x character; search string
@@ -14,11 +14,11 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' allanwood('Fluazinam', type = 'commonname')
-#' sapply(c('Fluazinam', 'Diclofop', 'xxxxx'), allanwood, type = 'com')
-#' allanwood("79622-59-6", type = 'cas')
+#' alanwood('Fluazinam', type = 'commonname')
+#' sapply(c('Fluazinam', 'Diclofop', 'xxxxx'), alanwood, type = 'com')
+#' alanwood("79622-59-6", type = 'cas')
 #' }
-allanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
+alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   type <- match.arg(type)
   if (type == 'commonname') {
     baseurl <- 'http://www.alanwood.net/pesticides/index_cn.html'
