@@ -27,6 +27,10 @@ Before using this function, please read the disclaimer
 \dontrun{
 id <- get_etoxid('Triclosan')
 etox_basic(id)
+
+# Retrieve CAS for multiple inputs
+ids <- c("20179", "9051")
+sapply(ids, function(y) etox_basic(y)$cas)
 }
 }
 \author{

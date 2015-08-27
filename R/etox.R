@@ -22,6 +22,9 @@
 #' @examples
 #' \dontrun{
 #' get_etoxid('Triclosan')
+#' # multiple inpus
+#' comps <- c('Triclosan', 'Glyphosate')
+#' sapply(comps, get_etoxid)
 #' }
 get_etoxid <- function(query, verbose = TRUE){
   clean_char <- function(x){
@@ -103,6 +106,10 @@ get_etoxid <- function(query, verbose = TRUE){
 #' \dontrun{
 #' id <- get_etoxid('Triclosan')
 #' etox_basic(id)
+#'
+#' # Retrieve CAS for multiple inputs
+#' ids <- c("20179", "9051")
+#' sapply(ids, function(y) etox_basic(y)$cas)
 #' }
 etox_basic <- function(id, verbose = TRUE){
   # id <- '20179'
@@ -165,9 +172,22 @@ etox_basic <- function(id, verbose = TRUE){
 #' out <- etox_targets(id)
 #' out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 #' 'Value_Target_LR', 'Unit')]
+#' # Retrieve MAC-EQA for Germany for multiple inputs
+#' ids <- c("20179", "9051")
+#' sapply(ids, function(y) {
+#'   res <- etox_targets(y)
+#'   if (length(res) == 1) {
+#'     out <- res
+#'   } else {
+#'     out <- res[res$Country_or_Region == 'DEU' & res$Designation == 'MAC-EQS', c('Value_Target_LR')]
+#'   }
+#'   return(out)
+#' }
+#' )
 #' }
 etox_targets <- function(id, verbose = TRUE){
   # id <- '20179'
+  # id <- '9051
   baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
   httpheader = c("Accept-Language" = "en-US,en;q=0.5")
@@ -186,6 +206,17 @@ etox_targets <- function(id, verbose = TRUE){
 
   tt2 <-  htmlParse(getURL(paste0('http://webetox.uba.de', link2),
                            httpheader = httpheader))
+  mssg <- xpathSApply(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]", xmlValue)
+  if (length(mssg) > 0) {
+    if (grepl('no result', mssg)) {
+      message('No targets found found! Returning NA.\n')
+      return(NA)
+    } else {
+      message('Problem found! Message: \n ', mssg)
+    }
+  }
+
+
   csvlink <- xpathSApply(tt2, "//a[contains(.,'Csv')]/@href")
   cont <- getURL(paste0('http://webetox.uba.de', csvlink),
                  httpheader = httpheader)

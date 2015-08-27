@@ -39,11 +39,13 @@ test_that("etox_targets returns correct results", {
 
   do3 <- etox_targets('20179')
   xx3 <- etox_targets('xxxx')
+  xxx3 <- etox_targets('9051')
 
   expect_equal(do3$Substance[1], "Triclosan")
   expect_equal(ncol(do3), 32)
   expect_is(do3, 'data.frame')
   expect_equal(xx3, NA)
+  expect_equal(xxx3, NA)
 })
 
 test_that("etox_tests returns correct results", {
