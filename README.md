@@ -1,9 +1,3 @@
----
-output:
-  html_document:
-    keep_md: yes
-    self_contained: no
----
 webchem
 =============
 
@@ -233,9 +227,34 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 
 ```r
 alanwood('Fluazinam', type = 'commonname')
-#> Error in eval(expr, envir, enclos): konnte Funktion "alanwood" nicht finden
+#> $cname
+#> [1] "Fluazinam"
+#> 
+#> $status
+#> [1] "ISO 1750 (published)"
+#> 
+#> $pref_iupac_name
+#> [1] "3-chloro-N-[3-chloro-2,6-dinitro-4-(trifluoromethyl)phenyl]-5-(trifluoromethyl)pyridin-2-amine"
+#> 
+#> $iupac_name
+#> [1] "3-chloro-N-(3-chloro-5-trifluoromethyl-2-pyridyl)-α,α,α-trifluoro-2,6-dinitro-p-toluidine"
+#> 
+#> $cas
+#> [1] "79622-59-6"
+#> 
+#> $formula
+#> [1] "C13H4Cl2F6N4O4"
+#> 
+#> $activity
+#> [1] "fungicides (pyridine fungicides)"
+#> 
+#> $inchikey
+#> [1] "UZCGKGPEKUCDTF-UHFFFAOYSA-N"
+#> 
+#> $inch
+#> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
 alanwood('79622-59-6', type = 'cas')$cname
-#> Error in eval(expr, envir, enclos): konnte Funktion "alanwood" nicht finden
+#> [1] "fluazinam"
 ```
 
 #### SRC PHYSPROP Database
@@ -245,30 +264,7 @@ You can use `physprop()` to query this database using a CAS number:
 
 ```r
 physprop('50-00-0')
-#> $cas
-#> [1] "50-00-0"
-#> 
-#> $cname
-#> [1] "FORMALDEHYDE"
-#> 
-#> $mw
-#> [1] "30.026"
-#> 
-#> $prop
-#>                       variable            value             unit     temp
-#> 1             Water Solubility           400000             mg/L 20 deg C
-#> 2        Log P (octanol-water)             0.35                  25 deg C
-#> 3               Vapor Pressure             3886            mm Hg 25 deg C
-#> 4    pKa Dissociation Constant            13.27                  25 deg C
-#> 5         Henry's Law Constant      0.000000337       atm-m3/mol 25 deg C
-#> 6 Atmospheric OH Rate Constant 0.00000000000937 cm3/molecule-sec 25 deg C
-#>   type                              ref
-#> 1  EXP        PICKRELL,JA ET AL. (1983)
-#> 2  EXP           HANSCH,C ET AL. (1995)
-#> 3  EXT          BOUBLIK,T ET AL. (1984)
-#> 4  EXP   SERJEANT,EP & DEMPSEY,B (1979)
-#> 5  EXP BETTERTON,EA & HOFFMAN,MR (1988)
-#> 6  EXP     KWOK,ESC & ATKINSON,R (1994)
+#> [1] NA
 ```
 
 
@@ -420,7 +416,8 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 ### Contributors
 
 + [Eduard Szöcs](https://github.com/EDiLD)
-+ [Daniel Münch](https://github.com/Dahaniel)
++ [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
++ [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
 
 ### Meta
 

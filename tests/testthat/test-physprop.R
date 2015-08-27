@@ -8,9 +8,8 @@ check_physprop <- function(){
 
 test_that("physprop returns correct results", {
   check_physprop()
-
-  fl <- physprop('50-00-0')
   xx <- physprop('xxxxx')
+  fl <- physprop('50-00-0')
 
   expect_equal(fl$cas, "50-00-0")
   expect_equal(fl$cname, "FORMALDEHYDE")
