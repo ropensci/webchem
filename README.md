@@ -223,7 +223,11 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 `allanwood()` returns a list of 9 entries and can query common names and cas numbers:
 
 ```r
+<<<<<<< Updated upstream
 allanwood('Fluazinam', type = 'commonname')
+=======
+alanwood('Fluazinam', type = 'commonname')
+>>>>>>> Stashed changes
 #> $cname
 #> [1] "Fluazinam"
 #> 
@@ -236,6 +240,60 @@ allanwood('Fluazinam', type = 'commonname')
 #> $iupac_name
 #> [1] "3-chloro-N-(3-chloro-5-trifluoromethyl-2-pyridyl)-α,α,α-trifluoro-2,6-dinitro-p-toluidine"
 #> 
+<<<<<<< Updated upstream
+=======
+#> $cas
+#> [1] "79622-59-6"
+#> 
+#> $formula
+#> [1] "C13H4Cl2F6N4O4"
+#> 
+#> $activity
+#> [1] "fungicides (pyridine fungicides)"
+#> 
+#> $inchikey
+#> [1] "UZCGKGPEKUCDTF-UHFFFAOYSA-N"
+#> 
+#> $inch
+#> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
+alanwood('79622-59-6', type = 'cas')$cname
+#> [1] "fluazinam"
+```
+
+#### SRC PHYSPROP Database
+[SRCs PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) contains chemical structures, names and physical properties for over 41,000 chemicals.
+You can use `physprop()` to query this database using a CAS number:
+
+
+```r
+physprop('50-00-0')
+#> [1] NA
+```
+
+
+#### ETOX
+ETOX: Information System Ecotoxicology and Environmental Quality Targets is a database run by the Federal Environment Agency of Germany and provides data on synonyms, identifiers, Quality Targest and Effects.
+
+First we need to query a substance ID:
+
+
+```r
+id <- get_etoxid('Triclosan')
+id
+#> [1] "20179"
+#> attr(,"matched")
+#> [1] "Triclosan ( 20179 )"
+#> attr(,"distance")
+#> [1] 0.5263158
+```
+`get_etoxid` tries to find the best match for you (check the matched and distance attributes))
+
+With this substance ID we can query further information from ETOX, e.g.:
+
+
+```r
+etox_basic(id)
+>>>>>>> Stashed changes
 #> $cas
 #> [1] "79622-59-6"
 #> 
@@ -268,7 +326,8 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 ### Contributors
 
 + [Eduard Szöcs](https://github.com/EDiLD)
-+ [Daniel Münch](https://github.com/Dahaniel)
++ [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
++ [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
 
 ### Meta
 

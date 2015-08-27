@@ -9,7 +9,9 @@ URL: https://github.com/EDiLD/webchem
 BugReports: https://github.com/EDiLD/webchem/issues
 Authors@R: c(person("Eduard", "Szoecs", role = c("aut", "cre"),
     email = "eduardszoecs@gmail.com"),
-    person("Daniel", "Muench", role = "ctb"))
+    person("Daniel", "Muench", role = "ctb"),
+    person("Johannes Ranke", role = "ctb"))
+Maintainer: Eduard Szoecs <eduardszoecs@gmail.com>
 LazyLoad: yes
 LazyData: yes
 Imports:
