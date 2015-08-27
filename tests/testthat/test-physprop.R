@@ -1,13 +1,19 @@
 context("physprop")
 
-check_physprop <- function(){
-  if (is.na(physprop('50-00-0')))
+chk_physprop <- function(){
+  qurl <- 'http://esc.syrres.com/fatepointer/webprop.asp?CAS=50000'
+  Sys.sleep(0.2)
+  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+              silent = TRUE)
+  if (inherits(cont, 'try-error'))
     skip("Server is down!")
 }
 
 
+
 test_that("physprop returns correct results", {
-  check_physprop()
+  chk_physprop()
+
   xx <- physprop('xxxxx')
   fl <- physprop('50-00-0')
 

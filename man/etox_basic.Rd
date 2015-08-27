@@ -21,7 +21,7 @@ Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 }
 \note{
 Before using this function, please read the disclaimer
-\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+\url{http://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
