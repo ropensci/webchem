@@ -1,5 +1,6 @@
 context("alanwood")
 
+require(RCurl)
 chk_alanwood <- function(){
   qurl <- 'http://www.alanwood.net/pesticides/index_cn.html'
   Sys.sleep(0.2)

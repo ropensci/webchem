@@ -9,9 +9,12 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 
+* added exceptions to tests
+
 BUG FIXES
 
-* Correct the spelling of Alan Wood and rename function allanwood() to alanwood()
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood().
+
 
 
 webchem 0.0.2

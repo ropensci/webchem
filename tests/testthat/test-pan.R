@@ -1,5 +1,6 @@
 context("pan")
 
+require(RCurl)
 chk_pan <- function(){
   qurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?ChemName=2,4-dichlorophenol'
   Sys.sleep(0.2)
