@@ -20,7 +20,7 @@ Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 }
 \note{
 Before using this function, please read the disclaimer
-\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+\url{http://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
@@ -28,6 +28,18 @@ id <- get_etoxid('Triclosan')
 out <- etox_targets(id)
 out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 'Value_Target_LR', 'Unit')]
+# Retrieve MAC-EQA for Germany for multiple inputs
+ids <- c("20179", "9051")
+sapply(ids, function(y) {
+  res <- etox_targets(y)
+  if (length(res) == 1) {
+    out <- res
+  } else {
+    out <- res[res$Country_or_Region == 'DEU' & res$Designation == 'MAC-EQS', c('Value_Target_LR')]
+  }
+  return(out)
+}
+)
 }
 }
 \author{

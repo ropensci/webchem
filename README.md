@@ -23,7 +23,7 @@ Source | Function(s | API Docs | API key
 PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
-[Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
+[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
@@ -218,12 +218,12 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 
 
 
-#### Allan Wood's Compendium of Pesticide Common Names
+#### Alan Wood's Compendium of Pesticide Common Names
 
-`allanwood()` returns a list of 9 entries and can query common names and cas numbers:
+`alanwood()` returns a list of 9 entries and can query common names and cas numbers:
 
 ```r
-allanwood('Fluazinam', type = 'commonname')
+alanwood('Fluazinam', type = 'commonname')
 #> $cname
 #> [1] "Fluazinam"
 #> 
@@ -250,7 +250,7 @@ allanwood('Fluazinam', type = 'commonname')
 #> 
 #> $inch
 #> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
-allanwood('79622-59-6', type = 'cas')$cname
+alanwood('79622-59-6', type = 'cas')$cname
 #> [1] "fluazinam"
 ```
 
@@ -481,7 +481,8 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 ### Contributors
 
 + [Eduard Szöcs](https://github.com/EDiLD)
-+ [Daniel Münch](https://github.com/Dahaniel)
++ [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
++ [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
 
 ### Meta
 

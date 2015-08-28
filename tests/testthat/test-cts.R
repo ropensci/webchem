@@ -1,6 +1,17 @@
 context("cts")
 
+chk_cts <- function(){
+  qurl <- 'http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N'
+  Sys.sleep(0.2)
+  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+              silent = TRUE)
+  if (inherits(cont, 'try-error'))
+    skip("Server is down!")
+}
+
+
 test_that("cts_compinfo()", {
+  chk_cts()
   expect_error(cts_compinfo(c('xxxxx', 'aaaaaaa')))
   expect_equal(cts_compinfo('xxxxx', verbose = FALSE), NA)
   expect_equal(length(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)), 7)
@@ -9,6 +20,7 @@ test_that("cts_compinfo()", {
 
 
 test_that("cts_convert()", {
+  chk_cts()
   expect_error(cts_convert(c('xxxxx', 'aaaaaaa'), 'Chemical Name', 'CAS'))
   expect_error(cts_convert('Triclosan', c('Chemical Name', 'CAS'), 'CAS'))
   expect_error(cts_convert('Triclosan', 'CAS'))
@@ -20,6 +32,7 @@ test_that("cts_convert()", {
 })
 
 test_that("cts_compinfo(cir_query())", {
+  chk_cts()
   expect_equal(round(cts_compinfo(
     gsub('InChIKey=', '', cir_query('Triclosan', representation = 'stdinchikey', verbose = FALSE)),
     verbose = FALSE)[[3]], 4), 289.5418)

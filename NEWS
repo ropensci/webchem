@@ -12,7 +12,7 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 
-
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood()
 
 
 webchem 0.0.2

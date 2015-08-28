@@ -21,12 +21,16 @@ Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 }
 \note{
 Before using this function, please read the disclaimer
-\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+\url{http://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
 id <- get_etoxid('Triclosan')
 etox_basic(id)
+
+# Retrieve CAS for multiple inputs
+ids <- c("20179", "9051")
+sapply(ids, function(y) etox_basic(y)$cas)
 }
 }
 \author{
