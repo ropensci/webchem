@@ -7,10 +7,18 @@
 ppdb_query(cas, verbose = TRUE)
 }
 \arguments{
+\item{verbose}{logical; print message during processing to console?}
+
 \item{character;}{CAS number to query.}
 }
 \value{
-A list of
+A list of 9 data.frames: ec_regulation, approved_in, general, fate,
+deg, soil, metab, etox and names.
+
+
+
+
+See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf} for more information on the data
 }
 \description{
 This function queries the PPDB \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm} for information.

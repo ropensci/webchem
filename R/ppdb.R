@@ -68,17 +68,29 @@ ppdb_buildidx <- function(){
 #' @import XML RCurl
 #'
 #' @param character; CAS number to query.
-#' @return A list of
+#' @param verbose logical; print message during processing to console?
+#' @return A list of 9 data.frames: ec_regulation, approved_in, general, fate,
+#' deg, soil, metab, etox and names.
+#'
+#'
+#'
+#'
+#' See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf} for more information on the data
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 
 #' @export
 #' @examples
 #' \dontrun{
-#' ppdb_query('1071-83-6')
+#' gly <- ppdb_query('1071-83-6')
+#' gly$approved_in
+#'
+#' # handle multiple CAS
+#'  cas <- c('1071-83-6', '50-00-0')
 #' }
 ppdb_query <- function(cas, verbose = TRUE){
   # cas <- '1071-83-6'
+  # cas <- '50-00-0' # currently fails!
   qurl <- ppdb_idx[ppdb_idx$cas == cas, 'link']
   if (length(qurl) == 0) {
     message('CAS not found! Returning NA.\n')
@@ -107,17 +119,90 @@ ppdb_query <- function(cas, verbose = TRUE){
   general <- tables[[7]]
   names(general) <- c('variable', 'value')
 
+  # parents
+
+
 #   # formulations
 #   formulation <- tables[[8]]
 #   names(formulation) <- c('variable', 'value')
 
   # fate
   fate <- tables[[9]]
+  take <- fate[!is.na(fate$V5), ]
+  take[ , 'V1'] <- paste(take[ , 'V1'], take[ , 'V2'])
+  take[ , 'V2'] <- NULL
+  fate <- fate[is.na(fate$V5), 1:4]
+  nam <- fate[1 , ]
+  fate <- fate[-1, ]
+  colnames(fate) <- nam
+  colnames(take) <- nam
+  fate <- rbind(fate, take)
+  fate <- fate[!grepl('Note', fate[ , 'Property']), ]
+  take <- fate[is.na(fate[ , 'Interpretation']), ]
+  corr <- which(is.na(fate[ , 'Interpretation']))[1] - 1
+  take <- data.frame(Prop = NA, take[ , c(1,2,3)])
+  take[ , 1] <- fate[corr, 'Property']
+  colnames(take) <- nam
+  fate <- fate[!is.na(fate[ , 'Interpretation']), ]
+  fate <- rbind(fate, take)
+
+  # degredation
+  deg <- tables[[10]]
+  colnames(deg) <- deg[1, ]
+  deg <- deg[-1, ]
+  deg <- deg[!grepl('Note', deg[ , 'Property']), ]
+
+  take <- deg[deg[ , 'Value'] == 'Value', ]
+  take <- data.frame(take[ , -2], N = NA)
+  colnames(take) <- colnames(deg)
+  deg <- deg[!deg[ , 'Value'] == 'Value', ]
+  deg <- rbind(deg, take)
+
+  corr <- deg[!is.na(deg[,5]), 1]
+  deg[!is.na(deg[,5]), 1] <- paste(deg[!is.na(deg[,5]), 1], deg[!is.na(deg[,5]), 2])
+  deg[!is.na(deg[,5]), ] <- c(deg[!is.na(deg[,5]), c(1, 3, 4, 5)], NA)
+  deg[ , 5] <- NULL
+
+  # soil adsorption and mobility
+  soil <- tables[[11]]
+  colnames(soil) <- soil[1, ]
+  soil <- soil[-1, ]
+  soil <- soil[!grepl('Note', soil[ , 'Property']), ]
+  corr <- soil[!is.na(soil[,5]), 1]
+  soil[!is.na(soil[ , 5]), 1] <- paste(soil[!is.na(soil[ , 5]), 1], soil[!is.na(soil[ , 5]), 2])
+  soil[!is.na(soil[ , 5]), ] <- c(soil[!is.na(soil[ , 5]), c(1, 3, 4, 5)], NA)
+  soil[ , 5] <- NULL
+
+  # metabolites
+  metab <- tables[[12]]
+  colnames(metab) <- metab[1, ]
+  metab <- metab[-1, ]
+
+  # ecotoxicology
+  etox <- tables[[13]]
+  colnames(etox) <- etox[1, ]
+  etox <- etox[-1, ]
+  etox <- etox[!grepl('Note', etox[ , 'Property']), ]
+  corr <- etox[!is.na(etox[ , 5]), 1]
+  etox[!is.na(etox[ , 5]), 1] <- paste(etox[!is.na(etox[ , 5]), 1], etox[!is.na(etox[ , 5]), 2])
+  etox[!is.na(etox[ , 5]), ] <- c(etox[!is.na(etox[ , 5]), c(1, 3, 4, 5)], NA)
+  etox[ , 5] <- NULL
+
+  # names
+  names <- tables[[17]]
+  colnames(names) <- names[1, ]
+  names <- names[-1, ]
 
   out <- list(ec_regulation = ec_regulation,
        approved_in = approved_id,
-       general = general
-       # formulation = formulation
+       general = general,
+       # formulation = formulation,
+       fate = fate,
+       deg = deg,
+       soil = soil,
+       metab = metab,
+       etox = etox,
+       names = names
        )
   return(out)
 }
