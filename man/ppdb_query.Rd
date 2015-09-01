@@ -25,7 +25,11 @@ This function queries the PPDB \url{http://sitem.herts.ac.uk/aeru/iupac/search.h
 }
 \examples{
 \dontrun{
-ppdb_query('1071-83-6')
+gly <- ppdb_query('1071-83-6')
+gly$approved_in
+
+# handle multiple CAS
+ cas <- c('1071-83-6', '50-00-0')
 }
 }
 \author{
