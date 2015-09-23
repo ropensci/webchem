@@ -152,13 +152,15 @@ ppdb_query <- function(cas, verbose = TRUE){
     colnames(take) <- nam
     fate <- rbind(fate, take)
     fate <- fate[!grepl('Note', fate[ , 'Property']), ]
-    take <- fate[is.na(fate[ , 'Interpretation']), ]
-    corr <- which(is.na(fate[ , 'Interpretation']))[1] - 1
-    take <- data.frame(Prop = NA, take[ , c(1,2,3)])
-    take[ , 1] <- fate[corr, 'Property']
-    colnames(take) <- nam
-    fate <- fate[!is.na(fate[ , 'Interpretation']), ]
-    fate <- rbind(fate, take)
+    if (any(is.na(fate[ , 'Interpretation']))) {
+      take <- fate[is.na(fate[ , 'Interpretation']), ]
+      corr <- which(is.na(fate[ , 'Interpretation']))[1] - 1
+      take <- data.frame(Prop = NA, take[ , c(1,2,3)])
+      take[ , 1] <- fate[corr, 'Property']
+      colnames(take) <- nam
+      fate <- fate[!is.na(fate[ , 'Interpretation']), ]
+      fate <- rbind(fate, take)
+    }
   }
 
 
@@ -172,12 +174,14 @@ ppdb_query <- function(cas, verbose = TRUE){
     colnames(deg) <- nam
     deg <- deg[!grepl('Note', deg[ , 'Property']), ]
 
-    take <- deg[deg[ , 'Value'] == 'Value', ]
-    take <- data.frame(take[ , -2], N = NA)
-    colnames(take) <- colnames(deg)
-    deg <- deg[!deg[ , 'Value'] == 'Value', ]
-    deg <- rbind(deg, take)
+    if (any(deg[ , 'Value'] == 'Value')) {
+      take <- deg[deg[ , 'Value'] == 'Value', ]
+      take <- data.frame(take[ , -2], N = NA)
+      colnames(take) <- colnames(deg)
+      deg <- deg[!deg[ , 'Value'] == 'Value', ]
+      deg <- rbind(deg, take)
 
+    }
     corr <- deg[!is.na(deg[,5]), 1]
     deg[!is.na(deg[ , 5]), 1] <- paste(deg[!is.na(deg[ , 5]), 1], deg[!is.na(deg[ , 5]), 2])
     deg[!is.na(deg[ , 5]), ] <- c(deg[!is.na(deg[ , 5]), c(1, 3, 4, 5)], NA)
