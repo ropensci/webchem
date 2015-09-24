@@ -171,11 +171,11 @@ CTS allows to convert from nearly every possible identifier to nearly every poss
 
 ```r
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
-#> [1] "5564"
+#> [1] "5564"  "34140"
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
-#> [1] "5363"
-(inchk <- cts_convert(query = 'Triclosan', from = 'Chemical Name', to = 'inchikey'))
-#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+#> [1] "31465"
+(inchk <- cts_convert(query = '50-00-0', from = 'CAS', to = 'inchikey'))
+#> [1] "WSFSSNUMVMOOMR-UHFFFAOYSA-N"
 ```
 
 Moreover, we can a lot of information stored in the CTS database using InChIkey
@@ -184,19 +184,19 @@ Moreover, we can a lot of information stored in the CTS database using InChIkey
 info <- cts_compinfo(inchikey = inchk)
 info[1:5]
 #> $inchikey
-#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+#> [1] "WSFSSNUMVMOOMR-UHFFFAOYSA-N"
 #> 
 #> $inchicode
-#> [1] "InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
+#> [1] "InChI=1S/CH2O/c1-2/h1H2"
 #> 
 #> $molweight
-#> [1] 289.5418
+#> [1] 30.02602
 #> 
 #> $exactmass
-#> [1] 287.9512
+#> [1] 30.01056
 #> 
 #> $formula
-#> [1] "C12H7Cl3O2"
+#> [1] "CH2O"
 ```
 
 
@@ -264,7 +264,30 @@ You can use `physprop()` to query this database using a CAS number:
 
 ```r
 physprop('50-00-0')
-#> [1] NA
+#> $cas
+#> [1] "50-00-0"
+#> 
+#> $cname
+#> [1] "FORMALDEHYDE"
+#> 
+#> $mw
+#> [1] "30.026"
+#> 
+#> $prop
+#>                       variable            value             unit     temp
+#> 1             Water Solubility           400000             mg/L 20 deg C
+#> 2        Log P (octanol-water)             0.35                  25 deg C
+#> 3               Vapor Pressure             3886            mm Hg 25 deg C
+#> 4    pKa Dissociation Constant            13.27                  25 deg C
+#> 5         Henry's Law Constant      0.000000337       atm-m3/mol 25 deg C
+#> 6 Atmospheric OH Rate Constant 0.00000000000937 cm3/molecule-sec 25 deg C
+#>   type                              ref
+#> 1  EXP        PICKRELL,JA ET AL. (1983)
+#> 2  EXP           HANSCH,C ET AL. (1995)
+#> 3  EXT          BOUBLIK,T ET AL. (1984)
+#> 4  EXP   SERJEANT,EP & DEMPSEY,B (1979)
+#> 5  EXP BETTERTON,EA & HOFFMAN,MR (1988)
+#> 6  EXP     KWOK,ESC & ATKINSON,R (1994)
 ```
 
 
@@ -401,7 +424,102 @@ tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'U
 ```
 
 
+<<<<<<< Updated upstream
+=======
+#### PPDB
+The PPDB holds a lot of chemical and ecotoxicological information.
+In webchem we provide a function to query this database by a CAS number.
 
+
+```r
+out <- ppdb_query('1071-83-6')
+```
+
+The informaion output is enormous, I show here only a small part, the countries where the compound is approved:
+
+
+```r
+out[[3]]
+#>                                            variable
+#> 1                                   Substance group
+#> 2                                  Substance origin
+#> 3                                    Mode of action
+#> 4                                            CAS RN
+#> 5                                         EC number
+#> 6                                      CIPAC number
+#> 7                              US EPA chemical code
+#> 8                                   Chiral molecule
+#> 9                                  Chemical formula
+#> 10                                           SMILES
+#> 11 International Chemical Identifier key (InChIKey)
+#> 12        International Chemical Identifier (InChI)
+#> 13               Structure diagram/image available?
+#> 14           Molecular mass               (g mol-1)
+#> 15              PIN (Preferred Identification Name)
+#> 16                                       IUPAC name
+#> 17                                         CAS name
+#> 18                         Other status information
+#> 19       Herbicide Resistance Classification (HRAC)
+#> 20       Herbicide Resistance Classification (WSSA)
+#> 21     Insecticide Resistance Classification (IRAC)
+#> 22       Fungicide Resistance Classification (FRAC)
+#> 23                                   Physical state
+#> 24                   Related substances & organisms
+#>                                                                                                                                                                           value
+#> 1                                                                                                                                                              Phosphonoglycine
+#> 2                                                                                                                                                                     Synthetic
+#> 3                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
+#> 4                                                                                                                                                                     1071-83-6
+#> 5                                                                                                                                                                     213-997-4
+#> 6                                                                                                                                                                           284
+#> 7                                                                                                                                                                        417300
+#> 8                                                                                                                                                                            No
+#> 9                                                                                                                                                                      C3H8NO5P
+#> 10                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
+#> 11                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
+#> 12                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
+#> 13                                                                                                                                                                          Yes
+#> 14                                                                                                                                                                        169.1
+#> 15                                                                                                                                                                            -
+#> 16                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 17                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 18                                                                                                Risk of herbicide resistance developing - anti-resistance management required
+#> 19                                                                                                                                                                            G
+#> 20                                                                                                                                                                            9
+#> 21                                                                                                                                                               Not applicable
+#> 22                                                                                                                                                               Not applicable
+#> 23                                                                                                                                                          Colourless crystals
+#> 24 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
+```
+
+>>>>>>> Stashed changes
+
+#### I have multiple compounds. How should I query those?
+
+The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
+Maybe, this will ge easier in the future...
+
+First we query alanwood:
+
+```r
+cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
+# query alanwood 
+aw_out <- lapply(cmp, alanwood)
+# this gives for each compound one list
+# str(aw_out)
+```
+
+Next we extract the cas:
+
+
+```r
+cas <- unlist(sapply(aw_out, '[', 'cas')) 
+data.frame(cmp, cas)
+#>                        cmp        cas
+#> 1                  Isodrin   465-73-6
+#> 2 Naphthalin1,6-disulfonat       <NA>
+#> 3               Pencycuron 66063-05-6
+```
 
 
 ### Acknowledgements
