@@ -9,13 +9,22 @@ chk_cts <- function(){
     skip("Server is down!")
 }
 
+chk_cir <- function(){
+  qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
+  Sys.sleep(0.2)
+  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+              silent = TRUE)
+  if (inherits(cont, 'try-error'))
+    skip("Server is down!")
+}
+
 
 test_that("cts_compinfo()", {
   chk_cts()
   expect_error(cts_compinfo(c('xxxxx', 'aaaaaaa')))
   expect_equal(cts_compinfo('xxxxx', verbose = FALSE), NA)
   expect_equal(length(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)), 7)
-  expect_equal(round(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)[[3]], 4), 289.5418)
+  expect_equal(round(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)[[3]], 3), 289.542)
 })
 
 
@@ -33,8 +42,9 @@ test_that("cts_convert()", {
 
 test_that("cts_compinfo(cir_query())", {
   chk_cts()
-  expect_equal(round(cts_compinfo(
-    gsub('InChIKey=', '', cir_query('Triclosan', representation = 'stdinchikey', verbose = FALSE)),
-    verbose = FALSE)[[3]], 4), 289.5418)
+  chk_cir()
+  inchikey <- cir_query('Triclosan', representation = 'stdinchikey', verbose = FALSE)
+  inchikey <- gsub('InChIKey=', '', inchikey)
+  expect_equal(round(cts_compinfo(inchikey, verbose = FALSE)[[3]], 3), 289.542)
 
 })

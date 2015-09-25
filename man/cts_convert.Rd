@@ -36,8 +36,8 @@ for possible values of from and to.
 cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 
 ### multiple inputs
-comp <- c('Triclosan', 'Aspirin')
-sapply(comp, function(x) cts_convert(x, 'Chemical Name', 'CAS', first = TRUE))
+comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
+sapply(comp, function(x) cts_convert(x, 'inchikey', 'Chemical Name', first = TRUE))
 }
 }
 \author{

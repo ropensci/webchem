@@ -136,7 +136,7 @@ CTS allows to convert from nearly every possible identifier to nearly every poss
 ```{r cts_convert}
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
-(inchk <- cts_convert(query = 'Triclosan', from = 'Chemical Name', to = 'inchikey'))
+(inchk <- cts_convert(query = '50-00-0', from = 'CAS', to = 'inchikey'))
 ```
 
 Moreover, we can a lot of information stored in the CTS database using InChIkey
@@ -220,6 +220,26 @@ out[[3]]
 ```
 
 
+#### I have multiple compounds. How should I query those?
+
+The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
+Maybe, this will ge easier in the future...
+
+First we query alanwood:
+```{r}
+cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
+# query alanwood 
+aw_out <- lapply(cmp, alanwood)
+# this gives for each compound one list
+# str(aw_out)
+```
+
+Next we extract the cas:
+
+```{r}
+cas <- unlist(sapply(aw_out, '[', 'cas')) 
+data.frame(cmp, cas)
+```
 
 
 ### Acknowledgements
