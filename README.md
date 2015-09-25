@@ -26,6 +26,7 @@ Source | Function(s | API Docs | API key
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -66,7 +67,7 @@ cir_query('Triclosan', 'cas')
 cir_query('Triclosan', 'cas', first = TRUE)
 #> [1] "3380-34-5"
 cir_query('Triclosan', 'mw')
-#> [1] NA
+#> [1] "289.5451"
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -423,6 +424,72 @@ tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'U
 #> 25         d     NOEC   5.000 µg/l
 ```
 
+
+#### PPDB
+The PPDB holds a lot of chemical and ecotoxicological information.
+In webchem we provide a function to query this database by a CAS number.
+
+
+```r
+out <- ppdb_query('1071-83-6')
+```
+
+The information output is enormous, I show here only a small part, the countries where the compound is approved:
+
+
+```r
+out[[3]]
+#>                                            variable
+#> 1                                   Substance group
+#> 2                                  Substance origin
+#> 3                                    Mode of action
+#> 4                                            CAS RN
+#> 5                                         EC number
+#> 6                                      CIPAC number
+#> 7                              US EPA chemical code
+#> 8                                   Chiral molecule
+#> 9                                  Chemical formula
+#> 10                                           SMILES
+#> 11 International Chemical Identifier key (InChIKey)
+#> 12        International Chemical Identifier (InChI)
+#> 13               Structure diagram/image available?
+#> 14           Molecular mass               (g mol-1)
+#> 15              PIN (Preferred Identification Name)
+#> 16                                       IUPAC name
+#> 17                                         CAS name
+#> 18                         Other status information
+#> 19       Herbicide Resistance Classification (HRAC)
+#> 20       Herbicide Resistance Classification (WSSA)
+#> 21     Insecticide Resistance Classification (IRAC)
+#> 22       Fungicide Resistance Classification (FRAC)
+#> 23                                   Physical state
+#> 24                   Related substances & organisms
+#>                                                                                                                                                                           value
+#> 1                                                                                                                                                              Phosphonoglycine
+#> 2                                                                                                                                                                     Synthetic
+#> 3                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
+#> 4                                                                                                                                                                     1071-83-6
+#> 5                                                                                                                                                                     213-997-4
+#> 6                                                                                                                                                                           284
+#> 7                                                                                                                                                                        417300
+#> 8                                                                                                                                                                            No
+#> 9                                                                                                                                                                      C3H8NO5P
+#> 10                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
+#> 11                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
+#> 12                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
+#> 13                                                                                                                                                                          Yes
+#> 14                                                                                                                                                                        169.1
+#> 15                                                                                                                                                                            -
+#> 16                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 17                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 18                                                                                                Risk of herbicide resistance developing - anti-resistance management required
+#> 19                                                                                                                                                                            G
+#> 20                                                                                                                                                                            9
+#> 21                                                                                                                                                               Not applicable
+#> 22                                                                                                                                                               Not applicable
+#> 23                                                                                                                                                          Colourless crystals
+#> 24 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
+```
 
 
 #### I have multiple compounds. How should I query those?

@@ -39,6 +39,7 @@ Source | Function(s | API Docs | API key
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -203,6 +204,20 @@ tests <- etox_tests(id)
 tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 ```
 
+
+#### PPDB
+The PPDB holds a lot of chemical and ecotoxicological information.
+In webchem we provide a function to query this database by a CAS number.
+
+```{r ppdb}
+out <- ppdb_query('1071-83-6')
+```
+
+The information output is enormous, I show here only a small part, the countries where the compound is approved:
+
+```{r ppdb_out}
+out[[3]]
+```
 
 
 #### I have multiple compounds. How should I query those?
