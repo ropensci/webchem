@@ -128,7 +128,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   }
   if (verbose)
     message(qurl)
-  Sys.sleep(1.2)
+  Sys.sleep(1.5)
   hh <- try(getURL(qurl, .opts = list(timeout = 2)))
   if (!inherits(hh, "try-error")) {
     h <- xmlParse(hh)

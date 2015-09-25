@@ -66,7 +66,7 @@ cir_query('Triclosan', 'cas')
 cir_query('Triclosan', 'cas', first = TRUE)
 #> [1] "3380-34-5"
 cir_query('Triclosan', 'mw')
-#> [1] "289.5451"
+#> [1] NA
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -467,6 +467,10 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 + [Eduard Szöcs](https://github.com/EDiLD)
 + [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
 + [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
+
+### Want to contribute?
+
+Checkout our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
 
 ### Meta
 

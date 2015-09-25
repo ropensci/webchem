@@ -2,10 +2,9 @@ context("cir")
 
 chk_cir <- function(){
   qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
-  Sys.sleep(1)
+  Sys.sleep(1.5)
   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 2)),
               silent = TRUE)
-  Sys.sleep(1.2)
   if (inherits(cont, 'try-error'))
     skip("Server is down!")
 }
