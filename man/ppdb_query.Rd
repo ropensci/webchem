@@ -7,12 +7,12 @@
 ppdb_query(cas, verbose = TRUE)
 }
 \arguments{
-\item{verbose}{logical; print message during processing to console?}
+\item{cas}{character; CAS number to query.}
 
-\item{character;}{CAS number to query.}
+\item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A list of 9 data.frames: ec_regulation, approved_in, general, fate,
+A list of 10 data.frames : ec_regulation, approved_in, general, parents, fate,
 deg, soil, metab, etox and names.
 
 
@@ -25,6 +25,7 @@ This function queries the PPDB \url{http://sitem.herts.ac.uk/aeru/iupac/search.h
 }
 \examples{
 \dontrun{
+# might fail if Server is not available
 gly <- ppdb_query('1071-83-6')
 gly$approved_in
 

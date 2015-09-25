@@ -55,9 +55,14 @@ ppdb_buildidx <- function(){
   # possible titles
   ptitles <- str_split(titles, ', ')
   cas <- sapply(ptitles, function(x) x[[3]])
-
-  index <- data.frame(cas = cas, link = links)
-  return(index)
+  # fix utf8
+  cas <- gsub('\u0096', '-', cas)
+  ppdb_idx <- data.frame(cas = iconv(cas, from = "UTF-8", to = "ASCII"),
+                      link = iconv(links, from = "UTF-8", to = "ASCII"),
+                      stringsAsFactors = FALSE)
+  ppdb_idx <- ppdb_idx[!ppdb_idx$cas == '', ]
+  # save(ppdb_idx, file = 'data/ppdb_idx.rda')
+  return(ppdb_idx)
 }
 
 
@@ -67,9 +72,9 @@ ppdb_buildidx <- function(){
 #'
 #' @import XML RCurl
 #'
-#' @param character; CAS number to query.
+#' @param cas character; CAS number to query.
 #' @param verbose logical; print message during processing to console?
-#' @return A list of 9 data.frames: ec_regulation, approved_in, general, fate,
+#' @return A list of 10 data.frames : ec_regulation, approved_in, general, parents, fate,
 #' deg, soil, metab, etox and names.
 #'
 #'
@@ -82,6 +87,7 @@ ppdb_buildidx <- function(){
 #' @export
 #' @examples
 #' \dontrun{
+#' # might fail if Server is not available
 #' gly <- ppdb_query('1071-83-6')
 #' gly$approved_in
 #'
@@ -90,13 +96,17 @@ ppdb_buildidx <- function(){
 #' }
 ppdb_query <- function(cas, verbose = TRUE){
   # cas <- '1071-83-6'
-  # cas <- '50-00-0' # currently fails!
+  # cas <- '50-00-0'
+  # cas <- 'xxxxx'
 
   chk <- function(x){
     if (inherits(x, 'try-error'))
       return(NA)
     return(x)
   }
+  # make dataset available
+  ppdb_idx <- webchem::ppdb_idx
+
   qurl <- ppdb_idx[ppdb_idx$cas == cas, 'link']
   if (length(qurl) == 0) {
     message('CAS not found! Returning NA.\n')
@@ -105,6 +115,7 @@ ppdb_query <- function(cas, verbose = TRUE){
   if (verbose)
     message('Querying ', qurl)
 
+  Sys.sleep(0.3)
   tt <- getURL(qurl)
   ttt <- htmlParse(tt)
 

@@ -14,6 +14,7 @@ Authors@R: c(person("Eduard", "Szoecs", role = c("aut", "cre"),
 Maintainer: Eduard Szoecs <eduardszoecs@gmail.com>
 LazyLoad: yes
 LazyData: yes
+Depends: R (>= 2.10)
 Imports:
     XML,
     RCurl,
