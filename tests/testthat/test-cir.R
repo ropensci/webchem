@@ -5,7 +5,7 @@ chk_cir <- function(){
   Sys.sleep(1)
   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 2)),
               silent = TRUE)
-  Sys.sleep(1)
+  Sys.sleep(1.2)
   if (inherits(cont, 'try-error'))
     skip("Server is down!")
 }

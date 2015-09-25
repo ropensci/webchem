@@ -79,6 +79,8 @@
 #'
 #'  }
 #'
+#' @note You can only make 1 request per second (this is a hard-coded feature).
+#'
 #' @references
 #' \code{cir_query} relies on the great CIR web service created by the CADD
 #' Group at NCI/NIH! \cr
@@ -126,7 +128,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   }
   if (verbose)
     message(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep(1.2)
   hh <- try(getURL(qurl, .opts = list(timeout = 2)))
   if (!inherits(hh, "try-error")) {
     h <- xmlParse(hh)

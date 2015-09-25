@@ -98,6 +98,9 @@ A interface to the Chemical Identifier Resolver (CIR).
 
  }
 }
+\note{
+You can only make 1 request per second (this is a hard-coded feature).
+}
 \examples{
 \donttest{
 # might fail if API is not available
