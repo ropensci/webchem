@@ -126,9 +126,10 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   }
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
-  h <- try(xmlParse(qurl, isURL = TRUE), silent = TRUE)
-  if (!inherits(h, "try-error")) {
+  Sys.sleep(0.3)
+  hh <- try(getURL(qurl, .opts = list(timeout = 2)))
+  if (!inherits(hh, "try-error")) {
+    h <- xmlParse(hh)
     out <- xpathSApply(h, "//data/item", xmlValue)
   } else {
     warning('Problem with web service encountered... Returning NA.')

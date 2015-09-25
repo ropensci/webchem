@@ -9,11 +9,12 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 
-* added exceptions to tests
+* added exceptions/checks to tests
+* improved robustness of cir_query()
 
 BUG FIXES
 
-* Correct the spelling of Alan Wood and rename function allanwood() to alanwood().
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribition of @jranke]
 
 
 
