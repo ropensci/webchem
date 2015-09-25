@@ -20,7 +20,7 @@ Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
-PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
@@ -63,14 +63,11 @@ Use `first` to return only the first hit.
 
 ```r
 cir_query('Triclosan', 'cas')
-#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml"
-#> [1] NA
+#> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
 cir_query('Triclosan', 'cas', first = TRUE)
-#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml"
-#> [1] NA
+#> [1] "3380-34-5"
 cir_query('Triclosan', 'mw')
-#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/Triclosan/mw/xml"
-#> [1] NA
+#> [1] "289.5451"
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -78,19 +75,16 @@ Inputs might by ambiguous and we can specify where to search using `resolver=`.
 
 ```r
 cir_query('3380-34-5', 'smiles')
-#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/3380-34-5/smiles/xml"
-#> [1] NA
+#> [1] "C1=CC(=CC(=C1OC2=CC=C(C=C2Cl)Cl)O)Cl"
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
-#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/3380-34-5/stdinchikey/xml?resolver=cas_number"
-#> [1] NA
+#> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
 
 ```r
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
-#> Operation in progressfailed to load external entity "http://cactus.nci.nih.gov/chemical/structure/XEFQLINVKFYRCS-UHFFFAOYSA-N/ring_count/xml"
-#> [1] NA
+#> [1] "2"
 ```
 
 
@@ -213,7 +207,17 @@ info[1:5]
 ```r
 pan_list <- pan('lambda-Cyhalothrin', first = TRUE)
 pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
-#> [1] NA NA NA NA
+#> $`CAS Number`
+#> [1] "91465-08-6"
+#> 
+#> $`Chemical Class`
+#> [1] "Pyrethroid"
+#> 
+#> $`Water Solubility (Avg, mg/L)`
+#> [1] "0.0050"
+#> 
+#> $`Adsorption Coefficient (Koc)`
+#> [1] "157000"
 ```
 
 
@@ -430,63 +434,61 @@ In webchem we provide a function to query this database by a CAS number.
 out <- ppdb_query('1071-83-6')
 ```
 
-The informaion output is enormous, I show here only a small part, the countries where the compound is approved:
+The information output is enormous, I show here only a small part, the countries where the compound is approved:
 
 
 ```r
 out[[3]]
 #>                                            variable
-#> 1                                    Pesticide type
-#> 2                                   Substance group
-#> 3                                  Substance origin
-#> 4                                    Mode of action
-#> 5                                            CAS RN
-#> 6                                         EC number
-#> 7                                      CIPAC number
-#> 8                              US EPA chemical code
-#> 9                                   Chiral molecule
-#> 10                                 Chemical formula
-#> 11                                           SMILES
-#> 12 International Chemical Identifier key (InChIKey)
-#> 13        International Chemical Identifier (InChI)
-#> 14               Structure diagram/image available?
-#> 15           Molecular mass               (g mol-1)
-#> 16              PIN (Preferred Identification Name)
-#> 17                                       IUPAC name
-#> 18                                         CAS name
-#> 19                         Other status information
-#> 20       Herbicide Resistance Classification (HRAC)
-#> 21       Herbicide Resistance Classification (WSSA)
-#> 22     Insecticide Resistance Classification (IRAC)
-#> 23       Fungicide Resistance Classification (FRAC)
-#> 24                                   Physical state
-#> 25                   Related substances & organisms
+#> 1                                   Substance group
+#> 2                                  Substance origin
+#> 3                                    Mode of action
+#> 4                                            CAS RN
+#> 5                                         EC number
+#> 6                                      CIPAC number
+#> 7                              US EPA chemical code
+#> 8                                   Chiral molecule
+#> 9                                  Chemical formula
+#> 10                                           SMILES
+#> 11 International Chemical Identifier key (InChIKey)
+#> 12        International Chemical Identifier (InChI)
+#> 13               Structure diagram/image available?
+#> 14           Molecular mass               (g mol-1)
+#> 15              PIN (Preferred Identification Name)
+#> 16                                       IUPAC name
+#> 17                                         CAS name
+#> 18                         Other status information
+#> 19       Herbicide Resistance Classification (HRAC)
+#> 20       Herbicide Resistance Classification (WSSA)
+#> 21     Insecticide Resistance Classification (IRAC)
+#> 22       Fungicide Resistance Classification (FRAC)
+#> 23                                   Physical state
+#> 24                   Related substances & organisms
 #>                                                                                                                                                                           value
-#> 1                                                                                                                                                                     Herbicide
-#> 2                                                                                                                                                              Phosphonoglycine
-#> 3                                                                                                                                                                     Synthetic
-#> 4                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
-#> 5                                                                                                                                                                     1071-83-6
-#> 6                                                                                                                                                                     213-997-4
-#> 7                                                                                                                                                                           284
-#> 8                                                                                                                                                                        417300
-#> 9                                                                                                                                                                            No
-#> 10                                                                                                                                                                     C3H8NO5P
-#> 11                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
-#> 12                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
-#> 13                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
-#> 14                                                                                                                                                                          Yes
-#> 15                                                                                                                                                                        169.1
-#> 16                                                                                                                                                                            -
+#> 1                                                                                                                                                              Phosphonoglycine
+#> 2                                                                                                                                                                     Synthetic
+#> 3                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
+#> 4                                                                                                                                                                     1071-83-6
+#> 5                                                                                                                                                                     213-997-4
+#> 6                                                                                                                                                                           284
+#> 7                                                                                                                                                                        417300
+#> 8                                                                                                                                                                            No
+#> 9                                                                                                                                                                      C3H8NO5P
+#> 10                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
+#> 11                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
+#> 12                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
+#> 13                                                                                                                                                                          Yes
+#> 14                                                                                                                                                                        169.1
+#> 15                                                                                                                                                                            -
+#> 16                                                                                                                                                   N-(phosphonomethyl)glycine
 #> 17                                                                                                                                                   N-(phosphonomethyl)glycine
-#> 18                                                                                                                                                   N-(phosphonomethyl)glycine
-#> 19                                                                                                Risk of herbicide resistance developing - anti-resistance management required
-#> 20                                                                                                                                                                            G
-#> 21                                                                                                                                                                            9
+#> 18                                                                                                Risk of herbicide resistance developing - anti-resistance management required
+#> 19                                                                                                                                                                            G
+#> 20                                                                                                                                                                            9
+#> 21                                                                                                                                                               Not applicable
 #> 22                                                                                                                                                               Not applicable
-#> 23                                                                                                                                                               Not applicable
-#> 24                                                                                                                                                          Colourless crystals
-#> 25 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
+#> 23                                                                                                                                                          Colourless crystals
+#> 24 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
 ```
 
 
@@ -532,6 +534,10 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 + [Eduard Szöcs](https://github.com/EDiLD)
 + [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
 + [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
+
+### Want to contribute?
+
+Checkout our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
 
 ### Meta
 

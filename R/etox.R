@@ -27,6 +27,9 @@
 #' sapply(comps, get_etoxid)
 #' }
 get_etoxid <- function(query, verbose = TRUE){
+  if (length(query) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   clean_char <- function(x){
     # rm \n \t
     x <- gsub('\n | \t', '', x)
@@ -112,6 +115,9 @@ get_etoxid <- function(query, verbose = TRUE){
 #' sapply(ids, function(y) etox_basic(y)$cas)
 #' }
 etox_basic <- function(id, verbose = TRUE){
+  if (length(id) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   # id <- '20179'
   baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
@@ -186,6 +192,9 @@ etox_basic <- function(id, verbose = TRUE){
 #' )
 #' }
 etox_targets <- function(id, verbose = TRUE){
+  if (length(id) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   # id <- '20179'
   # id <- '9051
   baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
@@ -254,6 +263,9 @@ etox_targets <- function(id, verbose = TRUE){
 #' 'Endpoint', 'Value', 'Unit')]
 #' }
 etox_tests <- function(id, verbose = TRUE){
+  if (length(id) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   # id <- '20179'
   baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
