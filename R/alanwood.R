@@ -19,6 +19,9 @@
 #' alanwood("79622-59-6", type = 'cas')
 #' }
 alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
+  if (length(x) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   type <- match.arg(type)
   if (type == 'commonname') {
     baseurl <- 'http://www.alanwood.net/pesticides/index_cn.html'
