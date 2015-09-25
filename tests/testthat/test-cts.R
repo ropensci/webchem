@@ -45,8 +45,6 @@ test_that("cts_compinfo(cir_query())", {
   chk_cir()
   inchikey <- cir_query('Triclosan', representation = 'stdinchikey', verbose = FALSE)
   inchikey <- gsub('InChIKey=', '', inchikey)
-  expect_equal(round(cts_compinfo(
-    inchikey,
-    verbose = FALSE)[[3]], 4), 289.5418)
+  expect_equal(round(cts_compinfo(inchikey, verbose = FALSE)[[3]], 3), 289.542)
 
 })
