@@ -2,7 +2,7 @@ Package: webchem
 Title: Chemical Information from the Web
 Description: Chemical information from around the web. This package interacts with a suite of web APIs for chemical information.
 Type: Package
-Version: 0.0.3
+Version: 0.0.3.1
 Date: 2015-08-27
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/webchem
