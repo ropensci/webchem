@@ -61,6 +61,10 @@ alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     message('Not found! Returning NA.\n')
     return(NA)
   }
+  if (length(takelink) > 1) {
+    message('More then one link found! Returning first.\n')
+    takelink <- takelink[1]
+  }
   if (verbose)
     message('Querying ', takelink)
 
