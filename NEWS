@@ -1,3 +1,12 @@
+webchem 0.0.4
+======================
+
+BUG FIXES
+
+* alanwood() returns only results for first match in case of multiple links found
+
+
+
 webchem 0.0.3
 ======================
 
