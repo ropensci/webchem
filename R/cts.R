@@ -28,6 +28,9 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
+  if (!is.inchikey(inchikey)) {
+    stop('Input is not a valid inchikey!')
+  }
   baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
   qurl <- paste0(baseurl, '/', inchikey)
   if (verbose)

@@ -22,7 +22,7 @@ chk_cir <- function(){
 test_that("cts_compinfo()", {
   chk_cts()
   expect_error(cts_compinfo(c('xxxxx', 'aaaaaaa')))
-  expect_equal(cts_compinfo('xxxxx', verbose = FALSE), NA)
+  expect_error(cts_compinfo('xxx'))
   expect_equal(length(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)), 7)
   expect_equal(round(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)[[3]], 3), 289.542)
 })
