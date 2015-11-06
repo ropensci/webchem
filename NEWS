@@ -6,6 +6,7 @@ NEW FEATURES
 MINOR IMPROVEMENTS
 
 * cts_compinfo() checks if input is a inchikey (via exported function is.inchikey())
+* alanwood() returns separate inchi and ichikeys in case of isomers.
 
 BUG FIXES
 
