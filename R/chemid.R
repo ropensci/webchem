@@ -7,8 +7,23 @@
 #' @param query character; query string
 #' @param type character; type of querystring.
 #'     'rn' for regeistry number or 'name' for common name.
+#' @return A list of 8 entries: name (vector), synonyms (vector), cas (vector),
+#' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
+#' physprop (data.frame).
+#'
+#' @note The data of the entry \code{physprop} is identical to the result returned
+#' by \code{\link{physprop()}}.
 #'
 #' @export
+#' @examples
+#' y1 <- chemid('Formaldehyde', type = 'name')
+#' str(y1)
+#' y1$name
+#'
+#' y2 <- chemid('50-00-0', type = 'name')
+#' str(y2)
+#' y2$name
+#'
 chemid <- function(query, type = c('rn', 'name'), verbose = TRUE){
   # query <- '50-00-0'
   # query <- 'Triclosan'
@@ -16,7 +31,7 @@ chemid <- function(query, type = c('rn', 'name'), verbose = TRUE){
   type <- match.arg(type)
   if (type == 'rn')
     baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/rn/'
-  if (type = 'name')
+  if (type == 'name')
     baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/name/'
   qurl <- paste0(baseurl, query)
   if (verbose)
@@ -36,8 +51,15 @@ chemid <- function(query, type = c('rn', 'name'), verbose = TRUE){
   smiles <- gsub('\\n|\\t', '',
                  xpathSApply(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]", xmlValue)
   )
-  toxicity <- readHTMLTable(xpathSApply(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table")[[1]])
-  physprop <- readHTMLTable(xpathSApply(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table")[[1]])
+  toxicity <- readHTMLTable(xpathSApply(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table")[[1]],
+                            stringsAsFactors = FALSE)
+  physprop <- readHTMLTable(xpathSApply(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table")[[1]],
+                            stringsAsFactors = FALSE)
+  physprop[ , 'Value'] <- as.numeric(physprop[ , 'Value'])
   #= same as physprop
 
+  out <- list(name = name, synonyms = synonyms, cas = cas, inchi = inchi,
+              inchikey = inchikey, smiles = smiles, toxicity = toxicity,
+              physprop = physprop)
+  return(out)
 }
