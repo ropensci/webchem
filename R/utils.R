@@ -1,6 +1,6 @@
 #' Check if input has correct inchikey format
 #'
-#' @param x input string
+#' @param x character; input string
 #' @return a logical
 #'
 #' @export
@@ -12,4 +12,14 @@ is.inchikey = function(x) {
     (nchar(x) == 27) &
     (substr(x, 15, 15) == "-") &
     (substr(x, 26, 26) == "-")
+}
+
+
+#' Extract number from string
+#' @param x character; input string
+#' @return a numeric vector
+#' @export
+#' @examples
+extr_num <- function(x) {
+  as.numeric(gsub("[^0-9\\-]+", "", x))
 }

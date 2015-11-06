@@ -38,13 +38,14 @@ physprop <- function(cas, verbose = TRUE){
   # cas = '50-00-0'
   # cas <- '79622-59-6'
   query <- gsub('-', '', cas)
-  baseurl <- 'http://esc.syrres.com/fatepointer/webprop.asp?CAS='
+  baseurl <- 'https://esc.syrres.com/fatepointer/webprop.asp?CAS='
   qurl <- paste0(baseurl, query)
   if (verbose)
     message('Querying ', qurl)
 
   # the server seems down from time to time - catch this problem (allow 2 seconds to connect)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+  cont <- try(
+    getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3, ssl.verifypeer = FALSE, ssl.verifyhost = FALSE)),
               silent = TRUE)
   if (inherits(cont, 'try-error')) {
     warning('Web server seems to be down! \n Returning NA.')
@@ -90,6 +91,7 @@ physprop <- function(cas, verbose = TRUE){
   }))
   prop$variable <- variables
   prop <- prop[, c("variable", "value", "unit", "temp", "type", "ref")]
+  prop[ , 'value'] <-  as.numeric(prop[ , 'value'])
 
   cas <- xpathApply(ttt, '//ul[@class="ph"]/li[starts-with(text(),"CAS")]',xmlValue)[[1]]
   cas <- sub(".*:.", "", cas)
@@ -99,7 +101,22 @@ physprop <- function(cas, verbose = TRUE){
   cname <- sub(".*:.", "", cname)
 
   mw <- xpathApply(ttt, "//ul[@class='ph']/li[4]",xmlValue)[[1]]
-  mw <- sub(".*:.", "", mw)
+  mw <- as.numeric(sub(".*:.", "", mw))
+
+  mp <- xpathApply(ttt, "//ul[@class='ph']/li[5]",xmlValue)[[1]]
+  prop <- rbind(prop, data.frame(variable = 'Melting Point',
+                                 value = extr_num(mp),
+                                 unit = 'deg C',
+                                 temp = NA,
+                                 type = NA,
+                                 ref = NA))
+  bp <- xpathApply(ttt, "//ul[@class='ph']/li[6]",xmlValue)[[1]]
+  prop <- rbind(prop, data.frame(variable = 'Boiling Point',
+                                 value = extr_num(bp),
+                                 unit = 'deg C',
+                                 temp = NA,
+                                 type = NA,
+                                 ref = NA))
 
   out <- list(cas = cas, cname = cname, mw = mw, prop = prop)
   return(out)
