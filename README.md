@@ -27,6 +27,7 @@ Source | Function(s | API Docs | API key
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
+[ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -272,23 +273,27 @@ physprop('50-00-0')
 #> [1] "FORMALDEHYDE"
 #> 
 #> $mw
-#> [1] "30.026"
+#> [1] 30.026
 #> 
 #> $prop
-#>                       variable            value             unit     temp
-#> 1             Water Solubility           400000             mg/L 20 deg C
-#> 2        Log P (octanol-water)             0.35                  25 deg C
-#> 3               Vapor Pressure             3886            mm Hg 25 deg C
-#> 4    pKa Dissociation Constant            13.27                  25 deg C
-#> 5         Henry's Law Constant      0.000000337       atm-m3/mol 25 deg C
-#> 6 Atmospheric OH Rate Constant 0.00000000000937 cm3/molecule-sec 25 deg C
-#>   type                              ref
-#> 1  EXP        PICKRELL,JA ET AL. (1983)
-#> 2  EXP           HANSCH,C ET AL. (1995)
-#> 3  EXT          BOUBLIK,T ET AL. (1984)
-#> 4  EXP   SERJEANT,EP & DEMPSEY,B (1979)
-#> 5  EXP BETTERTON,EA & HOFFMAN,MR (1988)
-#> 6  EXP     KWOK,ESC & ATKINSON,R (1994)
+#>                       variable      value             unit     temp type
+#> 1             Water Solubility  4.000e+05             mg/L 20 deg C  EXP
+#> 2        Log P (octanol-water)  3.500e-01                  25 deg C  EXP
+#> 3               Vapor Pressure  3.886e+03            mm Hg 25 deg C  EXT
+#> 4    pKa Dissociation Constant  1.327e+01                  25 deg C  EXP
+#> 5         Henry's Law Constant  3.370e-07       atm-m3/mol 25 deg C  EXP
+#> 6 Atmospheric OH Rate Constant  9.370e-12 cm3/molecule-sec 25 deg C  EXP
+#> 7                Melting Point -9.200e+01            deg C     <NA> <NA>
+#> 8                Boiling Point -1.950e+02            deg C     <NA> <NA>
+#>                                ref
+#> 1        PICKRELL,JA ET AL. (1983)
+#> 2           HANSCH,C ET AL. (1995)
+#> 3          BOUBLIK,T ET AL. (1984)
+#> 4   SERJEANT,EP & DEMPSEY,B (1979)
+#> 5 BETTERTON,EA & HOFFMAN,MR (1988)
+#> 6     KWOK,ESC & ATKINSON,R (1994)
+#> 7                             <NA>
+#> 8                             <NA>
 ```
 
 
@@ -490,6 +495,32 @@ out[[3]]
 #> 23                                                                                                                                                          Colourless crystals
 #> 24 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
 ```
+
+
+
+#### ChemIDplus
+
+
+```r
+out <- chemid(query = 'Triclosan', type = 'name')
+out$physprop
+#>              Physical Property    Value            Units Temp (deg C)
+#> 1                Melting Point       NA            deg C             
+#> 2        log P (octanol-water) 4.76e+00           (none)             
+#> 3             Water Solubility 1.00e+01             mg/L           20
+#> 4               Vapor Pressure 6.45e-07            mm Hg           25
+#> 5         Henry's Law Constant 4.99e-09      atm-m3/mole           25
+#> 6 Atmospheric OH Rate Constant 1.61e-11 cm3/molecule-sec           25
+#>   Source
+#> 1    EXP
+#> 2    EXP
+#> 3    EXP
+#> 4    EST
+#> 5    EST
+#> 6    EST
+```
+
+
 
 
 #### I have multiple compounds. How should I query those?

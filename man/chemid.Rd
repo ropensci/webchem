@@ -4,13 +4,13 @@
 \alias{chemid}
 \title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus/name/triclosan}}
 \usage{
-chemid(query, type = c("rn", "name"), verbose = TRUE)
+chemid(query, type = c("rn", "name", "inchikey"), verbose = TRUE)
 }
 \arguments{
 \item{query}{character; query string}
 
-\item{type}{character; type of querystring.
-'rn' for regeistry number or 'name' for common name.}
+\item{type}{character; type of query string.
+'rn' for regeistry number or 'name' for common name or 'inchikey' for inchikey as input.}
 }
 \value{
 A list of 8 entries: name (vector), synonyms (vector), cas (vector),
@@ -34,7 +34,7 @@ str(y2)
 y2$name
 
 y3 <- chemid('50-00-0', type = 'name')
-str(y2)
-y2$name
+str(y3)
+y3$name
 }
 
