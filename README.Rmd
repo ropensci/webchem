@@ -33,11 +33,13 @@ Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
-PubChem | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
-[Allan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `allanwood()` | none | none
+[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
+[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -45,13 +47,14 @@ Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a secur
 
 ## Installation
 #### Install from CRAN (stable version)
-```{r install_cran eval=FALSE}
+
+```{r install_cran, eval=FALSE}
 install.packages("webchem")
 ```
 
 
 #### Install from Github (development version)
-```{r install_github eval=FALSE}
+```{r install_github, eval=FALSE}
 install.packages("devtools")
 library("devtools")
 install_github("ropensci/webchem")
@@ -87,13 +90,13 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 
 #### ChemSpider
-```{r token echo=FALSE}
+```{r token, echo=FALSE}
 token = '37bf5e57-9091-42f5-9274-650a64398aaf'
 ```
 
 You'll need a API key:
 
-```{r api_key eval=FALSE}
+```{r api_key, eval=FALSE}
 token = '<YOUR TOKEN HERE'
 ```
 
@@ -133,7 +136,7 @@ CTS allows to convert from nearly every possible identifier to nearly every poss
 ```{r cts_convert}
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
-(inchk <- cts_convert(query = 'Triclosan', from = 'Chemical Name', to = 'inchikey'))
+(inchk <- cts_convert(query = '50-00-0', from = 'CAS', to = 'inchikey'))
 ```
 
 Moreover, we can a lot of information stored in the CTS database using InChIkey
@@ -152,12 +155,12 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 
 
 
-#### Allan Wood's Compendium of Pesticide Common Names
+#### Alan Wood's Compendium of Pesticide Common Names
 
-`allanwood()` returns a list of 9 entries and can query common names and cas numbers:
-```{r allanwood}
-allanwood('Fluazinam', type = 'commonname')
-allanwood('79622-59-6', type = 'cas')$cname
+`alanwood()` returns a list of 9 entries and can query common names and cas numbers:
+```{r alanwood}
+alanwood('Fluazinam', type = 'commonname')
+alanwood('79622-59-6', type = 'cas')$cname
 ```
 
 #### SRC PHYSPROP Database
@@ -169,6 +172,74 @@ physprop('50-00-0')
 ```
 
 
+#### ETOX
+ETOX: Information System Ecotoxicology and Environmental Quality Targets is a database run by the Federal Environment Agency of Germany and provides data on synonyms, identifiers, Quality Targest and Effects.
+
+First we need to query a substance ID:
+
+```{r get_etoxid}
+id <- get_etoxid('Triclosan')
+id
+```
+`get_etoxid` tries to find the best match for you (check the matched and distance attributes))
+
+With this substance ID we can query further information from ETOX, e.g.:
+
+```{r etox_basic}
+etox_basic(id)
+```
+
+Which returns CAS, EC and GSBL numbers, as well as a synonym list.
+
+We can also retrieve Quality Targets:
+
+```{r etox_targets}
+targets <- etox_targets(id)
+targets[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
+```
+
+and results of ecotox tests:
+```{r etox_tests}
+tests <- etox_tests(id)
+tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
+```
+
+
+#### PPDB
+The PPDB holds a lot of chemical and ecotoxicological information.
+In webchem we provide a function to query this database by a CAS number.
+
+```{r ppdb}
+out <- ppdb_query('1071-83-6')
+```
+
+The information output is enormous, I show here only a small part, the countries where the compound is approved:
+
+```{r ppdb_out}
+out[[3]]
+```
+
+
+#### I have multiple compounds. How should I query those?
+
+The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
+Maybe, this will ge easier in the future...
+
+First we query alanwood:
+```{r}
+cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
+# query alanwood 
+aw_out <- lapply(cmp, alanwood)
+# this gives for each compound one list
+# str(aw_out)
+```
+
+Next we extract the cas:
+
+```{r}
+cas <- unlist(sapply(aw_out, '[', 'cas')) 
+data.frame(cmp, cas)
+```
 
 
 ### Acknowledgements
@@ -183,7 +254,12 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 ### Contributors
 
 + [Eduard Szöcs](https://github.com/EDiLD)
-+ [Daniel Münch](https://github.com/Dahaniel)
++ [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
++ [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
+
+### Want to contribute?
+
+Checkout our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
 
 ### Meta
 

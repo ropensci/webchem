@@ -32,6 +32,9 @@
 #' }
 
 physprop <- function(cas, verbose = TRUE){
+  if (length(cas) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   # cas = '50-00-0'
   # cas <- '79622-59-6'
   query <- gsub('-', '', cas)

@@ -12,7 +12,7 @@
 #' \donttest{
 #' # might fail if API is not available
 #' out <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N")
-#' # = Triclosa
+#' # = Triclosan
 #' str(out)
 #' out[1:5]
 #'
@@ -27,6 +27,9 @@
 cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
+  }
+  if (!is.inchikey(inchikey)) {
+    stop('Input is not a valid inchikey!')
   }
   baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
   qurl <- paste0(baseurl, '/', inchikey)
@@ -70,8 +73,8 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 #'
 #' ### multiple inputs
-#' comp <- c('Triclosan', 'Aspirin')
-#' sapply(comp, function(x) cts_convert(x, 'Chemical Name', 'CAS', first = TRUE))
+#' comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
+#' sapply(comp, function(x) cts_convert(x, 'inchikey', 'Chemical Name', first = TRUE))
 #' }
 cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   if (length(query) > 1 | length(from) > 1 | length(to) > 1) {
