@@ -7,7 +7,7 @@
 is.inchikey(x)
 }
 \arguments{
-\item{x}{input string}
+\item{x}{character; input string}
 }
 \value{
 a logical
