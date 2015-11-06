@@ -13,7 +13,6 @@ is.inchikey = function(x) {
     (substr(x, 15, 15) == "-") &
     (substr(x, 26, 26) == "-")
 }
-<<<<<<< HEAD
 
 
 #' Extract number from string
@@ -24,5 +23,3 @@ is.inchikey = function(x) {
 extr_num <- function(x) {
   as.numeric(gsub("[^0-9\\-]+", "", x))
 }
-=======
->>>>>>> master
