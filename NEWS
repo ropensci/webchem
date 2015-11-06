@@ -1,5 +1,11 @@
-webchem 0.0.4
+webchem 0.0.4.1
 ======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+* cts_compinfo() checks if input is a inchikey (via exported function is.inchikey())
 
 BUG FIXES
 

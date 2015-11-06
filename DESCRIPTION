@@ -1,6 +1,7 @@
 Package: webchem
 Title: Chemical Information from the Web
-Description: Chemical information from around the web. This package interacts with a suite of web APIs for chemical information.
+Description: Chemical information from around the web. This package interacts
+    with a suite of web APIs for chemical information.
 Type: Package
 Version: 0.0.4.1
 Date: 2015-10-16
@@ -14,7 +15,8 @@ Authors@R: c(person("Eduard", "Szoecs", role = c("aut", "cre"),
 Maintainer: Eduard Szoecs <eduardszoecs@gmail.com>
 LazyLoad: yes
 LazyData: yes
-Depends: R (>= 2.10)
+Depends:
+    R (>= 2.10)
 Imports:
     XML,
     RCurl,
@@ -22,3 +24,4 @@ Imports:
     stringr
 Suggests:
     testthat
+RoxygenNote: 5.0.0
