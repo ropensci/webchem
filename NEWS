@@ -3,14 +3,18 @@ webchem 0.0.4.1
 
 NEW FEATURES
 
+
 MINOR IMPROVEMENTS
 
 * cts_compinfo() checks if input is a inchikey (via exported function is.inchikey())
 * alanwood() returns separate inchi and ichikeys in case of isomers.
+* physprop() also returns boiling and melting points. Moreover, values are now numeric.
+
 
 BUG FIXES
 
 * alanwood() returns only results for first match in case of multiple links found
+* physprop() stopped working after change of SRC to https, fixed now.
 
 
 
