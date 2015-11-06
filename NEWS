@@ -3,6 +3,8 @@ webchem 0.0.4.1
 
 NEW FEATURES
 
+* chemid() to query ChemIDplus http://chem.sis.nlm.nih.gov/chemidplus/
+
 MINOR IMPROVEMENTS
 
 * cts_compinfo() checks if input is a inchikey (via exported function is.inchikey())

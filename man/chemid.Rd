@@ -24,4 +24,17 @@ Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus
 The data of the entry \code{physprop} is identical to the result returned
 by \code{\link{physprop()}}.
 }
+\examples{
+y1 <- chemid('Formaldehyde', type = 'name')
+str(y1)
+y1$name
+
+y2 <- chemid('50-00-0', type = 'rn')
+str(y2)
+y2$name
+
+y3 <- chemid('50-00-0', type = 'name')
+str(y2)
+y2$name
+}
 
