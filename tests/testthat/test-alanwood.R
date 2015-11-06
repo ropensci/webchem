@@ -14,9 +14,12 @@ test_that("alanwood, commonname", {
   chk_alanwood()
 
   fl <- alanwood('Fluazinam', type = 'commonname')
+  sm <- alanwood("S-Metolachlor", type = 'commonname')
   xx <- alanwood('xxxxx', type = 'commonname')
 
   expect_equal(fl$cas, "79622-59-6", verbose = FALSE)
+  expect_equal(length(sm$inchikey), 2)
+  expect_equal(length(sm$inchi), 2)
   expect_equal(xx, NA, verbose = FALSE)
   expect_equal(length(fl), 9)
 })

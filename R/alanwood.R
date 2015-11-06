@@ -77,7 +77,15 @@ alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   formula <- xpathSApply(ttt, "//tr/th[@id='r6']/following-sibling::td", xmlValue)
   activity <- xpathSApply(ttt, "//tr/th[@id='r7']/following-sibling::td", xmlValue)
   inchikey <- xpathSApply(ttt, "//tr/th[@id='r11']/following-sibling::td", xmlValue)
+  if(grepl('isomer', inchikey)){
+    inchikey <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchikey),
+      r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchikey))
+  }
   inchi <- xpathSApply(ttt, "//tr/th[@id='r12']/following-sibling::td", xmlValue)
+  if(grepl('isomer', inchi)){
+    inchi <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchi),
+               r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchi))
+  }
   out <- list(cname = cname, status = status, pref_iupac_name = pref_iupac_name,
               iupac_name = iupac_name, cas = cas, formula = formula,
               activity = activity, inchikey = inchikey, inch = inchi)
