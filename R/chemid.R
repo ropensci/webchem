@@ -2,7 +2,7 @@
 #'
 #' Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus/name/triclosan}
 #'
-#' @import RCurl xml2
+#' @import RCurl
 #'
 #' @param query character; query string
 #' @param type character; type of query string.
