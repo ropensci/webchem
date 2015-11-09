@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{is.inchikey}
 \alias{is.inchikey}
-\title{Check if input has correct inchikey format}
+\title{Check if input is a valid inchikey}
 \usage{
 is.inchikey(x)
 }
@@ -13,7 +13,7 @@ is.inchikey(x)
 a logical
 }
 \description{
-Check if input has correct inchikey format
+Check if input is a valid inchikey
 }
 \examples{
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
