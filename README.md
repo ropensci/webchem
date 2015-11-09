@@ -78,7 +78,7 @@ Inputs might by ambiguous and we can specify where to search using `resolver=`.
 cir_query('3380-34-5', 'smiles')
 #> [1] "C1=CC(=CC(=C1OC2=CC=C(C=C2Cl)Cl)O)Cl"
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
-#> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
+#> [1] NA
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
@@ -522,10 +522,31 @@ out$physprop
 
 
 
+#### Misc functions
+
+##### Check if a string is a valid CAS registry number
+
+```r
+is.cas('64-17-5')
+#> [1] TRUE
+is.cas('64-17-6')
+#> [1] FALSE
+```
+
+##### Check if a string is a valid InChIKey
+
+```r
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#> [1] TRUE
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#> [1] FALSE
+```
+
 
 #### I have multiple compounds. How should I query those?
 
 The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
+Every function has an example with multiple queries.
 Maybe, this will ge easier in the future...
 
 First we query alanwood:
