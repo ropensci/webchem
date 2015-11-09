@@ -20,6 +20,7 @@ is.inchikey = function(x) {
 #' @return a numeric vector
 #' @export
 #' @examples
+#' extr_num('aaaa -95')
 extr_num <- function(x) {
   as.numeric(gsub("[^0-9\\-]+", "", x))
 }

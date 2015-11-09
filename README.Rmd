@@ -40,6 +40,7 @@ Source | Function(s | API Docs | API key
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
+[ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -218,6 +219,17 @@ The information output is enormous, I show here only a small part, the countries
 ```{r ppdb_out}
 out[[3]]
 ```
+
+
+
+#### ChemIDplus
+
+```{r chemid}
+out <- chemid(query = 'Triclosan', type = 'name')
+out$physprop
+```
+
+
 
 
 #### I have multiple compounds. How should I query those?

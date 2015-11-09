@@ -15,4 +15,7 @@ a numeric vector
 \description{
 Extract number from string
 }
+\examples{
+extr_num('aaaa -95')
+}
 

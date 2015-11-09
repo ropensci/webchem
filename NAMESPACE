@@ -2,6 +2,7 @@
 
 export(alanwood)
 export(allanwood)
+export(chemid)
 export(cid_compinfo)
 export(cir_query)
 export(csid_compinfo)
