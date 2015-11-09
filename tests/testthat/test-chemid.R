@@ -2,8 +2,6 @@ context("chemid")
 
 
 test_that("chemid returns correct results", {
-  chk_physprop()
-
   xx <- chemid('xxxxx', type = 'name')
   fl <- chemid('50-00-0', type = 'rn')
 
