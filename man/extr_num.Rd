@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{extr_num}
 \alias{extr_num}
-\title{Extract number from string}
+\title{Extract a number from a string}
 \usage{
 extr_num(x)
 }
@@ -13,7 +13,7 @@ extr_num(x)
 a numeric vector
 }
 \description{
-Extract number from string
+Extract a number from a string
 }
 \examples{
 extr_num('aaaa -95')
