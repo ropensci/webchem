@@ -7,12 +7,13 @@
 #' @param query character; query string
 #' @param type character; type of query string.
 #'     'rn' for regeistry number or 'name' for common name or 'inchikey' for inchikey as input.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @return A list of 8 entries: name (vector), synonyms (vector), cas (vector),
 #' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
 #' physprop (data.frame).
 #'
 #' @note The data of the entry \code{physprop} is identical to the result returned
-#' by \code{\link{physprop()}}.
+#' by \code{\link{physprop}}.
 #'
 #' @export
 #' @examples
@@ -25,8 +26,7 @@
 #' y2$name
 #'
 #' y3 <- chemid('50-00-0', type = 'name')
-#' str(y3)
-#' y3$name
+#' y3
 chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   # query <- '50-00-0'
   # query <- 'Triclosan'

@@ -11,6 +11,8 @@ chemid(query, type = c("rn", "name", "inchikey"), verbose = TRUE)
 
 \item{type}{character; type of query string.
 'rn' for regeistry number or 'name' for common name or 'inchikey' for inchikey as input.}
+
+\item{verbose}{logical; should a verbose output be printed on the console?}
 }
 \value{
 A list of 8 entries: name (vector), synonyms (vector), cas (vector),
@@ -22,7 +24,7 @@ Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus
 }
 \note{
 The data of the entry \code{physprop} is identical to the result returned
-by \code{\link{physprop()}}.
+by \code{\link{physprop}}.
 }
 \examples{
 y1 <- chemid('Formaldehyde', type = 'name')
@@ -34,7 +36,6 @@ str(y2)
 y2$name
 
 y3 <- chemid('50-00-0', type = 'name')
-str(y3)
-y3$name
+y3
 }
 
