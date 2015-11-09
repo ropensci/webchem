@@ -5,7 +5,10 @@ webchem
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/github/ropensci/webchem?branch=master)
+<!--
 [![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
+-->
 [![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
 [![Downloads](http://cranlogs.r-pkg.org/badges/webchem)](http://cranlogs.r-pkg.org/badges/webchem)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/webchem)](http://cran.r-project.org/web/packages/webchem)
@@ -78,7 +81,7 @@ Inputs might by ambiguous and we can specify where to search using `resolver=`.
 cir_query('3380-34-5', 'smiles')
 #> [1] "C1=CC(=CC(=C1OC2=CC=C(C=C2Cl)Cl)O)Cl"
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
-#> [1] NA
+#> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
