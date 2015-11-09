@@ -9,7 +9,7 @@ is.cas(x, verbose = TRUE)
 \arguments{
 \item{x}{character; input strin}
 
-\item{verbose}{logical; print message during processing to console?g}
+\item{verbose}{logical; print messages during processing to console?}
 }
 \value{
 a logical
@@ -30,5 +30,8 @@ is.cas('4-17-5')
 is.cas('64-177-6')
 is.cas('64-17-55')
 is.cas('64-17-6')
+}
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 

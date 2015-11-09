@@ -1,30 +1,73 @@
 #' Check if input is a valid inchikey
 #'
+#' @description This function checks if a string is a valid inchikey.
+#' Inchikey must fulfill the following criteria:
+#' 1) consist of 27 characters;
+#' 2) be all uppercase, all letters (no numbers);
+#' 3) contain two hyphens at positions 15 and 26;
+#' 4) 24th character (flag character) be 'S' (Standard InChI) or 'N' (non-standard)
+#' 5) 25th character (version character) must be 'A' (currently).
+#'
 #' @param x character; input string
+#' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
+#' @references Heller, Stephen R., et al. "InChI, the IUPAC International Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
+#'
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-#' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKS')
-is.inchikey = function(x) {
-  (x == toupper(x)) &
-    (nchar(x) == 27) &
-    (substr(x, 15, 15) == "-") &
-    (substr(x, 26, 26) == "-")
+#' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA')
+#' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-5')
+#' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-n')
+#' is.inchikey('BQJCRHHNABKAKU/KBQPJGBKSA/N')
+#' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+is.inchikey = function(x, verbose = TRUE) {
+  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  nch <- nchar(x)
+  if (nch != 27) {
+    if (verbose)
+      message('Not 27 characters long.')
+    return(FALSE)
+  }
+
+  let <- strsplit(x, split = '')[[1]]
+  if (any(grepl("[[:digit:]]", let))) {
+    if (verbose)
+      message('strings contains numbers.')
+    return(FALSE)
+  }
+
+  if (x != toupper(x)) {
+    if (verbose)
+      message('Not all character uppercase.')
+    return(FALSE)
+  }
+
+  if (substr(x, 15, 15) != "-" | substr(x, 26, 26) != "-") {
+    if (verbose)
+      message('Hyphens not at position 15 and 26.')
+    return(FALSE)
+  }
+
+  f <- substr(x, 24, 24)
+  if (f != 'S' & f != 'N') {
+    if (verbose)
+      message("Flag character not 'S' or 'N'.")
+    return(FALSE)
+  }
+
+  f <- substr(x, 25, 25)
+  if (f != 'A') {
+    if (verbose)
+      message("Version character not 'A'.")
+    return(FALSE)
+  }
+
+  return(TRUE)
 }
-
-
-#' Extract a number from a string
-#' @param x character; input string
-#' @return a numeric vector
-#' @export
-#' @examples
-#' extr_num('aaaa -95')
-extr_num <- function(x) {
-  as.numeric(gsub("[^0-9\\-]+", "", x))
-}
-
 
 
 #' Check if input is a valid CAS
@@ -39,8 +82,10 @@ extr_num <- function(x) {
 #'
 #' @import stringr
 #' @param x character; input strin
-#' @param verbose logical; print message during processing to console?g
+#' @param verbose logical; print messages during processing to console?
 #' @return a logical
+#'
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
 #' @export
 #' @examples
@@ -95,4 +140,16 @@ is.cas = function(x, verbose = TRUE) {
   }
 
   return(TRUE)
+}
+
+
+
+#' Extract a number from a string
+#' @param x character; input string
+#' @return a numeric vector
+#' @export
+#' @examples
+#' extr_num('aaaa -95')
+extr_num <- function(x) {
+  as.numeric(gsub("[^0-9\\-]+", "", x))
 }

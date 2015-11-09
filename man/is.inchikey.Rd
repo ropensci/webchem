@@ -4,19 +4,38 @@
 \alias{is.inchikey}
 \title{Check if input is a valid inchikey}
 \usage{
-is.inchikey(x)
+is.inchikey(x, verbose = TRUE)
 }
 \arguments{
 \item{x}{character; input string}
+
+\item{verbose}{logical; print messages during processing to console?}
 }
 \value{
 a logical
 }
 \description{
-Check if input is a valid inchikey
+This function checks if a string is a valid inchikey.
+Inchikey must fulfill the following criteria:
+1) consist of 27 characters;
+2) be all uppercase, all letters (no numbers);
+3) contain two hyphens at positions 15 and 26;
+4) 24th character (flag character) be 'S' (Standard InChI) or 'N' (non-standard)
+5) 25th character (version character) must be 'A' (currently).
 }
 \examples{
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-is.inchikey('BQJCRHHNABKAKU-KBQPJGBKS')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-5')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-n')
+is.inchikey('BQJCRHHNABKAKU/KBQPJGBKSA/N')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+}
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}
+\references{
+Heller, Stephen R., et al. "InChI, the IUPAC International Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
 }
 
