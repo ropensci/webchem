@@ -43,5 +43,7 @@ env:
     - RVERSION=devel COVERAGE=true
 
   global:
+    # COVERALLS_TOKEN
+    - secure: "WJeHUOPD0YrYyrxWUGpdrBSGJMB361m0nHC19ohwIWbdGysksgTTkyBDTamD62XRKjJSlGpHohMU3OiOX0YE45mypgsKvfdqP4CTBbc7J//fYLPUIttVXOiCp15qNFr7NLjKB78BG2K0wqsjVVb65oJg+uzl89Rt+xjyV1cFxD0="
     - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran --run-donttest"
     - _R_CHECK_TIMINGS_="0"
