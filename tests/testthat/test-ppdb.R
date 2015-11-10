@@ -7,10 +7,10 @@ test_that("ppdb_buildidx", {
   expect_equal(ncol(y), 2)
 })
 
-test_that("ppdb_query", {
-  y <- ppdb_query('1071-83-6')
-  z <- ppdb_query('50-00-0')
-  xx <- ppdb_query('xxx')
+test_that("ppdb", {
+  y <- ppdb('1071-83-6')
+  z <- ppdb('50-00-0')
+  xx <- ppdb('xxx')
 
   expect_is(y, 'list')
   expect_is(z, 'list')
