@@ -15,7 +15,7 @@ alanwood(x, type = c("commonname", "cas"), verbose = TRUE)
 }
 \value{
 A list of eight entries: common-name, status, preferredd IUPAC Name,
-         IUPAC Name, cas, formula, activity, inchikey, inchi
+         IUPAC Name, cas, formula, activity, subactivity, inchikey and inchi.
 }
 \description{
 Query Alan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
@@ -26,7 +26,7 @@ for type = 'cas' only the first link is returned
 \examples{
 \dontrun{
 alanwood('Fluazinam', type = 'commonname')
-sapply(c('Fluazinam', 'Diclofop', 'xxxxx'), alanwood, type = 'com')
+sapply(c('Fluazinam', 'Diclofop'), alanwood, type = 'com')
 alanwood("79622-59-6", type = 'cas')
 }
 }
