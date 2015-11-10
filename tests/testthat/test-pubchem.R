@@ -30,5 +30,14 @@ test_that("cid_compinfo", {
   expect_equal(length(cid_compinfo('5564', verbose = FALSE)), 25)
   chk_pubchem()
   expect_equal(length(cid_compinfo('5564', first = TRUE, verbose = FALSE)$synonyms), 1)
-  expect_equal(get_cid('xxxxx', verbose = FALSE), NA)
+  expect_equal(cid_compinfo('xxxxx', verbose = FALSE), NA)
+  expect_warning(cid_compinfo('xxxxx', verbose = TRUE))
+})
+
+
+test_that("cid integration tests", {
+  chk_pubchem()
+  expect_equal(cid_compinfo(get_cid('Triclosan')[1])$CanonicalSmiles, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
+  expect_true(is.na(cid_compinfo(get_cid('xxxxxx')[1])))
+  expect_warning(cid_compinfo(get_cid('xxxxxx')[1]))
 })

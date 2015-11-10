@@ -97,51 +97,56 @@ cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
     message(qurl)
   Sys.sleep(0.3)
   h <- try(xmlParse(qurl, isURL = TRUE), silent = TRUE)
-  if (!inherits(h, "try-error")) {
-    CID <- xpathSApply(h, '//Id', xmlValue)
-    InChIKey <-  xpathSApply(h, "//Item[@Name='InChIKey']", xmlValue)
-    InChI <- xpathSApply(h, "//Item[@Name='InChI']", xmlValue)
-    synonyms <- xpathSApply(h, "//Item[@Name='SynonymList']/Item", xmlValue)
-    IUPACName <- xpathSApply(h, "//Item[@Name='IUPACName']", xmlValue)
-    CanonicalSmiles <- xpathSApply(h, "//Item[@Name='CanonicalSmiles']", xmlValue)
-    IsomericSmiles <- xpathSApply(h, "//Item[@Name='IsomericSmiles']", xmlValue)
-    RotatableBondCount <- xpathSApply(h, "//Item[@Name='RotatableBondCount']", xmlValue)
-    MolecularFormula <- xpathSApply(h, "//Item[@Name='MolecularFormula']", xmlValue)
-    MolecularWeight <- xpathSApply(h, "//Item[@Name='MolecularWeight']", xmlValue)
-    TotalFormalCharge <- xpathSApply(h, "//Item[@Name='TotalFormalCharge']", xmlValue)
-    XLogP <- xpathSApply(h, "//Item[@Name='XLogP']", xmlValue)
-    HydrogenBondDonorCount <- xpathSApply(h, "//Item[@Name='HydrogenBondDonorCount']", xmlValue)
-    HydrogenBondAcceptorCount <- xpathSApply(h, "//Item[@Name='HydrogenBondAcceptorCount']", xmlValue)
-    Complexity <- xpathSApply(h, "//Item[@Name='Complexity']", xmlValue)
-    HeavyAtomCount <- xpathSApply(h, "//Item[@Name='HeavyAtomCount']", xmlValue)
-    AtomChiralCount <- xpathSApply(h, "//Item[@Name='AtomChiralCount']", xmlValue)
-    AtomChiralDefCount <- xpathSApply(h, "//Item[@Name='AtomChiralDefCount']", xmlValue)
-    AtomChiralUndefCount <- xpathSApply(h, "//Item[@Name='AtomChiralUndefCount']", xmlValue)
-    BondChiralCount <- xpathSApply(h, "//Item[@Name='BondChiralCount']", xmlValue)
-    BondChiralDefCount <- xpathSApply(h, "//Item[@Name='BondChiralDefCount']", xmlValue)
-    BondChiralUndefCount <- xpathSApply(h, "//Item[@Name='BondChiralUndefCount']", xmlValue)
-    IsotopeAtomCount <- xpathSApply(h, "//Item[@Name='IsotopeAtomCount']", xmlValue)
-    CovalentUnitCount <- xpathSApply(h, "//Item[@Name='CovalentUnitCount']", xmlValue)
-    TautomerCount <- xpathSApply(h, "//Item[@Name='TautomerCount']", xmlValue)
-    out <- list(CID = CID, InChIKey = InChIKey, InChI = InChI, synonyms = synonyms,
-                IUPACName = IUPACName, CanonicalSmiles = CanonicalSmiles,
-                IsomericSmiles = IsomericSmiles, RotatableBondCount = RotatableBondCount,
-                MolecularFormula = MolecularFormula, MolecularWeight = MolecularWeight,
-                TotalFormalCharge = TotalFormalCharge, XLogP = XLogP,
-                HydrogenBondDonorCount = HydrogenBondDonorCount,
-                HydrogenBondAcceptorCount = HydrogenBondAcceptorCount,
-                Complexity = Complexity, HeavyAtomCount = HeavyAtomCount,
-                AtomChiralCount = AtomChiralCount, AtomChiralDefCount = AtomChiralDefCount,
-                AtomChiralUndefCount = AtomChiralUndefCount, BondChiralCount = BondChiralCount,
-                BondChiralDefCount = BondChiralDefCount, BondChiralUndefCount = BondChiralUndefCount,
-                IsotopeAtomCount = IsotopeAtomCount, CovalentUnitCount = CovalentUnitCount,
-                TautomerCount = TautomerCount)
-    if (first)
-      out <- lapply(out, function(x) x[1])
-  } else {
-    warning('CID not found... Returning NA.')
+  if (inherits(h, "try-error")) {
+    if(verbose)
+      warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
+  if (length(xpathSApply(h, '//ERROR')) > 0) {
+    if(verbose)
+      warning("Problem encountered : '", xpathSApply(h, '//ERROR', xmlValue), "'.\n Returning NA.")
+    return(NA)
+  }
+  CID <- xpathSApply(h, '//Id', xmlValue)
+  InChIKey <-  xpathSApply(h, "//Item[@Name='InChIKey']", xmlValue)
+  InChI <- xpathSApply(h, "//Item[@Name='InChI']", xmlValue)
+  synonyms <- xpathSApply(h, "//Item[@Name='SynonymList']/Item", xmlValue)
+  IUPACName <- xpathSApply(h, "//Item[@Name='IUPACName']", xmlValue)
+  CanonicalSmiles <- xpathSApply(h, "//Item[@Name='CanonicalSmiles']", xmlValue)
+  IsomericSmiles <- xpathSApply(h, "//Item[@Name='IsomericSmiles']", xmlValue)
+  RotatableBondCount <- xpathSApply(h, "//Item[@Name='RotatableBondCount']", xmlValue)
+  MolecularFormula <- xpathSApply(h, "//Item[@Name='MolecularFormula']", xmlValue)
+  MolecularWeight <- xpathSApply(h, "//Item[@Name='MolecularWeight']", xmlValue)
+  TotalFormalCharge <- xpathSApply(h, "//Item[@Name='TotalFormalCharge']", xmlValue)
+  XLogP <- xpathSApply(h, "//Item[@Name='XLogP']", xmlValue)
+  HydrogenBondDonorCount <- xpathSApply(h, "//Item[@Name='HydrogenBondDonorCount']", xmlValue)
+  HydrogenBondAcceptorCount <- xpathSApply(h, "//Item[@Name='HydrogenBondAcceptorCount']", xmlValue)
+  Complexity <- xpathSApply(h, "//Item[@Name='Complexity']", xmlValue)
+  HeavyAtomCount <- xpathSApply(h, "//Item[@Name='HeavyAtomCount']", xmlValue)
+  AtomChiralCount <- xpathSApply(h, "//Item[@Name='AtomChiralCount']", xmlValue)
+  AtomChiralDefCount <- xpathSApply(h, "//Item[@Name='AtomChiralDefCount']", xmlValue)
+  AtomChiralUndefCount <- xpathSApply(h, "//Item[@Name='AtomChiralUndefCount']", xmlValue)
+  BondChiralCount <- xpathSApply(h, "//Item[@Name='BondChiralCount']", xmlValue)
+  BondChiralDefCount <- xpathSApply(h, "//Item[@Name='BondChiralDefCount']", xmlValue)
+  BondChiralUndefCount <- xpathSApply(h, "//Item[@Name='BondChiralUndefCount']", xmlValue)
+  IsotopeAtomCount <- xpathSApply(h, "//Item[@Name='IsotopeAtomCount']", xmlValue)
+  CovalentUnitCount <- xpathSApply(h, "//Item[@Name='CovalentUnitCount']", xmlValue)
+  TautomerCount <- xpathSApply(h, "//Item[@Name='TautomerCount']", xmlValue)
+  out <- list(CID = CID, InChIKey = InChIKey, InChI = InChI, synonyms = synonyms,
+              IUPACName = IUPACName, CanonicalSmiles = CanonicalSmiles,
+              IsomericSmiles = IsomericSmiles, RotatableBondCount = RotatableBondCount,
+              MolecularFormula = MolecularFormula, MolecularWeight = MolecularWeight,
+              TotalFormalCharge = TotalFormalCharge, XLogP = XLogP,
+              HydrogenBondDonorCount = HydrogenBondDonorCount,
+              HydrogenBondAcceptorCount = HydrogenBondAcceptorCount,
+              Complexity = Complexity, HeavyAtomCount = HeavyAtomCount,
+              AtomChiralCount = AtomChiralCount, AtomChiralDefCount = AtomChiralDefCount,
+              AtomChiralUndefCount = AtomChiralUndefCount, BondChiralCount = BondChiralCount,
+              BondChiralDefCount = BondChiralDefCount, BondChiralUndefCount = BondChiralUndefCount,
+              IsotopeAtomCount = IsotopeAtomCount, CovalentUnitCount = CovalentUnitCount,
+              TautomerCount = TautomerCount)
+  if (first)
+    out <- lapply(out, function(x) x[1])
   return(out)
 }
 
