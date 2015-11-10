@@ -19,6 +19,9 @@ ppdb_idx
 A dataset containing the matched strings and links of the PPDB  \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}.
 This dataset has been created using code{\link{ppdb_buildidx}}
 }
+\details{
+Retrieved using \code{\link{ppdb_idx}} on 11th October 2015.
+}
 \seealso{
 \code{\link{ppdb_buildidx}}
 }
