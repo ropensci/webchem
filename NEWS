@@ -2,13 +2,16 @@ webchem 0.0.4.0
 ======================
 
 NEW FEATURES
-* chemid() to query ChemIDplus http://chem.sis.nlm.nih.gov/chemidplus/
+
+* chemid() to query ChemIDplus http://chem.sis.nlm.nih.gov/chemidplus/.
 * is.inchikey() and is.cas() to check if a string is valid inchikey or CAS registry number.
+
 
 MINOR IMPROVEMENTS
 
-* cts_compinfo() checks if input is a inchikey (via exported function is.inchikey())
+* cts_compinfo() checks if input is a inchikey (via exported function is.inchikey()).
 * alanwood() returns separate inchi and ichikeys in case of isomers.
+* alanwood() returns also subactvity (e.g. $Fluazinam$activity [1] "fungicides" and $Fluazinam$subactivity [1] "pyridine fungicides").
 * physprop() also returns boiling and melting points. Moreover, values are now numeric.
 
 

@@ -7,7 +7,7 @@
 #' @param type character; type of input
 #' @param verbose logical; print message during processing to console?
 #' @return A list of eight entries: common-name, status, preferredd IUPAC Name,
-#'          IUPAC Name, cas, formula, activity, inchikey, inchi
+#'          IUPAC Name, cas, formula, activity, subactivity, inchikey and inchi.
 #'
 #' @note for type = 'cas' only the first link is returned
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
@@ -15,10 +15,11 @@
 #' @examples
 #' \dontrun{
 #' alanwood('Fluazinam', type = 'commonname')
-#' sapply(c('Fluazinam', 'Diclofop', 'xxxxx'), alanwood, type = 'com')
+#' sapply(c('Fluazinam', 'Diclofop'), alanwood, type = 'com')
 #' alanwood("79622-59-6", type = 'cas')
 #' }
 alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
+  # x <- 'Fluazinam'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -56,6 +57,7 @@ alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     linknames <- c(linkn0, linkn1, linkn2)
     cname <-  linknames[tolower(names) == tolower(x)]
   }
+
   takelink <- links[tolower(names) == tolower(x)]
   if (length(takelink) == 0) {
     message('Not found! Returning NA.\n')
@@ -76,18 +78,22 @@ alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   cas <- xpathSApply(ttt, "//tr/th[@id='r5']/following-sibling::td", xmlValue)
   formula <- xpathSApply(ttt, "//tr/th[@id='r6']/following-sibling::td", xmlValue)
   activity <- xpathSApply(ttt, "//tr/th[@id='r7']/following-sibling::td", xmlValue)
+  subactivity <- gsub('^.*\\((.*)\\)', '\\1', activity)
+  activity <- gsub('^(.*) \\(.*\\)', '\\1', activity)
+
   inchikey <- xpathSApply(ttt, "//tr/th[@id='r11']/following-sibling::td", xmlValue)
-  if(grepl('isomer', inchikey)){
+  if (grepl('isomer', inchikey)) {
     inchikey <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchikey),
       r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchikey))
   }
   inchi <- xpathSApply(ttt, "//tr/th[@id='r12']/following-sibling::td", xmlValue)
-  if(grepl('isomer', inchi)){
+  if (grepl('isomer', inchi)) {
     inchi <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchi),
                r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchi))
   }
   out <- list(cname = cname, status = status, pref_iupac_name = pref_iupac_name,
               iupac_name = iupac_name, cas = cas, formula = formula,
-              activity = activity, inchikey = inchikey, inch = inchi)
+              activity = activity, subactivity = subactivity,
+              inchikey = inchikey, inch = inchi)
   return(out)
 }
