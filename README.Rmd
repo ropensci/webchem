@@ -34,7 +34,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
-[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
@@ -75,21 +75,21 @@ library("webchem")
 CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
 Use `first` to return only the first hit.
 ```{r cir_query1}
-cir_query('Triclosan', 'cas')
-cir_query('Triclosan', 'cas', first = TRUE)
-cir_query('Triclosan', 'mw')
+cir('Triclosan', 'cas')
+cir('Triclosan', 'cas', first = TRUE)
+cir('Triclosan', 'mw')
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
 Inputs might by ambiguous and we can specify where to search using `resolver=`.
 ```{r cir_query2}
-cir_query('3380-34-5', 'smiles')
-cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
+cir('3380-34-5', 'smiles')
+cir('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
 ```{r cir_query3}
-cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
+cir('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 ```
 
 
