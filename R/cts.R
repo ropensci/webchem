@@ -35,7 +35,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   qurl <- paste0(baseurl, '/', inchikey)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep(0.3)
   h <- try(getURL(qurl), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- fromJSON(h)
@@ -89,7 +89,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   qurl <- URLencode(qurl)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep(0.3)
   h <- try(getURL(qurl), silent = TRUE)
   if (!inherits(h, "try-error")) {
     out <- fromJSON(h)
