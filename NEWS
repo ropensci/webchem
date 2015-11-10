@@ -15,6 +15,7 @@ MINOR IMPROVEMENTS
 * alanwood() returns also subactvity (e.g. $Fluazinam$activity [1] "fungicides" and $Fluazinam$subactivity [1] "pyridine fungicides").
 * physprop() also returns boiling and melting points. Moreover, values are now numeric.
 * ppdb() replaces ppdb_query() and accepts individual index as created by ppdb_buildidx().
+* cir() replaces cir_query().
 
 
 BUG FIXES

@@ -112,7 +112,7 @@
 #'
 #'}
 #' @export
-cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
+cir <- function(identifier, representation = 'smiles', resolver = NULL,
                       first = FALSE, verbose = TRUE, ...){
   if (length(identifier) > 1) {
     stop('Cannot handle multiple input strings.')
