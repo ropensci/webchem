@@ -17,6 +17,7 @@ test_that("physprop returns correct results", {
   xx <- physprop('xxxxx')
   fl <- physprop('50-00-0')
 
+  expect_error(physprop(c('xxxxx', 'xxxxx')))
   expect_equal(fl$cas, "50-00-0")
   expect_equal(fl$cname, "FORMALDEHYDE")
   expect_equal(fl$prop$value[fl$prop$variable == 'Water Solubility'], 400000)
