@@ -21,7 +21,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
-[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
@@ -66,11 +66,11 @@ CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Tr
 Use `first` to return only the first hit.
 
 ```r
-cir_query('Triclosan', 'cas')
+cir('Triclosan', 'cas')
 #> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
-cir_query('Triclosan', 'cas', first = TRUE)
-#> [1] "3380-34-5"
-cir_query('Triclosan', 'mw')
+cir('Triclosan', 'cas', first = TRUE)
+#> [1] NA
+cir('Triclosan', 'mw')
 #> [1] "289.5451"
 ```
 
@@ -78,16 +78,16 @@ Query SMILES and InChIKey from CAS (Triclosan).
 Inputs might by ambiguous and we can specify where to search using `resolver=`.
 
 ```r
-cir_query('3380-34-5', 'smiles')
+cir('3380-34-5', 'smiles')
 #> [1] "C1=CC(=CC(=C1OC2=CC=C(C=C2Cl)Cl)O)Cl"
-cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
+cir('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 #> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
 
 ```r
-cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
+cir('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 #> [1] "2"
 ```
 
@@ -154,6 +154,7 @@ get_cid('Triclosan')
 #> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
 #> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
 #> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
+#> [37] "92024355"
 cid <- get_cid('3380-34-5')
 ```
 
