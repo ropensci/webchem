@@ -5,7 +5,10 @@ webchem
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/github/ropensci/webchem?branch=master)
+<!--
 [![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
+-->
 [![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
 [![Downloads](http://cranlogs.r-pkg.org/badges/webchem)](http://cranlogs.r-pkg.org/badges/webchem)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/webchem)](http://cran.r-project.org/web/packages/webchem)
@@ -522,10 +525,31 @@ out$physprop
 
 
 
+#### Misc functions
+
+##### Check if a string is a valid CAS registry number
+
+```r
+is.cas('64-17-5')
+#> [1] TRUE
+is.cas('64-17-6')
+#> [1] FALSE
+```
+
+##### Check if a string is a valid InChIKey
+
+```r
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#> [1] TRUE
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#> [1] FALSE
+```
+
 
 #### I have multiple compounds. How should I query those?
 
 The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
+Every function has an example with multiple queries.
 Maybe, this will ge easier in the future...
 
 First we query alanwood:
