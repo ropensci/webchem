@@ -3,7 +3,7 @@ context("cts")
 require(RCurl)
 chk_cts <- function(){
   qurl <- 'http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N'
-  Sys.sleep(0.2)
+  Sys.sleep(0.3)
   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
               silent = TRUE)
   if (inherits(cont, 'try-error'))
@@ -12,7 +12,7 @@ chk_cts <- function(){
 
 chk_cir <- function(){
   qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
-  Sys.sleep(0.2)
+  Sys.sleep(0.3)
   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
               silent = TRUE)
   if (inherits(cont, 'try-error'))
