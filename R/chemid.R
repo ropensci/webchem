@@ -17,6 +17,8 @@
 #'
 #' @export
 #' @examples
+#' \dontrun{
+#' # might fail if API is not available
 #' y1 <- chemid('Formaldehyde', type = 'name')
 #' str(y1)
 #' y1$name
@@ -27,6 +29,7 @@
 #'
 #' y3 <- chemid('50-00-0', type = 'name')
 #' y3
+#' }
 chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   # query <- '50-00-0'
   # query <- 'Triclosan'
@@ -41,7 +44,7 @@ chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   qurl <- paste0(baseurl, query)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep(0.3)
   tt <- getURL(qurl)
   ttt <- htmlParse(tt)
   #! maybe not the best test....
