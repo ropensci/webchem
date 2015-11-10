@@ -29,7 +29,7 @@ Source | Function(s | API Docs | API key
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
-[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb()` | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
 
 #### API keys
@@ -251,7 +251,10 @@ alanwood('Fluazinam', type = 'commonname')
 #> [1] "C13H4Cl2F6N4O4"
 #> 
 #> $activity
-#> [1] "fungicides (pyridine fungicides)"
+#> [1] "fungicides"
+#> 
+#> $subactivity
+#> [1] "pyridine fungicides"
 #> 
 #> $inchikey
 #> [1] "UZCGKGPEKUCDTF-UHFFFAOYSA-N"
@@ -439,7 +442,7 @@ In webchem we provide a function to query this database by a CAS number.
 
 
 ```r
-out <- ppdb_query('1071-83-6')
+out <- ppdb('1071-83-6')
 ```
 
 The information output is enormous, I show here only a small part, the countries where the compound is approved:

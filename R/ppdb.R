@@ -9,6 +9,7 @@
 #'   \item{link}{matched link}
 #' }
 #' @source  \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}
+#' @details Retrieved using \code{\link{ppdb_idx}} on 11th October 2015.
 #' @seealso \code{\link{ppdb_buildidx}}
 "ppdb_idx"
 
@@ -74,11 +75,10 @@ ppdb_buildidx <- function(){
 #'
 #' @param cas character; CAS number to query.
 #' @param verbose logical; print message during processing to console?
+#' @param index A index object, as created by \code{\link{ppdb_buildidx}}.
+#' If NULL (default), the index shipped with webchem is used \code{\link{ppdb_idx}}.
 #' @return A list of 10 data.frames : ec_regulation, approved_in, general, parents, fate,
 #' deg, soil, metab, etox and names.
-#'
-#'
-#'
 #'
 #' See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf} for more information on the data
 #'
@@ -88,13 +88,13 @@ ppdb_buildidx <- function(){
 #' @examples
 #' \dontrun{
 #' # might fail if Server is not available
-#' gly <- ppdb_query('1071-83-6')
+#' gly <- ppdb('1071-83-6')
 #' gly$approved_in
 #'
 #' # handle multiple CAS
 #'  cas <- c('1071-83-6', '50-00-0')
 #' }
-ppdb_query <- function(cas, verbose = TRUE){
+ppdb <- function(cas, verbose = TRUE, index = NULL){
   # cas <- '1071-83-6'
   # cas <- '50-00-0'
   # cas <- 'xxxxx'
@@ -104,8 +104,14 @@ ppdb_query <- function(cas, verbose = TRUE){
       return(NA)
     return(x)
   }
-  # make dataset available
-  ppdb_idx <- webchem::ppdb_idx
+
+  if (is.null(index)) {
+    # make dataset available
+    ppdb_idx <- webchem::ppdb_idx
+  } else {
+    ppdb_idx <- index
+  }
+
 
   qurl <- ppdb_idx[ppdb_idx$cas == cas, 'link']
   if (length(qurl) == 0) {
@@ -237,8 +243,6 @@ ppdb_query <- function(cas, verbose = TRUE){
     etox[!is.na(etox[ , 5]), ] <- c(etox[!is.na(etox[ , 5]), c(1, 3, 4, 5)], NA)
     etox[ , 5] <- NULL
   }
-
-
 
   # names
   names <- try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'TRANSLATIONS ')]/following-sibling::table[1]")[[1]],

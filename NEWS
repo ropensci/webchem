@@ -14,7 +14,7 @@ MINOR IMPROVEMENTS
 * alanwood() returns separate inchi and ichikeys in case of isomers.
 * alanwood() returns also subactvity (e.g. $Fluazinam$activity [1] "fungicides" and $Fluazinam$subactivity [1] "pyridine fungicides").
 * physprop() also returns boiling and melting points. Moreover, values are now numeric.
-* allanwood() is now defunct
+* ppdb() replaces ppdb_query() and accepts individual index as created by ppdb_buildidx().
 
 
 BUG FIXES
@@ -22,6 +22,10 @@ BUG FIXES
 * alanwood() returns only results for first match in case of multiple links found
 * physprop() stopped working after change of SRC to https, fixed now.
 
+
+DEFUNCT FUNCTIONS
+
+* allanwood()
 
 
 webchem 0.0.3
