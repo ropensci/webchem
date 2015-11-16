@@ -12,6 +12,7 @@ webchem
 [![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
 [![Downloads](http://cranlogs.r-pkg.org/badges/webchem)](http://cranlogs.r-pkg.org/badges/webchem)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/webchem)](http://cran.r-project.org/web/packages/webchem)
+[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
 
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
@@ -69,7 +70,7 @@ Use `first` to return only the first hit.
 cir('Triclosan', 'cas')
 #> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
 cir('Triclosan', 'cas', first = TRUE)
-#> [1] NA
+#> [1] "3380-34-5"
 cir('Triclosan', 'mw')
 #> [1] "289.5451"
 ```
@@ -154,7 +155,7 @@ get_cid('Triclosan')
 #> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
 #> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
 #> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
-#> [37] "92024355"
+#> [37] "92024355" "92043149" "92043150"
 cid <- get_cid('3380-34-5')
 ```
 
