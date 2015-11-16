@@ -196,12 +196,8 @@ etox_targets <- function(id, verbose = TRUE){
     stop('Cannot handle multiple input strings.')
   }
   # id <- '20179'
-<<<<<<< HEAD
   # id <- '9051
-  baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
-=======
   baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
->>>>>>> etox use https
   qurl <- paste0(baseurl, id)
   httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
