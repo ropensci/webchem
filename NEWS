@@ -22,6 +22,7 @@ BUG FIXES
 
 * alanwood() returns only results for first match in case of multiple links found
 * physprop() stopped working after change of SRC to https, fixed now.
+* changed etox_* functions to https
 
 
 DEFUNCT FUNCTIONS
