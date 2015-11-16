@@ -44,7 +44,7 @@ get_etoxid <- function(query, verbose = TRUE){
   # query <- 'Triclosan'
   if (verbose)
     message('Searching ', query)
-  baseurl <- 'http://webetox.uba.de/webETOX/public/search/stoff.do'
+  baseurl <- 'https://webetox.uba.de/webETOX/public/search/stoff.do'
 
   Sys.sleep(0.1)
   out <- postForm(baseurl,
@@ -119,7 +119,7 @@ etox_basic <- function(id, verbose = TRUE){
     stop('Cannot handle multiple input strings.')
   }
   # id <- '20179'
-  baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
   httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
@@ -197,7 +197,7 @@ etox_targets <- function(id, verbose = TRUE){
   }
   # id <- '20179'
   # id <- '9051
-  baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
   httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
@@ -213,7 +213,7 @@ etox_targets <- function(id, verbose = TRUE){
   link2 <- xpathSApply(tt, "//a[contains(.,'Quali')]/@href[contains(.,'stoff')]")
   id2 <- gsub('.*=(\\d+)', '\\1', link2)
 
-  tt2 <-  htmlParse(getURL(paste0('http://webetox.uba.de', link2),
+  tt2 <-  htmlParse(getURL(paste0('https://webetox.uba.de', link2),
                            httpheader = httpheader))
   mssg <- xpathSApply(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]", xmlValue)
   if (length(mssg) > 0) {
@@ -227,7 +227,7 @@ etox_targets <- function(id, verbose = TRUE){
 
 
   csvlink <- xpathSApply(tt2, "//a[contains(.,'Csv')]/@href")
-  cont <- getURL(paste0('http://webetox.uba.de', csvlink),
+  cont <- getURL(paste0('https://webetox.uba.de', csvlink),
                  httpheader = httpheader)
   out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
                     stringsAsFactors = FALSE)
@@ -267,7 +267,7 @@ etox_tests <- function(id, verbose = TRUE){
     stop('Cannot handle multiple input strings.')
   }
   # id <- '20179'
-  baseurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
   httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
@@ -283,10 +283,10 @@ etox_tests <- function(id, verbose = TRUE){
   link2 <- xpathSApply(tt, "//a[contains(.,'Test')]/@href[contains(.,'stoff')]")
   id2 <- gsub('.*=(\\d+)', '\\1', link2)
 
-  tt2 <-  htmlParse(getURL(paste0('http://webetox.uba.de', link2),
+  tt2 <-  htmlParse(getURL(paste0('https://webetox.uba.de', link2),
                            httpheader = httpheader))
   csvlink <- xpathSApply(tt2, "//a[contains(.,'Csv')]/@href")
-  cont <- getURL(paste0('http://webetox.uba.de', csvlink),
+  cont <- getURL(paste0('https://webetox.uba.de', csvlink),
                  httpheader = httpheader)
   out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
                     stringsAsFactors = FALSE)
