@@ -39,7 +39,7 @@ notifications:
 env:
   matrix:
     # - RVERSION=oldrel
-    - RVERSION=3.2.2
+    - RVERSION=release
     - RVERSION=devel COVERAGE=true
 
   global:
