@@ -14,8 +14,13 @@ MINOR IMPROVEMENTS
 * alanwood() returns separate inchi and ichikeys in case of isomers.
 * alanwood() returns also subactvity (e.g. $Fluazinam$activity [1] "fungicides" and $Fluazinam$subactivity [1] "pyridine fungicides").
 * physprop() also returns boiling and melting points. Moreover, values are now numeric.
+
+RENAMING
+
 * ppdb() replaces ppdb_query() and accepts individual index as created by ppdb_buildidx().
 * cir() replaces cir_query().
+* cs_compinfo() replaces csid_compinfo()
+* cs_extcompinfo() replaces csid_extcompinfo()
 
 
 BUG FIXES

@@ -87,18 +87,18 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' token <- '<YOUR-SECURITY-TOKEN>'
 #' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
-#' csid_compinfo(csid, token)
+#' cs_compinfo(csid, token)
 #'
 #' ###
 #' # multiple inputs
 #' csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' # fails:
-#' # csid_compinfo(csids, token = token)
-#' (ll <- lapply(csids, csid_compinfo, token = token))
+#' # cs_compinfo(csids, token = token)
+#' (ll <- lapply(csids, cs_compinfo, token = token))
 #' # return a list, convert to matrix:
 #' do.call(rbind, ll)
 #' }
-csid_compinfo <- function(csid, token, verbose = TRUE, ...){
+cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -143,18 +143,18 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
 #' # get SMILES from CSID
-#' csid_extcompinfo(csid, token)
+#' cs_extcompinfo(csid, token)
 #'
 #' ###
 #' # multiple inpits
 #' csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' # fails:
-#' # csid_extcompinfo(csids, token = token)
-#' (ll <- lapply(csids, csid_extcompinfo, token = token))
+#' # cs_extcompinfo(csids, token = token)
+#' (ll <- lapply(csids, cs_extcompinfo, token = token))
 #' # to matrix
 #' do.call(rbind, ll)
 #' }
-csid_extcompinfo <- function(csid, token, verbose = TRUE, ...){
+cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }

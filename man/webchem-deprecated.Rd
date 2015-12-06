@@ -2,6 +2,8 @@
 % Please edit documentation in R/webchem-deprecated.R
 \name{webchem-deprecated}
 \alias{cir_query}
+\alias{csid_compinfo}
+\alias{csid_extcompinfo}
 \alias{ppdb_query}
 \alias{webchem-deprecated}
 \title{Deprecated function(s) in the webchem package}
@@ -9,6 +11,10 @@
 ppdb_query(...)
 
 cir_query(...)
+
+csid_extcompinfo(...)
+
+csid_compinfo(...)
 }
 \arguments{
 \item{...}{Parameters to be passed to the modern version of the function}
@@ -23,6 +29,8 @@ Deprecated functions are:
 \tabular{rl}{
   \code{ppdb_query} \tab is now a synonym for \code{\link{ppdb}}\cr
   \code{cir_query} \tab is now a synonym for \code{\link{cir}}\cr
+  \code{csid_extcompinfo} \tab is now a synonym for \code{\link{cs_extcompinfo}}\cr
+  \code{csid_compinfo} \tab is now a synonym for \code{\link{cs_compinfo}}\cr
 }
 }
 
