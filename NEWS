@@ -5,6 +5,7 @@ NEW FEATURES
 
 * chemid() to query ChemIDplus http://chem.sis.nlm.nih.gov/chemidplus/.
 * is.inchikey() and is.cas() to check if a string is valid inchikey or CAS registry number.
+* parse_mol(): A simple molfile parser.
 
 
 MINOR IMPROVEMENTS

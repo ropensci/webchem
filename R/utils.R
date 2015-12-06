@@ -153,3 +153,53 @@ is.cas = function(x, verbose = TRUE) {
 extr_num <- function(x) {
   as.numeric(gsub("[^0-9\\-]+", "", x))
 }
+
+
+#' Parse Molfile (as returned by chemspider) into a R-object.
+#'
+#' @param string molfile as one string
+#' @return A list with of four entries: header (h), counts line (cl), atom block (ab) and bond block (bb).
+#' header: a = number of atoms, b = number of bonds, l = number of atom lists, f = obsolete,
+#' c = chiral flag (0=not chiral, 1 = chiral), s = number of stext entries, x, r, p, i = obsolete,
+#' m = 999, v0 version
+#'
+#' atom block: x, y, z = atom coordinates, a = mass difference, c= charge, s= stereo parity,
+#' h = hydrogen count 1, b = stereo care box, v = valence, h = h0 designator, r, i = not used,
+#' m = atom-atom mapping number, n = inversion/retention flag, e = exact change flag
+#'
+#' bond block:
+#' 1 = first atom, 2 = second atom, t = bond type, s = stereo type, x = not used, r = bond typology,
+#' c = reacting center status.
+#'
+#' For more information see  \url{infochim.u-strasbg.fr/recherche/Download/Fragmentor/MDL_SDF.pdf}.
+#'
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
+#' a toolset for transforming SD/Molfile structure information into R objects.
+#' Source Code for Biology and Medicine, 7, 12. http://doi.org/10.1186/1751-0473-7-12
+#' @export
+
+parse_mol <- function(string) {
+  if (length(string) > 1)
+    stop('string must be of length 1')
+  m <- readLines(textConnection(string))
+  # header
+  h <- trimws(m[1:3])
+  # counts line
+  cl <- m[4]
+  nchar(cl)
+  splits <- c(seq(1, 33, by = 3), 34)
+  cl <- trimws(substring(cl, splits, c(splits[-1] - 1, nchar(cl))))
+  names(cl) <- c('a', 'b', 'l', 'f', 'c', 's', 'x', 'r', 'p', 'i', 'm', 'p')
+  # atom block
+  na <- as.numeric(cl[1])
+  ab <- m[5:(4 + na)]
+  ab <- read.table(text = ab)
+  names(ab) <- c('x', 'y', 'z', 'a', 'd', 'c', 's', 'h', 'b', 'v', 'H', 'm', 'n', 'e')
+  # bound block
+  nb <- as.numeric(cl[2])
+  bb <- m[(5 + na):(4 + na + nb)]
+  bb <- read.table(text = bb)
+  names(bb) <- c('1', '2', 't', 's', 'x', 'r', 'c')
+  return(list(h = h, cl = cl, ab = ab, bb = bb))
+}
