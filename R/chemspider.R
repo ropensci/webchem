@@ -194,7 +194,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #'
 #' @return If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
 #'
-#' @seealso \code{\link{parse_mol}}
+#' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
@@ -232,6 +232,41 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
   return(out)
 }
 
-# cs_is_inchikey <- function(x, verbose = TRUE){
-#
-# }
+
+
+#' Check if input is a valid inchikey using ChemSpider API
+#'
+#' @param x character; input string
+#' @param verbose logical; print messages during processing to console?
+#' @return a logical
+#'
+#' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-5')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-n')
+#' is.inchikey_cs('BQJCRHHNABKAKU/KBQPJGBKSA/N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+is.inchikey_cs <- function(x, verbose = TRUE){
+  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA'
+  if (length(x) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
+  qurl <- paste0(baseurl, 'inchi_key=', x)
+  if (verbose)
+    message(qurl)
+  Sys.sleep(0.1)
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('Problem with webservice... Returning NA.')
+    out <- NA
+  } else {
+    out <- as.logical(xml_text(h))
+  }
+  return(out)
+}

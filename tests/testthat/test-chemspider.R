@@ -72,3 +72,15 @@ test_that("cs_csid_mol()", {
   expect_is(m2, 'character')
   expect_equal(length(m2), 1)
 })
+
+
+test_that("is.inchikey_cs", {
+  expect_message(is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N'))
+  g <- is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+  b <- is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
+
+  expect_true(g)
+  expect_false(b)
+
+  expect_equal(length(g), 1)
+})

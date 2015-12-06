@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemspider.R
 \name{cs_csid_mol}
 \alias{cs_csid_mol}
-\title{Convert a CSID to a molfile}
+\title{Convert a CSID to a Molfile}
 \usage{
 cs_csid_mol(csid, token, parse = TRUE, verbose = TRUE, ...)
 }
@@ -22,7 +22,7 @@ If \code{FALSE} the raw mol is returned as string.}
 If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
 }
 \description{
-Convert a CSID to a molfile
+Convert a CSID to a Molfile
 }
 \note{
 A security token is neeeded. Please register at RSC
@@ -43,6 +43,6 @@ cs_csid_mol(5363, token = token, parse = FALSE)
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
-\code{\link{parse_mol}}
+\code{\link{parse_mol}} for a description of the Mol R Object.
 }
 
