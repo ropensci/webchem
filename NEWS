@@ -9,6 +9,7 @@ NEW FEATURES
 * Functions to work with ChemSpider InChI API:
   + cs_csid_mol : convert csid to mol
   + is.inchikey_cs: Check is inchikey is valid
+* webchem has now a zenodo doi, please cite if you use it.
 
 
 MINOR IMPROVEMENTS
@@ -38,6 +39,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 * allanwood()
+
 
 
 webchem 0.0.3
