@@ -82,5 +82,7 @@ test_that("is.inchikey_cs", {
   expect_true(g)
   expect_false(b)
 
+  expect_error(is.inchikey_cs(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
+
   expect_equal(length(g), 1)
 })

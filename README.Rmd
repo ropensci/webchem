@@ -36,7 +36,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_csid_mol()`, `is.inchikey_cs()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
@@ -277,7 +277,7 @@ Every function has an example with multiple queries.
 Maybe, this will ge easier in the future...
 
 First we query alanwood:
-```{r}
+```{r multi_alanwood}
 cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
 # query alanwood 
 aw_out <- lapply(cmp, alanwood)
@@ -287,7 +287,7 @@ aw_out <- lapply(cmp, alanwood)
 
 Next we extract the cas:
 
-```{r}
+```{r multi_extract}
 cas <- unlist(sapply(aw_out, '[', 'cas')) 
 data.frame(cmp, cas)
 ```
