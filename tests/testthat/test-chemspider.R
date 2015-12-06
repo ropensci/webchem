@@ -53,3 +53,22 @@ test_that("csid_extcompinfo(get_cid())", {
   expect_equal(length(cs_extcompinfo(get_csid('Triclosan', token = token, verbose = FALSE),
                                        token = token, verbose = FALSE)), 12)
 })
+
+
+test_that("cs_csid_mol()", {
+  m1 <- cs_csid_mol(5363, token = token, verbose = FALSE)
+  m2 <- cs_csid_mol(5363, token = token, parse = FALSE, verbose = FALSE)
+
+  expect_error(cs_csid_mol(c(5363,5363), token = token))
+  expect_message(cs_csid_mol(5363, token = token))
+
+  expect_is(m1, 'list')
+  expect_equal(length(m1), 4)
+  expect_is(m1$ab, 'data.frame')
+  expect_is(m1$bb, 'data.frame')
+  expect_equal(unname(m1$cl[1]), "17")
+  expect_equal(unname(m1$cl[2]), "18")
+
+  expect_is(m2, 'character')
+  expect_equal(length(m2), 1)
+})

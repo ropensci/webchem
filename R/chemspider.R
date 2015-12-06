@@ -172,3 +172,66 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   }
   return(out)
 }
+
+
+# cs_convert <- function(query, from = c('csid', 'inchi', 'inchikey', 'smiles', 'mol'),
+#                        to = c('csid', 'inchi',  'inchikey', 'smiles', 'mol'),
+#                        token) {
+#
+# }
+
+
+
+#' Convert a CSID to a Molfile
+#' @import xml2
+#'
+#' @param csid character,  ChemSpider ID.
+#' @param token character; security token.
+#' @param parse should the molfile be parsed to a R object?
+#' If \code{FALSE} the raw mol is returned as string.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... currently not used.
+#'
+#' @return If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
+#'
+#' @seealso \code{\link{parse_mol}}
+#' @note A security token is neeeded. Please register at RSC
+#' \url{https://www.rsc.org/rsc-id/register}
+#' for a security token.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @examples
+#' \dontrun{
+#' # Fails because no TOKEN is included
+#' token <- '<YOUR-SECURITY-TOKEN>'
+#' # convert CAS to CSID
+#' tric_mol <- cs_csid_mol(5363, token = token)
+#' tric_mol
+#' cs_csid_mol(5363, token = token, parse = FALSE)
+#' }
+cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
+  if (length(csid) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/CSIDToMol?'
+  qurl <- paste0(baseurl, 'csid=', csid, '&token=', token)
+  if (verbose)
+    message(qurl)
+  Sys.sleep(0.1)
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('CSID not found... Returning NA.')
+    out <- NA
+  } else {
+    mol <- xml_text(h)
+    if (!parse) {
+      out <- mol
+    } else {
+      out <- parse_mol(mol)
+    }
+  }
+  return(out)
+}
+
+# cs_is_inchikey <- function(x, verbose = TRUE){
+#
+# }
