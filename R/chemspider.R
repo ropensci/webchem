@@ -199,6 +199,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
 #' @examples
 #' \dontrun{
 #' # Fails because no TOKEN is included
