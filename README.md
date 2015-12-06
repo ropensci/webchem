@@ -23,7 +23,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
@@ -115,7 +115,7 @@ Use this ID to query information from ChemSpider
 
 
 ```r
-csid_extcompinfo(id, token = token)
+cs_extcompinfo(id, token = token)
 #>                                                                          CSID 
 #>                                                                        "5363" 
 #>                                                                            MF 
@@ -143,6 +143,24 @@ csid_extcompinfo(id, token = token)
 ```
 
 
+Convert CSID to MolFile
+
+
+```r
+mol <- cs_csid_mol(5363, token = token)
+head(mol$ab)
+#>         x      y z  a d c s h b v H m n e NA NA
+#> 1 -1.7350 2.0001 0 Cl 0 0 0 0 0 0 0 0 0 0  0  0
+#> 2 -0.8675 1.5027 0  C 0 0 0 0 0 0 0 0 0 0  0  0
+#> 3 -0.8675 0.4975 0  C 0 0 0 0 0 0 0 0 0 0  0  0
+#> 4  0.0000 0.0000 0  C 0 0 0 0 0 0 0 0 0 0  0  0
+#> 5  0.8675 0.4975 0  C 0 0 0 0 0 0 0 0 0 0  0  0
+#> 6  0.8675 1.5027 0  C 0 0 0 0 0 0 0 0 0 0  0  0
+```
+
+Note that the Molfile is parsed into a R object (via `parse_mol()`).
+
+
 #### PubChem
 
 Retrieve PubChem CID
@@ -155,7 +173,7 @@ get_cid('Triclosan')
 #> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
 #> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
 #> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
-#> [37] "92024355" "92043149" "92043150"
+#> [37] "92024355" "92043149" "92043150" "92131249"
 cid <- get_cid('3380-34-5')
 ```
 
@@ -454,54 +472,60 @@ The information output is enormous, I show here only a small part, the countries
 out[[3]]
 #>                                            variable
 #> 1                                   Substance group
-#> 2                                  Substance origin
-#> 3                                    Mode of action
-#> 4                                            CAS RN
-#> 5                                         EC number
-#> 6                                      CIPAC number
-#> 7                              US EPA chemical code
-#> 8                                   Chiral molecule
-#> 9                                  Chemical formula
-#> 10                                           SMILES
-#> 11 International Chemical Identifier key (InChIKey)
-#> 12        International Chemical Identifier (InChI)
-#> 13               Structure diagram/image available?
-#> 14           Molecular mass               (g mol-1)
-#> 15              PIN (Preferred Identification Name)
-#> 16                                       IUPAC name
-#> 17                                         CAS name
-#> 18                         Other status information
-#> 19       Herbicide Resistance Classification (HRAC)
-#> 20       Herbicide Resistance Classification (WSSA)
-#> 21     Insecticide Resistance Classification (IRAC)
-#> 22       Fungicide Resistance Classification (FRAC)
-#> 23                                   Physical state
-#> 24                   Related substances & organisms
+#> 2                   Minimum active substance purity
+#> 3                         Known relevant impurities
+#> 4                                  Substance origin
+#> 5                                    Mode of action
+#> 6                                            CAS RN
+#> 7                                         EC number
+#> 8                                      CIPAC number
+#> 9                              US EPA chemical code
+#> 10                                  Chiral molecule
+#> 11                                 Chemical formula
+#> 12                                           SMILES
+#> 13 International Chemical Identifier key (InChIKey)
+#> 14        International Chemical Identifier (InChI)
+#> 15               Structure diagram/image available?
+#> 16           Molecular mass               (g mol-1)
+#> 17              PIN (Preferred Identification Name)
+#> 18                                       IUPAC name
+#> 19                                         CAS name
+#> 20                         Other status information
+#> 21       Herbicide Resistance Classification (HRAC)
+#> 22       Herbicide Resistance Classification (WSSA)
+#> 23     Insecticide Resistance Classification (IRAC)
+#> 24       Fungicide Resistance Classification (FRAC)
+#> 25                  Examples of recorded resistance
+#> 26                                   Physical state
+#> 27                   Related substances & organisms
 #>                                                                                                                                                                           value
 #> 1                                                                                                                                                              Phosphonoglycine
-#> 2                                                                                                                                                                     Synthetic
-#> 3                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
-#> 4                                                                                                                                                                     1071-83-6
-#> 5                                                                                                                                                                     213-997-4
-#> 6                                                                                                                                                                           284
-#> 7                                                                                                                                                                        417300
-#> 8                                                                                                                                                                            No
-#> 9                                                                                                                                                                      C3H8NO5P
-#> 10                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
-#> 11                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
-#> 12                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
-#> 13                                                                                                                                                                          Yes
-#> 14                                                                                                                                                                        169.1
-#> 15                                                                                                                                                                            -
-#> 16                                                                                                                                                   N-(phosphonomethyl)glycine
-#> 17                                                                                                                                                   N-(phosphonomethyl)glycine
-#> 18                                                                                                Risk of herbicide resistance developing - anti-resistance management required
-#> 19                                                                                                                                                                            G
-#> 20                                                                                                                                                                            9
-#> 21                                                                                                                                                               Not applicable
-#> 22                                                                                                                                                               Not applicable
-#> 23                                                                                                                                                          Colourless crystals
-#> 24 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
+#> 2                                                                                                                                                                      950 g/kg
+#> 3                                                                                                                                                    EU dossier - None declared
+#> 4                                                                                                                                                                     Synthetic
+#> 5                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
+#> 6                                                                                                                                                                     1071-83-6
+#> 7                                                                                                                                                                     213-997-4
+#> 8                                                                                                                                                                           284
+#> 9                                                                                                                                                                        417300
+#> 10                                                                                                                                                                           No
+#> 11                                                                                                                                                                     C3H8NO5P
+#> 12                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
+#> 13                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
+#> 14                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
+#> 15                                                                                                                                                                          Yes
+#> 16                                                                                                                                                                        169.1
+#> 17                                                                                                                                                                            -
+#> 18                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 19                                                                                                                                                   N-(phosphonomethyl)glycine
+#> 20                                                                                                Risk of herbicide resistance developing - anti-resistance management required
+#> 21                                                                                                                                                                            G
+#> 22                                                                                                                                                                            9
+#> 23                                                                                                                                                               Not applicable
+#> 24                                                                                                                                                               Not applicable
+#> 25                                                                                                        Eleusine indicaLolium rigidumAmaranthus palmeriEuphorbia heterophylla
+#> 26                                                                                                                                                          Colourless crystals
+#> 27 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
 ```
 
 
@@ -543,12 +567,25 @@ is.cas('64-17-6')
 
 ##### Check if a string is a valid InChIKey
 
+Using a pure R implementation:
+
 ```r
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #> [1] TRUE
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #> [1] FALSE
 ```
+
+Using the ChemSpider API
+
+```r
+is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#> [1] TRUE
+is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#> [1] FALSE
+```
+
+
 
 
 #### I have multiple compounds. How should I query those?

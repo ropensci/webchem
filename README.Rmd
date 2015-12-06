@@ -113,9 +113,19 @@ Retrieve the ChemSpider ID of Triclosan
 
 Use this ID to query information from ChemSpider
 
-```{r csid_extcompinfo}
+```{r cs_extcompinfo}
 cs_extcompinfo(id, token = token)
 ```
+
+
+Convert CSID to MolFile
+
+```{r cs_csid_mol}
+mol <- cs_csid_mol(5363, token = token)
+head(mol$ab)
+```
+
+Note that the Molfile is parsed into a R object (via `parse_mol()`).
 
 
 #### PubChem
@@ -238,16 +248,26 @@ out$physprop
 #### Misc functions
 
 ##### Check if a string is a valid CAS registry number
-```{r}
+```{r is.cas}
 is.cas('64-17-5')
 is.cas('64-17-6')
 ```
 
 ##### Check if a string is a valid InChIKey
-```{r}
+
+Using a pure R implementation:
+```{r is.inchikey}
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 ```
+
+Using the ChemSpider API
+```{r is.inchikey_cs}
+is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+```
+
+
 
 
 #### I have multiple compounds. How should I query those?
