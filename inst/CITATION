@@ -1,0 +1,13 @@
+citHeader("To cite webchem in publications use:")
+
+citEntry(entry = "Manual",
+  title        = "{webchem}:  retrieve chemical information from the web",
+  author       = personList(as.person("Eduard Szöcs")),
+  journal      = "Zenodo",
+  year         = "2015",
+  url          = "http://dx.doi.org/10.5281/zenodo.33823",
+
+  textVersion  =
+  paste("Eduard Szöcs et al. (2015). webchem: zenodo release. ",
+        "Zenodo. 10.5281/zenodo.33823")
+)
