@@ -36,7 +36,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `csid_compinfo()`, `csid_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
@@ -113,9 +113,19 @@ Retrieve the ChemSpider ID of Triclosan
 
 Use this ID to query information from ChemSpider
 
-```{r csid_extcompinfo}
-csid_extcompinfo(id, token = token)
+```{r cs_extcompinfo}
+cs_extcompinfo(id, token = token)
 ```
+
+
+Convert CSID to MolFile
+
+```{r cs_csid_mol}
+mol <- cs_csid_mol(5363, token = token)
+head(mol$ab)
+```
+
+Note that the Molfile is parsed into a R object (via `parse_mol()`).
 
 
 #### PubChem
@@ -238,16 +248,26 @@ out$physprop
 #### Misc functions
 
 ##### Check if a string is a valid CAS registry number
-```{r}
+```{r is.cas}
 is.cas('64-17-5')
 is.cas('64-17-6')
 ```
 
 ##### Check if a string is a valid InChIKey
-```{r}
+
+Using a pure R implementation:
+```{r is.inchikey}
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 ```
+
+Using the ChemSpider API
+```{r is.inchikey_cs}
+is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+```
+
+
 
 
 #### I have multiple compounds. How should I query those?

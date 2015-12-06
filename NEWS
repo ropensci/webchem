@@ -5,6 +5,10 @@ NEW FEATURES
 
 * chemid() to query ChemIDplus http://chem.sis.nlm.nih.gov/chemidplus/.
 * is.inchikey() and is.cas() to check if a string is valid inchikey or CAS registry number.
+* parse_mol(): A simple molfile parser.
+* Functions to work with ChemSpider InChI API:
+  + cs_csid_mol : convert csid to mol
+  + is.inchikey_cs: Check is inchikey is valid
 
 
 MINOR IMPROVEMENTS
@@ -14,8 +18,6 @@ MINOR IMPROVEMENTS
 * alanwood() returns separate inchi and ichikeys in case of isomers.
 * alanwood() returns also subactvity (e.g. $Fluazinam$activity [1] "fungicides" and $Fluazinam$subactivity [1] "pyridine fungicides").
 * physprop() also returns boiling and melting points. Moreover, values are now numeric.
-* ppdb() replaces ppdb_query() and accepts individual index as created by ppdb_buildidx().
-* cir() replaces cir_query().
 
 
 BUG FIXES
@@ -23,6 +25,14 @@ BUG FIXES
 * alanwood() returns only results for first match in case of multiple links found
 * physprop() stopped working after change of SRC to https, fixed now.
 * changed etox_* functions to https
+
+
+DEPRECATED FUNCTIONS
+
+* ppdb() replaces ppdb_query() and accepts individual index as created by ppdb_buildidx().
+* cir() replaces cir_query().
+* cs_compinfo() replaces csid_compinfo()
+* cs_extcompinfo() replaces csid_extcompinfo()
 
 
 DEFUNCT FUNCTIONS

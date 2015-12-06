@@ -19,9 +19,10 @@ Depends:
     R (>= 2.10)
 Imports:
     XML,
+    xml2,
     RCurl,
     jsonlite,
     stringr
 Suggests:
     testthat
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

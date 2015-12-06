@@ -87,18 +87,18 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' token <- '<YOUR-SECURITY-TOKEN>'
 #' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
-#' csid_compinfo(csid, token)
+#' cs_compinfo(csid, token)
 #'
 #' ###
 #' # multiple inputs
 #' csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' # fails:
-#' # csid_compinfo(csids, token = token)
-#' (ll <- lapply(csids, csid_compinfo, token = token))
+#' # cs_compinfo(csids, token = token)
+#' (ll <- lapply(csids, cs_compinfo, token = token))
 #' # return a list, convert to matrix:
 #' do.call(rbind, ll)
 #' }
-csid_compinfo <- function(csid, token, verbose = TRUE, ...){
+cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -143,18 +143,18 @@ csid_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
 #' # get SMILES from CSID
-#' csid_extcompinfo(csid, token)
+#' cs_extcompinfo(csid, token)
 #'
 #' ###
 #' # multiple inpits
 #' csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' # fails:
-#' # csid_extcompinfo(csids, token = token)
-#' (ll <- lapply(csids, csid_extcompinfo, token = token))
+#' # cs_extcompinfo(csids, token = token)
+#' (ll <- lapply(csids, cs_extcompinfo, token = token))
 #' # to matrix
 #' do.call(rbind, ll)
 #' }
-csid_extcompinfo <- function(csid, token, verbose = TRUE, ...){
+cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -169,6 +169,105 @@ csid_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   } else{
     warning('CSID not found... Returning NA.')
     return(NA)
+  }
+  return(out)
+}
+
+
+# cs_convert <- function(query, from = c('csid', 'inchi', 'inchikey', 'smiles', 'mol'),
+#                        to = c('csid', 'inchi',  'inchikey', 'smiles', 'mol'),
+#                        token) {
+#
+# }
+
+
+
+#' Convert a CSID to a Molfile
+#' @import xml2
+#'
+#' @param csid character,  ChemSpider ID.
+#' @param token character; security token.
+#' @param parse should the molfile be parsed to a R object?
+#' If \code{FALSE} the raw mol is returned as string.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... currently not used.
+#'
+#' @return If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
+#'
+#' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
+#' @note A security token is neeeded. Please register at RSC
+#' \url{https://www.rsc.org/rsc-id/register}
+#' for a security token.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' \dontrun{
+#' # Fails because no TOKEN is included
+#' token <- '<YOUR-SECURITY-TOKEN>'
+#' # convert CAS to CSID
+#' tric_mol <- cs_csid_mol(5363, token = token)
+#' tric_mol
+#' cs_csid_mol(5363, token = token, parse = FALSE)
+#' }
+cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
+  if (length(csid) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/CSIDToMol?'
+  qurl <- paste0(baseurl, 'csid=', csid, '&token=', token)
+  if (verbose)
+    message(qurl)
+  Sys.sleep(0.1)
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('CSID not found... Returning NA.')
+    out <- NA
+  } else {
+    mol <- xml_text(h)
+    if (!parse) {
+      out <- mol
+    } else {
+      out <- parse_mol(mol)
+    }
+  }
+  return(out)
+}
+
+
+
+#' Check if input is a valid inchikey using ChemSpider API
+#'
+#' @param x character; input string
+#' @param verbose logical; print messages during processing to console?
+#' @return a logical
+#'
+#' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-5')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-n')
+#' is.inchikey_cs('BQJCRHHNABKAKU/KBQPJGBKSA/N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+is.inchikey_cs <- function(x, verbose = TRUE){
+  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA'
+  if (length(x) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
+  qurl <- paste0(baseurl, 'inchi_key=', x)
+  if (verbose)
+    message(qurl)
+  Sys.sleep(0.1)
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('Problem with webservice... Returning NA.')
+    out <- NA
+  } else {
+    out <- as.logical(xml_text(h))
   }
   return(out)
 }

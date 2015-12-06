@@ -39,7 +39,7 @@ A interface to the Chemical Identifier Resolver (CIR).
  CACTVS HASHISY, NSC number, PubChem SID, ZINC Code, ChemSpider ID,
  ChemNavigator SID, eMolecule VID.
 
- \code{cir_query()} can handle only a part of all possible conversions of CIR.
+ \code{cir()} can handle only a part of all possible conversions of CIR.
  Possible \code{representations} are:
  \itemize{
      \item \code{'smiles'}(SMILES strings),
@@ -104,21 +104,21 @@ You can only make 1 request per second (this is a hard-coded feature).
 \examples{
 \donttest{
 # might fail if API is not available
-cir_query('Triclosan', 'cas')
-cir_query("3380-34-5", 'cas')
-cir_query("3380-34-5", 'cas', resolver = 'cas_number')
-cir_query("3380-34-5", 'smiles')
-cir_query('Triclosan', 'mw')
-cir_query('Triclosan', 'aromatic')
-cir_query('Triclosan', 'xlogp2')
+cir('Triclosan', 'cas')
+cir("3380-34-5", 'cas')
+cir("3380-34-5", 'cas', resolver = 'cas_number')
+cir("3380-34-5", 'smiles')
+cir('Triclosan', 'mw')
+cir('Triclosan', 'aromatic')
+cir('Triclosan', 'xlogp2')
 
 # query multiple representations
 reps <- c('smiles', 'cas', 'stdinchikey', 'mw', 'formula', 'xlogp2')
-sapply(reps, function(x) cir_query('Triclosan', x, first = TRUE))
+sapply(reps, function(x) cir('Triclosan', x, first = TRUE))
 
 # multiple inputs
 comp <- c('Triclosan', 'Aspirin')
-sapply(comp, function(x) cir_query(x, 'cas', first = TRUE))
+sapply(comp, function(x) cir(x, 'cas', first = TRUE))
 
 }
 }
@@ -126,7 +126,7 @@ sapply(comp, function(x) cir_query(x, 'cas', first = TRUE))
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \references{
-\code{cir_query} relies on the great CIR web service created by the CADD
+\code{cir} relies on the great CIR web service created by the CADD
 Group at NCI/NIH! \cr
 \url{http://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
 \url{http://cactus.nci.nih.gov/blog/?cat=10}, \cr
