@@ -78,7 +78,7 @@ alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   cas <- xpathSApply(ttt, "//tr/th[@id='r5']/following-sibling::td", xmlValue)
   formula <- xpathSApply(ttt, "//tr/th[@id='r6']/following-sibling::td", xmlValue)
   activity <- xpathSApply(ttt, "//tr/th[@id='r7']/following-sibling::td", xmlValue)
-  subactivity <- gsub('^.*\\((.*)\\)', '\\1', activity)
+  subactivity <- trimws(strsplit(gsub('^.*\\((.*)\\)', '\\1', activity), ';')[[1]])
   activity <- gsub('^(.*) \\(.*\\)', '\\1', activity)
 
   inchikey <- xpathSApply(ttt, "//tr/th[@id='r11']/following-sibling::td", xmlValue)
