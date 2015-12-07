@@ -4,7 +4,7 @@
 \alias{cs_inchikey_csid}
 \title{Convert a InChIKey to CSID}
 \usage{
-cs_inchikey_csid(inchikey, token, parse = TRUE, verbose = TRUE, ...)
+cs_inchikey_csid(inchikey, token, verbose = TRUE, ...)
 }
 \arguments{
 \item{inchikey}{character,  InChIKey}

@@ -68,12 +68,13 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #'
 #' Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
 #' @import RCurl XML
+#'
 #' @param csid character, ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of four, with entries: CSID (ChemSpider ID), InChI, InChIKey and SMILES string.
-
+#'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
@@ -116,6 +117,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   }
   return(out)
 }
+
 
 
 #' Get extended record details by ChemSpider ID
@@ -172,6 +174,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   }
   return(out)
 }
+
 
 
 # cs_convert <- function(query, from = c('csid', 'inchi', 'inchikey', 'smiles', 'mol'),
@@ -234,6 +237,7 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 }
 
 
+
 #' Convert a InChIKey to CSID
 #' @import xml2
 #'
@@ -254,25 +258,26 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' # convert CAS to CSID
 #' cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
 #' }
-cs_inchikey_csid <- function(inchikey, token, parse = TRUE, verbose = TRUE, ...){
+cs_inchikey_csid <- function(inchikey, token, verbose = TRUE, ...){
   # inchkey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIKeyToCSID?'
-  qurl <- paste0(baseurl, 'inchi_key=', inchkey, '&token=', token)
+  qurl <- paste0(baseurl, 'inchi_key=', inchikey, '&token=', token)
   if (verbose)
     message(qurl)
   Sys.sleep(0.1)
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
-    warning('CSID not found... Returning NA.')
+    warning('Inchkey not found... Returning NA.')
     out <- NA
   } else {
     out <- xml_text(h)
   }
   return(out)
 }
+
 
 
 #' Check if input is a valid inchikey using ChemSpider API

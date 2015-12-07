@@ -59,6 +59,9 @@ test_that("cs_csid_mol()", {
   m1 <- cs_csid_mol(5363, token = token, verbose = FALSE)
   m2 <- cs_csid_mol(5363, token = token, parse = FALSE, verbose = FALSE)
 
+  expect_warning(cs_csid_mol('xxxx', token = token))
+  expect_equal(cs_csid_mol('xxxx', token = token), NA)
+
   expect_error(cs_csid_mol(c(5363,5363), token = token))
   expect_message(cs_csid_mol(5363, token = token))
 
@@ -87,6 +90,7 @@ test_that("is.inchikey_cs", {
   expect_equal(length(g), 1)
 })
 
+
 test_that("cs_inchikey_csid()", {
   m1 <- cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
 
@@ -96,4 +100,7 @@ test_that("cs_inchikey_csid()", {
   expect_is(m1, 'character')
   expect_equal(length(m1), 1)
   expect_equal(m1, "4450907")
+
+  expect_warning(cs_inchikey_csid('xxx', token = token))
+  expect_equal(cs_inchikey_csid('xxx', token = token), NA)
 })
