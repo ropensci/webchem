@@ -7,8 +7,9 @@
 cs_inchi_mol(inchi, parse = TRUE, verbose = TRUE, ...)
 }
 \arguments{
-\item{inchi}{character,  InChI
-#' @param parse should the molfile be parsed to a R object?
+\item{inchi}{character,  InChI}
+
+\item{parse}{should the molfile be parsed to a R object?
 If \code{FALSE} the raw mol is returned as string.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}

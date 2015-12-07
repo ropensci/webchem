@@ -7,11 +7,11 @@
 cs_smiles_inchi(smiles, verbose = TRUE, ...)
 }
 \arguments{
+\item{smiles}{character, A SMILES string}
+
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{...}{currently not used.}
-
-\item{inchi}{character,  InChI}
 }
 \value{
 A SMILES string

@@ -447,7 +447,7 @@ cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
 #' @import xml2 httr
 #'
 #' @param inchi character,  InChI
-#' #' @param parse should the molfile be parsed to a R object?
+#' @param parse should the molfile be parsed to a R object?
 #' If \code{FALSE} the raw mol is returned as string.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
@@ -538,7 +538,7 @@ cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
 #' Convert a SMILES to InChI
 #' @import xml2 httr
 #'
-#' @param inchi character,  InChI
+#' @param smiles character, A SMILES string
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #'
