@@ -150,16 +150,21 @@ head(mol2$ab)
 ```
 
 
-Convert InChI to CSID, InChiKey
+Convert InChI to CSID, InChiKey, Molfile and smiles
 
 ```{r cs_inchi_csid, eval=FALSE}
-cs_inchi_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-cs_inchi_inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-cs_inchi_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-cs_inchi_smiles('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+cs_inchi_csid(inchi)
+cs_inchi_inchikey(inchi)
+cs_inchi_mol(inchi)
+cs_inchi_smiles(inchi)
 ```
 
+Convert SMILES to InChI
 
+```{r cs_smiles_inchi, eval=FALSE}
+cs_smiles_inchi("CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O")
+```
 
 #### PubChem
 

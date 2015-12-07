@@ -212,3 +212,18 @@ test_that("cs_inchi_smiles()", {
   expect_warning(cs_inchi_smiles('xxx'))
   expect_equal(cs_inchi_smiles('xxx'), NA)
 })
+
+
+test_that("cs_smiles_inchi()", {
+  smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
+  m1 <- cs_smiles_inchi(smiles)
+
+  expect_error(cs_inchi_smiles(c(smiles, smiles)))
+  expect_message(cs_inchi_smiles(smiles))
+
+  expect_is(m1, 'character')
+  expect_equal(length(m1), 1)
+
+  expect_warning(cs_smiles_inchi('xxx'))
+  expect_equal(cs_smiles_inchi('xxx'), NA)
+})

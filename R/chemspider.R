@@ -458,8 +458,8 @@ cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-
-#' 2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+#' inchi <-  paste0("InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-",
+#' "2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1")
 #' # convert InChI to CSID
 #' cs_inchi_mol(inchi)
 #' cs_inchi_mol(inchi, parse = FALSE)
@@ -517,6 +517,48 @@ cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
     message('Querrying ', baseurl)
   Sys.sleep(0.1)
   res <- try(POST(baseurl, body = list(inchi = inchi), encode = 'form'),
+             silent = TRUE)
+  if (inherits(res, "try-error")) {
+    warning('Problem with service... Returning NA.')
+    out <- NA
+  } else {
+    out <- try(read_xml(content(res, 'raw')), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      warning('inchi not found... Returning NA.')
+      out <- NA
+    } else {
+      out <- xml_text(out)
+    }
+  }
+  return(out)
+}
+
+
+
+#' Convert a SMILES to InChI
+#' @import xml2 httr
+#'
+#' @param inchi character,  InChI
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... currently not used.
+#'
+#' @return A SMILES string
+#'
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
+#' # convert smiles to inchi
+#' cs_smiles_inchi(smiles)
+cs_smiles_inchi <- function(smiles, verbose = TRUE, ...){
+  if (length(smiles) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/SMILESToInChI'
+  if (verbose)
+    message('Querrying ', baseurl)
+  Sys.sleep(0.1)
+  res <- try(POST(baseurl, body = list(smiles = smiles), encode = 'form'),
              silent = TRUE)
   if (inherits(res, "try-error")) {
     warning('Problem with service... Returning NA.')
