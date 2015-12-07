@@ -4,12 +4,10 @@
 \alias{cs_inchikey_csid}
 \title{Convert a InChIKey to CSID}
 \usage{
-cs_inchikey_csid(inchikey, token, verbose = TRUE, ...)
+cs_inchikey_csid(inchikey, verbose = TRUE, ...)
 }
 \arguments{
 \item{inchikey}{character,  InChIKey}
-
-\item{token}{character; security token.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -27,12 +25,8 @@ A security token is neeeded. Please register at RSC
 for a security token.
 }
 \examples{
-\dontrun{
-# Fails because no TOKEN is included
-token <- '<YOUR-SECURITY-TOKEN>'
 # convert CAS to CSID
 cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
-}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

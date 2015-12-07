@@ -4,12 +4,10 @@
 \alias{cs_inchikey_inchi}
 \title{Convert a InChIKey to InChI}
 \usage{
-cs_inchikey_inchi(inchikey, token, verbose = TRUE, ...)
+cs_inchikey_inchi(inchikey, verbose = TRUE, ...)
 }
 \arguments{
 \item{inchikey}{character,  InChIKey}
-
-\item{token}{character; security token.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

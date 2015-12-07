@@ -242,7 +242,6 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' @import xml2
 #'
 #' @param inchikey character,  InChIKey
-#' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #'
@@ -254,25 +253,21 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' \dontrun{
-#' # Fails because no TOKEN is included
-#' token <- '<YOUR-SECURITY-TOKEN>'
 #' # convert CAS to CSID
 #' cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
-#' }
-cs_inchikey_csid <- function(inchikey, token, verbose = TRUE, ...){
+cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
   # inchkey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIKeyToCSID?'
-  qurl <- paste0(baseurl, 'inchi_key=', inchikey, '&token=', token)
+  qurl <- paste0(baseurl, 'inchi_key=', inchikey)
   if (verbose)
     message(qurl)
   Sys.sleep(0.1)
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
-    warning('Inchkey not found... Returning NA.')
+    warning('inchikey not found... Returning NA.')
     out <- NA
   } else {
     out <- xml_text(h)
@@ -285,7 +280,6 @@ cs_inchikey_csid <- function(inchikey, token, verbose = TRUE, ...){
 #' @import xml2
 #'
 #' @param inchikey character,  InChIKey
-#' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return character; InChI
@@ -302,22 +296,69 @@ cs_inchikey_csid <- function(inchikey, token, verbose = TRUE, ...){
 #' # convert CAS to CSID
 #' cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
 #' }
-cs_inchikey_inchi <- function(inchikey, token, verbose = TRUE, ...){
+cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
   # inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIKeyToInChI?'
-  qurl <- paste0(baseurl, 'inchi_key=', inchikey, '&token=', token)
+  qurl <- paste0(baseurl, 'inchi_key=', inchikey)
   if (verbose)
     message(qurl)
   Sys.sleep(0.1)
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
-    warning('Inchkey not found... Returning NA.')
+    warning('inchikey not found... Returning NA.')
     out <- NA
   } else {
     out <- xml_text(h)
+  }
+  return(out)
+}
+
+
+#' Convert a InChIkey to a Molfile
+#' @import xml2
+#'
+#' @param inchikey character,  ChemSpider ID.
+#' @param parse should the molfile be parsed to a R object?
+#' If \code{FALSE} the raw mol is returned as string.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... currently not used.
+#'
+#' @return If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
+#'
+#' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
+#' @note A security token is neeeded. Please register at RSC
+#' \url{https://www.rsc.org/rsc-id/register}
+#' for a security token.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' tric_mol <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+#' tric_mol
+#' cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token, parse = FALSE)
+cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
+  # inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  if (length(inchikey) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIKeyToMol?'
+  qurl <- paste0(baseurl, 'inchi_key=', inchikey)
+  if (verbose)
+    message(qurl)
+  Sys.sleep(0.1)
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('inchikey not found... Returning NA.')
+    out <- NA
+  } else {
+    mol <- xml_text(h)
+    if (!parse) {
+      out <- mol
+    } else {
+      out <- parse_mol(mol)
+    }
   }
   return(out)
 }
