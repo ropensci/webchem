@@ -2,7 +2,7 @@ context("cir")
 
 chk_cir <- function(){
   qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
-  Sys.sleep(1.5)
+  Sys.sleep(1)
   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 2)),
               silent = TRUE)
   if (inherits(cont, 'try-error'))
