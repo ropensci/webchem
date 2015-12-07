@@ -19,11 +19,6 @@ character; InChI
 \description{
 Convert a InChIKey to InChI
 }
-\note{
-A security token is neeeded. Please register at RSC
-\url{https://www.rsc.org/rsc-id/register}
-for a security token.
-}
 \examples{
 \dontrun{
 # Fails because no TOKEN is included

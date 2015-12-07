@@ -19,11 +19,6 @@ A CSID.
 \description{
 Convert a InChIKey to CSID
 }
-\note{
-A security token is neeeded. Please register at RSC
-\url{https://www.rsc.org/rsc-id/register}
-for a security token.
-}
 \examples{
 # convert CAS to CSID
 cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)

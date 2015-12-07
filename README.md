@@ -23,7 +23,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_csid_mol()`, `is.inchikey_cs()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
@@ -159,6 +159,49 @@ head(mol$ab)
 ```
 
 Note that the Molfile is parsed into a R object (via `parse_mol()`).
+
+
+Convert InChIKey to CSID
+
+
+```r
+cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#> [1] "4450907"
+```
+
+
+Convert InChIKey to InChI
+
+
+```r
+cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#> [1] "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+```
+
+
+Convert InChiKey to MolFile
+
+
+```r
+mol2 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+head(mol2$ab)
+#>        x       y z a d c s h b v H m n e NA NA
+#> 1 0.0000 -3.0108 0 O 0 0 0 0 0 0 0 0 0 0  0  0
+#> 2 0.1998 -6.2213 0 O 0 0 0 0 0 0 0 0 0 0  0  0
+#> 3 0.1998  0.0000 0 O 0 0 0 0 0 0 0 0 0 0  0  0
+#> 4 5.5530 -4.3474 0 N 0 0 0 0 0 0 0 0 0 0  0  0
+#> 5 2.3425 -3.6791 0 C 0 0 0 0 0 0 0 0 0 0  0  0
+#> 6 3.4793 -4.3474 0 C 0 0 0 0 0 0 0 0 0 0  0  0
+```
+
+
+Convert InChI to CSID
+
+
+```r
+cs_inchi_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+```
+
 
 
 #### PubChem
@@ -640,5 +683,6 @@ Checkout our [contribution guide here](https://github.com/ropensci/webchem/blob/
 
 * Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
 * License: MIT
+* Get citation information for `webchem` in R doing `citation(package = 'webchem')`
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

@@ -73,7 +73,8 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a list of four, with entries: CSID (ChemSpider ID), InChI, InChIKey and SMILES string.
+#' @return a list of four, with entries: CSID (ChemSpider ID), InChI,
+#'   InChIKey and SMILES string.
 #'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
@@ -188,14 +189,15 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' Convert a CSID to a Molfile
 #' @import xml2
 #'
-#' @param csid character,  ChemSpider ID.
+#' @param csid character,  ChemSpiderID.
 #' @param token character; security token.
 #' @param parse should the molfile be parsed to a R object?
 #' If \code{FALSE} the raw mol is returned as string.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #'
-#' @return If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
+#' @return If parse = FALSE then a charactersting,
+#'   else a RMol-object (from \code{\link{parse_mol}})
 #'
 #' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
 #' @note A security token is neeeded. Please register at RSC
@@ -247,9 +249,6 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #'
 #' @return A CSID.
 #'
-#' @note A security token is neeeded. Please register at RSC
-#' \url{https://www.rsc.org/rsc-id/register}
-#' for a security token.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -284,9 +283,6 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
 #' @param ... currently not used.
 #' @return character; InChI
 #'
-#' @note A security token is neeeded. Please register at RSC
-#' \url{https://www.rsc.org/rsc-id/register}
-#' for a security token.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -320,18 +316,16 @@ cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
 #' Convert a InChIkey to a Molfile
 #' @import xml2
 #'
-#' @param inchikey character,  ChemSpider ID.
+#' @param inchikey character,  A InChIKey.
 #' @param parse should the molfile be parsed to a R object?
 #' If \code{FALSE} the raw mol is returned as string.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #'
-#' @return If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
+#' @return If parse = FALSE then a charactersting,
+#'   else a RMol-object (from \code{\link{parse_mol}})
 #'
 #' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
-#' @note A security token is neeeded. Please register at RSC
-#' \url{https://www.rsc.org/rsc-id/register}
-#' for a security token.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -358,6 +352,48 @@ cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
       out <- mol
     } else {
       out <- parse_mol(mol)
+    }
+  }
+  return(out)
+}
+
+
+#' Convert a InChI to CSID
+#' @import xml2 httr
+#'
+#' @param inchi character,  InChI
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... currently not used.
+#'
+#' @return A CSID.
+#'
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-
+#' 2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+#' # convert InChI to CSID
+#' cs_inchi_csid(inchi)
+cs_inchi_csid <- function(inchi, verbose = TRUE, ...){
+  if (length(inchi) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIToCSID'
+  if (verbose)
+    message('Querrying ', baseurl)
+  Sys.sleep(0.1)
+  res <- try(POST(baseurl, body = list(inchi = inchi), encode = 'form'),
+             silent = TRUE)
+  if (inherits(res, "try-error")) {
+    warning('Problem with service... Returning NA.')
+    out <- NA
+  } else {
+    out <- try(read_xml(content(res, 'raw')), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      warning('inchi not found... Returning NA.')
+      out <- NA
+    } else {
+      out <- xml_text(out)
     }
   }
   return(out)

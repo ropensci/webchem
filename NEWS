@@ -8,9 +8,11 @@ NEW FEATURES
 * parse_mol(): A simple molfile parser.
 * Functions to work with ChemSpider InChI API:
   + cs_csid_mol : convert csid to mol
-  + cs_inchikey_csid: convert inchikey to csid
+  + cs_inchikey_csid : convert inchikey to csid
   + cs_inchikey_inchi : convert inchikey to inchi
-  + is.inchikey_cs: Check is inchikey is valid
+  + cs_inchikey_mol : convert inchikey to Molfile
+  + cs_inchi_csid : convert inchi to csid
+  + is.inchikey_cs : Check is inchikey is valid
 * webchem has now a zenodo doi, please cite if you use it.
 
 
@@ -41,6 +43,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 * allanwood()
+
 
 
 

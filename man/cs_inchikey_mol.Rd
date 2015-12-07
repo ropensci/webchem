@@ -7,7 +7,7 @@
 cs_inchikey_mol(inchikey, parse = TRUE, verbose = TRUE, ...)
 }
 \arguments{
-\item{inchikey}{character,  ChemSpider ID.}
+\item{inchikey}{character,  A InChIKey.}
 
 \item{parse}{should the molfile be parsed to a R object?
 If \code{FALSE} the raw mol is returned as string.}
@@ -17,15 +17,11 @@ If \code{FALSE} the raw mol is returned as string.}
 \item{...}{currently not used.}
 }
 \value{
-If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
+If parse = FALSE then a charactersting,
+  else a RMol-object (from \code{\link{parse_mol}})
 }
 \description{
 Convert a InChIkey to a Molfile
-}
-\note{
-A security token is neeeded. Please register at RSC
-\url{https://www.rsc.org/rsc-id/register}
-for a security token.
 }
 \examples{
 tric_mol <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)

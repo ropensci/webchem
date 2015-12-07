@@ -7,7 +7,7 @@
 cs_csid_mol(csid, token, parse = TRUE, verbose = TRUE, ...)
 }
 \arguments{
-\item{csid}{character,  ChemSpider ID.}
+\item{csid}{character,  ChemSpiderID.}
 
 \item{token}{character; security token.}
 
@@ -19,7 +19,8 @@ If \code{FALSE} the raw mol is returned as string.}
 \item{...}{currently not used.}
 }
 \value{
-If parse = FALSE then a charactersting, else a RMol-object (from \code{\link{parse_mol}})
+If parse = FALSE then a charactersting,
+  else a RMol-object (from \code{\link{parse_mol}})
 }
 \description{
 Convert a CSID to a Molfile

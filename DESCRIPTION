@@ -21,6 +21,7 @@ Depends:
 Imports:
     XML,
     xml2,
+    httr,
     RCurl,
     jsonlite,
     stringr
