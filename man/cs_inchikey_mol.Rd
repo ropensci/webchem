@@ -24,9 +24,9 @@ If parse = FALSE then a charactersting,
 Convert a InChIkey to a Molfile
 }
 \examples{
-tric_mol <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+tric_mol <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 tric_mol
-cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token, parse = FALSE)
+cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N',parse = FALSE)
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

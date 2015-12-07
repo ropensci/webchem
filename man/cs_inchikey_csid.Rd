@@ -21,7 +21,7 @@ Convert a InChIKey to CSID
 }
 \examples{
 # convert CAS to CSID
-cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
