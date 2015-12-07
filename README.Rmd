@@ -128,12 +128,18 @@ head(mol$ab)
 Note that the Molfile is parsed into a R object (via `parse_mol()`).
 
 
-Convert InChIKes to CSID
+Convert InChIKey to CSID
 
 ```{r cs_inchikey_csid}
 cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
 ```
 
+
+Convert InChIKey to InChI
+
+```{r cs_inchikey_csid}
+cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+```
 
 
 #### PubChem

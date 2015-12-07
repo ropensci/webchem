@@ -246,6 +246,8 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #'
+#' @return A CSID.
+#'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
@@ -264,6 +266,48 @@ cs_inchikey_csid <- function(inchikey, token, verbose = TRUE, ...){
     stop('Cannot handle multiple input strings.')
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIKeyToCSID?'
+  qurl <- paste0(baseurl, 'inchi_key=', inchikey, '&token=', token)
+  if (verbose)
+    message(qurl)
+  Sys.sleep(0.1)
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('Inchkey not found... Returning NA.')
+    out <- NA
+  } else {
+    out <- xml_text(h)
+  }
+  return(out)
+}
+
+
+#' Convert a InChIKey to InChI
+#' @import xml2
+#'
+#' @param inchikey character,  InChIKey
+#' @param token character; security token.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... currently not used.
+#' @return character; InChI
+#'
+#' @note A security token is neeeded. Please register at RSC
+#' \url{https://www.rsc.org/rsc-id/register}
+#' for a security token.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' \dontrun{
+#' # Fails because no TOKEN is included
+#' token <- '<YOUR-SECURITY-TOKEN>'
+#' # convert CAS to CSID
+#' cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+#' }
+cs_inchikey_inchi <- function(inchikey, token, verbose = TRUE, ...){
+  # inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  if (length(inchikey) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIKeyToInChI?'
   qurl <- paste0(baseurl, 'inchi_key=', inchikey, '&token=', token)
   if (verbose)
     message(qurl)

@@ -11,8 +11,6 @@ chk_cs <- function(){
 }
 
 
-
-
 test_that("get_csid()", {
   chk_cs()
 
@@ -22,6 +20,7 @@ test_that("get_csid()", {
   expect_warning(get_csid(NA, token = token))
   expect_true(is.vector(get_csid("Triclosan", token = token, verbose = FALSE)))
 })
+
 
 test_that("cs_compinfo()", {
   chk_cs()
@@ -103,4 +102,19 @@ test_that("cs_inchikey_csid()", {
 
   expect_warning(cs_inchikey_csid('xxx', token = token))
   expect_equal(cs_inchikey_csid('xxx', token = token), NA)
+})
+
+
+test_that("cs_inchikey_inchi()", {
+  m1 <- cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+
+  expect_error(cs_inchikey_inchi(c('BQJCRHHNABKAKU-KBQPJGBKSA-N','BQJCRHHNABKAKU-KBQPJGBKSA-N'), token = token))
+  expect_message(cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token))
+
+  expect_is(m1, 'character')
+  expect_equal(length(m1), 1)
+  expect_equal(m1,  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1")
+
+  expect_warning(cs_inchikey_inchi('xxx', token = token))
+  expect_equal(cs_inchikey_inchi('xxx', token = token), NA)
 })
