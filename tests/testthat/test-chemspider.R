@@ -86,3 +86,14 @@ test_that("is.inchikey_cs", {
 
   expect_equal(length(g), 1)
 })
+
+test_that("cs_inchikey_csid()", {
+  m1 <- cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+
+  expect_error(cs_inchikey_csid(c('BQJCRHHNABKAKU-KBQPJGBKSA-N','BQJCRHHNABKAKU-KBQPJGBKSA-N'), token = token))
+  expect_message(cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token))
+
+  expect_is(m1, 'character')
+  expect_equal(length(m1), 1)
+  expect_equal(m1, "4450907")
+})
