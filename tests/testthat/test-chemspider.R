@@ -127,7 +127,7 @@ test_that("cs_inchikey_mol()", {
   expect_warning(cs_inchikey_mol('xxxx'))
   expect_equal(cs_inchikey_mol('xxxx'), NA)
 
-  expect_error(cs_inchikey_mol(c('BQJCRHHNABKAKU-KBQPJGBKSA-N', 'BQJCRHHNABKAKU-KBQPJGBKSA-N'), token = token))
+  expect_error(cs_inchikey_mol(c('BQJCRHHNABKAKU-KBQPJGBKSA-N', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
   expect_message(cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N'))
 
   expect_is(m1, 'list')
@@ -172,4 +172,27 @@ test_that("cs_inchi_inchikey()", {
 
   expect_warning(cs_inchi_inchikey('xxx'))
   expect_equal(cs_inchi_inchikey('xxx'), NA)
+})
+
+
+test_that("cs_inchi_mol()", {
+  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+  m1 <- cs_inchi_mol(inchi, verbose = FALSE)
+  m2 <- cs_inchi_mol(inchi, parse = FALSE, verbose = FALSE)
+
+  expect_warning(cs_inchi_mol('xxxx'))
+  expect_equal(cs_inchi_mol('xxxx'), NA)
+
+  expect_error(cs_inchi_mol(c(inchi, inchi)))
+  expect_message(cs_inchi_mol(inchi))
+
+  expect_is(m1, 'list')
+  expect_equal(length(m1), 4)
+  expect_is(m1$ab, 'data.frame')
+  expect_is(m1$bb, 'data.frame')
+  expect_equal(unname(m1$cl[1]), "25")
+  expect_equal(unname(m1$cl[2]), "29")
+
+  expect_is(m2, 'character')
+  expect_equal(length(m2), 1)
 })

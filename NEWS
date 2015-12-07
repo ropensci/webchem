@@ -13,6 +13,7 @@ NEW FEATURES
   + cs_inchikey_mol() : convert inchikey to Molfile
   + cs_inchi_csid() : convert inchi to csid
   + cs_inchi_inchikey : convert inchi to inchikey
+  + cs_inchi_mol() : convert inchi to molfile
   + is.inchikey_cs() : Check via ChemSpider if inchikey is valid
 * webchem has now a zenodo doi, please cite if you use it.
 
