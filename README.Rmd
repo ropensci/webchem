@@ -150,10 +150,11 @@ head(mol2$ab)
 ```
 
 
-Convert InChI to CSID
+Convert InChI to CSID, InChiKey
 
 ```{r cs_inchi_csid, eval=FALSE}
 cs_inchi_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+cs_inchi_inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 ```
 
 
