@@ -196,3 +196,19 @@ test_that("cs_inchi_mol()", {
   expect_is(m2, 'character')
   expect_equal(length(m2), 1)
 })
+
+
+test_that("cs_inchi_smiles()", {
+  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+  m1 <- cs_inchi_smiles(inchi)
+
+  expect_error(cs_inchi_smiles(c(inchi, inchi)))
+  expect_message(cs_inchi_smiles(inchi))
+
+  expect_is(m1, 'character')
+  expect_equal(length(m1), 1)
+  expect_equal(m1,  "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O")
+
+  expect_warning(cs_inchi_smiles('xxx'))
+  expect_equal(cs_inchi_smiles('xxx'), NA)
+})
