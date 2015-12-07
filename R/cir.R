@@ -99,11 +99,9 @@
 #' cir("3380-34-5", 'cas', resolver = 'cas_number')
 #' cir("3380-34-5", 'smiles')
 #' cir('Triclosan', 'mw')
-#' cir('Triclosan', 'aromatic')
-#' cir('Triclosan', 'xlogp2')
 #'
 #' # query multiple representations
-#' reps <- c('smiles', 'cas', 'stdinchikey', 'mw', 'formula', 'xlogp2')
+#' reps <- c('smiles', 'cas')
 #' sapply(reps, function(x) cir('Triclosan', x, first = TRUE))
 #'
 #' # multiple inputs
