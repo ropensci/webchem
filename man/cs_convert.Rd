@@ -22,7 +22,7 @@ cs_convert(query, from = c("csid", "inchikey", "inchi", "smiles"),
 \item{...}{futher arguments passed. Currently onl \code{parse}, see also \code{\link{cs_csid_mol}}}
 }
 \value{
-Depends on to. if \code{to = 'mol} then an RMol-Object, else a character string.
+Depends on to. if \code{to = 'mol'} then an RMol-Object, else a character string.
 }
 \description{
 Convert identifiers using ChemSpider
@@ -33,9 +33,12 @@ A security token is neeeded. Please register at RSC
 for a security token.
 }
 \examples{
+\donttest{
+# might fail if API is not available
 cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
 cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'inchi')
 cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'mol')
+}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

@@ -20,7 +20,10 @@ character; InChI
 Convert a InChIKey to InChI
 }
 \examples{
+\donttest{
+# might fail if API is not available
 cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

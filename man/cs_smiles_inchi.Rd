@@ -20,9 +20,12 @@ A SMILES string
 Convert a SMILES to InChI
 }
 \examples{
+\donttest{
+# might fail if API is not available
 smiles <- "CN1CC[C@]23[C@H]4C=C[C@H]([C@H]3Oc3c(ccc(C[C@H]14)c23)O)O"
 # convert smiles to inchi
 cs_smiles_inchi(smiles)
+}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

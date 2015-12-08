@@ -20,8 +20,11 @@ A CSID.
 Convert a InChIKey to CSID
 }
 \examples{
+\donttest{
+# might fail if API is not available
 # convert CAS to CSID
 cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
