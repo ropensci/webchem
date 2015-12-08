@@ -17,10 +17,7 @@
 #' out[1:5]
 #'
 #' ### multiple inputs
-#' comp <- c('Triclosan', 'Aspirin')
-#' inchkeys <- sapply(comp, function(x) cir(x, 'stdinchikey', first = TRUE))
-#' # ne to strip '#InChIKey='
-#' inchkeys <- gsub('InChIKey=', '', inchkeys)
+#' inchkeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
 #' ll <- lapply(inchkeys, function(x) cts_compinfo(x)[1:5])
 #' do.call(rbind, ll)
 #' }

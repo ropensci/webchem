@@ -20,11 +20,9 @@ character; InChI
 Convert a InChIKey to InChI
 }
 \examples{
-\dontrun{
-# Fails because no TOKEN is included
-token <- '<YOUR-SECURITY-TOKEN>'
-# convert CAS to CSID
-cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+\donttest{
+# might fail if API is not available
+cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 }
 }
 \author{

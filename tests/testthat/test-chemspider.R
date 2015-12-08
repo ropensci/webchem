@@ -227,3 +227,60 @@ test_that("cs_smiles_inchi()", {
   expect_warning(cs_smiles_inchi('xxx'))
   expect_equal(cs_smiles_inchi('xxx'), NA)
 })
+
+
+test_that("cs_convert()", {
+  inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  csid <- "4450907"
+  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+  smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
+
+  expect_error(cs_convert(c(ik, ik), from = 'inchikey', to = 'csid'))
+  expect_error(cs_convert(csid, from = 'csid', to = 'mol'))
+  expect_error(cs_convert(csid, from = 'csid', to = 'inchikey'))
+
+  m1 <- cs_convert(csid, from = 'csid', to = 'mol', token = token)
+  m1r <- cs_convert(csid, from = 'csid', to = 'mol', token = token, parse = FALSE)
+  expect_is(m1, 'list')
+  expect_equal(length(m1), 4)
+  expect_is(m1$ab, 'data.frame')
+  expect_is(m1$bb, 'data.frame')
+  expect_equal(unname(m1$cl[1]), "22")
+  expect_equal(unname(m1$cl[2]), "26")
+  expect_is(m1r, 'character')
+  expect_equal(length(m1r), 1)
+
+  m2 <- cs_convert(inchikey, from = 'inchikey', to = 'csid')
+  expect_equal(m2, csid)
+
+  m3 <- cs_convert(inchikey, from = 'inchikey', to = 'inchi')
+  expect_equal(m3, inchi)
+
+  m4 <- cs_convert(inchikey, from = 'inchikey', to = 'mol')
+  expect_is(m4, 'list')
+  expect_equal(length(m4), 4)
+  expect_is(m4$ab, 'data.frame')
+  expect_is(m4$bb, 'data.frame')
+  expect_equal(unname(m4$cl[1]), "21")
+  expect_equal(unname(m4$cl[2]), "25")
+
+  m5 <- cs_convert(inchi, from = 'inchi', to = 'csid')
+  expect_equal(m5, csid)
+
+  m6 <- cs_convert(inchi, from = 'inchi', to = 'inchikey')
+  expect_equal(m6, inchikey)
+
+  m7 <- cs_convert(inchi, from = 'inchi', to = 'mol')
+  expect_is(m7, 'list')
+  expect_equal(length(m7), 4)
+  expect_is(m7$ab, 'data.frame')
+  expect_is(m7$bb, 'data.frame')
+  expect_equal(unname(m7$cl[1]), "25")
+  expect_equal(unname(m7$cl[2]), "29")
+
+  m8 <- cs_convert(inchi, from = 'inchi', to = 'smiles')
+  expect_equal(m8, smiles)
+
+  m9 <- cs_convert(smiles, from = 'smiles', to = 'inchi')
+  expect_equal(m9, inchi)
+})

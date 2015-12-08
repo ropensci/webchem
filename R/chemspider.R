@@ -178,11 +178,61 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 
 
 
-# cs_convert <- function(query, from = c('csid', 'inchi', 'inchikey', 'smiles', 'mol'),
-#                        to = c('csid', 'inchi',  'inchikey', 'smiles', 'mol'),
-#                        token) {
-#
-# }
+#' Convert identifiers using ChemSpider
+#'
+#' @param query character; query ID.
+#' @param from character; type of query ID.
+#' @param to character; type to convert to.
+#' @param token character; security token. Converting from csid to mol requires a token.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... futher arguments passed. Currently onl \code{parse}, see also \code{\link{cs_csid_mol}}
+#' @return Depends on to. if \code{to = 'mol'} then an RMol-Object, else a character string.
+#'
+#' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
+#' @note A security token is neeeded. Please register at RSC
+#' \url{https://www.rsc.org/rsc-id/register}
+#' for a security token.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' # might fail if API is not available
+#' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
+#' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'inchi')
+#' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'mol')
+#'}
+cs_convert <- function(query, from = c('csid', 'inchikey', 'inchi', 'smiles'),
+                       to = c('csid', 'inchikey', 'inchi', 'smiles', 'mol'),
+                       verbose = TRUE, token = NULL, ...) {
+  if (length(query) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  from <- match.arg(from)
+  to <- match.arg(to)
+  from_to <- paste(from, to , sep = '_')
+  if (from_to == 'csid_mol' & is.null(token)) {
+    stop('Need token for this conversion!')
+  }
+  # allowed combinations
+  comb <- c('csid_mol', 'inchikey_csid', 'inchikey_inchi', 'inchikey_mol',
+            'inchi_csid', 'inchi_inchikey', 'inchi_mol', 'inchi_smiles','smiles_inchi')
+  if (!from_to %in% comb) {
+    stop('Conversion from ', from, ' to ', to, ' currently not supported')
+  }
+  out <- switch(from_to,
+         csid_mol = cs_csid_mol(csid = query, token = token, verbose = verbose, ...),
+         inchikey_csid = cs_inchikey_csid(inchikey = query, verbose = verbose, ...),
+         inchikey_inchi = cs_inchikey_inchi(inchikey = query, verbose = verbose, ...),
+         inchikey_mol = cs_inchikey_mol(inchikey = query, verbose = verbose, ...),
+         inchi_csid = cs_inchi_csid(inchi = query, verbose = verbose, ...),
+         inchi_inchikey = cs_inchi_inchikey(inchi = query, verbose = verbose, ...),
+         inchi_mol = cs_inchi_mol(inchi = query, verbose = verbose, ...),
+         inchi_smiles = cs_inchi_smiles(inchi = query, verbose = verbose, ...),
+         smiles_inchi = cs_smiles_inchi(smiles = query, verbose = verbose, ...)
+         )
+  return(out)
+}
 
 
 
@@ -252,8 +302,11 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \donttest{
+#' # might fail if API is not available
 #' # convert CAS to CSID
-#' cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+#' cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#' }
 cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
   # inchkey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(inchikey) > 1) {
@@ -286,11 +339,9 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' \dontrun{
-#' # Fails because no TOKEN is included
-#' token <- '<YOUR-SECURITY-TOKEN>'
-#' # convert CAS to CSID
-#' cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+#' \donttest{
+#' # might fail if API is not available
+#' cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' }
 cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
   # inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
@@ -329,9 +380,12 @@ cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
-#' tric_mol <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token)
+#' \donttest{
+#' # might fail if API is not available
+#' tric_mol <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' tric_mol
-#' cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', token = token, parse = FALSE)
+#' cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N',parse = FALSE)
+#' }
 cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
   # inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(inchikey) > 1) {
@@ -370,10 +424,13 @@ cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \donttest{
+#' # might fail if API is not available
 #' inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-
 #' 2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
 #' # convert InChI to CSID
 #' cs_inchi_csid(inchi)
+#' }
 cs_inchi_csid <- function(inchi, verbose = TRUE, ...){
   if (length(inchi) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -412,10 +469,13 @@ cs_inchi_csid <- function(inchi, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \donttest{
+#' # might fail if API is not available
 #' inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-
 #' 2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
 #' # convert InChI to CSID
 #' cs_inchi_inchikey(inchi)
+#' }
 cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
   if (length(inchi) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -458,11 +518,14 @@ cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \donttest{
+#' # might fail if API is not available
 #' inchi <-  paste0("InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-",
 #' "2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1")
 #' # convert InChI to CSID
 #' cs_inchi_mol(inchi)
 #' cs_inchi_mol(inchi, parse = FALSE)
+#' }
 cs_inchi_mol <- function(inchi, parse = TRUE, verbose = TRUE, ...){
   if (length(inchi) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -504,10 +567,13 @@ cs_inchi_mol <- function(inchi, parse = TRUE, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \donttest{
+#' # might fail if API is not available
 #' inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-
 #' 2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
 #' # convert InChI to CSID
 #' cs_inchi_smiles(inchi)
+#' }
 cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
   if (length(inchi) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -547,9 +613,12 @@ cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \donttest{
+#' # might fail if API is not available
 #' smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
 #' # convert smiles to inchi
 #' cs_smiles_inchi(smiles)
+#' }
 cs_smiles_inchi <- function(smiles, verbose = TRUE, ...){
   if (length(smiles) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -587,6 +656,8 @@ cs_smiles_inchi <- function(smiles, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
+#' \donttest{
+#' # might fail if API is not available
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-5')
@@ -594,6 +665,7 @@ cs_smiles_inchi <- function(smiles, verbose = TRUE, ...){
 #' is.inchikey_cs('BQJCRHHNABKAKU/KBQPJGBKSA/N')
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+#' }
 is.inchikey_cs <- function(x, verbose = TRUE){
   # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA'
   if (length(x) > 1) {

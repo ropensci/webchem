@@ -166,6 +166,14 @@ Convert SMILES to InChI
 cs_smiles_inchi("CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O")
 ```
 
+
+For conveniece, these conversions are all wrapped into `cs_convert()`:
+
+```{r cs_convert}
+cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
+```
+
+
 #### PubChem
 
 Retrieve PubChem CID

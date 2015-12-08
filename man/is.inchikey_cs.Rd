@@ -18,6 +18,8 @@ a logical
 Check if input is a valid inchikey using ChemSpider API
 }
 \examples{
+\donttest{
+# might fail if API is not available
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-5')
@@ -25,6 +27,7 @@ is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-n')
 is.inchikey_cs('BQJCRHHNABKAKU/KBQPJGBKSA/N')
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
