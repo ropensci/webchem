@@ -218,8 +218,8 @@ test_that("cs_smiles_inchi()", {
   smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
   m1 <- cs_smiles_inchi(smiles)
 
-  expect_error(cs_inchi_smiles(c(smiles, smiles)))
-  expect_message(cs_inchi_smiles(smiles))
+  expect_error(cs_smiles_inchi(c(smiles, smiles)))
+  expect_message(cs_smiles_inchi(smiles))
 
   expect_is(m1, 'character')
   expect_equal(length(m1), 1)
@@ -235,7 +235,7 @@ test_that("cs_convert()", {
   inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
   smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
 
-  expect_error(cs_convert(c(ik, ik), from = 'inchikey', to = 'csid'))
+  expect_error(cs_convert(c(inchikey, inchikey), from = 'inchikey', to = 'csid'))
   expect_error(cs_convert(csid, from = 'csid', to = 'mol'))
   expect_error(cs_convert(csid, from = 'csid', to = 'inchikey'))
 
