@@ -45,9 +45,8 @@ chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   if (verbose)
     message(qurl)
   Sys.sleep(0.3)
-  ttt <- read_html(qurl)
-  #! maybe not the best test....
-  if (length(xml_find_all(ttt, "//div[@id = 'resultsContent']")) > 0) {
+  ttt <- try(read_html(qurl), silent = TRUE)
+  if (inherits(ttt, 'try-error')) {
     message('Not found! Returning NA.\n')
     return(NA)
   }
