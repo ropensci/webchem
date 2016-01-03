@@ -1,7 +1,7 @@
 #' Query http://www.alanwood.net/pesticides
 #'
 #' Query Alan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
-#' @import XML RCurl
+#' @import httr xml2
 #'
 #' @param  x character; search string
 #' @param type character; type of input
@@ -20,37 +20,41 @@
 #' }
 alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   # x <- 'Fluazinam'
+  # x <- "79622-59-6"
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }
   type <- match.arg(type)
   if (type == 'commonname') {
     baseurl <- 'http://www.alanwood.net/pesticides/index_cn.html'
-    ttt <- htmlParse(getURL(baseurl))
-    names <- xpathSApply(ttt, "//a" , xmlValue)
-    names <- names[!names == '']
-    links <- xpathSApply(ttt,"//a//@href")
+    ttt <- read_html(baseurl)
+    n <- xml_find_all(ttt, '//a')
+    names <- xml_text(n)
+    rm <- names == ''
+    names <- names[!rm]
+    links <- xml_attr(n, 'href')
+    links <- links[!rm]
     cname <-  x
   }
   if (type == 'cas') {
     baseurl0 <- 'http://www.alanwood.net/pesticides/index_rn.html'
-    ttt0 <- htmlParse(getURL(baseurl0))
-    names0 <- xpathSApply(ttt0, "//dl/dt" , xmlValue)
+    ttt0 <- read_html(baseurl0)
+    names0 <- xml_text(xml_find_all(ttt0, "//dl/dt"))
     # select only first link
-    links0 <- xpathSApply(ttt0, '//dt/following-sibling::dd[1]/a[1]/@href')
-    linkn0 <- xpathSApply(ttt0, '//dt/following-sibling::dd[1]/a[1]', xmlValue)
+    links0 <- xml_attr(xml_find_all(ttt0, '//dt/following-sibling::dd[1]/a[1]'), 'href')
+    linkn0 <- xml_text(xml_find_all(ttt0, '//dt/following-sibling::dd[1]/a[1]'))
 
     baseurl1 <- 'http://www.alanwood.net/pesticides/index_rn1.html'
-    ttt1 <- htmlParse(getURL(baseurl1))
-    names1 <- xpathSApply(ttt1, "//dt" , xmlValue)
-    links1 <- xpathSApply(ttt1, '//dt/following-sibling::dd[1]/a[1]/@href')
-    linkn1 <- xpathSApply(ttt1, '//dt/following-sibling::dd[1]/a[1]', xmlValue)
+    ttt1 <- read_html(baseurl1)
+    names1 <- xml_text(xml_find_all(ttt1, "//dt"))
+    links1 <-  xml_attr(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'), 'href')
+    linkn1 <- xml_text(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'))
 
     baseurl2 <- 'http://www.alanwood.net/pesticides/index_rn2.html'
-    ttt2 <- htmlParse(getURL(baseurl2))
-    names2 <- xpathSApply(ttt2, "//dt" , xmlValue)
-    links2 <- xpathSApply(ttt2, '//dt/following-sibling::dd[1]/a[1]/@href')
-    linkn2 <- xpathSApply(ttt2, '//dt/following-sibling::dd[1]/a[1]', xmlValue)
+    ttt2 <- read_html(baseurl2)
+    names2 <- xml_text(xml_find_all(ttt2, "//dt"))
+    links2 <-  xml_attr(xml_find_all(ttt2, '//dt/following-sibling::dd[1]/a[1]'), 'href')
+    linkn2 <- xml_text(xml_find_all(ttt2, '//dt/following-sibling::dd[1]/a[1]'))
 
     names <- c(names0, names1, names2)
     links <- c(links0, links1, links2)
@@ -71,22 +75,21 @@ alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     message('Querying ', takelink)
 
   Sys.sleep(0.3)
-  ttt <- htmlParse(getURL(paste0('http://www.alanwood.net/pesticides/', takelink)))
-  status <- xpathSApply(ttt, "//tr/th[@id='r1']/following-sibling::td", xmlValue)
-  pref_iupac_name <- xpathSApply(ttt, "//tr/th[@id='r2']/following-sibling::td", xmlValue)
-  iupac_name <- xpathSApply(ttt, "//tr/th[@id='r3']/following-sibling::td", xmlValue)
-  cas <- xpathSApply(ttt, "//tr/th[@id='r5']/following-sibling::td", xmlValue)
-  formula <- xpathSApply(ttt, "//tr/th[@id='r6']/following-sibling::td", xmlValue)
-  activity <- xpathSApply(ttt, "//tr/th[@id='r7']/following-sibling::td", xmlValue)
+  ttt <- read_html(paste0('http://www.alanwood.net/pesticides/', takelink))
+  status <- xml_text(xml_find_all(ttt, "//tr/th[@id='r1']/following-sibling::td"))
+  pref_iupac_name <- xml_text(xml_find_all(ttt, "//tr/th[@id='r2']/following-sibling::td"))
+  iupac_name <- xml_text(xml_find_all(ttt, "//tr/th[@id='r3']/following-sibling::td"))
+  cas <- xml_text(xml_find_all(ttt, "//tr/th[@id='r5']/following-sibling::td"))
+  formula <- xml_text(xml_find_all(ttt, "//tr/th[@id='r6']/following-sibling::td"))
+  activity <- xml_text(xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
   subactivity <- trimws(strsplit(gsub('^.*\\((.*)\\)', '\\1', activity), ';')[[1]])
   activity <- gsub('^(.*) \\(.*\\)', '\\1', activity)
-
-  inchikey <- xpathSApply(ttt, "//tr/th[@id='r11']/following-sibling::td", xmlValue)
+  inchikey <- xml_text(xml_find_all(ttt, "//tr/th[@id='r11']/following-sibling::td"))
   if (grepl('isomer', inchikey)) {
     inchikey <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchikey),
       r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchikey))
   }
-  inchi <- xpathSApply(ttt, "//tr/th[@id='r12']/following-sibling::td", xmlValue)
+  inchi <- xml_text(xml_find_all(ttt, "//tr/th[@id='r12']/following-sibling::td"))
   if (grepl('isomer', inchi)) {
     inchi <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchi),
                r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchi))

@@ -22,6 +22,7 @@ Imports:
     XML,
     xml2,
     httr,
+    rvest,
     RCurl,
     jsonlite,
     stringr
