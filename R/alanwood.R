@@ -1,7 +1,7 @@
 #' Query http://www.alanwood.net/pesticides
 #'
 #' Query Alan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
-#' @import httr xml2
+#' @import xml2
 #'
 #' @param  x character; search string
 #' @param type character; type of input

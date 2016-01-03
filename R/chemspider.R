@@ -1,7 +1,7 @@
 #' Retrieve ChemSpider ID
 #'
 #' Return Chemspider ID (CSID) for a search query, see \url{http://www.chemspider.com/}.
-#' @import httr xml2
+#' @import xml2
 #'
 #' @param query charachter; search term.
 #' @param token character; your security token.
@@ -66,7 +66,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' Get record details (CSID, StdInChIKey, StdInChI, SMILES) by ChemSpider ID
 #'
 #' Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
-#' @import httr xml2
+#' @import xml2
 #'
 #' @param csid character, ChemSpider ID.
 #' @param token character; security token.
@@ -123,7 +123,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' Get extended record details by ChemSpider ID
 #'
 #' Get extended info from Chemspider, see \url{http://www.chemspider.com/}
-#' @import httr xml2
+#' @import xml2
 #' @param csid character,  ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
