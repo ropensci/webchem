@@ -1,6 +1,7 @@
 context("chemspider")
 token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
 
+require(RCurl)
 chk_cs <- function(){
   qurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?query=Triclosan&token=37bf5e57-9091-42f5-9274-650a64398aaf'
   Sys.sleep(0.2)
@@ -26,29 +27,30 @@ test_that("cs_compinfo()", {
   chk_cs()
 
   expect_equal(length(cs_compinfo('5363', token, verbose = FALSE)), 4)
-  expect_equal(cs_compinfo('5363', token, verbose = FALSE)['SMILES'],
-               c(SMILES = "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl"))
+  expect_equal(cs_compinfo('5363', token, verbose = FALSE)[['smiles']],
+               "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
   expect_warning(cs_compinfo('aaaa', token, verbose = FALSE))
   expect_error(cs_compinfo(c("a", "b"), token = token))
   })
 
+
 test_that("cs_extcompinfo()", {
   chk_cs()
-
-  expect_equal(cs_extcompinfo('5363', token = token, verbose = FALSE)['AverageMass'],
-               c(AverageMass = '289.5418'))
+  expect_equal(cs_extcompinfo('5363', token = token, verbose = FALSE)[['average_mass']],
+               289.5418)
   expect_equal(length(cs_extcompinfo('5363', token = token, verbose = FALSE)), 12)
   expect_warning(cs_extcompinfo('aaaa', token, verbose = FALSE))
   expect_error(cs_extcompinfo(c("a", "b"), token = token))
 })
 
 
+# integration tests
 test_that("csid_extcompinfo(get_cid())", {
   chk_cs()
 
   expect_equal(cs_extcompinfo(get_csid('Triclosan', token = token, verbose = FALSE),
-                                token = token, verbose = FALSE)['AverageMass'],
-               c(AverageMass = '289.5418'))
+                                token = token, verbose = FALSE)[['average_mass']],
+               289.5418)
   expect_equal(length(cs_extcompinfo(get_csid('Triclosan', token = token, verbose = FALSE),
                                        token = token, verbose = FALSE)), 12)
 })
