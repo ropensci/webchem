@@ -6,7 +6,7 @@
 #' extrapolated and estimated values. For more information
 #' see \url{http://www.srcinc.com/what-we-do/environmental/scientific-databases.html#physprop}.
 #'
-#' @import XML RCurl
+#' @import xml2 httr
 #'
 #' @param cas character; A CAS number to query.
 #' @param verbose logical; print message during processing to console?
@@ -42,75 +42,60 @@ physprop <- function(cas, verbose = TRUE){
   qurl <- paste0(baseurl, query)
   if (verbose)
     message('Querying ', qurl)
-
-  # the server seems down from time to time - catch this problem (allow 2 seconds to connect)
-  cont <- try(
-    getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3, ssl.verifypeer = FALSE, ssl.verifyhost = FALSE)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error')) {
-    warning('Web server seems to be down! \n Returning NA.')
+  Sys.sleep(0.1)
+  ttt <- try(
+    read_html(
+      content(
+        GET(qurl, config = config( ssl_verifypeer = 0L, ssl_verifyhost = 0L)),
+        as = 'text'
+        ), encoding = "UTF-8"), silent = TRUE)
+  if (inherits(ttt, 'try-error')) {
+    warning('Cannot retrive data from server. \n Returning NA.')
     return(NA)
   }
-  ttt <- htmlParse(cont, useInternalNodes = TRUE,
-                   encoding = "UTF-8")
-  Sys.sleep(0.1)
 
-  if (grepl('No records', xpathSApply(ttt, '//p', xmlValue)[3])) {
+  if (grepl('No records', xml_text(xml_find_all(ttt, '//p'))[3])) {
     message('Not found! Returning NA.\n')
     return(NA)
   }
 
-  variables <- xpathSApply(ttt, '//ul/following-sibling::text()[1]', xmlValue)
+  variables <- xml_text(xml_find_all(ttt, '//ul/following-sibling::text()[1]'))
   variables <- gsub(':', '', variables)
 
-  prop <- do.call(rbind, xpathApply(ttt, '//ul[@class!="ph"]', function(node){
-    value_var <- xpathSApply(node, './li[starts-with(text(),"Value")]', xmlValue)
-    value_var <- gsub('Value.:.(.*)', '\\1', value_var)
-    value <- gsub('^(\\d*\\.?\\d*).*', '\\1', value_var)
-    unit <- gsub('^\\d*\\.?\\d*.(.*)', '\\1', value_var)
-    temp <- xpathSApply(node, './li[starts-with(text(),"Temp")]', xmlValue)
-    if (length(temp) == 0) {
-      temp <- NA
-    } else {
-      temp <- gsub('Temp.*:.(.*)', '\\1', temp)
-    }
-    type <- xpathSApply(node, './li[starts-with(text(),"Type")]', xmlValue)
-    if (length(type) == 0) {
-      type <- NA
-    } else {
-      type <- gsub('Type.*:.(.*)', '\\1', type)
-    }
-    ref <- xpathSApply(node, './li[starts-with(text(),"Ref")]', xmlValue)
-    if (length(ref) == 0) {
-      ref <- NA
-    } else {
-      ref <- gsub('Ref.*:.(.*)', '\\1', ref)
-    }
-    out <- data.frame(value, unit, temp, type, ref, stringsAsFactors = FALSE)
-    return(out)
-  }))
+  nd <- xml_find_all(ttt, '//ul[@class!="ph"]')
+  value_var <- xml_text(xml_find_all(nd, './li[starts-with(text(),"Value")]'))
+  value_var <- gsub('Value.:.(.*)', '\\1', value_var)
+  value <- gsub('^(\\d*\\.?\\d*).*', '\\1', value_var)
+  unit <- gsub('^\\d*\\.?\\d*.(.*)', '\\1', value_var)
+  temp <- xml_text(xml_find_all(nd, './li[starts-with(text(),"Temp")]'))
+  temp <- gsub('Temp.*:.(.*)', '\\1', temp)
+  type <- xml_text(xml_find_all(nd,  './li[starts-with(text(),"Type")]'))
+  type <- gsub('Type.*:.(.*)', '\\1', type)
+  ref <- xml_text(xml_find_all(nd, './li[starts-with(text(),"Ref")]'))
+  ref <- gsub('Ref.*:.(.*)', '\\1', ref)
+  prop <- data.frame(value, unit, temp, type, ref, stringsAsFactors = FALSE)
   prop$variable <- variables
   prop <- prop[, c("variable", "value", "unit", "temp", "type", "ref")]
   prop[ , 'value'] <-  as.numeric(prop[ , 'value'])
 
-  cas <- xpathApply(ttt, '//ul[@class="ph"]/li[starts-with(text(),"CAS")]',xmlValue)[[1]]
+  cas <- xml_text(xml_find_all(ttt, '//ul[@class="ph"]/li[starts-with(text(),"CAS")]'))
   cas <- sub(".*:.", "", cas)
   cas <- sub("^[0]+", "", cas)
 
-  cname <- xpathApply(ttt, '//ul[@class="ph"]/li[starts-with(text(),"Chem")]',xmlValue)[[1]]
+  cname <- xml_text(xml_find_all(ttt, '//ul[@class="ph"]/li[starts-with(text(),"Chem")]'))
   cname <- sub(".*:.", "", cname)
 
-  mw <- xpathApply(ttt, "//ul[@class='ph']/li[4]",xmlValue)[[1]]
+  mw <- xml_text(xml_find_all(ttt, "//ul[@class='ph']/li[4]"))
   mw <- as.numeric(sub(".*:.", "", mw))
 
-  mp <- xpathApply(ttt, "//ul[@class='ph']/li[5]",xmlValue)[[1]]
+  mp <- xml_text(xml_find_all(ttt, "//ul[@class='ph']/li[5]"))
   prop <- rbind(prop, data.frame(variable = 'Melting Point',
                                  value = extr_num(mp),
                                  unit = 'deg C',
                                  temp = NA,
                                  type = NA,
                                  ref = NA))
-  bp <- xpathApply(ttt, "//ul[@class='ph']/li[6]",xmlValue)[[1]]
+  bp <- xml_text(xml_find_all(ttt, "//ul[@class='ph']/li[6]"))
   prop <- rbind(prop, data.frame(variable = 'Boiling Point',
                                  value = extr_num(bp),
                                  unit = 'deg C',

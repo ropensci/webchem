@@ -3,7 +3,7 @@
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 #' \url{http://webetox.uba.de/webETOX/index.do} for their substance ID
 #'
-#' @import XML RCurl
+#' @import xml2 httr
 #'
 #' @param  query character; The searchterm
 #' @param verbose logical; print message during processing to console?
@@ -47,22 +47,18 @@ get_etoxid <- function(query, verbose = TRUE){
   baseurl <- 'https://webetox.uba.de/webETOX/public/search/stoff.do'
 
   Sys.sleep(0.1)
-  out <- postForm(baseurl,
-                  .params = list('stoffname.selection[0].name' = query,
-                                 event = 'Search'))
-
+  h <- POST(url = baseurl, body = list('stoffname.selection[0].name' = query,
+                                  event = 'Search'))
   # get substances and links
-  tt <- htmlParse(out)
-  subs <- clean_char(xpathSApply(tt,"//*/table[@class = 'listForm resultList']//a",
-                                 xmlValue))
+  tt <- read_html(h)
+  subs <- clean_char(xml_text(xml_find_all(tt, "//*/table[@class = 'listForm resultList']//a")))
   if (length(subs) == 0) {
     if (verbose)
       message('Substance not found! Returing NA. \n')
     return(NA)
   }
-  type <- clean_char(xpathSApply(tt,"//*/table[@class = 'listForm resultList']/tr/td[2]",
-                                 xmlValue))
-  links <- xpathSApply(tt, "//*/table[@class = 'listForm resultList']//a//@href")
+  type <- clean_char(xml_text(xml_find_all(tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
+  links <- xml_attr(xml_find_all(tt, "//*/table[@class = 'listForm resultList']//a"), 'href')
 
   # match query with substance, get link
   if (length(unique(links)) > 1) {
@@ -77,6 +73,7 @@ get_etoxid <- function(query, verbose = TRUE){
     d <- 0
     matched_sub <- subs[type == 'ETOX_NAME'][1]
   }
+
   id <- gsub('^.*\\?id=(.*)', '\\1', takelink)
   names(id) <- NULL
   attr(id, "matched") <- matched_sub
@@ -84,12 +81,14 @@ get_etoxid <- function(query, verbose = TRUE){
   return(id)
 }
 
+
+
 #' Get basic information from a ETOX ID
 #'
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 #' \url{http://webetox.uba.de/webETOX/index.do} for basic information
 #'
-#' @import XML RCurl
+#' @import rvest xml2
 #'
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
@@ -119,22 +118,17 @@ etox_basic <- function(id, verbose = TRUE){
     stop('Cannot handle multiple input strings.')
   }
   # id <- '20179'
-  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
   qurl <- paste0(baseurl, id)
-  httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
     message('Querying ', qurl)
-
   Sys.sleep(0.1)
-  tt <- htmlParse(getURL(qurl, httpheader = httpheader))
-
-  if (any(grepl('Problem', xpathSApply(tt, '//h3', xmlValue)))) {
+  tt <- try(read_html(qurl), silent = TRUE)
+  if (inherits(tt, 'try-error')) {
     message('ID not found! Returning NA.\n')
     return(NA)
   }
-
-  tabs <- readHTMLTable(tt, header = FALSE, stringsAsFactors = FALSE)
-
+  tabs <- html_table(tt, fill = TRUE)
   binf <- tabs[[3]]
   cas <- binf[, 1][binf[, 2] == 'CAS']
   ec <- binf[, 1][grepl('EINEC', binf[, 2])]
@@ -157,7 +151,7 @@ etox_basic <- function(id, verbose = TRUE){
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 #' \url{http://webetox.uba.de/webETOX/index.do} for quality targets
 #'
-#' @import XML RCurl
+#' @import xml2 RCurl
 #' @importFrom utils read.table
 #'
 #' @param id character; ETOX ID
@@ -197,25 +191,21 @@ etox_targets <- function(id, verbose = TRUE){
   }
   # id <- '20179'
   # id <- '9051
-  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
   qurl <- paste0(baseurl, id)
-  httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
     message('Querying ', qurl)
-
-  # get second id
   Sys.sleep(0.1)
-  tt <- htmlParse(getURL(qurl, httpheader = httpheader))
-  if (any(grepl('Problem', xpathSApply(tt, '//h3', xmlValue)))) {
+  tt <- try(read_html(qurl), silent = TRUE)
+  if (inherits(tt, 'try-error')) {
     message('ID not found! Returning NA.\n')
     return(NA)
   }
-  link2 <- xpathSApply(tt, "//a[contains(.,'Quali')]/@href[contains(.,'stoff')]")
+  link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Quali') and contains(@href,'stoff')]"), 'href')
   id2 <- gsub('.*=(\\d+)', '\\1', link2)
 
-  tt2 <-  htmlParse(getURL(paste0('https://webetox.uba.de', link2),
-                           httpheader = httpheader))
-  mssg <- xpathSApply(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]", xmlValue)
+  tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
+  mssg <- xml_text(xml_find_all(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]"))
   if (length(mssg) > 0) {
     if (grepl('no result', mssg)) {
       message('No targets found found! Returning NA.\n')
@@ -225,22 +215,21 @@ etox_targets <- function(id, verbose = TRUE){
     }
   }
 
-
-  csvlink <- xpathSApply(tt2, "//a[contains(.,'Csv')]/@href")
-  cont <- getURL(paste0('https://webetox.uba.de', csvlink),
-                 httpheader = httpheader)
+  csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
+  cont <- getURL(paste0('https://webetox.uba.de', csvlink))
   out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
                     stringsAsFactors = FALSE)
   out$Value_Target_LR <- as.numeric(out$Value_Target_LR)
   return(out)
 }
 
+
 #' Get Tests from a ETOX ID
 #'
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 #' \url{http://webetox.uba.de/webETOX/index.do} for tests
 #'
-#' @import XML RCurl
+#' @import xml2 RCurl
 #' @importFrom utils read.table
 #'
 #' @param id character; ETOX ID
@@ -272,22 +261,18 @@ etox_tests <- function(id, verbose = TRUE){
   httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
     message('Querying ', qurl)
-
-  # get second id
   Sys.sleep(0.1)
-  tt <- htmlParse(getURL(qurl, httpheader = httpheader))
-  if (any(grepl('Problem', xpathSApply(tt, '//h3', xmlValue)))) {
+  tt <- try(read_html(qurl), silent = TRUE)
+  if (inherits(tt, 'try-error')) {
     message('ID not found! Returning NA.\n')
     return(NA)
   }
-  link2 <- xpathSApply(tt, "//a[contains(.,'Test')]/@href[contains(.,'stoff')]")
+  link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Test') and contains(@href,'stoff')]"), 'href')
   id2 <- gsub('.*=(\\d+)', '\\1', link2)
 
-  tt2 <-  htmlParse(getURL(paste0('https://webetox.uba.de', link2),
-                           httpheader = httpheader))
-  csvlink <- xpathSApply(tt2, "//a[contains(.,'Csv')]/@href")
-  cont <- getURL(paste0('https://webetox.uba.de', csvlink),
-                 httpheader = httpheader)
+  tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
+  csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
+  cont <- getURL(paste0('https://webetox.uba.de', csvlink))
   out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
                     stringsAsFactors = FALSE)
   out$Value <- as.numeric(out$Value)

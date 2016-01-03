@@ -19,7 +19,7 @@
 #' is used to get an updated index.
 #' This is used to build the index shipped with the webchem package - code{\link{ppdb_idx}}.
 #'
-#' @import XML RCurl stringr
+#' @import xml2 stringr
 #'
 #' @return A dataframe with 2 variables:
 #' \describe{
@@ -35,16 +35,16 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' # code used the build the index shipped with etox
+#' # code used the build the index shipped with webchem
 #' ppdb_idx <- ppdb_buildidx()
 #' }
 ppdb_buildidx <- function(){
   # query seach index
-  url <- 'http://sitem.herts.ac.uk/aeru/iupac/search.htm'
-  search <- getURL(url)
-  tt <- htmlParse(search)
-  cont <- xpathApply(tt, "//script[contains(.,'# of titles present in the database')]", xmlValue)
-  cont <- strsplit(cont[[1]], '\\n')
+  qurl <- 'http://sitem.herts.ac.uk/aeru/iupac/search.htm'
+  tt <- read_html(qurl)
+  cont <- xml_text(xml_find_all(tt, "//script[contains(.,'# of titles present in the database')]"))
+  Encoding(cont) <- "latin1"
+  cont <- strsplit(cont, '\\n')
   links <- cont[[1]][grepl('^links\\[', cont[[1]])]
   links <- str_match(links, '\\\"(.*)\\"')[ , 2]
   baseurl <- 'http://sitem.herts.ac.uk/aeru/iupac/'
@@ -56,12 +56,10 @@ ppdb_buildidx <- function(){
   # possible titles
   ptitles <- str_split(titles, ', ')
   cas <- sapply(ptitles, function(x) x[[3]])
-  # fix utf8
-  cas <- gsub('\u0096', '-', cas)
   ppdb_idx <- data.frame(cas = iconv(cas, from = "UTF-8", to = "ASCII"),
                       link = iconv(links, from = "UTF-8", to = "ASCII"),
                       stringsAsFactors = FALSE)
-  ppdb_idx <- ppdb_idx[!ppdb_idx$cas == '', ]
+  ppdb_idx <- ppdb_idx[! (ppdb_idx$cas == '' | is.na(ppdb_idx$cas)), ]
   # save(ppdb_idx, file = 'data/ppdb_idx.rda')
   return(ppdb_idx)
 }
@@ -71,7 +69,7 @@ ppdb_buildidx <- function(){
 #'
 #' This function queries the PPDB \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm} for information.
 #'
-#' @import XML RCurl
+#' @import xml2 rvest
 #'
 #' @param cas character; CAS number to query.
 #' @param verbose logical; print message during processing to console?
@@ -122,48 +120,52 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
     message('Querying ', qurl)
 
   Sys.sleep(0.3)
-  tt <- getURL(qurl)
-  ttt <- htmlParse(tt)
+  ttt <- read_html(qurl)
 
   # ec regulation
-  ec_regulation <- readHTMLTable(getNodeSet(ttt, "//p[contains(.,'EC Reg')]/following-sibling::table[1]")[[1]],
-                                 stringsAsFactors = FALSE)
-
+  ec_regulation <- html_table(
+    xml_find_all(ttt, "//p[contains(.,'EC Reg')]/following-sibling::table[1]"),
+    header = TRUE)[[1]]
 
   # approved in contries
-  status <- unlist(xpathApply(ttt, "//*[contains(.,'Approved')]/following-sibling::table[1]/tr[2]/td/p/img/@src"))
-  approved_id <- data.frame(t(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'Approved for use')]/following-sibling::table[1]")[[1]],
-                                            stringsAsFactors = FALSE)))
+  status <- xml_attr(xml_find_all(ttt, "//*[contains(.,'Approved')]/following-sibling::table[1]/tr[2]/td/p/img"), 'src')
+  approved_id <- data.frame(t(html_table(
+    xml_find_all(ttt, "//p[contains(.,'Approved for use')]/following-sibling::table[1]"),
+    header = TRUE)[[1]]), stringsAsFactors = FALSE)
   approved_id$status <- ifelse(status == 'tick.jpg', TRUE, FALSE)
   approved_id[ , 1] <- NULL
   approved_id$county <- rownames(approved_id)
 
+
   # general status
-  general <- readHTMLTable(getNodeSet(ttt, "//p[contains(.,'General status')]/following-sibling::table[1]")[[1]],
-                           stringsAsFactors = FALSE)
+  general <- html_table(
+    xml_find_all(ttt, "//p[contains(.,'General status')]/following-sibling::table[1]"),
+    header = TRUE, fill = TRUE)[[1]]
+  general <- general[ , 1:2]
   names(general) <- c('variable', 'value')
 
   # parents
-  parents <- try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'Can be a metabolite of')]/following-sibling::table[1]")[[1]],
-                               stringsAsFactors = FALSE),
-                 silent = TRUE)
+  parents <- try(html_table(
+    xml_find_all(ttt,  "//p[contains(.,'Can be a metabolite of')]/following-sibling::table[1]"),
+    header = TRUE)[[1]],
+    silent = TRUE)
   parents <- chk(parents)
-
 
 #   # formulations
 #   formulation <- tables[[8]]
 #   names(formulation) <- c('variable', 'value')
 
   # fate
-  fate <- try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'ENVIRONMENTAL FATE')]/following-sibling::table[1]")[[1]],
-                            stringsAsFactors = FALSE),
-                 silent = TRUE)
+  fate <- try(html_table(
+    xml_find_all(ttt,   "//p[contains(.,'ENVIRONMENTAL FATE')]/following-sibling::table[1]"),
+    header = TRUE, fill = TRUE)[[1]],
+    silent = TRUE)
   fate <- chk(fate)
   if (!length(fate) == 0) {
-    take <- fate[!is.na(fate[ , 'V5']), ]
-    take[ , 'V1'] <- paste(take[ , 'V1'], take[ , 'V2'])
-    take[ , 'V2'] <- NULL
-    fate <- fate[is.na(fate[ , 'V5']), 1:4]
+    take <- fate[!is.na(fate[ , 5]), ]
+    take[ , 1] <- paste(take[ , 1], take[ , 2])
+    take[ , 2] <- NULL
+    fate <- fate[is.na(fate[ , 5]), 1:4]
     nam <- c('Property', 'Value', 'Source/Quality', 'Interpretation')
     colnames(fate) <- nam
     colnames(take) <- nam
@@ -182,13 +184,20 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
 
 
   # degredation
-  deg <-  try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'Degradation')]/following-sibling::table[1]")[[1]],
-                            stringsAsFactors = FALSE),
-              silent = TRUE)
+  deg <- try(html_table(
+    xml_find_all(ttt,   "//p[contains(.,'Degradation')]/following-sibling::table[1]"),
+    header = TRUE, fill = TRUE)[[1]],
+    silent = TRUE)
   deg <- chk(deg)
   if (!length(deg) == 0) {
+    take <- deg[!is.na(deg[ , 5]), ]
+    take[ , 1] <- paste(take[ , 1], take[ , 2])
+    take[ , 2] <- NULL
+    deg <- deg[is.na(deg[ , 5]), 1:4]
     nam <- c('Property', 'Value', 'Source/Quality', 'Interpretation')
     colnames(deg) <- nam
+    colnames(take) <- nam
+    deg <- rbind(deg, take)
     deg <- deg[!grepl('Note', deg[ , 'Property']), ]
 
     if (any(deg[ , 'Value'] == 'Value')) {
@@ -197,20 +206,16 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
       colnames(take) <- colnames(deg)
       deg <- deg[!deg[ , 'Value'] == 'Value', ]
       deg <- rbind(deg, take)
-
     }
-    corr <- deg[!is.na(deg[,5]), 1]
-    deg[!is.na(deg[ , 5]), 1] <- paste(deg[!is.na(deg[ , 5]), 1], deg[!is.na(deg[ , 5]), 2])
-    deg[!is.na(deg[ , 5]), ] <- c(deg[!is.na(deg[ , 5]), c(1, 3, 4, 5)], NA)
-    deg[ , 5] <- NULL
   }
 
 
 
   # soil adsorption and mobility
-  soil <- try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'Soil adsorption')]/following-sibling::table[1]")[[1]],
-                            stringsAsFactors = FALSE),
-              silent = TRUE)
+  soil <- try(html_table(
+    xml_find_all(ttt,   "//p[contains(.,'Soil adsorption')]/following-sibling::table[1]"),
+    header = TRUE, fill = TRUE)[[1]],
+    silent = TRUE)
   soil <- chk(soil)
   if (!length(soil) == 0) {
     nam <- c('Property', 'Value', 'Source/Quality', 'Interpretation')
@@ -224,15 +229,17 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
 
 
   # metabolites
-  metab <- try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'Key metabolites')]/following-sibling::table[1]")[[1]],
-                             stringsAsFactors = FALSE),
-               silent = TRUE)
+  metab <- try(html_table(
+    xml_find_all(ttt,   "//p[contains(.,'Key metabolites')]/following-sibling::table[1]"),
+    header = TRUE, fill = TRUE)[[1]],
+    silent = TRUE)
   metab <- chk(metab)
 
   # ecotoxicology
-  etox <- try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'ECOTOXICOLOGY')]/following-sibling::table[1]")[[1]],
-                            stringsAsFactors = FALSE),
-              silent = TRUE)
+  etox <- try(html_table(
+    xml_find_all(ttt,   "//p[contains(.,'ECOTOXICOLOGY')]/following-sibling::table[1]"),
+    header = TRUE, fill = TRUE)[[1]],
+    silent = TRUE)
   etox <- chk(etox)
   if (!length(etox) == 0) {
     nam <- c('Property', 'Value', 'Source/Quality', 'Interpretation')
@@ -245,9 +252,10 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
   }
 
   # names
-  names <- try(readHTMLTable(getNodeSet(ttt, "//p[contains(.,'TRANSLATIONS ')]/following-sibling::table[1]")[[1]],
-                             stringsAsFactors = FALSE),
-               silent = TRUE)
+  names <- try(html_table(
+    xml_find_all(ttt,   "//p[contains(.,'TRANSLATIONS ')]/following-sibling::table[1]"),
+    header = TRUE, fill = TRUE)[[1]],
+    silent = TRUE)
   names <- chk(names)
 
   out <- list(ec_regulation = ec_regulation,
