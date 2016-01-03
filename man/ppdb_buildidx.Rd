@@ -25,7 +25,7 @@ Only use this to retrieve an updated index.
 }
 \examples{
 \dontrun{
-# code used the build the index shipped with etox
+# code used the build the index shipped with webchem
 ppdb_idx <- ppdb_buildidx()
 }
 }
