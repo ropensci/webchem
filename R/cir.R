@@ -1,5 +1,5 @@
 #' Query Chemical Identifier Resolver
-#' @import XML RCurl
+#' @import xml2
 #'
 #' @param identifier character; chemical identifier.
 #' @param representation character; what representation of the identifier should
@@ -127,19 +127,28 @@ cir <- function(identifier, representation = 'smiles', resolver = NULL,
   if (verbose)
     message(qurl)
   Sys.sleep(1.5)
-  hh <- try(getURL(qurl, .opts = list(timeout = 2)))
-  if (!inherits(hh, "try-error")) {
-    h <- xmlParse(hh)
-    out <- xpathSApply(h, "//data/item", xmlValue)
-  } else {
+  h <- try(read_xml(qurl))
+  if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
     out <- NA
+  } else {
+    out <- xml_text(xml_find_all(h, '//item'))
   }
   if (length(out) == 0) {
     message('No representation found... Returning NA.')
-    out <- NA
+    return(NA)
   }
   if (first)
     out <- out[1]
+
+  # convert to numeric
+  if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
+                           'h_bond_acceptor_count', 'h_bond_center_count',
+                           'rule_of_5_violation_count', 'rotor_count',
+                           'effective_rotor_count', 'ring_count', 'ringsys_count',
+                           'xlogp2', 'heteroatom_count', 'hydrogen_atom_count',
+                           'heavy_atom_count', 'deprotonable_group_count',
+                           'protonable_group_count') )
+    out <- as.numeric(out)
   return(out)
 }
