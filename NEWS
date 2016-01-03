@@ -5,7 +5,12 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 
-* switched to xml2/httr/rvest for all functions
+* all functions use exclusively xml2/httr/rvest
+* cs_compinfo():
+  - names of returned list changed
+* cs_extcompinfo():
+  - names of returned list changed
+  - result is numeric where appropriate
 
 BUG FIXES
 

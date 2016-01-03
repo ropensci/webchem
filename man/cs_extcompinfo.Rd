@@ -16,9 +16,9 @@ cs_extcompinfo(csid, token, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-a list with entries: CSID (ChemSpider ID), MF (Molecular Formula),
-SMILES string, InChI, InChIKey, Average Mass, Molecular weight, MonoisotopicMass,
-NominalMass, ALogP, XLogP and the common Name.
+a list with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
+'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
+'nominal_mass', 'alogp', 'xlogp', 'common_name'
 }
 \description{
 Get extended info from Chemspider, see \url{http://www.chemspider.com/}

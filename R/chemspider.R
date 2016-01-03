@@ -1,7 +1,7 @@
 #' Retrieve ChemSpider ID
 #'
 #' Return Chemspider ID (CSID) for a search query, see \url{http://www.chemspider.com/}.
-#' @import RCurl XML
+#' @import httr xml2
 #'
 #' @param query charachter; search term.
 #' @param token character; your security token.
@@ -45,14 +45,13 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
   if (verbose)
     message(qurl, '\n')
   Sys.sleep(0.1)
-  h <- try(xmlParse(qurl, isURL = TRUE, useInternalNodes = TRUE), silent = TRUE)
-  if (!inherits(h, "try-error")) {
-    out <- unlist(xmlToList(h))
-  } else {
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
-  if (length(out) == 0) {
+  out <- xml_text(h, trim = TRUE)
+  if (out == '') {
     message('No csid found... Returning NA.')
     return(NA)
   }
@@ -67,14 +66,14 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' Get record details (CSID, StdInChIKey, StdInChI, SMILES) by ChemSpider ID
 #'
 #' Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
-#' @import RCurl XML
+#' @import httr xml2
 #'
 #' @param csid character, ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a list of four, with entries: CSID (ChemSpider ID), InChI,
-#'   InChIKey and SMILES string.
+#' @return a list of four, with entries: csid (ChemSpider ID), inchi,
+#'   inchikey and smiles.
 #'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
@@ -109,13 +108,13 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   if (verbose)
     message(qurl)
   Sys.sleep(0.1)
-  h <- try(xmlParse(qurl, isURL = TRUE), silent = TRUE)
-  if (!inherits(h, "try-error")) {
-    out <- unlist(xmlToList(h))
-  } else {
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
     warning('CSID not found... Returning NA.')
     return(NA)
   }
+  out <- as.list(xml_text(xml_children(h)))
+  names(out) <- c('csid', 'inchi', 'inchikey', 'smiles')
   return(out)
 }
 
@@ -124,14 +123,14 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' Get extended record details by ChemSpider ID
 #'
 #' Get extended info from Chemspider, see \url{http://www.chemspider.com/}
-#' @import RCurl XML
+#' @import httr xml2
 #' @param csid character,  ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a list with entries: CSID (ChemSpider ID), MF (Molecular Formula),
-#' SMILES string, InChI, InChIKey, Average Mass, Molecular weight, MonoisotopicMass,
-#' NominalMass, ALogP, XLogP and the common Name.
+#' @return a list with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
+#' 'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
+#' 'nominal_mass', 'alogp', 'xlogp', 'common_name'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
@@ -166,13 +165,21 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   if (verbose)
     message(qurl)
   Sys.sleep(0.1)
-  h <- try(xmlParse(qurl, isURL = TRUE), silent = TRUE)
-  if (!inherits(h, "try-error")) {
-    out <- unlist(xmlToList(h))
-  } else{
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
     warning('CSID not found... Returning NA.')
     return(NA)
   }
+  out <- as.list(xml_text(xml_children(h)))
+  names(out) <- c('csid', 'mf', 'smiles', 'inchi', 'inchikey', 'average_mass',
+                  'mw', 'monoiso_mass', 'nominal_mass', 'alogp', 'xlogp', 'common_name')
+  # convert to numeric
+  out[['average_mass']] <- as.numeric(out[['average_mass']])
+  out[['mw']] <- as.numeric(out[['mw']])
+  out[['monoiso_mass']] <- as.numeric(out[['monoiso_mass']])
+  out[['nominal_mass']] <- as.numeric(out[['nominal_mass']])
+  out[['alogp']] <- as.numeric(out[['alogp']])
+  out[['xlogp']] <- as.numeric(out[['xlogp']])
   return(out)
 }
 
