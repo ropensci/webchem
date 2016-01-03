@@ -1,7 +1,7 @@
 #' Get record details from Chemical Translation Service (CTS)
 #'
 #' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
-#' @import RCurl jsonlite
+#' @import jsonlite
 #' @param inchikey character; InChIkey.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
@@ -22,6 +22,7 @@
 #' do.call(rbind, ll)
 #' }
 cts_compinfo <- function(inchikey, verbose = TRUE, ...){
+  # inchikey <- "XEFQLINVKFYRCS-UHFFFAOYSA-N"
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -33,19 +34,14 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   if (verbose)
     message(qurl)
   Sys.sleep(0.3)
-  h <- try(getURL(qurl), silent = TRUE)
-  if (!inherits(h, "try-error")) {
-    out <- fromJSON(h)
-  } else{
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  if (length(out) == 1 && grepl('invalid', out)) {
-    message("invalid InChIKey. Returning NA.")
+  out <- try(fromJSON(qurl), silent = TRUE)
+  if (inherits(out, "try-error")) {
+    warning('Not found... Returning NA.')
     return(NA)
   }
   return(out)
 }
+
 
 #' Convert Ids using Chemical Translation Service (CTS)
 #'
@@ -87,19 +83,12 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   if (verbose)
     message(qurl)
   Sys.sleep(0.3)
-  h <- try(getURL(qurl), silent = TRUE)
-  if (!inherits(h, "try-error")) {
-    out <- fromJSON(h)
-  } else {
-    warning('Problem with web service encountered... Returning NA.')
+  out <- try(fromJSON(qurl), silent = TRUE)
+  if (inherits(out, "try-error")) {
+    warning('Not found... Returning NA.')
     return(NA)
   }
-  if ('error' %in% names(out)) {
-    warning('Error in query : \n', out['error'], "\n Returning NA.")
-    return(NA)
-  } else {
-    out <- out$result[[1]]
-  }
+  out <- out$result[[1]]
   if (length(out) == 0) {
     message("Not found. Returning NA.")
     return(NA)
