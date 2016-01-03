@@ -19,7 +19,6 @@ Encoding: UTF-8
 Depends:
     R (>= 2.10)
 Imports:
-    XML,
     xml2,
     httr,
     rvest,

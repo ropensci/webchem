@@ -56,7 +56,7 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
 #' Retrieve compound information from pubchem CID
 #'
 #' Retrieve compound information from pubchem CID, see \url{https://pubchem.ncbi.nlm.nih.gov/}
-#' @import RCurl XML
+#' @import xml2
 #' @param cid character; Pubchem ID (CID).
 #' @param first logical; return only first list items?
 #' That is: a list with entries of lenght 1 (for easy conversion in a data.frame)
@@ -97,7 +97,7 @@ cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   Sys.sleep(0.3)
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
-    if(verbose)
+    if (verbose)
       warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }

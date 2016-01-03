@@ -69,7 +69,8 @@ ppdb_buildidx <- function(){
 #'
 #' This function queries the PPDB \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm} for information.
 #'
-#' @import xml2 rvest
+#' @import xml2
+#' @importFrom rvest html_table
 #'
 #' @param cas character; CAS number to query.
 #' @param verbose logical; print message during processing to console?
