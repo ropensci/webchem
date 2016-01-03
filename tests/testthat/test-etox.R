@@ -1,5 +1,6 @@
 context("etox")
 
+require(RCurl)
 chk_etox <- function(){
   qurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id=20179'
   Sys.sleep(0.2)
