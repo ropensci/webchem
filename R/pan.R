@@ -1,8 +1,9 @@
 #' Query the PAN Pesticide database
 #'
 #' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
-#' @import xml2 rvest
+#' @import xml2
 #' @importFrom utils adist
+#' @importFrom rvest html_table
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param match character; \code{match="all"} returns all matches,
 #'   \code{match="first"} the first one and \code{match="best"} the hit with the lowest

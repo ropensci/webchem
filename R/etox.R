@@ -88,7 +88,8 @@ get_etoxid <- function(query, verbose = TRUE){
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 #' \url{http://webetox.uba.de/webETOX/index.do} for basic information
 #'
-#' @import rvest xml2
+#' @import xml2
+#' @importFrom rvest html_table
 #'
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?

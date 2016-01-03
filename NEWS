@@ -5,7 +5,7 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 
-* all functions use exclusively xml2/httr/rvest
+* webchem use exclusively xml2/httr/rvest (instead of XML)
 * cs_compinfo():
   - names of returned list changed
 * cs_extcompinfo():
