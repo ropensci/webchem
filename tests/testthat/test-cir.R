@@ -1,5 +1,6 @@
 context("cir")
 
+require(RCurl)
 chk_cir <- function(){
   qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
   Sys.sleep(1)
@@ -12,7 +13,7 @@ chk_cir <- function(){
 test_that("cir()", {
   chk_cir()
 
-  expect_equal(cir('Triclosan', 'mw', verbose = FALSE), '289.5451')
+  expect_equal(cir('Triclosan', 'mw', verbose = FALSE), 289.5451)
   expect_error(cir(c('Triclosan', 'Benzol'), 'mw'))
   expect_equal(cir('xxxxxxx', 'mw', verbose = FALSE), NA)
   expect_warning(cir(NA, 'mw', verbose = FALSE))

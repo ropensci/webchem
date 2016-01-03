@@ -11,6 +11,8 @@ MINOR IMPROVEMENTS
 * cs_extcompinfo():
   - names of returned list changed
   - result is numeric where appropriate
+* cir():
+  - result is numeric where appropriate
 
 BUG FIXES
 
