@@ -1,7 +1,7 @@
 #' Query the PAN Pesticide database
 #'
 #' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
-#' @import RCurl XML
+#' @import xml2 rvest
 #' @importFrom utils adist
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param match character; \code{match="all"} returns all matches,
@@ -101,18 +101,17 @@ pan <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
   if (verbose)
     message(paste0(baseurl, 'ChemName=', query), '\n')
   Sys.sleep(0.1)
-  cont <- try(getURLContent(qurl, .opts = list(timeout = 3)), silent = TRUE)
-  if (inherits(cont, "try-error")) {
+  h <- try(read_html(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
-  h <- htmlParse(cont, useInternalNodes = TRUE)
-  nd <- getNodeSet(h, "//table[contains(.,'Detailed Info')]")
+  nd <- xml_find_all(h, "//table[contains(.,'Detailed Info')]")
   if (length(nd) == 0) {
     message('Not found... Returning NA.')
     return(NA)
   }
-  ttt <- readHTMLTable(nd[[1]], stringsAsFactors = FALSE)
+  ttt <- html_table(nd)[[1]]
   out <- as.list(ttt)
   # clean
   out$`Detailed Info` <- NULL
