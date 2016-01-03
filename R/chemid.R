@@ -2,7 +2,7 @@
 #'
 #' Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus/name/triclosan}
 #'
-#' @import RCurl
+#' @import httr xml2 rvest
 #'
 #' @param query character; query string
 #' @param type character; type of query string.
@@ -45,29 +45,26 @@ chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   if (verbose)
     message(qurl)
   Sys.sleep(0.3)
-  tt <- getURL(qurl)
-  ttt <- htmlParse(tt)
+  ttt <- read_html(qurl)
   #! maybe not the best test....
-  if (length(xpathSApply(ttt, "//div[@id = 'resultsContent']")) > 0) {
+  if (length(xml_find_all(ttt, "//div[@id = 'resultsContent']")) > 0) {
     message('Not found! Returning NA.\n')
     return(NA)
   }
-  name <- xpathSApply(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li", xmlValue)
-  synonyms <- xpathSApply(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li", xmlValue)
-  cas <- xpathSApply(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li", xmlValue)
+  name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
+  synonyms <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))
+  cas <- xml_text(xml_find_all(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))
   inchi <- gsub('\\n|\\t', '',
-                xpathSApply(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]", xmlValue)[1]
+                xml_text(xml_find_all(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]"))[1]
                 )
   inchikey <- gsub('\\n|\\t', '',
-                   xpathSApply(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]", xmlValue)
+                   xml_text(xml_find_all(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]"))
   )
   smiles <- gsub('\\n|\\t', '',
-                 xpathSApply(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]", xmlValue)
+                 xml_text(xml_find_all(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]"))
   )
-  toxicity <- readHTMLTable(xpathSApply(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table")[[1]],
-                            stringsAsFactors = FALSE)
-  physprop <- readHTMLTable(xpathSApply(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table")[[1]],
-                            stringsAsFactors = FALSE)
+  toxicity <- html_table(xml_find_all(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))[[1]]
+  physprop <- html_table(xml_find_all(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))[[1]]
   physprop[ , 'Value'] <- as.numeric(physprop[ , 'Value'])
   #= same as physprop
 
