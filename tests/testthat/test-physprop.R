@@ -1,5 +1,6 @@
 context("physprop")
 
+require(RCurl)
 chk_physprop <- function(){
   qurl <- 'http://esc.syrres.com/fatepointer/webprop.asp?CAS=50000'
   Sys.sleep(0.2)

@@ -21,7 +21,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' get_etoxid(q)
+#' get_etoxid('Triclosan')
 #' # multiple inpus
 #' comps <- c('Triclosan', 'Glyphosate')
 #' sapply(comps, get_etoxid)
