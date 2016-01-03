@@ -5,6 +5,8 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 
+* switched to xml2/httr/rvest for all functions
+
 BUG FIXES
 
 DEPRECATED FUNCTIONS
