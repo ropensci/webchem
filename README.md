@@ -80,7 +80,7 @@ Inputs might by ambiguous and we can specify where to search using `resolver=`.
 
 ```r
 cir('3380-34-5', 'smiles')
-#> [1] "C1=CC(=CC(=C1OC2=CC=C(C=C2Cl)Cl)O)Cl"
+#> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
 cir('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 #> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
 ```
@@ -229,13 +229,13 @@ Retrieve PubChem CID
 
 ```r
 get_cid('Triclosan')
-#>  [1] "5564"     "131203"   "627458"   "15942656" "16220126" "16220128"
-#>  [7] "16220129" "16220130" "18413505" "22947105" "23656593" "24848164"
-#> [13] "25023954" "25023955" "25023956" "25023957" "25023958" "25023959"
-#> [19] "25023960" "25023961" "25023962" "25023963" "25023964" "25023965"
-#> [25] "25023966" "25023967" "25023968" "25023969" "25023970" "25023971"
-#> [31] "25023972" "25023973" "45040608" "45040609" "67606151" "71752714"
-#> [37] "92024355" "92043149" "92043150" "92131249"
+#>  [1] "5564"     "131203"   "627458"   "9929261"  "15942656" "16220126"
+#>  [7] "16220128" "16220129" "16220130" "18413505" "22947105" "23656593"
+#> [13] "24848164" "25023954" "25023955" "25023956" "25023957" "25023958"
+#> [19] "25023959" "25023960" "25023961" "25023962" "25023963" "25023964"
+#> [25] "25023965" "25023966" "25023967" "25023968" "25023969" "25023970"
+#> [31] "25023971" "25023972" "25023973" "45040608" "45040609" "67606151"
+#> [37] "71752714" "92024355" "92043149" "92043150" "92131249"
 cid <- get_cid('3380-34-5')
 ```
 
@@ -563,7 +563,7 @@ out[[3]]
 #>                                                                                                                                                                           value
 #> 1                                                                                                                                                              Phosphonoglycine
 #> 2                                                                                                                                                                      950 g/kg
-#> 3                                                                                                                                                    EU dossier - None declared
+#> 3                                                                                                                                                     EU dossier - Formaldehyde
 #> 4                                                                                                                                                                     Synthetic
 #> 5                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
 #> 6                                                                                                                                                                     1071-83-6
@@ -580,7 +580,7 @@ out[[3]]
 #> 17                                                                                                                                                                            -
 #> 18                                                                                                                                                   N-(phosphonomethyl)glycine
 #> 19                                                                                                                                                   N-(phosphonomethyl)glycine
-#> 20                                                                                                Risk of herbicide resistance developing - anti-resistance management required
+#> 20                                                          Risk of herbicide resistance developing - anti-resistance management required; PAN listed Highly Hazardous Chemical
 #> 21                                                                                                                                                                            G
 #> 22                                                                                                                                                                            9
 #> 23                                                                                                                                                               Not applicable
