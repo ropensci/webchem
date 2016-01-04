@@ -32,6 +32,7 @@ Source | Function(s | API Docs | API key
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb()` | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
+[Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -72,7 +73,7 @@ cir('Triclosan', 'cas')
 cir('Triclosan', 'cas', first = TRUE)
 #> [1] "3380-34-5"
 cir('Triclosan', 'mw')
-#> [1] "289.5451"
+#> [1] 289.5451
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -89,7 +90,7 @@ Query the number of rings using the InChiKey (Triclosan)
 
 ```r
 cir('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
-#> [1] "2"
+#> [1] 2
 ```
 
 
@@ -116,30 +117,41 @@ Use this ID to query information from ChemSpider
 
 ```r
 cs_extcompinfo(id, token = token)
-#>                                                                          CSID 
-#>                                                                        "5363" 
-#>                                                                            MF 
-#>                                                      "C_{12}H_{7}Cl_{3}O_{2}" 
-#>                                                                        SMILES 
-#>                                              "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl" 
-#>                                                                         InChI 
-#> "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H" 
-#>                                                                      InChIKey 
-#>                                                   "XEFQLINVKFYRCS-UHFFFAOYAS" 
-#>                                                                   AverageMass 
-#>                                                                    "289.5418" 
-#>                                                               MolecularWeight 
-#>                                                                    "289.5418" 
-#>                                                              MonoisotopicMass 
-#>                                                                  "287.951172" 
-#>                                                                   NominalMass 
-#>                                                                         "288" 
-#>                                                                         ALogP 
-#>                                                                        "5.53" 
-#>                                                                         XLogP 
-#>                                                                           "5" 
-#>                                                                    CommonName 
-#>                                                                   "Triclosan"
+#> $csid
+#> [1] "5363"
+#> 
+#> $mf
+#> [1] "C_{12}H_{7}Cl_{3}O_{2}"
+#> 
+#> $smiles
+#> [1] "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl"
+#> 
+#> $inchi
+#> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
+#> 
+#> $inchikey
+#> [1] "XEFQLINVKFYRCS-UHFFFAOYAS"
+#> 
+#> $average_mass
+#> [1] 289.5418
+#> 
+#> $mw
+#> [1] 289.5418
+#> 
+#> $monoiso_mass
+#> [1] 287.9512
+#> 
+#> $nominal_mass
+#> [1] 288
+#> 
+#> $alogp
+#> [1] 5.53
+#> 
+#> $xlogp
+#> [1] 5
+#> 
+#> $common_name
+#> [1] "Triclosan"
 ```
 
 
@@ -300,7 +312,7 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 #> [1] "Pyrethroid"
 #> 
 #> $`Water Solubility (Avg, mg/L)`
-#> [1] "0.0050"
+#> [1] "0.005"
 #> 
 #> $`Adsorption Coefficient (Koc)`
 #> [1] "157000"
@@ -418,24 +430,24 @@ etox_basic(id)
 #> 
 #> $synonyms
 #>                                          name  language
-#> 5      5-chloro-2-(2,4-dichlorophenoxy)phenol   English
-#> 8   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-    German
-#> 9     2,4,4'-Trichlor-2'-hydroxydiphenylether    German
-#> 10                             Irgasan DP 300    German
-#> 11                                  Vikol THP    German
-#> 12     2,4,4-Trichlor-2'-hydroxydiphenylether    German
-#> 13   2,4,4'-Trichloro-2'-hydroxydiphenylether    German
-#> 15     Chlor-2-(2,4-dichlorphenoxy)phenol, 5- universal
-#> 16  Trichlor-2'-hydroxydiphenylether, 2,4,4'- universal
-#> 17   Trichlor-2'-hydroxydiphenylether, 2,4,4- universal
-#> 18 Trichloro-2'-hydroxydiphenylether, 2,4,4'- universal
-#> 19      5-Chlor-2-(2,4-dichlorphenoxy)-phenol universal
-#> 20    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5- universal
-#> 21       5-Chlor-2-(2,4-dichlorphenoxy)phenol universal
-#> 22                                  triclosán   Spanish
-#> 23                                triklosaani   Finnish
-#> 24                                 triclosano   Italian
-#> 25                                  triklosan   Swedish
+#> 4      5-chloro-2-(2,4-dichlorophenoxy)phenol   English
+#> 7   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-    German
+#> 8     2,4,4'-Trichlor-2'-hydroxydiphenylether    German
+#> 9                              Irgasan DP 300    German
+#> 10                                  Vikol THP    German
+#> 11     2,4,4-Trichlor-2'-hydroxydiphenylether    German
+#> 12   2,4,4'-Trichloro-2'-hydroxydiphenylether    German
+#> 14     Chlor-2-(2,4-dichlorphenoxy)phenol, 5- universal
+#> 15  Trichlor-2'-hydroxydiphenylether, 2,4,4'- universal
+#> 16   Trichlor-2'-hydroxydiphenylether, 2,4,4- universal
+#> 17 Trichloro-2'-hydroxydiphenylether, 2,4,4'- universal
+#> 18      5-Chlor-2-(2,4-dichlorphenoxy)-phenol universal
+#> 19    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5- universal
+#> 20       5-Chlor-2-(2,4-dichlorphenoxy)phenol universal
+#> 21                                  triclosán   Spanish
+#> 22                                triklosaani   Finnish
+#> 23                                 triclosano   Italian
+#> 24                                  triklosan   Swedish
 ```
 
 Which returns CAS, EC and GSBL numbers, as well as a synonym list.
@@ -463,32 +475,32 @@ and results of ecotox tests:
 ```r
 tests <- etox_tests(id)
 tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
-#>                           Organism                 Effect Duration
-#> 1              Anabaena flos-aquae           not reported        4
-#> 2          Brachionus calyciflorus           not reported        2
-#> 3          Brachionus calyciflorus           not reported        2
-#> 4          Brachionus calyciflorus           not reported        2
-#> 5                Brachydanio rerio Embryo-Larval-Toxicity       10
-#> 6               Ceriodaphnia dubia              Lethality        7
-#> 7               Ceriodaphnia dubia              Mortality        2
-#> 8               Ceriodaphnia dubia              Mortality        7
-#> 9               Ceriodaphnia dubia           not reported        7
-#> 10              Ceriodaphnia dubia           Reproduction        7
-#> 11              Ceriodaphnia dubia           Reproduction        7
-#> 12                   Daphnia magna              Mortality       21
-#> 13                   Daphnia magna           Reproduction       21
-#> 14         Desmodesmus subspicatus     Cell Proliferation        4
-#> 15          Dunaliella tertiolecta     Cell Proliferation        4
-#> 16          Dunaliella tertiolecta     Cell Proliferation        4
-#> 17             Oncorhynchus mykiss Embryo-Larval-Toxicity        4
-#> 18             Pimephales promelas              Mortality        4
-#> 19 Pseudokirchneriella subcapitata       Wachstumshemmung        3
-#> 20         Scenedesmus subspicatus                Biomass        3
-#> 21         Scenedesmus subspicatus           not reported        4
-#> 22         Scenedesmus subspicatus           not reported        4
-#> 23         Scenedesmus subspicatus           not reported        4
-#> 24         Scenedesmus subspicatus           Reproduction        3
-#> 25                 Hyalella azteca              Mortality       10
+#>                           Organism                  Effect Duration
+#> 1              Anabaena flos-aquae                    k.A.        4
+#> 2          Brachionus calyciflorus                    k.A.        2
+#> 3          Brachionus calyciflorus                    k.A.        2
+#> 4          Brachionus calyciflorus                    k.A.        2
+#> 5                Brachydanio rerio Embryo-Larval-Toxizität       10
+#> 6               Ceriodaphnia dubia               Letalität        7
+#> 7               Ceriodaphnia dubia              Mortalität        2
+#> 8               Ceriodaphnia dubia              Mortalität        7
+#> 9               Ceriodaphnia dubia                    k.A.        7
+#> 10              Ceriodaphnia dubia            Reproduktion        7
+#> 11              Ceriodaphnia dubia            Reproduktion        7
+#> 12                   Daphnia magna              Mortalität       21
+#> 13                   Daphnia magna            Reproduktion       21
+#> 14         Desmodesmus subspicatus          Zellvermehrung        4
+#> 15          Dunaliella tertiolecta          Zellvermehrung        4
+#> 16          Dunaliella tertiolecta          Zellvermehrung        4
+#> 17             Oncorhynchus mykiss Embryo-Larval-Toxizität        4
+#> 18             Pimephales promelas              Mortalität        4
+#> 19 Pseudokirchneriella subcapitata        Wachstumshemmung        3
+#> 20         Scenedesmus subspicatus                Biomasse        3
+#> 21         Scenedesmus subspicatus                    k.A.        4
+#> 22         Scenedesmus subspicatus                    k.A.        4
+#> 23         Scenedesmus subspicatus                    k.A.        4
+#> 24         Scenedesmus subspicatus            Reproduktion        3
+#> 25                 Hyalella azteca              Mortalität       10
 #>    Time_Unit Endpoint   Value Unit
 #> 1          d     NOEC   0.810     
 #> 2          d     NOEC  50.000 µg/l
@@ -616,9 +628,35 @@ out$physprop
 
 
 
+#### Wikidata
+
+```r
+ids <- get_wdid(query = 'Triclosan', language = 'en')
+ids
+#> [1] "Q408646"
+#> attr(,"matched")
+#> [1] "Triclosan"
+
+# quera identifiers from wikidata
+wd_ident(ids)[1:4]
+#> $smiles
+#> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
+#> 
+#> $cas
+#> [1] "3380-34-5"
+#> 
+#> $cid
+#> [1] "5564"
+#> 
+#> $einecs
+#> [1] "222-182-2"
+```
+
+
 #### Misc functions
 
 ##### Check if a string is a valid CAS registry number
+
 
 ```r
 is.cas('64-17-5')
@@ -626,6 +664,7 @@ is.cas('64-17-5')
 is.cas('64-17-6')
 #> [1] FALSE
 ```
+
 
 ##### Check if a string is a valid InChIKey
 

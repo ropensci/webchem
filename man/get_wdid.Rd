@@ -28,6 +28,9 @@ Only matches in labels are returned.
 \examples{
 \dontrun{
 get_wdid('Triclosan', language = 'en')
+get_wdid('DDT', language = 'en')
+get_wdid('DDT', language = 'en', first = TRUE)
+
 # multiple inpus
 comps <- c('Triclosan', 'Glyphosate')
 sapply(comps, get_wdid, language = 'en')
