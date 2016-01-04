@@ -13,7 +13,7 @@ install:
   ps: Bootstrap
 
 build_script:
-  - travis-tool.sh install_r_binary testthat httr rjava xml2
+  - travis-tool.sh install_r_binary testthat httr rJava xml2
   - travis-tool.sh install_deps
 
 test_script:
