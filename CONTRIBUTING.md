@@ -3,9 +3,9 @@
 ### Please contribute!
 We love collaboration.
 
-### Bugs?
+### Found a Bug?
 
-* Submit an issue on the Issues page [here](https://github.com/ropensci/webchem/issues)
+* Submit an issue on our Issues page [here](https://github.com/ropensci/webchem/issues).
 
 ### Code contributions?
 
@@ -16,6 +16,20 @@ We love collaboration.
 * **Push** up to your account.
 * Submit a **pull request** to home base at `ropensci/webchem`.
 
-### Questions? Get in touch: [eduardszoecs@gmail.com](mailto:eduardszoecs@gmail.com)
+### Code guidelines
+
+We do not have strong guideline for our contributions and are happy to help.
+
+1. Please follow [this](http://adv-r.had.co.nz/Style.html) styleguide for your contributions.
+
+We want to keep dependencies to a minimum:
+
+2. Please use the [`xml2`](https://github.com/hadley/xml2) package instead of the `XML` package. The maintainance of xml2 is much better.
+3. Please use the lightweight [`jsonlite`](https://github.com/jeroenooms/jsonlite) package for handling JSON.
+
+
+### Questions? 
+
+Get in touch: [eduardszoecs@gmail.com](mailto:eduardszoecs@gmail.com)
 
 ### Thanks for contributing!
