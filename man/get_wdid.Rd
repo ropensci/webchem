@@ -4,22 +4,20 @@
 \alias{get_wdid}
 \title{Get Wikidata Item ID}
 \usage{
-get_wdid(query, language, match = c("all", "first", "best"), verbose = TRUE)
+get_wdid(query, language, first = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{query}{character; The searchterm}
 
 \item{language}{character; the language to search in}
 
-\item{match}{character; \code{match = "all"} returns all matches,
-\code{match = "first"} the first one and \code{match = "best"} the hit with the lowest
- Levenshtein distance between query and hit.}
+\item{first}{logical; If TRUE return only first result.}
 
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A character vector with the item ID and additional attributes \code{matched}  (the matched
-substance name) and \code{distance} (the normalized string distance of the query to the match).
+A character vector with the item ID and the additional attribute \code{matched}  (the matched
+label).
 }
 \description{
 Get Wikidata Item ID

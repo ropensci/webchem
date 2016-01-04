@@ -2,15 +2,13 @@
 #'
 #' @import jsonlite httr
 #'
-#' @param  query character; The searchterm
+#' @param query character; The searchterm
 #' @param language character; the language to search in
-#' @param match character; \code{match = "all"} returns all matches,
-#'   \code{match = "first"} the first one and \code{match = "best"} the hit with the lowest
-#'    Levenshtein distance between query and hit.
+#' @param first logical; If TRUE return only first result.
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A character vector with the item ID and additional attributes \code{matched}  (the matched
-#' substance name) and \code{distance} (the normalized string distance of the query to the match).
+#' @return A character vector with the item ID and the additional attribute \code{matched}  (the matched
+#' label).
 #'
 #' @note Only matches in labels are returned.
 #'
@@ -23,38 +21,35 @@
 #' comps <- c('Triclosan', 'Glyphosate')
 #' sapply(comps, get_wdid, language = 'en')
 #' }
-get_wdid <- function(query, language, match = c('all', 'first', 'best'), verbose = TRUE){
+get_wdid <- function(query, language, first = FALSE, verbose = TRUE){
   # language <-  'en'
   # query <- 'Triclosan'
+  if (length(query) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   limit <-  50
-  match <- match.arg(match)
   qurl <- paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
   qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query)
   if (verbose)
     message('Querying ', qurl)
   cont <- fromJSON(content(GET(qurl, user_agent('webchem (https://github.com/ropensci/webchem)')), 'text'))
   search <- cont$search
-
+  if (length(search) == 0) {
+    if (verbose)
+      message('Substance not found! Returing NA. \n')
+    return(NA)
+  }
   # use only matches on label
   search <- search[search$match$type == 'label', ]
-  if (nrow(search) > 1) {
-    if (match == 'first') {
-      search <- search[1, ]
-    }
-    if (match == 'best') {
-      hits <- search$label
-      dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
-      take <- which.min(dists)
-      out <- search$id[take]
-      attr(out, "matched") <- search$label[take]
-      attr(out, "distance") <- dists[take]
-    }
-  } else {
-    out <- search$id
-    attr(out, "matched") <- search$label
-    attr(out, "distance") <- 0
+  search <- search[tolower(search$match$text) == tolower(query), ]
+
+  if (first) {
+    search <- search[1, ]
   }
+
+  out <- search$id
+  attr(out, "matched") <- search$label
   return(out)
 }
 
-
+#! Use SPARQL to search of chemical compounds (P31)?! For a finer / better search?
