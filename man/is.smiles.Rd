@@ -7,7 +7,7 @@
 is.smiles(x, verbose = TRUE)
 }
 \arguments{
-\item{x}{character; input string}
+\item{x}{character; input SMILES.}
 
 \item{verbose}{logical; print messages during processing to console?}
 }
@@ -15,8 +15,11 @@ is.smiles(x, verbose = TRUE)
 a logical
 }
 \description{
-This function checks if a string is a valid SMILES by checking if CDK can parse it.
+This function checks if a string is a valid SMILES by checking if (R)CDK can parse it.
 If it cannot be parsed by rcdk FALSE is returned, else TRUE.
+}
+\note{
+This function can handle only one SMILES string.
 }
 \examples{
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')

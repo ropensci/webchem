@@ -7,7 +7,7 @@
 is.inchikey(x, verbose = TRUE)
 }
 \arguments{
-\item{x}{character; input string}
+\item{x}{character; input InChIKey}
 
 \item{verbose}{logical; print messages during processing to console?}
 }
@@ -22,6 +22,9 @@ Inchikey must fulfill the following criteria:
 3) contain two hyphens at positions 15 and 26;
 4) 24th character (flag character) be 'S' (Standard InChI) or 'N' (non-standard)
 5) 25th character (version character) must be 'A' (currently).
+}
+\note{
+This function can handle only one SMILES string.
 }
 \examples{
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
