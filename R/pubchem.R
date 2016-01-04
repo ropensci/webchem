@@ -97,8 +97,7 @@ cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   Sys.sleep(0.3)
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
-    if (verbose)
-      warning('Problem with web service encountered... Returning NA.')
+    warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
   if (length(xml_find_all(h, '//ERROR')) > 0) {

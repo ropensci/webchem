@@ -4,10 +4,11 @@ webchem 0.0.5.0
 NEW FEATURES
 
 * is.smiles() checks SMILES string, by parsing via (R)CDK.
+* get_wdid() and wd_indent() to retrieve information from wikidata.
 
 MINOR IMPROVEMENTS
 
-* webchem use exclusively xml2/httr/rvest (instead of XML).
+* webchem uses exclusively xml2 (instead of XML)
 * cs_compinfo():
   - names of returned list changed
 * cs_extcompinfo():

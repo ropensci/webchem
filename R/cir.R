@@ -130,7 +130,7 @@ cir <- function(identifier, representation = 'smiles', resolver = NULL,
   h <- try(read_xml(qurl))
   if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
-    out <- NA
+    return(NA)
   } else {
     out <- xml_text(xml_find_all(h, '//item'))
   }

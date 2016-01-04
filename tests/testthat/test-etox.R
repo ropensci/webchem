@@ -14,11 +14,14 @@ test_that("get_etoxid returns correct results", {
   chk_etox()
 
   do <- get_etoxid('Triclosan')
+  do2 <- get_etoxid('Thiamethoxam')
   xx <- get_etoxid('xxxxx')
 
   expect_error(get_etoxid(c('Triclosan', 'xxx')))
   expect_equal(c(do), "20179")
+  expect_equal(c(do2), "98867")
   expect_equal(attr(do, "matched"), "Triclosan ( 20179 )")
+  expect_equal(attr(do2, "distance"), 0)
   expect_equal(c(xx), NA)
 })
 
