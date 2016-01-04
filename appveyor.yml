@@ -1,7 +1,6 @@
-env:
-  global:
-    - R_BUILD_ARGS="--no-manual"
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran"
+environment:
+    R_BUILD_ARGS: --no-manual
+    R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran
 
 init:
   ps: |
