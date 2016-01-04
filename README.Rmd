@@ -45,6 +45,7 @@ Source | Function(s | API Docs | API key
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb()` | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
+[Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
 #### API keys
 ChemSpider functions require a security token. 
@@ -291,13 +292,25 @@ out$physprop
 
 
 
+#### Wikidata
+```{r wikidata}
+ids <- get_wdid(query = 'Triclosan', language = 'en')
+ids
+
+# quera identifiers from wikidata
+wd_ident(ids)[1:4]
+```
+
+
 #### Misc functions
 
 ##### Check if a string is a valid CAS registry number
+
 ```{r is.cas}
 is.cas('64-17-5')
 is.cas('64-17-6')
 ```
+
 
 ##### Check if a string is a valid InChIKey
 
