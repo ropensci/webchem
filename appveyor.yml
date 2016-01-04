@@ -1,7 +1,6 @@
 environment:
     R_BUILD_ARGS: --no-manual
     R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran
-    JAVA_HOME: C:\Program Files\Java\jre7
 
 init:
   ps: |
@@ -13,7 +12,9 @@ install:
   ps: Bootstrap
 
 build_script:
-  - travis-tool.sh install_r_binary testthat httr rJava xml2
+  - set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0\jre
+  - set PATH=C:\Program Files (x86)\Java\jdk1.8.0\bin;C:\Program Files (x86)\Java\jdk1.8.0\jre\bin\server;%PATH%
+  - ls "C:\Program Files (x86)\Java\jdk1.8.0\jre"
   - travis-tool.sh install_deps
 
 test_script:
