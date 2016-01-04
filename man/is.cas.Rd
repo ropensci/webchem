@@ -7,7 +7,7 @@
 is.cas(x, verbose = TRUE)
 }
 \arguments{
-\item{x}{character; input strin}
+\item{x}{character; input string}
 
 \item{verbose}{logical; print messages during processing to console?}
 }

@@ -81,7 +81,7 @@ is.inchikey = function(x, verbose = TRUE) {
 #' The modulo 10 of the sum of these is the checksum.
 #'
 #' @import stringr
-#' @param x character; input strin
+#' @param x character; input string
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
@@ -95,7 +95,7 @@ is.inchikey = function(x, verbose = TRUE) {
 #' is.cas('64-177-6')
 #' is.cas('64-17-55')
 #' is.cas('64-17-6')
-is.cas = function(x, verbose = TRUE) {
+is.cas <-  function(x, verbose = TRUE) {
   # x <- '64-17-5'
 
   # cas must have two hyphens
@@ -142,6 +142,33 @@ is.cas = function(x, verbose = TRUE) {
   return(TRUE)
 }
 
+
+#' Check if input is a SMILES string
+#'
+#' @description This function checks if a string is a valid SMILES by checking if CDK can parse it.
+#' If it cannot be parsed by rcdk FALSE is returned, else TRUE.
+#'
+#' @import rcdk
+#'
+#' @param x character; input string
+#' @param verbose logical; print messages during processing to console?
+#' @return a logical
+#'
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#'
+#' @export
+#' @examples
+#' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
+#' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
+is.smiles <- function(x, verbose = TRUE) {
+  # x <- 'Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl'
+  out <- try(parse.smiles(x), silent = TRUE)
+  if (inherits(out, 'try-error')) {
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
 
 
 #' Extract a number from a string
