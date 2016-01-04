@@ -326,6 +326,13 @@ is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 ```
 
+##### Check if a string is a valid SMILES
+
+```{r is.smiles}
+is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
+# 'J' is not found in the periodic table
+is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
+```
 
 
 

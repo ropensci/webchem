@@ -7,7 +7,7 @@
 is.cas(x, verbose = TRUE)
 }
 \arguments{
-\item{x}{character; input strin}
+\item{x}{character; input CAS}
 
 \item{verbose}{logical; print messages during processing to console?}
 }
@@ -22,6 +22,9 @@ of one digit (check digit); 5) the check digits corresponds the checksum.
 The checksum is found by taking the last digit (excluding the check digit) multiplyingit with 1,
 the second last multiplied with 2, the third-last multiplied with 3 etc.
 The modulo 10 of the sum of these is the checksum.
+}
+\note{
+This function can handle only one SMILES string.
 }
 \examples{
 is.cas('64-17-5')

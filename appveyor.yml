@@ -1,5 +1,7 @@
 environment:
-  R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran
+    R_BUILD_ARGS: --no-manual
+    R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran --no-multiarch
+    R_INSTALL_ARGS: --no-multiarch
 
 init:
   ps: |
@@ -11,6 +13,9 @@ install:
   ps: Bootstrap
 
 build_script:
+  - set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0\jre
+  - set PATH=C:\Program Files (x86)\Java\jdk1.8.0\bin;C:\Program Files (x86)\Java\jdk1.8.0\jre\bin\server;%PATH%
+  - ls "C:\Program Files (x86)\Java\jdk1.8.0\jre"
   - travis-tool.sh install_deps
 
 test_script:
