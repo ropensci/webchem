@@ -1,5 +1,7 @@
-environment:
-  R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran
+env:
+  global:
+    - R_BUILD_ARGS="--no-manual""
+    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran""
 
 init:
   ps: |
@@ -11,6 +13,7 @@ install:
   ps: Bootstrap
 
 build_script:
+  - travis-tool.sh install_r_binary testthat httr rjava xml2
   - travis-tool.sh install_deps
 
 test_script:
