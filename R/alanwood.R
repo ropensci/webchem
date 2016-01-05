@@ -4,7 +4,7 @@
 #' @import xml2
 #'
 #' @param  x character; search string
-#' @param type character; type of input
+#' @param type character; type of input ('cas' or 'commonname')
 #' @param verbose logical; print message during processing to console?
 #' @return A list of eight entries: common-name, status, preferredd IUPAC Name,
 #'          IUPAC Name, cas, formula, activity, subactivity, inchikey and inchi.
