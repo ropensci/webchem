@@ -41,7 +41,7 @@ chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   if (type == 'name')
     baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/name/'
   if (type == 'inchikey')
-    baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/inchikey'
+    baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/inchikey/'
   qurl <- paste0(baseurl, query)
   if (verbose)
     message(qurl)

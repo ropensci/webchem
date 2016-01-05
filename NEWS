@@ -20,6 +20,7 @@ MINOR IMPROVEMENTS
 BUG FIXES
 
 * utility function are not vectorized and throw an error.
+* chemid() did mot work with inchikey as input.
 
 DEPRECATED FUNCTIONS
 
