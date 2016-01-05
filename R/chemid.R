@@ -1,6 +1,6 @@
-#' Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus/name/triclosan}
+#' Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}
 #'
-#' Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus/name/triclosan}
+#' Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}
 #'
 #' @import xml2
 #' @importFrom rvest html_table
