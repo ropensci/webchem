@@ -9,7 +9,6 @@
 \alias{pan}
 \alias{physprop}
 \alias{ppdb}
-\alias{ppdb_query}
 \alias{webchem-deprecated}
 \title{Deprecated function(s) in the webchem package}
 \usage{
