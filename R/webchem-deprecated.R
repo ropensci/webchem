@@ -7,10 +7,13 @@
 #' @name webchem-deprecated
 #' @param ... Parameters to be passed to the modern version of the function
 #' @export
-#' @aliases ppdb_query
-#' @aliases cir_query
-#' @aliases csid_extcompinfo
-#' @aliases csid_compinfo
+#' @aliases ppdb
+#' @aliases cir
+#' @aliases pan
+#' @aliases alanwood
+#' @aliases physprop
+#' @aliases get_cid
+#' @aliases cid_compinfo
 #' @details Deprecated functions are:
 #' \tabular{rl}{
 #'   \code{ppdb_query} \tab is now a synonym for \code{\link{ppdb}}\cr
