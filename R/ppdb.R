@@ -216,14 +216,13 @@ ppdb_query <- function(cas, verbose = TRUE, index = NULL){
     colnames(take) <- nam
     deg <- rbind(deg, take)
     deg <- deg[!grepl('Note', deg[ , 'Property']), ]
-
-    if (any(deg[ , 'Value'] == 'Value')) {
-      take <- deg[deg[ , 'Value'] == 'Value', ]
-      take <- data.frame(take[ , -2], N = NA)
-      colnames(take) <- colnames(deg)
-      deg <- deg[!deg[ , 'Value'] == 'Value', ]
-      deg <- rbind(deg, take)
-    }
+    # if (any(deg[ , 'Value'] == 'Value')) {
+    #   take <- deg[deg[ , 'Value'] == 'Value', ]
+    #   take <- data.frame(take[ , -2], N = NA)
+    #   colnames(take) <- colnames(deg)
+    #   deg <- deg[!deg[ , 'Value'] == 'Value', ]
+    #   deg <- rbind(deg, take)
+    # }
   }
 
 

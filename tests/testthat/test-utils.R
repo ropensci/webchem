@@ -30,7 +30,8 @@ test_that("is.inchikey() returns correct results", {
   expect_false(b)
 
   expect_error(is.inchikey(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N'), type = 'chemspider'))
-
+  expect_error(is.inchikey_cs(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
+  expect_error(is.inchikey_format(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
   expect_equal(length(g), 1)
 })
 
