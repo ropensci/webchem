@@ -17,6 +17,7 @@
 #'   \code{cir_query} \tab is now a synonym for \code{\link{cir}}\cr
 #'   \code{pan_query} \tab is now a synonym for \code{\link{pan}}\cr
 #'   \code{aw_query} \tab is now a synonym for \code{\link{alanwood}}\cr
+#'   \code{pp_query} \tab is now a synonym for \code{\link{physprop}}\cr
 #' }
 ppdb <- function(...) {
   .Deprecated("ppdb_query", package = "webchem")
@@ -41,5 +42,12 @@ pan <- function(...) {
 #' @export
 alanwood <- function(...) {
   .Deprecated("aw_query", package = "webchem")
+  cir(...)
+}
+
+#' @rdname webchem-deprecated
+#' @export
+physprop <- function(...) {
+  .Deprecated("pp_query", package = "webchem")
   cir(...)
 }

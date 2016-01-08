@@ -4,6 +4,7 @@
 \alias{alanwood}
 \alias{cir}
 \alias{pan}
+\alias{physprop}
 \alias{ppdb}
 \alias{ppdb_query}
 \alias{webchem-deprecated}
@@ -16,6 +17,8 @@ cir(...)
 pan(...)
 
 alanwood(...)
+
+physprop(...)
 }
 \arguments{
 \item{...}{Parameters to be passed to the modern version of the function}
@@ -32,6 +35,7 @@ Deprecated functions are:
   \code{cir_query} \tab is now a synonym for \code{\link{cir}}\cr
   \code{pan_query} \tab is now a synonym for \code{\link{pan}}\cr
   \code{aw_query} \tab is now a synonym for \code{\link{alanwood}}\cr
+  \code{pp_query} \tab is now a synonym for \code{\link{physprop}}\cr
 }
 }
 

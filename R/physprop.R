@@ -27,11 +27,11 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' physprop('50-00-0')
-#' lapply(c('50-00-0', '79622-59-6', 'xxxxx'), physprop)
+#' pp_query('50-00-0')
+#' lapply(c('50-00-0', '79622-59-6', 'xxxxx'), pp_query)
 #' }
 
-physprop <- function(cas, verbose = TRUE){
+pp_query <- function(cas, verbose = TRUE){
   if (length(cas) > 1) {
     stop('Cannot handle multiple input strings.')
   }
