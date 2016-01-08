@@ -26,7 +26,7 @@ They follow the format of \texttt{source\_functionality}, e.g. \texttt{cs\_compi
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_csid_mol()`, `cs_inchi_csid()`, `cs_inchi_inchikey()`, `cs_inchi_mol()`, `cs_inchi_smiles()`, `cs_smiles_inchi()`, `cs_inchikey_csid()`, `cs_inchikey_inchi()`, `cs_inchikey_mol()` `is.inchikey_cs()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_pcid()`, `pc_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -37,8 +37,11 @@ Source | Function(s | API Docs | API key
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
+Moreover, there are some functions to check indentifiers: `is.inchikey()', `is.cas()` and `is.smiles()`.
+
 #### API keys
-ChemSpider functions require a security token. 
+
+Some ChemSpider functions require a security token. 
 Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
 
 ## Installation
@@ -158,11 +161,11 @@ cs_extcompinfo(id, token = token)
 ```
 
 
-Convert CSID to MolFile
+Or to convert to a Mol-Object
 
 
 ```r
-mol <- cs_csid_mol(5363, token = token)
+mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
 head(mol$ab)
 #>         x      y z  a d c s h b v H m n e NA NA
 #> 1 -1.7350 2.0001 0 Cl 0 0 0 0 0 0 0 0 0 0  0  0
@@ -172,70 +175,21 @@ head(mol$ab)
 #> 5  0.8675 0.4975 0  C 0 0 0 0 0 0 0 0 0 0  0  0
 #> 6  0.8675 1.5027 0  C 0 0 0 0 0 0 0 0 0 0  0  0
 ```
-
-Note that the Molfile is parsed into a R object (via `parse_mol()`).
-
-
-Convert InChIKey to CSID
+Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a API-key is needed
 
 
-```r
-cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-#> [1] "4450907"
-```
-
-
-Convert InChIKey to InChI
+`cs_convert()` handles a lot of input / output formats, even without API-key:
 
 
 ```r
-cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-#> [1] "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+#> [1] "5363"
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+#> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+#> [1] "InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 ```
 
-
-Convert InChiKey to MolFile
-
-
-```r
-mol2 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-head(mol2$ab)
-#>        x       y z a d c s h b v H m n e NA NA
-#> 1 0.0000 -3.0108 0 O 0 0 0 0 0 0 0 0 0 0  0  0
-#> 2 0.1998 -6.2213 0 O 0 0 0 0 0 0 0 0 0 0  0  0
-#> 3 0.1998  0.0000 0 O 0 0 0 0 0 0 0 0 0 0  0  0
-#> 4 5.5530 -4.3474 0 N 0 0 0 0 0 0 0 0 0 0  0  0
-#> 5 2.3425 -3.6791 0 C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 6 3.4793 -4.3474 0 C 0 0 0 0 0 0 0 0 0 0  0  0
-```
-
-
-Convert InChI to CSID, InChiKey, Molfile and smiles
-
-
-```r
-inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-cs_inchi_csid(inchi)
-cs_inchi_inchikey(inchi)
-cs_inchi_mol(inchi)
-cs_inchi_smiles(inchi)
-```
-
-Convert SMILES to InChI
-
-
-```r
-cs_smiles_inchi("CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O")
-```
-
-
-For conveniece, these conversions are all wrapped into `cs_convert()`:
-
-
-```r
-cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
-#> [1] "4450907"
-```
 
 
 #### PubChem
@@ -683,9 +637,9 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 Using the ChemSpider API
 
 ```r
-is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
 #> [1] TRUE
-is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N', type = 'chemspider')
 #> [1] FALSE
 ```
 

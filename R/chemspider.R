@@ -195,12 +195,26 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' @param ... futher arguments passed. Currently onl \code{parse}, see also \code{\link{cs_csid_mol}}
 #' @return Depends on to. if \code{to = 'mol'} then an RMol-Object, else a character string.
 #'
-#' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
-#' @note A security token is neeeded. Please register at RSC
-#' \url{https://www.rsc.org/rsc-id/register}
-#' for a security token.
+#' @note A security token is neeeded for conversion to mol. Please register at RSC
+#' \url{https://www.rsc.org/rsc-id/register} for a security token.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
+#'
+#' @seealso  There are many low level functions underlying, which are exported from
+#' the package. The naming scheme is cs_from_to() here's a list and links to their manual pages:
+#'\itemize{
+#'  \item \code{\link{cs_csid_mol}}
+#'  \item \code{\link{cs_inchikey_csid}}
+#'  \item \code{\link{cs_inchikey_inchi}}
+#'  \item \code{\link{cs_inchikey_mol}}
+#'  \item \code{\link{cs_inchi_csid}}
+#'  \item \code{\link{cs_inchi_inchikey}}
+#'  \item \code{\link{cs_inchi_mol}}
+#'  \item \code{\link{cs_inchi_smiles}}
+#'  \item \code{\link{cs_smiles_inchi}}
+#' }
+#' Check \code{\link{parse_mol}} for a description of the Mol R Object.
 #'
 #' @examples
 #' \donttest{
@@ -256,7 +270,8 @@ cs_convert <- function(query, from = c('csid', 'inchikey', 'inchi', 'smiles'),
 #' @return If parse = FALSE then a charactersting,
 #'   else a RMol-object (from \code{\link{parse_mol}})
 #'
-#' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
+#'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
@@ -306,6 +321,8 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #'
 #' @return A CSID.
 #'
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -342,6 +359,8 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return character; InChI
+#'
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
@@ -383,7 +402,7 @@ cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
 #' @return If parse = FALSE then a charactersting,
 #'   else a RMol-object (from \code{\link{parse_mol}})
 #'
-#' @seealso \code{\link{parse_mol}} for a description of the Mol R Object.
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -427,6 +446,8 @@ cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
 #' @param ... currently not used.
 #'
 #' @return A CSID.
+#'
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
@@ -472,6 +493,8 @@ cs_inchi_csid <- function(inchi, verbose = TRUE, ...){
 #' @param ... currently not used.
 #'
 #' @return A InChiKey.
+#'
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
@@ -522,6 +545,8 @@ cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
 #' @return If parse = FALSE then a charactersting,
 #'   else a RMol-object (from \code{\link{parse_mol}})
 #'
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -569,7 +594,9 @@ cs_inchi_mol <- function(inchi, parse = TRUE, verbose = TRUE, ...){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #'
-#' @return A SMILES string
+#' @return A SMILES string.
+#'
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
@@ -617,6 +644,8 @@ cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
 #'
 #' @return A SMILES string
 #'
+#' @seealso This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -647,48 +676,6 @@ cs_smiles_inchi <- function(smiles, verbose = TRUE, ...){
     } else {
       out <- xml_text(out)
     }
-  }
-  return(out)
-}
-
-
-
-#' Check if input is a valid inchikey using ChemSpider API
-#'
-#' @param x character; input string
-#' @param verbose logical; print messages during processing to console?
-#' @return a logical
-#'
-#' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @export
-#' @examples
-#' \donttest{
-#' # might fail if API is not available
-#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
-#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-5')
-#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-n')
-#' is.inchikey_cs('BQJCRHHNABKAKU/KBQPJGBKSA/N')
-#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
-#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
-#' }
-is.inchikey_cs <- function(x, verbose = TRUE){
-  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA'
-  if (length(x) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
-  baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
-  qurl <- paste0(baseurl, 'inchi_key=', x)
-  if (verbose)
-    message(qurl)
-  Sys.sleep(0.1)
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with webservice... Returning NA.')
-    out <- NA
-  } else {
-    out <- as.logical(xml_text(h))
   }
   return(out)
 }

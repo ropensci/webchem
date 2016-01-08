@@ -16,8 +16,9 @@ MINOR IMPROVEMENTS
   - result is numeric where appropriate
 * cir():
   - result is numeric where appropriate
-* unified naming scheme
-* withdraw naming changes in V0.0.4 (ppdb, cir)
+* unified naming scheme.
+* withdraw naming changes in V0.0.4 (ppdb, cir).
+* is.inchikey_cs has been integrated into is.inchikey.
 
 BUG FIXES
 

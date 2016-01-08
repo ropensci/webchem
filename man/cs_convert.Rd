@@ -28,9 +28,8 @@ Depends on to. if \code{to = 'mol'} then an RMol-Object, else a character string
 Convert identifiers using ChemSpider
 }
 \note{
-A security token is neeeded. Please register at RSC
-\url{https://www.rsc.org/rsc-id/register}
-for a security token.
+A security token is neeeded for conversion to mol. Please register at RSC
+\url{https://www.rsc.org/rsc-id/register} for a security token.
 }
 \examples{
 \donttest{
@@ -44,6 +43,19 @@ cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'mol')
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
-\code{\link{parse_mol}} for a description of the Mol R Object.
+There are many low level functions underlying, which are exported from
+the package. The naming scheme is cs_from_to() here's a list and links to their manual pages:
+\itemize{
+ \item \code{\link{cs_csid_mol}}
+ \item \code{\link{cs_inchikey_csid}}
+ \item \code{\link{cs_inchikey_inchi}}
+ \item \code{\link{cs_inchikey_mol}}
+ \item \code{\link{cs_inchi_csid}}
+ \item \code{\link{cs_inchi_inchikey}}
+ \item \code{\link{cs_inchi_mol}}
+ \item \code{\link{cs_inchi_smiles}}
+ \item \code{\link{cs_smiles_inchi}}
+}
+Check \code{\link{parse_mol}} for a description of the Mol R Object.
 }
 

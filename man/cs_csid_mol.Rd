@@ -44,6 +44,6 @@ cs_csid_mol(5363, token = token, parse = FALSE)
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
-\code{\link{parse_mol}} for a description of the Mol R Object.
+This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 }
 

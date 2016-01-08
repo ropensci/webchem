@@ -39,7 +39,7 @@ They follow the format of \texttt{source\_functionality}, e.g. \texttt{cs\_compi
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_csid_mol()`, `cs_inchi_csid()`, `cs_inchi_inchikey()`, `cs_inchi_mol()`, `cs_inchi_smiles()`, `cs_smiles_inchi()`, `cs_inchikey_csid()`, `cs_inchikey_inchi()`, `cs_inchikey_mol()` `is.inchikey_cs()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_pcid()`, `pc_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -50,8 +50,11 @@ Source | Function(s | API Docs | API key
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
+Moreover, there are some functions to check indentifiers: `is.inchikey()', `is.cas()` and `is.smiles()`.
+
 #### API keys
-ChemSpider functions require a security token. 
+
+Some ChemSpider functions require a security token. 
 Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
 
 ## Installation
@@ -122,60 +125,23 @@ cs_extcompinfo(id, token = token)
 ```
 
 
-Convert CSID to MolFile
+Or to convert to a Mol-Object
 
 ```{r cs_csid_mol}
-mol <- cs_csid_mol(5363, token = token)
+mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
 head(mol$ab)
 ```
+Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a API-key is needed
 
-Note that the Molfile is parsed into a R object (via `parse_mol()`).
 
-
-Convert InChIKey to CSID
+`cs_convert()` handles a lot of input / output formats, even without API-key:
 
 ```{r cs_inchikey_csid}
-cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 ```
 
-
-Convert InChIKey to InChI
-
-```{r cs_inchikey_inchi}
-cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-```
-
-
-Convert InChiKey to MolFile
-
-```{r cs_inchikey_mol}
-mol2 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-head(mol2$ab)
-```
-
-
-Convert InChI to CSID, InChiKey, Molfile and smiles
-
-```{r cs_inchi_csid, eval=FALSE}
-inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-cs_inchi_csid(inchi)
-cs_inchi_inchikey(inchi)
-cs_inchi_mol(inchi)
-cs_inchi_smiles(inchi)
-```
-
-Convert SMILES to InChI
-
-```{r cs_smiles_inchi, eval=FALSE}
-cs_smiles_inchi("CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O")
-```
-
-
-For conveniece, these conversions are all wrapped into `cs_convert()`:
-
-```{r cs_convert}
-cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
-```
 
 
 #### PubChem
@@ -325,8 +291,8 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 
 Using the ChemSpider API
 ```{r is.inchikey_cs}
-is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N', type = 'chemspider')
 ```
 
 ##### Check if a string is a valid SMILES

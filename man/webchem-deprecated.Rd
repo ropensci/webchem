@@ -2,6 +2,7 @@
 % Please edit documentation in R/webchem-deprecated.R
 \name{webchem-deprecated}
 \alias{alanwood}
+\alias{cid_compinfo}
 \alias{cir}
 \alias{get_cid}
 \alias{pan}
@@ -22,6 +23,8 @@ alanwood(...)
 physprop(...)
 
 get_cid(...)
+
+cid_compinfo(...)
 }
 \arguments{
 \item{...}{Parameters to be passed to the modern version of the function}
@@ -40,6 +43,7 @@ Deprecated functions are:
   \code{aw_query} \tab is now a synonym for \code{\link{alanwood}}\cr
   \code{pp_query} \tab is now a synonym for \code{\link{physprop}}\cr
   \code{get_pcid} \tab is now a synonym for \code{\link{get_cid}}\cr
+  \code{pc_compinfo} \tab is now a synonym for \code{\link{cid_compinfo}}\cr
 }
 }
 

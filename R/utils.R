@@ -9,6 +9,7 @@
 #' 5) 25th character (version character) must be 'A' (currently).
 #'
 #' @param x character; input InChIKey
+#' @param type character; How should be checked? Either, by format (see above) ('format') or by ChemSpider ('chemspider').
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
@@ -26,52 +27,128 @@
 #' is.inchikey('BQJCRHHNABKAKU/KBQPJGBKSA/N')
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
-is.inchikey = function(x, verbose = TRUE) {
+is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
   # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }
 
+  type <- match.arg(type)
+  out <- switch(type,
+                format = is.inchikey_format(x, verbose = verbose),
+                chemspider = is.inchikey_cs(x, verbose = verbose))
+  return(out)
+}
+
+
+#' Check if input is a valid inchikey using ChemSpider API
+#'
+#' @param x character; input string
+#' @param verbose logical; print messages during processing to console?
+#' @return a logical
+#'
+#' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' \donttest{
+#' # might fail if API is not available
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-5')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-n')
+#' is.inchikey_cs('BQJCRHHNABKAKU/KBQPJGBKSA/N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+#' }
+is.inchikey_cs <- function(x, verbose = TRUE){
+  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA'
+  if (length(x) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
+  qurl <- paste0(baseurl, 'inchi_key=', x)
+  if (verbose)
+    message(qurl)
+  Sys.sleep(0.1)
+  h <- try(read_xml(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('Problem with webservice... Returning NA.')
+    out <- NA
+  } else {
+    out <- as.logical(xml_text(h))
+  }
+  return(out)
+}
+
+
+
+#' Check if input is a valid inchikey using format
+#'
+#' @description  Inchikey must fulfill the following criteria:
+#' 1) consist of 27 characters;
+#' 2) be all uppercase, all letters (no numbers);
+#' 3) contain two hyphens at positions 15 and 26;
+#' 4) 24th character (flag character) be 'S' (Standard InChI) or 'N' (non-standard)
+#' 5) 25th character (version character) must be 'A' (currently).
+#'
+#' @param x character; input string
+#' @param verbose logical; print messages during processing to console?
+#' @return a logical
+#'
+#' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @export
+#' @examples
+#' \donttest{
+#' # might fail if API is not available
+#' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+#' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA')
+#' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA-5')
+#' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA-n')
+#' is.inchikey_format('BQJCRHHNABKAKU/KBQPJGBKSA/N')
+#' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+#' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSB-N')
+#' }
+is.inchikey_format = function(x, verbose = TRUE) {
+  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  if (length(x) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
   nch <- nchar(x)
   if (nch != 27) {
     if (verbose)
       message('Not 27 characters long.')
     return(FALSE)
   }
-
   let <- strsplit(x, split = '')[[1]]
   if (any(grepl("[[:digit:]]", let))) {
     if (verbose)
       message('strings contains numbers.')
     return(FALSE)
   }
-
   if (x != toupper(x)) {
     if (verbose)
       message('Not all character uppercase.')
     return(FALSE)
   }
-
   if (substr(x, 15, 15) != "-" | substr(x, 26, 26) != "-") {
     if (verbose)
       message('Hyphens not at position 15 and 26.')
     return(FALSE)
   }
-
   f <- substr(x, 24, 24)
   if (f != 'S' & f != 'N') {
     if (verbose)
       message("Flag character not 'S' or 'N'.")
     return(FALSE)
   }
-
   f <- substr(x, 25, 25)
   if (f != 'A') {
     if (verbose)
       message("Version character not 'A'.")
     return(FALSE)
   }
-
   return(TRUE)
 }
 

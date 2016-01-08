@@ -4,10 +4,12 @@
 \alias{is.inchikey}
 \title{Check if input is a valid inchikey}
 \usage{
-is.inchikey(x, verbose = TRUE)
+is.inchikey(x, type = c("format", "chemspider"), verbose = TRUE)
 }
 \arguments{
 \item{x}{character; input InChIKey}
+
+\item{type}{character; How should be checked? Either, by format (see above) ('format') or by ChemSpider ('chemspider').}
 
 \item{verbose}{logical; print messages during processing to console?}
 }
