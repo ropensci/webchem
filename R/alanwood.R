@@ -14,11 +14,11 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' alanwood('Fluazinam', type = 'commonname')
+#' aw_query('Fluazinam', type = 'commonname')
 #' sapply(c('Fluazinam', 'Diclofop'), alanwood, type = 'com')
-#' alanwood("79622-59-6", type = 'cas')
+#' aw_query("79622-59-6", type = 'cas')
 #' }
-alanwood <- function(x, type = c("commonname", "cas"), verbose = TRUE){
+aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   # x <- 'Fluazinam'
   # x <- "79622-59-6"
   if (length(x) > 1) {

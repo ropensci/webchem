@@ -30,25 +30,31 @@ knitr::opts_chunk$set(
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
 
+The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`)
+They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations.
+
 
 ## Currently implemented in `webchem`
 
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
-[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_csid_mol()`, `cs_inchi_csid()`, `cs_inchi_inchikey()`, `cs_inchi_mol()`, `cs_inchi_smiles()`, `cs_smiles_inchi()`, `cs_inchikey_csid()`, `cs_inchikey_inchi()`, `cs_inchikey_mol()` `is.inchikey_cs()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
-[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_pcid()`, `pc_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
-[PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan()` | none | none
-[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
-[PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
+[PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
+[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
+[PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `pp_query()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
-[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb()` | none | none
-[ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
+[ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
+Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
+
 #### API keys
-ChemSpider functions require a security token. 
+
+Some ChemSpider functions require a security token. 
 Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
 
 ## Installation
@@ -77,21 +83,21 @@ library("webchem")
 CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
 Use `first` to return only the first hit.
 ```{r cir_query1}
-cir('Triclosan', 'cas')
-cir('Triclosan', 'cas', first = TRUE)
-cir('Triclosan', 'mw')
+cir_query('Triclosan', 'cas')
+cir_query('Triclosan', 'cas', first = TRUE)
+cir_query('Triclosan', 'mw')
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
 Inputs might by ambiguous and we can specify where to search using `resolver=`.
 ```{r cir_query2}
-cir('3380-34-5', 'smiles')
-cir('3380-34-5', 'stdinchikey', resolver = 'cas_number')
+cir_query('3380-34-5', 'smiles')
+cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
 ```{r cir_query3}
-cir('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
+cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 ```
 
 
@@ -119,73 +125,36 @@ cs_extcompinfo(id, token = token)
 ```
 
 
-Convert CSID to MolFile
+Or to convert to a Mol-Object
 
 ```{r cs_csid_mol}
-mol <- cs_csid_mol(5363, token = token)
+mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
 head(mol$ab)
 ```
+Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a API-key is needed
 
-Note that the Molfile is parsed into a R object (via `parse_mol()`).
 
-
-Convert InChIKey to CSID
+`cs_convert()` handles a lot of input / output formats, even without API-key:
 
 ```{r cs_inchikey_csid}
-cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 ```
 
-
-Convert InChIKey to InChI
-
-```{r cs_inchikey_inchi}
-cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-```
-
-
-Convert InChiKey to MolFile
-
-```{r cs_inchikey_mol}
-mol2 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-head(mol2$ab)
-```
-
-
-Convert InChI to CSID, InChiKey, Molfile and smiles
-
-```{r cs_inchi_csid, eval=FALSE}
-inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-cs_inchi_csid(inchi)
-cs_inchi_inchikey(inchi)
-cs_inchi_mol(inchi)
-cs_inchi_smiles(inchi)
-```
-
-Convert SMILES to InChI
-
-```{r cs_smiles_inchi, eval=FALSE}
-cs_smiles_inchi("CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O")
-```
-
-
-For conveniece, these conversions are all wrapped into `cs_convert()`:
-
-```{r cs_convert}
-cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
-```
 
 
 #### PubChem
 
 Retrieve PubChem CID
-```{r get_cid}
-get_cid('Triclosan')
-cid <- get_cid('3380-34-5')
+```{r get_pcid}
+get_pcid('Triclosan')
+cid <- get_pcid('3380-34-5')
 ```
 
 Use this CID to retrieve some chemical properties:
-```{r cid_compinfo}
-props <- cid_compinfo(cid)
+```{r pc_compinfo}
+props <- pc_compinfo(cid)
 props$InChIKey
 props$MolecularWeight
 props$IUPACName
@@ -209,9 +178,9 @@ info[1:5]
 
 
 #### PAN Pesticide Database
-`pan()` returns a list of 73 entries, here I extract only 4 of those:
+`pan_query()` returns a list of 73 entries, here I extract only 4 of those:
 ```{r pan}
-pan_list <- pan('lambda-Cyhalothrin', first = TRUE)
+pan_list <- pan_query('lambda-Cyhalothrin', first = TRUE)
 pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
 ```
 
@@ -219,18 +188,18 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 
 #### Alan Wood's Compendium of Pesticide Common Names
 
-`alanwood()` returns a list of 9 entries and can query common names and cas numbers:
+`aw_query()` returns a list of 9 entries and can query common names and cas numbers:
 ```{r alanwood}
-alanwood('Fluazinam', type = 'commonname')
-alanwood('79622-59-6', type = 'cas')$cname
+aw_query('Fluazinam', type = 'commonname')
+aw_query('79622-59-6', type = 'cas')$cname
 ```
 
 #### SRC PHYSPROP Database
 [SRCs PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) contains chemical structures, names and physical properties for over 41,000 chemicals.
-You can use `physprop()` to query this database using a CAS number:
+You can use `pp_query()` to query this database using a CAS number:
 
 ```{r physprop}
-physprop('50-00-0')
+pp_query('50-00-0')
 ```
 
 
@@ -272,7 +241,7 @@ The PPDB holds a lot of chemical and ecotoxicological information.
 In webchem we provide a function to query this database by a CAS number.
 
 ```{r ppdb}
-out <- ppdb('1071-83-6')
+out <- ppdb_query('1071-83-6')
 ```
 
 The information output is enormous, I show here only a small part, the countries where the compound is approved:
@@ -286,7 +255,7 @@ out[[3]]
 #### ChemIDplus
 
 ```{r chemid}
-out <- chemid(query = 'Triclosan', type = 'name')
+out <- ci_query(query = 'Triclosan', type = 'name')
 out$physprop
 ```
 
@@ -322,8 +291,8 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 
 Using the ChemSpider API
 ```{r is.inchikey_cs}
-is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
+is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N', type = 'chemspider')
 ```
 
 ##### Check if a string is a valid SMILES
@@ -346,7 +315,7 @@ First we query alanwood:
 ```{r multi_alanwood}
 cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
 # query alanwood 
-aw_out <- lapply(cmp, alanwood)
+aw_out <- lapply(cmp, aw_query)
 # this gives for each compound one list
 # str(aw_out)
 ```

@@ -3,13 +3,13 @@
 #' A dataset containing the matched strings and links of the PPDB  \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}.
 #' This dataset has been created using code{\link{ppdb_buildidx}}
 #'
-#' @format A data frame with 53940 rows and 10 variables:
+#' @format A data frame with 1745 rows and 2 variables:
 #' \describe{
 #'   \item{cas}{cas}
 #'   \item{link}{matched link}
 #' }
 #' @source  \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}
-#' @details Retrieved using \code{\link{ppdb_idx}} on 11th October 2015.
+#' @details Retrieved using \code{\link{ppdb_idx}} on 8th January 2016.
 #' @seealso \code{\link{ppdb_buildidx}}
 "ppdb_idx"
 
@@ -59,7 +59,15 @@ ppdb_buildidx <- function(){
   ppdb_idx <- data.frame(cas = iconv(cas, from = "UTF-8", to = "ASCII"),
                       link = iconv(links, from = "UTF-8", to = "ASCII"),
                       stringsAsFactors = FALSE)
+  # remove empty entries
   ppdb_idx <- ppdb_idx[! (ppdb_idx$cas == '' | is.na(ppdb_idx$cas)), ]
+  # remove non-cas entries
+  trm <- c( "AE1277106", "AE1394083", "AE-F130619", "ASU 70 480 1", "D-3598" ,
+            "IN-EQW78", "IR5839" ,"methyl ester", "MON 0139", "None",  "sodium salt" )
+  ppdb_idx <- ppdb_idx[!ppdb_idx$cas %in% trm, ]
+  # remove duplicated cas entries
+  ppdb_idx <- ppdb_idx[!duplicated(ppdb_idx$cas), ]
+
   # save(ppdb_idx, file = 'data/ppdb_idx.rda')
   return(ppdb_idx)
 }
@@ -87,13 +95,21 @@ ppdb_buildidx <- function(){
 #' @examples
 #' \dontrun{
 #' # might fail if Server is not available
-#' gly <- ppdb('1071-83-6')
+#' gly <- ppdb_query('1071-83-6')
 #' gly$approved_in
 #'
 #' # handle multiple CAS
 #'  cas <- c('1071-83-6', '50-00-0')
+#'  # check if these compounds are approved in germany
+#'  foo <- function(y) {
+#'    # query cas
+#'    q <- ppdb_query(y)
+#'    # extract status for germany
+#'    q$approved_in$status[q$approved_in$country == 'DE']
+#'  }
+#'  sapply(cas, foo)
 #' }
-ppdb <- function(cas, verbose = TRUE, index = NULL){
+ppdb_query <- function(cas, verbose = TRUE, index = NULL){
   # cas <- '1071-83-6'
   # cas <- '50-00-0'
   # cas <- 'xxxxx'
@@ -121,7 +137,7 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
     message('Querying ', qurl)
 
   Sys.sleep(0.3)
-  ttt <- read_html(qurl)
+  ttt <- read_html(qurl, encoding = 'latin1')
 
   # ec regulation
   ec_regulation <- html_table(
@@ -135,7 +151,7 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
     header = TRUE)[[1]]), stringsAsFactors = FALSE)
   approved_id$status <- ifelse(status == 'tick.jpg', TRUE, FALSE)
   approved_id[ , 1] <- NULL
-  approved_id$county <- rownames(approved_id)
+  approved_id$country <- rownames(approved_id)
 
 
   # general status
@@ -200,14 +216,13 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
     colnames(take) <- nam
     deg <- rbind(deg, take)
     deg <- deg[!grepl('Note', deg[ , 'Property']), ]
-
-    if (any(deg[ , 'Value'] == 'Value')) {
-      take <- deg[deg[ , 'Value'] == 'Value', ]
-      take <- data.frame(take[ , -2], N = NA)
-      colnames(take) <- colnames(deg)
-      deg <- deg[!deg[ , 'Value'] == 'Value', ]
-      deg <- rbind(deg, take)
-    }
+    # if (any(deg[ , 'Value'] == 'Value')) {
+    #   take <- deg[deg[ , 'Value'] == 'Value', ]
+    #   take <- data.frame(take[ , -2], N = NA)
+    #   colnames(take) <- colnames(deg)
+    #   deg <- deg[!deg[ , 'Value'] == 'Value', ]
+    #   deg <- rbind(deg, take)
+    # }
   }
 
 

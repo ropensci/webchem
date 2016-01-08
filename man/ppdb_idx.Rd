@@ -4,7 +4,7 @@
 \name{ppdb_idx}
 \alias{ppdb_idx}
 \title{PPDB search index}
-\format{A data frame with 53940 rows and 10 variables:
+\format{A data frame with 1745 rows and 2 variables:
 \describe{
   \item{cas}{cas}
   \item{link}{matched link}
@@ -20,7 +20,7 @@ A dataset containing the matched strings and links of the PPDB  \url{http://site
 This dataset has been created using code{\link{ppdb_buildidx}}
 }
 \details{
-Retrieved using \code{\link{ppdb_idx}} on 11th October 2015.
+Retrieved using \code{\link{ppdb_idx}} on 8th January 2016.
 }
 \seealso{
 \code{\link{ppdb_buildidx}}

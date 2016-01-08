@@ -28,4 +28,7 @@ cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
+\seealso{
+This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
+}
 

@@ -20,18 +20,27 @@
 #' @examples
 #' \dontrun{
 #' # might fail if API is not available
-#' y1 <- chemid('Formaldehyde', type = 'name')
-#' str(y1)
-#' y1$name
+#' # query common name
+#' y1 <- ci_query('Formaldehyde', type = 'name')
+#' str(y1) # lots of information inside
+#' y1$inchikey
 #'
-#' y2 <- chemid('50-00-0', type = 'rn')
-#' str(y2)
-#' y2$name
+#' # Query by CAS
+#' y2 <- ci_query('50-00-0', type = 'rn')
+#' y2$inchikey
 #'
-#' y3 <- chemid('50-00-0', type = 'name')
-#' y3
+#' # query by inchikey
+#' y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
+#' y3$name
+#'
+#' ### handle multiple inputs
+#'  cas <- c('1071-83-6', '50-00-0')
+#'  # extract inchikeys
+#'  sapply(cas, function(x){
+#'    ci_query(x, type = 'rn')$inchikey
+#'  })
 #' }
-chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
+ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   # query <- '50-00-0'
   # query <- 'Triclosan'
   # query <- 'xxxx'

@@ -7,41 +7,74 @@
 #' @name webchem-deprecated
 #' @param ... Parameters to be passed to the modern version of the function
 #' @export
-#' @aliases ppdb_query
-#' @aliases cir_query
-#' @aliases csid_extcompinfo
-#' @aliases csid_compinfo
+#' @aliases ppdb
+#' @aliases cir
+#' @aliases pan
+#' @aliases alanwood
+#' @aliases physprop
+#' @aliases get_cid
+#' @aliases cid_compinfo
 #' @details Deprecated functions are:
 #' \tabular{rl}{
 #'   \code{ppdb_query} \tab is now a synonym for \code{\link{ppdb}}\cr
 #'   \code{cir_query} \tab is now a synonym for \code{\link{cir}}\cr
-#'   \code{csid_extcompinfo} \tab is now a synonym for \code{\link{cs_extcompinfo}}\cr
-#'   \code{csid_compinfo} \tab is now a synonym for \code{\link{cs_compinfo}}\cr
+#'   \code{pan_query} \tab is now a synonym for \code{\link{pan}}\cr
+#'   \code{aw_query} \tab is now a synonym for \code{\link{alanwood}}\cr
+#'   \code{pp_query} \tab is now a synonym for \code{\link{physprop}}\cr
+#'   \code{get_pcid} \tab is now a synonym for \code{\link{get_cid}}\cr
+#'   \code{pc_compinfo} \tab is now a synonym for \code{\link{cid_compinfo}}\cr
 #' }
-ppdb_query <- function(...) {
-  .Deprecated("ppdb", package = "webchem")
+ppdb <- function(...) {
+  .Deprecated("ppdb_query", package = "webchem")
   ppdb(...)
 }
 
-
 #' @rdname webchem-deprecated
 #' @export
-cir_query <- function(...) {
-  .Deprecated("cir", package = "webchem")
+cir <- function(...) {
+  .Deprecated("cir_query", package = "webchem")
   cir(...)
 }
 
 #' @rdname webchem-deprecated
 #' @export
-csid_extcompinfo <- function(...) {
-  .Deprecated("cs_extcompinfo", package = "webchem")
-  cs_extcompinfo(...)
+pan <- function(...) {
+  .Deprecated("pan_query", package = "webchem")
+  cir(...)
 }
-
 
 #' @rdname webchem-deprecated
 #' @export
-csid_compinfo <- function(...) {
-  .Deprecated("cs_compinfo", package = "webchem")
-  cs_compinfo(...)
+alanwood <- function(...) {
+  .Deprecated("aw_query", package = "webchem")
+  cir(...)
 }
+
+#' @rdname webchem-deprecated
+#' @export
+physprop <- function(...) {
+  .Deprecated("pp_query", package = "webchem")
+  cir(...)
+}
+
+#' @rdname webchem-deprecated
+#' @export
+get_cid <- function(...) {
+  .Deprecated("get_pcid", package = "webchem")
+  cir(...)
+}
+
+#' @rdname webchem-deprecated
+#' @export
+cid_compinfo <- function(...) {
+  .Deprecated("pc_compinfo", package = "webchem")
+  cir(...)
+}
+
+#' @rdname webchem-deprecated
+#' @export
+chemid <- function(...) {
+  .Deprecated("ci_query", package = "webchem")
+  cir(...)
+}
+

@@ -13,11 +13,11 @@ chk_alanwood <- function(){
 test_that("alanwood, commonname", {
   chk_alanwood()
 
-  fl <- alanwood('Fluazinam', type = 'commonname')
-  sm <- alanwood("S-Metolachlor", type = 'commonname')
-  xx <- alanwood('xxxxx', type = 'commonname')
+  fl <- aw_query('Fluazinam', type = 'commonname')
+  sm <- aw_query("S-Metolachlor", type = 'commonname')
+  xx <- aw_query('xxxxx', type = 'commonname')
 
-  expect_error(alanwood(c('Fluazinam', 'xxx'), type = 'commonname'))
+  expect_error(aw_query(c('Fluazinam', 'xxx'), type = 'commonname'))
 
   expect_equal(fl$cas, "79622-59-6", verbose = FALSE)
   expect_equal(length(sm$inchikey), 2)
@@ -30,8 +30,8 @@ test_that("alanwood, commonname", {
 test_that("alanwood, cas", {
   chk_alanwood()
 
-  cs <-  alanwood("79622-59-6", type = 'cas')
-  xx <- alanwood('xxxxx', type = 'cas')
+  cs <-  aw_query("79622-59-6", type = 'cas')
+  xx <- aw_query('xxxxx', type = 'cas')
 
   expect_equal(cs$cas, "79622-59-6", verbose = FALSE)
   expect_equal(cs$cname, "fluazinam", verbose = FALSE)

@@ -2,9 +2,9 @@ context("chemid")
 
 
 test_that("chemid returns correct results", {
-  xx <- chemid('xxxxx', type = 'name')
-  fl <- chemid('50-00-0', type = 'rn')
-  inc <- chemid('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
+  xx <- ci_query('xxxxx', type = 'name')
+  fl <- ci_query('50-00-0', type = 'rn')
+  inc <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
 
 
   expect_equal(fl$cas, "50-00-0")

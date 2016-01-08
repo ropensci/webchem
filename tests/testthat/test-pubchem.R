@@ -10,34 +10,34 @@ chk_pubchem <- function(){
     skip("Server is down!")
 }
 
-test_that("get_cid()", {
+test_that("get_pcid()", {
   chk_pubchem()
-  expect_equal(get_cid('Triclosan')[1], '5564')
-  expect_equal(length(get_cid('Triclosan', first = TRUE, verbose = FALSE)), 1)
+  expect_equal(get_pcid('Triclosan')[1], '5564')
+  expect_equal(length(get_pcid('Triclosan', first = TRUE, verbose = FALSE)), 1)
   chk_pubchem()
-  expect_equal(get_cid('xxxxx', verbose = FALSE), NA)
-  expect_error(get_cid(c('xxxxx', 'aaaaaaa')))
-  expect_warning(get_cid(NA))
+  expect_equal(get_pcid('xxxxx', verbose = FALSE), NA)
+  expect_error(get_pcid(c('xxxxx', 'aaaaaaa')))
+  expect_warning(get_pcid(NA))
 })
 
 
-test_that("cid_compinfo", {
+test_that("pc_compinfo", {
   chk_pubchem()
 
-  expect_error(cid_compinfo(c('xxxxx', 'aaaaaaa')))
+  expect_error(pc_compinfo(c('xxxxx', 'aaaaaaa')))
   chk_pubchem()
-  expect_equal(cid_compinfo('5564', verbose = FALSE)$CanonicalSmiles, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
-  expect_equal(length(cid_compinfo('5564', verbose = FALSE)), 25)
+  expect_equal(pc_compinfo('5564', verbose = FALSE)$CanonicalSmiles, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
+  expect_equal(length(pc_compinfo('5564', verbose = FALSE)), 25)
   chk_pubchem()
-  expect_equal(length(cid_compinfo('5564', first = TRUE, verbose = FALSE)$synonyms), 1)
-  expect_equal(cid_compinfo('xxxxx', verbose = FALSE), NA)
-  expect_warning(cid_compinfo('xxxxx', verbose = TRUE))
+  expect_equal(length(pc_compinfo('5564', first = TRUE, verbose = FALSE)$synonyms), 1)
+  expect_equal(pc_compinfo('xxxxx', verbose = FALSE), NA)
+  expect_warning(pc_compinfo('xxxxx', verbose = TRUE))
 })
 
 
 test_that("cid integration tests", {
   chk_pubchem()
-  expect_equal(cid_compinfo(get_cid('Triclosan')[1])$CanonicalSmiles, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
-  expect_true(is.na(cid_compinfo(get_cid('xxxxxx')[1])))
-  expect_warning(cid_compinfo(get_cid('xxxxxx')[1]))
+  expect_equal(pc_compinfo(get_pcid('Triclosan')[1])$CanonicalSmiles, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
+  expect_true(is.na(pc_compinfo(get_pcid('xxxxxx')[1])))
+  expect_warning(pc_compinfo(get_pcid('xxxxxx')[1]))
 })

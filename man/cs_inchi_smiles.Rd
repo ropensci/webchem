@@ -14,7 +14,7 @@ cs_inchi_smiles(inchi, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-A SMILES string
+A SMILES string.
 }
 \description{
 Convert a InChI to SMILES
@@ -30,5 +30,8 @@ cs_inchi_smiles(inchi)
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}
+\seealso{
+This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 }
 

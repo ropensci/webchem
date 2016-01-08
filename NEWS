@@ -16,15 +16,33 @@ MINOR IMPROVEMENTS
   - result is numeric where appropriate
 * cir():
   - result is numeric where appropriate
+* unified naming scheme.
+* withdraw naming changes in V0.0.4 (ppdb, cir).
+* is.inchikey_cs has been integrated into is.inchikey.
 
 BUG FIXES
 
 * utility function are not vectorized and throw an error.
 * chemid() did mot work with inchikey as input.
+* ppdb_idx returned duplicated CAS values, which caused ppdb() to fail.
+* ppdb() failed in some cases because of false encoding.
+* etox_*() functions are more robust.
 
 DEPRECATED FUNCTIONS
 
+* pan_query() replaces pan()
+* aw_query() replaces alanwood()
+* get_pcid() replaces get_cid()
+* pc_compinfo() replaces cid_compinfo()
+* ci_query() replaces chemid()
+* pp_query() replaces physprop()
+
 DEFUNCT FUNCTIONS
+
+* csid_compinfo()
+* csid_extcompinfo()
+
+
 
 
 webchem 0.0.4.0
