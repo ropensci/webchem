@@ -5,6 +5,7 @@ test_that("chemid returns correct results", {
   xx <- ci_query('xxxxx', type = 'name')
   fl <- ci_query('50-00-0', type = 'rn')
   inc <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
+  # n <- ci_query('Triclosan [USAN:USP:INN:BAN]', type = 'name')
 
   b1 <- ci_query('Tetracyclin', type = 'name')  # BUG: Failed because of multiple matches
   expect_equal(b1$name[1], "Tetracycline")

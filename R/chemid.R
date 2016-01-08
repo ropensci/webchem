@@ -76,7 +76,10 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
 
     # if mult == 'first'
     hit_cas <- hit_cas[1]
-    # endif
+    if (is.na(hit_cas)) {
+      message('Not found! Returning NA.\n')
+      return(NA)
+    }
 
     # retry with CAS-API
     qurl <- paste0('http://chem.sis.nlm.nih.gov/chemidplus/rn/', hit_cas)
