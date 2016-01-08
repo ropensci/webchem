@@ -10,11 +10,11 @@ get_etoxid(query, mult = c("all", "first", "best", "ask", "na"),
 \arguments{
 \item{query}{character; The searchterm}
 
-\item{verbose}{logical; print message during processing to console?}
-
-\item{multi}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
+\item{mult}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
 'na' returns NA if multiple hits are found.}
+
+\item{verbose}{logical; print message during processing to console?}
 }
 \value{
 A character vector with the substance ID and additional attributes \code{matched}  (the matched
