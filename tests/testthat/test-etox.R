@@ -40,7 +40,8 @@ test_that("get_etoxid returns correct results", {
     expect_true(length(attr(m3, 'matched')) == 1)
     expect_equal(c(m3), "20179")
     expect_equal(attr(m3, 'd'), 'first')
-  expect_message(get_etoxid('Triclosan', mult = 'ask'))
+    # get_etoxid('Triclosan', mult = 'ask')
+
 })
 
 
