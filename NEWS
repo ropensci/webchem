@@ -29,6 +29,7 @@ BUG FIXES
 * ppdb() failed in some cases because of false encoding.
 * etox_*() functions are more robust.
 * ci_query() failed if multi hits were found. Now returns first hit.
+* aw_fuery() failed if inchikey was not found.
 
 DEPRECATED FUNCTIONS
 
