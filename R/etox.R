@@ -42,6 +42,7 @@ get_etoxid <- function(query, verbose = TRUE){
   }
 
   # query <- 'Triclosan'
+  # query <- 'Thiamethoxam'
   if (verbose)
     message('Searching ', query)
   baseurl <- 'https://webetox.uba.de/webETOX/public/search/stoff.do'
@@ -60,10 +61,17 @@ get_etoxid <- function(query, verbose = TRUE){
   type <- clean_char(xml_text(xml_find_all(tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
   links <- xml_attr(xml_find_all(tt, "//*/table[@class = 'listForm resultList']//a"), 'href')
 
+  if (!'ETOX_NAME' %in% type) {
+    warning('No ETOX_NAME found. Return match only for synonyms')
+  }
+
+
+
   # match query with substance, get link
   if (length(unique(links)) > 1) {
     if (verbose)
       message("More then one Link found. Returning best match. \n")
+
     dd <- adist(query, subs[type == 'ETOX_NAME']) / nchar(subs[type == 'ETOX_NAME'])
     takelink <- links[type == 'ETOX_NAME'][which.min(dd)]
     d <- dd[which.min(dd)]
@@ -74,6 +82,7 @@ get_etoxid <- function(query, verbose = TRUE){
     matched_sub <- subs[type == 'ETOX_NAME'][1]
   }
 
+  # return object
   id <- gsub('^.*\\?id=(.*)', '\\1', takelink)
   names(id) <- NULL
   attr(id, "matched") <- matched_sub
@@ -117,6 +126,10 @@ get_etoxid <- function(query, verbose = TRUE){
 etox_basic <- function(id, verbose = TRUE){
   if (length(id) > 1) {
     stop('Cannot handle multiple input strings.')
+  }
+  if (is.na(id)) {
+    message('ID is NA! Returning NA.\n')
+    return(NA)
   }
   # id <- '20179'
   baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
@@ -190,6 +203,10 @@ etox_targets <- function(id, verbose = TRUE){
   if (length(id) > 1) {
     stop('Cannot handle multiple input strings.')
   }
+  if (is.na(id)) {
+    message('ID is NA! Returning NA.\n')
+    return(NA)
+  }
   # id <- '20179'
   # id <- '9051
   baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
@@ -255,6 +272,10 @@ etox_targets <- function(id, verbose = TRUE){
 etox_tests <- function(id, verbose = TRUE){
   if (length(id) > 1) {
     stop('Cannot handle multiple input strings.')
+  }
+  if (is.na(id)) {
+    message('ID is NA! Returning NA.\n')
+    return(NA)
   }
   # id <- '20179'
   baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='

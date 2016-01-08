@@ -17,6 +17,9 @@ test_that("get_etoxid returns correct results", {
   do2 <- get_etoxid('Thiamethoxam')
   xx <- get_etoxid('xxxxx')
 
+  b1 <- get_etoxid('Tetracyclin')   # BUG: returned character(0)!
+  expect_warning(get_etoxid('Tetracyclin'))
+
   expect_error(get_etoxid(c('Triclosan', 'xxx')))
   expect_equal(c(do), "20179")
   expect_equal(c(do2), "98867")
@@ -31,6 +34,7 @@ test_that("etox_basic returns correct results", {
 
   do2 <- etox_basic('20179')
   xx2 <- etox_basic('xxx')
+  expect_equal(etox_basic(NA), NA)
 
   expect_error(etox_basic(c('20179', 'xxx')))
   expect_equal(do2$cas, "3380-34-5")
@@ -46,6 +50,7 @@ test_that("etox_targets returns correct results", {
   do3 <- etox_targets('20179')
   xx3 <- etox_targets('xxxx')
   xxx3 <- etox_targets('9051')
+  expect_equal(etox_targets(NA), NA)
 
   expect_error(etox_targets(c('20179', 'xxx')))
   expect_equal(do3$Substance[1], "Triclosan")
@@ -60,6 +65,7 @@ test_that("etox_tests returns correct results", {
 
   do4 <- etox_tests('20179')
   xx4 <- etox_tests('xxxx')
+  expect_equal(etox_tests(NA), NA)
 
   expect_error(etox_tests(c('20179', 'xxx')))
   expect_equal(do4$Substance[1], "Triclosan")
@@ -76,9 +82,10 @@ test_that("etox integration tests", {
 
   int1 <- etox_basic(do)
   int2 <- etox_targets(do)
+  int5 <- etox_tests(do)
+
   int3 <- etox_basic(xx)
   int4 <- etox_targets(xx)
-  int5 <- etox_tests(do)
   int6 <- etox_tests(xx)
 
   expect_equal(int1$cas, "3380-34-5")

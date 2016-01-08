@@ -26,6 +26,7 @@ BUG FIXES
 * chemid() did mot work with inchikey as input.
 * ppdb_idx returned duplicated CAS values, which caused ppdb() to fail.
 * ppdb() failed in some cases because of false encoding.
+* etox_*() functions are more robust.
 
 DEPRECATED FUNCTIONS
 
@@ -40,6 +41,8 @@ DEFUNCT FUNCTIONS
 
 * csid_compinfo()
 * csid_extcompinfo()
+
+
 
 
 webchem 0.0.4.0
