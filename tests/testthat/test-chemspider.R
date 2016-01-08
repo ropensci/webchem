@@ -78,20 +78,6 @@ test_that("cs_csid_mol()", {
 })
 
 
-test_that("is.inchikey_cs", {
-  expect_message(is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N'))
-  g <- is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-  b <- is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
-
-  expect_true(g)
-  expect_false(b)
-
-  expect_error(is.inchikey_cs(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
-
-  expect_equal(length(g), 1)
-})
-
-
 test_that("cs_inchikey_csid()", {
   m1 <- cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 
