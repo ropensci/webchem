@@ -17,8 +17,8 @@ webchem
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
 
-The functions in the package that hit a specific API have a prefix and suffix separated by an underscore. 
-They follow the format of \texttt{source\_functionality}, e.g. \texttt{cs\_compinfo} uses ChemSpider to retrieve compound informations.
+The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`)
+They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations.
 
 
 ## Currently implemented in `webchem`
