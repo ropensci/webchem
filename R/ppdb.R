@@ -129,7 +129,7 @@ ppdb <- function(cas, verbose = TRUE, index = NULL){
     message('Querying ', qurl)
 
   Sys.sleep(0.3)
-  ttt <- read_html(qurl)
+  ttt <- read_html(qurl, encoding = 'latin1')
 
   # ec regulation
   ec_regulation <- html_table(
