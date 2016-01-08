@@ -4,23 +4,27 @@
 \alias{get_etoxid}
 \title{Get ETOX ID}
 \usage{
-get_etoxid(query, verbose = TRUE)
+get_etoxid(query, mult = c("all", "first", "best", "ask", "na"),
+  verbose = TRUE)
 }
 \arguments{
 \item{query}{character; The searchterm}
 
 \item{verbose}{logical; print message during processing to console?}
+
+\item{multi}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
+'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
+'na' returns NA if multiple hits are found.}
 }
 \value{
 A character vector with the substance ID and additional attributes \code{matched}  (the matched
-substance name) and \code{distance} (the normalized string distance of the query to the match).
+substance name) and \code{d} (either the string distance to the match, or the type of match).
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 \url{http://webetox.uba.de/webETOX/index.do} for their substance ID
 }
 \note{
-If more than one reference is found only the first hit is taken.
 Before using this function, please read the disclaimer \url{http://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{

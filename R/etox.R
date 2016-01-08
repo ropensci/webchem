@@ -5,14 +5,17 @@
 #'
 #' @import xml2 httr
 #'
-#' @param  query character; The searchterm
+#' @param query character; The searchterm
+#' @param multi character; How should multiple hits be handeled? 'all' returns all matched IDs,
+#' 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
+#' 'na' returns NA if multiple hits are found.
+#'
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A character vector with the substance ID and additional attributes \code{matched}  (the matched
-#' substance name) and \code{distance} (the normalized string distance of the query to the match).
+#' substance name) and \code{d} (either the string distance to the match, or the type of match).
 #'
-#' @note If more than one reference is found only the first hit is taken.
-#' Before using this function, please read the disclaimer \url{http://webetox.uba.de/webETOX/disclaimer.do}.
+#' @note Before using this function, please read the disclaimer \url{http://webetox.uba.de/webETOX/disclaimer.do}.
 #'
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results.
@@ -26,7 +29,7 @@
 #' comps <- c('Triclosan', 'Glyphosate')
 #' sapply(comps, get_etoxid)
 #' }
-get_etoxid <- function(query, verbose = TRUE){
+get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), verbose = TRUE) {
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -40,6 +43,8 @@ get_etoxid <- function(query, verbose = TRUE){
     x <- gsub("(?<=[\\s])\\s*|^\\s+$", "", x, perl = TRUE)
     return(x)
   }
+
+  mult <- match.arg(mult)
 
   # query <- 'Triclosan'
   # query <- 'Thiamethoxam'
@@ -65,25 +70,64 @@ get_etoxid <- function(query, verbose = TRUE){
     warning('No ETOX_NAME found. Return match only for synonyms')
   }
 
-
-
   # match query with substance, get link
-  if (length(unique(links)) > 1) {
+  ulinks <- unique(links)
+  ename <- subs[type == 'ETOX_NAME']
+  if (length(ulinks) > 1) {
     if (verbose)
-      message("More then one Link found. Returning best match. \n")
-
-    dd <- adist(query, subs[type == 'ETOX_NAME']) / nchar(subs[type == 'ETOX_NAME'])
-    takelink <- links[type == 'ETOX_NAME'][which.min(dd)]
-    d <- dd[which.min(dd)]
-    matched_sub <- subs[type == 'ETOX_NAME'][which.min(dd)]
+      message("More then one Link found. \n")
+    if (mult == 'na') {
+      if (verbose)
+        message("Returning NA. \n")
+      id <- NA
+      matched_sub <- NA
+      d <- NA
+    }
+    if (mult == 'all') {
+      if (verbose)
+        message("Returning all matches. \n")
+      id <- gsub('^.*\\?id=(.*)', '\\1', ulinks)
+      matched_sub <- ename[sapply(id, function(x) grep(x, ename)[1])]
+      d <- 'all'
+    }
+    if (mult == 'first') {
+      if (verbose)
+        message("Returning first match. \n")
+      id <- gsub('^.*\\?id=(.*)', '\\1', ulinks[1])
+      matched_sub <- ename[grep(id[1], ename)[1]]
+      d <- 'first'
+    }
+    if (mult == 'best') {
+      if (verbose)
+        message("Returning best match. \n")
+      dd <- adist(query, subs) / nchar(subs)
+      id <- gsub('^.*\\?id=(.*)', '\\1', links[which.min(dd)])
+      d <- dd[which.min(dd)]
+      matched_sub <- subs[which.min(dd)]
+    }
+    if (mult == 'ask') {
+      tochoose <- data.frame(match = subs, match_type = type)
+      print(tochoose)
+      message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
+      take <- scan(n = 1, quiet = TRUE, what = 'raw')
+      if (length(take) == 0) {
+        id <- NA
+        matched_sub <- NA
+        d <- NA
+      }
+      if (take %in% seq_len(nrow(tochoose))) {
+        id <- gsub('^.*\\?id=(.*)', '\\1', links[take])
+        matched_sub <- subs[take]
+        d <- 'interactive'
+      }
+    }
   } else {
-    takelink <- unique(links)
-    d <- 0
-    matched_sub <- subs[type == 'ETOX_NAME'][1]
+    id <- gsub('^.*\\?id=(.*)', '\\1', unique(links))
+    d <- 'direct match'
+    matched_sub <- subs[1]
   }
 
   # return object
-  id <- gsub('^.*\\?id=(.*)', '\\1', takelink)
   names(id) <- NULL
   attr(id, "matched") <- matched_sub
   attr(id, "distance") <- d
