@@ -6,7 +6,7 @@
 #' @import xml2 httr
 #'
 #' @param query character; The searchterm
-#' @param multi character; How should multiple hits be handeled? 'all' returns all matched IDs,
+#' @param mult character; How should multiple hits be handeled? 'all' returns all matched IDs,
 #' 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
 #' 'na' returns NA if multiple hits are found.
 #'
