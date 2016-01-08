@@ -16,8 +16,8 @@ test_that("ppdb", {
   z <- ppdb_query('50-00-0')
   xx <- ppdb_query('xxx')
 
-  b1 <- ppdb_query('553-82-2') # failed because of dups in ppdb_idx
-  b2 <- ppdb_query('1327-53-3') # failed because wrong encoding in website
+  b1 <- ppdb_query('553-82-2') # BUG: failed because of dups in ppdb_idx
+  b2 <- ppdb_query('1327-53-3') # BUG: failed because wrong encoding in website
 
   expect_is(y, 'list')
   expect_is(z, 'list')
