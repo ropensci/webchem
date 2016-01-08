@@ -13,19 +13,34 @@ chk_etox <- function(){
 test_that("get_etoxid returns correct results", {
   chk_etox()
 
-  do <- get_etoxid('Triclosan')
+  do <- get_etoxid('Triclosan', mult = 'best')
   do2 <- get_etoxid('Thiamethoxam')
-  xx <- get_etoxid('xxxxx')
 
-  b1 <- get_etoxid('Tetracyclin')   # BUG: returned character(0)!
-  expect_warning(get_etoxid('Tetracyclin'))
+  xx <- get_etoxid('xxxxx')
 
   expect_error(get_etoxid(c('Triclosan', 'xxx')))
   expect_equal(c(do), "20179")
   expect_equal(c(do2), "98867")
   expect_equal(attr(do, "matched"), "Triclosan ( 20179 )")
-  expect_equal(attr(do2, "distance"), 0)
+  expect_equal(attr(do2, "distance"), 'direct match')
   expect_equal(c(xx), NA)
+
+  # only synonyms found
+  expect_warning(get_etoxid('Tetracyclin'))
+  # test multiple hits
+  m1 <- get_etoxid('Triclosan', mult = 'all')
+    expect_true(length(m1) > 1)
+    expect_true(length(attr(m1, 'matched')) > 1)
+    expect_equal(attr(m1, 'd'), 'all')
+  m2 <- get_etoxid('Triclosan', mult = 'na')
+    expect_equal(c(m2), NA)
+    expect_equal(attr(m2, 'd'), NA)
+  m3 <- get_etoxid('Triclosan', mult = 'first')
+    expect_true(length(m3) == 1)
+    expect_true(length(attr(m3, 'matched')) == 1)
+    expect_equal(c(m3), "20179")
+    expect_equal(attr(m3, 'd'), 'first')
+  expect_message(get_etoxid('Triclosan', mult = 'ask'))
 })
 
 
@@ -77,7 +92,7 @@ test_that("etox_tests returns correct results", {
 test_that("etox integration tests", {
   chk_etox()
 
-  do <- get_etoxid('Triclosan')
+  do <- get_etoxid('Triclosan', mult = 'best')
   xx <- get_etoxid('xxxxx')
 
   int1 <- etox_basic(do)
