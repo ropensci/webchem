@@ -100,6 +100,14 @@ ppdb_buildidx <- function(){
 #'
 #' # handle multiple CAS
 #'  cas <- c('1071-83-6', '50-00-0')
+#'  # check if these compounds are approved in germany
+#'  foo <- function(y) {
+#'    # query cas
+#'    q <- ppdb_query(y)
+#'    # extract status for germany
+#'    q$approved_in$status[q$approved_in$country == 'DE']
+#'  }
+#'  sapply(cas, foo)
 #' }
 ppdb_query <- function(cas, verbose = TRUE, index = NULL){
   # cas <- '1071-83-6'
@@ -143,7 +151,7 @@ ppdb_query <- function(cas, verbose = TRUE, index = NULL){
     header = TRUE)[[1]]), stringsAsFactors = FALSE)
   approved_id$status <- ifelse(status == 'tick.jpg', TRUE, FALSE)
   approved_id[ , 1] <- NULL
-  approved_id$county <- rownames(approved_id)
+  approved_id$country <- rownames(approved_id)
 
 
   # general status
