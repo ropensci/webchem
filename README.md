@@ -361,7 +361,7 @@ First we need to query a substance ID:
 
 
 ```r
-id <- get_etoxid('Triclosan')
+id <- get_etoxid('Triclosan', mult = 'best')
 id
 #> [1] "20179"
 #> attr(,"matched")
@@ -369,7 +369,20 @@ id
 #> attr(,"distance")
 #> [1] 0.5263158
 ```
-`get_etoxid` tries to find the best match for you (check the matched and distance attributes))
+`get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
+Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
+
+
+```r
+get_etoxid('Triclosan', mult = 'all')
+#> [1] "20179" "89236"
+#> attr(,"matched")
+#> [1] "Triclosan ( 20179 )"       "Methyltriclosan ( 89236 )"
+#> attr(,"distance")
+#> [1] "all"
+```
+
+
 
 With this substance ID we can query further information from ETOX, e.g.:
 
