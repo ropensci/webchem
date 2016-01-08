@@ -33,6 +33,8 @@ DEPRECATED FUNCTIONS
 * aw_query() replaces alanwood()
 * get_pcid() replaces get_cid()
 * pc_compinfo() replaces cid_compinfo()
+* ci_query() replaces chemid()
+* pp_query() replaces physprop()
 
 DEFUNCT FUNCTIONS
 

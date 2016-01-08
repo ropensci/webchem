@@ -68,3 +68,10 @@ cid_compinfo <- function(...) {
   cir(...)
 }
 
+#' @rdname webchem-deprecated
+#' @export
+chemid <- function(...) {
+  .Deprecated("ci_query", package = "webchem")
+  cir(...)
+}
+

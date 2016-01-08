@@ -2,6 +2,7 @@
 % Please edit documentation in R/webchem-deprecated.R
 \name{webchem-deprecated}
 \alias{alanwood}
+\alias{chemid}
 \alias{cid_compinfo}
 \alias{cir}
 \alias{get_cid}
@@ -25,6 +26,8 @@ physprop(...)
 get_cid(...)
 
 cid_compinfo(...)
+
+chemid(...)
 }
 \arguments{
 \item{...}{Parameters to be passed to the modern version of the function}

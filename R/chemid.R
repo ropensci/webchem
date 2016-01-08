@@ -20,18 +20,18 @@
 #' @examples
 #' \dontrun{
 #' # might fail if API is not available
-#' y1 <- chemid('Formaldehyde', type = 'name')
+#' y1 <- ci_query('Formaldehyde', type = 'name')
 #' str(y1)
 #' y1$name
 #'
-#' y2 <- chemid('50-00-0', type = 'rn')
+#' y2 <- ci_query('50-00-0', type = 'rn')
 #' str(y2)
 #' y2$name
 #'
-#' y3 <- chemid('50-00-0', type = 'name')
+#' y3 <- ci_query('50-00-0', type = 'name')
 #' y3
 #' }
-chemid <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
+ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   # query <- '50-00-0'
   # query <- 'Triclosan'
   # query <- 'xxxx'

@@ -34,10 +34,10 @@ Source | Function(s | API Docs | API key
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `pp_query()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
-[ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
+[ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
-Moreover, there are some functions to check indentifiers: `is.inchikey()', `is.cas()` and `is.smiles()`.
+Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
 #### API keys
 
@@ -565,7 +565,7 @@ out[[3]]
 
 
 ```r
-out <- chemid(query = 'Triclosan', type = 'name')
+out <- ci_query(query = 'Triclosan', type = 'name')
 out$physprop
 #>              Physical Property    Value            Units Temp (deg C)
 #> 1                Melting Point       NA            deg C             
