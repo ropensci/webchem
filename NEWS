@@ -30,6 +30,8 @@ DEPRECATED FUNCTIONS
 
 * pan_query() replaces pan()
 * aw_query() replaces alanwood()
+* get_pcid() replaces get_cid()
+* pc_compinfo() replaces cid_compinfo()
 
 DEFUNCT FUNCTIONS
 

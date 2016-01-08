@@ -14,14 +14,14 @@
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' get_cid('Triclosan')
+#' get_pcid('Triclosan')
 #'
 #' # multiple inputs
 #' comp <- c('Triclosan', 'Aspirin')
-#' sapply(comp, function(x) get_cid(x))
-#' sapply(comp, function(x) get_cid(x, first = TRUE))
+#' sapply(comp, function(x) get_pcid(x))
+#' sapply(comp, function(x) get_pcid(x, first = TRUE))
 #' }
-get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
+get_pcid <- function(query, first = FALSE, verbose = TRUE, ...){
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -69,23 +69,23 @@ get_cid <- function(query, first = FALSE, verbose = TRUE, ...){
 #' AtomChiralDefCount, AtomChiralUndefCount, BondChiralCount, BondChiralDefCount,
 #' BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @seealso \code{\link{get_cid}} to retrieve Pubchem IDs.
+#' @seealso \code{\link{get_pcid}} to retrieve Pubchem IDs.
 #' @export
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' cid <- get_cid('Triclosan')
-#' cid_compinfo(cid[1])
+#' cid <- get_pcid('Triclosan')
+#' pc_compinfo(cid[1])
 #'
 #' ###
 #' # multiple CIDS
 #' comp <- c('Triclosan', 'Aspirin')
-#' cids <- sapply(comp, function(x) get_cid(x, first = TRUE))
-#' (ll <- lapply(cids, cid_compinfo, first = TRUE))
+#' cids <- sapply(comp, function(x) get_pcid(x, first = TRUE))
+#' (ll <- lapply(cids, pc_compinfo, first = TRUE))
 #' # as mtrix
 #' do.call(rbind, ll)
 #' }
-cid_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
+pc_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   # cid <- '5564'
   if (length(cid) > 1) {
     stop('Cannot handle multiple input strings.')

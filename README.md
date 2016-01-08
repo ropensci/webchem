@@ -17,6 +17,9 @@ webchem
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
 
+The functions in the package that hit a specific API have a prefix and suffix separated by an underscore. 
+They follow the format of \texttt{source\_functionality}, e.g. \texttt{cs\_compinfo} uses ChemSpider to retrieve compound informations.
+
 
 ## Currently implemented in `webchem`
 
@@ -24,7 +27,7 @@ Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_csid_mol()`, `cs_inchi_csid()`, `cs_inchi_inchikey()`, `cs_inchi_mol()`, `cs_inchi_smiles()`, `cs_smiles_inchi()`, `cs_inchikey_csid()`, `cs_inchikey_inchi()`, `cs_inchikey_mol()` `is.inchikey_cs()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
-[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_pcid()`, `pc_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
@@ -240,7 +243,7 @@ cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
 Retrieve PubChem CID
 
 ```r
-get_cid('Triclosan')
+get_pcid('Triclosan')
 #>  [1] "5564"     "131203"   "627458"   "9929261"  "15942656" "16220126"
 #>  [7] "16220128" "16220129" "16220130" "18413505" "22947105" "23656593"
 #> [13] "24848164" "25023954" "25023955" "25023956" "25023957" "25023958"
@@ -248,13 +251,13 @@ get_cid('Triclosan')
 #> [25] "25023965" "25023966" "25023967" "25023968" "25023969" "25023970"
 #> [31] "25023971" "25023972" "25023973" "45040608" "45040609" "67606151"
 #> [37] "71752714" "92024355" "92043149" "92043150" "92131249"
-cid <- get_cid('3380-34-5')
+cid <- get_pcid('3380-34-5')
 ```
 
 Use this CID to retrieve some chemical properties:
 
 ```r
-props <- cid_compinfo(cid)
+props <- pc_compinfo(cid)
 props$InChIKey
 #> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
 props$MolecularWeight
