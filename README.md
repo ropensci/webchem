@@ -22,7 +22,7 @@ This package interacts with a suite of web APIs to retrieve chemical information
 
 Source | Function(s | API Docs | API key
 ------ | --------- | -------- | --------
-[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
+[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_csid_mol()`, `cs_inchi_csid()`, `cs_inchi_inchikey()`, `cs_inchi_mol()`, `cs_inchi_smiles()`, `cs_smiles_inchi()`, `cs_inchikey_csid()`, `cs_inchikey_inchi()`, `cs_inchikey_mol()` `is.inchikey_cs()` | [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
@@ -30,7 +30,7 @@ Source | Function(s | API Docs | API key
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
-[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `chemid()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
@@ -68,11 +68,11 @@ CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Tr
 Use `first` to return only the first hit.
 
 ```r
-cir('Triclosan', 'cas')
+cir_query('Triclosan', 'cas')
 #> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
-cir('Triclosan', 'cas', first = TRUE)
+cir_query('Triclosan', 'cas', first = TRUE)
 #> [1] "3380-34-5"
-cir('Triclosan', 'mw')
+cir_query('Triclosan', 'mw')
 #> [1] 289.5451
 ```
 
@@ -80,16 +80,16 @@ Query SMILES and InChIKey from CAS (Triclosan).
 Inputs might by ambiguous and we can specify where to search using `resolver=`.
 
 ```r
-cir('3380-34-5', 'smiles')
+cir_query('3380-34-5', 'smiles')
 #> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
-cir('3380-34-5', 'stdinchikey', resolver = 'cas_number')
+cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
 #> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
 ```
 
 Query the number of rings using the InChiKey (Triclosan) 
 
 ```r
-cir('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
+cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 #> [1] 2
 ```
 
@@ -536,7 +536,7 @@ In webchem we provide a function to query this database by a CAS number.
 
 
 ```r
-out <- ppdb('1071-83-6')
+out <- ppdb_query('1071-83-6')
 ```
 
 The information output is enormous, I show here only a small part, the countries where the compound is approved:
@@ -686,6 +686,16 @@ is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #> [1] FALSE
 ```
 
+##### Check if a string is a valid SMILES
+
+
+```r
+is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
+#> [1] TRUE
+# 'J' is not found in the periodic table
+is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
+#> [1] FALSE
+```
 
 
 

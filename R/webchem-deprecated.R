@@ -15,33 +15,16 @@
 #' \tabular{rl}{
 #'   \code{ppdb_query} \tab is now a synonym for \code{\link{ppdb}}\cr
 #'   \code{cir_query} \tab is now a synonym for \code{\link{cir}}\cr
-#'   \code{csid_extcompinfo} \tab is now a synonym for \code{\link{cs_extcompinfo}}\cr
-#'   \code{csid_compinfo} \tab is now a synonym for \code{\link{cs_compinfo}}\cr
 #' }
-ppdb_query <- function(...) {
-  .Deprecated("ppdb", package = "webchem")
+ppdb <- function(...) {
+  .Deprecated("ppdb_query", package = "webchem")
   ppdb(...)
 }
 
-
 #' @rdname webchem-deprecated
 #' @export
-cir_query <- function(...) {
-  .Deprecated("cir", package = "webchem")
+cir <- function(...) {
+  .Deprecated("cir_query", package = "webchem")
   cir(...)
 }
 
-#' @rdname webchem-deprecated
-#' @export
-csid_extcompinfo <- function(...) {
-  .Deprecated("cs_extcompinfo", package = "webchem")
-  cs_extcompinfo(...)
-}
-
-
-#' @rdname webchem-deprecated
-#' @export
-csid_compinfo <- function(...) {
-  .Deprecated("cs_compinfo", package = "webchem")
-  cs_compinfo(...)
-}

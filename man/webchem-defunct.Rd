@@ -2,10 +2,14 @@
 % Please edit documentation in R/webchem-defunct.R
 \name{webchem-defunct}
 \alias{allanwood}
+\alias{csid_compinfo}
+\alias{csid_extcompinfo}
 \alias{webchem-defunct}
 \title{Defunct function(s) in the webchem package}
 \usage{
-allanwood()
+csid_extcompinfo(...)
+
+csid_compinfo(...)
 }
 \description{
 These functions are defunct and no longer available.
@@ -13,7 +17,8 @@ These functions are defunct and no longer available.
 \details{
 Defunct functions are:
 \tabular{rl}{
-  \code{allanwood} \cr
+  \code{csid_extcompinfo} \cr
+  \code{csid_extcompinfo} \cr
 }
 }
 

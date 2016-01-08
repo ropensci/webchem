@@ -95,13 +95,13 @@ ppdb_buildidx <- function(){
 #' @examples
 #' \dontrun{
 #' # might fail if Server is not available
-#' gly <- ppdb('1071-83-6')
+#' gly <- ppdb_query('1071-83-6')
 #' gly$approved_in
 #'
 #' # handle multiple CAS
 #'  cas <- c('1071-83-6', '50-00-0')
 #' }
-ppdb <- function(cas, verbose = TRUE, index = NULL){
+ppdb_query <- function(cas, verbose = TRUE, index = NULL){
   # cas <- '1071-83-6'
   # cas <- '50-00-0'
   # cas <- 'xxxxx'

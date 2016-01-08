@@ -20,7 +20,7 @@
 #'  CACTVS HASHISY, NSC number, PubChem SID, ZINC Code, ChemSpider ID,
 #'  ChemNavigator SID, eMolecule VID.
 #'
-#'  \code{cir()} can handle only a part of all possible conversions of CIR.
+#'  \code{cir_query()} can handle only a part of all possible conversions of CIR.
 #'  Possible \code{representations} are:
 #'  \itemize{
 #'      \item \code{'smiles'}(SMILES strings),
@@ -94,23 +94,23 @@
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' cir('Triclosan', 'cas')
-#' cir("3380-34-5", 'cas')
-#' cir("3380-34-5", 'cas', resolver = 'cas_number')
-#' cir("3380-34-5", 'smiles')
-#' cir('Triclosan', 'mw')
+#' cir_query('Triclosan', 'cas')
+#' cir_query("3380-34-5", 'cas')
+#' cir_query("3380-34-5", 'cas', resolver = 'cas_number')
+#' cir_query("3380-34-5", 'smiles')
+#' cir_query('Triclosan', 'mw')
 #'
 #' # query multiple representations
 #' reps <- c('smiles', 'cas')
-#' sapply(reps, function(x) cir('Triclosan', x, first = TRUE))
+#' sapply(reps, function(x) cir_query('Triclosan', x, first = TRUE))
 #'
 #' # multiple inputs
 #' comp <- c('Triclosan', 'Aspirin')
-#' sapply(comp, function(x) cir(x, 'cas', first = TRUE))
+#' sapply(comp, function(x) cir_query(x, 'cas', first = TRUE))
 #'
 #'}
 #' @export
-cir <- function(identifier, representation = 'smiles', resolver = NULL,
+cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
                       first = FALSE, verbose = TRUE, ...){
   if (length(identifier) > 1) {
     stop('Cannot handle multiple input strings.')

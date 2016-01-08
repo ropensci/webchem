@@ -12,12 +12,12 @@ test_that("ppdb_buildidx", {
 
 
 test_that("ppdb", {
-  y <- ppdb('1071-83-6')
-  z <- ppdb('50-00-0')
-  xx <- ppdb('xxx')
+  y <- ppdb_query('1071-83-6')
+  z <- ppdb_query('50-00-0')
+  xx <- ppdb_query('xxx')
 
-  b1 <- ppdb('553-82-2') # failed because of dups in ppdb_idx
-  b2 <- ppdb('1327-53-3') # failed because wrong encoding in website
+  b1 <- ppdb_query('553-82-2') # failed because of dups in ppdb_idx
+  b2 <- ppdb_query('1327-53-3') # failed because wrong encoding in website
 
   expect_is(y, 'list')
   expect_is(z, 'list')

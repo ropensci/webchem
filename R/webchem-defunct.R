@@ -7,8 +7,16 @@
 #' @aliases allanwood
 #' @details Defunct functions are:
 #' \tabular{rl}{
-#'   \code{allanwood} \cr
+#'   \code{csid_extcompinfo} \cr
+#'   \code{csid_extcompinfo} \cr
 #' }
-allanwood <- function() {
-  .Defunct("alanwood", package = "webchem")
+csid_extcompinfo <- function(...) {
+  .Defunct("cs_extcompinfo", package = "webchem")
+}
+
+
+#' @rdname webchem-defunct
+#' @export
+csid_compinfo <- function(...) {
+  .Defunct("cs_compinfo", package = "webchem")
 }

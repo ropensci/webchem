@@ -16,17 +16,22 @@ MINOR IMPROVEMENTS
   - result is numeric where appropriate
 * cir():
   - result is numeric where appropriate
+* withdraw naming changes in V0.0.4 (ppdb, cir) for a consistent naming
 
 BUG FIXES
 
 * utility function are not vectorized and throw an error.
 * chemid() did mot work with inchikey as input.
 * ppdb_idx returned duplicated CAS values, which caused ppdb() to fail.
-* ppdb() failed in some cases because of false encoding
+* ppdb() failed in some cases because of false encoding.
 
 DEPRECATED FUNCTIONS
 
+
 DEFUNCT FUNCTIONS
+
+* csid_compinfo()
+* csid_extcompinfo()
 
 
 webchem 0.0.4.0
