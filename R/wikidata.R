@@ -104,7 +104,10 @@ wd_ident <- function(id, verbose = TRUE){
   if (verbose)
     message('Querying ', qurl)
   tmp <- fromJSON(qurl)
+
+  vars_out <- tmp$head$vars
   out <- tmp$results$bindings
+
   if (length(out) == 0) {
     if (verbose)
       message('Not found! Returing NA. \n')
@@ -112,6 +115,13 @@ wd_ident <- function(id, verbose = TRUE){
   }
 
   out <- lapply(out, '[[', 'value')
+
+  # check for missing entries and add to out-list
+  miss <- names[!names %in% names(out)]
+  for(i in miss){
+    out[[i]] <- NA
+  }
+  out <- out[names]
   return(out)
 }
 

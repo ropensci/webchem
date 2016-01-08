@@ -6,7 +6,7 @@
 #' @import xml2 httr
 #'
 #' @param query character; The searchterm
-#' @param multi character; How should multiple hits be handeled? 'all' returns all matched IDs,
+#' @param mult character; How should multiple hits be handeled? 'all' returns all matched IDs,
 #' 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
 #' 'na' returns NA if multiple hits are found.
 #'
@@ -73,6 +73,8 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
   # match query with substance, get link
   ulinks <- unique(links)
   ename <- subs[type == 'ETOX_NAME']
+
+  # multiple hits
   if (length(ulinks) > 1) {
     if (verbose)
       message("More then one Link found. \n")
@@ -109,7 +111,7 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
       tochoose <- data.frame(match = subs, match_type = type)
       print(tochoose)
       message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
-      take <- scan(n = 1, quiet = TRUE, what = 'raw')
+      take <- as.numeric(scan(n = 1, quiet = TRUE))
       if (length(take) == 0) {
         id <- NA
         matched_sub <- NA
