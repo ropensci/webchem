@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemid.R
 \name{chemid}
 \alias{chemid}
-\title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus/name/triclosan}}
+\title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}}
 \usage{
 chemid(query, type = c("rn", "name", "inchikey"), verbose = TRUE)
 }
@@ -20,7 +20,7 @@ inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
 physprop (data.frame).
 }
 \description{
-Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus/name/triclosan}
+Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}
 }
 \note{
 The data of the entry \code{physprop} is identical to the result returned

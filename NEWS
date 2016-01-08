@@ -21,6 +21,7 @@ BUG FIXES
 
 * utility function are not vectorized and throw an error.
 * chemid() did mot work with inchikey as input.
+* ppdb_idx returned duplicated CAS values, which caused ppdb() to fail.
 
 DEPRECATED FUNCTIONS
 

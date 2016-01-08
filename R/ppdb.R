@@ -3,13 +3,13 @@
 #' A dataset containing the matched strings and links of the PPDB  \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}.
 #' This dataset has been created using code{\link{ppdb_buildidx}}
 #'
-#' @format A data frame with 53940 rows and 10 variables:
+#' @format A data frame with 1745 rows and 2 variables:
 #' \describe{
 #'   \item{cas}{cas}
 #'   \item{link}{matched link}
 #' }
 #' @source  \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm}
-#' @details Retrieved using \code{\link{ppdb_idx}} on 11th October 2015.
+#' @details Retrieved using \code{\link{ppdb_idx}} on 8th January 2016.
 #' @seealso \code{\link{ppdb_buildidx}}
 "ppdb_idx"
 
@@ -59,7 +59,15 @@ ppdb_buildidx <- function(){
   ppdb_idx <- data.frame(cas = iconv(cas, from = "UTF-8", to = "ASCII"),
                       link = iconv(links, from = "UTF-8", to = "ASCII"),
                       stringsAsFactors = FALSE)
+  # remove empty entries
   ppdb_idx <- ppdb_idx[! (ppdb_idx$cas == '' | is.na(ppdb_idx$cas)), ]
+  # remove non-cas entries
+  trm <- c( "AE1277106", "AE1394083", "AE-F130619", "ASU 70 480 1", "D-3598" ,
+            "IN-EQW78", "IR5839" ,"methyl ester", "MON 0139", "None",  "sodium salt" )
+  ppdb_idx <- ppdb_idx[!ppdb_idx$cas %in% trm, ]
+  # remove duplicated cas entries
+  ppdb_idx <- ppdb_idx[!duplicated(ppdb_idx$cas), ]
+
   # save(ppdb_idx, file = 'data/ppdb_idx.rda')
   return(ppdb_idx)
 }

@@ -9,7 +9,7 @@ alanwood(x, type = c("commonname", "cas"), verbose = TRUE)
 \arguments{
 \item{x}{character; search string}
 
-\item{type}{character; type of input}
+\item{type}{character; type of input ('cas' or 'commonname')}
 
 \item{verbose}{logical; print message during processing to console?}
 }
