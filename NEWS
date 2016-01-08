@@ -29,6 +29,7 @@ BUG FIXES
 DEPRECATED FUNCTIONS
 
 * pan_query() replaces pan()
+* aw_query() replaces alanwood()
 
 DEFUNCT FUNCTIONS
 

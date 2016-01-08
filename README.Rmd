@@ -40,7 +40,7 @@ Source | Function(s | API Docs | API key
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `cid_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
-[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `alanwood()` | none | none
+[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `physprop()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
@@ -219,10 +219,10 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 
 #### Alan Wood's Compendium of Pesticide Common Names
 
-`alanwood()` returns a list of 9 entries and can query common names and cas numbers:
+`aw_query()` returns a list of 9 entries and can query common names and cas numbers:
 ```{r alanwood}
-alanwood('Fluazinam', type = 'commonname')
-alanwood('79622-59-6', type = 'cas')$cname
+aw_query('Fluazinam', type = 'commonname')
+aw_query('79622-59-6', type = 'cas')$cname
 ```
 
 #### SRC PHYSPROP Database
@@ -346,7 +346,7 @@ First we query alanwood:
 ```{r multi_alanwood}
 cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
 # query alanwood 
-aw_out <- lapply(cmp, alanwood)
+aw_out <- lapply(cmp, aw_query)
 # this gives for each compound one list
 # str(aw_out)
 ```
