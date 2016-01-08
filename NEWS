@@ -16,7 +16,8 @@ MINOR IMPROVEMENTS
   - result is numeric where appropriate
 * cir():
   - result is numeric where appropriate
-* withdraw naming changes in V0.0.4 (ppdb, cir) for a consistent naming
+* unified naming scheme
+* withdraw naming changes in V0.0.4 (ppdb, cir)
 
 BUG FIXES
 
@@ -27,6 +28,7 @@ BUG FIXES
 
 DEPRECATED FUNCTIONS
 
+* pan_query() replaces pan()
 
 DEFUNCT FUNCTIONS
 

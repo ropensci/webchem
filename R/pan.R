@@ -53,24 +53,24 @@
 #'  # might fail if API is not available
 #'
 #'  # return all hits
-#'  pan('2,4-dichlorophenol')[c(1, 2, 5, 74)]
+#'  pan_query('2,4-dichlorophenol')[c(1, 2, 5, 74)]
 #'  # return only first hit
-#'  pan('2,4-dichlorophenol', match = 'first')[c(1, 2, 5, 74)]
+#'  pan_query('2,4-dichlorophenol', match = 'first')[c(1, 2, 5, 74)]
 #'  # return only best hit
-#'  pan('2,4-dichlorophenol', match = 'best')[c(1, 2, 5, 74)]
+#'  pan_query('2,4-dichlorophenol', match = 'best')[c(1, 2, 5, 74)]
 #'
 #'  # returns NA
-#'  pan('xxxxx')
+#'  pan_query('xxxxx')
 #'
 #' ### multiple inputs
 #' comp <- c('Triclosan', 'Aspirin')
 #' # retrive CAS
-#' sapply(comp, function(x) pan(x, match = 'best')[['CAS Number']])
+#' sapply(comp, function(x) pan_query(x, match = 'best')[['CAS Number']])
 #' # multiple columns
-#' ll <- lapply(comp, function(x) pan(x, match = 'best')[c(1, 2, 5, 74)])
+#' ll <- lapply(comp, function(x) pan_query(x, match = 'best')[c(1, 2, 5, 74)])
 #' do.call(rbind, ll)
 #' }
-pan <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
+pan_query <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }

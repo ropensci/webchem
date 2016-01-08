@@ -2,6 +2,7 @@
 % Please edit documentation in R/webchem-deprecated.R
 \name{webchem-deprecated}
 \alias{cir}
+\alias{pan}
 \alias{ppdb}
 \alias{ppdb_query}
 \alias{webchem-deprecated}
@@ -10,6 +11,8 @@
 ppdb(...)
 
 cir(...)
+
+pan(...)
 }
 \arguments{
 \item{...}{Parameters to be passed to the modern version of the function}
@@ -24,6 +27,7 @@ Deprecated functions are:
 \tabular{rl}{
   \code{ppdb_query} \tab is now a synonym for \code{\link{ppdb}}\cr
   \code{cir_query} \tab is now a synonym for \code{\link{cir}}\cr
+  \code{pan_query} \tab is now a synonym for \code{\link{pan}}\cr
 }
 }
 

@@ -15,6 +15,7 @@
 #' \tabular{rl}{
 #'   \code{ppdb_query} \tab is now a synonym for \code{\link{ppdb}}\cr
 #'   \code{cir_query} \tab is now a synonym for \code{\link{cir}}\cr
+#'   \code{pan_query} \tab is now a synonym for \code{\link{pan}}\cr
 #' }
 ppdb <- function(...) {
   .Deprecated("ppdb_query", package = "webchem")
@@ -28,3 +29,9 @@ cir <- function(...) {
   cir(...)
 }
 
+#' @rdname webchem-deprecated
+#' @export
+pan <- function(...) {
+  .Deprecated("pan_query", package = "webchem")
+  cir(...)
+}
