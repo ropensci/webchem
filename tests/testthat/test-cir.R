@@ -10,7 +10,7 @@ chk_cir <- function(){
     skip("Server is down!")
 }
 
-test_that("cir()", {
+test_that("cir_query()", {
   chk_cir()
 
   expect_equal(cir_query('Triclosan', 'mw', verbose = FALSE), 289.5451)

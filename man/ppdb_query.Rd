@@ -31,6 +31,14 @@ gly$approved_in
 
 # handle multiple CAS
  cas <- c('1071-83-6', '50-00-0')
+ # check if these compounds are approved in germany
+ foo <- function(y) {
+   # query cas
+   q <- ppdb_query(y)
+   # extract status for germany
+   q$approved_in$status[q$approved_in$country == 'DE']
+ }
+ sapply(cas, foo)
 }
 }
 \author{
