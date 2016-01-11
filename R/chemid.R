@@ -44,14 +44,16 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   # query <- '50-00-0'
   # query <- 'Triclosan'
   # query <- 'xxxx'
+  # query <- 'Tetracyclin'
   type <- match.arg(type)
   if (type == 'rn')
     baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/rn/'
   if (type == 'name')
-    baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/name/'
+    baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/name/startswith/'
   if (type == 'inchikey')
     baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/inchikey/'
-  qurl <- paste0(baseurl, query)
+  # return max 50 hits
+  qurl <- paste0(baseurl, query, '?DT_START_ROW=0&DT_ROWS_PER_PAGE=50')
   if (verbose)
     message(qurl)
   Sys.sleep(0.3)
@@ -60,6 +62,33 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
     message('Not found! Returning NA.\n')
     return(NA)
   }
+
+  tit <- xml_text(xml_find_all(ttt, "//head/title"))
+
+  if (grepl('^ChemIDplus Results - Chemical information', x = tit)) {
+    if (verbose)
+      message("More then one Link found. \n")
+    hit_names <- xml_text(xml_find_all(ttt, "//a[@title='Open record details']"))
+    hit_cas <- xml_text(xml_find_all(ttt, "//a[@title='Open record details']/following-sibling::text()[1]"))
+    # exclude missing cas
+    hit_cas <- hit_cas[!nchar(hit_cas) < 5]
+    hit_names <- hit_names[!nchar(hit_cas) < 5]
+
+    # if mult == 'first'
+    hit_cas <- hit_cas[1]
+    if (is.na(hit_cas)) {
+      message('Not found! Returning NA.\n')
+      return(NA)
+    }
+
+    # retry with CAS-API
+    qurl <- paste0('http://chem.sis.nlm.nih.gov/chemidplus/rn/', hit_cas)
+    if (verbose)
+      message(qurl)
+    Sys.sleep(0.3)
+    ttt <- try(read_html(qurl), silent = TRUE)
+  }
+
   name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
   synonyms <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))
   cas <- xml_text(xml_find_all(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))

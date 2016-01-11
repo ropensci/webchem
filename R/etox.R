@@ -24,6 +24,7 @@
 #' @export
 #' @examples
 #' \dontrun{
+#' # might fail if API is not available
 #' get_etoxid('Triclosan')
 #' # multiple inpus
 #' comps <- c('Triclosan', 'Glyphosate')

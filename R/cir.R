@@ -127,12 +127,13 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   if (verbose)
     message(qurl)
   Sys.sleep(1.5)
-  h <- try(read_xml(qurl))
+  h <- try(GET(qurl, timeout(2)))
   if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   } else {
-    out <- xml_text(xml_find_all(h, '//item'))
+    tt <- read_xml(content(h, as = 'raw'))
+    out <- xml_text(xml_find_all(tt, '//item'))
   }
   if (length(out) == 0) {
     message('No representation found... Returning NA.')

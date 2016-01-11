@@ -21,6 +21,7 @@
 aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   # x <- 'Fluazinam'
   # x <- "79622-59-6"
+  # x <- '12071-83-9'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -45,12 +46,14 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     linkn0 <- xml_text(xml_find_all(ttt0, '//dt/following-sibling::dd[1]/a[1]'))
 
     baseurl1 <- 'http://www.alanwood.net/pesticides/index_rn1.html'
+    Sys.sleep(0.3)
     ttt1 <- read_html(baseurl1)
     names1 <- xml_text(xml_find_all(ttt1, "//dt"))
     links1 <-  xml_attr(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'), 'href')
     linkn1 <- xml_text(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'))
 
     baseurl2 <- 'http://www.alanwood.net/pesticides/index_rn2.html'
+    Sys.sleep(0.3)
     ttt2 <- read_html(baseurl2)
     names2 <- xml_text(xml_find_all(ttt2, "//dt"))
     links2 <-  xml_attr(xml_find_all(ttt2, '//dt/following-sibling::dd[1]/a[1]'), 'href')
@@ -85,14 +88,23 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   subactivity <- trimws(strsplit(gsub('^.*\\((.*)\\)', '\\1', activity), ';')[[1]])
   activity <- gsub('^(.*) \\(.*\\)', '\\1', activity)
   inchikey <- xml_text(xml_find_all(ttt, "//tr/th[@id='r11']/following-sibling::td"))
-  if (grepl('isomer', inchikey)) {
-    inchikey <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchikey),
-      r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchikey))
+  if (length(inchikey) == 0){
+    inchikey <- NA
+  } else {
+    if (grepl('isomer', inchikey)) {
+      inchikey <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchikey),
+        r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchikey))
+    }
   }
+
   inchi <- xml_text(xml_find_all(ttt, "//tr/th[@id='r12']/following-sibling::td"))
-  if (grepl('isomer', inchi)) {
-    inchi <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchi),
-               r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchi))
+  if (length(inchi) == 0){
+    inchi <- NA
+  } else {
+    if (grepl('isomer', inchi)) {
+      inchi <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchi),
+                 r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchi))
+    }
   }
   out <- list(cname = cname, status = status, pref_iupac_name = pref_iupac_name,
               iupac_name = iupac_name, cas = cas, formula = formula,
