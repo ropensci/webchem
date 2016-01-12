@@ -9,6 +9,9 @@
 #' @param ... currently not used.
 #' @return a character vector.
 #'
+#' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
+#' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -70,6 +73,8 @@ get_pcid <- function(query, first = FALSE, verbose = TRUE, ...){
 #' BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_pcid}} to retrieve Pubchem IDs.
+#' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
+#' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
 #' @export
 #' @examples
 #' \donttest{

@@ -35,4 +35,8 @@ sapply(comp, function(x) get_pcid(x, first = TRUE))
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
+\references{
+Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
+Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
+}
 

@@ -74,6 +74,12 @@ get_wdid <- function(query, language, first = FALSE, verbose = TRUE){
 #'
 #' @seealso \code{\link{get_wdid}}
 #'
+#' @references Willighagen, E., 2015. Getting CAS registry numbers out of WikiData. The Winnower.
+#' \url{http://dx.doi.org/10.15200/winn.142867.72538}
+#'
+#' Mitraka, Elvira, Andra Waagmeester, Sebastian Burgstaller-Muehlbacher, et al. 2015
+#' Wikidata: A Platform for Data Integration and Dissemination for the Life Sciences and beyond. bioRxiv: 031971.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples

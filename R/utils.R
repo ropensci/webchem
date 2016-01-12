@@ -246,6 +246,9 @@ is.cas <-  function(x, verbose = TRUE) {
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
+#' @references Egon Willighagen (2015). How to test SMILES strings in Supplementary Information.
+#' \url{https://chem-bla-ics.blogspot.nl/2015/10/how-to-test-smiles-strings-in.html}
+#'
 #' @export
 #' @examples
 #' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')

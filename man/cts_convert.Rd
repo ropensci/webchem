@@ -43,4 +43,8 @@ sapply(comp, function(x) cts_convert(x, 'inchikey', 'Chemical Name', first = TRU
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
+\references{
+Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
+-- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+}
 

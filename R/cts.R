@@ -7,6 +7,9 @@
 #' @param ... currently not used.
 #' @return a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#'
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
+#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
 #' \donttest{
@@ -59,6 +62,9 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @details See see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 #' for possible values of from and to.
+#'
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
+#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
 #' \donttest{

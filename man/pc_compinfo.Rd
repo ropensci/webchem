@@ -45,6 +45,10 @@ do.call(rbind, ll)
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
+\references{
+Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
+Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
+}
 \seealso{
 \code{\link{get_pcid}} to retrieve Pubchem IDs.
 }
