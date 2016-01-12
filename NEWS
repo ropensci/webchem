@@ -20,6 +20,7 @@ MINOR IMPROVEMENTS
 * unified naming scheme.
 * withdraw naming changes in V0.0.4 (ppdb, cir).
 * is.inchikey_cs has been integrated into is.inchikey.
+* aw_query() returns multiple inchikey if found.
 
 BUG FIXES
 
