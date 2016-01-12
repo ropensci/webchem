@@ -6,6 +6,7 @@ NEW FEATURES
 * is.smiles() checks SMILES string, by parsing via (R)CDK.
 * get_wdid() and wd_indent() to retrieve information from wikidata.
 * get_etoxid() can handle multi inputs (interactive mode, best match, first match, NA and all matches)
+* ci_query() can handle multi inputs (interactive mode, best match, first match and NA)
 
 MINOR IMPROVEMENTS
 

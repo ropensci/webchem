@@ -8,6 +8,9 @@
 #' @param query character; query string
 #' @param type character; type of query string.
 #'     'rn' for regeistry number or 'name' for common name or 'inchikey' for inchikey as input.
+#' @param mult character; How should multiple hits be handeled?
+#' 'first' returns only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
+#' 'na' returns NA if multiple hits are found.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return A list of 8 entries: name (vector), synonyms (vector), cas (vector),
 #' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
@@ -40,12 +43,15 @@
 #'    ci_query(x, type = 'rn')$inchikey
 #'  })
 #' }
-ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
+ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
+                     mult = c('first', 'best', 'ask', 'na'),
+                     verbose = TRUE){
   # query <- '50-00-0'
   # query <- 'Triclosan'
   # query <- 'xxxx'
   # query <- 'Tetracyclin'
   type <- match.arg(type)
+  mult <- match.arg(mult)
   if (type == 'rn')
     baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/rn/'
   if (type == 'name')
@@ -65,21 +71,63 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
 
   tit <- xml_text(xml_find_all(ttt, "//head/title"))
 
+  # handle multiple inputs
   if (grepl('^ChemIDplus Results - Chemical information', x = tit)) {
     if (verbose)
       message("More then one Link found. \n")
     hit_names <- xml_text(xml_find_all(ttt, "//a[@title='Open record details']"))
     hit_cas <- xml_text(xml_find_all(ttt, "//a[@title='Open record details']/following-sibling::text()[1]"))
     # exclude missing cas
-    hit_cas <- hit_cas[!nchar(hit_cas) < 5]
-    hit_names <- hit_names[!nchar(hit_cas) < 5]
+    trm <- nchar(hit_cas) < 5
+    hit_cas <- hit_cas[!trm]
+    hit_names <- hit_names[!trm]
 
-    # if mult == 'first'
-    hit_cas <- hit_cas[1]
-    if (is.na(hit_cas)) {
-      message('Not found! Returning NA.\n')
+    if (mult == 'first') {
+      if (verbose)
+        message("Returning first match. \n")
+      hit_cas <- hit_cas[1]
+      matched_sub <- hit_names[1]
+      d <- 'first'
+    }
+
+    if (mult == 'best') {
+      if (verbose)
+        message("Returning best match. \n")
+      hit_names <- gsub(' \\[.*\\]', '', hit_names)
+      dd <- adist(query, hit_names) / nchar(hit_names)
+      hit_cas <- hit_cas[which.min(dd)]
+      matched_sub <- hit_names[which.min(dd)]
+      d <- dd[which.min(dd)]
+    }
+
+    if (mult == 'na') {
+      if (verbose)
+        message("Returning NA. \n")
       return(NA)
     }
+
+    if (mult == 'ask') {
+      tochoose <- data.frame(name = hit_names, cas = hit_cas)
+      print(tochoose)
+      message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
+      take <- as.numeric(scan(n = 1, quiet = TRUE))
+      if (length(take) == 0) {
+        return(NA)
+      }
+      if (take %in% seq_len(nrow(tochoose))) {
+        hit_cas <- hit_cas[take]
+        matched_sub <- hit_names[take]
+        d <- 'interactive'
+      }
+    }
+
+    # check hit
+    if (is.na(hit_cas)) {
+      if (verbose)
+        message('CAS not found! Returning NA.\n')
+      return(NA)
+    }
+
 
     # retry with CAS-API
     qurl <- paste0('http://chem.sis.nlm.nih.gov/chemidplus/rn/', hit_cas)
@@ -87,6 +135,9 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
       message(qurl)
     Sys.sleep(0.3)
     ttt <- try(read_html(qurl), silent = TRUE)
+  } else {
+    d <- 'direct match'
+    matched_sub <- subs[1]
   }
 
   name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
@@ -109,5 +160,7 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'), verbose = TRUE){
   out <- list(name = name, synonyms = synonyms, cas = cas, inchi = inchi,
               inchikey = inchikey, smiles = smiles, toxicity = toxicity,
               physprop = physprop)
+  attr(out, "matched") <- matched_sub
+  attr(out, "distance") <- d
   return(out)
 }

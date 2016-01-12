@@ -4,13 +4,18 @@
 \alias{ci_query}
 \title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}}
 \usage{
-ci_query(query, type = c("rn", "name", "inchikey"), verbose = TRUE)
+ci_query(query, type = c("rn", "name", "inchikey"), mult = c("first",
+  "best", "ask", "na"), verbose = TRUE)
 }
 \arguments{
 \item{query}{character; query string}
 
 \item{type}{character; type of query string.
 'rn' for regeistry number or 'name' for common name or 'inchikey' for inchikey as input.}
+
+\item{mult}{character; How should multiple hits be handeled?
+'first' returns only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
+'na' returns NA if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 }
