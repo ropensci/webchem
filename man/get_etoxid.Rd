@@ -29,6 +29,7 @@ Before using this function, please read the disclaimer \url{http://webetox.uba.d
 }
 \examples{
 \dontrun{
+# might fail if API is not available
 get_etoxid('Triclosan')
 # multiple inpus
 comps <- c('Triclosan', 'Glyphosate')
