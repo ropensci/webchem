@@ -44,4 +44,7 @@ gly$approved_in
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
+\references{
+Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016. An International Database for Pesticide Risk Assessments and Management. Human and Ecological Risk Assessment: An International Journal
+}
 
