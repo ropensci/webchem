@@ -53,7 +53,7 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
     message('Searching ', query)
   baseurl <- 'https://webetox.uba.de/webETOX/public/search/stoff.do'
 
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   h <- POST(url = baseurl, body = list('stoffname.selection[0].name' = query,
                                   event = 'Search'))
   # get substances and links
@@ -183,7 +183,7 @@ etox_basic <- function(id, verbose = TRUE){
   qurl <- paste0(baseurl, id)
   if (verbose)
     message('Querying ', qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   tt <- try(read_html(qurl), silent = TRUE)
   if (inherits(tt, 'try-error')) {
     message('ID not found! Returning NA.\n')
@@ -260,7 +260,7 @@ etox_targets <- function(id, verbose = TRUE){
   qurl <- paste0(baseurl, id)
   if (verbose)
     message('Querying ', qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   tt <- try(read_html(qurl), silent = TRUE)
   if (inherits(tt, 'try-error')) {
     message('ID not found! Returning NA.\n')
@@ -330,7 +330,7 @@ etox_tests <- function(id, verbose = TRUE){
   httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
     message('Querying ', qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   tt <- try(read_html(qurl), silent = TRUE)
   if (inherits(tt, 'try-error')) {
     message('ID not found! Returning NA.\n')

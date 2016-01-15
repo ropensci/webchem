@@ -62,7 +62,7 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
   qurl <- paste0(baseurl, query, '?DT_START_ROW=0&DT_ROWS_PER_PAGE=50')
   if (verbose)
     message(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   ttt <- try(read_html(qurl), silent = TRUE)
   if (inherits(ttt, 'try-error')) {
     message('Not found! Returning NA.\n')
@@ -133,7 +133,7 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
     qurl <- paste0('http://chem.sis.nlm.nih.gov/chemidplus/rn/', hit_cas)
     if (verbose)
       message(qurl)
-    Sys.sleep(0.3)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     ttt <- try(read_html(qurl), silent = TRUE)
   } else {
     d <- 'direct match'

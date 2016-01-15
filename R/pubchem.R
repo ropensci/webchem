@@ -36,7 +36,7 @@ get_pcid <- function(query, first = FALSE, verbose = TRUE, ...){
                 query, sep = "")
   if (verbose)
     message(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
@@ -99,7 +99,7 @@ pc_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   qurl <- paste0(baseurl, '&ID=', cid)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')

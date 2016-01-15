@@ -13,6 +13,7 @@
 #' @seealso \code{\link{ppdb_buildidx}}
 "ppdb_idx"
 
+
 #' Query PPDB search index
 #'
 #' This function queries the PPDB search index \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm} and
@@ -41,6 +42,7 @@
 ppdb_buildidx <- function(){
   # query seach index
   qurl <- 'http://sitem.herts.ac.uk/aeru/iupac/search.htm'
+  Sys.sleep(5)
   tt <- read_html(qurl)
   cont <- xml_text(xml_find_all(tt, "//script[contains(.,'# of titles present in the database')]"))
   Encoding(cont) <- "latin1"
@@ -60,7 +62,7 @@ ppdb_buildidx <- function(){
                       link = iconv(links, from = "UTF-8", to = "ASCII"),
                       stringsAsFactors = FALSE)
   # remove empty entries
-  ppdb_idx <- ppdb_idx[! (ppdb_idx$cas == '' | is.na(ppdb_idx$cas)), ]
+  ppdb_idx <- ppdb_idx[!(ppdb_idx$cas == '' | is.na(ppdb_idx$cas)), ]
   # remove non-cas entries
   trm <- c( "AE1277106", "AE1394083", "AE-F130619", "ASU 70 480 1", "D-3598" ,
             "IN-EQW78", "IR5839" ,"methyl ester", "MON 0139", "None",  "sodium salt" )
@@ -90,7 +92,7 @@ ppdb_buildidx <- function(){
 #' See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf} for more information on the data
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-
+#' @references Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016. An International Database for Pesticide Risk Assessments and Management. Human and Ecological Risk Assessment: An International Journal
 #' @export
 #' @examples
 #' \dontrun{
@@ -136,7 +138,7 @@ ppdb_query <- function(cas, verbose = TRUE, index = NULL){
   if (verbose)
     message('Querying ', qurl)
 
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   ttt <- read_html(qurl, encoding = 'latin1')
 
   # ec regulation

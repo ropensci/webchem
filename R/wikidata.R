@@ -35,7 +35,7 @@ get_wdid <- function(query, language, first = FALSE, verbose = TRUE){
   qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query)
   if (verbose)
     message('Querying ', qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   cont <- fromJSON(content(GET(qurl, user_agent('webchem (https://github.com/ropensci/webchem)')), 'text'))
   search <- cont$search
   if (length(search) == 0) {
@@ -106,7 +106,7 @@ wd_ident <- function(id, verbose = TRUE){
   sparql <- paste(sparql_head, sparql_body, '}')
   qurl <- paste0(baseurl, sparql)
   qurl <- URLencode(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   if (verbose)
     message('Querying ', qurl)
   tmp <- fromJSON(qurl)
@@ -124,7 +124,7 @@ wd_ident <- function(id, verbose = TRUE){
 
   # check for missing entries and add to out-list
   miss <- names[!names %in% names(out)]
-  for(i in miss){
+  for (i in miss) {
     out[[i]] <- NA
   }
   out <- out[names]

@@ -36,7 +36,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
   qurl <- paste0(baseurl, '/', inchikey)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   out <- try(fromJSON(qurl), silent = TRUE)
   if (inherits(out, "try-error")) {
     warning('Not found... Returning NA.')
@@ -88,7 +88,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   qurl <- URLencode(qurl)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   out <- try(fromJSON(qurl), silent = TRUE)
   if (inherits(out, "try-error")) {
     warning('Not found... Returning NA.')

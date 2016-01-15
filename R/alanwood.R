@@ -47,14 +47,14 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     linkn0 <- xml_text(xml_find_all(ttt0, '//dt/following-sibling::dd[1]/a[1]'))
 
     baseurl1 <- 'http://www.alanwood.net/pesticides/index_rn1.html'
-    Sys.sleep(0.3)
+    Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
     ttt1 <- read_html(baseurl1)
     names1 <- xml_text(xml_find_all(ttt1, "//dt"))
     links1 <-  xml_attr(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'), 'href')
     linkn1 <- xml_text(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'))
 
     baseurl2 <- 'http://www.alanwood.net/pesticides/index_rn2.html'
-    Sys.sleep(0.3)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     ttt2 <- read_html(baseurl2)
     names2 <- xml_text(xml_find_all(ttt2, "//dt"))
     links2 <-  xml_attr(xml_find_all(ttt2, '//dt/following-sibling::dd[1]/a[1]'), 'href')
@@ -78,7 +78,7 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   if (verbose)
     message('Querying ', takelink)
 
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   ttt <- read_html(paste0('http://www.alanwood.net/pesticides/', takelink))
   status <- xml_text(xml_find_all(ttt, "//tr/th[@id='r1']/following-sibling::td"))
   pref_iupac_name <- xml_text(xml_find_all(ttt, "//tr/th[@id='r2']/following-sibling::td"))

@@ -42,7 +42,7 @@ pp_query <- function(cas, verbose = TRUE){
   qurl <- paste0(baseurl, query)
   if (verbose)
     message('Querying ', qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   ttt <- try(
     read_html(
       content(
