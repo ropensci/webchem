@@ -119,7 +119,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
     warning('Identifier is NA... Returning NA.')
     return(NA)
   }
-  baseurl <- "http://cactus.nci.nih.gov/chemical/structure"
+  baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
   qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
   if (!is.null(resolver)) {
     qurl <- paste0(qurl, '?resolver=', resolver)
