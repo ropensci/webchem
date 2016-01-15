@@ -9,7 +9,8 @@
 #' @return A list of eight entries: common-name, status, preferredd IUPAC Name,
 #'          IUPAC Name, cas, formula, activity, subactivity, inchikey and inchi.
 #'
-#' @note for type = 'cas' only the first link is returned
+#' @note for type = 'cas' only the first matched link is returned.
+#' Please respect Copyright, Terms and Conditions \url{http://www.alanwood.net/pesticides/legal.html}!
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
