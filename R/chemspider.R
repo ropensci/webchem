@@ -10,9 +10,10 @@
 #' @param ... currently not used.
 #' @return a character vector of class 'csid' with ChemSpider IDs.
 #'
-#' @note A security token is neeeded. Please register at RSC
+#' @note A security token is neeeded. Please register at RSC.
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
+#' Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{csid_compinfo}} and \code{\link{csid_extcompinfo}} to
@@ -78,6 +79,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
+#' Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
 #' \code{\link{csid_extcompinfo}} for extended compound information.
@@ -134,6 +136,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
+#' Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
 #' \code{\link{csid_compinfo}} for extended compound information.

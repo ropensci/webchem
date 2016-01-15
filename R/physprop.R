@@ -16,12 +16,8 @@
 #' prop is a data.frame, with variables, value, unit, temp, type (see note) and ref (see note).
 #'
 #' @note Abbreviations in the 'Type' field: EXP = Experimental Data,
-#' EST = Estimated Data, EXT = Extrapolated Data. Extrapolated data is based
-#' upon experimental measurement outside the temperature range of the reported value.
-#' References below are abbreviated citations ...
-#' the full reference citations are NOT available here.
-#' References for Estimated data generally refer to the method used to make the estimate ...
-#' most estimates were made using SRC software.
+#' EST = Estimated Data, EXT = Extrapolated Data.
+#' Please respect the terms of use: \url{http://www.srcinc.com/terms-of-use.html}.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
