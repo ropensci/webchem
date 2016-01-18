@@ -23,6 +23,9 @@ See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pd
 \description{
 This function queries the PPDB \url{http://sitem.herts.ac.uk/aeru/iupac/search.htm} for information.
 }
+\note{
+Please read the Terms and Conditions for use: \url{http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Conditions_of_use.pdf}.
+}
 \examples{
 \dontrun{
 # might fail if Server is not available

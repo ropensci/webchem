@@ -81,6 +81,7 @@ ppdb_buildidx <- function(){
 #'
 #' @import xml2
 #' @importFrom rvest html_table
+#' @importFrom stats rgamma
 #'
 #' @param cas character; CAS number to query.
 #' @param verbose logical; print message during processing to console?
@@ -90,6 +91,8 @@ ppdb_buildidx <- function(){
 #' deg, soil, metab, etox and names.
 #'
 #' See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf} for more information on the data
+#'
+#' @note Please read the Terms and Conditions for use: \url{http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Conditions_of_use.pdf}.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @references Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016. An International Database for Pesticide Risk Assessments and Management. Human and Ecological Risk Assessment: An International Journal

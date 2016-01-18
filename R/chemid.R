@@ -4,6 +4,7 @@
 #'
 #' @import xml2
 #' @importFrom rvest html_table
+#' @importFrom stats rgamma
 #'
 #' @param query character; query string
 #' @param type character; type of query string.

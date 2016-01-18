@@ -2,6 +2,7 @@
 #'
 #' Query Alan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param  x character; search string
 #' @param type character; type of input ('cas' or 'commonname')

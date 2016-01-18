@@ -4,6 +4,7 @@
 #' @import xml2
 #' @importFrom utils adist
 #' @importFrom rvest html_table
+#' @importFrom stats rgamma
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param match character; \code{match="all"} returns all matches,
 #'   \code{match="first"} the first one and \code{match="best"} the hit with the lowest

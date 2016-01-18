@@ -2,6 +2,7 @@
 #'
 #' Return Chemspider ID (CSID) for a search query, see \url{http://www.chemspider.com/}.
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param query charachter; search term.
 #' @param token character; your security token.
@@ -68,6 +69,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #'
 #' Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param csid character, ChemSpider ID.
 #' @param token character; security token.
@@ -126,6 +128,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #'
 #' Get extended info from Chemspider, see \url{http://www.chemspider.com/}
 #' @import xml2
+#' @importFrom stats rgamma
 #' @param csid character,  ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -262,6 +265,7 @@ cs_convert <- function(query, from = c('csid', 'inchikey', 'inchi', 'smiles'),
 
 #' Convert a CSID to a Molfile
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param csid character,  ChemSpiderID.
 #' @param token character; security token.
@@ -317,6 +321,7 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 
 #' Convert a InChIKey to CSID
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param inchikey character,  InChIKey
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -357,6 +362,7 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
 
 #' Convert a InChIKey to InChI
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param inchikey character,  InChIKey
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -395,6 +401,7 @@ cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
 
 #' Convert a InChIkey to a Molfile
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param inchikey character,  A InChIKey.
 #' @param parse should the molfile be parsed to a R object?
@@ -443,6 +450,7 @@ cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
 
 #' Convert a InChI to CSID
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -490,6 +498,7 @@ cs_inchi_csid <- function(inchi, verbose = TRUE, ...){
 
 #' Convert a InChI to InChiKey
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -538,6 +547,7 @@ cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
 
 #' Convert a InChI to Molfile
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param parse should the molfile be parsed to a R object?
@@ -592,6 +602,7 @@ cs_inchi_mol <- function(inchi, parse = TRUE, verbose = TRUE, ...){
 
 #' Convert a InChI to SMILES
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -640,6 +651,7 @@ cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
 
 #' Convert a SMILES to InChI
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param smiles character, A SMILES string
 #' @param verbose logical; should a verbose output be printed on the console?

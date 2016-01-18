@@ -27,6 +27,7 @@ Get extended info from Chemspider, see \url{http://www.chemspider.com/}
 A security token is neeeded. Please register at RSC
 \url{https://www.rsc.org/rsc-id/register}
 for a security token.
+Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{

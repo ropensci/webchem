@@ -1,6 +1,7 @@
 #' Get Wikidata Item ID
 #'
 #' @import jsonlite httr
+#' @importFrom stats rgamma
 #'
 #' @param query character; The searchterm
 #' @param language character; the language to search in
@@ -63,6 +64,7 @@ get_wdid <- function(query, language, first = FALSE, verbose = TRUE){
 #' Retrieve Indentifiers from wikidata
 #'
 #' @import jsonlite
+#' @importFrom stats rgamma
 #'
 #' @param id character; identifier, as returned by \code{\link{get_wdid}}
 #' @param verbose logical; print message during processing to console?

@@ -60,6 +60,7 @@ get_pcid <- function(query, first = FALSE, verbose = TRUE, ...){
 #'
 #' Retrieve compound information from pubchem CID, see \url{https://pubchem.ncbi.nlm.nih.gov/}
 #' @import xml2
+#' @importFrom stats rgamma
 #' @param cid character; Pubchem ID (CID).
 #' @param first logical; return only first list items?
 #' That is: a list with entries of lenght 1 (for easy conversion in a data.frame)

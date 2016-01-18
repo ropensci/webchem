@@ -7,6 +7,7 @@
 #' see \url{http://www.srcinc.com/what-we-do/environmental/scientific-databases.html#physprop}.
 #'
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param cas character; A CAS number to query.
 #' @param verbose logical; print message during processing to console?

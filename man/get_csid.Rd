@@ -24,9 +24,10 @@ a character vector of class 'csid' with ChemSpider IDs.
 Return Chemspider ID (CSID) for a search query, see \url{http://www.chemspider.com/}.
 }
 \note{
-A security token is neeeded. Please register at RSC
+A security token is neeeded. Please register at RSC.
 \url{https://www.rsc.org/rsc-id/register}
 for a security token.
+Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{
