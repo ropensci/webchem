@@ -25,6 +25,7 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   # x <- "79622-59-6"
   # x <- '12071-83-9'
   # x <- '91465-08-6'
+  # x <- "S-Metolachlor"
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -97,17 +98,16 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     if (grepl('isomer', inchikey_r)) {
       inchikey <- c(s_isomer = gsub('.*\\(S\\)-isomer:(.*)(minor component.*)', '\\1', inchikey_r),
         r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchikey_r))
-    } else {
-      inchikey <- inchikey_r
     }
     if (grepl('identifier', inchikey_r)) {
       inchikey <- c(gsub('(.*)identifier.*', '\\1', inchikey_r), gsub('.*identifier.*:(.*)', '\\1', inchikey_r))
       names(inchikey) <- c('inchikey',
                            gsub('.*(identifier.*:).*', '\\1', inchikey_r)
                            )
-    } else {
+    }
+    if (!grepl('isomer', inchikey_r) & !grepl('identifier', inchikey_r))
       inchikey <- inchikey_r
-  }}
+  }
 
   inchi <- xml_text(xml_find_all(ttt, "//tr/th[@id='r12']/following-sibling::td"))
   if (length(inchi) == 0) {
