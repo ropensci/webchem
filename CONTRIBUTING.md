@@ -25,7 +25,14 @@ We do not have strong guideline for our contributions and are happy to help.
 We want to keep dependencies to a minimum:
 
 2. Please use the [`xml2`](https://github.com/hadley/xml2) package instead of the `XML` package. The maintainance of xml2 is much better.
+
 3. Please use the lightweight [`jsonlite`](https://github.com/jeroenooms/jsonlite) package for handling JSON.
+
+4. Be nice to the resources! Use appropriate timeouts.
+
+5. Tests go into the separate tests branch and not in the master branch.
+
+
 
 
 ### Questions? 
