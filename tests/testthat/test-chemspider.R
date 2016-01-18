@@ -90,6 +90,8 @@ test_that("cs_inchikey_csid()", {
 
   expect_warning(cs_inchikey_csid('xxx'))
   expect_equal(cs_inchikey_csid('xxx'), NA)
+
+  expect_equal(cs_inchikey_csid(inchikey = 'KYOUEHWYDNYHAL-IOORBXIBSA-N'), NA) # Was BUG, returned "", should be NA
 })
 
 

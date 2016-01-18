@@ -340,7 +340,8 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' }
 cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
-  # inchkey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  # inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  # inchikey <- 'KYOUEHWYDNYHAL-IOORBXIBSA-N'
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -356,6 +357,11 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
   } else {
     out <- xml_text(h)
   }
+  if (out == '') {
+    warning('inchikey not found... Returning NA.')
+    out <- NA
+  }
+
   return(out)
 }
 
