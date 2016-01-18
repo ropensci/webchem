@@ -138,7 +138,7 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
     ttt <- try(read_html(qurl), silent = TRUE)
   } else {
     d <- 'direct match'
-    matched_sub <- subs[1]
+    matched_sub <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))[1]
   }
 
   name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
