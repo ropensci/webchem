@@ -5,7 +5,7 @@ webchem
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
-[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/github/ropensci/webchem?branch=master)
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/github/ropensci/webchem?branch=tests)
 <!--
 [![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
 -->
@@ -197,27 +197,17 @@ cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 Retrieve PubChem CID
 
 ```r
-get_pcid('Triclosan')
-#>  [1] "5564"     "131203"   "627458"   "9929261"  "15942656" "16220126"
-#>  [7] "16220128" "16220129" "16220130" "18413505" "22947105" "23656593"
-#> [13] "24848164" "25023954" "25023955" "25023956" "25023957" "25023958"
-#> [19] "25023959" "25023960" "25023961" "25023962" "25023963" "25023964"
-#> [25] "25023965" "25023966" "25023967" "25023968" "25023969" "25023970"
-#> [31] "25023971" "25023972" "25023973" "45040608" "45040609" "67606151"
-#> [37] "71752714" "92024355" "92043149" "92043150" "92131249"
-cid <- get_pcid('3380-34-5')
+# get_pcid('Triclosan')
+# cid <- get_pcid('3380-34-5')
 ```
 
 Use this CID to retrieve some chemical properties:
 
 ```r
-props <- pc_compinfo(cid)
-props$InChIKey
-#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
-props$MolecularWeight
-#> [1] "289.541780"
-props$IUPACName
-#> [1] "5-chloro-2-(2,4-dichlorophenoxy)phenol"
+# props <- pc_compinfo(cid)
+# props$InChIKey
+# props$MolecularWeight
+# props$IUPACName
 ```
 
 
