@@ -38,5 +38,8 @@ Eduard Szoecs, \email{eduardszoecs@gmail.com}
 \references{
 Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
 Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
+
+Kim, Sunghwan, Paul A. Thiessen, Evan E. Bolton, et al. 2016
+PubChem Substance and Compound Databases. Nucleic Acids Research 44(D1): D1202–D1213.
 }
 
