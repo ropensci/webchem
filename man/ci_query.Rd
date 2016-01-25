@@ -22,7 +22,7 @@ ci_query(query, type = c("rn", "name", "inchikey"), mult = c("first",
 \value{
 A list of 8 entries: name (vector), synonyms (vector), cas (vector),
 inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
-physprop (data.frame).
+physprop (data.frame) and source_url.
 }
 \description{
 Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}

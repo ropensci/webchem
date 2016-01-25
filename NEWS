@@ -21,6 +21,7 @@ MINOR IMPROVEMENTS
 * is.inchikey_cs() has been integrated into is.inchikey().
 * aw_query() returns multiple inchikey if found and source_url is returned.
 * pan() now returns chemical name and matched synonym. Values have appropriate class and source_url is returned.
+* ci_query() returns source_url.
 
 BUG FIXES
 
