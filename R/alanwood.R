@@ -8,7 +8,7 @@
 #' @param type character; type of input ('cas' or 'commonname')
 #' @param verbose logical; print message during processing to console?
 #' @return A list of eight entries: common-name, status, preferredd IUPAC Name,
-#'          IUPAC Name, cas, formula, activity, subactivity, inchikey and inchi.
+#'          IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source url.
 #'
 #' @note for type = 'cas' only the first matched link is returned.
 #' Please respect Copyright, Terms and Conditions \url{http://www.alanwood.net/pesticides/legal.html}!
@@ -118,9 +118,12 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
                  r_isomer = gsub('.*\\(R\\)-isomer:(.*)', '\\1', inchi))
     }
   }
+
+  # add source url
+  source_url <- paste0('http://www.alanwood.net/pesticides/', takelink)
   out <- list(cname = cname, status = status, pref_iupac_name = pref_iupac_name,
               iupac_name = iupac_name, cas = cas, formula = formula,
               activity = activity, subactivity = subactivity,
-              inchikey = inchikey, inch = inchi)
+              inchikey = inchikey, inch = inchi, source_url = source_url)
   return(out)
 }
