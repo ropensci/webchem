@@ -10,8 +10,8 @@ pan_query(query, match = c("all", "first", "best"), verbose = TRUE, ...)
 \item{query}{character; searchterm, e.g. chemical name or CAS.}
 
 \item{match}{character; \code{match="all"} returns all matches,
-\code{match="first"} the first one and \code{match="best"} the hit with the lowest
- Levenshtein distance between query and hit.}
+\code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
+ Levenshtein distance between query and matching synonym.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -23,7 +23,7 @@ a named list of 73 entries,
   If \code{match="best"} an additional entry \code{match_score} with the normalized
   Levenshtein distance (0 = perfect match, 1 = worst match).
 
-Chemical Name and matching synonym; CAS Number; U.S. EPAPC Code; CA ChemCode;
+CAS Number; U.S. EPAPC Code; CA ChemCode;
 Use Type; Chemical Class; Molecular Weight; U.S. EPARegistered ; CA Reg Status;
 PIC; POPs; WHO Obsolete; EPA HAP; CA TAC; Ground Water Contaminant;
 CA Grnd Water Contam.; Acute Aquatic Toxcity; Chronic Aquatic Toxicity;
@@ -52,7 +52,8 @@ Salt Water Quality Criteria Max (ug/L); Human Consumption of Organisms from Wate
 Human Consumption of Water and Organisms from Water Source (ug/L);
 Taste and Odor Criteria (ug/L);
 Fresh Water Guidelines (ug/L); Salt Water Guidelines (ug/L);
-Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L)
+Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L);
+Chemical Name; matching synonym; source URL
 }
 \description{
 Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
