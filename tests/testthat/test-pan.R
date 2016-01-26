@@ -16,13 +16,16 @@ chk_pan <- function(){
 test_that("pan_query()", {
   chk_pan()
 
+  a <- pan_query('Triclosan', verbose = FALSE)
+  b <- pan_query('Chlorpyrifos', verbose = FALSE, match = 'best')
+
   expect_error(pan_query(c('xxxxx', 'aaaaaaa')))
   expect_warning(pan_query(NA))
-  expect_equal(pan_query('xxxxx', verbose = FALSE), NA)
-  expect_equal(length(pan_query('2,4-dichlorophenol', verbose = FALSE)), 73)
-  expect_equal(pan_query('Triclosan', verbose = FALSE)[[2]], "3380-34-5")
+  rexpect_equal(pan_query('xxxxx', verbose = FALSE), NA)
+  expect_equal(length(a), 75)
+  expect_equal(a$`CAS Number`, "3380-34-5")
   expect_equal(length(pan_query('Chlorpyrifos', verbose = FALSE, match = 'all')[[1]]), 9)
   expect_equal(length(pan_query('Chlorpyrifos', verbose = FALSE, match = 'first')[[1]]), 1)
-  expect_equal(length(pan_query('Chlorpyrifos', verbose = FALSE, match = 'best')[[1]]), 1)
-  expect_equal(pan_query('Chlorpyrifos', verbose = FALSE, match = 'best')[[1]], "Chlorpyrifos\nChlorpyrifos")
+  expect_equal(length(b$`CAS Number`), 1)
+  expect_equal(b$`Chemical name`, "Chlorpyrifos")
 })

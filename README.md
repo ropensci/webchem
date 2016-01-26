@@ -5,7 +5,7 @@ webchem
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
-[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/github/ropensci/webchem?branch=master)
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/github/ropensci/webchem?branch=tests)
 <!--
 [![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
 -->
@@ -158,8 +158,12 @@ cs_extcompinfo(id, token = token)
 #> 
 #> $common_name
 #> [1] "Triclosan"
+#> 
+#> $source_url
+#> [1] "http://www.chemspider.com/Chemical-Structure.5363.html"
 ```
 
+Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
 
 Or to convert to a Mol-Object
 
@@ -269,10 +273,10 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 #> [1] "Pyrethroid"
 #> 
 #> $`Water Solubility (Avg, mg/L)`
-#> [1] "0.005"
+#> [1] 0.005
 #> 
 #> $`Adsorption Coefficient (Koc)`
-#> [1] "157000"
+#> [1] 157000
 ```
 
 
@@ -312,6 +316,9 @@ aw_query('Fluazinam', type = 'commonname')
 #> 
 #> $inch
 #> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
+#> 
+#> $source_url
+#> [1] "http://www.alanwood.net/pesticides/fluazinam.html"
 aw_query('79622-59-6', type = 'cas')$cname
 #> [1] "fluazinam"
 ```
@@ -351,6 +358,9 @@ pp_query('50-00-0')
 #> 6     KWOK,ESC & ATKINSON,R (1994)
 #> 7                             <NA>
 #> 8                             <NA>
+#> 
+#> $source_url
+#> [1] "https://esc.syrres.com/fatepointer/webprop.asp?CAS=50000"
 ```
 
 
@@ -418,6 +428,9 @@ etox_basic(id)
 #> 22                                triklosaani   Finnish
 #> 23                                 triclosano   Italian
 #> 24                                  triklosan   Swedish
+#> 
+#> $source_url
+#> [1] "https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id=20179"
 ```
 
 Which returns CAS, EC and GSBL numbers, as well as a synonym list.
@@ -427,7 +440,7 @@ We can also retrieve Quality Targets:
 
 ```r
 targets <- etox_targets(id)
-targets[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
+targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 #>   Substance Country_or_Region      Designation Value_Target_LR Unit
 #> 1 Triclosan               AUS             PNEC           0.050 µg/l
 #> 2 Triclosan               CHE AA-QS_freshwater           0.020 µg/l
@@ -444,7 +457,7 @@ and results of ecotox tests:
 
 ```r
 tests <- etox_tests(id)
-tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
+tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 #>                           Organism                  Effect Duration
 #> 1              Anabaena flos-aquae                    k.A.        4
 #> 2          Brachionus calyciflorus                    k.A.        2
@@ -513,63 +526,36 @@ The information output is enormous, I show here only a small part, the countries
 
 
 ```r
-out[[3]]
-#>                                            variable
-#> 1                                   Substance group
-#> 2                   Minimum active substance purity
-#> 3                         Known relevant impurities
-#> 4                                  Substance origin
-#> 5                                    Mode of action
-#> 6                                            CAS RN
-#> 7                                         EC number
-#> 8                                      CIPAC number
-#> 9                              US EPA chemical code
-#> 10                                  Chiral molecule
-#> 11                                 Chemical formula
-#> 12                                           SMILES
-#> 13 International Chemical Identifier key (InChIKey)
-#> 14        International Chemical Identifier (InChI)
-#> 15               Structure diagram/image available?
-#> 16           Molecular mass               (g mol-1)
-#> 17              PIN (Preferred Identification Name)
-#> 18                                       IUPAC name
-#> 19                                         CAS name
-#> 20                         Other status information
-#> 21       Herbicide Resistance Classification (HRAC)
-#> 22       Herbicide Resistance Classification (WSSA)
-#> 23     Insecticide Resistance Classification (IRAC)
-#> 24       Fungicide Resistance Classification (FRAC)
-#> 25                  Examples of recorded resistance
-#> 26                                   Physical state
-#> 27                   Related substances & organisms
-#>                                                                                                                                                                           value
-#> 1                                                                                                                                                              Phosphonoglycine
-#> 2                                                                                                                                                                      950 g/kg
-#> 3                                                                                                                                                     EU dossier - Formaldehyde
-#> 4                                                                                                                                                                     Synthetic
-#> 5                                                                          Broad-spectrum, systemic, contact action translocated and non-residual. Inhibition of EPSP synthase.
-#> 6                                                                                                                                                                     1071-83-6
-#> 7                                                                                                                                                                     213-997-4
-#> 8                                                                                                                                                                           284
-#> 9                                                                                                                                                                        417300
-#> 10                                                                                                                                                                           No
-#> 11                                                                                                                                                                     C3H8NO5P
-#> 12                                                                                                                                                      C(C(=O)[O-])NCP(=O)(O)O
-#> 13                                                                                                                                                  XDDAORKBJWWYJS-UHFFFAOYSA-N
-#> 14                                                                                                          InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)
-#> 15                                                                                                                                                                          Yes
-#> 16                                                                                                                                                                        169.1
-#> 17                                                                                                                                                                            -
-#> 18                                                                                                                                                   N-(phosphonomethyl)glycine
-#> 19                                                                                                                                                   N-(phosphonomethyl)glycine
-#> 20                                                          Risk of herbicide resistance developing - anti-resistance management required; PAN listed Highly Hazardous Chemical
-#> 21                                                                                                                                                                            G
-#> 22                                                                                                                                                                            9
-#> 23                                                                                                                                                               Not applicable
-#> 24                                                                                                                                                               Not applicable
-#> 25                                                                                                        Eleusine indicaLolium rigidumAmaranthus palmeriEuphorbia heterophylla
-#> 26                                                                                                                                                          Colourless crystals
-#> 27 diflufenican  \n                          ethoxylated tallow amine    \n                          polyacrylamide              \n                          8-hydroxyquinoline
+out[['approved_in']]
+#>    status country
+#> AT   TRUE      AT
+#> BE   TRUE      BE
+#> BG   TRUE      BG
+#> CY   TRUE      CY
+#> CZ   TRUE      CZ
+#> DE   TRUE      DE
+#> DK   TRUE      DK
+#> EE   TRUE      EE
+#> EL   TRUE      EL
+#> ES   TRUE      ES
+#> FI   TRUE      FI
+#> FR   TRUE      FR
+#> HR   TRUE      HR
+#> HU   TRUE      HU
+#> IE   TRUE      IE
+#> IT   TRUE      IT
+#> LT   TRUE      LT
+#> LU   TRUE      LU
+#> LV   TRUE      LV
+#> MT   TRUE      MT
+#> NL   TRUE      NL
+#> PL   TRUE      PL
+#> PT   TRUE      PT
+#> RO   TRUE      RO
+#> SE   TRUE      SE
+#> SI   TRUE      SI
+#> SK   TRUE      SK
+#> UK   TRUE      UK
 ```
 
 
@@ -608,7 +594,7 @@ ids
 #> [1] "Triclosan"
 
 # quera identifiers from wikidata
-wd_ident(ids)[1:4]
+wd_ident(ids)[1:3]
 #> $smiles
 #> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
 #> 
@@ -617,9 +603,6 @@ wd_ident(ids)[1:4]
 #> 
 #> $cid
 #> [1] "5564"
-#> 
-#> $einecs
-#> [1] "222-182-2"
 ```
 
 

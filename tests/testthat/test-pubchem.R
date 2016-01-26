@@ -26,10 +26,10 @@ test_that("pc_compinfo", {
 
   expect_error(pc_compinfo(c('xxxxx', 'aaaaaaa')))
   chk_pubchem()
-  expect_equal(pc_compinfo('5564', verbose = FALSE)$CanonicalSmiles, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
-  expect_equal(length(pc_compinfo('5564', verbose = FALSE)), 25)
+  a <- pc_compinfo('5564', verbose = FALSE)
+  expect_equal(a$CanonicalSmiles, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
+  expect_equal(length(a), 26)
   chk_pubchem()
-  expect_equal(length(pc_compinfo('5564', first = TRUE, verbose = FALSE)$synonyms), 1)
   expect_equal(pc_compinfo('xxxxx', verbose = FALSE), NA)
   expect_warning(pc_compinfo('xxxxx', verbose = TRUE))
 })

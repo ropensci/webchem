@@ -12,6 +12,8 @@
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
 #' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
 #'
+#' Kim, Sunghwan, Paul A. Thiessen, Evan E. Bolton, et al. 2016
+#' PubChem Substance and Compound Databases. Nucleic Acids Research 44(D1): D1202–D1213.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -71,11 +73,14 @@ get_pcid <- function(query, first = FALSE, verbose = TRUE, ...){
 #' MolecularWeight, TotalFormalCharge, XlogP, HydrogenBondDonorCount,
 #' HydrogenBondAcceptorCount, Complexity,  HeavyAtomCount, AtomChiralCount,
 #' AtomChiralDefCount, AtomChiralUndefCount, BondChiralCount, BondChiralDefCount,
-#' BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount
+#' BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount and source_url
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_pcid}} to retrieve Pubchem IDs.
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
 #' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
+#'
+#' Kim, Sunghwan, Paul A. Thiessen, Evan E. Bolton, et al. 2016
+#' PubChem Substance and Compound Databases. Nucleic Acids Research 44(D1): D1202–D1213.
 #' @export
 #' @examples
 #' \donttest{
@@ -138,6 +143,7 @@ pc_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
   CovalentUnitCount <- xml_text(xml_find_all(h, "//Item[@Name='CovalentUnitCount']"))
   TautomerCount <- xml_text(xml_find_all(h, "//Item[@Name='TautomerCount']"))
 
+  source_url = paste0("https://pubchem.ncbi.nlm.nih.gov/compound/", CID)
   out <- list(CID = CID, InChIKey = InChIKey, InChI = InChI, synonyms = synonyms,
               IUPACName = IUPACName, CanonicalSmiles = CanonicalSmiles,
               IsomericSmiles = IsomericSmiles, RotatableBondCount = RotatableBondCount,
@@ -150,7 +156,7 @@ pc_compinfo <- function(cid, first = FALSE, verbose = TRUE, ...){
               AtomChiralUndefCount = AtomChiralUndefCount, BondChiralCount = BondChiralCount,
               BondChiralDefCount = BondChiralDefCount, BondChiralUndefCount = BondChiralUndefCount,
               IsotopeAtomCount = IsotopeAtomCount, CovalentUnitCount = CovalentUnitCount,
-              TautomerCount = TautomerCount)
+              TautomerCount = TautomerCount, source_url = source_url)
   if (first)
     out <- lapply(out, function(x) x[1])
   return(out)

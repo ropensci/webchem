@@ -15,7 +15,7 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return A list of 8 entries: name (vector), synonyms (vector), cas (vector),
 #' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
-#' physprop (data.frame).
+#' physprop (data.frame) and source_url.
 #'
 #' @note The data of the entry \code{physprop} is identical to the result returned
 #' by \code{\link{physprop}}.
@@ -53,12 +53,10 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
   # query <- 'Tetracyclin'
   type <- match.arg(type)
   mult <- match.arg(mult)
-  if (type == 'rn')
-    baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/rn/'
-  if (type == 'name')
-    baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/name/startswith/'
-  if (type == 'inchikey')
-    baseurl <- 'http://chem.sis.nlm.nih.gov/chemidplus/inchikey/'
+  baseurl <- switch(type,
+         rn = 'http://chem.sis.nlm.nih.gov/chemidplus/rn/',
+         name = 'http://chem.sis.nlm.nih.gov/chemidplus/name/startswith/',
+         inchikey = 'http://chem.sis.nlm.nih.gov/chemidplus/inchikey/')
   # return max 50 hits
   qurl <- paste0(baseurl, query, '?DT_START_ROW=0&DT_ROWS_PER_PAGE=50')
   if (verbose)
@@ -129,16 +127,17 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
       return(NA)
     }
 
-
     # retry with CAS-API
     qurl <- paste0('http://chem.sis.nlm.nih.gov/chemidplus/rn/', hit_cas)
     if (verbose)
       message(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     ttt <- try(read_html(qurl), silent = TRUE)
+    source_url <- qurl
   } else {
     d <- 'direct match'
     matched_sub <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))[1]
+    source_url <- gsub('^(.*)\\?.*', '\\1', qurl)
   }
 
   name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
@@ -158,9 +157,10 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
   physprop[ , 'Value'] <- as.numeric(physprop[ , 'Value'])
   #= same as physprop
 
+
   out <- list(name = name, synonyms = synonyms, cas = cas, inchi = inchi,
               inchikey = inchikey, smiles = smiles, toxicity = toxicity,
-              physprop = physprop)
+              physprop = physprop, source_url = source_url)
   attr(out, "matched") <- matched_sub
   attr(out, "distance") <- d
   return(out)

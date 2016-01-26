@@ -12,7 +12,7 @@ etox_tests(id, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A data.frame with test results from the ETOX database.
+A list of two: A data.frame with test results from the ETOX database and the source_url.
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets

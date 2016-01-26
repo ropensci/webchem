@@ -3,29 +3,28 @@ webchem 0.0.5.0
 
 NEW FEATURES
 
-* is.smiles() checks SMILES string, by parsing via (R)CDK.
+* is.smiles() checks SMILES strings, by parsing via (R)CDK.
 * get_wdid() and wd_indent() to retrieve information from wikidata.
-* get_etoxid() can handle multi inputs (interactive mode, best match, first match, NA and all matches)
-* ci_query() can handle multi inputs (interactive mode, best match, first match and NA)
+* get_etoxid() can handle multi inputs (interactive mode, best match, first match, NA and all matches).
+* ci_query() can handle multi inputs (interactive mode, best match, first match and NA).
 
 MINOR IMPROVEMENTS
 
-* webchem uses exclusively xml2 (instead of XML)
-* cs_compinfo():
-  - names of returned list changed
+* webchem uses exclusively xml2 (instead of XML).
+* All function return source_url for (micro-)attribution of sources
+* cs_compinfo(): names of returned list changed.
 * cs_extcompinfo():
   - names of returned list changed
   - result is numeric where appropriate
-* cir():
-  - result is numeric where appropriate
-* unified naming scheme.
-* withdraw naming changes in V0.0.4 (ppdb, cir).
-* is.inchikey_cs has been integrated into is.inchikey.
+* cir(): result is numeric where appropriate.
+* unified naming scheme of functions.
+* is.inchikey_cs() has been integrated into is.inchikey().
 * aw_query() returns multiple inchikey if found.
+* pan() now returns chemical name and matched synonym.
 
 BUG FIXES
 
-* utility function are not vectorized and throw an error.
+* utility functions are not vectorized and throw an error.
 * chemid() did mot work with inchikey as input.
 * ppdb_idx returned duplicated CAS values, which caused ppdb() to fail.
 * ppdb() failed in some cases because of false encoding.

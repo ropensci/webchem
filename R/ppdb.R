@@ -87,15 +87,16 @@ ppdb_buildidx <- function(){
 #' @param verbose logical; print message during processing to console?
 #' @param index A index object, as created by \code{\link{ppdb_buildidx}}.
 #' If NULL (default), the index shipped with webchem is used \code{\link{ppdb_idx}}.
-#' @return A list of 10 data.frames : ec_regulation, approved_in, general, parents, fate,
-#' deg, soil, metab, etox and names.
+#' @return A list of 11 data.frames : ec_regulation, approved_in, general, parents, fate,
+#' deg, soil, metab, etox, names and source_url.
 #'
 #' See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf} for more information on the data
 #'
 #' @note Please read the Terms and Conditions for use: \url{http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Conditions_of_use.pdf}.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @references Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016. An International Database for Pesticide Risk Assessments and Management. Human and Ecological Risk Assessment: An International Journal
+#' @references Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016.
+#' An International Database for Pesticide Risk Assessments and Management. Human and Ecological Risk Assessment: An International Journal
 #' @export
 #' @examples
 #' \dontrun{
@@ -289,7 +290,8 @@ ppdb_query <- function(cas, verbose = TRUE, index = NULL){
        soil = soil,
        metab = metab,
        etox = etox,
-       names = names
+       names = names,
+       source_url = qurl
        )
   return(out)
 }

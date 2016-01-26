@@ -153,7 +153,7 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return a list wit four entries: cas (the CAS numbers), ec (the EC number),
-#' gsbl (the gsbl number) and a data.frame synonys with synonyms.
+#' gsbl (the gsbl number), a data.frame synonys with synonyms and the source url.
 #'
 #' @note Before using this function, please read the disclaimer
 #' \url{http://webetox.uba.de/webETOX/disclaimer.do}.
@@ -204,7 +204,8 @@ etox_basic <- function(id, verbose = TRUE){
   syns <- syns[ , -2]
   names(syns) <- c('name', 'language')
 
-  out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns)
+  out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns,
+              source_url = qurl)
   return(out)
 }
 
@@ -221,7 +222,7 @@ etox_basic <- function(id, verbose = TRUE){
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A data.frame with quality targets from the ETOX database.
+#' @return A list of two: \code{res} a data.frame with quality targets from the ETOX database, and source_url.
 #'
 #' @note Before using this function, please read the disclaimer
 #' \url{http://webetox.uba.de/webETOX/disclaimer.do}.
@@ -258,7 +259,7 @@ etox_targets <- function(id, verbose = TRUE){
     return(NA)
   }
   # id <- '20179'
-  # id <- '9051
+  # id <- '9051'
   baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
   qurl <- paste0(baseurl, id)
   if (verbose)
@@ -284,10 +285,14 @@ etox_targets <- function(id, verbose = TRUE){
   }
 
   csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
-  cont <- getURL(paste0('https://webetox.uba.de', csvlink))
-  out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
+  res <- read.table(paste0('https://webetox.uba.de', csvlink),
+                    header = TRUE, sep = ',', dec = ',', fileEncoding = 'latin1',
                     stringsAsFactors = FALSE)
-  out$Value_Target_LR <- as.numeric(out$Value_Target_LR)
+  res$Value_Target_LR <- as.numeric(res$Value_Target_LR)
+  source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
+  source_url <- gsub('^(.*ziel\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
+  out <- list(res = res, source_url = source_url)
+
   return(out)
 }
 
@@ -304,7 +309,7 @@ etox_targets <- function(id, verbose = TRUE){
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A data.frame with test results from the ETOX database.
+#' @return A list of two: A data.frame with test results from the ETOX database and the source_url.
 #' @note Before using this function, please read the disclaimer
 #' \url{http://webetox.uba.de/webETOX/disclaimer.do}.
 #'
@@ -331,7 +336,6 @@ etox_tests <- function(id, verbose = TRUE){
   # id <- '20179'
   baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
   qurl <- paste0(baseurl, id)
-  httpheader = c("Accept-Language" = "en-US,en;q=0.5")
   if (verbose)
     message('Querying ', qurl)
   Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
@@ -340,14 +344,21 @@ etox_tests <- function(id, verbose = TRUE){
     message('ID not found! Returning NA.\n')
     return(NA)
   }
-  link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Test') and contains(@href,'stoff')]"), 'href')
+  link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Tests') and contains(@href,'stoff')]"), 'href')
   id2 <- gsub('.*=(\\d+)', '\\1', link2)
 
   tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
   csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
-  cont <- getURL(paste0('https://webetox.uba.de', csvlink))
-  out <- read.table(text = cont, header = TRUE, sep = ',', dec = ',',
+
+  # csvlink <- gsub('^(.*\\.do).*$', '\\1', csvlink)
+  res <- read.table(paste0('https://webetox.uba.de', csvlink),
+                    header = TRUE, sep = ',', dec = ',', fileEncoding = 'latin1',
                     stringsAsFactors = FALSE)
-  out$Value <- as.numeric(out$Value)
+  res$Value <- as.numeric(res$Value)
+
+  source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
+  source_url <- gsub('^(.*test\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
+  out <- list(res = res, source_url = source_url)
+
   return(out)
 }

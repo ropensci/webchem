@@ -7,8 +7,8 @@
 #' @importFrom stats rgamma
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param match character; \code{match="all"} returns all matches,
-#'   \code{match="first"} the first one and \code{match="best"} the hit with the lowest
-#'    Levenshtein distance between query and hit.
+#'   \code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
+#'    Levenshtein distance between query and matching synonym.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a named list of 73 entries,
@@ -17,7 +17,7 @@
 #'   Levenshtein distance (0 = perfect match, 1 = worst match).
 #'
 #
-#' Chemical Name and matching synonym; CAS Number; U.S. EPAPC Code; CA ChemCode;
+#' CAS Number; U.S. EPAPC Code; CA ChemCode;
 #' Use Type; Chemical Class; Molecular Weight; U.S. EPARegistered ; CA Reg Status;
 #' PIC; POPs; WHO Obsolete; EPA HAP; CA TAC; Ground Water Contaminant;
 #' CA Grnd Water Contam.; Acute Aquatic Toxcity; Chronic Aquatic Toxicity;
@@ -46,7 +46,8 @@
 #' Human Consumption of Water and Organisms from Water Source (ug/L);
 #' Taste and Odor Criteria (ug/L);
 #' Fresh Water Guidelines (ug/L); Salt Water Guidelines (ug/L);
-#' Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L)
+#' Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L);
+#' Chemical Name; matching synonym; source URL
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -79,6 +80,8 @@ pan_query <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, 
     warning('Identifier is NA... Returning NA.')
     return(NA)
   }
+  # query <- '94-75-7'
+  # query <- '2,4-D'
   match <- match.arg(match)
   baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
   baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',
@@ -123,16 +126,30 @@ pan_query <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, 
   }, how = "replace" )
   out <- c(out[1:46],
            rapply(out[47:73], function(x) gsub(',', '', x), how = 'replace'))
+
+  # split chemName and matching synonym
+  out[['matching synonym']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 2)
+  out[['Chemical name']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 1)
+  out[['Chemical Name and matching synonym']] <- NULL
+
+  # return also source url
+  # xmlview::xml_view(nd, add_filter = TRUE)
+  source_url <- xml_attr(xml_find_all(nd, ".//a[contains(., 'Details')]"), 'href')
+  out[['source_url']] <- paste0('http://www.pesticideinfo.org/', source_url)
+
+  # convert to numeric
+  tonum <- c(6, 46:72)
+  out[tonum] <- rapply(out[tonum], as.numeric)
+
   if (match == 'first')
     out <- lapply(out, '[', 1)
+    attr(out, "match distance") <- 'first match'
   if (match == 'best') {
-    hits <- out[[1]]
-    # split synonyms
-    hits <- strsplit(hits, '\\n')
+    hits <- out[['matching synonym']]
     dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
     take <- which.min(dists)
     out <- lapply(out, '[', take)
-    out$match_score <- dists[take]
+    attr(out, "match distance") <- dists[take]
   }
   return(out)
 }

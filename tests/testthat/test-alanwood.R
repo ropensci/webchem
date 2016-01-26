@@ -23,7 +23,7 @@ test_that("alanwood, commonname", {
   expect_equal(length(sm$inchikey), 2)
   expect_equal(length(sm$inchi), 2)
   expect_equal(xx, NA, verbose = FALSE)
-  expect_equal(length(fl), 10)
+  expect_equal(length(fl), 11)
 })
 
 
