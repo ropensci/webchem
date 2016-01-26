@@ -243,7 +243,7 @@ cs_prop <- function(csid, verbose = TRUE, ...){
   # \\d* - 0 or more digits (the decimal part);
   # $ - End of the line.
   acd$value <- as.numeric(gsub('^(\\d*\\.?\\d*).*$', '\\1', acd$val))
-  acd$error <- ifelse(grepl('±' , acd$val), gsub('^\\d*\\.?\\d*±(\\d*\\.?\\d*)\\s.*$', '\\1', acd$val), NA)
+  acd$error <- as.numeric(ifelse(grepl('\u00B1' , acd$val), gsub('^\\d*\\.?\\d*\u00B1(\\d*\\.?\\d*)\\s.*$', '\\1', acd$val), NA))
   acd$unit <- ifelse(grepl('\\s.*\\d*$', acd$val),
          gsub('^.*\\d*\\s(.*\\d*)$', '\\1', acd$val),
          NA)
@@ -324,7 +324,7 @@ cs_prop <- function(csid, verbose = TRUE, ...){
   source_exp <- c(source_exp, NA)
 
   epi <- data.frame(prop, value_pred, unit_pred, source_pred,
-                    value_exp, unit_exp, source_exp)
+                    value_exp, unit_exp, source_exp, stringsAsFactors = FALSE)
 
 
   out <- list(acd = acd,
