@@ -13,7 +13,7 @@ etox_basic(id, verbose = TRUE)
 }
 \value{
 a list wit four entries: cas (the CAS numbers), ec (the EC number),
-gsbl (the gsbl number) and a data.frame synonys with synonyms.
+gsbl (the gsbl number), a data.frame synonys with synonyms and the source url.
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets

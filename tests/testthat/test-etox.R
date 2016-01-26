@@ -54,7 +54,7 @@ test_that("etox_basic returns correct results", {
 
   expect_error(etox_basic(c('20179', 'xxx')))
   expect_equal(do2$cas, "3380-34-5")
-  expect_equal(length(do2), 4)
+  expect_equal(length(do2), 5)
   expect_is(do2$synonyms, 'data.frame')
   expect_equal(xx2, NA)
 })
@@ -69,9 +69,9 @@ test_that("etox_targets returns correct results", {
   expect_equal(etox_targets(NA), NA)
 
   expect_error(etox_targets(c('20179', 'xxx')))
-  expect_equal(do3$Substance[1], "Triclosan")
-  expect_equal(ncol(do3), 32)
-  expect_is(do3, 'data.frame')
+  expect_equal(do3$res$Substance[1], "Triclosan")
+  expect_equal(ncol(do3$res), 32)
+  expect_is(do3, 'list')
   expect_equal(xx3, NA)
   expect_equal(xxx3, NA)
 })
@@ -84,11 +84,13 @@ test_that("etox_tests returns correct results", {
   expect_equal(etox_tests(NA), NA)
 
   expect_error(etox_tests(c('20179', 'xxx')))
-  expect_equal(do4$Substance[1], "Triclosan")
-  expect_equal(ncol(do4), 41)
-  expect_is(do4, 'data.frame')
+  expect_equal(do4$res$Substance[1], "Triclosan")
+  expect_equal(ncol(do4$res), 41)
+  expect_is(do4$res, 'data.frame')
+  expect_equal(length(do4), 2)
   expect_equal(xx4, NA)
 })
+
 
 test_that("etox integration tests", {
   chk_etox()
@@ -105,16 +107,17 @@ test_that("etox integration tests", {
   int6 <- etox_tests(xx)
 
   expect_equal(int1$cas, "3380-34-5")
-  expect_equal(length(int1), 4)
+  expect_equal(length(int1), 5)
   expect_is(int1$synonyms, 'data.frame')
 
-  expect_equal(int2$Substance[1], "Triclosan")
-  expect_equal(ncol(int2), 32)
-  expect_is(int2, 'data.frame')
+  expect_equal(int2$res$Substance[1], "Triclosan")
+  expect_equal(length(int2),2)
+  expect_equal(ncol(int2$res), 32)
+  expect_is(int2$res, 'data.frame')
 
-  expect_equal(int5$Substance[1], "Triclosan")
-  expect_equal(ncol(int5), 41)
-  expect_is(int5, 'data.frame')
+  expect_equal(int5$res$Substance[1], "Triclosan")
+  expect_equal(ncol(int5$res), 41)
+  expect_is(int5$res, 'data.frame')
 
   expect_equal(int3, NA)
   expect_equal(int4, NA)
