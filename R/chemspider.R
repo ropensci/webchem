@@ -76,7 +76,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of four, with entries: csid (ChemSpider ID), inchi,
-#'   inchikey and smiles.
+#'   inchikey, smiles and source_url.
 #'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
@@ -104,6 +104,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' do.call(rbind, ll)
 #' }
 cs_compinfo <- function(csid, token, verbose = TRUE, ...){
+  # csid <- "5363"
   if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -119,6 +120,8 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   }
   out <- as.list(xml_text(xml_children(h)))
   names(out) <- c('csid', 'inchi', 'inchikey', 'smiles')
+  source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+  out[['source_url']] <- source_url
   return(out)
 }
 
@@ -135,7 +138,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' @param ... currently not used.
 #' @return a list with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
 #' 'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
-#' 'nominal_mass', 'alogp', 'xlogp', 'common_name'
+#' 'nominal_mass', 'alogp', 'xlogp', 'common_name' and 'source_url'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
@@ -186,6 +189,8 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   out[['nominal_mass']] <- as.numeric(out[['nominal_mass']])
   out[['alogp']] <- as.numeric(out[['alogp']])
   out[['xlogp']] <- as.numeric(out[['xlogp']])
+  source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+  out[['source_url']] <- source_url
   return(out)
 }
 

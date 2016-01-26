@@ -124,6 +124,7 @@ Use this ID to query information from ChemSpider
 cs_extcompinfo(id, token = token)
 ```
 
+Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
 
 Or to convert to a Mol-Object
 
@@ -233,13 +234,13 @@ We can also retrieve Quality Targets:
 
 ```{r etox_targets}
 targets <- etox_targets(id)
-targets[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
+targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 ```
 
 and results of ecotox tests:
 ```{r etox_tests}
 tests <- etox_tests(id)
-tests[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
+tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 ```
 
 
@@ -254,7 +255,7 @@ out <- ppdb_query('1071-83-6')
 The information output is enormous, I show here only a small part, the countries where the compound is approved:
 
 ```{r ppdb_out}
-out[[3]]
+out[['approved_in']]
 ```
 
 
@@ -274,7 +275,7 @@ ids <- get_wdid(query = 'Triclosan', language = 'en')
 ids
 
 # quera identifiers from wikidata
-wd_ident(ids)[1:4]
+wd_ident(ids)[1:3]
 ```
 
 

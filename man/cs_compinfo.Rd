@@ -17,7 +17,7 @@ cs_compinfo(csid, token, verbose = TRUE, ...)
 }
 \value{
 a list of four, with entries: csid (ChemSpider ID), inchi,
-  inchikey and smiles.
+  inchikey, smiles and source_url.
 }
 \description{
 Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}

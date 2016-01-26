@@ -350,7 +350,7 @@ etox_tests <- function(id, verbose = TRUE){
   tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
   csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
 
-  #! This is XML! replace!
+  # csvlink <- gsub('^(.*\\.do).*$', '\\1', csvlink)
   res <- read.table(paste0('https://webetox.uba.de', csvlink),
                     header = TRUE, sep = ',', dec = ',', fileEncoding = 'latin1',
                     stringsAsFactors = FALSE)
