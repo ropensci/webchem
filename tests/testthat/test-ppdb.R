@@ -19,12 +19,8 @@ test_that("ppdb", {
 
   expect_is(y, 'list')
   expect_is(z, 'list')
-  expect_is(b1, 'list')
-  expect_is(b2, 'list')
   expect_equal(length(y), 11)
   expect_equal(length(z), 11)
-  expect_equal(length(b1), 11)
-  expect_equal(length(b2), 11)
 
   expect_is(y$ec_regulation, 'data.frame')
   expect_equal(y$general[y$general$variable == 'CAS RN', 'value'], "553-82-2")
