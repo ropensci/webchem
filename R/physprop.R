@@ -12,8 +12,8 @@
 #' @param cas character; A CAS number to query.
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A list of 4 entries: cas (CAS-Number), cname (Chemical Name),
-#' mw (Molecular weigth) and prop (Properties).
+#' @return A list of 5 entries: cas (CAS-Number), cname (Chemical Name),
+#' mw (Molecular weigth), prop (Properties) and source url.
 #' prop is a data.frame, with variables, value, unit, temp, type (see note) and ref (see note).
 #'
 #' @note Abbreviations in the 'Type' field: EXP = Experimental Data,
@@ -100,7 +100,7 @@ pp_query <- function(cas, verbose = TRUE){
                                  type = NA,
                                  ref = NA))
 
-  out <- list(cas = cas, cname = cname, mw = mw, prop = prop)
+  out <- list(cas = cas, cname = cname, mw = mw, prop = prop, source_url = qurl)
   return(out)
 }
 

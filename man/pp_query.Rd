@@ -12,8 +12,8 @@ pp_query(cas, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A list of 4 entries: cas (CAS-Number), cname (Chemical Name),
-mw (Molecular weigth) and prop (Properties).
+A list of 5 entries: cas (CAS-Number), cname (Chemical Name),
+mw (Molecular weigth), prop (Properties) and source url.
 prop is a data.frame, with variables, value, unit, temp, type (see note) and ref (see note).
 }
 \description{
