@@ -4,7 +4,7 @@
 \alias{get_wdid}
 \title{Get Wikidata Item ID}
 \usage{
-get_wdid(query, language, first = FALSE, verbose = TRUE)
+get_wdid(query, language = "en", first = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{query}{character; The searchterm}
@@ -27,9 +27,9 @@ Only matches in labels are returned.
 }
 \examples{
 \dontrun{
-get_wdid('Triclosan', language = 'en')
-get_wdid('DDT', language = 'en')
-get_wdid('DDT', language = 'en', first = TRUE)
+get_wdid('Triclosan', language = 'de')
+get_wdid('DDT')
+get_wdid('DDT', first = TRUE)
 
 # multiple inpus
 comps <- c('Triclosan', 'Glyphosate')

@@ -24,14 +24,14 @@ test_that("wd_ident returns correct results", {
 
   expect_error(wd_ident(c(id, id)))
   expect_equal(d$cas, "1071-83-6")
-  expect_equal(length(d), 12)
+  expect_equal(length(d), 13)
   expect_equal(f, NA)
   expect_message(wd_ident('xxxxx'))
 
   expect_equal(d2$cas, "3380-34-5")
-  expect_equal(length(d2), 12)
+  expect_equal(length(d2), 13)
   expect_equal(names(d2), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii'))
+                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'source_url'))
 })
 
 
@@ -40,6 +40,6 @@ test_that("wd integration test", {
   f <- wd_ident(get_wdid('xxxxx', 'en', TRUE))
 
   expect_equal(d$cas, "1071-83-6")
-  expect_equal(length(d), 12)
+  expect_equal(length(d), 13)
   expect_equal(f, NA)
 })

@@ -17,15 +17,15 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' get_wdid('Triclosan', language = 'en')
-#' get_wdid('DDT', language = 'en')
-#' get_wdid('DDT', language = 'en', first = TRUE)
+#' get_wdid('Triclosan', language = 'de')
+#' get_wdid('DDT')
+#' get_wdid('DDT', first = TRUE)
 #'
 #' # multiple inpus
 #' comps <- c('Triclosan', 'Glyphosate')
 #' sapply(comps, get_wdid, language = 'en')
 #' }
-get_wdid <- function(query, language, first = FALSE, verbose = TRUE){
+get_wdid <- function(query, language = 'en', first = FALSE, verbose = TRUE){
   # language <-  'en'
   # query <- 'Triclosan'
   if (length(query) > 1) {
@@ -70,7 +70,7 @@ get_wdid <- function(query, language, first = FALSE, verbose = TRUE){
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A list of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-#' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii'
+#' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
 #'
 #' @note Only matches in labels are returned.
 #'
@@ -130,6 +130,7 @@ wd_ident <- function(id, verbose = TRUE){
     out[[i]] <- NA
   }
   out <- out[names]
+  out[['source_url']] <- paste0('https://www.wikidata.org/wiki/', id)
   return(out)
 }
 

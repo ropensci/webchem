@@ -13,7 +13,7 @@ wd_ident(id, verbose = TRUE)
 }
 \value{
 A list of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-'drugbank', 'zvg', 'chebi', 'chembl', 'unii'
+'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
 }
 \description{
 Retrieve Indentifiers from wikidata
