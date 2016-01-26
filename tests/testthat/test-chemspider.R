@@ -275,3 +275,17 @@ test_that("cs_convert()", {
   m9 <- cs_convert(smiles, from = 'smiles', to = 'inchi')
   expect_equal(m9, inchi)
 })
+
+
+test_that("cs_prop()", {
+  id <- '5363'
+  m1 <- cs_prop(id)
+
+  expect_error(cs_prop(c(id, id)))
+
+  expect_is(m1, 'list')
+  expect_equal(length(m1), 3)
+
+  expect_is(m1$epi, 'data.frame')
+
+})

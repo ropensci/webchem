@@ -143,7 +143,11 @@ cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
 cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 ```
 
+And get EPISuit predictions from ChemSpider
 
+```{r cs_prop}
+cs_prop('5363')$epi[ , c(1:4)]
+```
 
 #### PubChem
 
