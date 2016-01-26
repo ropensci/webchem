@@ -15,8 +15,8 @@ ppdb_query(cas, verbose = TRUE, index = NULL)
 If NULL (default), the index shipped with webchem is used \code{\link{ppdb_idx}}.}
 }
 \value{
-A list of 10 data.frames : ec_regulation, approved_in, general, parents, fate,
-deg, soil, metab, etox and names.
+A list of 11 data.frames : ec_regulation, approved_in, general, parents, fate,
+deg, soil, metab, etox, names and source_url.
 
 See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf} for more information on the data
 }
@@ -48,6 +48,7 @@ gly$approved_in
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \references{
-Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016. An International Database for Pesticide Risk Assessments and Management. Human and Ecological Risk Assessment: An International Journal
+Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016.
+An International Database for Pesticide Risk Assessments and Management. Human and Ecological Risk Assessment: An International Journal
 }
 
