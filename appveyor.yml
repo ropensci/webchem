@@ -50,3 +50,6 @@ artifacts:
 
   - path: '\*_*.zip'
     name: zip
+
+  - path: '*.Rcheck\**\*.timings'
+    name: Logs
