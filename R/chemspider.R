@@ -496,15 +496,14 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('inchikey not found... Returning NA.')
-    out <- NA
+    return(NA)
   } else {
     out <- xml_text(h)
   }
   if (out == '') {
     warning('inchikey not found... Returning NA.')
-    out <- NA
+    return(NA)
   }
-
   return(out)
 }
 

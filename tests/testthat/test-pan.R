@@ -21,7 +21,7 @@ test_that("pan_query()", {
 
   expect_error(pan_query(c('xxxxx', 'aaaaaaa')))
   expect_warning(pan_query(NA))
-  rexpect_equal(pan_query('xxxxx', verbose = FALSE), NA)
+  expect_equal(pan_query('xxxxx', verbose = FALSE), NA)
   expect_equal(length(a), 75)
   expect_equal(a$`CAS Number`, "3380-34-5")
   expect_equal(length(pan_query('Chlorpyrifos', verbose = FALSE, match = 'all')[[1]]), 9)
