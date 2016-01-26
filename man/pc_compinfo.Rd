@@ -22,7 +22,7 @@ synonyms, IUPACName, Canonical SMILES, Isomeric SMILES, MolecularFormula,
 MolecularWeight, TotalFormalCharge, XlogP, HydrogenBondDonorCount,
 HydrogenBondAcceptorCount, Complexity,  HeavyAtomCount, AtomChiralCount,
 AtomChiralDefCount, AtomChiralUndefCount, BondChiralCount, BondChiralDefCount,
-BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount
+BondChiralUndefCount, IsotopeAtomCount, CovalentUnitCount, TautomerCount and source_url
 }
 \description{
 Retrieve compound information from pubchem CID, see \url{https://pubchem.ncbi.nlm.nih.gov/}
