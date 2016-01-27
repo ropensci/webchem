@@ -25,7 +25,7 @@ Before using this function, please read the disclaimer
 }
 \examples{
 \dontrun{
-id <- get_etoxid('Triclosan')
+id <- get_etoxid('Triclosan', mult = 'best')
 etox_basic(id)
 
 # Retrieve CAS for multiple inputs

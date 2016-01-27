@@ -13,7 +13,8 @@ NULL
 #' in the year 2013 in the river Jagst, Germany.
 #' The data is publicly available and can be retrieved from the
 #' LUBW Landesanstalt für Umwelt, Messungen und Naturschutz Baden-Württemberg.
-#' It comprises measurements of 34 substances (substances without detects have been removed)
+#' It has been preprocessed and comprises measurements of 34 substances.
+#' Substances without detects have been removed.
 #' on 13 sampling occasions.
 #' Values are given in ug/L.
 #'
@@ -26,3 +27,21 @@ NULL
 #' }
 #' @source \url{http://jdkfg.lubw.baden-wuerttemberg.de/servlet/is/300/}
 "jagst"
+
+
+#' Acute toxicity data from U.S. EPA ECOTOX
+#'
+#' This dataset comprises acute ecotoxicity data of 160 insecticides.
+#'
+#' The data is publicly available and can be retrieved from the EPA ECOTOX database
+#' (\url {http://cfpub.epa.gov/ecotox/})
+#' It comprises acute toxicity data (D. magna, 48h, Laboratory, 48h) and has been
+#' preprocessed (aggregate multiple value, keep only numeric data etc)
+#'
+#' @format A data frame with 160 rows and 2 variables:
+#' \describe{
+#'   \item{cas}{CAS registry number}
+#'   \item{value}{LC50value}
+#' }
+#' @source \url {http://cfpub.epa.gov/ecotox/}
+"lc50"
