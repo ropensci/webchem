@@ -165,7 +165,7 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
 #' @export
 #' @examples
 #' \dontrun{
-#' id <- get_etoxid('Triclosan')
+#' id <- get_etoxid('Triclosan', mult = 'best')
 #' etox_basic(id)
 #'
 #' # Retrieve CAS for multiple inputs
@@ -233,7 +233,7 @@ etox_basic <- function(id, verbose = TRUE){
 #' @export
 #' @examples
 #' \dontrun{
-#' id <- get_etoxid('Triclosan')
+#' id <- get_etoxid('Triclosan', mult = 'best')
 #' out <- etox_targets(id)
 #' out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 #' 'Value_Target_LR', 'Unit')]
@@ -320,7 +320,7 @@ etox_targets <- function(id, verbose = TRUE){
 #' @export
 #' @examples
 #' \dontrun{
-#' id <- get_etoxid('Triclosan')
+#' id <- get_etoxid('Triclosan', mult = 'best')
 #' out <- etox_tests(id)
 #' out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
 #' 'Endpoint', 'Value', 'Unit')]

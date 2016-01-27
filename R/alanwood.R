@@ -30,6 +30,7 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     stop('Cannot handle multiple input strings.')
   }
   type <- match.arg(type)
+  # search links in indexes
   if (type == 'commonname') {
     baseurl <- 'http://www.alanwood.net/pesticides/index_cn.html'
     ttt <- read_html(baseurl)
@@ -41,31 +42,26 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
     links <- links[!rm]
     cname <-  x
   }
+
   if (type == 'cas') {
-    baseurl0 <- 'http://www.alanwood.net/pesticides/index_rn.html'
-    ttt0 <- read_html(baseurl0)
-    names0 <- xml_text(xml_find_all(ttt0, "//dl/dt"))
-    # select only first link
-    links0 <- xml_attr(xml_find_all(ttt0, '//dt/following-sibling::dd[1]/a[1]'), 'href')
-    linkn0 <- xml_text(xml_find_all(ttt0, '//dt/following-sibling::dd[1]/a[1]'))
+    f <- as.numeric(gsub('^(\\d*)-\\d*-\\d*', '\\1', x))
 
-    baseurl1 <- 'http://www.alanwood.net/pesticides/index_rn1.html'
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-    ttt1 <- read_html(baseurl1)
-    names1 <- xml_text(xml_find_all(ttt1, "//dt"))
-    links1 <-  xml_attr(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'), 'href')
-    linkn1 <- xml_text(xml_find_all(ttt1, '//dt/following-sibling::dd[1]/a[1]'))
+    if (f < 10000) {
+      baseurl <- 'http://www.alanwood.net/pesticides/index_rn.html'
+    } else if (f > 10000 & f < 60000) {
+      baseurl <- 'http://www.alanwood.net/pesticides/index_rn1.html'
+    } else {
+      baseurl <- 'http://www.alanwood.net/pesticides/index_rn2.html'
+    }
 
-    baseurl2 <- 'http://www.alanwood.net/pesticides/index_rn2.html'
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    ttt2 <- read_html(baseurl2)
-    names2 <- xml_text(xml_find_all(ttt2, "//dt"))
-    links2 <-  xml_attr(xml_find_all(ttt2, '//dt/following-sibling::dd[1]/a[1]'), 'href')
-    linkn2 <- xml_text(xml_find_all(ttt2, '//dt/following-sibling::dd[1]/a[1]'))
+    ttt <- read_html(baseurl)
 
-    names <- c(names0, names1, names2)
-    links <- c(links0, links1, links2)
-    linknames <- c(linkn0, linkn1, linkn2)
+    names <- xml_text(xml_find_all(ttt, "//dl/dt"))
+    # select only first link
+    links <- xml_attr(xml_find_all(ttt, '//dt/following-sibling::dd[1]/a[1]'), 'href')
+    linknames <- xml_text(xml_find_all(ttt, '//dt/following-sibling::dd[1]/a[1]'))
+
     cname <-  linknames[tolower(names) == tolower(x)]
   }
 
@@ -83,6 +79,7 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
 
   Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   ttt <- read_html(paste0('http://www.alanwood.net/pesticides/', takelink))
+
   status <- xml_text(xml_find_all(ttt, "//tr/th[@id='r1']/following-sibling::td"))
   pref_iupac_name <- xml_text(xml_find_all(ttt, "//tr/th[@id='r2']/following-sibling::td"))
   iupac_name <- xml_text(xml_find_all(ttt, "//tr/th[@id='r3']/following-sibling::td"))
