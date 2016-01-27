@@ -6,8 +6,10 @@
 \title{Organic plant protection products in the river Jagst / Germany in 2013}
 \format{A data frame with 442 rows and 4 variables:
 \describe{
-  \item{price}{price, in US dollars}
-  \item{carat}{weight of the diamond, in carats}
+  \item{date}{sampling data}
+  \item{substance}{substance names}
+  \item{value}{concentration in ug/L}
+  \item{qual}{qualifier, indicating values < LOQ}
 }}
 \source{
 \url{http://jdkfg.lubw.baden-wuerttemberg.de/servlet/is/300/}
@@ -20,7 +22,9 @@ This dataset comprises environmental monitoring data of organic plant protection
 in the year 2013 in the river Jagst, Germany.
 The data is publicly available and can be retrieved from the
 LUBW Landesanstalt für Umwelt, Messungen und Naturschutz Baden-Württemberg.
-It comprises measurement 34 substances (substance without detects have been removed) on 13 sampling occasions.
+It comprises measurements of 34 substances (substances without detects have been removed)
+on 13 sampling occasions.
+Values are given in ug/L.
 }
 \keyword{datasets}
 
