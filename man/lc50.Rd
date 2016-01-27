@@ -10,17 +10,15 @@
   \item{value}{LC50value}
 }}
 \source{
-\url {http://cfpub.epa.gov/ecotox/}
+\url{http://cfpub.epa.gov/ecotox/}
 }
 \usage{
 lc50
 }
 \description{
 This dataset comprises acute ecotoxicity data of 160 insecticides.
-}
-\details{
 The data is publicly available and can be retrieved from the EPA ECOTOX database
-(\url {http://cfpub.epa.gov/ecotox/})
+(\url{http://cfpub.epa.gov/ecotox/})
 It comprises acute toxicity data (D. magna, 48h, Laboratory, 48h) and has been
 preprocessed (aggregate multiple value, keep only numeric data etc)
 }
