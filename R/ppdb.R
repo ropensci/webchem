@@ -163,7 +163,7 @@ ppdb_query <- function(cas, verbose = TRUE, index = NULL){
   # general status
   general <- html_table(
     xml_find_all(ttt, "//p[contains(.,'General status')]/following-sibling::table[1]"),
-    header = TRUE, fill = TRUE)[[1]]
+    header = FALSE, fill = TRUE)[[1]]
   general <- general[ , 1:2]
   names(general) <- c('variable', 'value')
 
