@@ -60,17 +60,29 @@ pp_query <- function(cas, verbose = TRUE){
   variables <- gsub(':', '', variables)
 
   nd <- xml_find_all(ttt, '//ul[@class!="ph"]')
-  value_var <- xml_text(xml_find_all(nd, './li[starts-with(text(),"Value")]'))
-  value_var <- gsub('Value.:.(.*)', '\\1', value_var)
-  value <- gsub('^(\\d*\\.?\\d*).*', '\\1', value_var)
-  unit <- gsub('^\\d*\\.?\\d*.(.*)', '\\1', value_var)
-  temp <- xml_text(xml_find_all(nd, './li[starts-with(text(),"Temp")]'))
-  temp <- gsub('Temp.*:.(.*)', '\\1', temp)
-  type <- xml_text(xml_find_all(nd,  './li[starts-with(text(),"Type")]'))
-  type <- gsub('Type.*:.(.*)', '\\1', type)
-  ref <- xml_text(xml_find_all(nd, './li[starts-with(text(),"Ref")]'))
-  ref <- gsub('Ref.*:.(.*)', '\\1', ref)
-  prop <- data.frame(value, unit, temp, type, ref, stringsAsFactors = FALSE)
+  prop <- data.frame(t(sapply(nd, function(y) {
+    value_var <- xml_text(xml_find_all(y, './li[starts-with(text(),"Value")]'))
+    value_var <- gsub('Value.:.(.*)', '\\1', value_var)
+    value <- gsub('^(\\d*\\.?\\d*).*', '\\1', value_var)
+    unit <- gsub('^\\d*\\.?\\d*.(.*)', '\\1', value_var)
+    temp <- xml_text(xml_find_all(y, './li[starts-with(text(),"Temp")]'))
+    temp <- gsub('Temp.*:.(.*)', '\\1', temp)
+    if (length(temp) == 0) {
+      temp <- NA
+    }
+    type <- xml_text(xml_find_all(y,  './li[starts-with(text(),"Type")]'))
+    type <- gsub('Type.*:.(.*)', '\\1', type)
+    if (length(type) == 0) {
+      type <- NA
+    }
+    ref <- xml_text(xml_find_all(y, './li[starts-with(text(),"Ref")]'))
+    ref <- gsub('Ref.*:.(.*)', '\\1', ref)
+    if (length(ref) == 0) {
+      ref <- NA
+    }
+    c(value, unit, temp, type, ref)
+  })), stringsAsFactors = FALSE)
+  names(prop) <- c("value", "unit", "temp", "type", "ref")
   prop$variable <- variables
   prop <- prop[, c("variable", "value", "unit", "temp", "type", "ref")]
   prop[ , 'value'] <-  as.numeric(prop[ , 'value'])

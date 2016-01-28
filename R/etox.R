@@ -192,7 +192,7 @@ etox_basic <- function(id, verbose = TRUE){
     return(NA)
   }
   tabs <- html_table(tt, fill = TRUE)
-  binf <- tabs[[3]]
+  binf <- tabs[[length(tabs)]]
   cas <- binf[, 1][binf[, 2] == 'CAS']
   ec <- binf[, 1][grepl('EINEC', binf[, 2])]
   gsbl <- binf[, 1][binf[, 2] == 'GSBL']

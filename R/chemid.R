@@ -69,6 +69,11 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
   }
 
   tit <- xml_text(xml_find_all(ttt, "//head/title"))
+  no <- xml_text(xml_find_all(ttt, "//h3"))
+  if (length(no) != 0 && no == 'The following query produced no records:') {
+    message('Not found! Returning NA.\n')
+    return(NA)
+  }
 
   # handle multiple inputs
   if (grepl('^ChemIDplus Results - Chemical information', x = tit)) {

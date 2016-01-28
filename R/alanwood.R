@@ -44,8 +44,11 @@ aw_query <- function(x, type = c("commonname", "cas"), verbose = TRUE){
   }
 
   if (type == 'cas') {
+    if (!is.cas(x)){
+      message('Input is not a CAS number! Returning NA.\n')
+      return(NA)
+    }
     f <- as.numeric(gsub('^(\\d*)-\\d*-\\d*', '\\1', x))
-
     if (f < 10000) {
       baseurl <- 'http://www.alanwood.net/pesticides/index_rn.html'
     } else if (f > 10000 & f < 60000) {

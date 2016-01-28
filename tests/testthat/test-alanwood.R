@@ -16,6 +16,7 @@ test_that("alanwood, commonname", {
   fl <- aw_query('Fluazinam', type = 'commonname')
   sm <- aw_query("S-Metolachlor", type = 'commonname')
   xx <- aw_query('xxxxx', type = 'commonname')
+  xx2 <- aw_query('xxxxx', type = 'cas')
 
   expect_error(aw_query(c('Fluazinam', 'xxx'), type = 'commonname'))
 
@@ -23,6 +24,7 @@ test_that("alanwood, commonname", {
   expect_equal(length(sm$inchikey), 2)
   expect_equal(length(sm$inchi), 2)
   expect_equal(xx, NA, verbose = FALSE)
+  expect_equal(xx2, NA, verbose = FALSE)
   expect_equal(length(fl), 11)
 })
 

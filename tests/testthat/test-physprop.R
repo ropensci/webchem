@@ -17,6 +17,8 @@ test_that("physprop returns correct results", {
 
   xx <- pp_query('xxxxx')
   fl <- pp_query('50-00-0')
+  fl2 <- pp_query('55-38-9')
+  fl3 <- pp_query('50-29-3')
 
   expect_error(pp_query(c('xxxxx', 'xxxxx')))
   expect_equal(fl$cas, "50-00-0")
@@ -26,6 +28,9 @@ test_that("physprop returns correct results", {
   expect_true(is.data.frame(fl$prop))
   expect_equal(xx, NA)
   expect_equal(names(fl$prop), c("variable", "value", "unit", "temp", "type", "ref"))
+
+  expect_equal(fl2$cas, "50-38-9")
+  expect_equal(fl3$cas, "50-29-3")
 })
 
 
