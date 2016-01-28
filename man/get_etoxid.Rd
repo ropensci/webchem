@@ -22,10 +22,10 @@ substance name) and \code{d} (either the string distance to the match, or the ty
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-\url{http://webetox.uba.de/webETOX/index.do} for their substance ID
+\url{https://webetox.uba.de/webETOX/index.do} for their substance ID
 }
 \note{
-Before using this function, please read the disclaimer \url{http://webetox.uba.de/webETOX/disclaimer.do}.
+Before using this function, please read the disclaimer \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{

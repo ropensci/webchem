@@ -16,11 +16,11 @@ A list of two: A data.frame with test results from the ETOX database and the sou
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-\url{http://webetox.uba.de/webETOX/index.do} for tests
+\url{https://webetox.uba.de/webETOX/index.do} for tests
 }
 \note{
 Before using this function, please read the disclaimer
-\url{http://webetox.uba.de/webETOX/disclaimer.do}.
+\url{https://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{

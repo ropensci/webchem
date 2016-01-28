@@ -17,11 +17,11 @@ gsbl (the gsbl number), a data.frame synonys with synonyms and the source url.
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-\url{http://webetox.uba.de/webETOX/index.do} for basic information
+\url{https://webetox.uba.de/webETOX/index.do} for basic information
 }
 \note{
 Before using this function, please read the disclaimer
-\url{http://webetox.uba.de/webETOX/disclaimer.do}.
+\url{https://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
