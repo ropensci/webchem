@@ -3,12 +3,15 @@
 \name{webchem-defunct}
 \alias{csid_compinfo}
 \alias{csid_extcompinfo}
+\alias{ppdb_query}
 \alias{webchem-defunct}
 \title{Defunct function(s) in the webchem package}
 \usage{
 csid_extcompinfo()
 
 csid_compinfo()
+
+ppdb_query()
 }
 \description{
 These functions are defunct and no longer available.

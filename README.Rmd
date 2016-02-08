@@ -36,7 +36,7 @@ They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpi
 
 ## Currently implemented in `webchem`
 
-Source | Function(s | API Docs | API key
+Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
@@ -46,7 +46,7 @@ Source | Function(s | API Docs | API key
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `pp_query()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
-[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
@@ -250,17 +250,17 @@ tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value'
 
 #### PPDB
 The PPDB holds a lot of chemical and ecotoxicological information.
-In webchem we provide a function to query this database by a CAS number.
+Earlier versions of `webchem` allowed also to search and download the PPDB.
+However, this is explicitly against the terms and conditions of use of the PPDB
+(see also [Terms and Conditions](http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Conditions_of_use.pdf) and 
+[Copyright](http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Copyright_University_of_Hertfordshire.pdf)).
 
-```{r ppdb}
-out <- ppdb_query('1071-83-6')
-```
+Therefore, `webchem` can only provide a function to parse html-code into a R object:
+`parse_ppdb()`.
+However, no examples can be given as saving and downloading the html source is explicitly 
+against the terms and conditions of use of the PPDB.
 
-The information output is enormous, I show here only a small part, the countries where the compound is approved:
 
-```{r ppdb_out}
-out[['approved_in']]
-```
 
 
 

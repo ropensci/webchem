@@ -21,3 +21,12 @@ csid_extcompinfo <- function() {
 csid_compinfo <- function() {
   .Defunct("cs_compinfo", package = "webchem")
 }
+
+
+#' @rdname webchem-defunct
+#' @export
+ppdb_query <- function() {
+  .Defunct("ppdb_parse", package = "webchem",
+msg = "ppdb_query has been removed from the package due to copyright issues. \n
+           You can use ppdb_parse() to parse html source code.")
+}

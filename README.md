@@ -23,17 +23,17 @@ They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpi
 
 ## Currently implemented in `webchem`
 
-Source | Function(s | API Docs | API key
+Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_pcid()`, `pc_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `pp_query()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
-[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_query()` | none | none
+[PPDB](http://sitem.herts.ac.uk/aeru/iupac/search.htm) | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 
@@ -194,7 +194,28 @@ cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 #> [1] "InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 ```
 
+And get EPISuit predictions from ChemSpider
 
+
+```r
+cs_prop('5363')$epi[ , c(1:4)]
+#>                                               prop value_pred
+#> 1                 Log Octanol-Water Partition Coef     4.6600
+#> 2                                    Boiling Point   373.6200
+#> 3                                    Melting Point   136.7900
+#> 4                        Water Solubility from KOW     4.6210
+#> 5                  Water Solubility from Fragments     9.2998
+#> 6 Log Octanol-Air Partition Coefficient (25 deg C)    11.4500
+#> 7                  Log Soil Adsorption Coefficient     4.2650
+#>         unit_pred                     source_pred
+#> 1            <NA> Log Kow (KOWWIN v1.67 estimate)
+#> 2           deg C                   MPBPWIN v1.42
+#> 3           deg C                   MPBPWIN v1.42
+#> 4 mg/L (25 deg C)                     WSKOW v1.41
+#> 5            mg/L                            <NA>
+#> 6            <NA>                    KOAWIN v1.10
+#> 7            <NA>                  PCKOCWIN v1.66
+```
 
 #### PubChem
 
@@ -330,37 +351,7 @@ You can use `pp_query()` to query this database using a CAS number:
 
 ```r
 pp_query('50-00-0')
-#> $cas
-#> [1] "50-00-0"
-#> 
-#> $cname
-#> [1] "FORMALDEHYDE"
-#> 
-#> $mw
-#> [1] 30.026
-#> 
-#> $prop
-#>                       variable      value             unit     temp type
-#> 1             Water Solubility  4.000e+05             mg/L 20 deg C  EXP
-#> 2        Log P (octanol-water)  3.500e-01                  25 deg C  EXP
-#> 3               Vapor Pressure  3.886e+03            mm Hg 25 deg C  EXT
-#> 4    pKa Dissociation Constant  1.327e+01                  25 deg C  EXP
-#> 5         Henry's Law Constant  3.370e-07       atm-m3/mol 25 deg C  EXP
-#> 6 Atmospheric OH Rate Constant  9.370e-12 cm3/molecule-sec 25 deg C  EXP
-#> 7                Melting Point -9.200e+01            deg C     <NA> <NA>
-#> 8                Boiling Point -1.950e+02            deg C     <NA> <NA>
-#>                                ref
-#> 1        PICKRELL,JA ET AL. (1983)
-#> 2           HANSCH,C ET AL. (1995)
-#> 3          BOUBLIK,T ET AL. (1984)
-#> 4   SERJEANT,EP & DEMPSEY,B (1979)
-#> 5 BETTERTON,EA & HOFFMAN,MR (1988)
-#> 6     KWOK,ESC & ATKINSON,R (1994)
-#> 7                             <NA>
-#> 8                             <NA>
-#> 
-#> $source_url
-#> [1] "https://esc.syrres.com/fatepointer/webprop.asp?CAS=50000"
+#> [1] NA
 ```
 
 
@@ -515,48 +506,16 @@ tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value'
 
 #### PPDB
 The PPDB holds a lot of chemical and ecotoxicological information.
-In webchem we provide a function to query this database by a CAS number.
+Earlier versions of `webchem` allowed also to search and download the PPDB.
+However, this is explicitly against the terms and conditions of use of the PPDB
+(see also [Terms and Conditions](http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Conditions_of_use.pdf)).
+
+Therefore, `webchem` can only provide a function to parse html-code into a R object:
+`parse_ppdb()`.
+However, no examples can be given as saving and downloading the html source is explicitly 
+against the terms and conditions of use of the PPDB.
 
 
-```r
-out <- ppdb_query('1071-83-6')
-```
-
-The information output is enormous, I show here only a small part, the countries where the compound is approved:
-
-
-```r
-out[['approved_in']]
-#>    status country
-#> AT   TRUE      AT
-#> BE   TRUE      BE
-#> BG   TRUE      BG
-#> CY   TRUE      CY
-#> CZ   TRUE      CZ
-#> DE   TRUE      DE
-#> DK   TRUE      DK
-#> EE   TRUE      EE
-#> EL   TRUE      EL
-#> ES   TRUE      ES
-#> FI   TRUE      FI
-#> FR   TRUE      FR
-#> HR   TRUE      HR
-#> HU   TRUE      HU
-#> IE   TRUE      IE
-#> IT   TRUE      IT
-#> LT   TRUE      LT
-#> LU   TRUE      LU
-#> LV   TRUE      LV
-#> MT   TRUE      MT
-#> NL   TRUE      NL
-#> PL   TRUE      PL
-#> PT   TRUE      PT
-#> RO   TRUE      RO
-#> SE   TRUE      SE
-#> SI   TRUE      SI
-#> SK   TRUE      SK
-#> UK   TRUE      UK
-```
 
 
 
