@@ -139,7 +139,7 @@ pan_query <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, 
 
   # convert to numeric
   tonum <- c(6, 46:72)
-  out[tonum] <- rapply(out[tonum], as.numeric)
+  out[tonum] <- lapply(out[tonum], as.numeric)
 
   if (match == 'first')
     out <- lapply(out, '[', 1)
