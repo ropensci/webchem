@@ -35,21 +35,24 @@ pp_query <- function(cas, verbose = TRUE){
   # cas = '50-00-0'
   # cas <- '79622-59-6'
   query <- gsub('-', '', cas)
-  baseurl <- 'https://esc.syrres.com/fatepointer/webprop.asp?CAS='
+  baseurl <- 'http://esc.syrres.com/fatepointer/webprop.asp?CAS='
   qurl <- paste0(baseurl, query)
   if (verbose)
     message('Querying ', qurl)
   Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   ttt <- try(
     read_html(
-      content(
-        GET(qurl, config = config( ssl_verifypeer = 0L, ssl_verifyhost = 0L)),
-        as = 'text'
-        ), encoding = "UTF-8"), silent = TRUE)
+      qurl,    # for http
+      # content(
+      #   GET(qurl, config = config( ssl_verifypeer = 0L, ssl_verifyhost = 0L)),
+      #   as = 'text'
+      #   ),
+      encoding = "UTF-8"), silent = TRUE)
   if (inherits(ttt, 'try-error')) {
     warning('Cannot retrive data from server. \n Returning NA.')
     return(NA)
   }
+
 
   if (grepl('No records', xml_text(xml_find_all(ttt, '//p'))[3])) {
     message('Not found! Returning NA.\n')
