@@ -2,7 +2,7 @@
 % Please edit documentation in R/ppdb.R
 \name{ppdb_parse}
 \alias{ppdb_parse}
-\title{Parse a HTML source from PPDB}
+\title{Parse a HTML source from a substance}
 \usage{
 ppdb_parse(source, verbose = TRUE)
 }
@@ -16,29 +16,23 @@ A list of 11 data.frames : ec_regulation, approved_in, general, parents, fate,
 deg, soil, metab, etox, names and source_url.
 }
 \description{
-This function parses a (substance) html from PPDB
-\url{http://sitem.herts.ac.uk/aeru/iupac/search.htm} into an R object.
-Earlier versions allowed also to search and download the PPDB.
-However, this is explicitly against the terms and conditions of use of the PPDB.
-See also \url{http://sitem.herts.ac.uk/aeru/iupac/docs/Background_and_Support.pdf}
-and \url{http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Copyright_University_of_Hertfordshire.pdf}
-for more information on the data.
+This function parses a (substance) html from the website into an R object.
+Earlier versions allowed also to search and download the database.
+However, this is explicitly against the terms and conditions of use [link removed on request].
+On request we also removed all links to the website / database.
 }
 \note{
-Please read the Terms and Conditions for use:
-\url{http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Conditions_of_use.pdf} and the Copyright
-statement \url{http://sitem.herts.ac.uk/aeru/ppdb/en/docs/Copyright_University_of_Hertfordshire.pdf}.
+Please read the Terms and Conditions for use [link removed on request] and
+the Copyright statement [link removed on request].
 
 This function only parses a html. Saving (or downloading) substantial parts
-from the PPDB is explicitly against the terms and conditions and copyright of use of the PPDB.
+from the database is explicitly against the terms and conditions and copyright of use
+[link removed on request].
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \references{
-Lewis, Kathleen A., John Tzilivakis, Douglas J. Warner, and Andrew Green 2016.
-An International Database for Pesticide Risk Assessments and Management.
-Human and Ecological Risk Assessment: An International Journal.
-\url{http://dx.doi.org/10.1080/10807039.2015.1133242}
+[Reference removed on request.]
 }
 
