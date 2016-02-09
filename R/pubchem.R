@@ -1,12 +1,16 @@
 #' Retrieve Pubchem Id (CID)
 #'
-#' Return CompoundID (CID) for a search query, see \url{https://pubchem.ncbi.nlm.nih.gov/}.
+#' Return CompoundID (CID) for a search query using PUG-REST,
+#' see \url{https://pubchem.ncbi.nlm.nih.gov/}.
 #' @import xml2
+#' @import httr
 #'
-#' @param query charachter; search term.
+#' @param query character; search term.
+#' @param from character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'
 #' @param first logical; If TRUE return only first result.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param ... currently not used.
+#' @param arg character; optinal arguments like 'name_type=word' to match individual words.
+#' @param ... optional arguments
 #' @return a character vector.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
@@ -14,45 +18,60 @@
 #'
 #' Kim, Sunghwan, Paul A. Thiessen, Evan E. Bolton, et al. 2016
 #' PubChem Substance and Compound Databases. Nucleic Acids Research 44(D1): D1202–D1213.
+#'
+#' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
+#' PUG-SOAP and PUG-REST: web services for programmatic access to chemical information in PubChem. Nucleic acids research, gkv396.
+#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' get_pcid('Triclosan')
+#' get_cid('Triclosan')
+#' get_cid('Triclosan', arg = 'name_type=word')
+#' get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = 'inchikey')
+#'
 #'
 #' # multiple inputs
 #' comp <- c('Triclosan', 'Aspirin')
-#' sapply(comp, function(x) get_pcid(x))
-#' sapply(comp, function(x) get_pcid(x, first = TRUE))
+#' get_cid(comp)
+#'
 #' }
-get_pcid <- function(query, first = FALSE, verbose = TRUE, ...){
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
+get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = NULL, ...) {
+  # from can be cid | name | smiles | inchi | sdf | inchikey | formula
+  # query <- c('Aspirin')
+  # from = 'name'
+
+  foo <- function(query, from, first, verbose, ...){
+    prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
+    input <- paste0('/compound/', from)
+    output <- '/cids/JSON'
+    if (!is.null(arg))
+      arg <- paste0('?', arg)
+    qurl <- paste0(prolog, input, output, arg)
+    if (verbose)
+      message(qurl)
+    Sys.sleep(0.3)
+    cont <- try(content(POST(qurl,
+                             body = paste0(from, '=', query)
+                             )), silent = TRUE
+    )
+    if (inherits(cont, "try-error")) {
+      warning('Problem with web service encountered... Returning NA.')
+      return(NA)
+    }
+    if (names(cont) == 'Fault') {
+      warning(cont$Fault$Details, '. Returning NA.')
+      return(NA)
+    }
+    out <- unlist(cont)
+    if (first)
+      out <- out[1]
+    names(out) <- NULL
+    return(out)
   }
-  if (is.na(query)) {
-    warning('Identifier is NA... Returning NA.')
-    return(NA)
-  }
-  qurl <- paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=",
-                query, sep = "")
-  if (verbose)
-    message(qurl)
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  out <- rev(xml_text(xml_find_all(h, "//IdList/Id")))
-  # not found on ncbi
-  if (length(out) == 0) {
-    message("Not found. Returning NA.")
-    return(NA)
-  }
-  if (first)
-    out <- out[1]
-  names(out) <- NULL
+  out <- lapply(query, foo, from = from, first = first, verbose = verbose)
+  out <- setNames(out, query)
   return(out)
 }
 

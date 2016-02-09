@@ -1,23 +1,12 @@
 context("pubchem")
 
-require(RCurl)
-chk_pubchem <- function(){
-  qurl <- 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmax=100000&db=pccompound&term=Triclosan'
-  Sys.sleep(0.2)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error'))
-    skip("Server is down!")
-}
-
-test_that("get_pcid()", {
-  chk_pubchem()
-  expect_equal(get_pcid('Triclosan')[1], '5564')
-  expect_equal(length(get_pcid('Triclosan', first = TRUE, verbose = FALSE)), 1)
-  chk_pubchem()
-  expect_equal(get_pcid('xxxxx', verbose = FALSE), NA)
-  expect_error(get_pcid(c('xxxxx', 'aaaaaaa')))
-  expect_warning(get_pcid(NA))
+test_that("get_cid()", {
+  expect_equal(get_cid('Triclosan')[[1]], '5564')
+  expect_true(length(get_cid('Triclosan', arg = 'name_type=word')[[1]]) > 1)
+  expect_true(length(get_cid('Triclosan', arg = 'name_type=word', first = TRUE)[[1]]) == 1)
+  expect_true(length(get_cid(c('Triclosan', 'Aspirin'))) == 2)
+  expect_equal(get_cid('xxxxx', verbose = FALSE)[[1]], NA)
+  expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = 'inchikey')[[1]], 12345)
 })
 
 

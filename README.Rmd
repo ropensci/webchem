@@ -153,8 +153,8 @@ cs_prop('5363')$epi[ , c(1:4)]
 
 Retrieve PubChem CID
 ```{r get_pcid}
-get_pcid('Triclosan')
-cid <- get_pcid('3380-34-5')
+get_cid('Triclosan')
+cid <- get_cid('3380-34-5')
 ```
 
 Use this CID to retrieve some chemical properties:
