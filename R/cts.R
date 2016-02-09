@@ -62,8 +62,11 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #' @param ... currently not used.
 #' @return a character vector.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @details See see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 #' for possible values of from and to.
+#'
+#' @seealso \code{\link{cts_from}} for possible values in the 'from' argument and
+#' \code{\link{cts_to}} for possible values in the 'to' argument.
 #'
 #' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
 #' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
@@ -104,4 +107,50 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   if (first)
     out <- out[1]
   return(out)
+}
+
+
+#' Return a list of all possible ids
+#'
+#' Return a list of all possible ids that can be used in the 'from' argument
+#' @import jsonlite
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @return a character vector.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/moreServices/index#fromnames}
+#'
+#' @seealso \code{\link{cts_convert}}
+#'
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
+#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+#' @export
+#' @examples
+#' \donttest{
+#' cts_from()
+#' }
+cts_from <- function(verbose = TRUE){
+  fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues')
+}
+
+
+#' Return a list of all possible ids
+#'
+#' Return a list of all possible ids that can be used in the 'to' argument
+#' @import jsonlite
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @return a character vector.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/moreServices/index#fromnames}
+#'
+#' @seealso \code{\link{cts_convert}}
+#'
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
+#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+#' @export
+#' @examples
+#' \donttest{
+#' cts_from()
+#' }
+cts_to <- function(verbose = TRUE){
+  fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues')
 }

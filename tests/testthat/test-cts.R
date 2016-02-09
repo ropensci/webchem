@@ -52,3 +52,12 @@ test_that("cts_compinfo(cir_query())", {
   expect_equal(round(cts_compinfo(inchikey, verbose = FALSE)[[3]], 3), 289.542)
 
 })
+
+
+test_that("fromto", {
+  to <- cts_to()
+  from <- cts_from()
+
+  expect_true(is.character(to))
+  expect_true(is.character(from))
+})

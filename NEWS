@@ -1,6 +1,8 @@
 webchem 0.0.6
 ======================
 
+NEW FEATURES
+* added cts_to() and cts_from() to retrieve possible ids that can be queried.
 
 
 webchem 0.0.5.0

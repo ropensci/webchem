@@ -2,7 +2,7 @@
 % Please edit documentation in R/ppdb.R
 \name{ppdb_parse}
 \alias{ppdb_parse}
-\title{Parse a HTML source from a substance}
+\title{Parse a HTML source from PPDB.}
 \usage{
 ppdb_parse(source, verbose = TRUE)
 }

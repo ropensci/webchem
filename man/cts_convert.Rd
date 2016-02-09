@@ -27,7 +27,7 @@ a character vector.
 Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 }
 \details{
-See see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+See also \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 for possible values of from and to.
 }
 \examples{
@@ -46,5 +46,9 @@ Eduard Szoecs, \email{eduardszoecs@gmail.com}
 \references{
 Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
 -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+}
+\seealso{
+\code{\link{cts_from}} for possible values in the 'from' argument and
+\code{\link{cts_to}} for possible values in the 'to' argument.
 }
 
