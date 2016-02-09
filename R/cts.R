@@ -5,8 +5,8 @@
 #' @importFrom stats rgamma
 #' @param inchikey character; InChIkey.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param ... currently not used.
-#' @return a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
+#' @return a list of lists (for each supplied inchikey):
+#' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
 #' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
@@ -18,31 +18,39 @@
 #' out <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N")
 #' # = Triclosan
 #' str(out)
-#' out[1:5]
+#' out[[1]][1:5]
 #'
 #' ### multiple inputs
-#' inchkeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
-#' ll <- lapply(inchkeys, function(x) cts_compinfo(x)[1:5])
-#' do.call(rbind, ll)
+#' inchikeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
+#' out2 <- cts_compinfo(inchikeys)
+#' str(out2)
+#' # a list of two
+#' # extract molecular weight
+#' sapply(out2, function(y) y$molweight)
 #' }
-cts_compinfo <- function(inchikey, verbose = TRUE, ...){
-  # inchikey <- "XEFQLINVKFYRCS-UHFFFAOYSA-N"
-  if (length(inchikey) > 1) {
-    stop('Cannot handle multiple input strings.')
+cts_compinfo <- function(inchikey, verbose = TRUE){
+  # inchikey <- 'XEFQLINVKFYRCS-UHFFFAOYSA-N'
+  foo <- function(inchikey, verbose) {
+    if (length(inchikey) > 1) {
+      stop('Cannot handle multiple input strings.')
+    }
+    if (!is.inchikey(inchikey)) {
+      stop('Input is not a valid inchikey!')
+    }
+    baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
+    qurl <- paste0(baseurl, '/', inchikey)
+    if (verbose)
+      message(qurl)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    out <- try(fromJSON(qurl), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      warning('Not found... Returning NA.')
+      return(NA)
+    }
+    return(out)
   }
-  if (!is.inchikey(inchikey)) {
-    stop('Input is not a valid inchikey!')
-  }
-  baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
-  qurl <- paste0(baseurl, '/', inchikey)
-  if (verbose)
-    message(qurl)
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  out <- try(fromJSON(qurl), silent = TRUE)
-  if (inherits(out, "try-error")) {
-    warning('Not found... Returning NA.')
-    return(NA)
-  }
+  out <- lapply(inchikey, foo, verbose = verbose)
+  out <- setNames(out, inchikey)
   return(out)
 }
 
@@ -78,34 +86,35 @@ cts_compinfo <- function(inchikey, verbose = TRUE, ...){
 #'
 #' ### multiple inputs
 #' comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
-#' sapply(comp, function(x) cts_convert(x, 'inchikey', 'Chemical Name', first = TRUE))
+#' cts_convert(comp, 'inchikey', 'Chemical Name')
 #' }
 cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
-  if (length(query) > 1 | length(from) > 1 | length(to) > 1) {
+  if (length(from) > 1 | length(to) > 1) {
     stop('Cannot handle multiple input strings.')
   }
-  if (is.na(query)) {
-    warning('Identifier is NA... Returning NA.')
-    return(NA)
+  foo <- function(query, from, to , first, verbose){
+    baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
+    qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
+    qurl <- URLencode(qurl)
+    if (verbose)
+      message(qurl)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    out <- try(fromJSON(qurl), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      warning('Not found... Returning NA.')
+      return(NA)
+    }
+    out <- out$result[[1]]
+    if (length(out) == 0) {
+      message("Not found. Returning NA.")
+      return(NA)
+    }
+    if (first)
+      out <- out[1]
+    return(out)
   }
-  baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
-  qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
-  qurl <- URLencode(qurl)
-  if (verbose)
-    message(qurl)
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  out <- try(fromJSON(qurl), silent = TRUE)
-  if (inherits(out, "try-error")) {
-    warning('Not found... Returning NA.')
-    return(NA)
-  }
-  out <- out$result[[1]]
-  if (length(out) == 0) {
-    message("Not found. Returning NA.")
-    return(NA)
-  }
-  if (first)
-    out <- out[1]
+  out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
+  out <- setNames(out, query)
   return(out)
 }
 

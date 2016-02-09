@@ -170,7 +170,6 @@ props$IUPACName
 
 CTS allows to convert from nearly every possible identifier to nearly every possible identifier:
 ```{r cts_convert}
-cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
 (inchk <- cts_convert(query = '50-00-0', from = 'CAS', to = 'inchikey'))
 ```
@@ -178,7 +177,7 @@ cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
 Moreover, we can a lot of information stored in the CTS database using InChIkey
 ```{r cts_compinfo}
 info <- cts_compinfo(inchikey = inchk)
-info[1:5]
+info[[1]][1:5]
 ```
 
 

@@ -37,7 +37,7 @@ cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
 
 ### multiple inputs
 comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
-sapply(comp, function(x) cts_convert(x, 'inchikey', 'Chemical Name', first = TRUE))
+cts_convert(comp, 'inchikey', 'Chemical Name')
 }
 }
 \author{
