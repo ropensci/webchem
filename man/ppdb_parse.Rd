@@ -7,9 +7,9 @@
 ppdb_parse(source, verbose = TRUE)
 }
 \arguments{
-\item{verbose}{logical; print message during processing to console?}
+\item{source}{an object of class \code{xml_document} as returned by  \code{\link[xml2]{read_html}}.}
 
-\item{source;}{an object of class \code{xml_document} as returned by  \code{\link[xml2]{read_html}}.}
+\item{verbose}{logical; print message during processing to console?}
 }
 \value{
 A list of 11 data.frames : ec_regulation, approved_in, general, parents, fate,

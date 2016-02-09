@@ -17,23 +17,21 @@ test_that("physprop returns correct results", {
 
   xx <- pp_query('xxxxx')
   fl <- pp_query('50-00-0')
-  fl2 <- pp_query('55-38-9')
-  fl3 <- pp_query('50-29-3')
-  fl4 <- pp_query('4151-50-2')
+  fl5 <- pp_query(c('55-38-9', '50-29-3', '4151-50-2', 'xxxxx'))
 
+  expect_equal(fl[[1]]$cas, "50-00-0")
+  expect_equal(fl[[1]]$cname, "FORMALDEHYDE")
+  expect_equal(fl[[1]]$prop$value[fl[[1]]$prop$variable == 'Water Solubility'], 400000)
+  expect_equal(length(fl[[1]]), 5)
+  expect_true(is.data.frame(fl[[1]]$prop))
+  expect_equal(xx[[1]], NA)
+  expect_equal(names(fl[[1]]$prop), c("variable", "value", "unit", "temp", "type", "ref"))
 
-  expect_error(pp_query(c('xxxxx', 'xxxxx')))
-  expect_equal(fl$cas, "50-00-0")
-  expect_equal(fl$cname, "FORMALDEHYDE")
-  expect_equal(fl$prop$value[fl$prop$variable == 'Water Solubility'], 400000)
-  expect_equal(length(fl), 5)
-  expect_true(is.data.frame(fl$prop))
-  expect_equal(xx, NA)
-  expect_equal(names(fl$prop), c("variable", "value", "unit", "temp", "type", "ref"))
-
-  expect_equal(fl2$cas, "55-38-9")
-  expect_equal(fl3$cas, "50-29-3")
-  expect_true(is.na(fl4$prop$type[2]))
+  expect_equal(length(fl5), 4)
+  expect_equal(fl5[[1]]$cas, "55-38-9")
+  expect_equal(fl5[[2]]$cas, "50-29-3")
+  expect_true(is.na(fl5[[3]]$prop$type[2]))
+  expect_true(is.na(fl5[[4]]))
 })
 
 

@@ -3,7 +3,7 @@ webchem 0.0.6
 
 NEW FEATURES
 * added cts_to() and cts_from() to retrieve possible ids that can be queried.
-* cts_* functions can handle multiple inputs
+* cts_*(), pp_query() can handle multiple inputs
 
 
 
