@@ -5,7 +5,7 @@
 #' However, this is explicitly against the terms and conditions of use [link removed on request].
 #' On request we also removed all links to the website / database.
 #'
-#' @param source; an object of class \code{xml_document} as returned by  \code{\link[xml2]{read_html}}.
+#' @param source an object of class \code{xml_document} as returned by  \code{\link[xml2]{read_html}}.
 #' @param verbose logical; print message during processing to console?
 #' @return A list of 11 data.frames : ec_regulation, approved_in, general, parents, fate,
 #' deg, soil, metab, etox, names and source_url.

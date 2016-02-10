@@ -3,7 +3,30 @@ webchem 0.0.6
 
 NEW FEATURES
 * added cts_to() and cts_from() to retrieve possible ids that can be queried.
-* cts_* functions can handle multiple inputs
+* cts_*(), pp_query(), cir_query(), get_cid(), can handle multiple inputs
+* pc_prop() queries properties from PUG-REST.
+* pc_synonmy() to query synonyms from pubchem
+
+MINOR IMPROVEMENTS
+* rewrite of pubchem functions using PUG-REST
+
+BUG FIXES
+
+* pan_query() did not return numeric values
+
+DEPRECATED FUNCTIONS
+
+
+DEFUNCT FUNCTIONS
+
+* ppdb_query() has been removed due to copyright issues.
+Th new ppdb_parse() parses only a html, but does not interact with the database
+* pan()
+* alanwood()
+* get_cid()
+* cid_compinfo()
+* chemid()
+* physprop()
 
 
 
