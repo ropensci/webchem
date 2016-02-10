@@ -27,7 +27,7 @@ Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
-[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_pcid()`, `pc_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
@@ -75,10 +75,13 @@ Use `first` to return only the first hit.
 
 ```r
 cir_query('Triclosan', 'cas')
-#> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
+#> $Triclosan
+#> [1] NA
 cir_query('Triclosan', 'cas', first = TRUE)
+#> $Triclosan
 #> [1] "3380-34-5"
 cir_query('Triclosan', 'mw')
+#> $Triclosan
 #> [1] 289.5451
 ```
 
@@ -87,8 +90,10 @@ Inputs might by ambiguous and we can specify where to search using `resolver=`.
 
 ```r
 cir_query('3380-34-5', 'smiles')
+#> $`3380-34-5`
 #> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
 cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
+#> $`3380-34-5`
 #> [1] "InChIKey=XEFQLINVKFYRCS-UHFFFAOYSA-N"
 ```
 
@@ -96,6 +101,7 @@ Query the number of rings using the InChiKey (Triclosan)
 
 ```r
 cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
+#> $`XEFQLINVKFYRCS-UHFFFAOYSA-N`
 #> [1] 2
 ```
 
@@ -222,28 +228,44 @@ cs_prop('5363')$epi[ , c(1:4)]
 Retrieve PubChem CID
 
 ```r
-get_pcid('Triclosan')
-#>  [1] "5564"     "131203"   "627458"   "9929261"  "15942656" "16220126"
-#>  [7] "16220128" "16220129" "16220130" "18413505" "22947105" "23656593"
-#> [13] "24848164" "25023954" "25023955" "25023956" "25023957" "25023958"
-#> [19] "25023959" "25023960" "25023961" "25023962" "25023963" "25023964"
-#> [25] "25023965" "25023966" "25023967" "25023968" "25023969" "25023970"
-#> [31] "25023971" "25023972" "25023973" "45040608" "45040609" "67606151"
-#> [37] "71752714" "92024355" "92043149" "92043150" "92131249"
-cid <- get_pcid('3380-34-5')
+get_cid(c('Triclosan', 'Aspirin'))
+#> $Triclosan
+#> [1] 5564
+#> 
+#> $Aspirin
+#> [1] 2244
+get_cid('3380-34-5')
+#> $`3380-34-5`
+#> [1] 5564
 ```
 
 Use this CID to retrieve some chemical properties:
 
 ```r
-props <- pc_compinfo(cid)
-props$InChIKey
-#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
-props$MolecularWeight
-#> [1] "289.541780"
-props$IUPACName
-#> [1] "5-chloro-2-(2,4-dichlorophenoxy)phenol"
+pc_prop(c(5564,2244), properties = c('InChIKey', 'MolecularFormula', 'MolecularWeight'))
+#>    CID MolecularFormula MolecularWeight                    InChIKey
+#> 1 5564       C12H7Cl3O2        289.5418 XEFQLINVKFYRCS-UHFFFAOYSA-N
+#> 2 2244           C9H8O4        180.1574 BSYNRYMUTXBXSQ-UHFFFAOYSA-N
 ```
+
+and synonyms
+
+
+```r
+pc_synonyms(5564, from = 'cid')[[1]][1:5]
+#> [1] "5564"                                     
+#> [2] "triclosan"                                
+#> [3] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
+#> [4] "3380-34-5"                                
+#> [5] "2,4,4'-Trichloro-2'-hydroxydiphenyl ether"
+pc_synonyms('Triclosan', from = 'name')[[1]][1:5]
+#> [1] "5564"                                     
+#> [2] "triclosan"                                
+#> [3] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
+#> [4] "3380-34-5"                                
+#> [5] "2,4,4'-Trichloro-2'-hydroxydiphenyl ether"
+```
+
 
 
 #### Chemical Translation Service (CTS)
@@ -251,19 +273,19 @@ props$IUPACName
 CTS allows to convert from nearly every possible identifier to nearly every possible identifier:
 
 ```r
-cts_convert(query = '3380-34-5', from = 'CAS', to = 'PubChem CID')
-#> [1] "5564"  "34140"
 cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
+#> $`3380-34-5`
 #> [1] "31465"
 (inchk <- cts_convert(query = '50-00-0', from = 'CAS', to = 'inchikey'))
+#> $`50-00-0`
 #> [1] "WSFSSNUMVMOOMR-UHFFFAOYSA-N"
 ```
 
 Moreover, we can a lot of information stored in the CTS database using InChIkey
 
 ```r
-info <- cts_compinfo(inchikey = inchk)
-info[1:5]
+info <- cts_compinfo(inchikey = inchk[[1]])
+info[[1]][1:5]
 #> $inchikey
 #> [1] "WSFSSNUMVMOOMR-UHFFFAOYSA-N"
 #> 
@@ -351,37 +373,8 @@ You can use `pp_query()` to query this database using a CAS number:
 
 ```r
 pp_query('50-00-0')
-#> $cas
-#> [1] "50-00-0"
-#> 
-#> $cname
-#> [1] "FORMALDEHYDE"
-#> 
-#> $mw
-#> [1] 30.026
-#> 
-#> $prop
-#>                       variable      value             unit     temp type
-#> 1             Water Solubility  4.000e+05             mg/L 20 deg C  EXP
-#> 2        Log P (octanol-water)  3.500e-01                  25 deg C  EXP
-#> 3               Vapor Pressure  3.886e+03            mm Hg 25 deg C  EXT
-#> 4    pKa Dissociation Constant  1.327e+01                  25 deg C  EXP
-#> 5         Henry's Law Constant  3.370e-07       atm-m3/mol 25 deg C  EXP
-#> 6 Atmospheric OH Rate Constant  9.370e-12 cm3/molecule-sec 25 deg C  EXP
-#> 7                Melting Point -9.200e+01            deg C     <NA> <NA>
-#> 8                Boiling Point -1.950e+02            deg C     <NA> <NA>
-#>                                ref
-#> 1        PICKRELL,JA ET AL. (1983)
-#> 2           HANSCH,C ET AL. (1995)
-#> 3          BOUBLIK,T ET AL. (1984)
-#> 4   SERJEANT,EP & DEMPSEY,B (1979)
-#> 5 BETTERTON,EA & HOFFMAN,MR (1988)
-#> 6     KWOK,ESC & ATKINSON,R (1994)
-#> 7                             <NA>
-#> 8                             <NA>
-#> 
-#> $source_url
-#> [1] "http://esc.syrres.com/fatepointer/webprop.asp?CAS=50000"
+#> $`50-00-0`
+#> [1] NA
 ```
 
 

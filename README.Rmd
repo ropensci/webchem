@@ -3,6 +3,7 @@ output:
   html_document:
     keep_md: yes
     self_contained: no
+  pdf_document: default
 ---
 webchem
 =============
@@ -40,7 +41,7 @@ Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
 [ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
-[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_pcid()`, `pc_compinfo()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
+[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
@@ -152,18 +153,23 @@ cs_prop('5363')$epi[ , c(1:4)]
 #### PubChem
 
 Retrieve PubChem CID
-```{r get_pcid}
-get_cid('Triclosan')
-cid <- get_cid('3380-34-5')
+```{r get_cid}
+get_cid(c('Triclosan', 'Aspirin'))
+get_cid('3380-34-5')
 ```
 
 Use this CID to retrieve some chemical properties:
-```{r pc_compinfo}
-props <- pc_compinfo(cid)
-props$InChIKey
-props$MolecularWeight
-props$IUPACName
+```{r pc_prop}
+pc_prop(c(5564,2244), properties = c('InChIKey', 'MolecularFormula', 'MolecularWeight'))
 ```
+
+and synonyms
+
+```{r pc_synonyms}
+pc_synonyms(5564, from = 'cid')[[1]][1:5]
+pc_synonyms('Triclosan', from = 'name')[[1]][1:5]
+```
+
 
 
 #### Chemical Translation Service (CTS)
@@ -176,7 +182,7 @@ cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
 
 Moreover, we can a lot of information stored in the CTS database using InChIkey
 ```{r cts_compinfo}
-info <- cts_compinfo(inchikey = inchk)
+info <- cts_compinfo(inchikey = inchk[[1]])
 info[[1]][1:5]
 ```
 

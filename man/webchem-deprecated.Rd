@@ -2,12 +2,9 @@
 % Please edit documentation in R/webchem-deprecated.R
 \name{webchem-deprecated}
 \alias{cid_compinfo}
-\alias{get_cid}
 \alias{webchem-deprecated}
 \title{Deprecated function(s) in the webchem package}
 \usage{
-get_cid(...)
-
 cid_compinfo(...)
 }
 \arguments{
@@ -21,7 +18,6 @@ removed.
 \details{
 Deprecated functions are:
 \tabular{rl}{
-  \code{get_pcid} \tab is now a synonym for \code{\link{get_cid}}\cr
   \code{pc_compinfo} \tab is now a synonym for \code{\link{cid_compinfo}}\cr
 }
 }
