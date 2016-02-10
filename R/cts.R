@@ -32,9 +32,6 @@
 cts_compinfo <- function(inchikey, verbose = TRUE){
   # inchikey <- 'XEFQLINVKFYRCS-UHFFFAOYSA-N'
   foo <- function(inchikey, verbose) {
-    if (length(inchikey) > 1) {
-      stop('Cannot handle multiple input strings.')
-    }
     if (!is.inchikey(inchikey)) {
       stop('Input is not a valid inchikey!')
     }
@@ -107,10 +104,10 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
       return(NA)
     }
     out <- out$result[[1]]
-    if (length(out) == 0) {
-      message("Not found. Returning NA.")
-      return(NA)
-    }
+    # if (length(out) == 0) {
+    #   message("Not found. Returning NA.")
+    #   return(NA)
+    # }
     if (first)
       out <- out[1]
     return(out)
