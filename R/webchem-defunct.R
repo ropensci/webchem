@@ -29,6 +29,6 @@ ppdb <- function() {
 
 #' @rdname webchem-defunct
 #' @export
-cir <- function(...) {
+cir <- function() {
   .Defunct("cir_query", package = "webchem")
 }

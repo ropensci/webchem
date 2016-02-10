@@ -11,7 +11,7 @@ ppdb_query()
 
 ppdb()
 
-cir(...)
+cir()
 }
 \description{
 These functions are defunct and no longer available.
