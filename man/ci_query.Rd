@@ -29,7 +29,7 @@ Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus
 }
 \note{
 The data of the entry \code{pp_query} is identical to the result returned
-by \code{\link{physprop}}.
+by \code{\link{pp_query}}.
 }
 \examples{
 \dontrun{

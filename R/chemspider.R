@@ -145,7 +145,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
-#' \code{\link{csid_compinfo}} for extended compound information.
+#' \code{\link{cs_compinfo}} for extended compound information.
 #' @export
 #' @examples
 #' \dontrun{
@@ -210,7 +210,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' @note Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
-#' \code{\link{csid_compinfo}} for extended compound information.
+#' \code{\link{cs_compinfo}} for extended compound information.
 #' @export
 #' @examples
 #' \dontrun{
