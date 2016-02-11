@@ -35,6 +35,7 @@
 #' sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' }
 get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
+  # token = '37bf5e57-9091-42f5-9274-650a64398aaf'
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -52,8 +53,8 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
-  out <- xml_text(h, trim = TRUE)
-  if (out == '') {
+  out <- xml_text(xml_find_all(h, '/*/*'), trim = TRUE)
+  if (length(out) == 0) {
     message('No csid found... Returning NA.')
     return(NA)
   }

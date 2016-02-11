@@ -13,6 +13,7 @@ MINOR IMPROVEMENTS
 BUG FIXES
 
 * pan_query() did not return numeric values
+* get_cid() failed with multiple results
 
 DEPRECATED FUNCTIONS
 
