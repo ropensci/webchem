@@ -36,6 +36,7 @@ Source | Function(s) | API Docs | API key
 PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
+[OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -78,8 +79,8 @@ cir_query('Triclosan', 'cas')
 #> $Triclosan
 #> [1] NA
 cir_query('Triclosan', 'cas', first = TRUE)
-#> $Triclosan
-#> [1] "3380-34-5"
+#>   Triclosan 
+#> "3380-34-5"
 cir_query('Triclosan', 'mw')
 #> $Triclosan
 #> [1] 289.5451
@@ -374,7 +375,37 @@ You can use `pp_query()` to query this database using a CAS number:
 ```r
 pp_query('50-00-0')
 #> $`50-00-0`
-#> [1] NA
+#> $`50-00-0`$cas
+#> [1] "50-00-0"
+#> 
+#> $`50-00-0`$cname
+#> [1] "FORMALDEHYDE"
+#> 
+#> $`50-00-0`$mw
+#> [1] 30.026
+#> 
+#> $`50-00-0`$prop
+#>                       variable      value             unit     temp type
+#> 1             Water Solubility  4.000e+05             mg/L 20 deg C  EXP
+#> 2        Log P (octanol-water)  3.500e-01                  25 deg C  EXP
+#> 3               Vapor Pressure  3.886e+03            mm Hg 25 deg C  EXT
+#> 4    pKa Dissociation Constant  1.327e+01                  25 deg C  EXP
+#> 5         Henry's Law Constant  3.370e-07       atm-m3/mol 25 deg C  EXP
+#> 6 Atmospheric OH Rate Constant  9.370e-12 cm3/molecule-sec 25 deg C  EXP
+#> 7                Melting Point -9.200e+01            deg C     <NA> <NA>
+#> 8                Boiling Point -1.950e+02            deg C     <NA> <NA>
+#>                                ref
+#> 1        PICKRELL,JA ET AL. (1983)
+#> 2           HANSCH,C ET AL. (1995)
+#> 3          BOUBLIK,T ET AL. (1984)
+#> 4   SERJEANT,EP & DEMPSEY,B (1979)
+#> 5 BETTERTON,EA & HOFFMAN,MR (1988)
+#> 6     KWOK,ESC & ATKINSON,R (1994)
+#> 7                             <NA>
+#> 8                             <NA>
+#> 
+#> $`50-00-0`$source_url
+#> [1] "http://esc.syrres.com/fatepointer/webprop.asp?CAS=50000"
 ```
 
 
@@ -589,6 +620,23 @@ wd_ident(ids)[1:3]
 ```
 
 
+#### OPSIN
+
+```r
+opsin_query(c('Cyclopropane', 'Octane'))
+#>                                                    inchi
+#> Cyclopropane                InChI=1/C3H6/c1-2-3-1/h1-3H2
+#> Octane       InChI=1/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3
+#>                                                  stdinchi
+#> Cyclopropane                InChI=1S/C3H6/c1-2-3-1/h1-3H2
+#> Octane       InChI=1S/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3
+#>                              stdinchikey   smiles message        query
+#> Cyclopropane LVZWSLJZHVFIQJ-UHFFFAOYSA-N    C1CC1         Cyclopropane
+#> Octane       TVMXDCGIABBOFY-UHFFFAOYSA-N CCCCCCCC               Octane
+```
+
+
+
 #### Misc functions
 
 ##### Check if a string is a valid CAS registry number
@@ -634,34 +682,6 @@ is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 ```
 
 
-
-#### I have multiple compounds. How should I query those?
-
-The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
-Every function has an example with multiple queries.
-Maybe, this will ge easier in the future...
-
-First we query alanwood:
-
-```r
-cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
-# query alanwood 
-aw_out <- lapply(cmp, aw_query)
-# this gives for each compound one list
-# str(aw_out)
-```
-
-Next we extract the cas:
-
-
-```r
-cas <- unlist(sapply(aw_out, '[', 'cas')) 
-data.frame(cmp, cas)
-#>                        cmp        cas
-#> 1                  Isodrin   465-73-6
-#> 2 Naphthalin1,6-disulfonat       <NA>
-#> 3               Pencycuron 66063-05-6
-```
 
 
 ### Acknowledgements

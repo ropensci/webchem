@@ -50,6 +50,7 @@ Source | Function(s) | API Docs | API key
 PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
+[OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -288,6 +289,13 @@ wd_ident(ids)[1:3]
 ```
 
 
+#### OPSIN
+```{r opsin}
+opsin_query(c('Cyclopropane', 'Octane'))
+```
+
+
+
 #### Misc functions
 
 ##### Check if a string is a valid CAS registry number
@@ -321,28 +329,6 @@ is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 ```
 
 
-
-#### I have multiple compounds. How should I query those?
-
-The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
-Every function has an example with multiple queries.
-Maybe, this will ge easier in the future...
-
-First we query alanwood:
-```{r multi_alanwood}
-cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
-# query alanwood 
-aw_out <- lapply(cmp, aw_query)
-# this gives for each compound one list
-# str(aw_out)
-```
-
-Next we extract the cas:
-
-```{r multi_extract}
-cas <- unlist(sapply(aw_out, '[', 'cas')) 
-data.frame(cmp, cas)
-```
 
 
 ### Acknowledgements

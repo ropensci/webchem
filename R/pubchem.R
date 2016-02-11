@@ -10,7 +10,7 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments
-#' @return a character vector.
+#' @return a list of cids. If first = TRUE a vector.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
 #' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
@@ -72,6 +72,8 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
   }
   out <- lapply(query, foo, from = from, first = first, verbose = verbose)
   out <- setNames(out, query)
+  if (first)
+    out <- unlist(out)
   return(out)
 }
 
