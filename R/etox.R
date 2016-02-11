@@ -10,15 +10,14 @@
 #' @param mult character; How should multiple hits be handeled? 'all' returns all matched IDs,
 #' 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
 #' 'na' returns NA if multiple hits are found.
-#'
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A character vector with the substance ID and additional attributes \code{matched}  (the matched
-#' substance name) and \code{d} (either the string distance to the match, or the type of match).
+#' @return if mult = 'all' a list with etoxids, otherwise a dataframe with 4 columns:
+#' etoxID, matched substance, string distance to match and the queried string
 #'
 #' @note Before using this function, please read the disclaimer \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #'
-#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
+#' @seealso \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
@@ -28,13 +27,11 @@
 #' # might fail if API is not available
 #' get_etoxid('Triclosan')
 #' # multiple inpus
-#' comps <- c('Triclosan', 'Glyphosate')
-#' sapply(comps, get_etoxid)
+#' comps <- c('Triclosan', 'Glyphosate', 'xxxx')
+#' get_etoxid(comps)
+#' get_etoxid(comps, mult = 'all')
 #' }
-get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), verbose = TRUE) {
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
+get_etoxid <- function(query, mult = c('best', 'all', 'first', 'ask', 'na'), verbose = TRUE) {
   clean_char <- function(x){
     # rm \n \t
     x <- gsub('\n | \t', '', x)
@@ -45,97 +42,110 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
     x <- gsub("(?<=[\\s])\\s*|^\\s+$", "", x, perl = TRUE)
     return(x)
   }
-
   mult <- match.arg(mult)
 
-  # query <- 'Triclosan'
-  # query <- 'Thiamethoxam'
-  if (verbose)
-    message('Searching ', query)
-  baseurl <- 'https://webetox.uba.de/webETOX/public/search/stoff.do'
-
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  h <- POST(url = baseurl, body = list('stoffname.selection[0].name' = query,
-                                  event = 'Search'))
-  # get substances and links
-  tt <- read_html(h)
-  subs <- clean_char(xml_text(xml_find_all(tt, "//*/table[@class = 'listForm resultList']//a")))
-  if (length(subs) == 0) {
+  foo <- function(query, mult, verbose){
+    # query <- 'Triclosan'
+    # query <- 'Thiamethoxam'
     if (verbose)
-      message('Substance not found! Returing NA. \n')
-    return(NA)
-  }
-  type <- clean_char(xml_text(xml_find_all(tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
-  links <- xml_attr(xml_find_all(tt, "//*/table[@class = 'listForm resultList']//a"), 'href')
+      message('Searching ', query)
+    baseurl <- 'https://webetox.uba.de/webETOX/public/search/stoff.do'
 
-  if (!'ETOX_NAME' %in% type) {
-    warning('No ETOX_NAME found. Return match only for synonyms')
-  }
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    h <- POST(url = baseurl, body = list('stoffname.selection[0].name' = query,
+                                    event = 'Search'))
+    # get substances and links
+    tt <- read_html(h)
+    subs <- clean_char(xml_text(xml_find_all(tt, "//*/table[@class = 'listForm resultList']//a")))
+    if (length(subs) == 0) {
+      if (verbose)
+        message('Substance not found! Returing NA. \n')
+      out <- NA
+      attr(out, "matched") <- NA
+      attr(out, "distance") <- NA
+      return(out)
+    }
+    type <- clean_char(xml_text(xml_find_all(tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
+    links <- xml_attr(xml_find_all(tt, "//*/table[@class = 'listForm resultList']//a"), 'href')
 
-  # match query with substance, get link
-  ulinks <- unique(links)
-  ename <- subs[type == 'ETOX_NAME']
+    if (!'ETOX_NAME' %in% type) {
+      warning('No ETOX_NAME found. Returning match only for synonyms')
+    }
 
-  # multiple hits
-  if (length(ulinks) > 1) {
-    if (verbose)
-      message("More then one Link found. \n")
-    if (mult == 'na') {
+    # match query with substance, get link
+    ulinks <- unique(links)
+    ename <- subs[type == 'ETOX_NAME']
+
+    # multiple hits
+    if (length(ulinks) > 1) {
       if (verbose)
-        message("Returning NA. \n")
-      id <- NA
-      matched_sub <- NA
-      d <- NA
-    }
-    if (mult == 'all') {
-      if (verbose)
-        message("Returning all matches. \n")
-      id <- gsub('^.*\\?id=(.*)', '\\1', ulinks)
-      matched_sub <- ename[sapply(id, function(x) grep(x, ename)[1])]
-      d <- 'all'
-    }
-    if (mult == 'first') {
-      if (verbose)
-        message("Returning first match. \n")
-      id <- gsub('^.*\\?id=(.*)', '\\1', ulinks[1])
-      matched_sub <- ename[grep(id[1], ename)[1]]
-      d <- 'first'
-    }
-    if (mult == 'best') {
-      if (verbose)
-        message("Returning best match. \n")
-      dd <- adist(query, subs) / nchar(subs)
-      id <- gsub('^.*\\?id=(.*)', '\\1', links[which.min(dd)])
-      d <- dd[which.min(dd)]
-      matched_sub <- subs[which.min(dd)]
-    }
-    if (mult == 'ask') {
-      tochoose <- data.frame(match = subs, match_type = type)
-      print(tochoose)
-      message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
-      take <- as.numeric(scan(n = 1, quiet = TRUE))
-      if (length(take) == 0) {
+        message("More then one Link found. \n")
+      if (mult == 'na') {
+        if (verbose)
+          message("Returning NA. \n")
         id <- NA
         matched_sub <- NA
         d <- NA
       }
-      if (take %in% seq_len(nrow(tochoose))) {
-        id <- gsub('^.*\\?id=(.*)', '\\1', links[take])
-        matched_sub <- subs[take]
-        d <- 'interactive'
+      if (mult == 'all') {
+        if (verbose)
+          message("Returning all matches. \n")
+        id <- gsub('^.*\\?id=(.*)', '\\1', ulinks)
+        matched_sub <- ename[sapply(id, function(x) grep(x, ename)[1])]
+        d <- 'all'
       }
+      if (mult == 'first') {
+        if (verbose)
+          message("Returning first match. \n")
+        id <- gsub('^.*\\?id=(.*)', '\\1', ulinks[1])
+        matched_sub <- ename[grep(id[1], ename)[1]]
+        d <- 'first'
+      }
+      if (mult == 'best') {
+        if (verbose)
+          message("Returning best match. \n")
+        dd <- adist(query, subs) / nchar(subs)
+        id <- gsub('^.*\\?id=(.*)', '\\1', links[which.min(dd)])
+        d <- round(dd[which.min(dd)], 2)
+        matched_sub <- subs[which.min(dd)]
+      }
+      if (mult == 'ask') {
+        tochoose <- data.frame(match = subs, match_type = type)
+        print(tochoose)
+        message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
+        take <- as.numeric(scan(n = 1, quiet = TRUE))
+        if (length(take) == 0) {
+          id <- NA
+          matched_sub <- NA
+          d <- NA
+        }
+        if (take %in% seq_len(nrow(tochoose))) {
+          id <- gsub('^.*\\?id=(.*)', '\\1', links[take])
+          matched_sub <- subs[take]
+          d <- 'interactive'
+        }
+      }
+    } else {
+      id <- gsub('^.*\\?id=(.*)', '\\1', unique(links))
+      d <- 0
+      matched_sub <- subs[1]
     }
-  } else {
-    id <- gsub('^.*\\?id=(.*)', '\\1', unique(links))
-    d <- 'direct match'
-    matched_sub <- subs[1]
-  }
 
-  # return object
-  names(id) <- NULL
-  attr(id, "matched") <- matched_sub
-  attr(id, "distance") <- d
-  return(id)
+    # return object
+    names(id) <- NULL
+    attr(id, "matched") <- matched_sub
+    attr(id, "distance") <- d
+    return(id)
+  }
+  out <- lapply(query, foo, mult = mult, verbose = verbose)
+  if (mult != 'all') {
+    out <- data.frame(t(sapply(out, function(y) {
+      c(y, attr(y, 'matched'), attr(y, 'distance'))
+      })), stringsAsFactors = FALSE)
+    names(out) <- c('etoxid', 'match', 'distance')
+    out[['query']] <- query
+  }
+  return(out)
 }
 
 

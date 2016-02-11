@@ -4,7 +4,7 @@
 \alias{get_etoxid}
 \title{Get ETOX ID}
 \usage{
-get_etoxid(query, mult = c("all", "first", "best", "ask", "na"),
+get_etoxid(query, mult = c("best", "all", "first", "ask", "na"),
   verbose = TRUE)
 }
 \arguments{
@@ -17,8 +17,8 @@ get_etoxid(query, mult = c("all", "first", "best", "ask", "na"),
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A character vector with the substance ID and additional attributes \code{matched}  (the matched
-substance name) and \code{d} (either the string distance to the match, or the type of match).
+if mult = 'all' a list with etoxids, otherwise a dataframe with 4 columns:
+etoxID, matched substance, string distance to match and the queried string
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
@@ -32,15 +32,16 @@ Before using this function, please read the disclaimer \url{https://webetox.uba.
 # might fail if API is not available
 get_etoxid('Triclosan')
 # multiple inpus
-comps <- c('Triclosan', 'Glyphosate')
-sapply(comps, get_etoxid)
+comps <- c('Triclosan', 'Glyphosate', 'xxxx')
+get_etoxid(comps)
+get_etoxid(comps, mult = 'all')
 }
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
-\code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
+\code{\link{etox_basic}} for basic information,
 \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results.
 }
 

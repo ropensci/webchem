@@ -1,46 +1,28 @@
 context("etox")
 
-require(RCurl)
-chk_etox <- function(){
-  qurl <- 'http://webetox.uba.de/webETOX/public/basics/stoff.do?id=20179'
-  Sys.sleep(0.2)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error'))
-    skip("Server is down!")
-}
-
 test_that("get_etoxid returns correct results", {
-  chk_etox()
 
-  do <- get_etoxid('Triclosan', mult = 'best')
+  # test general
+  comps <- c('Triclosan', 'Glyphosate', 'xxxx')
+  o1 <- get_etoxid(comps, mult = 'best')
+  o2 <- get_etoxid(comps, mult = 'all')
+  o3 <- get_etoxid('Triclosan', mult = 'first')
+  o4 <- get_etoxid('Triclosan', mult = 'na')
   do2 <- get_etoxid('Thiamethoxam')
 
-  xx <- get_etoxid('xxxxx')
+  expect_is(o1, 'data.frame')
+  expect_is(o2, 'list')
+  expect_is(o3, 'data.frame')
+  expect_is(o4, 'data.frame')
+  expect_is(do2, 'data.frame')
 
-  expect_error(get_etoxid(c('Triclosan', 'xxx')))
-  expect_equal(c(do), "20179")
-  expect_equal(c(do2), "98867")
-  expect_equal(attr(do, "matched"), "Triclosan ( 20179 )")
-  expect_equal(attr(do2, "distance"), 'direct match')
-  expect_equal(c(xx), NA)
+  expect_equal(o1$etoxid, c('20179', '9051', NA))
+  expect_equivalent(o2[[1]], c('20179', '89236'))
+  expect_equal(o3$distance, 'first')
+  expect_equal(do2$distance, '0')
 
   # only synonyms found
   expect_warning(get_etoxid('Tetracyclin'))
-  # test multiple hits
-  m1 <- get_etoxid('Triclosan', mult = 'all')
-    expect_true(length(m1) > 1)
-    expect_true(length(attr(m1, 'matched')) > 1)
-    expect_equal(attr(m1, 'd'), 'all')
-  m2 <- get_etoxid('Triclosan', mult = 'na')
-    expect_equal(c(m2), NA)
-    expect_equal(attr(m2, 'd'), NA)
-  m3 <- get_etoxid('Triclosan', mult = 'first')
-    expect_true(length(m3) == 1)
-    expect_true(length(attr(m3, 'matched')) == 1)
-    expect_equal(c(m3), "20179")
-    expect_equal(attr(m3, 'd'), 'first')
-    # get_etoxid('Triclosan', mult = 'ask')
 
 })
 
@@ -92,34 +74,34 @@ test_that("etox_tests returns correct results", {
 })
 
 
-test_that("etox integration tests", {
-  chk_etox()
-
-  do <- get_etoxid('Triclosan', mult = 'best')
-  xx <- get_etoxid('xxxxx')
-
-  int1 <- etox_basic(do)
-  int2 <- etox_targets(do)
-  int5 <- etox_tests(do)
-
-  int3 <- etox_basic(xx)
-  int4 <- etox_targets(xx)
-  int6 <- etox_tests(xx)
-
-  expect_equal(int1$cas, "3380-34-5")
-  expect_equal(length(int1), 5)
-  expect_is(int1$synonyms, 'data.frame')
-
-  expect_equal(int2$res$Substance[1], "Triclosan")
-  expect_equal(length(int2),2)
-  expect_equal(ncol(int2$res), 32)
-  expect_is(int2$res, 'data.frame')
-
-  expect_equal(int5$res$Substance[1], "Triclosan")
-  expect_equal(ncol(int5$res), 41)
-  expect_is(int5$res, 'data.frame')
-
-  expect_equal(int3, NA)
-  expect_equal(int4, NA)
-  expect_equal(int6, NA)
-})
+# test_that("etox integration tests", {
+#   chk_etox()
+#
+#   do <- get_etoxid('Triclosan', mult = 'best')
+#   xx <- get_etoxid('xxxxx')
+#
+#   int1 <- etox_basic(do)
+#   int2 <- etox_targets(do)
+#   int5 <- etox_tests(do)
+#
+#   int3 <- etox_basic(xx)
+#   int4 <- etox_targets(xx)
+#   int6 <- etox_tests(xx)
+#
+#   expect_equal(int1$cas, "3380-34-5")
+#   expect_equal(length(int1), 5)
+#   expect_is(int1$synonyms, 'data.frame')
+#
+#   expect_equal(int2$res$Substance[1], "Triclosan")
+#   expect_equal(length(int2),2)
+#   expect_equal(ncol(int2$res), 32)
+#   expect_is(int2$res, 'data.frame')
+#
+#   expect_equal(int5$res$Substance[1], "Triclosan")
+#   expect_equal(ncol(int5$res), 41)
+#   expect_is(int5$res, 'data.frame')
+#
+#   expect_equal(int3, NA)
+#   expect_equal(int4, NA)
+#   expect_equal(int6, NA)
+# })
