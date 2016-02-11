@@ -21,7 +21,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 * ppdb_query() has been removed due to copyright issues.
-Th new ppdb_parse() parses only a html, but does not interact with the database
+The new ppdb_parse() parses only a html, but does not interact with the database
 * pan()
 * alanwood()
 * get_cid()

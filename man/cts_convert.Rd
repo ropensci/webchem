@@ -21,7 +21,7 @@ cts_convert(query, from, to, first = FALSE, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-a character vector.
+a list of characters. If first = TRUE a vector.
 }
 \description{
 Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}

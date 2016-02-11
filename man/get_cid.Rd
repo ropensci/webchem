@@ -21,7 +21,7 @@ get_cid(query, from = "name", first = FALSE, verbose = TRUE, arg = NULL,
 \item{...}{optional arguments}
 }
 \value{
-a character vector.
+a list of cids. If first = TRUE a vector.
 }
 \description{
 Return CompoundID (CID) for a search query using PUG-REST,

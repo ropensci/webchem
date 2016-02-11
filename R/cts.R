@@ -67,7 +67,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @param first logical; return only first result be returned?
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a character vector.
+#' @return a list of characters. If first = TRUE a vector.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 #' for possible values of from and to.
@@ -114,6 +114,8 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
+  if (first)
+    out <- unlist(out)
   return(out)
 }
 
