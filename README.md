@@ -77,7 +77,7 @@ Use `first` to return only the first hit.
 ```r
 cir_query('Triclosan', 'cas')
 #> $Triclosan
-#> [1] NA
+#> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
 cir_query('Triclosan', 'cas', first = TRUE)
 #>   Triclosan 
 #> "3380-34-5"
@@ -416,13 +416,10 @@ First we need to query a substance ID:
 
 
 ```r
-id <- get_etoxid('Triclosan', mult = 'best')
-id
-#> [1] "20179"
-#> attr(,"matched")
-#> [1] "Triclosan ( 20179 )"
-#> attr(,"distance")
-#> [1] 0.5263158
+etoxids <- get_etoxid('Triclosan', mult = 'best')
+etoxids
+#>   etoxid               match distance     query
+#> 1  20179 Triclosan ( 20179 )     0.53 Triclosan
 ```
 `get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
 Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
@@ -430,6 +427,7 @@ Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `
 
 ```r
 get_etoxid('Triclosan', mult = 'all')
+#> [[1]]
 #> [1] "20179" "89236"
 #> attr(,"matched")
 #> [1] "Triclosan ( 20179 )"       "Methyltriclosan ( 89236 )"
@@ -443,7 +441,7 @@ With this substance ID we can query further information from ETOX, e.g.:
 
 
 ```r
-etox_basic(id)
+etox_basic(etoxids$etoxid)
 #> $cas
 #> [1] "3380-34-5"
 #> 
@@ -484,7 +482,7 @@ We can also retrieve Quality Targets:
 
 
 ```r
-targets <- etox_targets(id)
+targets <- etox_targets(etoxids$etoxid)
 targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 #>   Substance Country_or_Region      Designation Value_Target_LR Unit
 #> 1 Triclosan               AUS             PNEC           0.050 µg/l
@@ -501,7 +499,7 @@ targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_
 and results of ecotox tests:
 
 ```r
-tests <- etox_tests(id)
+tests <- etox_tests(etoxids$etoxid)
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 #>                           Organism                  Effect Duration
 #> 1              Anabaena flos-aquae                    k.A.        4

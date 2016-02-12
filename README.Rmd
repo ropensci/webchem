@@ -220,8 +220,8 @@ ETOX: Information System Ecotoxicology and Environmental Quality Targets is a da
 First we need to query a substance ID:
 
 ```{r get_etoxid}
-id <- get_etoxid('Triclosan', mult = 'best')
-id
+ids <- get_etoxid('Triclosan', mult = 'best')
+ids
 ```
 `get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
 Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
@@ -235,7 +235,7 @@ get_etoxid('Triclosan', mult = 'all')
 With this substance ID we can query further information from ETOX, e.g.:
 
 ```{r etox_basic}
-etox_basic(id)
+etox_basic(ids$etoxid)[[1]]
 ```
 
 Which returns CAS, EC and GSBL numbers, as well as a synonym list.
@@ -243,13 +243,13 @@ Which returns CAS, EC and GSBL numbers, as well as a synonym list.
 We can also retrieve Quality Targets:
 
 ```{r etox_targets}
-targets <- etox_targets(id)
+targets <- etox_targets(ids$etoxid)[[1]]
 targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 ```
 
 and results of ecotox tests:
 ```{r etox_tests}
-tests <- etox_tests(id)
+tests <- etox_tests(ids$etoxid)[[1]]
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 ```
 
