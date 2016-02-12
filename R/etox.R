@@ -162,7 +162,7 @@ get_etoxid <- function(query, mult = c('best', 'all', 'first', 'ask', 'na'), ver
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return a list wit four entries: cas (the CAS numbers), ec (the EC number),
+#' @return a list with lists of four entries: cas (the CAS numbers), ec (the EC number),
 #' gsbl (the gsbl number), a data.frame synonys with synonyms and the source url.
 #'
 #' @note Before using this function, please read the disclaimer
@@ -176,46 +176,49 @@ get_etoxid <- function(query, mult = c('best', 'all', 'first', 'ask', 'na'), ver
 #' @examples
 #' \dontrun{
 #' id <- get_etoxid('Triclosan', mult = 'best')
-#' etox_basic(id)
+#' etox_basic(id$etoxid)
 #'
 #' # Retrieve CAS for multiple inputs
 #' ids <- c("20179", "9051")
-#' sapply(ids, function(y) etox_basic(y)$cas)
+#' etox_basic(ids)
 #' }
 etox_basic <- function(id, verbose = TRUE){
-  if (length(id) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
-  if (is.na(id)) {
-    message('ID is NA! Returning NA.\n')
-    return(NA)
-  }
-  # id <- '20179'
-  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
-  qurl <- paste0(baseurl, id)
-  if (verbose)
-    message('Querying ', qurl)
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  tt <- try(read_html(qurl), silent = TRUE)
-  if (inherits(tt, 'try-error')) {
-    message('ID not found! Returning NA.\n')
-    return(NA)
-  }
-  tabs <- html_table(tt, fill = TRUE)
-  binf <- tabs[[length(tabs)]]
-  cas <- binf[, 1][binf[, 2] == 'CAS']
-  ec <- binf[, 1][grepl('EINEC', binf[, 2])]
-  gsbl <- binf[, 1][binf[, 2] == 'GSBL']
+  # id <- c("20179", "9051")
+  foo <- function(id, verbose){
+    if (is.na(id)) {
+      message('ID is NA! Returning NA.\n')
+      return(NA)
+    }
+    # id <- '20179'
+    baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
+    qurl <- paste0(baseurl, id)
+    if (verbose)
+      message('Querying ', qurl)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    tt <- try(read_html(qurl), silent = TRUE)
+    if (inherits(tt, 'try-error')) {
+      message('ID not found! Returning NA.\n')
+      return(NA)
+    }
+    tabs <- html_table(tt, fill = TRUE)
+    binf <- tabs[[length(tabs)]]
+    cas <- binf[, 1][binf[, 2] == 'CAS']
+    ec <- binf[, 1][grepl('EINEC', binf[, 2])]
+    gsbl <- binf[, 1][binf[, 2] == 'GSBL']
 
-  syns <- tabs[[2]][c(1, 3, 4)]
-  colnames(syns) <- syns[1, ]
-  syns <- syns[-1, ]
-  syns <- syns[syns[ , 2] == 'SYNONYM' & !is.na(syns[ , 2]), ]
-  syns <- syns[ , -2]
-  names(syns) <- c('name', 'language')
+    syns <- tabs[[2]][c(1, 3, 4)]
+    colnames(syns) <- syns[1, ]
+    syns <- syns[-1, ]
+    syns <- syns[syns[ , 2] == 'SYNONYM' & !is.na(syns[ , 2]), ]
+    syns <- syns[ , -2]
+    names(syns) <- c('name', 'language')
 
-  out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns,
-              source_url = qurl)
+    out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns,
+                source_url = qurl)
+    return(out)
+  }
+  out <- lapply(id, foo,verbose = verbose)
+  out <- setNames(out, id)
   return(out)
 }
 

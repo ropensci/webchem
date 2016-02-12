@@ -28,17 +28,15 @@ test_that("get_etoxid returns correct results", {
 
 
 test_that("etox_basic returns correct results", {
-  chk_etox()
+  ids <- c("20179", "9051", "xxxxx", NA)
+  o1 <- etox_basic(ids)
 
-  do2 <- etox_basic('20179')
-  xx2 <- etox_basic('xxx')
-  expect_equal(etox_basic(NA), NA)
-
-  expect_error(etox_basic(c('20179', 'xxx')))
-  expect_equal(do2$cas, "3380-34-5")
-  expect_equal(length(do2), 5)
-  expect_is(do2$synonyms, 'data.frame')
-  expect_equal(xx2, NA)
+  expect_is(o1, 'list')
+  expect_equal(length(o1), 4)
+  expect_equal(o1[['20179']]$cas, "3380-34-5")
+  expect_equal(length(o1[['20179']]), 5)
+  expect_is(o1[['20179']]$synonyms, 'data.frame')
+  expect_true(is.naa(o1[[4]]))
 })
 
 

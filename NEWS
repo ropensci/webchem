@@ -3,7 +3,7 @@ webchem 0.0.6
 
 NEW FEATURES
 * added cts_to() and cts_from() to retrieve possible ids that can be queried.
-* cts_*(), pp_query(), cir_query(), get_cid(), get_etoxid() can handle multiple inputs
+* cts_*(), pp_query(), cir_query(), get_cid(), get_etoxid(), etox_*() can handle multiple inputs
 * pc_prop() queries properties and pc_synonmy() synonyms from PUG-REST.
 
 MINOR IMPROVEMENTS
