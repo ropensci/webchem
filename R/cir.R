@@ -10,7 +10,7 @@
 #' @param first logical; If TRUE return only first result.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return A character vector.
+#' @return A list of character vectors. If first = TRUE a vector.
 #' @details A interface to the Chemical Identifier Resolver (CIR).
 #'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
 #'
@@ -95,61 +95,57 @@
 #' \donttest{
 #' # might fail if API is not available
 #' cir_query('Triclosan', 'cas')
-#' cir_query("3380-34-5", 'cas')
+#' cir_query("3380-34-5", 'cas', first = TRUE)
 #' cir_query("3380-34-5", 'cas', resolver = 'cas_number')
 #' cir_query("3380-34-5", 'smiles')
 #' cir_query('Triclosan', 'mw')
 #'
-#' # query multiple representations
-#' reps <- c('smiles', 'cas')
-#' sapply(reps, function(x) cir_query('Triclosan', x, first = TRUE))
-#'
 #' # multiple inputs
 #' comp <- c('Triclosan', 'Aspirin')
-#' sapply(comp, function(x) cir_query(x, 'cas', first = TRUE))
+#' cir_query(comp, 'cas', first = TRUE)
 #'
 #'}
 #' @export
 cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
                       first = FALSE, verbose = TRUE, ...){
-  if (length(identifier) > 1) {
-    stop('Cannot handle multiple input strings.')
+  foo <- function(identifier, representation, resolver, first, verbose) {
+    baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
+    qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
+    if (!is.null(resolver)) {
+      qurl <- paste0(qurl, '?resolver=', resolver)
+    }
+    if (verbose)
+      message(qurl)
+    Sys.sleep(1.5)
+    h <- try(GET(qurl, timeout(2)))
+    if (inherits(h, "try-error")) {
+      warning('Problem with web service encountered... Returning NA.')
+      return(NA)
+    } else {
+      tt <- read_xml(content(h, as = 'raw'))
+      out <- xml_text(xml_find_all(tt, '//item'))
+    }
+    if (length(out) == 0) {
+      message('No representation found... Returning NA.')
+      return(NA)
+    }
+    if (first)
+      out <- out[1]
+    # convert to numeric
+    if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
+                             'h_bond_acceptor_count', 'h_bond_center_count',
+                             'rule_of_5_violation_count', 'rotor_count',
+                             'effective_rotor_count', 'ring_count', 'ringsys_count',
+                             'xlogp2', 'heteroatom_count', 'hydrogen_atom_count',
+                             'heavy_atom_count', 'deprotonable_group_count',
+                             'protonable_group_count') )
+      out <- as.numeric(out)
+    return(out)
   }
-  if (is.na(identifier)) {
-    warning('Identifier is NA... Returning NA.')
-    return(NA)
-  }
-  baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
-  qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
-  if (!is.null(resolver)) {
-    qurl <- paste0(qurl, '?resolver=', resolver)
-  }
-  if (verbose)
-    message(qurl)
-  Sys.sleep(3)
-  h <- try(GET(qurl, timeout(2)))
-  if (inherits(h, "try-error")) {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  } else {
-    tt <- read_xml(content(h, as = 'raw'))
-    out <- xml_text(xml_find_all(tt, '//item'))
-  }
-  if (length(out) == 0) {
-    message('No representation found... Returning NA.')
-    return(NA)
-  }
+  out <- lapply(identifier, foo, representation = representation,
+                resolver = resolver, first = first, verbose = verbose)
+  out <- setNames(out, identifier)
   if (first)
-    out <- out[1]
-
-  # convert to numeric
-  if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
-                           'h_bond_acceptor_count', 'h_bond_center_count',
-                           'rule_of_5_violation_count', 'rotor_count',
-                           'effective_rotor_count', 'ring_count', 'ringsys_count',
-                           'xlogp2', 'heteroatom_count', 'hydrogen_atom_count',
-                           'heavy_atom_count', 'deprotonable_group_count',
-                           'protonable_group_count') )
-    out <- as.numeric(out)
+    out <- unlist(out)
   return(out)
 }

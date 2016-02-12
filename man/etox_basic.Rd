@@ -12,25 +12,25 @@ etox_basic(id, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-a list wit four entries: cas (the CAS numbers), ec (the EC number),
+a list with lists of four entries: cas (the CAS numbers), ec (the EC number),
 gsbl (the gsbl number), a data.frame synonys with synonyms and the source url.
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-\url{http://webetox.uba.de/webETOX/index.do} for basic information
+\url{https://webetox.uba.de/webETOX/index.do} for basic information
 }
 \note{
 Before using this function, please read the disclaimer
-\url{http://webetox.uba.de/webETOX/disclaimer.do}.
+\url{https://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
-id <- get_etoxid('Triclosan')
-etox_basic(id)
+id <- get_etoxid('Triclosan', match = 'best')
+etox_basic(id$etoxid)
 
 # Retrieve CAS for multiple inputs
 ids <- c("20179", "9051")
-sapply(ids, function(y) etox_basic(y)$cas)
+etox_basic(ids)
 }
 }
 \author{

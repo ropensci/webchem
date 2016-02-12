@@ -53,6 +53,6 @@ Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
-\code{\link{csid_compinfo}} for extended compound information.
+\code{\link{cs_compinfo}} for extended compound information.
 }
 

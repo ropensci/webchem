@@ -12,7 +12,7 @@ pp_query(cas, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A list of 5 entries: cas (CAS-Number), cname (Chemical Name),
+A list of lists with 5 entries: cas (CAS-Number), cname (Chemical Name),
 mw (Molecular weigth), prop (Properties) and source url.
 prop is a data.frame, with variables, value, unit, temp, type (see note) and ref (see note).
 }
@@ -31,7 +31,7 @@ Please respect the terms of use: \url{http://www.srcinc.com/terms-of-use.html}.
 \examples{
 \dontrun{
 pp_query('50-00-0')
-lapply(c('50-00-0', '79622-59-6', 'xxxxx'), pp_query)
+pp_query(c('50-00-0', '79622-59-6', 'xxxxx'))
 }
 }
 \author{
