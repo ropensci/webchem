@@ -19,37 +19,31 @@ test_that("get_csid()", {
 
 
 test_that("cs_compinfo()", {
-  chk_cs()
-
-  tt <- cs_compinfo('5363', token, verbose = FALSE)
-  expect_equal(length(tt), 5)
-  expect_equal(tt[['smiles']],
-               "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
-  expect_warning(cs_compinfo('aaaa', token, verbose = FALSE))
-  expect_error(cs_compinfo(c("a", "b"), token = token))
+  comps <- c("2157", "5363" )
+  o1 <- cs_compinfo(comps, token)
+  expect_is(o1, 'data.frame')
+  expect_equal(dim(o1), c(2, 6))
+  expect_equal(o1$csid[1], '2157')
   })
 
 
 test_that("cs_extcompinfo()", {
-  chk_cs()
-  tt <- cs_extcompinfo('5363', token = token, verbose = FALSE)
-  expect_equal(tt[['average_mass']],
-               289.5418)
-  expect_equal(length(tt), 13)
-  expect_warning(cs_extcompinfo('aaaa', token, verbose = FALSE))
-  expect_error(cs_extcompinfo(c("a", "b"), token = token))
+  comps <- c("2157", "5363" )
+  o1 <- cs_extcompinfo(comps, token)
+  expect_is(o1, 'data.frame')
+  expect_equal(dim(o1), c(2, 14))
+  expect_equal(o1$csid[1], '2157')
 })
 
 test_that("cs_prop()", {
   id <- '5363'
   m1 <- cs_prop(id)
 
-  expect_error(cs_prop(c(id, id)))
-
   expect_is(m1, 'list')
-  expect_equal(length(m1), 3)
+  expect_equal(length(m1), 1)
+  expect_equal(length(m1[[1]]), 3)
 
-  expect_is(m1$epi, 'data.frame')
+  expect_is(m1[[1]]$epi, 'data.frame')
 
 })
 
