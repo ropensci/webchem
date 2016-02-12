@@ -189,10 +189,10 @@ info[[1]][1:5]
 
 
 #### PAN Pesticide Database
-`pan_query()` returns a list of 73 entries, here I extract only 4 of those:
+`pan_query()` returns a list of 75 entries, here I extract only 4 of those:
 ```{r pan}
-pan_list <- pan_query('lambda-Cyhalothrin', first = TRUE)
-pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
+pan_list <- pan_query('lambda-Cyhalothrin', match = 'best')
+pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
 ```
 
 

@@ -13,7 +13,7 @@ chk_etox <- function(){
 test_that("get_etoxid returns correct results", {
   chk_etox()
 
-  do <- get_etoxid('Triclosan', mult = 'best')
+  do <- get_etoxid('Triclosan', match = 'best')
   do2 <- get_etoxid('Thiamethoxam')
 
   xx <- get_etoxid('xxxxx')
@@ -28,19 +28,19 @@ test_that("get_etoxid returns correct results", {
   # only synonyms found
   expect_warning(get_etoxid('Tetracyclin'))
   # test multiple hits
-  m1 <- get_etoxid('Triclosan', mult = 'all')
+  m1 <- get_etoxid('Triclosan', match = 'all')
     expect_true(length(m1) > 1)
     expect_true(length(attr(m1, 'matched')) > 1)
     expect_equal(attr(m1, 'd'), 'all')
-  m2 <- get_etoxid('Triclosan', mult = 'na')
+  m2 <- get_etoxid('Triclosan', match = 'na')
     expect_equal(c(m2), NA)
     expect_equal(attr(m2, 'd'), NA)
-  m3 <- get_etoxid('Triclosan', mult = 'first')
+  m3 <- get_etoxid('Triclosan', match = 'first')
     expect_true(length(m3) == 1)
     expect_true(length(attr(m3, 'matched')) == 1)
     expect_equal(c(m3), "20179")
     expect_equal(attr(m3, 'd'), 'first')
-    # get_etoxid('Triclosan', mult = 'ask')
+    # get_etoxid('Triclosan', match = 'ask')
 
 })
 
@@ -95,7 +95,7 @@ test_that("etox_tests returns correct results", {
 test_that("etox integration tests", {
   chk_etox()
 
-  do <- get_etoxid('Triclosan', mult = 'best')
+  do <- get_etoxid('Triclosan', match = 'best')
   xx <- get_etoxid('xxxxx')
 
   int1 <- etox_basic(do)

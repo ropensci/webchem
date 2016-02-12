@@ -3,7 +3,7 @@ webchem 0.0.6
 
 NEW FEATURES
 * added cts_to() and cts_from() to retrieve possible ids that can be queried.
-* cts_*(), pp_query(), cir_query(), get_cid(), can handle multiple inputs
+* cts_*(), pp_query(), cir_query(), get_cid(), pan_query() can handle multiple inputs
 * pc_prop() queries properties from PUG-REST.
 * pc_synonmy() to query synonyms from pubchem
 

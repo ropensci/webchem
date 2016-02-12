@@ -7,7 +7,7 @@
 #' @importFrom stats rgamma
 #'
 #' @param query character; The searchterm
-#' @param mult character; How should multiple hits be handeled? 'all' returns all matched IDs,
+#' @param match character; How should multiple hits be handeled? 'all' returns all matched IDs,
 #' 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
 #' 'na' returns NA if multiple hits are found.
 #'
@@ -31,7 +31,7 @@
 #' comps <- c('Triclosan', 'Glyphosate')
 #' sapply(comps, get_etoxid)
 #' }
-get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), verbose = TRUE) {
+get_etoxid <- function(query, match = c('all', 'first', 'best', 'ask', 'na'), verbose = TRUE) {
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -46,7 +46,7 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
     return(x)
   }
 
-  mult <- match.arg(mult)
+  match <- match.arg(match)
 
   # query <- 'Triclosan'
   # query <- 'Thiamethoxam'
@@ -80,28 +80,28 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
   if (length(ulinks) > 1) {
     if (verbose)
       message("More then one Link found. \n")
-    if (mult == 'na') {
+    if (match == 'na') {
       if (verbose)
         message("Returning NA. \n")
       id <- NA
       matched_sub <- NA
       d <- NA
     }
-    if (mult == 'all') {
+    if (match == 'all') {
       if (verbose)
         message("Returning all matches. \n")
       id <- gsub('^.*\\?id=(.*)', '\\1', ulinks)
       matched_sub <- ename[sapply(id, function(x) grep(x, ename)[1])]
       d <- 'all'
     }
-    if (mult == 'first') {
+    if (match == 'first') {
       if (verbose)
         message("Returning first match. \n")
       id <- gsub('^.*\\?id=(.*)', '\\1', ulinks[1])
       matched_sub <- ename[grep(id[1], ename)[1]]
       d <- 'first'
     }
-    if (mult == 'best') {
+    if (match == 'best') {
       if (verbose)
         message("Returning best match. \n")
       dd <- adist(query, subs) / nchar(subs)
@@ -109,7 +109,7 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
       d <- dd[which.min(dd)]
       matched_sub <- subs[which.min(dd)]
     }
-    if (mult == 'ask') {
+    if (match == 'ask') {
       tochoose <- data.frame(match = subs, match_type = type)
       print(tochoose)
       message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
@@ -165,7 +165,7 @@ get_etoxid <- function(query, mult = c('all', 'first', 'best', 'ask', 'na'), ver
 #' @export
 #' @examples
 #' \dontrun{
-#' id <- get_etoxid('Triclosan', mult = 'best')
+#' id <- get_etoxid('Triclosan', match = 'best')
 #' etox_basic(id)
 #'
 #' # Retrieve CAS for multiple inputs
@@ -233,7 +233,7 @@ etox_basic <- function(id, verbose = TRUE){
 #' @export
 #' @examples
 #' \dontrun{
-#' id <- get_etoxid('Triclosan', mult = 'best')
+#' id <- get_etoxid('Triclosan', match = 'best')
 #' out <- etox_targets(id)
 #' out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 #' 'Value_Target_LR', 'Unit')]
@@ -320,7 +320,7 @@ etox_targets <- function(id, verbose = TRUE){
 #' @export
 #' @examples
 #' \dontrun{
-#' id <- get_etoxid('Triclosan', mult = 'best')
+#' id <- get_etoxid('Triclosan', match = 'best')
 #' out <- etox_tests(id)
 #' out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
 #' 'Endpoint', 'Value', 'Unit')]
