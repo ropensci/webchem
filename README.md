@@ -305,11 +305,11 @@ info[[1]][1:5]
 
 
 #### PAN Pesticide Database
-`pan_query()` returns a list of 73 entries, here I extract only 4 of those:
+`pan_query()` returns a list of 75 entries, here I extract only 4 of those:
 
 ```r
-pan_list <- pan_query('lambda-Cyhalothrin', first = TRUE)
-pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
+pan_list <- pan_query('lambda-Cyhalothrin', match = 'best')
+pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
 #> $`CAS Number`
 #> [1] "91465-08-6"
 #> 
@@ -416,20 +416,18 @@ First we need to query a substance ID:
 
 
 ```r
-id <- get_etoxid('Triclosan', mult = 'best')
-id
-#> [1] "20179"
-#> attr(,"matched")
-#> [1] "Triclosan ( 20179 )"
-#> attr(,"distance")
-#> [1] 0.5263158
+ids <- get_etoxid('Triclosan', match = 'best')
+ids
+#>   etoxid               match distance     query
+#> 1  20179 Triclosan ( 20179 )     0.53 Triclosan
 ```
 `get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
-Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
+Other options are `match = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
 
 
 ```r
-get_etoxid('Triclosan', mult = 'all')
+get_etoxid('Triclosan', match = 'all')
+#> [[1]]
 #> [1] "20179" "89236"
 #> attr(,"matched")
 #> [1] "Triclosan ( 20179 )"       "Methyltriclosan ( 89236 )"
@@ -443,7 +441,7 @@ With this substance ID we can query further information from ETOX, e.g.:
 
 
 ```r
-etox_basic(id)
+etox_basic(ids$etoxid)[[1]]
 #> $cas
 #> [1] "3380-34-5"
 #> 
@@ -484,7 +482,7 @@ We can also retrieve Quality Targets:
 
 
 ```r
-targets <- etox_targets(id)
+targets <- etox_targets(ids$etoxid)[[1]]
 targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 #>   Substance Country_or_Region      Designation Value_Target_LR Unit
 #> 1 Triclosan               AUS             PNEC           0.050 µg/l
@@ -501,7 +499,7 @@ targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_
 and results of ecotox tests:
 
 ```r
-tests <- etox_tests(id)
+tests <- etox_tests(ids$etoxid)[[1]]
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 #>                           Organism                  Effect Duration
 #> 1              Anabaena flos-aquae                    k.A.        4
@@ -601,22 +599,15 @@ out$physprop
 #### Wikidata
 
 ```r
-ids <- get_wdid(query = 'Triclosan', language = 'en')
+ids <- get_wdid(query = 'Triclosan')
 ids
-#> [1] "Q408646"
-#> attr(,"matched")
-#> [1] "Triclosan"
+#>        id     match distance     query
+#> 1 Q408646 Triclosan        0 Triclosan
 
 # quera identifiers from wikidata
-wd_ident(ids)[1:3]
-#> $smiles
-#> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
-#> 
-#> $cas
-#> [1] "3380-34-5"
-#> 
-#> $cid
-#> [1] "5564"
+wd_ident(ids$id)[1:5]
+#>                         smiles       cas  cid    einecs csid
+#> 1 Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl 3380-34-5 5564 222-182-2 5363
 ```
 
 
