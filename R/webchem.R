@@ -44,3 +44,21 @@ NULL
 #' }
 #' @source \url{http://cfpub.epa.gov/ecotox/}
 "lc50"
+
+
+#' Index of Alan Woods Compendium of Pesticides
+#'
+#' This dataset is a index of Alan Woods Compendium of Pesticides  \url{http://www.alanwood.net/pesticides}.
+#' This index is if for use with \code{\link{aw_query}}.
+#' You can use the function \code{\link{build_aw_idx}} to rebuild the index.
+#' Date of build: 12. Feb. 2016
+#'
+#' @format A data frame with 2152 rows and 4 variables:
+#' \describe{
+#'   \item{names}{CAS numbers}
+#'   \item{links}{URL to webpage}
+#'   \item{linknames}{names in link / substance names}
+#'   \item{source} source of link, either from CAS (rn) or Commonname (cn)
+#' }
+#' @source \url{http://www.alanwood.net/pesticides}
+"aw_idx"

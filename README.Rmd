@@ -202,7 +202,7 @@ pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", 
 `aw_query()` returns a list of 9 entries and can query common names and cas numbers:
 ```{r alanwood}
 aw_query('Fluazinam', type = 'commonname')
-aw_query('79622-59-6', type = 'cas')$cname
+aw_query('79622-59-6', type = 'cas')[[1]]$cname
 ```
 
 #### SRC PHYSPROP Database
