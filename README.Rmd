@@ -281,11 +281,11 @@ out$physprop
 
 #### Wikidata
 ```{r wikidata}
-ids <- get_wdid(query = 'Triclosan', language = 'en')
+ids <- get_wdid(query = 'Triclosan')
 ids
 
 # quera identifiers from wikidata
-wd_ident(ids)[1:3]
+wd_ident(ids$id)[1:3]
 ```
 
 

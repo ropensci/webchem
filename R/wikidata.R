@@ -10,8 +10,8 @@
 #' 'na' returns NA if multiple hits are found.
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A character vector with the item ID and the additional attribute \code{matched}  (the matched
-#' label).
+#' @return if match = 'all' a list with ids, otherwise a dataframe with 4 columns:
+#' id, matched text, string distance to match and the queried string
 #'
 #' @note Only matches in labels are returned.
 #'
@@ -21,18 +21,18 @@
 #' \dontrun{
 #' get_wdid('Triclosan', language = 'de')
 #' get_wdid('DDT')
-#' get_wdid('DDT', first = TRUE)
+#' get_wdid('DDT', match = 'all')
 #'
-#' # multiple inpus
+#' # multiple inputs
 #' comps <- c('Triclosan', 'Glyphosate')
-#' sapply(comps, get_wdid, language = 'en')
+#' get_wdid(comps)
 #' }
-get_wdid <- function(query, language = 'en', match = c('all', 'first', 'best', 'ask', 'na'),
+get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', 'ask', 'na'),
                      verbose = TRUE){
   # language <-  'en'
   # query <- 'Triclosan'
   match <- match.arg(match)
-  foo <- function(query, language, first, verbose){
+  foo <- function(query, language, match, verbose){
     limit <-  50
     qurl <- paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
     qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query)
@@ -44,19 +44,83 @@ get_wdid <- function(query, language = 'en', match = c('all', 'first', 'best', '
     if (length(search) == 0) {
       if (verbose)
         message('Substance not found! Returing NA. \n')
-      return(NA)
+      id <- NA
+      attr(id, "matched") <- NA
+      attr(id, "distance") <- NA
+      return(id)
     }
     # use only matches on label
-    search <- search[search$match$type == 'label', ]
+    search <- search[search$match$type %in% c('label', 'alias'), ]
+    # # check matches
     search <- search[tolower(search$match$text) == tolower(query), ]
 
-    if (first) {
-      search <- search[1, ]
+    if (nrow(search) > 1) {
+      if (verbose)
+        message("More then one Link found. \n")
+      if (match == 'na') {
+        if (verbose)
+          message("Returning NA. \n")
+        id <- NA
+        matched_sub <- NA
+        d <- NA
+      }
+      if (match == 'all') {
+        if (verbose)
+          message("Returning all matches. \n")
+        id <- search$id
+        matched_sub <- search$label
+        d <- 'all'
+      }
+      if (match == 'first') {
+        if (verbose)
+          message("Returning first match. \n")
+        id <- search$id[1]
+        matched_sub <- search$label[1]
+        d <- 'first'
+      }
+      if (match == 'best') {
+        if (verbose)
+          message("Returning best match. \n")
+        dd <- adist(query, search$label) / nchar(search$label)
+        id <- search$id[which.min(dd)]
+        d <- round(dd[which.min(dd)], 2)
+        matched_sub <- search$label[which.min(dd)]
+      }
+      if (match == 'ask') {
+        tochoose <- data.frame(match = search$label, url = search$url, description = search$description)
+        print(tochoose)
+        message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
+        take <- as.numeric(scan(n = 1, quiet = TRUE))
+        if (length(take) == 0) {
+          id <- NA
+          matched_sub <- NA
+          d <- NA
+        }
+        if (take %in% seq_len(nrow(tochoose))) {
+          id <- search$id[take]
+          matched_sub <- search$label[take]
+          d <- 'interactive'
+        }
+      }
+    } else {
+      id <- search$id
+      d <- 0
+      matched_sub <- search$label
     }
-    out <- search$id
-    attr(out, "matched") <- search$label
-    return(out)
+    names(id) <- NULL
+    attr(id, "matched") <- matched_sub
+    attr(id, "distance") <- d
+    return(id)
   }
+  out <- lapply(query, foo, language = language, match = match, verbose = verbose)
+  if (match != 'all') {
+    out <- data.frame(t(sapply(out, function(y) {
+      c(y, attr(y, 'matched'), attr(y, 'distance'))
+    })), stringsAsFactors = FALSE)
+    names(out) <- c('id', 'match', 'distance')
+    out[['query']] <- query
+  }
+  return(out)
 }
 
 #! Use SPARQL to search of chemical compounds (P31)?! For a finer / better search?

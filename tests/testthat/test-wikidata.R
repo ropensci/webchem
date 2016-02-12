@@ -2,17 +2,23 @@ context("wikidata")
 
 
 test_that("get_wdid returns correct results", {
-  do <- get_wdid('Triclosan', language = 'en')
-  do2 <- get_wdid('ddt', language = 'en')
-  do3 <- get_wdid('Triclosan', language = 'en', first = TRUE)
-  xx <- get_wdid('xxxxxx', language = 'en')
+  # test general
+  comps <- c('DDT', 'Aspirin', 'xdewrwdcadsr4w')
+  o1 <- get_wdid(comps, match = 'best')
+  o2 <- get_wdid(comps, match = 'all')
+  o3 <- get_wdid(comps[1], match = 'first')
+  o4 <- get_wdid(comps[1], match = 'na')
 
-  expect_error(get_wdid(c('Triclosan', 'xxx'), language = 'en'))
-  expect_equal(c(do), "Q408646")
-  expect_equal(attr(do, "matched"), "Triclosan")
-  expect_true(length(do2) > 1)
-  expect_true(length(do3) == 1)
-  expect_equal(c(xx), NA)
+
+  expect_is(o1, 'data.frame')
+  expect_is(o2, 'list')
+  expect_is(o3, 'data.frame')
+  expect_is(o4, 'data.frame')
+
+  expect_equal(o1$id, c("Q163648", "Q18216", NA))
+  expect_equivalent(o2[[1]][1:2], c("Q163648", "Q949424"))
+  expect_equal(o3$distance, 'first')
+  expect_equal(o4$distance, NA)
 })
 
 
