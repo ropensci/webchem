@@ -10,7 +10,7 @@ parse_mol(string)
 \item{string}{molfile as one string}
 }
 \value{
-A list with of four entries: header (h), counts line (cl), atom block (ab) and bond block (bb).
+A list with of four entries: header (eh), counts line (cl), atom block (ab) and bond block (bb).
 header: a = number of atoms, b = number of bonds, l = number of atom lists, f = obsolete,
 c = chiral flag (0=not chiral, 1 = chiral), s = number of stext entries, x, r, p, i = obsolete,
 m = 999, v0 version

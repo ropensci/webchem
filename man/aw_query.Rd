@@ -15,13 +15,14 @@ aw_query(x, type = c("commonname", "cas"), verbose = TRUE)
 }
 \value{
 A list of eight entries: common-name, status, preferredd IUPAC Name,
-         IUPAC Name, cas, formula, activity, subactivity, inchikey and inchi.
+         IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source url.
 }
 \description{
 Query Alan Woods Compendium of Pesticide Common Names http://www.alanwood.net/pesticides
 }
 \note{
-for type = 'cas' only the first link is returned
+for type = 'cas' only the first matched link is returned.
+Please respect Copyright, Terms and Conditions \url{http://www.alanwood.net/pesticides/legal.html}!
 }
 \examples{
 \dontrun{

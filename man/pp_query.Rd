@@ -12,8 +12,8 @@ pp_query(cas, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A list of 4 entries: cas (CAS-Number), cname (Chemical Name),
-mw (Molecular weigth) and prop (Properties).
+A list of lists with 5 entries: cas (CAS-Number), cname (Chemical Name),
+mw (Molecular weigth), prop (Properties) and source url.
 prop is a data.frame, with variables, value, unit, temp, type (see note) and ref (see note).
 }
 \description{
@@ -25,17 +25,13 @@ see \url{http://www.srcinc.com/what-we-do/environmental/scientific-databases.htm
 }
 \note{
 Abbreviations in the 'Type' field: EXP = Experimental Data,
-EST = Estimated Data, EXT = Extrapolated Data. Extrapolated data is based
-upon experimental measurement outside the temperature range of the reported value.
-References below are abbreviated citations ...
-the full reference citations are NOT available here.
-References for Estimated data generally refer to the method used to make the estimate ...
-most estimates were made using SRC software.
+EST = Estimated Data, EXT = Extrapolated Data.
+Please respect the terms of use: \url{http://www.srcinc.com/terms-of-use.html}.
 }
 \examples{
 \dontrun{
 pp_query('50-00-0')
-lapply(c('50-00-0', '79622-59-6', 'xxxxx'), pp_query)
+pp_query(c('50-00-0', '79622-59-6', 'xxxxx'))
 }
 }
 \author{

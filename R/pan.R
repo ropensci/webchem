@@ -4,10 +4,11 @@
 #' @import xml2
 #' @importFrom utils adist
 #' @importFrom rvest html_table
+#' @importFrom stats rgamma
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param match character; \code{match="all"} returns all matches,
-#'   \code{match="first"} the first one and \code{match="best"} the hit with the lowest
-#'    Levenshtein distance between query and hit.
+#'   \code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
+#'    Levenshtein distance between query and matching synonym.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a named list of 73 entries,
@@ -16,7 +17,7 @@
 #'   Levenshtein distance (0 = perfect match, 1 = worst match).
 #'
 #
-#' Chemical Name and matching synonym; CAS Number; U.S. EPAPC Code; CA ChemCode;
+#' CAS Number; U.S. EPAPC Code; CA ChemCode;
 #' Use Type; Chemical Class; Molecular Weight; U.S. EPARegistered ; CA Reg Status;
 #' PIC; POPs; WHO Obsolete; EPA HAP; CA TAC; Ground Water Contaminant;
 #' CA Grnd Water Contam.; Acute Aquatic Toxcity; Chronic Aquatic Toxicity;
@@ -45,7 +46,8 @@
 #' Human Consumption of Water and Organisms from Water Source (ug/L);
 #' Taste and Odor Criteria (ug/L);
 #' Fresh Water Guidelines (ug/L); Salt Water Guidelines (ug/L);
-#' Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L)
+#' Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L);
+#' Chemical Name; matching synonym; source URL
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -53,86 +55,95 @@
 #'  # might fail if API is not available
 #'
 #'  # return all hits
-#'  pan_query('2,4-dichlorophenol')[c(1, 2, 5, 74)]
+#'  pan_query('2,4-dichlorophenol')[[1]][c(1, 2, 5, 74)]
 #'  # return only first hit
-#'  pan_query('2,4-dichlorophenol', match = 'first')[c(1, 2, 5, 74)]
+#'  pan_query('2,4-dichlorophenol', match = 'first')[[1]][c(1, 2, 5, 74)]
 #'  # return only best hit
-#'  pan_query('2,4-dichlorophenol', match = 'best')[c(1, 2, 5, 74)]
+#'  pan_query('2,4-dichlorophenol', match = 'best')[[1]][c(1, 2, 5, 74)]
 #'
-#'  # returns NA
-#'  pan_query('xxxxx')
-#'
-#' ### multiple inputs
-#' comp <- c('Triclosan', 'Aspirin')
-#' # retrive CAS
-#' sapply(comp, function(x) pan_query(x, match = 'best')[['CAS Number']])
-#' # multiple columns
-#' ll <- lapply(comp, function(x) pan_query(x, match = 'best')[c(1, 2, 5, 74)])
-#' do.call(rbind, ll)
+#'  pan_query(c('Triclosan', 'Aspirin'), 'best')
 #' }
-pan_query <- function(query, match = c('all', 'first', 'best'), verbose = TRUE, ...){
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
-  if (is.na(query)) {
-    warning('Identifier is NA... Returning NA.')
-    return(NA)
-  }
+pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, ...){
   match <- match.arg(match)
-  baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
-  baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',
-                  'dDPR_Chem_Code=y&dUseList=y&dClassList=y&dMol_weight=y&',
-                  'dEPA_Reg=y&dCA_Reg=y&dPIC=y&dPOP=y&dWHOObsolete=y&dEPA_HAP=y&',
-                  'dCA_TAC=y&dS_GrdWat=y&dDPR_GrdWatCont=y&dS_AquaAcute=y&',
-                  'dS_AquaChronic=y&dS_BA=y&dDirtyDozen=y&dS_Acute=y&',
-                  'dS_ChEInhib=y&',
-                  'dEPAAcute=y&dNTPAcute=y&dPANAcute=y&dTRI_Acute=y&dWHOAcute=y&',
-                  'dS_Cancer=y&dEPACancer=y&dIARCCancer=y&dNIHCancer=y&',
-                  'dp65_Cancer=y&dTRI_Cancer=y&dS_DevRep=y&dp65_Dev=y&dTRI_Dev=y&',
-                  'dp65_Female=y&dp65_Male=y&dTRI_Repr=y&dS_ED=y&dED_EU=y&',
-                  'dED_Benbrook=y&dED_Denmark_Inert=y&dED_Colborn=y&',
-                  'dED_Illinois_EPA=y&dED_Keith=y&dAvg_Sol=y&dAvg_Koc=y&',
-                  'dAvg_Hydrolysis=y&dAvg_Aerobic=y&dAvg_Anaerobic=y&dMCL=y&',
-                  'dMCLG=y&dOneDay=y&dTenDay=y&dLifetime=y&dRfD=y&dDWEL=y&',
-                  'dCancerRisk=y&dMAC=y&dIMAC=y&dAO=y&dFWCont=y&dFWMax=y&',
-                  'dSWCont=y&dSWMax=y&dHumConsOrgOnly=y&dHumConsWaterOrg=y&',
-                  'dEPAOrganoleptic=y&dCanAquaFWConc=y&dCanAquaMarineConc=y&',
-                  'dIrrigConc=y&dLivestockConc=y&')
-  qurl = paste0(baseurl, baseq, 'ChemName=', query)
-  if (verbose)
-    message(paste0(baseurl, 'ChemName=', query), '\n')
-  Sys.sleep(0.1)
-  h <- try(read_html(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
+  foo <- function(query, match, verbose) {
+    if (is.na(query)) {
+      warning('Identifier is NA... Returning NA.')
+      return(NA)
+    }
+    # query <- '94-75-7'
+    # query <- '2,4-D'
+    baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
+    baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',
+                    'dDPR_Chem_Code=y&dUseList=y&dClassList=y&dMol_weight=y&',
+                    'dEPA_Reg=y&dCA_Reg=y&dPIC=y&dPOP=y&dWHOObsolete=y&dEPA_HAP=y&',
+                    'dCA_TAC=y&dS_GrdWat=y&dDPR_GrdWatCont=y&dS_AquaAcute=y&',
+                    'dS_AquaChronic=y&dS_BA=y&dDirtyDozen=y&dS_Acute=y&',
+                    'dS_ChEInhib=y&',
+                    'dEPAAcute=y&dNTPAcute=y&dPANAcute=y&dTRI_Acute=y&dWHOAcute=y&',
+                    'dS_Cancer=y&dEPACancer=y&dIARCCancer=y&dNIHCancer=y&',
+                    'dp65_Cancer=y&dTRI_Cancer=y&dS_DevRep=y&dp65_Dev=y&dTRI_Dev=y&',
+                    'dp65_Female=y&dp65_Male=y&dTRI_Repr=y&dS_ED=y&dED_EU=y&',
+                    'dED_Benbrook=y&dED_Denmark_Inert=y&dED_Colborn=y&',
+                    'dED_Illinois_EPA=y&dED_Keith=y&dAvg_Sol=y&dAvg_Koc=y&',
+                    'dAvg_Hydrolysis=y&dAvg_Aerobic=y&dAvg_Anaerobic=y&dMCL=y&',
+                    'dMCLG=y&dOneDay=y&dTenDay=y&dLifetime=y&dRfD=y&dDWEL=y&',
+                    'dCancerRisk=y&dMAC=y&dIMAC=y&dAO=y&dFWCont=y&dFWMax=y&',
+                    'dSWCont=y&dSWMax=y&dHumConsOrgOnly=y&dHumConsWaterOrg=y&',
+                    'dEPAOrganoleptic=y&dCanAquaFWConc=y&dCanAquaMarineConc=y&',
+                    'dIrrigConc=y&dLivestockConc=y&')
+    qurl = paste0(baseurl, baseq, 'ChemName=', query)
+    if (verbose)
+      message(paste0(baseurl, 'ChemName=', query), '\n')
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    h <- try(read_html(qurl), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      warning('Problem with web service encountered... Returning NA.')
+      return(NA)
+    }
+    nd <- xml_find_all(h, "//table[contains(.,'Detailed Info')]")
+    if (length(nd) == 0) {
+      message('Not found... Returning NA.')
+      return(NA)
+    }
+    ttt <- html_table(nd)[[1]]
+    out <- as.list(ttt)
+    # clean
+    out$`Detailed Info` <- NULL
+    names(out) <- gsub('\\n', '', names(out))
+    out <- rapply(out, f = function(x){
+      ifelse(x %in% c('null', '-', ''), NA, x)
+    }, how = "replace" )
+    out <- c(out[1:46],
+             rapply(out[47:73], function(x) gsub(',', '', x), how = 'replace'))
+
+    # split chemName and matching synonym
+    out[['matching synonym']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 2)
+    out[['Chemical name']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 1)
+    out[['Chemical Name and matching synonym']] <- NULL
+
+    # return also source url
+    # xmlview::xml_view(nd, add_filter = TRUE)
+    source_url <- xml_attr(xml_find_all(nd, ".//a[contains(., 'Details')]"), 'href')
+    out[['source_url']] <- paste0('http://www.pesticideinfo.org/', source_url)
+
+    # convert to numeric
+    tonum <- c(6, 46:72)
+    out[tonum] <- lapply(out[tonum], as.numeric)
+
+    if (match == 'first')
+      out <- lapply(out, '[', 1)
+      attr(out, "match distance") <- 'first match'
+    if (match == 'best') {
+      hits <- out[['matching synonym']]
+      dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
+      take <- which.min(dists)
+      out <- lapply(out, '[', take)
+      attr(out, "match distance") <- dists[take]
+    }
+    return(out)
   }
-  nd <- xml_find_all(h, "//table[contains(.,'Detailed Info')]")
-  if (length(nd) == 0) {
-    message('Not found... Returning NA.')
-    return(NA)
-  }
-  ttt <- html_table(nd)[[1]]
-  out <- as.list(ttt)
-  # clean
-  out$`Detailed Info` <- NULL
-  names(out) <- gsub('\\n', '', names(out))
-  out <- rapply(out, f = function(x){
-    ifelse(x %in% c('null', '-', ''), NA, x)
-  }, how = "replace" )
-  out <- c(out[1:46],
-           rapply(out[47:73], function(x) gsub(',', '', x), how = 'replace'))
-  if (match == 'first')
-    out <- lapply(out, '[', 1)
-  if (match == 'best') {
-    hits <- out[[1]]
-    # split synonyms
-    hits <- strsplit(hits, '\\n')
-    dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
-    take <- which.min(dists)
-    out <- lapply(out, '[', take)
-    out$match_score <- dists[take]
-  }
+  out <- lapply(query, foo, match = match, verbose = verbose)
+  out <- setNames(out, query)
   return(out)
 }
 

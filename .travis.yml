@@ -27,7 +27,7 @@ after_failure:
 
 # report to coveralls
 after_success:
-  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(quiet = FALSE)'; fi
+  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'; fi
 
 notifications:
   email:
@@ -45,5 +45,5 @@ env:
   global:
     # COVERALLS_TOKEN
     - secure: "WJeHUOPD0YrYyrxWUGpdrBSGJMB361m0nHC19ohwIWbdGysksgTTkyBDTamD62XRKjJSlGpHohMU3OiOX0YE45mypgsKvfdqP4CTBbc7J//fYLPUIttVXOiCp15qNFr7NLjKB78BG2K0wqsjVVb65oJg+uzl89Rt+xjyV1cFxD0="
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran --run-donttest"
+    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran"
     - _R_CHECK_TIMINGS_="0"

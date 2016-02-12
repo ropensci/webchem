@@ -1,29 +1,64 @@
+webchem 0.0.6
+======================
+
+NEW FEATURES
+* added cts_to() and cts_from() to retrieve possible ids that can be queried.
+* cts_*(), pp_query(), cir_query(), get_cid(), get_etoxid(), etox_*() and pan_query() can handle multiple inputs
+* pc_prop() queries properties and pc_synonmy() synonyms from PUG-REST.
+
+
+MINOR IMPROVEMENTS
+* rewrite of pubchem functions using PUG-REST
+
+BUG FIXES
+
+* pan_query() did not return numeric values
+* get_cid() failed with multiple results
+
+DEPRECATED FUNCTIONS
+
+
+DEFUNCT FUNCTIONS
+
+* ppdb_query() has been removed due to copyright issues.
+The new ppdb_parse() parses only a html, but does not interact with the database
+* pan()
+* alanwood()
+* get_cid()
+* cid_compinfo()
+* chemid()
+* physprop()
+
+
+
 webchem 0.0.5.0
 ======================
 
 NEW FEATURES
 
-* is.smiles() checks SMILES string, by parsing via (R)CDK.
+* is.smiles() checks SMILES strings, by parsing via (R)CDK.
 * get_wdid() and wd_indent() to retrieve information from wikidata.
-* get_etoxid() can handle multi inputs (interactive mode, best match, first match, NA and all matches)
+* get_etoxid() can handle multi inputs (interactive mode, best match, first match, NA and all matches).
+* ci_query() can handle multi inputs (interactive mode, best match, first match and NA).
+* cs_prop() queries predcitions (ACD and EPiSuite) from ChemSpider
 
 MINOR IMPROVEMENTS
 
-* webchem uses exclusively xml2 (instead of XML)
-* cs_compinfo():
-  - names of returned list changed
+* webchem uses exclusively xml2 (instead of XML).
+* All function return source_url for (micro-)attribution of sources
+* cs_compinfo(): names of returned list changed.
 * cs_extcompinfo():
   - names of returned list changed
   - result is numeric where appropriate
-* cir():
-  - result is numeric where appropriate
-* unified naming scheme.
-* withdraw naming changes in V0.0.4 (ppdb, cir).
-* is.inchikey_cs has been integrated into is.inchikey.
+* cir(): result is numeric where appropriate.
+* unified naming scheme of functions.
+* is.inchikey_cs() has been integrated into is.inchikey().
+* aw_query() returns multiple inchikey if found.
+* pan() now returns chemical name and matched synonym.
 
 BUG FIXES
 
-* utility function are not vectorized and throw an error.
+* utility functions are not vectorized and throw an error.
 * chemid() did mot work with inchikey as input.
 * ppdb_idx returned duplicated CAS values, which caused ppdb() to fail.
 * ppdb() failed in some cases because of false encoding.

@@ -274,6 +274,8 @@ is.smiles <- function(x, verbose = TRUE) {
 #' @examples
 #' extr_num('aaaa -95')
 extr_num <- function(x) {
+  if (length(x) == 0)
+    return(NA)
   as.numeric(gsub("[^0-9\\-]+", "", x))
 }
 
@@ -281,7 +283,7 @@ extr_num <- function(x) {
 #' Parse Molfile (as returned by chemspider) into a R-object.
 #'
 #' @param string molfile as one string
-#' @return A list with of four entries: header (h), counts line (cl), atom block (ab) and bond block (bb).
+#' @return A list with of four entries: header (eh), counts line (cl), atom block (ab) and bond block (bb).
 #' header: a = number of atoms, b = number of bonds, l = number of atom lists, f = obsolete,
 #' c = chiral flag (0=not chiral, 1 = chiral), s = number of stext entries, x, r, p, i = obsolete,
 #' m = 999, v0 version
@@ -324,5 +326,5 @@ parse_mol <- function(string) {
   bb <- m[(5 + na):(4 + na + nb)]
   bb <- read.table(text = bb)
   names(bb) <- c('1', '2', 't', 's', 'x', 'r', 'c')
-  return(list(h = h, cl = cl, ab = ab, bb = bb))
+  return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }

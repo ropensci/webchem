@@ -17,7 +17,7 @@ cs_compinfo(csid, token, verbose = TRUE, ...)
 }
 \value{
 a list of four, with entries: csid (ChemSpider ID), inchi,
-  inchikey and smiles.
+  inchikey, smiles and source_url.
 }
 \description{
 Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
@@ -26,6 +26,7 @@ Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/
 A security token is neeeded. Please register at RSC
 \url{https://www.rsc.org/rsc-id/register}
 for a security token.
+Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{
@@ -50,6 +51,6 @@ Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
-\code{\link{csid_extcompinfo}} for extended compound information.
+\code{\link{cs_extcompinfo}} for extended compound information.
 }
 

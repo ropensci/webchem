@@ -1,6 +1,7 @@
 #' Get Wikidata Item ID
 #'
 #' @import jsonlite httr
+#' @importFrom stats rgamma
 #'
 #' @param query character; The searchterm
 #' @param language character; the language to search in
@@ -18,9 +19,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' get_wdid('Triclosan', language = 'en')
-#' get_wdid('DDT', language = 'en')
-#' get_wdid('DDT', language = 'en', first = TRUE)
+#' get_wdid('Triclosan', language = 'de')
+#' get_wdid('DDT')
+#' get_wdid('DDT', first = TRUE)
 #'
 #' # multiple inpus
 #' comps <- c('Triclosan', 'Glyphosate')
@@ -65,12 +66,13 @@ get_wdid <- function(query, language = 'en', match = c('all', 'first', 'best', '
 #' Retrieve Indentifiers from wikidata
 #'
 #' @import jsonlite
+#' @importFrom stats rgamma
 #'
 #' @param id character; identifier, as returned by \code{\link{get_wdid}}
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A list of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-#' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii'
+#' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
 #'
 #' @note Only matches in labels are returned.
 #'
@@ -108,7 +110,7 @@ wd_ident <- function(id, verbose = TRUE){
   sparql <- paste(sparql_head, sparql_body, '}')
   qurl <- paste0(baseurl, sparql)
   qurl <- URLencode(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
   if (verbose)
     message('Querying ', qurl)
   tmp <- fromJSON(qurl)
@@ -126,10 +128,11 @@ wd_ident <- function(id, verbose = TRUE){
 
   # check for missing entries and add to out-list
   miss <- names[!names %in% names(out)]
-  for(i in miss){
+  for (i in miss) {
     out[[i]] <- NA
   }
   out <- out[names]
+  out[['source_url']] <- paste0('https://www.wikidata.org/wiki/', id)
   return(out)
 }
 

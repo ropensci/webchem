@@ -22,24 +22,28 @@ chk_cir <- function(){
 
 test_that("cts_compinfo()", {
   chk_cts()
-  expect_error(cts_compinfo(c('xxxxx', 'aaaaaaa')))
   expect_error(cts_compinfo('xxx'))
-  expect_equal(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE), NA)
+
+  o1 <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)
+  o2 <- cts_compinfo(c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-X"), verbose = FALSE)
+  expect_equal(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE)[[1]], NA)
   expect_warning(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE))
-  expect_equal(length(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)), 7)
-  expect_equal(round(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)[[3]], 3), 289.542)
+  expect_equal(length(o1[[1]]), 7)
+  expect_equal(round(o1[[1]][["molweight"]], 3), 289.542)
+  expect_equal(length(o2), 2)
+  expect_true(is.na(o2[[2]]))
 })
 
 
 test_that("cts_convert()", {
   chk_cts()
-  expect_error(cts_convert(c('xxxxx', 'aaaaaaa'), 'Chemical Name', 'CAS'))
-  expect_error(cts_convert('Triclosan', c('Chemical Name', 'CAS'), 'CAS'))
+  comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
+  expect_error(cts_convert(comp, c('Chemical Name', 'CAS'), 'CAS'))
   expect_error(cts_convert('Triclosan', 'CAS'))
-  expect_equal(cts_convert('Triclosan', 'Chemical Name', 'inchikey', first = TRUE, verbose = FALSE), 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
-  expect_equal(length(cts_convert('Triclosan', 'Chemical Name', 'inchikey', first = TRUE, verbose = FALSE)), 1)
-  expect_equal(cts_convert('xxxxxx', 'Chemical Name', 'inchikey', verbose = FALSE), NA)
-  expect_warning(cts_convert(NA, 'Chemical Name', 'inchikey', verbose = FALSE))
+  o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', first = TRUE, verbose = FALSE)
+  expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
+  expect_equal(length(o1), 2)
+  expect_true(is.na(cts_convert('xxxx', 'inchikey', 'Chemical Name')[[1]]))
 })
 
 
@@ -49,6 +53,14 @@ test_that("cts_compinfo(cir_query())", {
   chk_cir()
   inchikey <- cir_query('Triclosan', representation = 'stdinchikey', verbose = FALSE)
   inchikey <- gsub('InChIKey=', '', inchikey)
-  expect_equal(round(cts_compinfo(inchikey, verbose = FALSE)[[3]], 3), 289.542)
+  expect_equal(round(cts_compinfo(inchikey, verbose = FALSE)[[1]][["molweight"]], 3), 289.542)
+})
 
+
+test_that("fromto", {
+  to <- cts_to()
+  from <- cts_from()
+
+  expect_true(is.character(to))
+  expect_true(is.character(from))
 })

@@ -18,7 +18,7 @@ cs_extcompinfo(csid, token, verbose = TRUE, ...)
 \value{
 a list with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
 'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
-'nominal_mass', 'alogp', 'xlogp', 'common_name'
+'nominal_mass', 'alogp', 'xlogp', 'common_name' and 'source_url'
 }
 \description{
 Get extended info from Chemspider, see \url{http://www.chemspider.com/}
@@ -27,6 +27,7 @@ Get extended info from Chemspider, see \url{http://www.chemspider.com/}
 A security token is neeeded. Please register at RSC
 \url{https://www.rsc.org/rsc-id/register}
 for a security token.
+Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{
@@ -52,6 +53,6 @@ Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
-\code{\link{csid_compinfo}} for extended compound information.
+\code{\link{cs_compinfo}} for extended compound information.
 }
 

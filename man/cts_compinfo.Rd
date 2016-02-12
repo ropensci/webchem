@@ -4,16 +4,15 @@
 \alias{cts_compinfo}
 \title{Get record details from Chemical Translation Service (CTS)}
 \usage{
-cts_compinfo(inchikey, verbose = TRUE, ...)
+cts_compinfo(inchikey, verbose = TRUE)
 }
 \arguments{
 \item{inchikey}{character; InChIkey.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{...}{currently not used.}
 }
 \value{
+a list of lists (for each supplied inchikey):
 a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
 }
 \description{
@@ -25,12 +24,15 @@ Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
 out <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N")
 # = Triclosan
 str(out)
-out[1:5]
+out[[1]][1:5]
 
 ### multiple inputs
-inchkeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
-ll <- lapply(inchkeys, function(x) cts_compinfo(x)[1:5])
-do.call(rbind, ll)
+inchikeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
+out2 <- cts_compinfo(inchikeys)
+str(out2)
+# a list of two
+# extract molecular weight
+sapply(out2, function(y) y$molweight)
 }
 }
 \author{

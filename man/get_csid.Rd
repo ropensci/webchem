@@ -24,9 +24,10 @@ a character vector of class 'csid' with ChemSpider IDs.
 Return Chemspider ID (CSID) for a search query, see \url{http://www.chemspider.com/}.
 }
 \note{
-A security token is neeeded. Please register at RSC
+A security token is neeeded. Please register at RSC.
 \url{https://www.rsc.org/rsc-id/register}
 for a security token.
+Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{
@@ -47,7 +48,7 @@ sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
-\code{\link{csid_compinfo}} and \code{\link{csid_extcompinfo}} to
+\code{\link{cs_compinfo}} and \code{\link{cs_extcompinfo}} to
 retrieve compound details from csid.
 }
 

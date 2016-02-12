@@ -2,6 +2,7 @@
 #'
 #' Return Chemspider ID (CSID) for a search query, see \url{http://www.chemspider.com/}.
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param query charachter; search term.
 #' @param token character; your security token.
@@ -10,12 +11,13 @@
 #' @param ... currently not used.
 #' @return a character vector of class 'csid' with ChemSpider IDs.
 #'
-#' @note A security token is neeeded. Please register at RSC
+#' @note A security token is neeeded. Please register at RSC.
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
+#' Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @seealso \code{\link{csid_compinfo}} and \code{\link{csid_extcompinfo}} to
+#' @seealso \code{\link{cs_compinfo}} and \code{\link{cs_extcompinfo}} to
 #' retrieve compound details from csid.
 #' @export
 #' @examples
@@ -33,6 +35,7 @@
 #' sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' }
 get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
+  # token = '37bf5e57-9091-42f5-9274-650a64398aaf'
   if (length(query) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -44,14 +47,14 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
   qurl <- paste0(baseurl, 'query=', query, '&token=', token)
   if (verbose)
     message(qurl, '\n')
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('Problem with web service encountered... Returning NA.')
     return(NA)
   }
-  out <- xml_text(h, trim = TRUE)
-  if (out == '') {
+  out <- xml_text(xml_find_all(h, '/*/*'), trim = TRUE)
+  if (length(out) == 0) {
     message('No csid found... Returning NA.')
     return(NA)
   }
@@ -67,20 +70,22 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #'
 #' Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param csid character, ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of four, with entries: csid (ChemSpider ID), inchi,
-#'   inchikey and smiles.
+#'   inchikey, smiles and source_url.
 #'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
+#' Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
-#' \code{\link{csid_extcompinfo}} for extended compound information.
+#' \code{\link{cs_extcompinfo}} for extended compound information.
 #' @export
 #' @examples
 #' \dontrun{
@@ -100,6 +105,7 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' do.call(rbind, ll)
 #' }
 cs_compinfo <- function(csid, token, verbose = TRUE, ...){
+  # csid <- "5363"
   if (length(csid) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -107,7 +113,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('CSID not found... Returning NA.')
@@ -115,6 +121,8 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   }
   out <- as.list(xml_text(xml_children(h)))
   names(out) <- c('csid', 'inchi', 'inchikey', 'smiles')
+  source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+  out[['source_url']] <- source_url
   return(out)
 }
 
@@ -124,19 +132,21 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #'
 #' Get extended info from Chemspider, see \url{http://www.chemspider.com/}
 #' @import xml2
+#' @importFrom stats rgamma
 #' @param csid character,  ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
 #' 'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
-#' 'nominal_mass', 'alogp', 'xlogp', 'common_name'
+#' 'nominal_mass', 'alogp', 'xlogp', 'common_name' and 'source_url'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
 #' for a security token.
+#' Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
-#' \code{\link{csid_compinfo}} for extended compound information.
+#' \code{\link{cs_compinfo}} for extended compound information.
 #' @export
 #' @examples
 #' \dontrun{
@@ -164,7 +174,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('CSID not found... Returning NA.')
@@ -180,9 +190,149 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   out[['nominal_mass']] <- as.numeric(out[['nominal_mass']])
   out[['alogp']] <- as.numeric(out[['alogp']])
   out[['xlogp']] <- as.numeric(out[['xlogp']])
+  source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+  out[['source_url']] <- source_url
   return(out)
 }
 
+#' Get predicted chemical properties from ChemSpider
+#'
+#' Get predicted (ACD/Labs and EPISuite) chemical properties from ChemSpider,
+#' see \url{http://www.chemspider.com/}
+#' @import xml2 stringr
+#' @importFrom stats rgamma
+#'
+#' @param csid character,  ChemSpider ID.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... currently not used.
+#'
+#' @return A list of three: acd (data.frame), epi (data.frame) and source_url.
+#'
+#' @note Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
+#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
+#' \code{\link{cs_compinfo}} for extended compound information.
+#' @export
+#' @examples
+#' \dontrun{
+#' out <- cs_prop('5363')
+#' out$epi
+#' }
+cs_prop <- function(csid, verbose = TRUE, ...){
+  # csid <- "5363"
+  if (length(csid) > 1) {
+    stop('Cannot handle multiple input strings.')
+  }
+  qurl <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+  if (verbose)
+    message(qurl)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
+  h <- try(read_html(qurl), silent = TRUE)
+  if (inherits(h, "try-error")) {
+    warning('CSID not found... Returning NA.')
+    return(NA)
+  }
+
+  ### acd
+  acd <- do.call(rbind, html_table(xml_find_all(h, '//div[@class="column two"]/table')))
+  names(acd) <- c('variable', 'val')
+  acd$variable <- gsub('^(.*)\\:$', '\\1', acd$variable)
+
+  # ^ - Beginning of the line;
+  # \\d* - 0 or more digits;
+  # \\.? - An optional dot (escaped, because in regex, . is a special character);
+  # \\d* - 0 or more digits (the decimal part);
+  # $ - End of the line.
+  acd$value <- as.numeric(gsub('^(\\d*\\.?\\d*).*$', '\\1', acd$val))
+  acd$error <- as.numeric(ifelse(grepl('\u00B1' , acd$val), gsub('^\\d*\\.?\\d*\u00B1(\\d*\\.?\\d*)\\s.*$', '\\1', acd$val), NA))
+  acd$unit <- ifelse(grepl('\\s.*\\d*$', acd$val),
+         gsub('^.*\\d*\\s(.*\\d*)$', '\\1', acd$val),
+         NA)
+  acd$val <- NULL
+
+
+  ### episuite
+  epi <- data.frame(property = character(),
+                    value_pred = numeric(),
+                    unit_pred = character(),
+                    source_pred = character(),
+                    value_exp = numeric(),
+                    unit_exp = character(),
+                    source_exp = character())
+
+
+  kow_raw <- xml_text(xml_find_all(h, '//div[@id="epiTab"]/pre'))
+  ll <- str_split(kow_raw, '\n')
+  ll <- sapply(ll, str_trim)
+  ll <- ll[!ll == '']
+
+  prop <- 'Log Octanol-Water Partition Coef'
+  value_pred <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
+  unit_pred <- NA
+  source_pred <- gsub('(.*) = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)])
+  value_exp <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(Exper.', ll)]))
+  unit_exp <- NA
+  source_exp <- gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Log Kow \\(Exper.', ll)) + 1])
+
+  prop <- c(prop, 'Boiling Point')
+  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Boiling Pt \\(deg C', ll)])))
+  unit_pred <- c(unit_pred, 'deg C')
+  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
+  value_exp <- c(value_exp,   NA)
+  unit_exp <- c(unit_exp, NA)
+  source_exp <- c(source_exp, NA)
+
+  prop <- c(prop, 'Melting Point')
+  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Melting Pt \\(deg C', ll)])))
+  unit_pred <- c(unit_pred, 'deg C')
+  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
+  value_exp <- c(value_exp,   NA)
+  unit_exp <- c(unit_exp, NA)
+  source_exp <- c(source_exp, NA)
+  # epi_mp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^MP\\s+\\(exp', ll)]))
+  # epi_bp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^BP\\s+\\(exp', ll)]))
+
+  prop <- c(prop, 'Water Solubility from KOW')
+  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Solubility at 25 deg C', ll)])))
+  unit_pred <- c(unit_pred, 'mg/L (25 deg C)')
+  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Water Solubility Estimate from Log Kow', ll)]))
+  value_exp <- c(value_exp,   as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Sol \\(Exper. database match', ll)])))
+  unit_exp <- c(unit_exp, gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+)(.*)','\\2', ll[grepl('^Water Sol \\(Exper. database match', ll)]))
+  source_exp <- c(source_exp, gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Water Sol \\(Exper. database match', ll)) + 1]))
+
+  prop <- c(prop, 'Water Solubility from Fragments')
+  value_pred <- c(value_pred, as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Wat Sol \\(v1.01', ll)])))
+  unit_pred <- c(unit_pred, 'mg/L')
+  source_pred <- c(source_pred, NA)
+  value_exp <- c(value_exp,  NA)
+  unit_exp <- c(unit_exp, NA)
+  source_exp <- c(source_exp, NA)
+
+  prop <- c(prop, 'Log Octanol-Air Partition Coefficient (25 deg C)')
+  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s(.*)','\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)])))
+  unit_pred <- c(unit_pred, NA)
+  source_pred <- c(source_pred, gsub('^.*\\[(.*)\\]\\:$','\\1', ll[grepl('^Log Octanol-Air Partition Coefficient', ll)]))
+  value_exp <- c(value_exp,   as.numeric(gsub('^.*\\:(.*)','\\1', ll[grepl('^Log Koa \\(experimental database\\).*', ll)])))
+  unit_exp <- c(unit_exp, NA)
+  source_exp <- c(source_exp, NA)
+
+  prop <- c(prop, 'Log Soil Adsorption Coefficient')
+  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Log Koc:', ll)])))
+  unit_pred <- c(unit_pred, NA)
+  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Soil Adsorption Coefficient', ll)]))
+  value_exp <- c(value_exp, NA)
+  unit_exp <- c(unit_exp, NA)
+  source_exp <- c(source_exp, NA)
+
+  epi <- data.frame(prop, value_pred, unit_pred, source_pred,
+                    value_exp, unit_exp, source_exp, stringsAsFactors = FALSE)
+
+
+  out <- list(acd = acd,
+              epi = epi,
+              source_url = qurl)
+  return(out)
+}
 
 
 #' Convert identifiers using ChemSpider
@@ -259,6 +409,7 @@ cs_convert <- function(query, from = c('csid', 'inchikey', 'inchi', 'smiles'),
 
 #' Convert a CSID to a Molfile
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param csid character,  ChemSpiderID.
 #' @param token character; security token.
@@ -294,7 +445,7 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'csid=', csid, '&token=', token)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('CSID not found... Returning NA.')
@@ -314,6 +465,7 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 
 #' Convert a InChIKey to CSID
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param inchikey character,  InChIKey
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -332,7 +484,8 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' }
 cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
-  # inchkey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  # inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
+  # inchikey <- 'KYOUEHWYDNYHAL-IOORBXIBSA-N'
   if (length(inchikey) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -340,13 +493,17 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'inchi_key=', inchikey)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('inchikey not found... Returning NA.')
-    out <- NA
+    return(NA)
   } else {
     out <- xml_text(h)
+  }
+  if (out == '') {
+    warning('inchikey not found... Returning NA.')
+    return(NA)
   }
   return(out)
 }
@@ -354,6 +511,7 @@ cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){
 
 #' Convert a InChIKey to InChI
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param inchikey character,  InChIKey
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -378,7 +536,7 @@ cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'inchi_key=', inchikey)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('inchikey not found... Returning NA.')
@@ -392,6 +550,7 @@ cs_inchikey_inchi <- function(inchikey, verbose = TRUE, ...){
 
 #' Convert a InChIkey to a Molfile
 #' @import xml2
+#' @importFrom stats rgamma
 #'
 #' @param inchikey character,  A InChIKey.
 #' @param parse should the molfile be parsed to a R object?
@@ -421,7 +580,7 @@ cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
   qurl <- paste0(baseurl, 'inchi_key=', inchikey)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
     warning('inchikey not found... Returning NA.')
@@ -440,6 +599,7 @@ cs_inchikey_mol <- function(inchikey, parse = TRUE, verbose = TRUE, ...){
 
 #' Convert a InChI to CSID
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -466,7 +626,7 @@ cs_inchi_csid <- function(inchi, verbose = TRUE, ...){
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIToCSID'
   if (verbose)
     message('Querrying ', baseurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   res <- try(POST(baseurl, body = list(inchi = inchi), encode = 'form'),
              silent = TRUE)
   if (inherits(res, "try-error")) {
@@ -487,6 +647,7 @@ cs_inchi_csid <- function(inchi, verbose = TRUE, ...){
 
 #' Convert a InChI to InChiKey
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -513,7 +674,7 @@ cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIToInChIKey'
   if (verbose)
     message('Querrying ', baseurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   res <- try(POST(baseurl, body = list(inchi = inchi), encode = 'form'),
              silent = TRUE)
   if (inherits(res, "try-error")) {
@@ -535,6 +696,7 @@ cs_inchi_inchikey <- function(inchi, verbose = TRUE, ...){
 
 #' Convert a InChI to Molfile
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param parse should the molfile be parsed to a R object?
@@ -565,7 +727,7 @@ cs_inchi_mol <- function(inchi, parse = TRUE, verbose = TRUE, ...){
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIToMol'
   if (verbose)
     message('Querrying ', baseurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   res <- try(POST(baseurl, body = list(inchi = inchi), encode = 'form'),
              silent = TRUE)
   if (inherits(res, "try-error")) {
@@ -589,6 +751,7 @@ cs_inchi_mol <- function(inchi, parse = TRUE, verbose = TRUE, ...){
 
 #' Convert a InChI to SMILES
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param inchi character,  InChI
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -615,7 +778,7 @@ cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
   baseurl <- 'http://www.chemspider.com/InChI.asmx/InChIToSMILES'
   if (verbose)
     message('Querrying ', baseurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   res <- try(POST(baseurl, body = list(inchi = inchi), encode = 'form'),
              silent = TRUE)
   if (inherits(res, "try-error")) {
@@ -637,6 +800,7 @@ cs_inchi_smiles <- function(inchi, verbose = TRUE, ...){
 
 #' Convert a SMILES to InChI
 #' @import xml2 httr
+#' @importFrom stats rgamma
 #'
 #' @param smiles character, A SMILES string
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -662,7 +826,7 @@ cs_smiles_inchi <- function(smiles, verbose = TRUE, ...){
   baseurl <- 'http://www.chemspider.com/InChI.asmx/SMILESToInChI'
   if (verbose)
     message('Querrying ', baseurl)
-  Sys.sleep(0.1)
+  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
   res <- try(POST(baseurl, body = list(smiles = smiles), encode = 'form'),
              silent = TRUE)
   if (inherits(res, "try-error")) {
