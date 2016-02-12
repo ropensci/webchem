@@ -6,10 +6,10 @@
 #'
 #' @param query charachter; search term.
 #' @param token character; your security token.
-#' @param first logical; If TRUE return only first result.
+#' @param first logical; If TRUE (default) return only first result.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a character vector of class 'csid' with ChemSpider IDs.
+#' @return if first = TRUE a character vector with ChemSpider IDs, otherwise a list.
 #'
 #' @note A security token is neeeded. Please register at RSC.
 #' \url{https://www.rsc.org/rsc-id/register}
@@ -24,18 +24,12 @@
 #' \dontrun{
 #' # Fails because no TOKEN is included
 #' token <- '<YOUR-SECURITY-TOKEN>'
-#' get_csid("Triclosan", token = token)
+#' get_csid("Triclosan", token = token)[[1]]
 #' # [1] "5363"
-#' # attr(,"class")
-#' # [1] "csid"
-#' get_csid("3380-34-5", token = token)
-#'
-#' ###
-#' # multiple inputs
-#' sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
+#' get_csid(c("Triclosan", "50-00-0"), token = token)
 #' }
-get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
-<<<<<<< HEAD
+get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
+  # token = '37bf5e57-9091-42f5-9274-650a64398aaf'
   foo <- function(query, token, first, verbose, ...){
     baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
     qurl <- paste0(baseurl, 'query=', query, '&token=', token)
@@ -56,32 +50,12 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
       out <- out[1]
     names(out) <- NULL
     return(out)
-=======
-  # token = '37bf5e57-9091-42f5-9274-650a64398aaf'
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
   }
-  if (is.na(query)) {
-    warning('Identifier is NA... Returning NA.')
-    return(NA)
-  }
-  baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
-  qurl <- paste0(baseurl, 'query=', query, '&token=', token)
-  if (verbose)
-    message(qurl, '\n')
-  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  out <- xml_text(xml_find_all(h, '/*/*'), trim = TRUE)
-  if (length(out) == 0) {
-    message('No csid found... Returning NA.')
-    return(NA)
->>>>>>> master
-  }
-
+  out <- lapply(query, foo, token = token, first = first, verbose = verbose)
+  out <- setNames(out, query)
+  if (first)
+    out <- unlist(out)
+  return(out)
 }
 
 

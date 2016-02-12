@@ -1,26 +1,20 @@
 context("chemspider")
 token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
 
-require(RCurl)
-chk_cs <- function(){
-  qurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?query=Triclosan&token=37bf5e57-9091-42f5-9274-650a64398aaf'
-  Sys.sleep(0.2)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error'))
-    skip("Server is down!")
-}
-
 
 test_that("get_csid()", {
-  chk_cs()
+  comps <- c("Triclosan", "50-00-0", "xxxxxx")
+  o1 <- get_csid(comps, token = token, verbose = TRUE)
+  o2 <- get_csid(comps, token = token, verbose = TRUE, first = FALSE)
 
-  tt <- get_csid("Triclosan", token = token, verbose = FALSE)
-  expect_equal(tt, '5363')
-  expect_equal(get_csid("xxxxxxxxx", token = token, verbose = FALSE), NA)
-  expect_error(get_csid(c("a", "b"), token = token))
-  expect_warning(get_csid(NA, token = token))
-  expect_true(is.vector(tt))
+  expect_is(o1, 'character')
+  expect_is(o2, 'list')
+  expect_equal(length(o1),3)
+  expect_equal(length(o2), 3)
+  expect_true(is.na(o1[[3]]))
+  expect_true(is.na(o2[[3]]))
+  expect_equal(o1[[1]], '5363')
+  expect_equal(o2[[2]], '692')
 })
 
 
@@ -46,6 +40,19 @@ test_that("cs_extcompinfo()", {
   expect_error(cs_extcompinfo(c("a", "b"), token = token))
 })
 
+test_that("cs_prop()", {
+  id <- '5363'
+  m1 <- cs_prop(id)
+
+  expect_error(cs_prop(c(id, id)))
+
+  expect_is(m1, 'list')
+  expect_equal(length(m1), 3)
+
+  expect_is(m1$epi, 'data.frame')
+
+})
+
 
 # integration tests
 test_that("csid_extcompinfo(get_cid())", {
@@ -59,6 +66,7 @@ test_that("csid_extcompinfo(get_cid())", {
 })
 
 
+# converters
 test_that("cs_csid_mol()", {
   m1 <- cs_csid_mol(5363, token = token, verbose = FALSE)
   m2 <- cs_csid_mol(5363, token = token, parse = FALSE, verbose = FALSE)
@@ -277,15 +285,3 @@ test_that("cs_convert()", {
 })
 
 
-test_that("cs_prop()", {
-  id <- '5363'
-  m1 <- cs_prop(id)
-
-  expect_error(cs_prop(c(id, id)))
-
-  expect_is(m1, 'list')
-  expect_equal(length(m1), 3)
-
-  expect_is(m1$epi, 'data.frame')
-
-})
