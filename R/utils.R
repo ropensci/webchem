@@ -326,3 +326,18 @@ parse_mol <- function(string) {
   names(bb) <- c('1', '2', 't', 's', 'x', 'r', 'c')
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
+
+
+#' Extract CAS numbers from a webchem object
+#' @param x object
+#' @return a vector of cas numbers
+#' @export
+cas <- function(...){
+  UseMethod("cas")
+}
+
+#' @export
+#' @rdname cas
+cas.default <- function(x) {
+  x$cas
+}
