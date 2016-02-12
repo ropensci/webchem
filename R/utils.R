@@ -331,6 +331,7 @@ parse_mol <- function(string) {
 
 
 #' Extract CAS numbers from a webchem object
+#' @rdname webchem-extractors
 #' @param x object
 #' @return a vector of cas numbers
 #' @export
@@ -339,7 +340,8 @@ cas <- function(...){
 }
 
 #' @export
-#' @rdname cas
+#' @rdname webchem-extractors
 cas.default <- function(x) {
-  x$cas
+  # works with aw_query
+  sapply(x, function(y) y[['cas']])
 }

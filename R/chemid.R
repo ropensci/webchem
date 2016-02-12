@@ -168,5 +168,6 @@ ci_query <- function(query, type = c('rn', 'name', 'inchikey'),
               physprop = physprop, source_url = source_url)
   attr(out, "matched") <- matched_sub
   attr(out, "distance") <- d
+  class(out) <- 'chemid'
   return(out)
 }
