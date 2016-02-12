@@ -35,32 +35,28 @@
 #' sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
 #' }
 get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
+  foo <- function(query, token, first, verbose, ...){
+    baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
+    qurl <- paste0(baseurl, 'query=', query, '&token=', token)
+    if (verbose)
+      message(qurl, '\n')
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    h <- try(read_xml(qurl), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      warning('Problem with web service encountered... Returning NA.')
+      return(NA)
+    }
+    out <- xml_text(h, trim = TRUE)
+    if (out == '') {
+      message('No csid found... Returning NA.')
+      return(NA)
+    }
+    if (first)
+      out <- out[1]
+    names(out) <- NULL
+    return(out)
   }
-  if (is.na(query)) {
-    warning('Identifier is NA... Returning NA.')
-    return(NA)
-  }
-  baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
-  qurl <- paste0(baseurl, 'query=', query, '&token=', token)
-  if (verbose)
-    message(qurl, '\n')
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  out <- xml_text(h, trim = TRUE)
-  if (out == '') {
-    message('No csid found... Returning NA.')
-    return(NA)
-  }
-  if (first)
-    out <- out[1]
-  names(out) <- NULL
-  return(out)
+
 }
 
 
