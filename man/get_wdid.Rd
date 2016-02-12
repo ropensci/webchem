@@ -4,20 +4,23 @@
 \alias{get_wdid}
 \title{Get Wikidata Item ID}
 \usage{
-get_wdid(query, language = "en", first = FALSE, verbose = TRUE)
+get_wdid(query, language = "en", match = c("best", "first", "all", "ask",
+  "na"), verbose = TRUE)
 }
 \arguments{
 \item{query}{character; The searchterm}
 
 \item{language}{character; the language to search in}
 
-\item{first}{logical; If TRUE return only first result.}
+\item{match}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
+'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
+'na' returns NA if multiple hits are found.}
 
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A character vector with the item ID and the additional attribute \code{matched}  (the matched
-label).
+if match = 'all' a list with ids, otherwise a dataframe with 4 columns:
+id, matched text, string distance to match and the queried string
 }
 \description{
 Get Wikidata Item ID
@@ -29,11 +32,11 @@ Only matches in labels are returned.
 \dontrun{
 get_wdid('Triclosan', language = 'de')
 get_wdid('DDT')
-get_wdid('DDT', first = TRUE)
+get_wdid('DDT', match = 'all')
 
-# multiple inpus
+# multiple inputs
 comps <- c('Triclosan', 'Glyphosate')
-sapply(comps, get_wdid, language = 'en')
+get_wdid(comps)
 }
 }
 \author{

@@ -24,7 +24,7 @@ See details for possible resolvers.}
 \item{...}{currently not used.}
 }
 \value{
-A character vector.
+A list of character vectors. If first = TRUE a vector.
 }
 \description{
 Query Chemical Identifier Resolver
@@ -105,18 +105,14 @@ You can only make 1 request per second (this is a hard-coded feature).
 \donttest{
 # might fail if API is not available
 cir_query('Triclosan', 'cas')
-cir_query("3380-34-5", 'cas')
+cir_query("3380-34-5", 'cas', first = TRUE)
 cir_query("3380-34-5", 'cas', resolver = 'cas_number')
 cir_query("3380-34-5", 'smiles')
 cir_query('Triclosan', 'mw')
 
-# query multiple representations
-reps <- c('smiles', 'cas')
-sapply(reps, function(x) cir_query('Triclosan', x, first = TRUE))
-
 # multiple inputs
 comp <- c('Triclosan', 'Aspirin')
-sapply(comp, function(x) cir_query(x, 'cas', first = TRUE))
+cir_query(comp, 'cas', first = TRUE)
 
 }
 }

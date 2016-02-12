@@ -30,7 +30,7 @@ We want to keep dependencies to a minimum:
 
 4. Be nice to the resources! Use appropriate timeouts.
 
-5. Tests go into the separate tests branch and not in the master branch.
+5. Tests go into a separate tests branch and not in the master branch.
 
 
 
