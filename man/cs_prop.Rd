@@ -14,7 +14,7 @@ cs_prop(csid, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-A list of three: acd (data.frame), epi (data.frame) and source_url.
+A list of lists with of three: acd (data.frame), epi (data.frame) and source_url.
 }
 \description{
 Get predicted (ACD/Labs and EPISuite) chemical properties from ChemSpider,
@@ -26,7 +26,7 @@ Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/t
 \examples{
 \dontrun{
 out <- cs_prop('5363')
-out$epi
+out[[1]]$epi
 }
 }
 \author{

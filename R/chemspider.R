@@ -361,39 +361,42 @@ cs_prop <- function(csid, verbose = TRUE, ...){
 #' \donttest{
 #' # might fail if API is not available
 #' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
+#' cs_convert(c('BQJCRHHNABKAKU-KBQPJGBKSA-N', 'BQJCRHHNABKAKU-KBQPJGBKSA-N'), from = 'inchikey', to = 'csid')
 #' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'inchi')
 #' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'mol')
 #'}
 cs_convert <- function(query, from = c('csid', 'inchikey', 'inchi', 'smiles'),
                        to = c('csid', 'inchikey', 'inchi', 'smiles', 'mol'),
                        verbose = TRUE, token = NULL, ...) {
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
   from <- match.arg(from)
   to <- match.arg(to)
-  from_to <- paste(from, to , sep = '_')
-  if (from_to == 'csid_mol' & is.null(token)) {
-    stop('Need token for this conversion!')
+
+  foo <- function(query, fromto, verbose, token, ...){
+    from_to <- paste(from, to , sep = '_')
+    if (from_to == 'csid_mol' & is.null(token)) {
+      stop('Need token for this conversion!')
+    }
+    # allowed combinations
+    comb <- c('csid_mol', 'inchikey_csid', 'inchikey_inchi', 'inchikey_mol',
+              'inchi_csid', 'inchi_inchikey', 'inchi_mol', 'inchi_smiles','smiles_inchi')
+    if (!from_to %in% comb) {
+      stop('Conversion from ', from, ' to ', to, ' currently not supported')
+    }
+    out <- switch(from_to,
+           csid_mol = cs_csid_mol(csid = query, token = token, verbose = verbose, ...),
+           inchikey_csid = cs_inchikey_csid(inchikey = query, verbose = verbose, ...),
+           inchikey_inchi = cs_inchikey_inchi(inchikey = query, verbose = verbose, ...),
+           inchikey_mol = cs_inchikey_mol(inchikey = query, verbose = verbose, ...),
+           inchi_csid = cs_inchi_csid(inchi = query, verbose = verbose, ...),
+           inchi_inchikey = cs_inchi_inchikey(inchi = query, verbose = verbose, ...),
+           inchi_mol = cs_inchi_mol(inchi = query, verbose = verbose, ...),
+           inchi_smiles = cs_inchi_smiles(inchi = query, verbose = verbose, ...),
+           smiles_inchi = cs_smiles_inchi(smiles = query, verbose = verbose, ...)
+           )
+    return(out)
   }
-  # allowed combinations
-  comb <- c('csid_mol', 'inchikey_csid', 'inchikey_inchi', 'inchikey_mol',
-            'inchi_csid', 'inchi_inchikey', 'inchi_mol', 'inchi_smiles','smiles_inchi')
-  if (!from_to %in% comb) {
-    stop('Conversion from ', from, ' to ', to, ' currently not supported')
-  }
-  out <- switch(from_to,
-         csid_mol = cs_csid_mol(csid = query, token = token, verbose = verbose, ...),
-         inchikey_csid = cs_inchikey_csid(inchikey = query, verbose = verbose, ...),
-         inchikey_inchi = cs_inchikey_inchi(inchikey = query, verbose = verbose, ...),
-         inchikey_mol = cs_inchikey_mol(inchikey = query, verbose = verbose, ...),
-         inchi_csid = cs_inchi_csid(inchi = query, verbose = verbose, ...),
-         inchi_inchikey = cs_inchi_inchikey(inchi = query, verbose = verbose, ...),
-         inchi_mol = cs_inchi_mol(inchi = query, verbose = verbose, ...),
-         inchi_smiles = cs_inchi_smiles(inchi = query, verbose = verbose, ...),
-         smiles_inchi = cs_smiles_inchi(smiles = query, verbose = verbose, ...)
-         )
-  return(out)
+  res <- lapply(query, foo, fromto = fromto, verbose = verbose, token = token, ...)
+  return(res)
 }
 
 
