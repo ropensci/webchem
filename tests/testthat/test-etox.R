@@ -4,10 +4,10 @@ test_that("get_etoxid returns correct results", {
 
   # test general
   comps <- c('Triclosan', 'Glyphosate', 'xxxx')
-  o1 <- get_etoxid(comps, mult = 'best')
-  o2 <- get_etoxid(comps, mult = 'all')
-  o3 <- get_etoxid('Triclosan', mult = 'first')
-  o4 <- get_etoxid('Triclosan', mult = 'na')
+  o1 <- get_etoxid(comps, match = 'best')
+  o2 <- get_etoxid(comps, match = 'all')
+  o3 <- get_etoxid('Triclosan', match = 'first')
+  o4 <- get_etoxid('Triclosan', match = 'na')
   do2 <- get_etoxid('Thiamethoxam')
 
   expect_is(o1, 'data.frame')
@@ -71,10 +71,10 @@ test_that("etox_tests returns correct results", {
 
 test_that("etox integration tests", {
   comps <- c('Triclosan', 'Glyphosate', 'xxxx')
-  ids_b <- get_etoxid(comps, mult = 'best')
-  ids_a <- get_etoxid(comps, mult = 'all')
+  ids_b <- get_etoxid(comps, match = 'best')
+  ids_a <- get_etoxid(comps, match = 'all')
 
-  # etox_*() can handle only vector inputs (so using mult = 'all' does not work)
+  # etox_*() can handle only vector inputs (so using match = 'all' does not work)
   expect_error(etox_basic(ids_a))
   expect_error(etox_targets(ids_a))
   expect_error(etox_tests(ids_a))

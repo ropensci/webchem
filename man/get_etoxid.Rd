@@ -4,20 +4,20 @@
 \alias{get_etoxid}
 \title{Get ETOX ID}
 \usage{
-get_etoxid(query, mult = c("best", "all", "first", "ask", "na"),
+get_etoxid(query, match = c("best", "all", "first", "ask", "na"),
   verbose = TRUE)
 }
 \arguments{
 \item{query}{character; The searchterm}
 
-\item{mult}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
+\item{match}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
 'na' returns NA if multiple hits are found.}
 
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-if mult = 'all' a list with etoxids, otherwise a dataframe with 4 columns:
+if match = 'all' a list with etoxids, otherwise a dataframe with 4 columns:
 etoxID, matched substance, string distance to match and the queried string
 }
 \description{
@@ -31,10 +31,10 @@ Before using this function, please read the disclaimer \url{https://webetox.uba.
 \dontrun{
 # might fail if API is not available
 get_etoxid('Triclosan')
-# multiple inpus
+# multiple inputs
 comps <- c('Triclosan', 'Glyphosate', 'xxxx')
 get_etoxid(comps)
-get_etoxid(comps, mult = 'all')
+get_etoxid(comps, match = 'all')
 }
 }
 \author{
