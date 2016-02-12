@@ -12,7 +12,7 @@ etox_targets(id, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A list of two: \code{res} a data.frame with quality targets from the ETOX database, and source_url.
+A list of lists of two: \code{res} a data.frame with quality targets from the ETOX database, and source_url.
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
@@ -28,18 +28,8 @@ id <- get_etoxid('Triclosan', mult = 'best')
 out <- etox_targets(id)
 out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 'Value_Target_LR', 'Unit')]
-# Retrieve MAC-EQA for Germany for multiple inputs
-ids <- c("20179", "9051")
-sapply(ids, function(y) {
-  res <- etox_targets(y)
-  if (length(res) == 1) {
-    out <- res
-  } else {
-    out <- res[res$Country_or_Region == 'DEU' & res$Designation == 'MAC-EQS', c('Value_Target_LR')]
-  }
-  return(out)
-}
-)
+etox_targets( c("20179", "9051"))
+
 }
 }
 \author{

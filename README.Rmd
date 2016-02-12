@@ -243,13 +243,13 @@ Which returns CAS, EC and GSBL numbers, as well as a synonym list.
 We can also retrieve Quality Targets:
 
 ```{r etox_targets}
-targets <- etox_targets(etoxids$etoxid)
+targets <- etox_targets(ids$etoxid)[[1]]
 targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 ```
 
 and results of ecotox tests:
 ```{r etox_tests}
-tests <- etox_tests(etoxids$etoxid)
+tests <- etox_tests(ids$etoxid)[[1]]
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 ```
 

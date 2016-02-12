@@ -182,7 +182,10 @@ get_etoxid <- function(query, mult = c('best', 'all', 'first', 'ask', 'na'), ver
 #' ids <- c("20179", "9051")
 #' etox_basic(ids)
 #' }
-etox_basic <- function(id, verbose = TRUE){
+etox_basic <- function(id, verbose = TRUE) {
+  if (!mode(id) %in% c("numeric","character")) {
+    stop("id must be a vector!")
+  }
   # id <- c("20179", "9051")
   foo <- function(id, verbose){
     if (is.na(id)) {
@@ -235,7 +238,7 @@ etox_basic <- function(id, verbose = TRUE){
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A list of two: \code{res} a data.frame with quality targets from the ETOX database, and source_url.
+#' @return A list of lists of two: \code{res} a data.frame with quality targets from the ETOX database, and source_url.
 #'
 #' @note Before using this function, please read the disclaimer
 #' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
@@ -250,62 +253,54 @@ etox_basic <- function(id, verbose = TRUE){
 #' out <- etox_targets(id)
 #' out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 #' 'Value_Target_LR', 'Unit')]
-#' # Retrieve MAC-EQA for Germany for multiple inputs
-#' ids <- c("20179", "9051")
-#' sapply(ids, function(y) {
-#'   res <- etox_targets(y)
-#'   if (length(res) == 1) {
-#'     out <- res
-#'   } else {
-#'     out <- res[res$Country_or_Region == 'DEU' & res$Designation == 'MAC-EQS', c('Value_Target_LR')]
-#'   }
-#'   return(out)
+#' etox_targets( c("20179", "9051"))
+#'
 #' }
-#' )
-#' }
-etox_targets <- function(id, verbose = TRUE){
-  if (length(id) > 1) {
-    stop('Cannot handle multiple input strings.')
+etox_targets <- function(id, verbose = TRUE) {
+  if (!mode(id) %in% c("numeric","character")) {
+    stop("id must be a vector!")
   }
-  if (is.na(id)) {
-    message('ID is NA! Returning NA.\n')
-    return(NA)
-  }
-  # id <- '20179'
-  # id <- '9051'
-  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
-  qurl <- paste0(baseurl, id)
-  if (verbose)
-    message('Querying ', qurl)
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  tt <- try(read_html(qurl), silent = TRUE)
-  if (inherits(tt, 'try-error')) {
-    message('ID not found! Returning NA.\n')
-    return(NA)
-  }
-  link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Quali') and contains(@href,'stoff')]"), 'href')
-  id2 <- gsub('.*=(\\d+)', '\\1', link2)
-
-  tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
-  mssg <- xml_text(xml_find_all(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]"))
-  if (length(mssg) > 0) {
-    if (grepl('no result', mssg)) {
-      message('No targets found found! Returning NA.\n')
+  foo <- function(id, verbose){
+    if (is.na(id)) {
+      message('ID is NA! Returning NA.\n')
       return(NA)
-    } else {
-      message('Problem found! Message: \n ', mssg)
     }
+    baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
+    qurl <- paste0(baseurl, id)
+    if (verbose)
+      message('Querying ', qurl)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    tt <- try(read_html(qurl), silent = TRUE)
+    if (inherits(tt, 'try-error')) {
+      message('ID not found! Returning NA.\n')
+      return(NA)
+    }
+    link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Quali') and contains(@href,'stoff')]"), 'href')
+    id2 <- gsub('.*=(\\d+)', '\\1', link2)
+
+    tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
+    mssg <- xml_text(xml_find_all(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]"), trim = TRUE)
+    if (length(mssg) > 0) {
+      if (grepl('no result', mssg)) {
+        message('No targets found found! Returning NA.\n')
+        return(NA)
+      } else {
+        message('Problem found! Message: \n ', mssg)
+      }
+    }
+
+    csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
+    res <- read.table(paste0('https://webetox.uba.de', csvlink),
+                      header = TRUE, sep = ',', dec = ',', fileEncoding = 'latin1',
+                      stringsAsFactors = FALSE)
+    res$Value_Target_LR <- as.numeric(res$Value_Target_LR)
+    source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
+    source_url <- gsub('^(.*ziel\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
+    out <- list(res = res, source_url = source_url)
+    return(out)
   }
-
-  csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
-  res <- read.table(paste0('https://webetox.uba.de', csvlink),
-                    header = TRUE, sep = ',', dec = ',', fileEncoding = 'latin1',
-                    stringsAsFactors = FALSE)
-  res$Value_Target_LR <- as.numeric(res$Value_Target_LR)
-  source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
-  source_url <- gsub('^(.*ziel\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
-  out <- list(res = res, source_url = source_url)
-
+  out <- lapply(id, foo,verbose = verbose)
+  out <- setNames(out, id)
   return(out)
 }
 
@@ -322,7 +317,7 @@ etox_targets <- function(id, verbose = TRUE){
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A list of two: A data.frame with test results from the ETOX database and the source_url.
+#' @return A list of lists of two: A data.frame with test results from the ETOX database and the source_url.
 #' @note Before using this function, please read the disclaimer
 #' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #'
@@ -337,41 +332,55 @@ etox_targets <- function(id, verbose = TRUE){
 #' out <- etox_tests(id)
 #' out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
 #' 'Endpoint', 'Value', 'Unit')]
+#' etox_tests( c("20179", "9051"))
 #' }
-etox_tests <- function(id, verbose = TRUE){
-  if (length(id) > 1) {
-    stop('Cannot handle multiple input strings.')
+etox_tests <- function(id, verbose = TRUE) {
+  if (!mode(id) %in% c("numeric","character")) {
+    stop("id must be a vector!")
   }
-  if (is.na(id)) {
-    message('ID is NA! Returning NA.\n')
-    return(NA)
+  foo <- function(id, verbose){
+    if (is.na(id)) {
+      message('ID is NA! Returning NA.\n')
+      return(NA)
+    }
+    # id <- '20179'
+    baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
+    qurl <- paste0(baseurl, id)
+    if (verbose)
+      message('Querying ', qurl)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    tt <- try(read_html(qurl), silent = TRUE)
+    if (inherits(tt, 'try-error')) {
+      message('ID not found! Returning NA.\n')
+      return(NA)
+    }
+    link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Tests') and contains(@href,'stoff')]"), 'href')
+    id2 <- gsub('.*=(\\d+)', '\\1', link2)
+
+    tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
+    mssg <- xml_text(xml_find_all(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]"), trim = TRUE)
+    if (length(mssg) > 0) {
+      if (grepl('no result', mssg)) {
+        message('No targets found found! Returning NA.\n')
+        return(NA)
+      } else {
+        message('Problem found! Message: \n ', mssg)
+      }
+    }
+    csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
+
+    # csvlink <- gsub('^(.*\\.do).*$', '\\1', csvlink)
+    res <- read.table(paste0('https://webetox.uba.de', csvlink),
+                      header = TRUE, sep = ',', dec = ',', fileEncoding = 'latin1',
+                      stringsAsFactors = FALSE)
+    res$Value <- as.numeric(res$Value)
+
+    source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
+    source_url <- gsub('^(.*test\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
+    out <- list(res = res, source_url = source_url)
+    return(out)
   }
-  # id <- '20179'
-  baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
-  qurl <- paste0(baseurl, id)
-  if (verbose)
-    message('Querying ', qurl)
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  tt <- try(read_html(qurl), silent = TRUE)
-  if (inherits(tt, 'try-error')) {
-    message('ID not found! Returning NA.\n')
-    return(NA)
-  }
-  link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Tests') and contains(@href,'stoff')]"), 'href')
-  id2 <- gsub('.*=(\\d+)', '\\1', link2)
-
-  tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
-  csvlink <- xml_attr(xml_find_all(tt2, "//a[contains(.,'Csv')]"), 'href')
-
-  # csvlink <- gsub('^(.*\\.do).*$', '\\1', csvlink)
-  res <- read.table(paste0('https://webetox.uba.de', csvlink),
-                    header = TRUE, sep = ',', dec = ',', fileEncoding = 'latin1',
-                    stringsAsFactors = FALSE)
-  res$Value <- as.numeric(res$Value)
-
-  source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
-  source_url <- gsub('^(.*test\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
-  out <- list(res = res, source_url = source_url)
-
+  out <- lapply(id, foo,verbose = verbose)
+  out <- setNames(out, id)
   return(out)
 }

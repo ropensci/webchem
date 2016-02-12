@@ -12,7 +12,7 @@ etox_tests(id, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A list of two: A data.frame with test results from the ETOX database and the source_url.
+A list of lists of two: A data.frame with test results from the ETOX database and the source_url.
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
@@ -28,6 +28,7 @@ id <- get_etoxid('Triclosan', mult = 'best')
 out <- etox_tests(id)
 out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
 'Endpoint', 'Value', 'Unit')]
+etox_tests( c("20179", "9051"))
 }
 }
 \author{

@@ -36,70 +36,72 @@ test_that("etox_basic returns correct results", {
   expect_equal(o1[['20179']]$cas, "3380-34-5")
   expect_equal(length(o1[['20179']]), 5)
   expect_is(o1[['20179']]$synonyms, 'data.frame')
-  expect_true(is.naa(o1[[4]]))
+  expect_true(is.na(o1[[3]]))
+  expect_true(is.na(o1[[4]]))
 })
 
 
 test_that("etox_targets returns correct results", {
-  chk_etox()
+  ids <- c("20179", "9051", "xxxxx", NA)
+  o1 <- etox_targets(ids)
 
-  do3 <- etox_targets('20179')
-  xx3 <- etox_targets('xxxx')
-  xxx3 <- etox_targets('9051')
-  expect_equal(etox_targets(NA), NA)
-
-  expect_error(etox_targets(c('20179', 'xxx')))
-  expect_equal(do3$res$Substance[1], "Triclosan")
-  expect_equal(ncol(do3$res), 32)
-  expect_is(do3, 'list')
-  expect_equal(xx3, NA)
-  expect_equal(xxx3, NA)
+  expect_is(o1, 'list')
+  expect_equal(length(o1), 4)
+  expect_equal(o1[['20179']]$res$Substance[1], "Triclosan")
+  expect_equal(ncol(o1[['20179']]$res), 32)
+  expect_is(o1[['20179']]$res, 'data.frame')
+  expect_true(is.na(o1[[3]]))
+  expect_true(is.na(o1[[4]]))
 })
+
 
 test_that("etox_tests returns correct results", {
-  chk_etox()
+  ids <- c("20179", "9051", "xxxxx", NA)
+  o1 <- etox_tests(ids)
 
-  do4 <- etox_tests('20179')
-  xx4 <- etox_tests('xxxx')
-  expect_equal(etox_tests(NA), NA)
-
-  expect_error(etox_tests(c('20179', 'xxx')))
-  expect_equal(do4$res$Substance[1], "Triclosan")
-  expect_equal(ncol(do4$res), 41)
-  expect_is(do4$res, 'data.frame')
-  expect_equal(length(do4), 2)
-  expect_equal(xx4, NA)
+  expect_is(o1, 'list')
+  expect_equal(length(o1), 4)
+  expect_equal(o1[['20179']]$res$Substance[1], "Triclosan")
+  expect_equal(ncol(o1[['20179']]$res), 41)
+  expect_is(o1[['20179']]$res, 'data.frame')
+  expect_true(is.na(o1[[3]]))
+  expect_true(is.na(o1[[4]]))
 })
 
 
-# test_that("etox integration tests", {
-#   chk_etox()
-#
-#   do <- get_etoxid('Triclosan', mult = 'best')
-#   xx <- get_etoxid('xxxxx')
-#
-#   int1 <- etox_basic(do)
-#   int2 <- etox_targets(do)
-#   int5 <- etox_tests(do)
-#
-#   int3 <- etox_basic(xx)
-#   int4 <- etox_targets(xx)
-#   int6 <- etox_tests(xx)
-#
-#   expect_equal(int1$cas, "3380-34-5")
-#   expect_equal(length(int1), 5)
-#   expect_is(int1$synonyms, 'data.frame')
-#
-#   expect_equal(int2$res$Substance[1], "Triclosan")
-#   expect_equal(length(int2),2)
-#   expect_equal(ncol(int2$res), 32)
-#   expect_is(int2$res, 'data.frame')
-#
-#   expect_equal(int5$res$Substance[1], "Triclosan")
-#   expect_equal(ncol(int5$res), 41)
-#   expect_is(int5$res, 'data.frame')
-#
-#   expect_equal(int3, NA)
-#   expect_equal(int4, NA)
-#   expect_equal(int6, NA)
-# })
+test_that("etox integration tests", {
+  comps <- c('Triclosan', 'Glyphosate', 'xxxx')
+  ids_b <- get_etoxid(comps, mult = 'best')
+  ids_a <- get_etoxid(comps, mult = 'all')
+
+  # etox_*() can handle only vector inputs (so using mult = 'all' does not work)
+  expect_error(etox_basic(ids_a))
+  expect_error(etox_targets(ids_a))
+  expect_error(etox_tests(ids_a))
+
+
+  int1 <- etox_basic(ids_b$etoxid)
+  int2 <- etox_targets(ids_b$etoxid)
+  int3 <- etox_tests(ids_b$etoxid)
+
+  expect_is(int1, 'list')
+  expect_equal(length(int1), 3)
+  expect_equal(int1[['20179']]$cas, "3380-34-5")
+  expect_equal(length(int1[['20179']]), 5)
+  expect_is(int1[['20179']]$synonyms, 'data.frame')
+  expect_true(is.na(int1[[3]]))
+
+  expect_is(int2, 'list')
+  expect_equal(length(int2), 3)
+  expect_equal(int2[['20179']]$res$Substance[1], "Triclosan")
+  expect_equal(ncol(int2[['20179']]$res), 32)
+  expect_is(int2[['20179']]$res, 'data.frame')
+  expect_true(is.na(int2[[3]]))
+
+  expect_is(int3, 'list')
+  expect_equal(length(int3), 3)
+  expect_equal(int3[['20179']]$res$Substance[1], "Triclosan")
+  expect_equal(ncol(int3[['20179']]$res), 41)
+  expect_is(int3[['20179']]$res, 'data.frame')
+  expect_true(is.na(int3[[3]]))
+})
