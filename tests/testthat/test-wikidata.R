@@ -23,21 +23,15 @@ test_that("get_wdid returns correct results", {
 
 
 test_that("wd_ident returns correct results", {
-  id <- "Q407232" # glyphosate
-  d <- wd_ident(id)
-  d2 <- wd_ident('Q408646')
-  f <- wd_ident('xxxxx')
-
-  expect_error(wd_ident(c(id, id)))
-  expect_equal(d$cas, "1071-83-6")
-  expect_equal(length(d), 13)
-  expect_equal(f, NA)
-  expect_message(wd_ident('xxxxx'))
-
-  expect_equal(d2$cas, "3380-34-5")
-  expect_equal(length(d2), 13)
-  expect_equal(names(d2), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'source_url'))
+  id <- c( "Q163648", "Q18216", "asndalsr", NA)
+  o1 <- wd_ident(id)
+  expect_is(o1, 'data.frame')
+  expect_equal(nrow(o1), 4)
+  expect_true(is.na(o1$smiles[3]))
+  expect_true(is.na(o1$smiles[4]))
+  expect_equal(o1$cas[1], '50-29-3')
+  expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
+                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'source_url', 'query'))
 })
 
 

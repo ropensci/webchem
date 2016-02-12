@@ -135,7 +135,7 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
 #' @param id character; identifier, as returned by \code{\link{get_wdid}}
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A list of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
+#' @return A data.frame of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
 #' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
 #'
 #' @note Only matches in labels are returned.
@@ -152,51 +152,67 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
 #' @export
 #' @examples
 #' \dontrun{
-#'  id <- "Q408646" # Triclosan
+#'  id <- c("Q408646", "Q18216")
 #'  wd_ident(id)
 #' }
 wd_ident <- function(id, verbose = TRUE){
+  # id <- c( "Q163648", "Q18216")
   # id <- 'Q408646'
-  if (length(id) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
-  baseurl <- 'https://query.wikidata.org/sparql?format=json&query='
-  props <- c('P233', 'P231', 'P662', 'P232', 'P661', 'P234', 'P235', 'P715', 'P679',
-             'P683', 'P592', 'P652')
-  names <- c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-             'drugbank', 'zvg', 'chebi', 'chembl', 'unii')
+  foo <- function(id, verbose){
+    if (is.na(id)) {
+      if (verbose)
+        message('NA as input! Returing NA. \n')
+      out <- as.list(rep(NA, 13))
+      names(out) <- c(vars_out, 'source_url')
+      return(out)
+    }
+    baseurl <- 'https://query.wikidata.org/sparql?format=json&query='
+    props <- c('P233', 'P231', 'P662', 'P232', 'P661', 'P234', 'P235', 'P715', 'P679',
+               'P683', 'P592', 'P652')
+    names <- c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
+               'drugbank', 'zvg', 'chebi', 'chembl', 'unii')
 
-  sparql_head <- paste('PREFIX wd: <http://www.wikidata.org/entity/>',
-    'PREFIX wdt: <http://www.wikidata.org/prop/direct/>',
-    'SELECT * WHERE {')
-  sparql_body <- paste(paste0('OPTIONAL{wd:', id, ' wdt:', props, ' ?', names, ' .}'),
-        collapse = ' ')
-  sparql <- paste(sparql_head, sparql_body, '}')
-  qurl <- paste0(baseurl, sparql)
-  qurl <- URLencode(qurl)
-  Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-  if (verbose)
-    message('Querying ', qurl)
-  tmp <- fromJSON(qurl)
-
-  vars_out <- tmp$head$vars
-  out <- tmp$results$bindings
-
-  if (length(out) == 0) {
+    sparql_head <- paste('PREFIX wd: <http://www.wikidata.org/entity/>',
+      'PREFIX wdt: <http://www.wikidata.org/prop/direct/>',
+      'SELECT * WHERE {')
+    sparql_body <- paste(paste0('OPTIONAL{wd:', id, ' wdt:', props, ' ?', names, ' .}'),
+          collapse = ' ')
+    sparql <- paste(sparql_head, sparql_body, '}')
+    qurl <- paste0(baseurl, sparql)
+    qurl <- URLencode(qurl)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     if (verbose)
-      message('Not found! Returing NA. \n')
-    return(NA)
-  }
+      message('Querying ', qurl)
+    tmp <- fromJSON(qurl)
 
-  out <- lapply(out, '[[', 'value')
+    vars_out <- tmp$head$vars
+    out <- tmp$results$bindings
 
-  # check for missing entries and add to out-list
-  miss <- names[!names %in% names(out)]
-  for (i in miss) {
-    out[[i]] <- NA
+    if (length(out) == 0) {
+      if (verbose)
+        message('Not found! Returing NA. \n')
+      out <- as.list(rep(NA, 13))
+      names(out) <- c(vars_out, 'source_url')
+      return(out)
+    }
+
+    out <- lapply(out, '[[', 'value')
+
+    # check for missing entries and add to out-list
+    miss <- names[!names %in% names(out)]
+    for (i in miss) {
+      out[[i]] <- NA
+    }
+    out <- out[names]
+    out[['source_url']] <- paste0('https://www.wikidata.org/wiki/', id)
+    out <- unlist(out)
+    return(out)
   }
-  out <- out[names]
-  out[['source_url']] <- paste0('https://www.wikidata.org/wiki/', id)
+  # ugly fixing to return data.frame
+  out <- data.frame(t(sapply(id, foo,verbose = verbose)), stringsAsFactors = FALSE, row.names = seq_along(id))
+  out[['query']] <- id
+  # even more ugly...
+  out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
   return(out)
 }
 

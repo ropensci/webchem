@@ -220,14 +220,14 @@ ETOX: Information System Ecotoxicology and Environmental Quality Targets is a da
 First we need to query a substance ID:
 
 ```{r get_etoxid}
-ids <- get_etoxid('Triclosan', mult = 'best')
+ids <- get_etoxid('Triclosan', match = 'best')
 ids
 ```
 `get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
-Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
+Other options are `match = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
 
 ```{r}
-get_etoxid('Triclosan', mult = 'all')
+get_etoxid('Triclosan', match = 'all')
 ```
 
 
@@ -285,7 +285,7 @@ ids <- get_wdid(query = 'Triclosan')
 ids
 
 # quera identifiers from wikidata
-wd_ident(ids$id)[1:3]
+wd_ident(ids$id)[1:5]
 ```
 
 
