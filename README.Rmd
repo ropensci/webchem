@@ -117,7 +117,7 @@ token = '<YOUR TOKEN HERE'
 Retrieve the ChemSpider ID of Triclosan
 
 ```{r get_csid}
-(id <- get_csid('Triclosan', token = token))
+(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
 ```
 
 Use this ID to query information from ChemSpider
@@ -148,7 +148,7 @@ cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 And get EPISuit predictions from ChemSpider
 
 ```{r cs_prop}
-cs_prop('5363')$epi[ , c(1:4)]
+cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 ```
 
 #### PubChem

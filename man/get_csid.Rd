@@ -4,21 +4,21 @@
 \alias{get_csid}
 \title{Retrieve ChemSpider ID}
 \usage{
-get_csid(query, token = NULL, first = FALSE, verbose = TRUE, ...)
+get_csid(query, token = NULL, first = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{query}{charachter; search term.}
 
 \item{token}{character; your security token.}
 
-\item{first}{logical; If TRUE return only first result.}
+\item{first}{logical; If TRUE (default) return only first result.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{...}{currently not used.}
 }
 \value{
-a character vector of class 'csid' with ChemSpider IDs.
+if first = TRUE a character vector with ChemSpider IDs, otherwise a list.
 }
 \description{
 Return Chemspider ID (CSID) for a search query, see \url{http://www.chemspider.com/}.
@@ -33,15 +33,9 @@ Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/t
 \dontrun{
 # Fails because no TOKEN is included
 token <- '<YOUR-SECURITY-TOKEN>'
-get_csid("Triclosan", token = token)
+get_csid("Triclosan", token = token)[[1]]
 # [1] "5363"
-# attr(,"class")
-# [1] "csid"
-get_csid("3380-34-5", token = token)
-
-###
-# multiple inputs
-sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
+get_csid(c("Triclosan", "50-00-0"), token = token)
 }
 }
 \author{

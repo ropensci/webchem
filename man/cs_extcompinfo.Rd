@@ -16,7 +16,7 @@ cs_extcompinfo(csid, token, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-a list with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
+a data.frame with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
 'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
 'nominal_mass', 'alogp', 'xlogp', 'common_name' and 'source_url'
 }
@@ -35,17 +35,10 @@ Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/t
 token <- '<YOUR-SECURITY-TOKEN>'
 # convert CAS to CSID
 csid <- get_csid("Triclosan", token = token)
-# get SMILES from CSID
 cs_extcompinfo(csid, token)
 
-###
-# multiple inpits
-csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
-# fails:
-# cs_extcompinfo(csids, token = token)
-(ll <- lapply(csids, cs_extcompinfo, token = token))
-# to matrix
-do.call(rbind, ll)
+csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
+cs_compinfo(csids, token = token)
 }
 }
 \author{
