@@ -1,45 +1,30 @@
 context("alanwood")
 
-require(RCurl)
-chk_alanwood <- function(){
-  qurl <- 'http://www.alanwood.net/pesticides/index_cn.html'
-  Sys.sleep(0.2)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error'))
-    skip("Server is down!")
-}
 
 test_that("alanwood, commonname", {
-  chk_alanwood()
+  comps <- c('Fluazinam', "S-Metolachlor", "xxxxx")
+  o1 <- aw_query(comps, type = 'commonname')
 
-  fl <- aw_query('Fluazinam', type = 'commonname')
-  sm <- aw_query("S-Metolachlor", type = 'commonname')
-  xx <- aw_query('xxxxx', type = 'commonname')
-  xx2 <- aw_query('xxxxx', type = 'cas')
-
-  expect_error(aw_query(c('Fluazinam', 'xxx'), type = 'commonname'))
-
-  expect_equal(fl$cas, "79622-59-6", verbose = FALSE)
-  expect_equal(length(sm$inchikey), 2)
-  expect_equal(length(sm$inchi), 2)
-  expect_equal(xx, NA, verbose = FALSE)
-  expect_equal(xx2, NA, verbose = FALSE)
-  expect_equal(length(fl), 11)
+  expect_is(o1, 'list')
+  expect_equal(length(o1), 3)
+  expect_true(is.na(o1[[3]]))
+  expect_equal(o1[['Fluazinam']]$cas, "79622-59-6")
+  expect_equal(length(o1[["S-Metolachlor"]]$inchikey), 2)
+  expect_equal(length(o1[["S-Metolachlor"]]$inchi), 2)
+  expect_equal(length(o1[['Fluazinam']]), 11)
 })
 
 
 test_that("alanwood, cas", {
-  chk_alanwood()
+  comps <- c("79622-59-6", "87392-12-9", "xxxxx")
+  o1 <- aw_query(comps, type = 'cas')
 
-  cs <-  aw_query("79622-59-6", type = 'cas')
-  xx <- aw_query('xxxxx', type = 'cas')
+  expect_is(o1, 'list')
+  expect_equal(length(o1), 3)
+  expect_true(is.na(o1[[3]]))
+  expect_equal(o1[[1]]$cas, "79622-59-6")
+  expect_equal(length(o1[[2]]$inchikey), 2)
+  expect_equal(length(o1[[2]]$inchi), 2)
+  expect_equal(length(o1[[1]]), 11)
 
-  b1 <- aw_query('12071-83-9', type = 'cas')  # BUG: failed because of missing inchi / inchikey
-  expect_equal(b1$cas, '12071-83-9')
-  expect_equal(b1$inchikey, NA)
-
-  expect_equal(cs$cas, "79622-59-6", verbose = FALSE)
-  expect_equal(cs$cname, "fluazinam", verbose = FALSE)
-  expect_equal(xx, NA, verbose = FALSE)
 })

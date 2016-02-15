@@ -16,8 +16,8 @@ cs_compinfo(csid, token, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-a list of four, with entries: csid (ChemSpider ID), inchi,
-  inchikey, smiles and source_url.
+a data.frame with 5 colums csid (ChemSpider ID), inchi,
+  inchikey, smiles, source_url and the query
 }
 \description{
 Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
@@ -36,14 +36,8 @@ token <- '<YOUR-SECURITY-TOKEN>'
 csid <- get_csid("Triclosan", token = token)
 cs_compinfo(csid, token)
 
-###
-# multiple inputs
-csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
-# fails:
-# cs_compinfo(csids, token = token)
-(ll <- lapply(csids, cs_compinfo, token = token))
-# return a list, convert to matrix:
-do.call(rbind, ll)
+csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
+cs_compinfo(csids, token = token)
 }
 }
 \author{

@@ -6,10 +6,10 @@
 #'
 #' @param query charachter; search term.
 #' @param token character; your security token.
-#' @param first logical; If TRUE return only first result.
+#' @param first logical; If TRUE (default) return only first result.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a character vector of class 'csid' with ChemSpider IDs.
+#' @return if first = TRUE a character vector with ChemSpider IDs, otherwise a list.
 #'
 #' @note A security token is neeeded. Please register at RSC.
 #' \url{https://www.rsc.org/rsc-id/register}
@@ -24,43 +24,37 @@
 #' \dontrun{
 #' # Fails because no TOKEN is included
 #' token <- '<YOUR-SECURITY-TOKEN>'
-#' get_csid("Triclosan", token = token)
+#' get_csid("Triclosan", token = token)[[1]]
 #' # [1] "5363"
-#' # attr(,"class")
-#' # [1] "csid"
-#' get_csid("3380-34-5", token = token)
-#'
-#' ###
-#' # multiple inputs
-#' sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
+#' get_csid(c("Triclosan", "50-00-0"), token = token)
 #' }
-get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
+get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
   # token = '37bf5e57-9091-42f5-9274-650a64398aaf'
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
+  foo <- function(query, token, first, verbose, ...){
+    baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
+    qurl <- paste0(baseurl, 'query=', query, '&token=', token)
+    if (verbose)
+      message(qurl, '\n')
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    h <- try(read_xml(qurl), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      warning('Problem with web service encountered... Returning NA.')
+      return(NA)
+    }
+    out <- xml_text(h, trim = TRUE)
+    if (out == '') {
+      message('No csid found... Returning NA.')
+      return(NA)
+    }
+    if (first)
+      out <- out[1]
+    names(out) <- NULL
+    return(out)
   }
-  if (is.na(query)) {
-    warning('Identifier is NA... Returning NA.')
-    return(NA)
-  }
-  baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
-  qurl <- paste0(baseurl, 'query=', query, '&token=', token)
-  if (verbose)
-    message(qurl, '\n')
-  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with web service encountered... Returning NA.')
-    return(NA)
-  }
-  out <- xml_text(xml_find_all(h, '/*/*'), trim = TRUE)
-  if (length(out) == 0) {
-    message('No csid found... Returning NA.')
-    return(NA)
-  }
+  out <- lapply(query, foo, token = token, first = first, verbose = verbose)
+  out <- setNames(out, query)
   if (first)
-    out <- out[1]
-  names(out) <- NULL
+    out <- unlist(out)
   return(out)
 }
 
@@ -76,8 +70,8 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a list of four, with entries: csid (ChemSpider ID), inchi,
-#'   inchikey, smiles and source_url.
+#' @return a data.frame with 5 colums csid (ChemSpider ID), inchi,
+#'   inchikey, smiles, source_url and the query
 #'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
@@ -95,34 +89,33 @@ get_csid <- function(query, token = NULL, first = FALSE, verbose = TRUE,  ...){
 #' csid <- get_csid("Triclosan", token = token)
 #' cs_compinfo(csid, token)
 #'
-#' ###
-#' # multiple inputs
-#' csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
-#' # fails:
-#' # cs_compinfo(csids, token = token)
-#' (ll <- lapply(csids, cs_compinfo, token = token))
-#' # return a list, convert to matrix:
-#' do.call(rbind, ll)
+#' csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
+#' cs_compinfo(csids, token = token)
 #' }
 cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   # csid <- "5363"
-  if (length(csid) > 1) {
-    stop('Cannot handle multiple input strings.')
+  foo <- function(csid, token, verbose) {
+    baseurl <- 'http://www.chemspider.com/Search.asmx/GetCompoundInfo?'
+    qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
+    if (verbose)
+      message(qurl)
+    Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
+    h <- try(read_xml(qurl), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      warning('CSID not found... Returning NA.')
+      return(NA)
+    }
+    out <- as.list(xml_text(xml_children(h)))
+    names(out) <- c('csid', 'inchi', 'inchikey', 'smiles')
+    source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+    out[['source_url']] <- source_url
+    return(out)
   }
-  baseurl <- 'http://www.chemspider.com/Search.asmx/GetCompoundInfo?'
-  qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
-  if (verbose)
-    message(qurl)
-  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('CSID not found... Returning NA.')
-    return(NA)
-  }
-  out <- as.list(xml_text(xml_children(h)))
-  names(out) <- c('csid', 'inchi', 'inchikey', 'smiles')
-  source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
-  out[['source_url']] <- source_url
+  out <- sapply(csid, foo, token = token, verbose = verbose)
+  out <- data.frame(t(out))
+  out[['query']] <- rownames(out)
+  out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
+  class(out) <- 'cs_compinfo'
   return(out)
 }
 
@@ -137,7 +130,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a list with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
+#' @return a data.frame with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
 #' 'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
 #' 'nominal_mass', 'alogp', 'xlogp', 'common_name' and 'source_url'
 #' @note A security token is neeeded. Please register at RSC
@@ -154,44 +147,43 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' token <- '<YOUR-SECURITY-TOKEN>'
 #' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
-#' # get SMILES from CSID
 #' cs_extcompinfo(csid, token)
 #'
-#' ###
-#' # multiple inpits
-#' csids <- sapply(c('Aspirin', 'Triclosan'), get_csid, token = token)
-#' # fails:
-#' # cs_extcompinfo(csids, token = token)
-#' (ll <- lapply(csids, cs_extcompinfo, token = token))
-#' # to matrix
-#' do.call(rbind, ll)
+#' csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
+#' cs_compinfo(csids, token = token)
 #' }
 cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
-  if (length(csid) > 1) {
-    stop('Cannot handle multiple input strings.')
+  # csid <- "5363"
+  foo <- function(csid, token, verbose) {
+    baseurl <- 'http://www.chemspider.com/MassSpecAPI.asmx/GetExtendedCompoundInfo?'
+    qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
+    if (verbose)
+      message(qurl)
+    Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
+    h <- try(read_xml(qurl), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      warning('CSID not found... Returning NA.')
+      return(NA)
+    }
+    out <- as.list(xml_text(xml_children(h)))
+    names(out) <- c('csid', 'mf', 'smiles', 'inchi', 'inchikey', 'average_mass',
+                    'mw', 'monoiso_mass', 'nominal_mass', 'alogp', 'xlogp', 'common_name')
+    # convert to numeric
+    out[['average_mass']] <- as.numeric(out[['average_mass']])
+    out[['mw']] <- as.numeric(out[['mw']])
+    out[['monoiso_mass']] <- as.numeric(out[['monoiso_mass']])
+    out[['nominal_mass']] <- as.numeric(out[['nominal_mass']])
+    out[['alogp']] <- as.numeric(out[['alogp']])
+    out[['xlogp']] <- as.numeric(out[['xlogp']])
+    source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+    out[['source_url']] <- source_url
+    return(out)
   }
-  baseurl <- 'http://www.chemspider.com/MassSpecAPI.asmx/GetExtendedCompoundInfo?'
-  qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
-  if (verbose)
-    message(qurl)
-  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('CSID not found... Returning NA.')
-    return(NA)
-  }
-  out <- as.list(xml_text(xml_children(h)))
-  names(out) <- c('csid', 'mf', 'smiles', 'inchi', 'inchikey', 'average_mass',
-                  'mw', 'monoiso_mass', 'nominal_mass', 'alogp', 'xlogp', 'common_name')
-  # convert to numeric
-  out[['average_mass']] <- as.numeric(out[['average_mass']])
-  out[['mw']] <- as.numeric(out[['mw']])
-  out[['monoiso_mass']] <- as.numeric(out[['monoiso_mass']])
-  out[['nominal_mass']] <- as.numeric(out[['nominal_mass']])
-  out[['alogp']] <- as.numeric(out[['alogp']])
-  out[['xlogp']] <- as.numeric(out[['xlogp']])
-  source_url <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
-  out[['source_url']] <- source_url
+  out <- sapply(csid, foo, token = token, verbose = verbose)
+  out <- data.frame(t(out))
+  out[['query']] <- rownames(out)
+  out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
+  class(out) <- 'cs_extcompinfo'
   return(out)
 }
 
@@ -206,7 +198,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #'
-#' @return A list of three: acd (data.frame), epi (data.frame) and source_url.
+#' @return A list of lists with of three: acd (data.frame), epi (data.frame) and source_url.
 #'
 #' @note Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
@@ -216,121 +208,123 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' @examples
 #' \dontrun{
 #' out <- cs_prop('5363')
-#' out$epi
+#' out[[1]]$epi
 #' }
 cs_prop <- function(csid, verbose = TRUE, ...){
-  # csid <- "5363"
-  if (length(csid) > 1) {
-    stop('Cannot handle multiple input strings.')
+  foo <- function(csid, verbose){
+    qurl <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
+    if (verbose)
+      message(qurl)
+    Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
+    h <- try(read_html(qurl), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      warning('CSID not found... Returning NA.')
+      return(NA)
+    }
+
+    ### acd
+    acd <- do.call(rbind, html_table(xml_find_all(h, '//div[@class="column two"]/table')))
+    names(acd) <- c('variable', 'val')
+    acd$variable <- gsub('^(.*)\\:$', '\\1', acd$variable)
+
+    # ^ - Beginning of the line;
+    # \\d* - 0 or more digits;
+    # \\.? - An optional dot (escaped, because in regex, . is a special character);
+    # \\d* - 0 or more digits (the decimal part);
+    # $ - End of the line.
+    acd$value <- as.numeric(gsub('^(\\d*\\.?\\d*).*$', '\\1', acd$val))
+    acd$error <- as.numeric(ifelse(grepl('\u00B1' , acd$val), gsub('^\\d*\\.?\\d*\u00B1(\\d*\\.?\\d*)\\s.*$', '\\1', acd$val), NA))
+    acd$unit <- ifelse(grepl('\\s.*\\d*$', acd$val),
+           gsub('^.*\\d*\\s(.*\\d*)$', '\\1', acd$val),
+           NA)
+    acd$val <- NULL
+
+
+    ### episuite
+    epi <- data.frame(property = character(),
+                      value_pred = numeric(),
+                      unit_pred = character(),
+                      source_pred = character(),
+                      value_exp = numeric(),
+                      unit_exp = character(),
+                      source_exp = character())
+
+
+    kow_raw <- xml_text(xml_find_all(h, '//div[@id="epiTab"]/pre'))
+    ll <- str_split(kow_raw, '\n')
+    ll <- sapply(ll, str_trim)
+    ll <- ll[!ll == '']
+
+    prop <- 'Log Octanol-Water Partition Coef'
+    value_pred <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
+    unit_pred <- NA
+    source_pred <- gsub('(.*) = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)])
+    value_exp <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(Exper.', ll)]))
+    unit_exp <- NA
+    source_exp <- gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Log Kow \\(Exper.', ll)) + 1])
+
+    prop <- c(prop, 'Boiling Point')
+    value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Boiling Pt \\(deg C', ll)])))
+    unit_pred <- c(unit_pred, 'deg C')
+    source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
+    value_exp <- c(value_exp,   NA)
+    unit_exp <- c(unit_exp, NA)
+    source_exp <- c(source_exp, NA)
+
+    prop <- c(prop, 'Melting Point')
+    value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Melting Pt \\(deg C', ll)])))
+    unit_pred <- c(unit_pred, 'deg C')
+    source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
+    value_exp <- c(value_exp,   NA)
+    unit_exp <- c(unit_exp, NA)
+    source_exp <- c(source_exp, NA)
+    # epi_mp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^MP\\s+\\(exp', ll)]))
+    # epi_bp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^BP\\s+\\(exp', ll)]))
+
+    prop <- c(prop, 'Water Solubility from KOW')
+    value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Solubility at 25 deg C', ll)])))
+    unit_pred <- c(unit_pred, 'mg/L (25 deg C)')
+    source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Water Solubility Estimate from Log Kow', ll)]))
+    value_exp <- c(value_exp,   as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Sol \\(Exper. database match', ll)])))
+    unit_exp <- c(unit_exp, gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+)(.*)','\\2', ll[grepl('^Water Sol \\(Exper. database match', ll)]))
+    source_exp <- c(source_exp, gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Water Sol \\(Exper. database match', ll)) + 1]))
+
+    prop <- c(prop, 'Water Solubility from Fragments')
+    value_pred <- c(value_pred, as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Wat Sol \\(v1.01', ll)])))
+    unit_pred <- c(unit_pred, 'mg/L')
+    source_pred <- c(source_pred, NA)
+    value_exp <- c(value_exp,  NA)
+    unit_exp <- c(unit_exp, NA)
+    source_exp <- c(source_exp, NA)
+
+    prop <- c(prop, 'Log Octanol-Air Partition Coefficient (25 deg C)')
+    value_pred <- c(value_pred, as.numeric(gsub('.*:\\s(.*)','\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)])))
+    unit_pred <- c(unit_pred, NA)
+    source_pred <- c(source_pred, gsub('^.*\\[(.*)\\]\\:$','\\1', ll[grepl('^Log Octanol-Air Partition Coefficient', ll)]))
+    value_exp <- c(value_exp,   as.numeric(gsub('^.*\\:(.*)','\\1', ll[grepl('^Log Koa \\(experimental database\\).*', ll)])))
+    unit_exp <- c(unit_exp, NA)
+    source_exp <- c(source_exp, NA)
+
+    prop <- c(prop, 'Log Soil Adsorption Coefficient')
+    value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Log Koc:', ll)])))
+    unit_pred <- c(unit_pred, NA)
+    source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Soil Adsorption Coefficient', ll)]))
+    value_exp <- c(value_exp, NA)
+    unit_exp <- c(unit_exp, NA)
+    source_exp <- c(source_exp, NA)
+
+    epi <- data.frame(prop, value_pred, unit_pred, source_pred,
+                      value_exp, unit_exp, source_exp, stringsAsFactors = FALSE)
+
+
+    out <- list(acd = acd,
+                epi = epi,
+                source_url = qurl)
+    return(out)
   }
-  qurl <- paste0('http://www.chemspider.com/Chemical-Structure.', csid, '.html')
-  if (verbose)
-    message(qurl)
-  Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
-  h <- try(read_html(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('CSID not found... Returning NA.')
-    return(NA)
-  }
-
-  ### acd
-  acd <- do.call(rbind, html_table(xml_find_all(h, '//div[@class="column two"]/table')))
-  names(acd) <- c('variable', 'val')
-  acd$variable <- gsub('^(.*)\\:$', '\\1', acd$variable)
-
-  # ^ - Beginning of the line;
-  # \\d* - 0 or more digits;
-  # \\.? - An optional dot (escaped, because in regex, . is a special character);
-  # \\d* - 0 or more digits (the decimal part);
-  # $ - End of the line.
-  acd$value <- as.numeric(gsub('^(\\d*\\.?\\d*).*$', '\\1', acd$val))
-  acd$error <- as.numeric(ifelse(grepl('\u00B1' , acd$val), gsub('^\\d*\\.?\\d*\u00B1(\\d*\\.?\\d*)\\s.*$', '\\1', acd$val), NA))
-  acd$unit <- ifelse(grepl('\\s.*\\d*$', acd$val),
-         gsub('^.*\\d*\\s(.*\\d*)$', '\\1', acd$val),
-         NA)
-  acd$val <- NULL
-
-
-  ### episuite
-  epi <- data.frame(property = character(),
-                    value_pred = numeric(),
-                    unit_pred = character(),
-                    source_pred = character(),
-                    value_exp = numeric(),
-                    unit_exp = character(),
-                    source_exp = character())
-
-
-  kow_raw <- xml_text(xml_find_all(h, '//div[@id="epiTab"]/pre'))
-  ll <- str_split(kow_raw, '\n')
-  ll <- sapply(ll, str_trim)
-  ll <- ll[!ll == '']
-
-  prop <- 'Log Octanol-Water Partition Coef'
-  value_pred <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
-  unit_pred <- NA
-  source_pred <- gsub('(.*) = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)])
-  value_exp <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(Exper.', ll)]))
-  unit_exp <- NA
-  source_exp <- gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Log Kow \\(Exper.', ll)) + 1])
-
-  prop <- c(prop, 'Boiling Point')
-  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Boiling Pt \\(deg C', ll)])))
-  unit_pred <- c(unit_pred, 'deg C')
-  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
-  value_exp <- c(value_exp,   NA)
-  unit_exp <- c(unit_exp, NA)
-  source_exp <- c(source_exp, NA)
-
-  prop <- c(prop, 'Melting Point')
-  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Melting Pt \\(deg C', ll)])))
-  unit_pred <- c(unit_pred, 'deg C')
-  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
-  value_exp <- c(value_exp,   NA)
-  unit_exp <- c(unit_exp, NA)
-  source_exp <- c(source_exp, NA)
-  # epi_mp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^MP\\s+\\(exp', ll)]))
-  # epi_bp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^BP\\s+\\(exp', ll)]))
-
-  prop <- c(prop, 'Water Solubility from KOW')
-  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Solubility at 25 deg C', ll)])))
-  unit_pred <- c(unit_pred, 'mg/L (25 deg C)')
-  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Water Solubility Estimate from Log Kow', ll)]))
-  value_exp <- c(value_exp,   as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Sol \\(Exper. database match', ll)])))
-  unit_exp <- c(unit_exp, gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+)(.*)','\\2', ll[grepl('^Water Sol \\(Exper. database match', ll)]))
-  source_exp <- c(source_exp, gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Water Sol \\(Exper. database match', ll)) + 1]))
-
-  prop <- c(prop, 'Water Solubility from Fragments')
-  value_pred <- c(value_pred, as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Wat Sol \\(v1.01', ll)])))
-  unit_pred <- c(unit_pred, 'mg/L')
-  source_pred <- c(source_pred, NA)
-  value_exp <- c(value_exp,  NA)
-  unit_exp <- c(unit_exp, NA)
-  source_exp <- c(source_exp, NA)
-
-  prop <- c(prop, 'Log Octanol-Air Partition Coefficient (25 deg C)')
-  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s(.*)','\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)])))
-  unit_pred <- c(unit_pred, NA)
-  source_pred <- c(source_pred, gsub('^.*\\[(.*)\\]\\:$','\\1', ll[grepl('^Log Octanol-Air Partition Coefficient', ll)]))
-  value_exp <- c(value_exp,   as.numeric(gsub('^.*\\:(.*)','\\1', ll[grepl('^Log Koa \\(experimental database\\).*', ll)])))
-  unit_exp <- c(unit_exp, NA)
-  source_exp <- c(source_exp, NA)
-
-  prop <- c(prop, 'Log Soil Adsorption Coefficient')
-  value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Log Koc:', ll)])))
-  unit_pred <- c(unit_pred, NA)
-  source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Soil Adsorption Coefficient', ll)]))
-  value_exp <- c(value_exp, NA)
-  unit_exp <- c(unit_exp, NA)
-  source_exp <- c(source_exp, NA)
-
-  epi <- data.frame(prop, value_pred, unit_pred, source_pred,
-                    value_exp, unit_exp, source_exp, stringsAsFactors = FALSE)
-
-
-  out <- list(acd = acd,
-              epi = epi,
-              source_url = qurl)
+  out <- lapply(csid, foo, verbose = verbose)
+  out <- setNames(out, csid)
+  class(out) <- 'cs_prop'
   return(out)
 }
 
@@ -370,39 +364,42 @@ cs_prop <- function(csid, verbose = TRUE, ...){
 #' \donttest{
 #' # might fail if API is not available
 #' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid')
+#' cs_convert(c('BQJCRHHNABKAKU-KBQPJGBKSA-N', 'BQJCRHHNABKAKU-KBQPJGBKSA-N'), from = 'inchikey', to = 'csid')
 #' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'inchi')
 #' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'mol')
 #'}
 cs_convert <- function(query, from = c('csid', 'inchikey', 'inchi', 'smiles'),
                        to = c('csid', 'inchikey', 'inchi', 'smiles', 'mol'),
                        verbose = TRUE, token = NULL, ...) {
-  if (length(query) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
   from <- match.arg(from)
   to <- match.arg(to)
-  from_to <- paste(from, to , sep = '_')
-  if (from_to == 'csid_mol' & is.null(token)) {
-    stop('Need token for this conversion!')
+
+  foo <- function(query, fromto, verbose, token, ...){
+    from_to <- paste(from, to , sep = '_')
+    if (from_to == 'csid_mol' & is.null(token)) {
+      stop('Need token for this conversion!')
+    }
+    # allowed combinations
+    comb <- c('csid_mol', 'inchikey_csid', 'inchikey_inchi', 'inchikey_mol',
+              'inchi_csid', 'inchi_inchikey', 'inchi_mol', 'inchi_smiles','smiles_inchi')
+    if (!from_to %in% comb) {
+      stop('Conversion from ', from, ' to ', to, ' currently not supported')
+    }
+    out <- switch(from_to,
+           csid_mol = cs_csid_mol(csid = query, token = token, verbose = verbose, ...),
+           inchikey_csid = cs_inchikey_csid(inchikey = query, verbose = verbose, ...),
+           inchikey_inchi = cs_inchikey_inchi(inchikey = query, verbose = verbose, ...),
+           inchikey_mol = cs_inchikey_mol(inchikey = query, verbose = verbose, ...),
+           inchi_csid = cs_inchi_csid(inchi = query, verbose = verbose, ...),
+           inchi_inchikey = cs_inchi_inchikey(inchi = query, verbose = verbose, ...),
+           inchi_mol = cs_inchi_mol(inchi = query, verbose = verbose, ...),
+           inchi_smiles = cs_inchi_smiles(inchi = query, verbose = verbose, ...),
+           smiles_inchi = cs_smiles_inchi(smiles = query, verbose = verbose, ...)
+           )
+    return(out)
   }
-  # allowed combinations
-  comb <- c('csid_mol', 'inchikey_csid', 'inchikey_inchi', 'inchikey_mol',
-            'inchi_csid', 'inchi_inchikey', 'inchi_mol', 'inchi_smiles','smiles_inchi')
-  if (!from_to %in% comb) {
-    stop('Conversion from ', from, ' to ', to, ' currently not supported')
-  }
-  out <- switch(from_to,
-         csid_mol = cs_csid_mol(csid = query, token = token, verbose = verbose, ...),
-         inchikey_csid = cs_inchikey_csid(inchikey = query, verbose = verbose, ...),
-         inchikey_inchi = cs_inchikey_inchi(inchikey = query, verbose = verbose, ...),
-         inchikey_mol = cs_inchikey_mol(inchikey = query, verbose = verbose, ...),
-         inchi_csid = cs_inchi_csid(inchi = query, verbose = verbose, ...),
-         inchi_inchikey = cs_inchi_inchikey(inchi = query, verbose = verbose, ...),
-         inchi_mol = cs_inchi_mol(inchi = query, verbose = verbose, ...),
-         inchi_smiles = cs_inchi_smiles(inchi = query, verbose = verbose, ...),
-         smiles_inchi = cs_smiles_inchi(smiles = query, verbose = verbose, ...)
-         )
-  return(out)
+  res <- lapply(query, foo, fromto = fromto, verbose = verbose, token = token, ...)
+  return(res)
 }
 
 

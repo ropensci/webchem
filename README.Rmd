@@ -117,7 +117,7 @@ token = '<YOUR TOKEN HERE'
 Retrieve the ChemSpider ID of Triclosan
 
 ```{r get_csid}
-(id <- get_csid('Triclosan', token = token))
+(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
 ```
 
 Use this ID to query information from ChemSpider
@@ -148,7 +148,7 @@ cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 And get EPISuit predictions from ChemSpider
 
 ```{r cs_prop}
-cs_prop('5363')$epi[ , c(1:4)]
+cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 ```
 
 #### PubChem
@@ -202,7 +202,7 @@ pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", 
 `aw_query()` returns a list of 9 entries and can query common names and cas numbers:
 ```{r alanwood}
 aw_query('Fluazinam', type = 'commonname')
-aw_query('79622-59-6', type = 'cas')$cname
+aw_query('79622-59-6', type = 'cas')[[1]]$cname
 ```
 
 #### SRC PHYSPROP Database
@@ -292,6 +292,19 @@ wd_ident(ids$id)[1:5]
 #### OPSIN
 ```{r opsin}
 opsin_query(c('Cyclopropane', 'Octane'))
+```
+
+
+#### Extractor functions
+
+The sources provide a lot of informations that can be retrieved using the functions described above. Often only specific inforamtion is needed. 
+Therefore, we added extractor functions for common identifiers.
+
+```{r extractors}
+wi <- wd_ident("Q408646")
+wi
+cas(wi)
+cas(pan_query('Triclosan'))
 ```
 
 
