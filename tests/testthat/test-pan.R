@@ -22,7 +22,7 @@ test_that("pan_query()", {
   expect_true(is.na(b[[3]]))
   expect_true(is.na(c[[3]]))
   expect_true(is.na(a[[4]]))
-  expect_true(is.na(b[[4]))
+  expect_true(is.na(b[[4]]))
   expect_true(is.na(c[[4]]))
   expect_equal(a[[1]]$`CAS Number`, "3380-34-5")
   expect_equal(a[[2]]$`Chemical name`, "Chlorpyrifos")
