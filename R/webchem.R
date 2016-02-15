@@ -58,7 +58,7 @@ NULL
 #'   \item{names}{CAS numbers}
 #'   \item{links}{URL to webpage}
 #'   \item{linknames}{names in link / substance names}
-#'   \item{source} source of link, either from CAS (rn) or Commonname (cn)
+#'   \item{source}{source of link, either from CAS (rn) or Commonname (cn)}
 #' }
 #' @source \url{http://www.alanwood.net/pesticides}
 "aw_idx"

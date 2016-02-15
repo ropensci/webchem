@@ -213,6 +213,7 @@ wd_ident <- function(id, verbose = TRUE){
   out[['query']] <- id
   # even more ugly...
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
+  class(out) <- c('wd_ident', 'data.frame')
   return(out)
 }
 

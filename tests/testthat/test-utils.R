@@ -42,3 +42,10 @@ test_that("is.smiles() returns correct results", {
   expect_false(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)ClJ'))
   expect_error(is.smiles(c('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl', 'Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl')))
 })
+
+
+test_that("cas is working", {
+  expect_equivalent(cas(pan_query('2,4-dichlorophenol', match = 'best')),  "120-83-2")
+  expect_equivalent(cas(wd_ident("Q408646")), "3380-34-5")
+  expect_equivalent(cas(aw_query('Fluazinam', type = 'commonname')), "79622-59-6")
+})

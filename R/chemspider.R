@@ -115,6 +115,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   out <- data.frame(t(out))
   out[['query']] <- rownames(out)
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
+  class(out) <- 'cs_compinfo'
   return(out)
 }
 
@@ -182,6 +183,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   out <- data.frame(t(out))
   out[['query']] <- rownames(out)
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
+  class(out) <- 'cs_extcompinfo'
   return(out)
 }
 
@@ -322,6 +324,7 @@ cs_prop <- function(csid, verbose = TRUE, ...){
   }
   out <- lapply(csid, foo, verbose = verbose)
   out <- setNames(out, csid)
+  class(out) <- 'cs_prop'
   return(out)
 }
 

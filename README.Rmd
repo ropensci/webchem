@@ -295,6 +295,19 @@ opsin_query(c('Cyclopropane', 'Octane'))
 ```
 
 
+#### Extractor functions
+
+The sources provide a lot of informations that can be retrieved using the functions described above. Often only specific inforamtion is needed. 
+Therefore, we added extractor functions for common identifiers.
+
+```{r extractors}
+wi <- wd_ident("Q408646")
+wi
+cas(wi)
+cas(pan_query('Triclosan'))
+```
+
+
 
 #### Misc functions
 
