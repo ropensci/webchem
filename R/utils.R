@@ -334,23 +334,24 @@ parse_mol <- function(string) {
 #' @name extractors
 #' @rdname extractors
 #' @param x object
+#' @param ... currently not used.
 #' @return a vector of cas numbers
 #' @export
-cas <- function(...){
+cas <- function(x, ...){
   UseMethod("cas")
 }
 
 #' @export
-cas.default <- function(x) {
+cas.default <- function(x, ...) {
   sapply(x, function(y) y$cas)
 }
 
 #' @export
-cas.pan_query <- function(x) {
+cas.pan_query <- function(x, ...) {
   sapply(x, function(y) y$`CAS Number`)
 }
 
 #' @export
-cas.wd_ident <- function(x) {
+cas.wd_ident <- function(x, ...) {
   x$cas
 }
