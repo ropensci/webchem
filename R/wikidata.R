@@ -162,8 +162,10 @@ wd_ident <- function(id, verbose = TRUE){
     if (is.na(id)) {
       if (verbose)
         message('NA as input! Returing NA. \n')
-      out <- as.list(rep(NA, 13))
-      names(out) <- c(vars_out, 'source_url')
+      out <- as.list(rep(NA, 14))
+      names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
+                      "drugbank", "zvg", "chebi", "chembl", "unii", "source_url",
+                      "query")
       return(out)
     }
     baseurl <- 'https://query.wikidata.org/sparql?format=json&query='

@@ -107,7 +107,6 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE, idx =
   }
   out <- lapply(query, foo, type = type, verbose = verbose, idx = idx)
   out <- setNames(out, query)
-  class(out) <- 'aw_query'
   return(out)
 }
 
@@ -132,7 +131,7 @@ build_aw_idx <- function(){
   aw_idx <- rbind(prep_idx(idx1), prep_idx(idx2) ,prep_idx(idx3))
   aw_idx[['source']] <- 'rn'
   idx4 <- read_html('http://www.alanwood.net/pesticides/index_cn.html')
-  n <- xml_find_all(ttt, '//a')
+  n <- xml_find_all(idx4, '//a')
   names <- xml_text(n)
   rm <- names == ''
   names <- names[!rm]
@@ -141,6 +140,12 @@ build_aw_idx <- function(){
   idx4 <- data.frame(names = NA, links = links, linknames = names,
                      source = 'cn', stringsAsFactors = FALSE)
   aw_idx <- rbind(aw_idx, idx4)
+
+  # fix encoding
+  ln <- aw_idx$linknames
+  Encoding(ln) <- 'latin1'
+  ln <- iconv(ln, from = 'latin1', to = 'UTF8')
+  aw_idx$linknames <- ln
 
   # save(aw_idx, file = 'data/aw_idx.rda')
   return(aw_idx)

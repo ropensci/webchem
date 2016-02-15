@@ -5,10 +5,12 @@
 \alias{extractors}
 \title{Extract parts from webchem objects}
 \usage{
-cas(...)
+cas(x, ...)
 }
 \arguments{
 \item{x}{object}
+
+\item{...}{currently not used.}
 }
 \value{
 a vector of cas numbers
