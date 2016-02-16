@@ -26,5 +26,14 @@ test_that("alanwood, cas", {
   expect_equal(length(o1[[2]]$inchikey), 2)
   expect_equal(length(o1[[2]]$inchi), 2)
   expect_equal(length(o1[[1]]), 11)
+  expect_true(is.na(aw_query('12071-83-9', type = 'cas')[[1]]$inchi))
+})
 
+test_that("alanwood, build_index", {
+  idx <- build_aw_idx()
+  expect_is(idx, 'data.frame')
+  expect_equal(ncol(idx), 4)
+  expect_equal(names(idx), c("names", "links", "linknames", "source"))
+  expect_equal(unique(idx$source), c("rn", "cn"))
+  expect_equal(idx$names[1], '50-00-0')
 })
