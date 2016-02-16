@@ -36,10 +36,11 @@ test_that("wd_ident returns correct results", {
 
 
 test_that("wd integration test", {
-  d <- wd_ident(get_wdid('Glyphosate', 'en', 'best'))
-  f <- wd_ident(get_wdid('xxxxx', 'en', 'best'))
+  d <- wd_ident(get_wdid('Glyphosate', 'en', 'best')$id)
+  f <- wd_ident(get_wdid('xxxxx', 'en', 'best')$id)
 
   expect_equal(d$cas, "1071-83-6")
-  expect_equal(length(d), 13)
-  expect_equal(f, NA)
+  expect_equal(ncol(d), 14)
+  expect_is(d, 'data.frame')
+  expect_true(all(is.na(f[1, ])))
 })
