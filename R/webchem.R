@@ -61,5 +61,4 @@ NULL
 #'   \item{source}{source of link, either from CAS (rn) or Commonname (cn)}
 #' }
 #' @source \url{http://www.alanwood.net/pesticides}
-#' @export
 "aw_idx"

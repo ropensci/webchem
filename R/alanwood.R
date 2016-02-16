@@ -8,7 +8,7 @@
 #' @param type character; type of input ('cas' or 'commonname')
 #' @param verbose logical; print message during processing to console?
 #' @param idx data.frame; index to use. If NULL (default) the internal index \code{\link{aw_idx}} is used.
-#' To rebuild the index use \code{\link{build_aw_idx}}
+#' To rebuild the index use \code{\link{build_aw_idx}}.
 #' @return A list of eight entries: common-name, status, preferredd IUPAC Name,
 #'          IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source url.
 #'
@@ -27,7 +27,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE, idx =
   foo <- function(query, type = c("commonname", "cas"), verbose, idx = NULL) {
     type <- match.arg(type)
     if (is.null(idx)) {
-      idx <- aw_idx
+      idx <- webchem::aw_idx
     }
   # search links in indexes
     if (type == 'commonname' ) {
@@ -144,7 +144,7 @@ build_aw_idx <- function(){
   # fix encoding
   ln <- aw_idx$linknames
   Encoding(ln) <- 'latin1'
-  ln <- iconv(ln, from = 'latin1', to = 'UTF8')
+  ln <- iconv(ln, from = 'latin1', to = 'ASCII', sub = '')
   aw_idx$linknames <- ln
 
   # save(aw_idx, file = 'data/aw_idx.rda')
