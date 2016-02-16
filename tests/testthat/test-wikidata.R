@@ -36,8 +36,8 @@ test_that("wd_ident returns correct results", {
 
 
 test_that("wd integration test", {
-  d <- wd_ident(get_wdid('Glyphosate', 'en', TRUE))
-  f <- wd_ident(get_wdid('xxxxx', 'en', TRUE))
+  d <- wd_ident(get_wdid('Glyphosate', 'en', 'best'))
+  f <- wd_ident(get_wdid('xxxxx', 'en', 'best'))
 
   expect_equal(d$cas, "1071-83-6")
   expect_equal(length(d), 13)
