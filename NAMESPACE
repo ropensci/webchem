@@ -3,7 +3,6 @@
 S3method(cas,default)
 S3method(cas,pan_query)
 S3method(cas,wd_ident)
-export(aw_idx)
 export(aw_query)
 export(build_aw_idx)
 export(cas)
