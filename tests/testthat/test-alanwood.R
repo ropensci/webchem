@@ -37,3 +37,7 @@ test_that("alanwood, build_index", {
   expect_equal(unique(idx$source), c("rn", "cn"))
   expect_equal(idx$names[1], '50-00-0')
 })
+
+test_that("alanwood index is up to date", {
+  expect_true(Sys.Date() - attr(aw_idx, 'date') < 30)
+})
