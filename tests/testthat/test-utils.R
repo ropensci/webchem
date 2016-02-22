@@ -44,8 +44,3 @@ test_that("is.smiles() returns correct results", {
 })
 
 
-test_that("cas is working", {
-  expect_equivalent(cas(pan_query('2,4-dichlorophenol', match = 'best')),  "120-83-2")
-  expect_equivalent(cas(wd_ident("Q408646")), "3380-34-5")
-  expect_equivalent(cas(aw_query('Fluazinam', type = 'commonname')), "79622-59-6")
-})

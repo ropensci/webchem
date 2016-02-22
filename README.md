@@ -77,13 +77,13 @@ Use `first` to return only the first hit.
 ```r
 cir_query('Triclosan', 'cas')
 #> $Triclosan
-#> [1] NA
+#> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
 cir_query('Triclosan', 'cas', first = TRUE)
 #>   Triclosan 
 #> "3380-34-5"
 cir_query('Triclosan', 'mw')
 #> $Triclosan
-#> [1] 289.5451
+#> [1] NA
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -121,8 +121,9 @@ Retrieve the ChemSpider ID of Triclosan
 
 
 ```r
-(id <- get_csid('Triclosan', token = token))
-#> [1] "5363"
+(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
+#>   Aspirin Triclosan 
+#>    "2157"    "5363"
 ```
 
 Use this ID to query information from ChemSpider
@@ -130,44 +131,21 @@ Use this ID to query information from ChemSpider
 
 ```r
 cs_extcompinfo(id, token = token)
-#> $csid
-#> [1] "5363"
-#> 
-#> $mf
-#> [1] "C_{12}H_{7}Cl_{3}O_{2}"
-#> 
-#> $smiles
-#> [1] "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl"
-#> 
-#> $inchi
-#> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
-#> 
-#> $inchikey
-#> [1] "XEFQLINVKFYRCS-UHFFFAOYAS"
-#> 
-#> $average_mass
-#> [1] 289.5418
-#> 
-#> $mw
-#> [1] 289.5418
-#> 
-#> $monoiso_mass
-#> [1] 287.9512
-#> 
-#> $nominal_mass
-#> [1] 288
-#> 
-#> $alogp
-#> [1] 5.53
-#> 
-#> $xlogp
-#> [1] 5
-#> 
-#> $common_name
-#> [1] "Triclosan"
-#> 
-#> $source_url
-#> [1] "http://www.chemspider.com/Chemical-Structure.5363.html"
+#>           csid                     mf                         smiles
+#> Aspirin   2157        C_{9}H_{8}O_{4}          CC(=O)Oc1ccccc1C(=O)O
+#> Triclosan 5363 C_{12}H_{7}Cl_{3}O_{2} c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl
+#>                                                                                 inchi
+#> Aspirin           InChI=1/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)
+#> Triclosan InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
+#>                            inchikey average_mass       mw monoiso_mass
+#> Aspirin   BSYNRYMUTXBXSQ-UHFFFAOYAW     180.1574 180.1574   180.042252
+#> Triclosan XEFQLINVKFYRCS-UHFFFAOYAS     289.5418 289.5418   287.951172
+#>           nominal_mass alogp xlogp common_name
+#> Aspirin            180     0     0     Aspirin
+#> Triclosan          288  5.53     5   Triclosan
+#>                                                       source_url     query
+#> Aspirin   http://www.chemspider.com/Chemical-Structure.2157.html   Aspirin
+#> Triclosan http://www.chemspider.com/Chemical-Structure.5363.html Triclosan
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
@@ -178,13 +156,7 @@ Or to convert to a Mol-Object
 ```r
 mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
 head(mol$ab)
-#>         x      y z  a d c s h b v H m n e NA NA
-#> 1 -1.7350 2.0001 0 Cl 0 0 0 0 0 0 0 0 0 0  0  0
-#> 2 -0.8675 1.5027 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 3 -0.8675 0.4975 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 4  0.0000 0.0000 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 5  0.8675 0.4975 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 6  0.8675 1.5027 0  C 0 0 0 0 0 0 0 0 0 0  0  0
+#> NULL
 ```
 Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a API-key is needed
 
@@ -194,10 +166,13 @@ Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a A
 
 ```r
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+#> [[1]]
 #> [1] "5363"
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+#> [[1]]
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+#> [[1]]
 #> [1] "InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 ```
 
@@ -205,7 +180,7 @@ And get EPISuit predictions from ChemSpider
 
 
 ```r
-cs_prop('5363')$epi[ , c(1:4)]
+cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 #>                                               prop value_pred
 #> 1                 Log Octanol-Water Partition Coef     4.6600
 #> 2                                    Boiling Point   373.6200
@@ -331,39 +306,44 @@ pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", 
 
 ```r
 aw_query('Fluazinam', type = 'commonname')
-#> $cname
+#> $Fluazinam
+#> $Fluazinam$cname
 #> [1] "Fluazinam"
 #> 
-#> $status
+#> $Fluazinam$status
 #> [1] "ISO 1750 (published)"
 #> 
-#> $pref_iupac_name
+#> $Fluazinam$pref_iupac_name
 #> [1] "3-chloro-N-[3-chloro-2,6-dinitro-4-(trifluoromethyl)phenyl]-5-(trifluoromethyl)pyridin-2-amine"
 #> 
-#> $iupac_name
+#> $Fluazinam$iupac_name
 #> [1] "3-chloro-N-(3-chloro-5-trifluoromethyl-2-pyridyl)-α,α,α-trifluoro-2,6-dinitro-p-toluidine"
 #> 
-#> $cas
+#> $Fluazinam$cas
 #> [1] "79622-59-6"
 #> 
-#> $formula
+#> $Fluazinam$formula
 #> [1] "C13H4Cl2F6N4O4"
 #> 
-#> $activity
+#> $Fluazinam$activity
 #> [1] "fungicides"
 #> 
-#> $subactivity
+#> $Fluazinam$subactivity
 #> [1] "pyridine fungicides"
 #> 
-#> $inchikey
+#> $Fluazinam$inchikey
 #> [1] "UZCGKGPEKUCDTF-UHFFFAOYSA-N"
 #> 
-#> $inch
+#> $Fluazinam$inch
 #> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
 #> 
-#> $source_url
+#> $Fluazinam$source_url
 #> [1] "http://www.alanwood.net/pesticides/fluazinam.html"
-aw_query('79622-59-6', type = 'cas')$cname
+#> 
+#> 
+#> attr(,"class")
+#> [1] "list"     "aw_query"
+aw_query('79622-59-6', type = 'cas')[[1]]$cname
 #> [1] "fluazinam"
 ```
 
@@ -624,6 +604,35 @@ opsin_query(c('Cyclopropane', 'Octane'))
 #>                              stdinchikey   smiles message        query
 #> Cyclopropane LVZWSLJZHVFIQJ-UHFFFAOYSA-N    C1CC1         Cyclopropane
 #> Octane       TVMXDCGIABBOFY-UHFFFAOYSA-N CCCCCCCC               Octane
+```
+
+
+#### Extractor functions
+
+The sources provide a lot of informations that can be retrieved using the functions described above. Often only specific inforamtion is needed. 
+Therefore, we added extractor functions for common identifiers.
+
+
+```r
+wi <- wd_ident("Q408646")
+wi
+#>                         smiles       cas  cid    einecs csid
+#> 1 Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl 3380-34-5 5564 222-182-2 5363
+#>                                                                    inchi
+#> 1 1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
+#>                      inchikey drugbank    zvg  chebi    chembl       unii
+#> 1 XEFQLINVKFYRCS-UHFFFAOYSA-N    08604 490400 164200 CHEMBL849 4NM5039Y5X
+#>                              source_url   query
+#> 1 https://www.wikidata.org/wiki/Q408646 Q408646
+cas(wi)
+#> [1] "3380-34-5"
+inchikey(wi)
+#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+smiles(wi)
+#> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
+
+smiles(etox_basic(5564))
+#> Error in smiles.etox_basic(etox_basic(5564)): InChIkey is not returned by this datasource!
 ```
 
 
