@@ -183,6 +183,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   out <- data.frame(t(out))
   out[['query']] <- rownames(out)
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
+  class(out) <- c('data.frame', 'cs_extcompinfo')
   return(out)
 }
 

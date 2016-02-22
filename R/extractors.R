@@ -41,6 +41,12 @@ inchikey.default <- function(x, ...) {
 inchikey.cs_compinfo <- function(x, ...) {
   x$inchikey
 }
+
+#' @export
+inchikey.cs_extcompinfo <- function(x, ...) {
+  x$inchikey
+}
+
 #' @export
 inchikey.etox_basic <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
@@ -85,6 +91,12 @@ smiles.default <- function(x, ...) {
 smiles.cs_compinfo <- function(x, ...) {
   x$smiles
 }
+
+#' @export
+smiles.cs_extcompinfo <- function(x, ...) {
+  x$smiles
+}
+
 
 #' @export
 smiles.cts_compinfo <- function(x, ...) {
