@@ -107,6 +107,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE, idx =
   }
   out <- lapply(query, foo, type = type, verbose = verbose, idx = idx)
   out <- setNames(out, query)
+  class(out) <- c('list', 'aw_query')
   return(out)
 }
 
@@ -146,6 +147,7 @@ build_aw_idx <- function(){
   Encoding(ln) <- 'latin1'
   ln <- iconv(ln, from = 'latin1', to = 'ASCII', sub = '')
   aw_idx$linknames <- ln
+  attr(aw_idx, 'date') <- Sys.Date()
 
   # save(aw_idx, file = 'data/aw_idx.rda')
   return(aw_idx)

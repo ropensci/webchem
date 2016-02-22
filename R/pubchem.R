@@ -156,6 +156,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
     return(NA)
   }
   out <- cont$PropertyTable[[1]]
+  class(out) <- c('data.frame', 'pc_prop')
   return(out)
 }
 

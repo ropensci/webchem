@@ -329,29 +329,3 @@ parse_mol <- function(string) {
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
 
-
-#' Extract parts from webchem objects
-#' @name extractors
-#' @rdname extractors
-#' @param x object
-#' @param ... currently not used.
-#' @return a vector of cas numbers
-#' @export
-cas <- function(x, ...){
-  UseMethod("cas")
-}
-
-#' @export
-cas.default <- function(x, ...) {
-  sapply(x, function(y) y$cas)
-}
-
-#' @export
-cas.pan_query <- function(x, ...) {
-  sapply(x, function(y) y$`CAS Number`)
-}
-
-#' @export
-cas.wd_ident <- function(x, ...) {
-  x$cas
-}
