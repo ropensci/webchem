@@ -31,6 +31,8 @@
 get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
   # token = '37bf5e57-9091-42f5-9274-650a64398aaf'
   foo <- function(query, token, first, verbose, ...){
+    if (is.na(query))
+      return(NA)
     baseurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?'
     qurl <- paste0(baseurl, 'query=', query, '&token=', token)
     if (verbose)
@@ -41,8 +43,8 @@ get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
       warning('Problem with web service encountered... Returning NA.')
       return(NA)
     }
-    out <- xml_text(h, trim = TRUE)
-    if (out == '') {
+    out <- xml_text(xml_find_all(h, './/*'))
+    if (length(out) == 1 && out == '') {
       message('No csid found... Returning NA.')
       return(NA)
     }
@@ -95,6 +97,9 @@ get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
 cs_compinfo <- function(csid, token, verbose = TRUE, ...){
   # csid <- "5363"
   foo <- function(csid, token, verbose) {
+    if (is.na(csid)) {
+      return(list(csid = NA, inchi = NA, inchikey = NA, smiles = NA, source_url = NA))
+    }
     baseurl <- 'http://www.chemspider.com/Search.asmx/GetCompoundInfo?'
     qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
     if (verbose)
@@ -112,7 +117,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
     return(out)
   }
   out <- sapply(csid, foo, token = token, verbose = verbose)
-  out <- data.frame(t(out))
+  out <- data.frame(t(out), row.names = seq_len(ncol(out)))
   out[['query']] <- rownames(out)
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
   class(out) <- c('data.frame', 'cs_compinfo')
@@ -130,8 +135,8 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a data.frame with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi',
-#' 'inchikey', 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
+#' @return a data.frame with entries: 'csid', 'mf' (molecular formula), 'smiles', 'inchi' (non-standard),
+#' 'inchikey' (non-standard), 'average_mass', 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass),
 #' 'nominal_mass', 'alogp', 'xlogp', 'common_name' and 'source_url'
 #' @note A security token is neeeded. Please register at RSC
 #' \url{https://www.rsc.org/rsc-id/register}
@@ -140,6 +145,7 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
 #' \code{\link{cs_compinfo}} for extended compound information.
+#' @note use \code{\link{cs_compinfo}} to retrieve standard inchikey.
 #' @export
 #' @examples
 #' \dontrun{
@@ -155,6 +161,12 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   # csid <- "5363"
   foo <- function(csid, token, verbose) {
+    if (is.na(csid)) {
+      out <- as.list(rep(NA, 13))
+      names(out) <- c('csid', 'mf', 'smiles', 'inchi', 'inchikey', 'average_mass',
+                      'mw', 'monoiso_mass', 'nominal_mass', 'alogp', 'xlogp', 'common_name', 'source_url')
+      return(out)
+    }
     baseurl <- 'http://www.chemspider.com/MassSpecAPI.asmx/GetExtendedCompoundInfo?'
     qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
     if (verbose)
@@ -180,7 +192,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
     return(out)
   }
   out <- sapply(csid, foo, token = token, verbose = verbose)
-  out <- data.frame(t(out))
+  out <- data.frame(t(out), row.names = seq_len(ncol(out)))
   out[['query']] <- rownames(out)
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
   class(out) <- c('data.frame', 'cs_extcompinfo')

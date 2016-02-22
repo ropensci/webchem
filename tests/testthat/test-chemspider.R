@@ -15,6 +15,7 @@ test_that("get_csid()", {
   expect_true(is.na(o2[[3]]))
   expect_equal(o1[[1]], '5363')
   expect_equal(o2[[2]], '692')
+  expect_true(is.na(get_csid(NA, token = token, verbose = TRUE)))
 })
 
 
@@ -24,6 +25,7 @@ test_that("cs_compinfo()", {
   expect_is(o1, 'data.frame')
   expect_equal(dim(o1), c(2, 6))
   expect_equal(o1$csid[1], '2157')
+  expect_true(all(is.na(cs_compinfo(NA, token)[ 1, 1:5])))
   })
 
 
@@ -33,6 +35,7 @@ test_that("cs_extcompinfo()", {
   expect_is(o1, 'data.frame')
   expect_equal(dim(o1), c(2, 14))
   expect_equal(o1$csid[1], '2157')
+  expect_true(all(is.na(cs_extcompinfo(c(2157, NA), token)[ 2, 1:5])))
 })
 
 test_that("cs_prop()", {
