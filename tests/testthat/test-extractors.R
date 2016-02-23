@@ -44,7 +44,7 @@ test_that("cas is working", {
 
 test_that("inchikey is working", {
   expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
-  expect_equivalent(inchikey(out_cs_extcompinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
+  expect_equivalent(inchikey(out_cs_extcompinfo), "XEFQLINVKFYRCS-UHFFFAOYAS")
   expect_equivalent(inchikey(out_cts_compinfo), c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N" ))
   expect_error(inchikey(out_etox_basic))
   expect_equivalent(inchikey(out_opsin_query), c("LVZWSLJZHVFIQJ-UHFFFAOYSA-N", "TVMXDCGIABBOFY-UHFFFAOYSA-N"))
