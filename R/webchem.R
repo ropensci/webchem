@@ -37,7 +37,7 @@ NULL
 #' It comprises acute toxicity data (D. magna, 48h, Laboratory, 48h) and has been
 #' preprocessed (remove non-insecticides, aggregate multiple value, keep only numeric data etc).
 #'
-#' @format A data frame with 160 rows and 2 variables:
+#' @format A data frame with 124 rows and 2 variables:
 #' \describe{
 #'   \item{cas}{CAS registry number}
 #'   \item{value}{LC50value}

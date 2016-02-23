@@ -30,7 +30,12 @@ Please respect Copyright, Terms and Conditions \url{http://www.alanwood.net/pest
 \examples{
 \dontrun{
 aw_query('Fluazinam', type = 'commonname')
-aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
+out <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
+out
+# extract subactivity from object
+sapply(out, function(y) y$subactivity[1])
+
+# use CAS-numbers
 aw_query("79622-59-6", type = 'cas')
 }
 }

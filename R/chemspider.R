@@ -219,8 +219,14 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' @export
 #' @examples
 #' \dontrun{
-#' out <- cs_prop('5363')
+#' out <- cs_prop(5363)
 #' out[[1]]$epi
+#'
+#' out2 <- cs_prop(c(5363, 2157))
+#' # extract Log Octanol-Water Partition Coef from EPI
+#' sapply(out2, function(y){
+#'   y$epi$value_pred[y$epi$prop == 'Log Octanol-Water Partition Coef']
+#' })
 #' }
 cs_prop <- function(csid, verbose = TRUE, ...){
   foo <- function(csid, verbose){

@@ -19,7 +19,12 @@
 #' @examples
 #' \dontrun{
 #' aw_query('Fluazinam', type = 'commonname')
-#' aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
+#' out <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
+#' out
+#' # extract subactivity from object
+#' sapply(out, function(y) y$subactivity[1])
+#'
+#' # use CAS-numbers
 #' aw_query("79622-59-6", type = 'cas')
 #' }
 aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE, idx = NULL){

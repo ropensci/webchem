@@ -178,7 +178,11 @@ get_etoxid <- function(query, match = c('best', 'all', 'first', 'ask', 'na'), ve
 #'
 #' # Retrieve CAS for multiple inputs
 #' ids <- c("20179", "9051")
-#' etox_basic(ids)
+#' out <- etox_basic(ids)
+#' out
+#'
+#' # extract ec numbers
+#' sapply(out, function(y) y$ec)
 #' }
 etox_basic <- function(id, verbose = TRUE) {
   if (!mode(id) %in% c("numeric","character")) {

@@ -31,7 +31,15 @@ Please respect the terms of use: \url{http://www.srcinc.com/terms-of-use.html}.
 \examples{
 \dontrun{
 pp_query('50-00-0')
-pp_query(c('50-00-0', '79622-59-6', 'xxxxx'))
+out <- pp_query(c('50-00-0', '79622-59-6', 'xxxxx'))
+out
+
+# extract lop-P
+sapply(out, function(y){
+ if (is.na(y))
+   return(NA)
+ y$prop$value[y$prop$variable == 'Log P (octanol-water)']
+ })
 }
 }
 \author{
