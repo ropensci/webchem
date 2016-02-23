@@ -102,7 +102,8 @@ get_etoxid <- function(query, match = c('best', 'all', 'first', 'ask', 'na'), ve
       if (match == 'best') {
         if (verbose)
           message("Returning best match. \n")
-        dd <- adist(query, subs) / nchar(subs)
+        msubs <- gsub(' \\(.*\\)', '', subs)
+        dd <- adist(query, msubs) / nchar(msubs)
         id <- gsub('^.*\\?id=(.*)', '\\1', links[which.min(dd)])
         d <- round(dd[which.min(dd)], 2)
         matched_sub <- subs[which.min(dd)]
