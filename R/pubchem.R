@@ -116,6 +116,8 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   # cid <- c('5564', '7843')
+  napos <- which(is.na(cid))
+  cid <- cid[!is.na(cid)]
   prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
   input <- '/compound/cid'
   if (is.null(properties))
@@ -156,6 +158,12 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
     return(NA)
   }
   out <- cont$PropertyTable[[1]]
+  # insert NA rows
+  narow <- rep(NA, ncol(out))
+  for (i in seq_along(napos)) {
+    out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
+  }
+
   class(out) <- c('data.frame', 'pc_prop')
   return(out)
 }

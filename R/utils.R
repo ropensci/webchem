@@ -68,8 +68,6 @@ is.inchikey_cs <- function(x, verbose = TRUE){
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
   qurl <- paste0(baseurl, 'inchi_key=', x)
-  if (verbose)
-    message(qurl)
   Sys.sleep(0.1)
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {

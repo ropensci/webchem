@@ -25,8 +25,14 @@ Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/t
 }
 \examples{
 \dontrun{
-out <- cs_prop('5363')
+out <- cs_prop(5363)
 out[[1]]$epi
+
+out2 <- cs_prop(c(5363, 2157))
+# extract Log Octanol-Water Partition Coef from EPI
+sapply(out2, function(y){
+  y$epi$value_pred[y$epi$prop == 'Log Octanol-Water Partition Coef']
+})
 }
 }
 \author{

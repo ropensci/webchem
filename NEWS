@@ -10,6 +10,7 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 * rewrite of pubchem functions using PUG-REST
+* chemspider: better use of NA in input (=return NA)
 
 BUG FIXES
 

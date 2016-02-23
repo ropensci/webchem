@@ -12,7 +12,11 @@ cas <- function(x, ...){
 
 #' @export
 cas.default <- function(x, ...) {
-  sapply(x, function(y) y$cas)
+  sapply(x, function(y) {
+    if (length(y) == 1 && is.na(y))
+      return(NA)
+    y$cas
+    })
 }
 
 #' @export
@@ -41,6 +45,12 @@ inchikey.default <- function(x, ...) {
 inchikey.cs_compinfo <- function(x, ...) {
   x$inchikey
 }
+
+#' @export
+inchikey.cs_extcompinfo <- function(x, ...) {
+  x$inchikey
+}
+
 #' @export
 inchikey.etox_basic <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
@@ -87,6 +97,12 @@ smiles.cs_compinfo <- function(x, ...) {
 }
 
 #' @export
+smiles.cs_extcompinfo <- function(x, ...) {
+  x$smiles
+}
+
+
+#' @export
 smiles.cts_compinfo <- function(x, ...) {
   stop("SMILES is not returned by this datasource!")
 }
@@ -111,8 +127,8 @@ smiles.aw_query <- function(x, ...) {
 
 #' @export
 smiles.pc_prop <- function(x, ...) {
-  if (!"InChIKey" %in% names(x)) {
-    stop("InChIKey not queried!")
+  if (!"CanonicalSMILES" %in% names(x)) {
+    stop("CanonicalSMILES not queried!")
   }
   x$CanonicalSMILES
 }

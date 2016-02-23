@@ -30,7 +30,11 @@ etox_basic(id$etoxid)
 
 # Retrieve CAS for multiple inputs
 ids <- c("20179", "9051")
-etox_basic(ids)
+out <- etox_basic(ids)
+out
+
+# extract ec numbers
+sapply(out, function(y) y$ec)
 }
 }
 \author{

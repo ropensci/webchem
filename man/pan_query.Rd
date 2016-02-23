@@ -69,7 +69,11 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
  # return only best hit
  pan_query('2,4-dichlorophenol', match = 'best')[[1]][c(1, 2, 5, 74)]
 
- pan_query(c('Triclosan', 'Aspirin'), 'best')
+ out <- pan_query(c('Triclosan', 'Aspirin'), 'best')
+ out
+
+ # extract Hydrolysis Half-life (Avg, Days)
+ sapply(out, function(y) y$`Hydrolysis Half-life (Avg, Days)`)
 }
 }
 \author{
