@@ -36,7 +36,7 @@ out
 
 # extract lop-P
 sapply(out, function(y){
- if (is.na(y))
+ if (length(y) == 1 && is.na(y))
    return(NA)
  y$prop$value[y$prop$variable == 'Log P (octanol-water)']
  })
