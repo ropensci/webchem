@@ -4,8 +4,8 @@
 \alias{ci_query}
 \title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}}
 \usage{
-ci_query(query, type = c("rn", "name", "inchikey"), mult = c("first",
-  "best", "ask", "na"), verbose = TRUE)
+ci_query(query, type = c("name", "rn", "inchikey"), match = c("best",
+  "first", "ask", "na"), verbose = TRUE)
 }
 \arguments{
 \item{query}{character; query string}
@@ -13,7 +13,7 @@ ci_query(query, type = c("rn", "name", "inchikey"), mult = c("first",
 \item{type}{character; type of query string.
 'rn' for regeistry number or 'name' for common name or 'inchikey' for inchikey as input.}
 
-\item{mult}{character; How should multiple hits be handeled?
+\item{match}{character; How should multiple hits be handeled?
 'first' returns only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
 'na' returns NA if multiple hits are found.}
 
@@ -35,23 +35,24 @@ by \code{\link{pp_query}}.
 \dontrun{
 # might fail if API is not available
 # query common name
-y1 <- ci_query('Formaldehyde', type = 'name')
-str(y1) # lots of information inside
-y1$inchikey
+y1 <- ci_query(c('Formaldehyde', 'Triclosan'), type = 'name')
+names(y1)
+str(y1[['Triclosan']]) # lots of information inside
+y1[['Triclosan']]$inchikey
 
 # Query by CAS
-y2 <- ci_query('50-00-0', type = 'rn')
-y2$inchikey
+y2 <- ci_query('50-00-0', type = 'rn', match = 'first')
+y2[['50-00-0']]$inchikey
 
 # query by inchikey
 y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
-y3$name
+y3[[1]]$name
 
-### handle multiple inputs
- cas <- c('1071-83-6', '50-00-0')
- # extract inchikeys
- sapply(cas, function(x){
-   ci_query(x, type = 'rn')$inchikey
+# extract lop-P
+sapply(y1, function(y){
+ if (length(y) == 1 && is.na(y))
+   return(NA)
+ y$physprop$Value[y$physprop$`Physical Property` == 'log P (octanol-water)']
  })
 }
 }

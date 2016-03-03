@@ -13,6 +13,7 @@ out_cts_compinfo <- cts_compinfo(inchikeys)
 out_etox_basic <- etox_basic(8252)
 
 # ChemID
+out_ci_query <- ci_query(c('Aspirin', 'Triclosan'), type = 'name')
 
 # OPSIN
 out_opsin_query <- opsin_query(c('Cyclopropane', 'Octane'))
@@ -40,11 +41,12 @@ test_that("cas is working", {
   expect_equivalent(cas(out_wd_ident), c("3380-34-5", "50-78-2"))
   expect_error(cas(out_pc_prop))
   expect_equivalent(cas(out_pan_query),  c("120-83-2", "1912-24-9"))
+  expect_equivalent(cas(out_ci_query),  c("50-78-2", "3380-34-5"))
 })
 
 test_that("inchikey is working", {
   expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
-  expect_equivalent(inchikey(out_cs_extcompinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
+  expect_equivalent(inchikey(out_cs_extcompinfo), "XEFQLINVKFYRCS-UHFFFAOYAS")
   expect_equivalent(inchikey(out_cts_compinfo), c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N" ))
   expect_error(inchikey(out_etox_basic))
   expect_equivalent(inchikey(out_opsin_query), c("LVZWSLJZHVFIQJ-UHFFFAOYSA-N", "TVMXDCGIABBOFY-UHFFFAOYSA-N"))
@@ -53,6 +55,7 @@ test_that("inchikey is working", {
   expect_equivalent(inchikey(out_pc_prop), c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N"))
   expect_error(inchikey(out_pc_prop2))
   expect_error(inchikey(out_pan_query))
+  expect_equivalent(out_ci_query, c("BSYNRYMUTXBXSQ-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-N"))
 })
 
 test_that("smiles is working", {
@@ -66,4 +69,5 @@ test_that("smiles is working", {
   expect_equivalent(smiles(out_pc_prop), c("C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl", "CC(=O)OC1=CC=CC=C1C(=O)O"))
   expect_error(smiles(out_pc_prop2))
   expect_error(smiles(out_pan_query))
+  expect_equivalent(smiles(out_ci_query), c("CC(=O)", "c1(Oc2c(cc(Cl)"))
 })

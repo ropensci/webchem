@@ -44,7 +44,7 @@ get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
       return(NA)
     }
     out <- xml_text(xml_find_all(h, './/*'))
-    if (length(out) == 1 && out == '') {
+    if (length(out) == 0) {
       message('No csid found... Returning NA.')
       return(NA)
     }

@@ -24,8 +24,8 @@ Imports:
     rvest,
     RCurl,
     jsonlite,
-    stringr,
-    rcdk
+    stringr
 Suggests:
-    testthat
+    testthat,
+    rcdk
 RoxygenNote: 5.0.1

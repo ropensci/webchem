@@ -3,14 +3,15 @@ webchem 0.0.6
 
 NEW FEATURES
 * added cts_to() and cts_from() to retrieve possible ids that can be queried.
-* cts_*(), pp_query(), cir_query(), get_cid(), get_etoxid(), etox_*(), pan_query() get_wdid(), aw_query(), get_csid(), cs_prop(), cs_compinfo() can handle multiple inputs
+* cts_*(), pp_query(), cir_query(), get_cid(), get_etoxid(), etox_*(), pan_query() get_wdid(), aw_query(), get_csid(), cs_prop(), cs_compinfo() and ci_query() can handle multiple inputs.
 * pc_prop() queries properties and pc_synonmy() synonyms from PUG-REST.
-* added extractors for webchem objects: cas(),inchikey() and smiles()
+* added extractors for webchem objects: cas(), inchikey() and smiles().
 
 
 MINOR IMPROVEMENTS
 * rewrite of pubchem functions using PUG-REST
 * chemspider: better use of NA in input (=return NA)
+* more robust matching in get_etoxid
 
 BUG FIXES
 

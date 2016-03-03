@@ -273,8 +273,8 @@ against the terms and conditions of use.
 #### ChemIDplus
 
 ```{r chemid}
-out <- ci_query(query = 'Triclosan', type = 'name')
-out$physprop
+out <- ci_query(query = 'Triclosan', type = 'name', match = 'best')
+out[['Triclosan']]$physprop
 ```
 
 
