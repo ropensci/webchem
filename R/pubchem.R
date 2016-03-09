@@ -163,7 +163,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   narow <- rep(NA, ncol(out))
   for (i in seq_along(napos)) {
     if (napos[i] > nrow(out)) {
-      print(napos[i])
+      # print(napos[i])
       out <- rbind(out, narow)
     } else {
       out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
