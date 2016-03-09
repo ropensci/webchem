@@ -162,13 +162,19 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   # insert NA rows
   narow <- rep(NA, ncol(out))
   for (i in seq_along(napos)) {
-    if (napos[i] > nrow(out)) {
-      # print(napos[i])
-      out <- rbind(out, narow)
+    #capture NAs at beginning
+    firstnna <- min(which(!is.na(cid_o)))
+    if (napos[i] <  firstnna) {
+      out <- rbind(narow, out)
     } else {
-      out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
-    }
-  }
+      # capture NAs at end
+      if (napos[i] > nrow(out)) {
+        # print(napos[i])
+        out <- rbind(out, narow)
+      } else {
+        out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
+      }
+    }}
   rownames(out) <- NULL
   class(out) <- c('data.frame', 'pc_prop')
   return(out)
