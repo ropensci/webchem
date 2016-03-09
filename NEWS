@@ -6,6 +6,7 @@ NEW FEATURES
 MINOR IMPROVEMENTS
 
 BUG FIXES
+* pc_prop() returned to many rows if last cid supplied was NA
 
 DEPRECATED FUNCTIONS
 

@@ -87,7 +87,8 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 #' @param cid character; Pubchem ID (CID).
 #' @param properties character vector; properties to retrieve, e.g. c('MolecularFormula', 'MolecularWeight').
 #' If NULL (default) all available properties are retrieved.
-#' @param verbose logical; should a verbose output be printed on the console?
+#' See \url{https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html#_Toc409516770} for a list of all available properties.
+#' @param verbose logical; should a verbose output be printed to the console?
 #' @param ... currently not used.
 #'
 #' @return a data.frame
@@ -117,6 +118,7 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   # cid <- c('5564', '7843')
   napos <- which(is.na(cid))
+  cid_o <- cid
   cid <- cid[!is.na(cid)]
   prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
   input <- '/compound/cid'
@@ -136,7 +138,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
                   'Fingerprint2D')
   properties <- paste(properties, collapse = ',')
   output <- paste0('/property/', properties, '/JSON')
-
 
   qurl <- paste0(prolog, input, output)
   if (verbose)
@@ -161,9 +162,12 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   # insert NA rows
   narow <- rep(NA, ncol(out))
   for (i in seq_along(napos)) {
+    if (napos[i] == length(cid_o)) {
+      out <- rbind(out, narow)
+    }
     out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
   }
-
+  rownames(out) <- NULL
   class(out) <- c('data.frame', 'pc_prop')
   return(out)
 }
