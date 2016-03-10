@@ -13,9 +13,12 @@ addons:
     packages:
       - libcurl4-openssl-dev
 
+r_binary_packages:
+  - devtools
+  - curl
+
 r_github_packages:
   - jimhester/covr
-  - jeroenooms/curl
 
 
 # report to coveralls
