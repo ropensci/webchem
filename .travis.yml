@@ -15,6 +15,7 @@ addons:
 
 r_github_packages:
   - jimhester/covr
+  - jeroenooms/curl
 
 
 # report to coveralls
