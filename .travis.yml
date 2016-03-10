@@ -6,6 +6,7 @@ r:
   - devel
 
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
+warnings_are_errors: false
 
 addons:
   apt:
