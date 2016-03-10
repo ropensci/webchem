@@ -122,7 +122,7 @@ is.inchikey_format = function(x, verbose = TRUE) {
   let <- strsplit(x, split = '')[[1]]
   if (any(grepl("[[:digit:]]", let))) {
     if (verbose)
-      message('strings contains numbers.')
+      message('string contains numbers.')
     return(FALSE)
   }
   if (x != toupper(x)) {
