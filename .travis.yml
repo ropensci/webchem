@@ -4,12 +4,10 @@ cache: packages
 
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
 
-r:
-  - release
-  - devel COVERAGE=true
-
-r_github_packages:
-  - jimhester/covr
+matrix:
+  r:
+    - release
+    - devel COVERAGE=true
 
 env:
   - _R_CHECK_TIMINGS_="0"
