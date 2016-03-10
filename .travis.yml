@@ -2,19 +2,17 @@ language: R
 sudo: false
 cache: packages
 
+r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
+
 r:
   - release
   - devel COVERAGE=true
 
+r_github_packages:
+  - jimhester/covr
+
 env:
   - _R_CHECK_TIMINGS_="0"
-
-r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
-
-env:
-  matrix:
-    - RVERSION=release
-    - RVERSION=devel COVERAGE=true
 
 
 # report to coveralls
