@@ -3,7 +3,6 @@ sudo: false
 cache: packages
 
 r:
-  - release
   - devel
 
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
