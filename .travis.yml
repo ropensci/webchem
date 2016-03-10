@@ -7,8 +7,12 @@ r:
 
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
 
+apt_packages:
+  - libcurl4-openssl-dev
+
 r_github_packages:
   - jimhester/covr
+
 
 # report to coveralls
 after_success:
