@@ -14,7 +14,6 @@ addons:
       - libcurl4-openssl-dev
 
 r_github_packages:
-  - jimhester/covr
   - jeroenooms/curl
 
 
