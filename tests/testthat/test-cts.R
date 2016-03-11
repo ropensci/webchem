@@ -3,7 +3,7 @@ context("cts")
 require(RCurl)
 chk_cts <- function(){
   qurl <- 'http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N'
-  Sys.sleep(0.5
+  Sys.sleep(0.5)
   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
               silent = TRUE)
   if (inherits(cont, 'try-error'))
