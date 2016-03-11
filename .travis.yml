@@ -4,7 +4,11 @@ cache: packages
 
 r:
   - devel
-  - release
+#  - release
+
+env:
+  global:
+    - _R_CRAN_CHECK_INCOMING_=false
 
 
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
