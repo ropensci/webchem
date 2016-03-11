@@ -1,5 +1,5 @@
 language: r
-# sudo: false
+sudo: false
 cache: packages
 
 r:
@@ -8,8 +8,17 @@ r:
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
 warnings_are_errors: false
 
-apt_packages:
-  - libcurl4-openssl-dev
+addons:
+  apt:
+    sources:
+    - r-packages-precise
+    packages:
+    - r-base-dev
+    - r-recommended
+    - libcurl4-openssl-dev
+    - libxml2-dev
+    - unixodbc-dev
+    - pandoc
 
 r_binary_packages:
   - devtools
