@@ -24,7 +24,6 @@ addons:
 
 r_binary_packages:
   - devtools
-  - curl
 
 r_github_packages:
   - jimhester/covr
