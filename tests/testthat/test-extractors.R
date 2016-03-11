@@ -55,7 +55,7 @@ test_that("inchikey is working", {
   expect_equivalent(inchikey(out_pc_prop), c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N"))
   expect_error(inchikey(out_pc_prop2))
   expect_error(inchikey(out_pan_query))
-  expect_equivalent(out_ci_query, c("BSYNRYMUTXBXSQ-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-N"))
+  expect_equivalent(inchikey(out_ci_query), c("BSYNRYMUTXBXSQ-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-N"))
 })
 
 test_that("smiles is working", {
