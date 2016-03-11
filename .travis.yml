@@ -20,6 +20,7 @@ addons:
     packages:
     - libcurl4-openssl-dev
     - libxml2-dev
+    - curl
 
 r_binary_packages:
   - devtools
@@ -27,7 +28,7 @@ r_binary_packages:
 
 r_github_packages:
   - jimhester/covr
-
+  - jeroenooms/curl
 
 # report to codecov
 after_success:
