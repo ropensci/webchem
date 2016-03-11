@@ -10,15 +10,9 @@ warnings_are_errors: false
 
 addons:
   apt:
-    sources:
-    - r-packages-precise
     packages:
-    - r-base-dev
-    - r-recommended
     - libcurl4-openssl-dev
     - libxml2-dev
-    - unixodbc-dev
-    - pandoc
 
 r_binary_packages:
   - devtools
