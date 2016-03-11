@@ -1,6 +1,5 @@
 language: r
 sudo: false
-cache: packages
 
 r:
   - devel
@@ -20,7 +19,6 @@ addons:
     packages:
     - libcurl4-openssl-dev
     - libxml2-dev
-    - curl
 
 r_binary_packages:
   - devtools
