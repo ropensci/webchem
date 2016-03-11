@@ -6,6 +6,11 @@ r:
   - release
   - devel
 
+env:
+  matrix:
+    - COVERAGE=false
+    - COVERAGE=true
+
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
 warnings_are_errors: false
 
@@ -25,8 +30,8 @@ r_github_packages:
 
 # report to codecov
 after_success:
-  - Rscript -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'
-  # - if [[ ! -z "$COVERAGE" ]];then Rscript -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'; fi
+  # - Rscript -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'
+  - if [[ ! -z "$COVERAGE" ]];then Rscript -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'; fi
 
 # report to maintainer
 notifications:
