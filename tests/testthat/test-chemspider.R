@@ -49,7 +49,7 @@ test_that("cs_prop()", {
 
   expect_is(m1[[1]]$epi, 'data.frame')
   expect_is(m1[[1]]$acd, 'data.frame')
-  expect_equal(m1[[1]]$source_url)
+  expect_equal(m1[[1]]$source_url,  "http://www.chemspider.com/Chemical-Structure.5363.html")
   expect_equal(names(m1[[1]]$epi), c("prop", "value_pred", "unit_pred",
                                      "source_pred", "value_exp",
                                      "unit_exp", "source_exp"))
