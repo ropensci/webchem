@@ -38,6 +38,7 @@ test_that("cs_extcompinfo()", {
   expect_true(all(is.na(cs_extcompinfo(c(2157, NA), token)[ 2, 1:5])))
 })
 
+
 test_that("cs_prop()", {
   id <- '5363'
   m1 <- cs_prop(id)
@@ -47,7 +48,8 @@ test_that("cs_prop()", {
   expect_equal(length(m1[[1]]), 3)
 
   expect_is(m1[[1]]$epi, 'data.frame')
-
+  expect_is(m1[[1]]$acd, 'data.frame')
+  expect_equal(m1[[1]]$source_url)
 })
 
 
