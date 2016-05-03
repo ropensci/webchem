@@ -1,4 +1,20 @@
-webchem 0.0.6
+webchem 0.1.1
+======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+BUG FIXES
+* pc_prop() returned to many rows if last cid supplied was NA
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
+
+webchem 0.1.0
 ======================
 
 NEW FEATURES

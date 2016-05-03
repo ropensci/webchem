@@ -10,9 +10,10 @@ pc_prop(cid, properties = NULL, verbose = TRUE, ...)
 \item{cid}{character; Pubchem ID (CID).}
 
 \item{properties}{character vector; properties to retrieve, e.g. c('MolecularFormula', 'MolecularWeight').
-If NULL (default) all available properties are retrieved.}
+If NULL (default) all available properties are retrieved.
+See \url{https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html#_Toc409516770} for a list of all available properties.}
 
-\item{verbose}{logical; should a verbose output be printed on the console?}
+\item{verbose}{logical; should a verbose output be printed to the console?}
 
 \item{...}{currently not used.}
 }

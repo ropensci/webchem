@@ -19,7 +19,7 @@ test_that("chemid returns correct results", {
   expect_is(o3, 'list')
   expect_is(m1, 'list')
   expect_is(m2, 'list')
-  expect_is(m31, 'list')
+  expect_is(m3, 'list')
 
   expect_true(length(o1) == 4)
   expect_true(is.na(o1[[1]]))

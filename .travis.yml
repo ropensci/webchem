@@ -1,49 +1,43 @@
-## Sample .travis.yml file for use with metacran/r-builder
-## See https://github.com/metacran/r-builder for detail
-language: c
-sudo: required
+language: r
+sudo: false
+cache: packages
 
-before_install:
-  - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
-  - chmod 755 pkg-build.sh
-  - ./pkg-build.sh bootstrap
+r:
+  - devel
+#  - release
 
-install:
-  - ./pkg-build.sh install_deps
-  - ./pkg-build.sh install_github jimhester/robustr
-  - ./pkg-build.sh install_github jimhester/covr
-  - ./pkg-build.sh install_github jeroenooms/curl
+env:
+  global:
+    - _R_CRAN_CHECK_INCOMING_=false
 
-script:
-  - ./pkg-build.sh run_tests
 
-# print timings (of examples) and sysinfo
-after_script:
-  - ./pkg-build.sh dump_logs_by_extension "timings"
-  - ./pkg-build.sh dump_sysinfo
+r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
+warnings_are_errors: false
+r_check_revdep: false
 
-after_failure:
-  - ./pkg-build.sh dump_logs
+addons:
+  apt:
+    packages:
+    - libcurl4-openssl-dev
+    - libxml2-dev
 
-# report to coveralls
+r_packages:
+  - devtools
+  - xml2
+
+r_github_packages:
+  - jimhester/covr
+  - jeroenooms/curl
+
+# report to codecov
 after_success:
-  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'; fi
+  - Rscript -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'
 
+# report to maintainer
 notifications:
   email:
     recipients:
     - szoecs@uni-landau.de
-    on_success: never
-    on_failure: always
+    on_success: change
+    on_failure: change
 
-env:
-  matrix:
-    # - RVERSION=oldrel
-    - RVERSION=release
-    - RVERSION=devel COVERAGE=true
-
-  global:
-    # COVERALLS_TOKEN
-    - secure: "WJeHUOPD0YrYyrxWUGpdrBSGJMB361m0nHC19ohwIWbdGysksgTTkyBDTamD62XRKjJSlGpHohMU3OiOX0YE45mypgsKvfdqP4CTBbc7J//fYLPUIttVXOiCp15qNFr7NLjKB78BG2K0wqsjVVb65oJg+uzl89Rt+xjyV1cFxD0="
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran"
-    - _R_CHECK_TIMINGS_="0"
