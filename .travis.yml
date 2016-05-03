@@ -20,7 +20,7 @@ addons:
     - libcurl4-openssl-dev
     - libxml2-dev
 
-r_binary_packages:
+r_packages:
   - devtools
   - xml2
 
