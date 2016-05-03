@@ -1,6 +1,5 @@
 language: r
 sudo: false
-cache: packages
 
 r:
   - devel
@@ -23,6 +22,7 @@ addons:
 
 r_binary_packages:
   - devtools
+  - xml2
 
 r_github_packages:
   - jimhester/covr
