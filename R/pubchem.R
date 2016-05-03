@@ -50,7 +50,7 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
     qurl <- paste0(prolog, input, output, arg)
     if (verbose)
       message(qurl)
-    Sys.sleep(0.3)
+    Sys.sleep(0.5)
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
                              ), type = 'text'), silent = TRUE
@@ -137,7 +137,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   qurl <- paste0(prolog, input, output)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.3)
+  Sys.sleep(0.5)
   cont <- try(content(POST(qurl,
                            body = list("cid" = paste(cid, collapse = ',')
                                        )),
@@ -202,7 +202,7 @@ pc_synonyms <- function(query, from = 'name', verbose = TRUE, arg = NULL, ...) {
     qurl <- paste0(prolog, input, output, arg)
     if (verbose)
       message(qurl)
-    Sys.sleep(0.3)
+    Sys.sleep(0.5)
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
     )), silent = TRUE
