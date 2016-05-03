@@ -43,6 +43,7 @@ test_that("cts_convert()", {
   o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', first = TRUE, verbose = FALSE)
   expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
   expect_equal(length(o1), 2)
+  expect_true(is.na(cts_convert('xxxx', 'inchikey', 'Chemical Name')[[1]]))
 })
 
 

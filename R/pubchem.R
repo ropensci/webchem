@@ -10,7 +10,7 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments
-#' @return a character vector.
+#' @return a list of cids. If first = TRUE a vector.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
 #' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
@@ -72,6 +72,8 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
   }
   out <- lapply(query, foo, from = from, first = first, verbose = verbose)
   out <- setNames(out, query)
+  if (first)
+    out <- unlist(out)
   return(out)
 }
 
@@ -85,7 +87,8 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 #' @param cid character; Pubchem ID (CID).
 #' @param properties character vector; properties to retrieve, e.g. c('MolecularFormula', 'MolecularWeight').
 #' If NULL (default) all available properties are retrieved.
-#' @param verbose logical; should a verbose output be printed on the console?
+#' See \url{https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html#_Toc409516770} for a list of all available properties.
+#' @param verbose logical; should a verbose output be printed to the console?
 #' @param ... currently not used.
 #'
 #' @return a data.frame
@@ -114,6 +117,9 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   # cid <- c('5564', '7843')
+  napos <- which(is.na(cid))
+  cid_o <- cid
+  cid <- cid[!is.na(cid)]
   prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
   input <- '/compound/cid'
   if (is.null(properties))
@@ -132,7 +138,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
                   'Fingerprint2D')
   properties <- paste(properties, collapse = ',')
   output <- paste0('/property/', properties, '/JSON')
-
 
   qurl <- paste0(prolog, input, output)
   if (verbose)
@@ -154,6 +159,24 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
     return(NA)
   }
   out <- cont$PropertyTable[[1]]
+  # insert NA rows
+  narow <- rep(NA, ncol(out))
+  for (i in seq_along(napos)) {
+    #capture NAs at beginning
+    firstnna <- min(which(!is.na(cid_o)))
+    if (napos[i] <  firstnna) {
+      out <- rbind(narow, out)
+    } else {
+      # capture NAs at end
+      if (napos[i] > nrow(out)) {
+        # print(napos[i])
+        out <- rbind(out, narow)
+      } else {
+        out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
+      }
+    }}
+  rownames(out) <- NULL
+  class(out) <- c('data.frame', 'pc_prop')
   return(out)
 }
 

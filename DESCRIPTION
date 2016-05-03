@@ -3,8 +3,8 @@ Title: Chemical Information from the Web
 Description: Chemical information from around the web. This package interacts
     with a suite of web APIs for chemical information.
 Type: Package
-Version: 0.0.6.0
-Date: 2016-02-08
+Version: 0.1.1.0
+Date: 2016-03-03
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
@@ -24,8 +24,8 @@ Imports:
     rvest,
     RCurl,
     jsonlite,
-    stringr,
-    rcdk
+    stringr
 Suggests:
-    testthat
+    testthat,
+    rcdk
 RoxygenNote: 5.0.1

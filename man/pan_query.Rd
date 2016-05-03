@@ -4,7 +4,7 @@
 \alias{pan_query}
 \title{Query the PAN Pesticide database}
 \usage{
-pan_query(query, match = c("all", "first", "best"), verbose = TRUE, ...)
+pan_query(query, match = c("best", "all", "first"), verbose = TRUE, ...)
 }
 \arguments{
 \item{query}{character; searchterm, e.g. chemical name or CAS.}
@@ -63,22 +63,17 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
  # might fail if API is not available
 
  # return all hits
- pan_query('2,4-dichlorophenol')[c(1, 2, 5, 74)]
+ pan_query('2,4-dichlorophenol')[[1]][c(1, 2, 5, 74)]
  # return only first hit
- pan_query('2,4-dichlorophenol', match = 'first')[c(1, 2, 5, 74)]
+ pan_query('2,4-dichlorophenol', match = 'first')[[1]][c(1, 2, 5, 74)]
  # return only best hit
- pan_query('2,4-dichlorophenol', match = 'best')[c(1, 2, 5, 74)]
+ pan_query('2,4-dichlorophenol', match = 'best')[[1]][c(1, 2, 5, 74)]
 
- # returns NA
- pan_query('xxxxx')
+ out <- pan_query(c('Triclosan', 'Aspirin'), 'best')
+ out
 
-### multiple inputs
-comp <- c('Triclosan', 'Aspirin')
-# retrive CAS
-sapply(comp, function(x) pan_query(x, match = 'best')[['CAS Number']])
-# multiple columns
-ll <- lapply(comp, function(x) pan_query(x, match = 'best')[c(1, 2, 5, 74)])
-do.call(rbind, ll)
+ # extract Hydrolysis Half-life (Avg, Days)
+ sapply(out, function(y) y$`Hydrolysis Half-life (Avg, Days)`)
 }
 }
 \author{

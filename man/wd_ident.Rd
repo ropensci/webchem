@@ -12,7 +12,7 @@ wd_ident(id, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-A list of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
+A data.frame of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
 'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
 }
 \description{
@@ -23,7 +23,7 @@ Only matches in labels are returned.
 }
 \examples{
 \dontrun{
- id <- "Q408646" # Triclosan
+ id <- c("Q408646", "Q18216")
  wd_ident(id)
 }
 }

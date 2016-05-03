@@ -32,9 +32,6 @@
 cts_compinfo <- function(inchikey, verbose = TRUE){
   # inchikey <- 'XEFQLINVKFYRCS-UHFFFAOYSA-N'
   foo <- function(inchikey, verbose) {
-    if (length(inchikey) > 1) {
-      stop('Cannot handle multiple input strings.')
-    }
     if (!is.inchikey(inchikey)) {
       stop('Input is not a valid inchikey!')
     }
@@ -52,6 +49,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
   }
   out <- lapply(inchikey, foo, verbose = verbose)
   out <- setNames(out, inchikey)
+  class(out) <- c('list', 'cts_compinfo')
   return(out)
 }
 
@@ -70,7 +68,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @param first logical; return only first result be returned?
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a character vector.
+#' @return a list of characters. If first = TRUE a vector.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
 #' for possible values of from and to.
@@ -107,16 +105,18 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
       return(NA)
     }
     out <- out$result[[1]]
-    if (length(out) == 0) {
-      message("Not found. Returning NA.")
-      return(NA)
-    }
+    # if (length(out) == 0) {
+    #   message("Not found. Returning NA.")
+    #   return(NA)
+    # }
     if (first)
       out <- out[1]
     return(out)
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
+  if (first)
+    out <- unlist(out)
   return(out)
 }
 

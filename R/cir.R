@@ -10,7 +10,7 @@
 #' @param first logical; If TRUE return only first result.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return A list of character vectors.
+#' @return A list of character vectors. If first = TRUE a vector.
 #' @details A interface to the Chemical Identifier Resolver (CIR).
 #'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
 #'
@@ -145,5 +145,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   out <- lapply(identifier, foo, representation = representation,
                 resolver = resolver, first = first, verbose = verbose)
   out <- setNames(out, identifier)
+  if (first)
+    out <- unlist(out)
   return(out)
 }

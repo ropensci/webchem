@@ -36,6 +36,7 @@ Source | Function(s) | API Docs | API key
 PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
+[OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -76,13 +77,13 @@ Use `first` to return only the first hit.
 ```r
 cir_query('Triclosan', 'cas')
 #> $Triclosan
-#> [1] NA
+#> [1] "3380-34-5"   "112099-35-1" "88032-08-0"
 cir_query('Triclosan', 'cas', first = TRUE)
-#> $Triclosan
-#> [1] "3380-34-5"
+#>   Triclosan 
+#> "3380-34-5"
 cir_query('Triclosan', 'mw')
 #> $Triclosan
-#> [1] 289.5451
+#> [1] NA
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -120,8 +121,9 @@ Retrieve the ChemSpider ID of Triclosan
 
 
 ```r
-(id <- get_csid('Triclosan', token = token))
-#> [1] "5363"
+(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
+#>   Aspirin Triclosan 
+#>    "2157"    "5363"
 ```
 
 Use this ID to query information from ChemSpider
@@ -129,44 +131,21 @@ Use this ID to query information from ChemSpider
 
 ```r
 cs_extcompinfo(id, token = token)
-#> $csid
-#> [1] "5363"
-#> 
-#> $mf
-#> [1] "C_{12}H_{7}Cl_{3}O_{2}"
-#> 
-#> $smiles
-#> [1] "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl"
-#> 
-#> $inchi
-#> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
-#> 
-#> $inchikey
-#> [1] "XEFQLINVKFYRCS-UHFFFAOYAS"
-#> 
-#> $average_mass
-#> [1] 289.5418
-#> 
-#> $mw
-#> [1] 289.5418
-#> 
-#> $monoiso_mass
-#> [1] 287.9512
-#> 
-#> $nominal_mass
-#> [1] 288
-#> 
-#> $alogp
-#> [1] 5.53
-#> 
-#> $xlogp
-#> [1] 5
-#> 
-#> $common_name
-#> [1] "Triclosan"
-#> 
-#> $source_url
-#> [1] "http://www.chemspider.com/Chemical-Structure.5363.html"
+#>           csid                     mf                         smiles
+#> Aspirin   2157        C_{9}H_{8}O_{4}          CC(=O)Oc1ccccc1C(=O)O
+#> Triclosan 5363 C_{12}H_{7}Cl_{3}O_{2} c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl
+#>                                                                                 inchi
+#> Aspirin           InChI=1/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)
+#> Triclosan InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
+#>                            inchikey average_mass       mw monoiso_mass
+#> Aspirin   BSYNRYMUTXBXSQ-UHFFFAOYAW     180.1574 180.1574   180.042252
+#> Triclosan XEFQLINVKFYRCS-UHFFFAOYAS     289.5418 289.5418   287.951172
+#>           nominal_mass alogp xlogp common_name
+#> Aspirin            180     0     0     Aspirin
+#> Triclosan          288  5.53     5   Triclosan
+#>                                                       source_url     query
+#> Aspirin   http://www.chemspider.com/Chemical-Structure.2157.html   Aspirin
+#> Triclosan http://www.chemspider.com/Chemical-Structure.5363.html Triclosan
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
@@ -177,13 +156,7 @@ Or to convert to a Mol-Object
 ```r
 mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
 head(mol$ab)
-#>         x      y z  a d c s h b v H m n e NA NA
-#> 1 -1.7350 2.0001 0 Cl 0 0 0 0 0 0 0 0 0 0  0  0
-#> 2 -0.8675 1.5027 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 3 -0.8675 0.4975 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 4  0.0000 0.0000 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 5  0.8675 0.4975 0  C 0 0 0 0 0 0 0 0 0 0  0  0
-#> 6  0.8675 1.5027 0  C 0 0 0 0 0 0 0 0 0 0  0  0
+#> NULL
 ```
 Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a API-key is needed
 
@@ -193,10 +166,13 @@ Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a A
 
 ```r
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+#> [[1]]
 #> [1] "5363"
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+#> [[1]]
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+#> [[1]]
 #> [1] "InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 ```
 
@@ -204,7 +180,7 @@ And get EPISuit predictions from ChemSpider
 
 
 ```r
-cs_prop('5363')$epi[ , c(1:4)]
+cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 #>                                               prop value_pred
 #> 1                 Log Octanol-Water Partition Coef     4.6600
 #> 2                                    Boiling Point   373.6200
@@ -304,11 +280,11 @@ info[[1]][1:5]
 
 
 #### PAN Pesticide Database
-`pan_query()` returns a list of 73 entries, here I extract only 4 of those:
+`pan_query()` returns a list of 75 entries, here I extract only 4 of those:
 
 ```r
-pan_list <- pan_query('lambda-Cyhalothrin', first = TRUE)
-pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
+pan_list <- pan_query('lambda-Cyhalothrin', match = 'best')
+pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
 #> $`CAS Number`
 #> [1] "91465-08-6"
 #> 
@@ -330,39 +306,44 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 
 ```r
 aw_query('Fluazinam', type = 'commonname')
-#> $cname
+#> $Fluazinam
+#> $Fluazinam$cname
 #> [1] "Fluazinam"
 #> 
-#> $status
+#> $Fluazinam$status
 #> [1] "ISO 1750 (published)"
 #> 
-#> $pref_iupac_name
+#> $Fluazinam$pref_iupac_name
 #> [1] "3-chloro-N-[3-chloro-2,6-dinitro-4-(trifluoromethyl)phenyl]-5-(trifluoromethyl)pyridin-2-amine"
 #> 
-#> $iupac_name
+#> $Fluazinam$iupac_name
 #> [1] "3-chloro-N-(3-chloro-5-trifluoromethyl-2-pyridyl)-α,α,α-trifluoro-2,6-dinitro-p-toluidine"
 #> 
-#> $cas
+#> $Fluazinam$cas
 #> [1] "79622-59-6"
 #> 
-#> $formula
+#> $Fluazinam$formula
 #> [1] "C13H4Cl2F6N4O4"
 #> 
-#> $activity
+#> $Fluazinam$activity
 #> [1] "fungicides"
 #> 
-#> $subactivity
+#> $Fluazinam$subactivity
 #> [1] "pyridine fungicides"
 #> 
-#> $inchikey
+#> $Fluazinam$inchikey
 #> [1] "UZCGKGPEKUCDTF-UHFFFAOYSA-N"
 #> 
-#> $inch
+#> $Fluazinam$inch
 #> [1] "InChI=1S/C13H4Cl2F6N4O4/c14-6-1-4(12(16,17)18)3-22-11(6)23-9-7(24(26)27)2-5(13(19,20)21)8(15)10(9)25(28)29/h1-3H,(H,22,23)"
 #> 
-#> $source_url
+#> $Fluazinam$source_url
 #> [1] "http://www.alanwood.net/pesticides/fluazinam.html"
-aw_query('79622-59-6', type = 'cas')$cname
+#> 
+#> 
+#> attr(,"class")
+#> [1] "list"     "aw_query"
+aw_query('79622-59-6', type = 'cas')[[1]]$cname
 #> [1] "fluazinam"
 ```
 
@@ -374,7 +355,37 @@ You can use `pp_query()` to query this database using a CAS number:
 ```r
 pp_query('50-00-0')
 #> $`50-00-0`
-#> [1] NA
+#> $`50-00-0`$cas
+#> [1] "50-00-0"
+#> 
+#> $`50-00-0`$cname
+#> [1] "FORMALDEHYDE"
+#> 
+#> $`50-00-0`$mw
+#> [1] 30.026
+#> 
+#> $`50-00-0`$prop
+#>                       variable      value             unit     temp type
+#> 1             Water Solubility  4.000e+05             mg/L 20 deg C  EXP
+#> 2        Log P (octanol-water)  3.500e-01                  25 deg C  EXP
+#> 3               Vapor Pressure  3.886e+03            mm Hg 25 deg C  EXT
+#> 4    pKa Dissociation Constant  1.327e+01                  25 deg C  EXP
+#> 5         Henry's Law Constant  3.370e-07       atm-m3/mol 25 deg C  EXP
+#> 6 Atmospheric OH Rate Constant  9.370e-12 cm3/molecule-sec 25 deg C  EXP
+#> 7                Melting Point -9.200e+01            deg C     <NA> <NA>
+#> 8                Boiling Point -1.950e+02            deg C     <NA> <NA>
+#>                                ref
+#> 1        PICKRELL,JA ET AL. (1983)
+#> 2           HANSCH,C ET AL. (1995)
+#> 3          BOUBLIK,T ET AL. (1984)
+#> 4   SERJEANT,EP & DEMPSEY,B (1979)
+#> 5 BETTERTON,EA & HOFFMAN,MR (1988)
+#> 6     KWOK,ESC & ATKINSON,R (1994)
+#> 7                             <NA>
+#> 8                             <NA>
+#> 
+#> $`50-00-0`$source_url
+#> [1] "http://esc.syrres.com/fatepointer/webprop.asp?CAS=50000"
 ```
 
 
@@ -385,20 +396,18 @@ First we need to query a substance ID:
 
 
 ```r
-id <- get_etoxid('Triclosan', mult = 'best')
-id
-#> [1] "20179"
-#> attr(,"matched")
-#> [1] "Triclosan ( 20179 )"
-#> attr(,"distance")
-#> [1] 0.5263158
+ids <- get_etoxid('Triclosan', match = 'best')
+ids
+#>   etoxid               match distance     query
+#> 1  20179 Triclosan ( 20179 )     0.53 Triclosan
 ```
 `get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
-Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
+Other options are `match = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
 
 
 ```r
-get_etoxid('Triclosan', mult = 'all')
+get_etoxid('Triclosan', match = 'all')
+#> [[1]]
 #> [1] "20179" "89236"
 #> attr(,"matched")
 #> [1] "Triclosan ( 20179 )"       "Methyltriclosan ( 89236 )"
@@ -412,7 +421,7 @@ With this substance ID we can query further information from ETOX, e.g.:
 
 
 ```r
-etox_basic(id)
+etox_basic(ids$etoxid)[[1]]
 #> $cas
 #> [1] "3380-34-5"
 #> 
@@ -453,7 +462,7 @@ We can also retrieve Quality Targets:
 
 
 ```r
-targets <- etox_targets(id)
+targets <- etox_targets(ids$etoxid)[[1]]
 targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 #>   Substance Country_or_Region      Designation Value_Target_LR Unit
 #> 1 Triclosan               AUS             PNEC           0.050 µg/l
@@ -470,7 +479,7 @@ targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_
 and results of ecotox tests:
 
 ```r
-tests <- etox_tests(id)
+tests <- etox_tests(ids$etoxid)[[1]]
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 #>                           Organism                  Effect Duration
 #> 1              Anabaena flos-aquae                    k.A.        4
@@ -570,23 +579,62 @@ out$physprop
 #### Wikidata
 
 ```r
-ids <- get_wdid(query = 'Triclosan', language = 'en')
+ids <- get_wdid(query = 'Triclosan')
 ids
-#> [1] "Q408646"
-#> attr(,"matched")
-#> [1] "Triclosan"
+#>        id     match distance     query
+#> 1 Q408646 Triclosan        0 Triclosan
 
 # quera identifiers from wikidata
-wd_ident(ids)[1:3]
-#> $smiles
-#> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
-#> 
-#> $cas
-#> [1] "3380-34-5"
-#> 
-#> $cid
-#> [1] "5564"
+wd_ident(ids$id)[1:5]
+#>                         smiles       cas  cid    einecs csid
+#> 1 Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl 3380-34-5 5564 222-182-2 5363
 ```
+
+
+#### OPSIN
+
+```r
+opsin_query(c('Cyclopropane', 'Octane'))
+#>                                                    inchi
+#> Cyclopropane                InChI=1/C3H6/c1-2-3-1/h1-3H2
+#> Octane       InChI=1/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3
+#>                                                  stdinchi
+#> Cyclopropane                InChI=1S/C3H6/c1-2-3-1/h1-3H2
+#> Octane       InChI=1S/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3
+#>                              stdinchikey   smiles message        query
+#> Cyclopropane LVZWSLJZHVFIQJ-UHFFFAOYSA-N    C1CC1         Cyclopropane
+#> Octane       TVMXDCGIABBOFY-UHFFFAOYSA-N CCCCCCCC               Octane
+```
+
+
+#### Extractor functions
+
+The sources provide a lot of informations that can be retrieved using the functions described above. Often only specific inforamtion is needed. 
+Therefore, we added extractor functions for common identifiers.
+
+
+```r
+wi <- wd_ident("Q408646")
+wi
+#>                         smiles       cas  cid    einecs csid
+#> 1 Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl 3380-34-5 5564 222-182-2 5363
+#>                                                                    inchi
+#> 1 1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
+#>                      inchikey drugbank    zvg  chebi    chembl       unii
+#> 1 XEFQLINVKFYRCS-UHFFFAOYSA-N    08604 490400 164200 CHEMBL849 4NM5039Y5X
+#>                              source_url   query
+#> 1 https://www.wikidata.org/wiki/Q408646 Q408646
+cas(wi)
+#> [1] "3380-34-5"
+inchikey(wi)
+#> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+smiles(wi)
+#> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
+
+smiles(etox_basic(5564))
+#> Error in smiles.etox_basic(etox_basic(5564)): InChIkey is not returned by this datasource!
+```
+
 
 
 #### Misc functions
@@ -634,34 +682,6 @@ is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 ```
 
 
-
-#### I have multiple compounds. How should I query those?
-
-The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
-Every function has an example with multiple queries.
-Maybe, this will ge easier in the future...
-
-First we query alanwood:
-
-```r
-cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
-# query alanwood 
-aw_out <- lapply(cmp, aw_query)
-# this gives for each compound one list
-# str(aw_out)
-```
-
-Next we extract the cas:
-
-
-```r
-cas <- unlist(sapply(aw_out, '[', 'cas')) 
-data.frame(cmp, cas)
-#>                        cmp        cas
-#> 1                  Isodrin   465-73-6
-#> 2 Naphthalin1,6-disulfonat       <NA>
-#> 3               Pencycuron 66063-05-6
-```
 
 
 ### Acknowledgements

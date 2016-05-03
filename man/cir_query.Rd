@@ -24,7 +24,7 @@ See details for possible resolvers.}
 \item{...}{currently not used.}
 }
 \value{
-A list of character vectors.
+A list of character vectors. If first = TRUE a vector.
 }
 \description{
 Query Chemical Identifier Resolver

@@ -50,6 +50,7 @@ Source | Function(s) | API Docs | API key
 PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
+[OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -116,7 +117,7 @@ token = '<YOUR TOKEN HERE'
 Retrieve the ChemSpider ID of Triclosan
 
 ```{r get_csid}
-(id <- get_csid('Triclosan', token = token))
+(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
 ```
 
 Use this ID to query information from ChemSpider
@@ -147,7 +148,7 @@ cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 And get EPISuit predictions from ChemSpider
 
 ```{r cs_prop}
-cs_prop('5363')$epi[ , c(1:4)]
+cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 ```
 
 #### PubChem
@@ -188,10 +189,10 @@ info[[1]][1:5]
 
 
 #### PAN Pesticide Database
-`pan_query()` returns a list of 73 entries, here I extract only 4 of those:
+`pan_query()` returns a list of 75 entries, here I extract only 4 of those:
 ```{r pan}
-pan_list <- pan_query('lambda-Cyhalothrin', first = TRUE)
-pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
+pan_list <- pan_query('lambda-Cyhalothrin', match = 'best')
+pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
 ```
 
 
@@ -201,7 +202,7 @@ pan_list[c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adso
 `aw_query()` returns a list of 9 entries and can query common names and cas numbers:
 ```{r alanwood}
 aw_query('Fluazinam', type = 'commonname')
-aw_query('79622-59-6', type = 'cas')$cname
+aw_query('79622-59-6', type = 'cas')[[1]]$cname
 ```
 
 #### SRC PHYSPROP Database
@@ -219,14 +220,14 @@ ETOX: Information System Ecotoxicology and Environmental Quality Targets is a da
 First we need to query a substance ID:
 
 ```{r get_etoxid}
-id <- get_etoxid('Triclosan', mult = 'best')
-id
+ids <- get_etoxid('Triclosan', match = 'best')
+ids
 ```
 `get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
-Other options are `mult = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
+Other options are `match = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
 
 ```{r}
-get_etoxid('Triclosan', mult = 'all')
+get_etoxid('Triclosan', match = 'all')
 ```
 
 
@@ -234,7 +235,7 @@ get_etoxid('Triclosan', mult = 'all')
 With this substance ID we can query further information from ETOX, e.g.:
 
 ```{r etox_basic}
-etox_basic(id)
+etox_basic(ids$etoxid)[[1]]
 ```
 
 Which returns CAS, EC and GSBL numbers, as well as a synonym list.
@@ -242,13 +243,13 @@ Which returns CAS, EC and GSBL numbers, as well as a synonym list.
 We can also retrieve Quality Targets:
 
 ```{r etox_targets}
-targets <- etox_targets(id)
+targets <- etox_targets(ids$etoxid)[[1]]
 targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
 ```
 
 and results of ecotox tests:
 ```{r etox_tests}
-tests <- etox_tests(id)
+tests <- etox_tests(ids$etoxid)[[1]]
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
 ```
 
@@ -272,20 +273,43 @@ against the terms and conditions of use.
 #### ChemIDplus
 
 ```{r chemid}
-out <- ci_query(query = 'Triclosan', type = 'name')
-out$physprop
+out <- ci_query(query = 'Triclosan', type = 'name', match = 'best')
+out[['Triclosan']]$physprop
 ```
 
 
 
 #### Wikidata
 ```{r wikidata}
-ids <- get_wdid(query = 'Triclosan', language = 'en')
+ids <- get_wdid(query = 'Triclosan')
 ids
 
 # quera identifiers from wikidata
-wd_ident(ids)[1:3]
+wd_ident(ids$id)[1:5]
 ```
+
+
+#### OPSIN
+```{r opsin}
+opsin_query(c('Cyclopropane', 'Octane'))
+```
+
+
+#### Extractor functions
+
+The sources provide a lot of informations that can be retrieved using the functions described above. Often only specific inforamtion is needed. 
+Therefore, we added extractor functions for common identifiers.
+
+```{r extractors, error=TRUE}
+wi <- wd_ident("Q408646")
+wi
+cas(wi)
+inchikey(wi)
+smiles(wi)
+
+smiles(etox_basic(5564))
+```
+
 
 
 #### Misc functions
@@ -321,28 +345,6 @@ is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 ```
 
 
-
-#### I have multiple compounds. How should I query those?
-
-The simples possibly is to 1) Query all compounds ant store the results in a list and 2) extract the needed information from this list.
-Every function has an example with multiple queries.
-Maybe, this will ge easier in the future...
-
-First we query alanwood:
-```{r multi_alanwood}
-cmp <- c("Isodrin", "Naphthalin1,6-disulfonat", "Pencycuron")
-# query alanwood 
-aw_out <- lapply(cmp, aw_query)
-# this gives for each compound one list
-# str(aw_out)
-```
-
-Next we extract the cas:
-
-```{r multi_extract}
-cas <- unlist(sapply(aw_out, '[', 'cas')) 
-data.frame(cmp, cas)
-```
 
 
 ### Acknowledgements

@@ -22,7 +22,6 @@ test_that("is.inchikey() returns correct results", {
   expect_false(is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N'))
   expect_error(is.inchikey(c('BQJCRHHNABKAKU-KBQPJGBKSA-N', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
 
-  expect_message(is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider'))
   g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
   b <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA', type = 'chemspider')
 
@@ -42,3 +41,5 @@ test_that("is.smiles() returns correct results", {
   expect_false(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)ClJ'))
   expect_error(is.smiles(c('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl', 'Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl')))
 })
+
+

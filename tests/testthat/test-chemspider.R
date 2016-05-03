@@ -1,64 +1,68 @@
 context("chemspider")
 token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
 
-require(RCurl)
-chk_cs <- function(){
-  qurl <- 'http://www.chemspider.com/Search.asmx/SimpleSearch?query=Triclosan&token=37bf5e57-9091-42f5-9274-650a64398aaf'
-  Sys.sleep(0.2)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error'))
-    skip("Server is down!")
-}
-
 
 test_that("get_csid()", {
-  chk_cs()
+  comps <- c("Triclosan", "50-00-0", "xxxxxx")
+  o1 <- get_csid(comps, token = token, verbose = TRUE)
+  o2 <- get_csid(comps, token = token, verbose = TRUE, first = FALSE)
 
-  tt <- get_csid("Triclosan", token = token, verbose = FALSE)
-  expect_equal(tt, '5363')
-  expect_equal(get_csid("xxxxxxxxx", token = token, verbose = FALSE), NA)
-  expect_error(get_csid(c("a", "b"), token = token))
-  expect_warning(get_csid(NA, token = token))
-  expect_true(is.vector(tt))
+  expect_is(o1, 'character')
+  expect_is(o2, 'list')
+  expect_equal(length(o1),3)
+  expect_equal(length(o2), 3)
+  expect_true(is.na(o1[[3]]))
+  expect_true(is.na(o2[[3]]))
+  expect_equal(o1[[1]], '5363')
+  expect_equal(o2[[2]], '692')
+  expect_true(is.na(get_csid(NA, token = token, verbose = TRUE)))
 })
 
 
 test_that("cs_compinfo()", {
-  chk_cs()
-
-  tt <- cs_compinfo('5363', token, verbose = FALSE)
-  expect_equal(length(tt), 5)
-  expect_equal(tt[['smiles']],
-               "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
-  expect_warning(cs_compinfo('aaaa', token, verbose = FALSE))
-  expect_error(cs_compinfo(c("a", "b"), token = token))
+  comps <- c("2157", "5363" )
+  o1 <- cs_compinfo(comps, token)
+  expect_is(o1, 'data.frame')
+  expect_equal(dim(o1), c(2, 6))
+  expect_equal(o1$csid[1], '2157')
+  expect_true(all(is.na(cs_compinfo(NA, token)[ 1, 1:5])))
   })
 
 
 test_that("cs_extcompinfo()", {
-  chk_cs()
-  tt <- cs_extcompinfo('5363', token = token, verbose = FALSE)
-  expect_equal(tt[['average_mass']],
-               289.5418)
-  expect_equal(length(tt), 13)
-  expect_warning(cs_extcompinfo('aaaa', token, verbose = FALSE))
-  expect_error(cs_extcompinfo(c("a", "b"), token = token))
+  comps <- c("2157", "5363" )
+  o1 <- cs_extcompinfo(comps, token)
+  expect_is(o1, 'data.frame')
+  expect_equal(dim(o1), c(2, 14))
+  expect_equal(o1$csid[1], '2157')
+  expect_true(all(is.na(cs_extcompinfo(c(2157, NA), token)[ 2, 1:5])))
+})
+
+test_that("cs_prop()", {
+  id <- '5363'
+  m1 <- cs_prop(id)
+
+  expect_is(m1, 'list')
+  expect_equal(length(m1), 1)
+  expect_equal(length(m1[[1]]), 3)
+
+  expect_is(m1[[1]]$epi, 'data.frame')
+
 })
 
 
 # integration tests
 test_that("csid_extcompinfo(get_cid())", {
-  chk_cs()
   tt <- get_csid('Triclosan', token = token, verbose = FALSE)
   tt2 <- cs_extcompinfo(tt,
                         token = token, verbose = FALSE)
   expect_equal(tt2[['average_mass']],
-               289.5418)
-  expect_equal(length(tt2), 13)
+               "289.5418")
+  expect_equal(ncol(tt2), 14)
 })
 
 
+# converters
 test_that("cs_csid_mol()", {
   m1 <- cs_csid_mol(5363, token = token, verbose = FALSE)
   m2 <- cs_csid_mol(5363, token = token, parse = FALSE, verbose = FALSE)
@@ -226,66 +230,53 @@ test_that("cs_convert()", {
   inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
   smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
 
-  expect_error(cs_convert(c(inchikey, inchikey), from = 'inchikey', to = 'csid'))
   expect_error(cs_convert(csid, from = 'csid', to = 'mol'))
   expect_error(cs_convert(csid, from = 'csid', to = 'inchikey'))
 
   m1 <- cs_convert(csid, from = 'csid', to = 'mol', token = token)
   m1r <- cs_convert(csid, from = 'csid', to = 'mol', token = token, parse = FALSE)
   expect_is(m1, 'list')
-  expect_equal(length(m1), 4)
-  expect_is(m1$ab, 'data.frame')
-  expect_is(m1$bb, 'data.frame')
-  expect_equal(unname(m1$cl[1]), "22")
-  expect_equal(unname(m1$cl[2]), "26")
-  expect_is(m1r, 'character')
-  expect_equal(length(m1r), 1)
+  expect_equal(length(m1[[1]]), 4)
+  expect_is(m1[[1]]$ab, 'data.frame')
+  expect_is(m1[[1]]$bb, 'data.frame')
+  expect_equal(unname(m1[[1]]$cl[1]), "22")
+  expect_equal(unname(m1[[1]]$cl[2]), "26")
+  expect_is(m1r[[1]], 'character')
+  expect_equal(length(m1r[[1]]), 1)
 
   m2 <- cs_convert(inchikey, from = 'inchikey', to = 'csid')
-  expect_equal(m2, csid)
+  expect_equal(m2[[1]], csid)
 
   m3 <- cs_convert(inchikey, from = 'inchikey', to = 'inchi')
-  expect_equal(m3, inchi)
+  expect_equal(m3[[1]], inchi)
 
   m4 <- cs_convert(inchikey, from = 'inchikey', to = 'mol')
-  expect_is(m4, 'list')
-  expect_equal(length(m4), 4)
-  expect_is(m4$ab, 'data.frame')
-  expect_is(m4$bb, 'data.frame')
-  expect_equal(unname(m4$cl[1]), "21")
-  expect_equal(unname(m4$cl[2]), "25")
+  expect_is(m4[[1]], 'list')
+  expect_equal(length(m4[[1]]), 4)
+  expect_is(m4[[1]]$ab, 'data.frame')
+  expect_is(m4[[1]]$bb, 'data.frame')
+  expect_equal(unname(m4[[1]]$cl[1]), "21")
+  expect_equal(unname(m4[[1]]$cl[2]), "25")
 
   m5 <- cs_convert(inchi, from = 'inchi', to = 'csid')
-  expect_equal(m5, csid)
+  expect_equal(m5[[1]], csid)
 
   m6 <- cs_convert(inchi, from = 'inchi', to = 'inchikey')
-  expect_equal(m6, inchikey)
+  expect_equal(m6[[1]], inchikey)
 
   m7 <- cs_convert(inchi, from = 'inchi', to = 'mol')
-  expect_is(m7, 'list')
-  expect_equal(length(m7), 4)
-  expect_is(m7$ab, 'data.frame')
-  expect_is(m7$bb, 'data.frame')
-  expect_equal(unname(m7$cl[1]), "25")
-  expect_equal(unname(m7$cl[2]), "29")
+  expect_is(m7[[1]], 'list')
+  expect_equal(length(m7[[1]]), 4)
+  expect_is(m7[[1]]$ab, 'data.frame')
+  expect_is(m7[[1]]$bb, 'data.frame')
+  expect_equal(unname(m7[[1]]$cl[1]), "25")
+  expect_equal(unname(m7[[1]]$cl[2]), "29")
 
   m8 <- cs_convert(inchi, from = 'inchi', to = 'smiles')
-  expect_equal(m8, smiles)
+  expect_equal(m8[[1]], smiles)
 
   m9 <- cs_convert(smiles, from = 'smiles', to = 'inchi')
-  expect_equal(m9, inchi)
+  expect_equal(m9[[1]], inchi)
 })
 
 
-test_that("cs_prop()", {
-  id <- '5363'
-  m1 <- cs_prop(id)
-
-  expect_error(cs_prop(c(id, id)))
-
-  expect_is(m1, 'list')
-  expect_equal(length(m1), 3)
-
-  expect_is(m1$epi, 'data.frame')
-
-})

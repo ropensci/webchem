@@ -68,8 +68,6 @@ is.inchikey_cs <- function(x, verbose = TRUE){
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
   qurl <- paste0(baseurl, 'inchi_key=', x)
-  if (verbose)
-    message(qurl)
   Sys.sleep(0.1)
   h <- try(read_xml(qurl), silent = TRUE)
   if (inherits(h, "try-error")) {
@@ -124,7 +122,7 @@ is.inchikey_format = function(x, verbose = TRUE) {
   let <- strsplit(x, split = '')[[1]]
   if (any(grepl("[[:digit:]]", let))) {
     if (verbose)
-      message('strings contains numbers.')
+      message('string contains numbers.')
     return(FALSE)
   }
   if (x != toupper(x)) {
@@ -235,9 +233,6 @@ is.cas <-  function(x, verbose = TRUE) {
 #'
 #' @description This function checks if a string is a valid SMILES by checking if (R)CDK can parse it.
 #' If it cannot be parsed by rcdk FALSE is returned, else TRUE.
-#'
-#' @import rcdk
-#'
 #' @param x character; input SMILES.
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
@@ -254,11 +249,15 @@ is.cas <-  function(x, verbose = TRUE) {
 #' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
 #' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 is.smiles <- function(x, verbose = TRUE) {
+  if (!requireNamespace("rcdk", quietly = TRUE)) {
+    stop("rcdk needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
   # x <- 'Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }
-  out <- try(parse.smiles(x), silent = TRUE)
+  out <- try(rcdk::parse.smiles(x), silent = TRUE)
   if (inherits(out, 'try-error')) {
     return(FALSE)
   } else {
@@ -328,3 +327,4 @@ parse_mol <- function(string) {
   names(bb) <- c('1', '2', 't', 's', 'x', 'r', 'c')
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
+

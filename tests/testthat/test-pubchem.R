@@ -1,7 +1,7 @@
 context("pubchem")
 
 test_that("get_cid()", {
-  expect_equal(get_cid('Triclosan')[[1]], '5564')
+  expect_equal(get_cid('Triclosan')[[1]], 5564)
   expect_true(length(get_cid('Triclosan', arg = 'name_type=word')[[1]]) > 1)
   expect_true(length(get_cid('Triclosan', arg = 'name_type=word', first = TRUE)[[1]]) == 1)
   expect_true(length(get_cid(c('Triclosan', 'Aspirin'))) == 2)
@@ -24,6 +24,7 @@ test_that("pc_synonyms", {
   expect_equal(pc_synonyms('Triclosan')[[1]][1], '5564')
   expect_equal(length(pc_synonyms(c('Triclosan', 'Aspirin'))), 2)
   expect_equal(pc_synonyms("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = 'inchikey')[[1]][1], "12345")
+  expect_true(is.na(pc_synonyms('xxxxx')[[1]]))
 })
 
 

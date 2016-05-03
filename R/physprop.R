@@ -26,7 +26,15 @@
 #' @examples
 #' \dontrun{
 #' pp_query('50-00-0')
-#' pp_query(c('50-00-0', '79622-59-6', 'xxxxx'))
+#' out <- pp_query(c('50-00-0', '79622-59-6', 'xxxxx'))
+#' out
+#'
+#' # extract lop-P
+#'sapply(out, function(y){
+#'  if (length(y) == 1 && is.na(y))
+#'    return(NA)
+#'  y$prop$value[y$prop$variable == 'Log P (octanol-water)']
+#'  })
 #' }
 
 pp_query <- function(cas, verbose = TRUE){
@@ -37,7 +45,7 @@ pp_query <- function(cas, verbose = TRUE){
     qurl <- paste0(baseurl, query)
     if (verbose)
       message('Querying ', qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
     ttt <- try(
       read_html(
         qurl,    # for http
