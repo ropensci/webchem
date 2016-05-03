@@ -117,7 +117,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
     if (verbose)
       message(qurl)
     Sys.sleep(1.5)
-    h <- try(GET(qurl, timeout(2)))
+    h <- try(GET(qurl, timeout(5)))
     if (inherits(h, "try-error")) {
       warning('Problem with web service encountered... Returning NA.')
       return(NA)
