@@ -20,11 +20,11 @@ addons:
     packages:
     - libcurl4-openssl-dev
     - libxml2-dev
+    - r-cran-rcdk
 
 r_packages:
   - devtools
   - xml2
-  - rcdk
 
 r_github_packages:
   - jimhester/covr
