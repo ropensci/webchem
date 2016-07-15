@@ -1,5 +1,5 @@
 language: r
-sudo: true
+sudo: required
 cache: packages
 
 r:
@@ -29,6 +29,9 @@ r_packages:
 r_github_packages:
   - jimhester/covr
   - jeroenooms/curl
+
+before_script:
+  - sudo R CMD javareconf
 
 # report to codecov
 after_success:
