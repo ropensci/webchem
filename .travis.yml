@@ -22,6 +22,9 @@ addons:
     - libxml2-dev
     - openjdk-8-jre
 
+before_install:
+ - sudo R CMD javareconf
+
 r_packages:
   - devtools
   - xml2
