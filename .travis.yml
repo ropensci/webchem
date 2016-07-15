@@ -20,7 +20,7 @@ addons:
     packages:
     - libcurl4-openssl-dev
     - libxml2-dev
-    - r-cran-rcdk
+    - r-cran-rjava
 
 r_packages:
   - devtools
