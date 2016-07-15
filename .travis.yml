@@ -23,7 +23,10 @@ addons:
     - openjdk-8-jre
 
 before_install:
- - sudo R CMD javareconf
+  - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre
+  - export PATH=$PATH:$JAVA_HOME/bin
+  - export LD_LIBRARY_PATH=/usr/lib/jvm/java-8-oracle/lib/amd64:/usr/lib/jvm/java-8-oracle/jre/lib/amd64/server
+  - sudo R CMD javareconf
 
 r_packages:
   - devtools
