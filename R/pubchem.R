@@ -43,18 +43,15 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 
   foo <- function(query, from, first, verbose, ...){
     prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
-    input <- paste0('/compound/', from)
+    input <- paste0('/compound/', from, "/")
     output <- '/cids/JSON'
     if (!is.null(arg))
       arg <- paste0('?', arg)
-    qurl <- paste0(prolog, input, output, arg)
+    qurl <- paste0(prolog, input, query, output, arg)
     if (verbose)
       message(qurl)
     Sys.sleep(0.5)
-    cont <- try(content(POST(qurl,
-                             body = paste0(from, '=', query)
-                             ), type = 'text'), silent = TRUE
-    )
+    cont <- try(content(GET(qurl), type = 'text'), silent = TRUE)
     if (inherits(cont, "try-error")) {
       warning('Problem with web service encountered... Returning NA.')
       return(NA)
