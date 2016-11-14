@@ -20,13 +20,13 @@ a data.frame with 5 colums csid (ChemSpider ID), inchi,
   inchikey, smiles, source_url and the query
 }
 \description{
-Get record details from ChemspiderId (CSID), see \url{http://www.chemspider.com/}
+Get record details from ChemspiderId (CSID), see \url{https://www.chemspider.com/}
 }
 \note{
 A security token is neeeded. Please register at RSC
 \url{https://www.rsc.org/rsc-id/register}
 for a security token.
-Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
+Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{
