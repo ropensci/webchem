@@ -3,6 +3,7 @@
 #'
 #' @docType package
 #' @name webchem
+#' @importFrom methods is
 NULL
 
 

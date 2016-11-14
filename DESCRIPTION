@@ -24,7 +24,8 @@ Imports:
     rvest,
     RCurl,
     jsonlite,
-    stringr
+    stringr,
+    methods
 Suggests:
     testthat,
     rcdk
