@@ -53,7 +53,8 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
     Sys.sleep(0.5)
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
-                             ), type = 'text'), silent = TRUE
+                             ), type = 'text', encoding = 'UTF-8'), 
+                silent = TRUE
     )
     if (inherits(cont, "try-error")) {
       warning('Problem with web service encountered... Returning NA.')
