@@ -53,7 +53,7 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
     Sys.sleep(0.2)
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
-                             ), type = 'text', encoding = 'UTF-8'), 
+                             ), type = 'text', encoding = 'UTF-8'),
                 silent = TRUE
     )
     if (inherits(cont, "try-error")) {
