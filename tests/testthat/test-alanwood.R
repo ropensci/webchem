@@ -2,6 +2,8 @@ context("alanwood")
 
 
 test_that("alanwood, commonname", {
+  skip_on_cran()
+
   comps <- c('Fluazinam', "S-Metolachlor", "xxxxx")
   o1 <- aw_query(comps, type = 'commonname')
 
@@ -16,6 +18,8 @@ test_that("alanwood, commonname", {
 
 
 test_that("alanwood, cas", {
+  skip_on_cran()
+
   comps <- c("79622-59-6", "87392-12-9", "xxxxx")
   o1 <- aw_query(comps, type = 'cas')
 
@@ -30,6 +34,8 @@ test_that("alanwood, cas", {
 })
 
 test_that("alanwood, build_index", {
+  skip_on_cran()
+
   idx <- build_aw_idx()
   expect_is(idx, 'data.frame')
   expect_equal(ncol(idx), 4)
@@ -39,5 +45,7 @@ test_that("alanwood, build_index", {
 })
 
 test_that("alanwood index is up to date", {
+  skip_on_cran()
+
   expect_true(Sys.Date() - attr(aw_idx, 'date') < 30)
 })

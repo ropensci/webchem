@@ -1,6 +1,8 @@
 context("pubchem")
 
 test_that("get_cid()", {
+  skip_on_cran()
+
   expect_equal(get_cid('Triclosan')[[1]], 5564)
   expect_true(length(get_cid('Triclosan', arg = 'name_type=word')[[1]]) > 1)
   expect_true(length(get_cid('Triclosan', arg = 'name_type=word', first = TRUE)[[1]]) == 1)
@@ -11,6 +13,8 @@ test_that("get_cid()", {
 
 
 test_that("pc_prop", {
+  skip_on_cran()
+
   a <- pc_prop('5564', properties = 'CanonicalSmiles', verbose = FALSE)
   b <- pc_prop('xxx', properties = 'CanonicalSmiles', verbose = FALSE)
   c <- pc_prop('5564', properties = c('CanonicalSmiles', 'InChiKey'), verbose = FALSE)
@@ -21,6 +25,8 @@ test_that("pc_prop", {
 })
 
 test_that("pc_synonyms", {
+  skip_on_cran()
+
   expect_equal(pc_synonyms('Triclosan')[[1]][1], '5564')
   expect_equal(length(pc_synonyms(c('Triclosan', 'Aspirin'))), 2)
   expect_equal(pc_synonyms("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = 'inchikey')[[1]][1], "12345")
@@ -29,6 +35,8 @@ test_that("pc_synonyms", {
 
 
 test_that("cid integration tests", {
+  skip_on_cran()
+
   expect_equal(pc_prop(get_cid('Triclosan')[[1]], properties = 'CanonicalSmiles')$CanonicalSMILES, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
   expect_true(is.na(pc_prop(NA, properties = 'CanonicalSmiles', verbose = FALSE)))
 })

@@ -2,6 +2,8 @@ context("wikidata")
 
 
 test_that("get_wdid returns correct results", {
+  skip_on_cran()
+
   # test general
   comps <- c('DDT', 'Aspirin', 'xdewrwdcadsr4w')
   o1 <- get_wdid(comps, match = 'best')
@@ -23,6 +25,8 @@ test_that("get_wdid returns correct results", {
 
 
 test_that("wd_ident returns correct results", {
+  skip_on_cran()
+
   id <- c( "Q163648", "Q18216", "asndalsr", NA)
   o1 <- wd_ident(id)
   expect_is(o1, 'data.frame')
@@ -36,6 +40,8 @@ test_that("wd_ident returns correct results", {
 
 
 test_that("wd integration test", {
+  skip_on_cran()
+
   d <- wd_ident(get_wdid('Glyphosate', 'en', 'best')$id)
   f <- wd_ident(get_wdid('xxxxx', 'en', 'best')$id)
 

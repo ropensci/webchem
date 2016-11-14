@@ -42,7 +42,7 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
   # from = 'name'
 
   foo <- function(query, from, first, verbose, ...){
-    prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
+    prolog <- 'https://pubchem.ncbi.nlm.nih.gov/rest/pug'
     input <- paste0('/compound/', from)
     output <- '/cids/JSON'
     if (!is.null(arg))
@@ -120,7 +120,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   napos <- which(is.na(cid))
   cid_o <- cid
   cid <- cid[!is.na(cid)]
-  prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
+  prolog <- 'https://pubchem.ncbi.nlm.nih.gov/rest/pug'
   input <- '/compound/cid'
   if (is.null(properties))
     properties <- c('MolecularFormula', 'MolecularWeight', 'CanonicalSMILES',
@@ -217,7 +217,7 @@ pc_synonyms <- function(query, from = 'name', verbose = TRUE, arg = NULL, ...) {
   # from = 'name'
 
   foo <- function(query, from, verbose, ...){
-    prolog <- 'http://pubchem.ncbi.nlm.nih.gov/rest/pug'
+    prolog <- 'https://pubchem.ncbi.nlm.nih.gov/rest/pug'
     input <- paste0('/compound/', from)
     output <- '/synonyms/JSON'
     if (!is.null(arg))

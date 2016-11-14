@@ -34,6 +34,8 @@ out_pan_query <- pan_query(c('2,4-dichlorophenol', 'Atrazin'), match = 'best')
 
 
 test_that("cas is working", {
+  skip_on_cran()
+
   expect_error(cas(out_cs_extcompinfo))
   expect_equivalent(cas(out_etox_basic), "50-00-0")
   expect_error(cas(out_opsin_query))
@@ -45,6 +47,8 @@ test_that("cas is working", {
 })
 
 test_that("inchikey is working", {
+  skip_on_cran()
+
   expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
   expect_equivalent(inchikey(out_cs_extcompinfo), "XEFQLINVKFYRCS-UHFFFAOYAS")
   expect_equivalent(inchikey(out_cts_compinfo), c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N" ))
@@ -59,13 +63,15 @@ test_that("inchikey is working", {
 })
 
 test_that("smiles is working", {
+  skip_on_cran()
+
   expect_equivalent(smiles(out_cs_compinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
   expect_equivalent(smiles(out_cs_extcompinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
   expect_error(smiles(out_cts_compinfo))
   expect_error(smiles(out_etox_basic))
   expect_equivalent(smiles(out_opsin_query), c("C1CC1", "CCCCCCCC"))
   expect_error(smiles(out_aw_query))
-  expect_equivalent(smiles(out_wd_ident), c("Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl","CC(=O)Oc1ccccc1C(=O)O"))
+  expect_equivalent(smiles(out_wd_ident), c("C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl","CC(=O)OC1=CC=CC=C1C(=O)O"))
   expect_equivalent(smiles(out_pc_prop), c("C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl", "CC(=O)OC1=CC=CC=C1C(=O)O"))
   expect_error(smiles(out_pc_prop2))
   expect_error(smiles(out_pan_query))

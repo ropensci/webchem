@@ -2,6 +2,8 @@ context("opsin")
 
 
 test_that("opsin_query()", {
+  skip_on_cran()
+
   o1 <- opsin_query(c('Cyclopropane', 'Octane'))
   o2 <- opsin_query(c('xxxx'))
   expect_is(o1, 'data.frame')

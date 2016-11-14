@@ -2,11 +2,18 @@ webchem 0.1.1
 ======================
 
 NEW FEATURES
+* added ping_pubchem() to check whether pubchem is up & running
+* added cs_web_ping () to check whether the chemspider webpage is functional
 
 MINOR IMPROVEMENTS
+* updated allan wood index
 
 BUG FIXES
 * pc_prop() returned to many rows if last cid supplied was NA
+* Switched to https for NCBI, chemspider & chemid (Issue #120, reported by @jranke)
+* get_wdid() failed if non-ascii characters where returned by wikipedia
+* rcdk:parse.smiles() now returns NA if a SMILES string could not be parsed.
+   => broke is.smiles
 
 DEPRECATED FUNCTIONS
 

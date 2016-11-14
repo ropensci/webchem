@@ -13,6 +13,8 @@ chk_physprop <- function(){
 
 
 test_that("physprop returns correct results", {
+  skip_on_cran()
+
   chk_physprop()
 
   xx <- pp_query('xxxxx')

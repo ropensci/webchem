@@ -1,4 +1,5 @@
-library("testthat")
+library('testthat')
+library('webchem')
 
 # All of the tests rely on the API existing and behaving as documented. However,
 # the API occasionally falls over or stops working which lets to errors on CRAN.

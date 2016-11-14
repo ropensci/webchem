@@ -2,6 +2,8 @@ context("utils")
 
 
 test_that("is.cas() returns correct results", {
+  skip_on_cran()
+
   expect_true(is.cas('64-17-5'))
   expect_false(is.cas('64175'))
   expect_false(is.cas('4-17-5'))
@@ -13,6 +15,8 @@ test_that("is.cas() returns correct results", {
 
 
 test_that("is.inchikey() returns correct results", {
+  skip_on_cran()
+
   expect_true(is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N'))
   expect_false(is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA'))
   expect_false(is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-5'))
@@ -37,8 +41,10 @@ test_that("is.inchikey() returns correct results", {
 
 
 test_that("is.smiles() returns correct results", {
+  skip_on_cran()
+
   expect_true(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl'))
-  expect_false(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)ClJ'))
+  expect_false(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)ClWWX'))
   expect_error(is.smiles(c('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl', 'Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl')))
 })
 

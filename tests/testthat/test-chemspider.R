@@ -3,6 +3,8 @@ token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
 
 
 test_that("get_csid()", {
+  skip_on_cran()
+
   comps <- c("Triclosan", "50-00-0", "xxxxxx")
   o1 <- get_csid(comps, token = token, verbose = TRUE)
   o2 <- get_csid(comps, token = token, verbose = TRUE, first = FALSE)
@@ -20,6 +22,8 @@ test_that("get_csid()", {
 
 
 test_that("cs_compinfo()", {
+  skip_on_cran()
+
   comps <- c("2157", "5363" )
   o1 <- cs_compinfo(comps, token)
   expect_is(o1, 'data.frame')
@@ -30,6 +34,8 @@ test_that("cs_compinfo()", {
 
 
 test_that("cs_extcompinfo()", {
+  skip_on_cran()
+
   comps <- c("2157", "5363" )
   o1 <- cs_extcompinfo(comps, token)
   expect_is(o1, 'data.frame')
@@ -40,6 +46,8 @@ test_that("cs_extcompinfo()", {
 
 
 test_that("cs_prop()", {
+  skip_on_cran()
+
   id <- '5363'
   m1 <- cs_prop(id)
 
@@ -49,7 +57,7 @@ test_that("cs_prop()", {
 
   expect_is(m1[[1]]$epi, 'data.frame')
   expect_is(m1[[1]]$acd, 'data.frame')
-  expect_equal(m1[[1]]$source_url,  "http://www.chemspider.com/Chemical-Structure.5363.html")
+  expect_equal(m1[[1]]$source_url,  "https://www.chemspider.com/Chemical-Structure.5363.html")
   expect_equal(names(m1[[1]]$epi), c("prop", "value_pred", "unit_pred",
                                      "source_pred", "value_exp",
                                      "unit_exp", "source_exp"))
@@ -59,6 +67,8 @@ test_that("cs_prop()", {
 
 # integration tests
 test_that("csid_extcompinfo(get_cid())", {
+  skip_on_cran()
+
   tt <- get_csid('Triclosan', token = token, verbose = FALSE)
   tt2 <- cs_extcompinfo(tt,
                         token = token, verbose = FALSE)
@@ -70,6 +80,8 @@ test_that("csid_extcompinfo(get_cid())", {
 
 # converters
 test_that("cs_csid_mol()", {
+  skip_on_cran()
+
   m1 <- cs_csid_mol(5363, token = token, verbose = FALSE)
   m2 <- cs_csid_mol(5363, token = token, parse = FALSE, verbose = FALSE)
 
@@ -92,6 +104,8 @@ test_that("cs_csid_mol()", {
 
 
 test_that("cs_inchikey_csid()", {
+  skip_on_cran()
+
   m1 <- cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 
   expect_error(cs_inchikey_csid(c('BQJCRHHNABKAKU-KBQPJGBKSA-N','BQJCRHHNABKAKU-KBQPJGBKSA-N')))
@@ -107,6 +121,8 @@ test_that("cs_inchikey_csid()", {
 
 
 test_that("cs_inchikey_inchi()", {
+  skip_on_cran()
+
   m1 <- cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 
   expect_error(cs_inchikey_inchi(c('BQJCRHHNABKAKU-KBQPJGBKSA-N','BQJCRHHNABKAKU-KBQPJGBKSA-N')))
@@ -122,6 +138,8 @@ test_that("cs_inchikey_inchi()", {
 
 
 test_that("cs_inchikey_mol()", {
+  skip_on_cran()
+
   m1 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', verbose = FALSE)
   m2 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', parse = FALSE, verbose = FALSE)
 
@@ -145,6 +163,8 @@ test_that("cs_inchikey_mol()", {
 
 
 test_that("cs_inchi_csid()", {
+  skip_on_cran()
+
   inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
   m1 <- cs_inchi_csid(inchi)
 
@@ -161,6 +181,8 @@ test_that("cs_inchi_csid()", {
 
 
 test_that("cs_inchi_inchikey()", {
+  skip_on_cran()
+
   inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
   m1 <- cs_inchi_inchikey(inchi)
 
@@ -177,6 +199,8 @@ test_that("cs_inchi_inchikey()", {
 
 
 test_that("cs_inchi_mol()", {
+  skip_on_cran()
+
   inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
   m1 <- cs_inchi_mol(inchi, verbose = FALSE)
   m2 <- cs_inchi_mol(inchi, parse = FALSE, verbose = FALSE)
@@ -200,6 +224,8 @@ test_that("cs_inchi_mol()", {
 
 
 test_that("cs_inchi_smiles()", {
+  skip_on_cran()
+
   inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
   m1 <- cs_inchi_smiles(inchi)
 
@@ -216,6 +242,8 @@ test_that("cs_inchi_smiles()", {
 
 
 test_that("cs_smiles_inchi()", {
+  skip_on_cran()
+
   smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
   m1 <- cs_smiles_inchi(smiles)
 
@@ -231,6 +259,8 @@ test_that("cs_smiles_inchi()", {
 
 
 test_that("cs_convert()", {
+  skip_on_cran()
+
   inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   csid <- "4450907"
   inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"

@@ -1,6 +1,7 @@
 context("pan")
 
 test_that("pan_query()", {
+  skip_on_cran()
 
   a <- pan_query(c('Triclosan','Chlorpyrifos', 'xxxx', NA), match = 'best', verbose = FALSE)
   b <- pan_query(c('Triclosan','Chlorpyrifos', 'xxxx', NA), match = 'all', verbose = FALSE)

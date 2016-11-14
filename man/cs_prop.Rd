@@ -18,10 +18,10 @@ A list of lists with of three: acd (data.frame), epi (data.frame) and source_url
 }
 \description{
 Get predicted (ACD/Labs and EPISuite) chemical properties from ChemSpider,
-see \url{http://www.chemspider.com/}
+see \url{https://www.chemspider.com/}
 }
 \note{
-Please respect the Terms & conditions \url{http://www.rsc.org/help-legal/legal/terms-conditions/}.
+Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{

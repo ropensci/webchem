@@ -52,7 +52,10 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
     # use only matches on label
     search <- search[search$match$type %in% c('label', 'alias'), ]
     # # check matches
-    search <- search[tolower(search$match$text) == tolower(query), ]
+    search <- search[tolower(iconv(search$match$text,
+                                   "latin1",
+                                   "ASCII",
+                                   sub = "")) == tolower(query), ]
 
     if (nrow(search) > 1) {
       if (verbose)

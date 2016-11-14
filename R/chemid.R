@@ -60,9 +60,9 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
       return(NA)
     }
     baseurl <- switch(type,
-           rn = 'http://chem.sis.nlm.nih.gov/chemidplus/rn/',
-           name = 'http://chem.sis.nlm.nih.gov/chemidplus/name/startswith/',
-           inchikey = 'http://chem.sis.nlm.nih.gov/chemidplus/inchikey/')
+           rn = 'https://chem.sis.nlm.nih.gov/chemidplus/rn/',
+           name = 'https://chem.sis.nlm.nih.gov/chemidplus/name/startswith/',
+           inchikey = 'https://chem.sis.nlm.nih.gov/chemidplus/inchikey/')
     # return max 50 hits
     qurl <- paste0(baseurl, query, '?DT_START_ROW=0&DT_ROWS_PER_PAGE=50')
     if (verbose)

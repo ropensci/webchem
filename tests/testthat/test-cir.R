@@ -1,6 +1,8 @@
 context("cir")
 
 test_that("cir_query()", {
+  skip_on_cran()
+
   Sys.sleep(5)
   expect_equal(cir_query('Triclosan', 'mw', verbose = FALSE)[[1]], 289.5451)
   Sys.sleep(5)
