@@ -50,10 +50,11 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
     qurl <- paste0(prolog, input, output, arg)
     if (verbose)
       message(qurl)
-    Sys.sleep(0.5)
+    Sys.sleep(0.2)
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
-                             ), type = 'text'), silent = TRUE
+                             ), type = 'text', encoding = 'UTF-8'),
+                silent = TRUE
     )
     if (inherits(cont, "try-error")) {
       warning('Problem with web service encountered... Returning NA.')
@@ -142,7 +143,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
   qurl <- paste0(prolog, input, output)
   if (verbose)
     message(qurl)
-  Sys.sleep(0.5)
+  Sys.sleep(0.2)
   cont <- try(content(POST(qurl,
                            body = list("cid" = paste(cid, collapse = ',')
                                        )),
@@ -225,7 +226,7 @@ pc_synonyms <- function(query, from = 'name', verbose = TRUE, arg = NULL, ...) {
     qurl <- paste0(prolog, input, output, arg)
     if (verbose)
       message(qurl)
-    Sys.sleep(0.5)
+    Sys.sleep(0.2)
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
     )), silent = TRUE
