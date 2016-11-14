@@ -7,6 +7,7 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 * pc_prop() returned to many rows if last cid supplied was NA
+* Switched to https for NCBI
 
 DEPRECATED FUNCTIONS
 
