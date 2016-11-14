@@ -34,6 +34,8 @@ out_pan_query <- pan_query(c('2,4-dichlorophenol', 'Atrazin'), match = 'best')
 
 
 test_that("cas is working", {
+  skip_on_cran()
+
   expect_error(cas(out_cs_extcompinfo))
   expect_equivalent(cas(out_etox_basic), "50-00-0")
   expect_error(cas(out_opsin_query))
@@ -45,6 +47,8 @@ test_that("cas is working", {
 })
 
 test_that("inchikey is working", {
+  skip_on_cran()
+
   expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
   expect_equivalent(inchikey(out_cs_extcompinfo), "XEFQLINVKFYRCS-UHFFFAOYAS")
   expect_equivalent(inchikey(out_cts_compinfo), c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N" ))
@@ -59,6 +63,8 @@ test_that("inchikey is working", {
 })
 
 test_that("smiles is working", {
+  skip_on_cran()
+
   expect_equivalent(smiles(out_cs_compinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
   expect_equivalent(smiles(out_cs_extcompinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
   expect_error(smiles(out_cts_compinfo))

@@ -2,6 +2,8 @@ context("chemid")
 
 
 test_that("chemid returns correct results", {
+  skip_on_cran()
+
   o1 <- ci_query(c('xxxxx', NA, 'Aspirin', 'Triclosan'), type = 'name', match = 'best')
   o2 <- ci_query('50-00-0', type = 'rn')
   o3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')

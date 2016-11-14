@@ -21,6 +21,8 @@ chk_cir <- function(){
 
 
 test_that("cts_compinfo()", {
+  skip_on_cran()
+
   chk_cts()
   expect_error(cts_compinfo('xxx'))
 
@@ -36,6 +38,8 @@ test_that("cts_compinfo()", {
 
 
 test_that("cts_convert()", {
+  skip_on_cran()
+
   chk_cts()
   comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
   expect_error(cts_convert(comp, c('Chemical Name', 'CAS'), 'CAS'))
@@ -58,6 +62,8 @@ test_that("cts_convert()", {
 
 
 test_that("fromto", {
+  skip_on_cran()
+
   to <- cts_to()
   from <- cts_from()
 

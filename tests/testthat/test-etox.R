@@ -1,6 +1,8 @@
 context("etox")
 
 test_that("get_etoxid returns correct results", {
+  skip_on_cran()
+
   # test general
   comps <- c('Triclosan', 'Glyphosate', 'xxxx')
   o1 <- get_etoxid(comps, match = 'best')
@@ -26,6 +28,8 @@ test_that("get_etoxid returns correct results", {
 
 
 test_that("etox_basic returns correct results", {
+  skip_on_cran()
+
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_basic(ids)
 
@@ -40,6 +44,8 @@ test_that("etox_basic returns correct results", {
 
 
 test_that("etox_targets returns correct results", {
+  skip_on_cran()
+
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_targets(ids)
 
@@ -54,6 +60,8 @@ test_that("etox_targets returns correct results", {
 
 
 test_that("etox_tests returns correct results", {
+  skip_on_cran()
+
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_tests(ids)
 
@@ -68,6 +76,8 @@ test_that("etox_tests returns correct results", {
 
 
 test_that("etox integration tests", {
+  skip_on_cran()
+
   comps <- c('Triclosan', 'Glyphosate', 'xxxx')
   ids_b <- get_etoxid(comps, match = 'best')
   ids_a <- get_etoxid(comps, match = 'all')
