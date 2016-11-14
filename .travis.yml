@@ -22,6 +22,10 @@ addons:
     - libxml2-dev
     - oracle-java8-installer
 
+before_install:
+  - jdk_switcher use oraclejdk8
+  - java -version
+
 r_packages:
   - devtools
   - xml2
