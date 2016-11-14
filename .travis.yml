@@ -1,49 +1,49 @@
-## Sample .travis.yml file for use with metacran/r-builder
-## See https://github.com/metacran/r-builder for detail
-language: c
+language: r
 sudo: required
+cache: packages
+
+r:
+  - devel
+#  - release
+
+env:
+  global:
+    - _R_CRAN_CHECK_INCOMING_=false
+
+
+r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
+warnings_are_errors: false
+r_check_revdep: false
+
+addons:
+  apt:
+    packages:
+    - libcurl4-openssl-dev
+    - libxml2-dev
+    - openjdk-7-jre
 
 before_install:
-  - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
-  - chmod 755 pkg-build.sh
-  - ./pkg-build.sh bootstrap
+  - export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
+  - export PATH=$PATH:$JAVA_HOME/bin
+  - export LD_LIBRARY_PATH=/usr/lib/jvm/java-8-oracle/lib/amd64:/usr/lib/jvm/java-8-oracle/jre/lib/amd64/server
 
-install:
-  - ./pkg-build.sh install_deps
-  - ./pkg-build.sh install_github jimhester/robustr
-  - ./pkg-build.sh install_github jimhester/covr
-  - ./pkg-build.sh install_github jeroenooms/curl
+r_packages:
+  - devtools
+  - xml2
 
-script:
-  - ./pkg-build.sh run_tests
+r_github_packages:
+  - jimhester/covr
+  - jeroenooms/curl
 
-# print timings (of examples) and sysinfo
-after_script:
-  - ./pkg-build.sh dump_logs_by_extension "timings"
-  - ./pkg-build.sh dump_sysinfo
-
-after_failure:
-  - ./pkg-build.sh dump_logs
-
-# report to coveralls
+# report to codecov
 after_success:
-  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'; fi
+  - Rscript -e 'covr::codecov(exclusions = list("R/ppdb.R"), quiet = FALSE)'
 
+# report to maintainer
 notifications:
   email:
     recipients:
     - szoecs@uni-landau.de
-    on_success: never
-    on_failure: always
+    on_success: change
+    on_failure: change
 
-env:
-  matrix:
-    # - RVERSION=oldrel
-    - RVERSION=release
-    - RVERSION=devel COVERAGE=true
-
-  global:
-    # COVERALLS_TOKEN
-    - secure: "WJeHUOPD0YrYyrxWUGpdrBSGJMB361m0nHC19ohwIWbdGysksgTTkyBDTamD62XRKjJSlGpHohMU3OiOX0YE45mypgsKvfdqP4CTBbc7J//fYLPUIttVXOiCp15qNFr7NLjKB78BG2K0wqsjVVb65oJg+uzl89Rt+xjyV1cFxD0="
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --timings --as-cran"
-    - _R_CHECK_TIMINGS_="0"

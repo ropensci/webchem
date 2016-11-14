@@ -46,7 +46,7 @@ test_that("etox_targets returns correct results", {
   expect_is(o1, 'list')
   expect_equal(length(o1), 4)
   expect_equal(o1[['20179']]$res$Substance[1], "Triclosan")
-  expect_equal(ncol(o1[['20179']]$res), 32)
+  expect_equal(ncol(o1[['20179']]$res), 33)
   expect_is(o1[['20179']]$res, 'data.frame')
   expect_true(is.na(o1[[3]]))
   expect_true(is.na(o1[[4]]))
@@ -92,7 +92,7 @@ test_that("etox integration tests", {
   expect_is(int2, 'list')
   expect_equal(length(int2), 3)
   expect_equal(int2[['20179']]$res$Substance[1], "Triclosan")
-  expect_equal(ncol(int2[['20179']]$res), 32)
+  expect_equal(ncol(int2[['20179']]$res), 33)
   expect_is(int2[['20179']]$res, 'data.frame')
   expect_true(is.na(int2[[3]]))
 
