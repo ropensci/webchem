@@ -11,6 +11,9 @@ MINOR IMPROVEMENTS
 BUG FIXES
 * pc_prop() returned to many rows if last cid supplied was NA
 * Switched to https for NCBI, chemspider & chemid (Issue #120, reported by @jranke)
+* get_wdid() failed if non-ascii characters where returned by wikipedia
+* rcdk:parse.smiles() now returns NA if a SMILES string could not be parsed.
+   => broke is.smiles
 
 DEPRECATED FUNCTIONS
 

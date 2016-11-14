@@ -258,7 +258,7 @@ is.smiles <- function(x, verbose = TRUE) {
     stop('Cannot handle multiple input strings.')
   }
   out <- try(rcdk::parse.smiles(x), silent = TRUE)
-  if (inherits(out, 'try-error')) {
+  if (inherits(out, 'try-error') | is.na(out)) {
     return(FALSE)
   } else {
     return(TRUE)
