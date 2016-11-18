@@ -22,8 +22,11 @@ If it cannot be parsed by rcdk FALSE is returned, else TRUE.
 This function can handle only one SMILES string.
 }
 \examples{
+\dontrun{
+# might fail if rcdk is not working properly
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
+}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
