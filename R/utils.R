@@ -248,8 +248,8 @@ is.cas <-  function(x, verbose = TRUE) {
 #' @examples
 #' \dontrun{
 #' # might fail if rcdk is not working properly
-#' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
-#' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
+#' # is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
+#' # is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 #' }
 is.smiles <- function(x, verbose = TRUE) {
   if (!requireNamespace("rcdk", quietly = TRUE)) {
