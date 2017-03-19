@@ -5,7 +5,7 @@ webchem
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
-[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/github/ropensci/webchem?branch=tests)
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests)
 <!--
 [![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
 -->
@@ -37,6 +37,7 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
+[Flavornet](http://www.flavornet.org) | `fn_percept` | none | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -83,7 +84,7 @@ cir_query('Triclosan', 'cas', first = TRUE)
 #> "3380-34-5"
 cir_query('Triclosan', 'mw')
 #> $Triclosan
-#> [1] NA
+#> [1] 289.5451
 ```
 
 Query SMILES and InChIKey from CAS (Triclosan).
@@ -131,21 +132,21 @@ Use this ID to query information from ChemSpider
 
 ```r
 cs_extcompinfo(id, token = token)
-#>           csid                     mf                         smiles
-#> Aspirin   2157        C_{9}H_{8}O_{4}          CC(=O)Oc1ccccc1C(=O)O
-#> Triclosan 5363 C_{12}H_{7}Cl_{3}O_{2} c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl
-#>                                                                                 inchi
-#> Aspirin           InChI=1/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)
-#> Triclosan InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
-#>                            inchikey average_mass       mw monoiso_mass
-#> Aspirin   BSYNRYMUTXBXSQ-UHFFFAOYAW     180.1574 180.1574   180.042252
-#> Triclosan XEFQLINVKFYRCS-UHFFFAOYAS     289.5418 289.5418   287.951172
-#>           nominal_mass alogp xlogp common_name
-#> Aspirin            180     0     0     Aspirin
-#> Triclosan          288  5.53     5   Triclosan
-#>                                                       source_url     query
-#> Aspirin   http://www.chemspider.com/Chemical-Structure.2157.html   Aspirin
-#> Triclosan http://www.chemspider.com/Chemical-Structure.5363.html Triclosan
+#>   csid                     mf                         smiles
+#> 1 2157        C_{9}H_{8}O_{4}          CC(=O)Oc1ccccc1C(=O)O
+#> 2 5363 C_{12}H_{7}Cl_{3}O_{2} c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl
+#>                                                                         inchi
+#> 1         InChI=1/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)
+#> 2 InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
+#>                    inchikey average_mass       mw monoiso_mass
+#> 1 BSYNRYMUTXBXSQ-UHFFFAOYAW     180.1574 180.1574   180.042252
+#> 2 XEFQLINVKFYRCS-UHFFFAOYAS     289.5418 289.5418   287.951172
+#>   nominal_mass alogp xlogp common_name
+#> 1          180     0     0     Aspirin
+#> 2          288  5.53     5   Triclosan
+#>                                                source_url query
+#> 1 https://www.chemspider.com/Chemical-Structure.2157.html     1
+#> 2 https://www.chemspider.com/Chemical-Structure.5363.html     2
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
@@ -220,8 +221,8 @@ Use this CID to retrieve some chemical properties:
 ```r
 pc_prop(c(5564,2244), properties = c('InChIKey', 'MolecularFormula', 'MolecularWeight'))
 #>    CID MolecularFormula MolecularWeight                    InChIKey
-#> 1 5564       C12H7Cl3O2        289.5418 XEFQLINVKFYRCS-UHFFFAOYSA-N
-#> 2 2244           C9H8O4        180.1574 BSYNRYMUTXBXSQ-UHFFFAOYSA-N
+#> 1 5564       C12H7Cl3O2         289.536 XEFQLINVKFYRCS-UHFFFAOYSA-N
+#> 2 2244           C9H8O4         180.159 BSYNRYMUTXBXSQ-UHFFFAOYSA-N
 ```
 
 and synonyms
@@ -231,14 +232,14 @@ and synonyms
 pc_synonyms(5564, from = 'cid')[[1]][1:5]
 #> [1] "5564"                                     
 #> [2] "triclosan"                                
-#> [3] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
-#> [4] "3380-34-5"                                
+#> [3] "3380-34-5"                                
+#> [4] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
 #> [5] "2,4,4'-Trichloro-2'-hydroxydiphenyl ether"
 pc_synonyms('Triclosan', from = 'name')[[1]][1:5]
 #> [1] "5564"                                     
 #> [2] "triclosan"                                
-#> [3] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
-#> [4] "3380-34-5"                                
+#> [3] "3380-34-5"                                
+#> [4] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
 #> [5] "2,4,4'-Trichloro-2'-hydroxydiphenyl ether"
 ```
 
@@ -399,7 +400,7 @@ First we need to query a substance ID:
 ids <- get_etoxid('Triclosan', match = 'best')
 ids
 #>   etoxid               match distance     query
-#> 1  20179 Triclosan ( 20179 )     0.53 Triclosan
+#> 1  20179 Triclosan ( 20179 )        0 Triclosan
 ```
 `get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
 Other options are `match = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
@@ -426,7 +427,7 @@ etox_basic(ids$etoxid)[[1]]
 #> [1] "3380-34-5"
 #> 
 #> $ec
-#> [1] "222-182-2"
+#> character(0)
 #> 
 #> $gsbl
 #> [1] "117338"
@@ -434,23 +435,19 @@ etox_basic(ids$etoxid)[[1]]
 #> $synonyms
 #>                                          name  language
 #> 4      5-chloro-2-(2,4-dichlorophenoxy)phenol   English
-#> 7   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-    German
+#> 5   Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-   English
 #> 8     2,4,4'-Trichlor-2'-hydroxydiphenylether    German
-#> 9                              Irgasan DP 300    German
-#> 10                                  Vikol THP    German
-#> 11     2,4,4-Trichlor-2'-hydroxydiphenylether    German
-#> 12   2,4,4'-Trichloro-2'-hydroxydiphenylether    German
-#> 14     Chlor-2-(2,4-dichlorphenoxy)phenol, 5- universal
-#> 15  Trichlor-2'-hydroxydiphenylether, 2,4,4'- universal
-#> 16   Trichlor-2'-hydroxydiphenylether, 2,4,4- universal
-#> 17 Trichloro-2'-hydroxydiphenylether, 2,4,4'- universal
-#> 18      5-Chlor-2-(2,4-dichlorphenoxy)-phenol universal
-#> 19    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5- universal
-#> 20       5-Chlor-2-(2,4-dichlorphenoxy)phenol universal
-#> 21                                  triclosán   Spanish
-#> 22                                triklosaani   Finnish
-#> 23                                 triclosano   Italian
-#> 24                                  triklosan   Swedish
+#> 9      2,4,4-Trichlor-2'-hydroxydiphenylether    German
+#> 10   2,4,4'-Trichloro-2'-hydroxydiphenylether    German
+#> 12     Chlor-2-(2,4-dichlorphenoxy)phenol, 5- universal
+#> 13 Trichloro-2'-hydroxydiphenylether, 2,4,4'- universal
+#> 14      5-Chlor-2-(2,4-dichlorphenoxy)-phenol universal
+#> 15    Chlor-2-(2,4-dichlorphenoxy)-phenol, 5- universal
+#> 16       5-Chlor-2-(2,4-dichlorphenoxy)phenol universal
+#> 17                                  triclosán   Spanish
+#> 18                                triklosaani   Finnish
+#> 19                                 triclosano   Italian
+#> 20                                  triklosan   Swedish
 #> 
 #> $source_url
 #> [1] "https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id=20179"
@@ -464,16 +461,20 @@ We can also retrieve Quality Targets:
 ```r
 targets <- etox_targets(ids$etoxid)[[1]]
 targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
-#>   Substance Country_or_Region      Designation Value_Target_LR Unit
-#> 1 Triclosan               AUS             PNEC           0.050 µg/l
-#> 2 Triclosan               CHE AA-QS_freshwater           0.020 µg/l
-#> 3 Triclosan               CHE           MAC-QS           0.020 µg/l
-#> 4 Triclosan               DEU           AA-EQS           0.020 µg/l
-#> 5 Triclosan               DEU          MAC-EQS           0.200 µg/l
-#> 6 Triclosan               DEU       QS_fw, eco           0.020 µg/l
-#> 7 Triclosan               DEU   MAC-QS_fw, eco           0.160 µg/l
-#> 8 Triclosan               DEU       QS_sw, eco           0.002 µg/l
-#> 9 Triclosan               DEU   MAC-QS_sw, eco           0.016 µg/l
+#>    Substance Country_or_Region      Designation Value_Target_LR Unit
+#> 1  Triclosan               AUS             PNEC           0.050 µg/l
+#> 2  Triclosan               CHE AA-QS_freshwater           0.020 µg/l
+#> 3  Triclosan               CHE           MAC-QS           0.020 µg/l
+#> 4  Triclosan               DEU           AA-EQS           0.020 µg/l
+#> 5  Triclosan               DEU          MAC-EQS           0.200 µg/l
+#> 6  Triclosan               DEU       QS_fw, eco           0.020 µg/l
+#> 7  Triclosan               DEU   MAC-QS_fw, eco           0.160 µg/l
+#> 8  Triclosan               DEU       QS_sw, eco           0.002 µg/l
+#> 9  Triclosan               DEU   MAC-QS_sw, eco           0.016 µg/l
+#> 10 Triclosan               DEU           AA-EQS           0.020 µg/l
+#> 11 Triclosan               DEU           AA-EQS           0.002 µg/l
+#> 12 Triclosan               DEU          MAC-EQS           0.200 µg/l
+#> 13 Triclosan               DEU          MAC-EQS           0.020 µg/l
 ```
 
 and results of ecotox tests:
@@ -556,11 +557,11 @@ against the terms and conditions of use.
 
 
 ```r
-out <- ci_query(query = 'Triclosan', type = 'name')
-out$physprop
+out <- ci_query(query = 'Triclosan', type = 'name', match = 'best')
+out[['Triclosan']]$physprop
 #>              Physical Property    Value            Units Temp (deg C)
-#> 1                Melting Point       NA            deg C             
-#> 2        log P (octanol-water) 4.76e+00           (none)             
+#> 1                Melting Point       NA            deg C           NA
+#> 2        log P (octanol-water) 4.76e+00           (none)           NA
 #> 3             Water Solubility 1.00e+01             mg/L           20
 #> 4               Vapor Pressure 6.45e-07            mm Hg           25
 #> 5         Henry's Law Constant 4.99e-09      atm-m3/mole           25
@@ -582,12 +583,12 @@ out$physprop
 ids <- get_wdid(query = 'Triclosan')
 ids
 #>        id     match distance     query
-#> 1 Q408646 Triclosan        0 Triclosan
+#> 1 Q408646 triclosan        0 Triclosan
 
 # quera identifiers from wikidata
 wd_ident(ids$id)[1:5]
-#>                         smiles       cas  cid    einecs csid
-#> 1 Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl 3380-34-5 5564 222-182-2 5363
+#>                                   smiles       cas  cid    einecs csid
+#> 1 C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl 3380-34-5 5564 222-182-2 5363
 ```
 
 
@@ -607,6 +608,17 @@ opsin_query(c('Cyclopropane', 'Octane'))
 ```
 
 
+#### flavornet
+
+```r
+fn_percept(c("75-07-0", "123-32-0"))
+#>                                    75-07-0 
+#>                           "pungent, ether" 
+#>                                   123-32-0 
+#> "cocoa, roasted nut, roast beef, medicine"
+```
+
+
 #### Extractor functions
 
 The sources provide a lot of informations that can be retrieved using the functions described above. Often only specific inforamtion is needed. 
@@ -616,8 +628,8 @@ Therefore, we added extractor functions for common identifiers.
 ```r
 wi <- wd_ident("Q408646")
 wi
-#>                         smiles       cas  cid    einecs csid
-#> 1 Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl 3380-34-5 5564 222-182-2 5363
+#>                                   smiles       cas  cid    einecs csid
+#> 1 C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl 3380-34-5 5564 222-182-2 5363
 #>                                                                    inchi
 #> 1 1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
 #>                      inchikey drugbank    zvg  chebi    chembl       unii
@@ -629,7 +641,7 @@ cas(wi)
 inchikey(wi)
 #> [1] "XEFQLINVKFYRCS-UHFFFAOYSA-N"
 smiles(wi)
-#> [1] "Oc1cc(Cl)ccc1Oc2ccc(Cl)cc2Cl"
+#> [1] "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl"
 
 smiles(etox_basic(5564))
 #> Error in smiles.etox_basic(etox_basic(5564)): InChIkey is not returned by this datasource!

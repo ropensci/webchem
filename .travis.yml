@@ -42,7 +42,7 @@ after_success:
 notifications:
   email:
     recipients:
-    - szoecs@uni-landau.de
+    - eduardszoecs@gmail.com
     on_success: change
     on_failure: change
 

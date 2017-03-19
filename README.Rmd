@@ -51,6 +51,7 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
+[Flavornet](http://www.flavornet.org) | `fn_percept` | none | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -292,6 +293,12 @@ wd_ident(ids$id)[1:5]
 #### OPSIN
 ```{r opsin}
 opsin_query(c('Cyclopropane', 'Octane'))
+```
+
+
+#### flavornet
+```{r flavornet}
+fn_percept(c("75-07-0", "123-32-0"))
 ```
 
 
