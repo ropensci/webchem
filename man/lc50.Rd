@@ -23,4 +23,3 @@ It comprises acute toxicity data (D. magna, 48h, Laboratory, 48h) and has been
 preprocessed (remove non-insecticides, aggregate multiple value, keep only numeric data etc).
 }
 \keyword{datasets}
-

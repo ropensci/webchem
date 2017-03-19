@@ -17,11 +17,12 @@ fn_percept(CAS, verbose = TRUE, ...)
 A named character vector containing flavor percepts or NA's in the case of CAS numbers that are not found
 }
 \description{
-Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors 
+Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
 perceptible to humans detected using gas chromatography ofactometry (GCO).
 }
 \examples{
 \donttest{
+# might fail if website is not available
 fn_percept("123-32-0")
 
 CASs <- c("75-07-0",  "64-17-5",  "109-66-0", "78-94-4",  "78-93-3")

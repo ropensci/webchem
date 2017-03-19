@@ -12,10 +12,9 @@ a data.frame with three columns: cas, url, and name
 \description{
 Function to build index
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{aw_query}}, \code{\link{aw_idx}}
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

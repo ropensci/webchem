@@ -24,4 +24,3 @@ You can use the function \code{\link{build_aw_idx}} to rebuild the index.
 Date of build: 12. Feb. 2016
 }
 \keyword{datasets}
-

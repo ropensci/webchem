@@ -40,10 +40,9 @@ tric_mol
 cs_csid_mol(5363, token = token, parse = FALSE)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

@@ -41,9 +41,6 @@ cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'inchi')
 cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'mol')
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 There are many low level functions underlying, which are exported from
 the package. The naming scheme is cs_from_to() here's a list and links to their manual pages:
@@ -60,4 +57,6 @@ the package. The naming scheme is cs_from_to() here's a list and links to their 
 }
 Check \code{\link{parse_mol}} for a description of the Mol R Object.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

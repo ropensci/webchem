@@ -38,11 +38,10 @@ get_csid("Triclosan", token = token)[[1]]
 get_csid(c("Triclosan", "50-00-0"), token = token)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{cs_compinfo}} and \code{\link{cs_extcompinfo}} to
 retrieve compound details from csid.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

@@ -37,11 +37,10 @@ get_etoxid(comps)
 get_etoxid(comps, match = 'all')
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{etox_basic}} for basic information,
 \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

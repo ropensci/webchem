@@ -28,10 +28,9 @@ inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-
 cs_inchi_inchikey(inchi)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

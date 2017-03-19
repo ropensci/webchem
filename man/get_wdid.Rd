@@ -42,4 +42,3 @@ get_wdid(comps)
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
-

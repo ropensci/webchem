@@ -27,10 +27,9 @@ smiles <- "CN1CC[C@]23[C@H]4C=C[C@H]([C@H]3Oc3c(ccc(C[C@H]14)c23)O)O"
 cs_smiles_inchi(smiles)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

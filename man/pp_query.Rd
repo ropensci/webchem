@@ -45,4 +45,3 @@ sapply(out, function(y){
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
-
