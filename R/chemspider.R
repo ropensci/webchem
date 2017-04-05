@@ -275,24 +275,32 @@ cs_prop <- function(csid, verbose = TRUE, ...){
 
     prop <- 'Log Octanol-Water Partition Coef'
     value_pred <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
+    if(length(value_pred) != 1){value_pred <- NA}
     unit_pred <- NA
     source_pred <- gsub('(.*) = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)])
+    if(length(source_pred) != 1){source_pred <- NA}
     value_exp <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(Exper.', ll)]))
+    if(length(value_exp) != 1){value_exp <- NA}
     unit_exp <- NA
     source_exp <- gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Log Kow \\(Exper.', ll)) + 1])
-
+    if(length(source_exp) != 1){source_exp <- NA}
+    
     prop <- c(prop, 'Boiling Point')
     value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Boiling Pt \\(deg C', ll)])))
+    if(length(value_pred) != 2){value_pred <- c(value_pred, NA)}
     unit_pred <- c(unit_pred, 'deg C')
     source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
+    if(length(source_pred) != 2){source_pred <- c(source_pred, NA)}
     value_exp <- c(value_exp,   NA)
     unit_exp <- c(unit_exp, NA)
     source_exp <- c(source_exp, NA)
 
     prop <- c(prop, 'Melting Point')
     value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Melting Pt \\(deg C', ll)])))
+    if(length(value_pred) != 3){value_pred <- c(value_pred, NA)}
     unit_pred <- c(unit_pred, 'deg C')
     source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Boiling Pt, ', ll)]))
+    if(length(source_pred) != 3){source_pred <- c(source_pred, NA)}
     value_exp <- c(value_exp,   NA)
     unit_exp <- c(unit_exp, NA)
     source_exp <- c(source_exp, NA)
@@ -301,14 +309,20 @@ cs_prop <- function(csid, verbose = TRUE, ...){
 
     prop <- c(prop, 'Water Solubility from KOW')
     value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Solubility at 25 deg C', ll)])))
+    if(length(value_pred) != 4){value_pred <- c(value_pred, NA)}
     unit_pred <- c(unit_pred, 'mg/L (25 deg C)')
     source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Water Solubility Estimate from Log Kow', ll)]))
+    if(length(source_pred) != 4){source_pred <- c(source_pred, NA)}
     value_exp <- c(value_exp,   as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Water Sol \\(Exper. database match', ll)])))
+    if(length(value_exp) != 4){value_exp <- c(value_exp, NA)}
     unit_exp <- c(unit_exp, gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+)(.*)','\\2', ll[grepl('^Water Sol \\(Exper. database match', ll)]))
+    if(length(unit_exp) != 4){unit_exp <- c(unit_exp, NA)}
     source_exp <- c(source_exp, gsub('^.*\\:\\s(.*)','\\1', ll[which(grepl('^Water Sol \\(Exper. database match', ll)) + 1]))
-
+    if(length(source_exp) != 4){source_exp <- c(source_exp, NA)}
+    
     prop <- c(prop, 'Water Solubility from Fragments')
     value_pred <- c(value_pred, as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Wat Sol \\(v1.01', ll)])))
+    if(length(value_pred) != 5){value_pred <- c(value_pred, NA)}
     unit_pred <- c(unit_pred, 'mg/L')
     source_pred <- c(source_pred, NA)
     value_exp <- c(value_exp,  NA)
@@ -317,16 +331,21 @@ cs_prop <- function(csid, verbose = TRUE, ...){
 
     prop <- c(prop, 'Log Octanol-Air Partition Coefficient (25 deg C)')
     value_pred <- c(value_pred, as.numeric(gsub('.*:\\s(.*)','\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)])))
+    if(length(value_pred) != 6){value_pred <- c(value_pred, NA)}
     unit_pred <- c(unit_pred, NA)
     source_pred <- c(source_pred, gsub('^.*\\[(.*)\\]\\:$','\\1', ll[grepl('^Log Octanol-Air Partition Coefficient', ll)]))
+    if(length(source_pred) != 6){source_pred <- c(source_pred, NA)}
     value_exp <- c(value_exp,   as.numeric(gsub('^.*\\:(.*)','\\1', ll[grepl('^Log Koa \\(experimental database\\).*', ll)])))
+    if(length(value_exp) != 6){value_exp <- c(value_exp, NA)}
     unit_exp <- c(unit_exp, NA)
     source_exp <- c(source_exp, NA)
 
     prop <- c(prop, 'Log Soil Adsorption Coefficient')
     value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^Log Koc:', ll)])))
+    if(length(value_pred) != 7){value_pred <- c(value_pred, NA)}
     unit_pred <- c(unit_pred, NA)
     source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1', ll[grepl('^Soil Adsorption Coefficient', ll)]))
+    if(length(source_pred) != 7){source_pred <- c(source_pred, NA)}
     value_exp <- c(value_exp, NA)
     unit_exp <- c(unit_exp, NA)
     source_exp <- c(source_exp, NA)
