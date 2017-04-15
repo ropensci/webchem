@@ -1,3 +1,21 @@
+webchem 0.3
+======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+* cs_prop() now also return experimental data for Boiling and Melting Points.
+
+BUG FIXES
+
+* cs_prop() failed with some CSIDs [isse #127, reported by @Aariq]
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
 webchem 0.2
 ======================
 

@@ -305,8 +305,11 @@ cs_prop <- function(csid, verbose = TRUE, ...){
                      gsub('^.*\\((.*)\\)\\:$',
                           '\\1',
                           ll[grepl('^Boiling Pt, ', ll)]))
-    value_exp <- c(value_exp,   NA)
-    unit_exp <- c(unit_exp, NA)
+
+    value_exp <- c(value_exp, save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*',
+                                                           '\\1',
+                                                           ll[grepl('^BP  \\(exp database', ll)]))))
+    unit_exp <- c(unit_exp, 'deg C')
     source_exp <- c(source_exp, NA)
 
     prop <- c(prop, 'Melting Point')
@@ -319,8 +322,10 @@ cs_prop <- function(csid, verbose = TRUE, ...){
                      gsub('^.*\\((.*)\\)\\:$',
                           '\\1',
                           ll[grepl('^Boiling Pt, ', ll)]))
-    value_exp <- c(value_exp,   NA)
-    unit_exp <- c(unit_exp, NA)
+    value_exp <- c(value_exp, save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*',
+                                                       '\\1',
+                                                       ll[grepl('^MP  \\(exp database', ll)]))))
+    unit_exp <- c(unit_exp, 'deg C')
     source_exp <- c(source_exp, NA)
     # epi_mp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^MP\\s+\\(exp', ll)]))
     # epi_bp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^BP\\s+\\(exp', ll)]))
