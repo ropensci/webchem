@@ -62,6 +62,16 @@ test_that("cs_prop()", {
                                      "source_pred", "value_exp",
                                      "unit_exp", "source_exp"))
   expect_equal(names(m1[[1]]$acd), c("variable", "value", "error", "unit"))
+
+  # issue #127
+  m2 <- cs_prop(16105)
+  expect_is(m2, 'list')
+  expect_equal(length(m2), 1)
+  expect_equal(length(m2[[1]]), 3)
+  expect_is(m2[[1]]$epi, 'data.frame')
+  expect_is(m2[[1]]$acd, 'data.frame')
+
+
 })
 
 
