@@ -20,4 +20,4 @@ test_that("fn_percept()", {
   expect_true(is.na(c[[3]]))
 
   expect_warning(fn_percept('xxxx'))
-  }
+  })

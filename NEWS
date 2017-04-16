@@ -8,6 +8,7 @@ MINOR IMPROVEMENTS
 * cs_prop() now also return experimental data for Boiling and Melting Points.
 * pc_synonyms gained an argument 'interactive' to enter an interactive mode for
   selecting synonyms [isse #129, requested by @Aariq]
+* cts_convert now returns NA if no matches are found.
 
 BUG FIXES
 

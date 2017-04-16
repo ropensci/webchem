@@ -17,7 +17,7 @@ test_that("get_wdid returns correct results", {
   expect_is(o3, 'data.frame')
   expect_is(o4, 'data.frame')
 
-  expect_equal(o1$id, c("Q163648", "Q18216", NA))
+  expect_equal(o1$id, c("Q163648", "Q10420388", NA))
   expect_equivalent(o2[[1]][1:2], c("Q163648", "Q949424"))
   expect_equal(o3$distance, 'first')
   expect_equal(o4$distance, NA)
@@ -43,7 +43,7 @@ test_that("wd integration test", {
   skip_on_cran()
 
   d <- wd_ident(get_wdid('Glyphosate', 'en', 'best')$id)
-  f <- wd_ident(get_wdid('xxxxx', 'en', 'best')$id)
+  f <- wd_ident(get_wdid('xxxxxxxAX', 'en', 'best')$id)
 
   expect_equal(d$cas, "1071-83-6")
   expect_equal(ncol(d), 14)

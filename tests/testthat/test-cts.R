@@ -30,7 +30,7 @@ test_that("cts_compinfo()", {
   o2 <- cts_compinfo(c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-X"), verbose = FALSE)
   expect_equal(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE)[[1]], NA)
   expect_warning(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE))
-  expect_equal(length(o1[[1]]), 7)
+  expect_equal(length(o1[[1]]), 10)
   expect_equal(round(o1[[1]][["molweight"]], 3), 289.542)
   expect_equal(length(o2), 2)
   expect_true(is.na(o2[[2]]))

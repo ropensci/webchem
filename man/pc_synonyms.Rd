@@ -4,12 +4,17 @@
 \alias{pc_synonyms}
 \title{Search synonyms in pubchem}
 \usage{
-pc_synonyms(query, from = "name", verbose = TRUE, arg = NULL, ...)
+pc_synonyms(query, from = "name", interactive = 0, verbose = TRUE,
+  arg = NULL, ...)
 }
 \arguments{
 \item{query}{character; search term.}
 
-\item{from}{character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'}
+\item{from}{character; type of input, can be one of 'name' (default), 'cid',
+'sid', 'aid', 'smiles', 'inchi', 'inchikey'}
+
+\item{interactive}{numeric; if > 0 an interactive mode is entered to pick one of the x displayed synonyms.
+The number specifies how many synonyms are displayed.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -29,6 +34,7 @@ see \url{https://pubchem.ncbi.nlm.nih.gov/}.
 pc_synonyms('Aspirin')
 pc_synonyms(c('Aspirin', 'Triclosan'))
 pc_synonyms(5564, from = 'cid')
+pc_synonyms(c('Aspirin', 'Triclosan'), interactive = 10)
 }
 }
 \references{
