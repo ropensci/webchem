@@ -35,9 +35,6 @@ cids <- unlist(get_cid(comp))
 pc_prop(cids, properties = c('MolecularFormula', 'MolecularWeight', 'CanonicalSMILES'))
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \references{
 Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
 Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
@@ -51,4 +48,6 @@ PUG-SOAP and PUG-REST: web services for programmatic access to chemical informat
 \seealso{
 \code{\link{get_cid}} to retrieve Pubchem IDs.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

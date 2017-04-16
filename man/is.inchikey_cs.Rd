@@ -29,10 +29,9 @@ is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{is.inchikey}} for a pure-R implementation.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

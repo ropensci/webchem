@@ -42,4 +42,3 @@ aw_query("79622-59-6", type = 'cas')
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
-

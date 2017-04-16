@@ -1,3 +1,40 @@
+webchem 0.3
+======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+* cs_prop() now also return experimental data for Boiling and Melting Points.
+* pc_synonyms gained an argument 'interactive' to enter an interactive mode for
+  selecting synonyms [isse #129, requested by @Aariq]
+
+BUG FIXES
+
+* cs_prop() failed with some CSIDs [isse #127, reported by @Aariq]
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
+webchem 0.2
+======================
+
+NEW FEATURES
+
+* fn_percept() extracts flavor percepts using CAS numbers from www.flavornet.org. Flavornet is a database of 738 compounds with human-detectible odors. [contributed by @Aariq]
+
+MINOR IMPROVEMENTS
+
+BUG FIXES
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
+
 webchem 0.1.1
 ======================
 
@@ -180,7 +217,7 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 
-* Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribition of @jranke]
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribution of @jranke]
 
 
 

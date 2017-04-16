@@ -31,9 +31,6 @@ pc_synonyms(c('Aspirin', 'Triclosan'))
 pc_synonyms(5564, from = 'cid')
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \references{
 Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
 Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623â€“633.
@@ -44,4 +41,6 @@ PubChem Substance and Compound Databases. Nucleic Acids Research 44(D1): D1202â€
 Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 PUG-SOAP and PUG-REST: web services for programmatic access to chemical information in PubChem. Nucleic acids research, gkv396.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

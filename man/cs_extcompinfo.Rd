@@ -43,11 +43,10 @@ csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
 cs_compinfo(csids, token = token)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
 \code{\link{cs_compinfo}} for extended compound information.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

@@ -8,4 +8,3 @@
 \description{
 webchem: An R package to retrieve chemical information from the web.
 }
-

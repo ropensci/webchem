@@ -40,9 +40,6 @@ comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
 cts_convert(comp, 'inchikey', 'Chemical Name')
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \references{
 Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
 -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
@@ -51,4 +48,6 @@ Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Che
 \code{\link{cts_from}} for possible values in the 'from' argument and
 \code{\link{cts_to}} for possible values in the 'to' argument.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

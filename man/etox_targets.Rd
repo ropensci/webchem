@@ -32,11 +32,10 @@ etox_targets( c("20179", "9051"))
 
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

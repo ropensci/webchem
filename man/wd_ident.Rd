@@ -27,9 +27,6 @@ Only matches in labels are returned.
  wd_ident(id)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \references{
 Willighagen, E., 2015. Getting CAS registry numbers out of WikiData. The Winnower.
 \url{http://dx.doi.org/10.15200/winn.142867.72538}
@@ -40,4 +37,6 @@ Wikidata: A Platform for Data Integration and Dissemination for the Life Science
 \seealso{
 \code{\link{get_wdid}}
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

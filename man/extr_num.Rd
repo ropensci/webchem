@@ -18,4 +18,3 @@ Extract a number from a string
 \examples{
 extr_num('aaaa -95')
 }
-

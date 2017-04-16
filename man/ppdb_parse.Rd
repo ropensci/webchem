@@ -29,10 +29,9 @@ This function only parses a html. Saving (or downloading) substantial parts
 from the database is explicitly against the terms and conditions and copyright of use
 [link removed on request].
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \references{
 [Reference removed on request.]
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}
