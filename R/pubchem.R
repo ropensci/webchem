@@ -187,6 +187,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' Search synonyms using PUG-REST,
 #' see \url{https://pubchem.ncbi.nlm.nih.gov/}.
 #' @import httr jsonlite
+#' @importFrom utils menu
 #'
 #' @param query character; search term.
 #' @param from character; type of input, can be one of 'name' (default), 'cid',
