@@ -12,8 +12,9 @@ test_that("get_csid()", {
 
   expect_is(o1, 'character')
   expect_is(o2, 'list')
-  expect_equal(length  expect_equal(o3, structure(list(picoxystrobin = "9460644", mandipropamid = "9467809"), .Names = c("picoxystrobin",
-      "mandipropamid")))(o1),3)
+  expect_equal(length(o1),3)
+  expect_equal(o3, structure(list(picoxystrobin = "9460644", mandipropamid = "9467809"), .Names = c("picoxystrobin",
+      "mandipropamid")))
   expect_equal(length(o2), 3)
   expect_true(is.na(o1[[3]]))
   expect_true(is.na(o2[[3]]))
