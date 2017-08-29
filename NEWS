@@ -13,6 +13,7 @@ MINOR IMPROVEMENTS
 BUG FIXES
 
 * cs_prop() failed with some CSIDs [isse #127, reported by @Aariq]
+* wd_ident() failed if multiple entries where found. Now returns the first hit only.
 
 DEPRECATED FUNCTIONS
 

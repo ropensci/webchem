@@ -34,7 +34,6 @@ for a security token.
 \dontrun{
 # Fails because no TOKEN is included
 token <- '<YOUR-SECURITY-TOKEN>'
-# convert CAS to CSID
 tric_mol <- cs_csid_mol(5363, token = token)
 tric_mol
 cs_csid_mol(5363, token = token, parse = FALSE)

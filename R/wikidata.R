@@ -141,7 +141,8 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
 #' @return A data.frame of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
 #' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
 #'
-#' @note Only matches in labels are returned.
+#' @note Only matches in labels are returned. If more than one unique hit is found,
+#' only the first is returned.
 #'
 #' @seealso \code{\link{get_wdid}}
 #'
@@ -198,6 +199,11 @@ wd_ident <- function(id, verbose = TRUE){
       out <- as.list(rep(NA, 13))
       names(out) <- c(vars_out, 'source_url')
       return(out)
+    }
+
+    if (nrow(out) > 1) {
+      warning("More then one unique entry found! Returning first.")
+      out <- out[1, ]
     }
 
     out <- lapply(out, '[[', 'value')
