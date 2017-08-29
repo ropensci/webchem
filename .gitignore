@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-
+.vscode*
 
 README_files*
 README.html
