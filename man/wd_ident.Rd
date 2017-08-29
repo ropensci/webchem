@@ -19,7 +19,8 @@ A data.frame of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs
 Retrieve Indentifiers from wikidata
 }
 \note{
-Only matches in labels are returned.
+Only matches in labels are returned. If more than one unique hit is found,
+only the first is returned.
 }
 \examples{
 \dontrun{

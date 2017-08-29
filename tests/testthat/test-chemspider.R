@@ -8,16 +8,19 @@ test_that("get_csid()", {
   comps <- c("Triclosan", "50-00-0", "xxxxxx")
   o1 <- get_csid(comps, token = token, verbose = TRUE)
   o2 <- get_csid(comps, token = token, verbose = TRUE, first = FALSE)
+  o3 <- get_csid(c("picoxystrobin", "mandipropamid"), token = token, verbose = TRUE, first = FALSE)
 
   expect_is(o1, 'character')
   expect_is(o2, 'list')
-  expect_equal(length(o1),3)
+  expect_equal(length  expect_equal(o3, structure(list(picoxystrobin = "9460644", mandipropamid = "9467809"), .Names = c("picoxystrobin",
+      "mandipropamid")))(o1),3)
   expect_equal(length(o2), 3)
   expect_true(is.na(o1[[3]]))
   expect_true(is.na(o2[[3]]))
   expect_equal(o1[[1]], '5363')
   expect_equal(o2[[2]], '692')
   expect_true(is.na(get_csid(NA, token = token, verbose = TRUE)))
+
 })
 
 

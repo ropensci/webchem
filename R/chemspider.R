@@ -87,7 +87,6 @@ get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
 #' \dontrun{
 #' # Fails because no TOKEN is included
 #' token <- '<YOUR-SECURITY-TOKEN>'
-#' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
 #' cs_compinfo(csid, token)
 #'
@@ -151,7 +150,6 @@ cs_compinfo <- function(csid, token, verbose = TRUE, ...){
 #' \dontrun{
 #' # Fails because no TOKEN is included
 #' token <- '<YOUR-SECURITY-TOKEN>'
-#' # convert CAS to CSID
 #' csid <- get_csid("Triclosan", token = token)
 #' cs_extcompinfo(csid, token)
 #'
@@ -503,7 +501,6 @@ cs_convert <- function(query, from = c('csid', 'inchikey', 'inchi', 'smiles'),
 #' \dontrun{
 #' # Fails because no TOKEN is included
 #' token <- '<YOUR-SECURITY-TOKEN>'
-#' # convert CAS to CSID
 #' tric_mol <- cs_csid_mol(5363, token = token)
 #' tric_mol
 #' cs_csid_mol(5363, token = token, parse = FALSE)
@@ -551,7 +548,6 @@ cs_csid_mol <- function(csid, token, parse = TRUE, verbose = TRUE, ...){
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' # convert CAS to CSID
 #' cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' }
 cs_inchikey_csid <- function(inchikey, verbose = TRUE, ...){

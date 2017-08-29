@@ -32,7 +32,6 @@ Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/
 \dontrun{
 # Fails because no TOKEN is included
 token <- '<YOUR-SECURITY-TOKEN>'
-# convert CAS to CSID
 csid <- get_csid("Triclosan", token = token)
 cs_compinfo(csid, token)
 
