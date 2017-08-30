@@ -288,8 +288,8 @@ test_that("cs_convert()", {
   expect_equal(length(m1[[1]]), 4)
   expect_is(m1[[1]]$ab, 'data.frame')
   expect_is(m1[[1]]$bb, 'data.frame')
-  expect_equal(unname(m1[[1]]$cl[1]), "22")
-  expect_equal(unname(m1[[1]]$cl[2]), "26")
+  expect_equal(unname(m1[[1]]$cl[1]), "21")
+  expect_equal(unname(m1[[1]]$cl[2]), "25")
   expect_is(m1r[[1]], 'character')
   expect_equal(length(m1r[[1]]), 1)
 
