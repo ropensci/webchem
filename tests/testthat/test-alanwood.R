@@ -47,5 +47,5 @@ test_that("alanwood, build_index", {
 test_that("alanwood index is up to date", {
   skip_on_cran()
 
-  expect_true(Sys.Date() - attr(aw_idx, 'date') < 30)
+  expect_true(Sys.Date() - attr(aw_idx, 'date') < 90)
 })
