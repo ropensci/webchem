@@ -278,7 +278,7 @@ is.smiles <- function(x, verbose = TRUE) {
 extr_num <- function(x) {
   if (length(x) == 0)
     return(NA)
-  as.numeric(gsub("[^0-9\\-]+", "", x))
+  as.numeric(gsub("[^0-9\\-\\.]+", "", x))
 }
 
 
