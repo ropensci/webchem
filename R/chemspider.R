@@ -203,6 +203,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
 #' see \url{https://www.chemspider.com/}
 #' @import xml2 stringr rvest
 #' @importFrom stats rgamma
+#' @importFrom curl curl
 #'
 #' @param csid character,  ChemSpider ID.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -241,15 +242,22 @@ cs_prop <- function(csid, verbose = TRUE, ...){
 
   foo <- function(csid, verbose){
     qurl <- paste0('https://www.chemspider.com/Chemical-Structure.', csid, '.html')
+	con <- curl(qurl)
     if (verbose)
       message(qurl)
     Sys.sleep( rgamma(1, shape = 10, scale = 1/10))
-    h <- try(read_html(qurl), silent = TRUE)
-    if (inherits(h, "try-error")) {
+    doc <- try(readLines(con), silent = TRUE)
+    if (inherits(doc, "try-error")) {
       warning('CSID not found... Returning NA.')
       return(NA)
     }
 
+	doc <- paste(doc, collapse="\n")
+	close(con)
+	# CS contains some invalid syntax that we try to fix here before parsing.
+	doc <- gsub("MP  (exp database):  <", "MP  (exp database):  ",doc, fixed = TRUE)
+	h <- read_html(doc)
+	
     ### acd
     acd <- do.call(rbind, html_table(xml_find_all(h, '//div[@class="column two"]/table')))
     names(acd) <- c('variable', 'val')
