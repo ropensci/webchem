@@ -8,7 +8,8 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 
-* extr_num() did not work properly with decimal numbers [reported and fixed by @stanstrup]
+* extr_num() did not work properly with decimal numbers [issue #136, reported and fixed by @stanstrup]
+* cs_prop() failed when epi-suite data was not available [issue #139, reported and fixed by @stanstrup]
 
 
 DEPRECATED FUNCTIONS
