@@ -48,4 +48,12 @@ test_that("is.inchikey() returns correct results", {
 #   expect_error(is.smiles(c('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl', 'Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl')))
 # })
 
+test_that("extr_num() returns correct results", {
+  skip_on_cran()
+
+  expect_equal(extr_num("Melting Pt : -44.6 deg C"), -44.6)
+  expect_equal(extr_num("Melting Pt : 44.6 deg C"), 44.6)
+  expect_equal(extr_num("Melting Pt : 446 deg C"), 446)
+})
+
 

@@ -1,3 +1,21 @@
+webchem 0.4
+======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+
+BUG FIXES
+
+* extr_num() did not work properly with decimal numbers [reported and fixed by @stanstrup]
+
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
 webchem 0.3
 ======================
 
