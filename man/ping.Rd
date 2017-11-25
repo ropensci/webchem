@@ -2,20 +2,43 @@
 % Please edit documentation in R/ping.R
 \name{ping}
 \alias{ping}
-\alias{pubchem_ping}
-\alias{cs_web_ping}
+\alias{ping_pubchem}
+\alias{ping_cs}
+\alias{ping_pan}
 \title{Ping an API used in webchem to see if it's working.}
 \usage{
-pubchem_ping(...)
+ping_pubchem(...)
 
-cs_web_ping(...)
+ping_cs(...)
+
+ping_pan(...)
 }
 \arguments{
 \item{...}{Curl options passed on to \code{\link[httr]{GET}} or \code{\link[httr]{POST}}}
 }
 \value{
 A logical, TRUE or FALSE
+
+TRUE if pubchem is reachable
+
+TRUE if chemspider is reachable
+
+TRUE if PAN is reachable
 }
 \description{
 Ping an API used in webchem to see if it's working.
+}
+\examples{
+\dontrun{
+ # might fail if API is not available
+ ping_pubchem()
+ }
+\dontrun{
+ # might fail if API is not available
+ ping_cs()
+ }
+\dontrun{
+ # might fail if API is not available
+ ping_pan()
+ }
 }

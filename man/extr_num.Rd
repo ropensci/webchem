@@ -17,4 +17,5 @@ Extract a number from a string
 }
 \examples{
 extr_num('aaaa -95')
+extr_num("Melting Pt : -44.6 deg C")
 }
