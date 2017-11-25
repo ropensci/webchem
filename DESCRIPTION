@@ -12,7 +12,8 @@ Authors@R: c(person("Eduard", "Szöcs", role = c("aut", "cre"),
     email = "eduardszoecs@gmail.com"),
     person("Daniel", "Muench", role = "ctb"),
     person("Johannes", "Ranke", role = "ctb"),
-    person("Eric", "Scott", role = "ctb"))
+    person("Eric", "Scott", role = "ctb"),
+    person("Jan", "Stanstrup", role = "ctb"))
 Maintainer: Eduard Szöcs <eduardszoecs@gmail.com>
 LazyLoad: yes
 LazyData: yes
