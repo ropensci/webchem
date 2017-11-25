@@ -76,9 +76,12 @@ test_that("cs_prop()", {
   expect_is(m2[[1]]$acd, 'data.frame')
   expect_equal(m2[[1]]$epi$value_exp[2], 178.5)
 
-  # issue #139
+  # issue #139 (no epi-suite data available)
   m3 <- cs_prop(21106900)
   expect_true(nrow(m3$`21106900`$epi) == 0)
+
+  # issue #138 (invalid chemspider html)
+  expect_error(cs_prop(8012), NA)
 })
 
 

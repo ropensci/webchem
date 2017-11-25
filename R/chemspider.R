@@ -244,11 +244,17 @@ cs_prop <- function(csid, verbose = TRUE, ...){
     if (verbose)
       message(qurl)
     Sys.sleep( rgamma(1, shape = 10, scale = 1/10))
-    h <- try(read_html(qurl), silent = TRUE)
-    if (inherits(h, "try-error")) {
+    # readLines to catch html errors in CS
+    doc <- try(readLines(qurl), silent = TRUE)
+    if (inherits(doc, "try-error")) {
       warning('CSID not found... Returning NA.')
       return(NA)
     }
+
+    doc <- paste(doc, collapse = "\n")
+    # CS contains some invalid syntax that we try to fix here before parsing.
+    doc <- gsub("MP  (exp database):  <", "MP  (exp database):  ", doc, fixed = TRUE)
+    h <- read_html(doc)
 
     ### acd
     acd <- do.call(rbind, html_table(xml_find_all(h, '//div[@class="column two"]/table')))
@@ -279,7 +285,7 @@ cs_prop <- function(csid, verbose = TRUE, ...){
 
 
     kow_raw <- xml_text(xml_find_all(h, '//div[@id="epiTab"]/pre'))
-    if (length(kow_raw) != 0){
+    if (length(kow_raw) != 0) {
       ll <- str_split(kow_raw, '\n')
       ll <- sapply(ll, str_trim)
       ll <- ll[!ll == '']
@@ -396,6 +402,7 @@ cs_prop <- function(csid, verbose = TRUE, ...){
                 source_url = qurl)
     return(out)
   }
+
   out <- lapply(csid, foo, verbose = verbose)
   out <- setNames(out, csid)
   return(out)
