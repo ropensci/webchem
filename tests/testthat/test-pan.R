@@ -1,4 +1,5 @@
 context("pan")
+skip_if_not(ping_pan())
 
 test_that("pan_query()", {
   skip_on_cran()
