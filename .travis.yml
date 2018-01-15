@@ -2,7 +2,7 @@ language: r
 r:
   - devel
 #  - release
-
+dist: trusty
 sudo: required
 cache: packages
 env:
@@ -18,10 +18,6 @@ apt_packages:
   - libxml2-dev
   - default-jre
   - default-jdk
-
-r_packages:
-  - devtools
-  - xml2
 
 r_binary_packages:
  - testthat
