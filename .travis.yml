@@ -21,7 +21,8 @@ apt_packages:
 
 r_binary_packages:
  - testthat
-
+r_packages:
+  - devtools
 r_github_packages:
   - jimhester/covr
   - jeroenooms/curl
