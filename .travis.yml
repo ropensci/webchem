@@ -3,7 +3,7 @@ r:
   - devel
 #  - release
 dist: trusty
-sudo: false
+sudo: required
 cache: packages
 env:
   global:
