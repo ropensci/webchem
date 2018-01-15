@@ -1,16 +1,14 @@
 language: r
 sudo: false
 cache: packages
-
 r:
   - devel
-#  - release
-
+  - release
+jdk:
+  - oraclejdk8
 env:
   global:
     - _R_CRAN_CHECK_INCOMING_=false
-
-
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
 warnings_are_errors: false
 r_check_revdep: false
@@ -20,7 +18,14 @@ addons:
     packages:
     - libcurl4-openssl-dev
     - libxml2-dev
+    - oracle-java8-installer
     - r-cran-rjava
+
+before_install:
+  - export JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre
+  - export PATH=$PATH:$JAVA_HOME/bin
+  - export LD_LIBRARY_PATH=/usr/lib/jvm/java-8-oracle/lib/amd64:/usr/lib/jvm/java-8-oracle/jre/lib/amd64/server
+  - sudo R CMD javareconf
 
 r_packages:
   - devtools
@@ -29,6 +34,7 @@ r_packages:
 r_github_packages:
   - jimhester/covr
   - jeroenooms/curl
+
 
 # report to codecov
 after_success:
