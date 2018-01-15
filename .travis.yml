@@ -3,7 +3,7 @@ sudo: false
 cache: packages
 r:
   - devel
-  - release
+#  - release
 jdk:
   - oraclejdk8
 env:
