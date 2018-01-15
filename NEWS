@@ -11,6 +11,7 @@ BUG FIXES
 * extr_num() did not work properly with decimal numbers [issue #136, reported and fixed by @stanstrup]
 * cs_prop() failed when epi-suite data was not available [issue #139, reported and fixed by @stanstrup]
 * cs_prop() failed with invalid html [issue #138, reported and fixed by @stanstrup]
+* is.smiles() failed because of changes in rcdk [PR #140, reported and fixed by @allaway]
 
 DEPRECATED FUNCTIONS
 
