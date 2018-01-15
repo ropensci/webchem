@@ -14,6 +14,7 @@ warnings_are_errors: false
 
 
 apt_packages:
+  - libssl-dev
   - libcurl4-openssl-dev
   - libxml2-dev
   - default-jre
@@ -21,8 +22,10 @@ apt_packages:
 
 r_binary_packages:
  - testthat
+
 r_packages:
   - devtools
+
 r_github_packages:
   - jimhester/covr
   - jeroenooms/curl
