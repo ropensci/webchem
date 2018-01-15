@@ -3,7 +3,7 @@ r:
   - devel
 #  - release
 dist: trusty
-sudo: required
+sudo: false
 cache: packages
 env:
   global:
@@ -19,9 +19,6 @@ apt_packages:
   - libxml2-dev
   - default-jre
   - default-jdk
-
-r_binary_packages:
- - testthat
 
 r_packages:
   - devtools
