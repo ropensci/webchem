@@ -366,9 +366,10 @@ cs_prop <- function(csid, verbose = TRUE, ...){
       source_exp <- c(source_exp, NA)
 
       prop <- c(prop, 'Log Octanol-Air Partition Coefficient (25 deg C)')
-      value_pred <- c(value_pred, as.numeric(gsub('.*:\\s(.*)',
-                                                  '\\1',
-                                                  ll[grepl('^Log Koa \\(KOAWIN', ll)])))
+      
+      value_pred_new <- as.numeric(gsub('.*:\\s(.*)', '\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)]))
+      value_pred <- c(value_pred, ifelse(length(value_pred_new)==0,NA,value_pred_new))
+      
       unit_pred <- c(unit_pred, NA)
       source_pred <- c(source_pred, gsub('^.*\\[(.*)\\]\\:$',
                                          '\\1',
