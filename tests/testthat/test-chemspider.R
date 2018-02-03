@@ -81,7 +81,21 @@ test_that("cs_prop()", {
   expect_true(nrow(m3$`21106900`$epi) == 0)
 
   # issue #138 (invalid chemspider html)
-  expect_error(cs_prop(8012), NA)
+  m3 <- cs_prop(8012)
+  expect_is(m3, 'list')
+  expect_equal(length(m3), 1)
+  expect_equal(length(m3[[1]]), 3)
+  expect_is(m3[[1]]$epi, 'data.frame')
+  expect_is(m3[[1]]$acd, 'data.frame')
+
+  # issue #142
+  m4 <- cs_prop(391783)
+  expect_is(m4, 'list')
+  expect_equal(length(m4), 1)
+  expect_equal(length(m4[[1]]), 3)
+  expect_is(m4[[1]]$epi, 'data.frame')
+  expect_is(m4[[1]]$acd, 'data.frame')
+
 })
 
 
