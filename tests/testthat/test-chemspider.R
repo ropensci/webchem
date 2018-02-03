@@ -96,6 +96,10 @@ test_that("cs_prop()", {
   expect_is(m4[[1]]$epi, 'data.frame')
   expect_is(m4[[1]]$acd, 'data.frame')
 
+  # issue #143
+  r <- m4$`391783`$epi
+  expect_equal(r$value_pred[r$prop == 'Water Solubility from KOW'], 13690)
+
 })
 
 
