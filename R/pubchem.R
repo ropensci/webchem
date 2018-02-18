@@ -195,6 +195,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' @param interactive numeric; if > 0 an interactive mode is entered to pick one of the x displayed synonyms.
 #'     The number specifies how many synonyms are displayed.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param CHUNKSIZE numeric; the number of compounds per query.
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments
 #' @return a character vector.
@@ -217,11 +218,11 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' pc_synonyms(5564, from = 'cid')
 #' pc_synonyms(c('Aspirin', 'Triclosan'), interactive = 10)
 #' }
-pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, arg = NULL, ...) {
+pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, CHUNKSIZE=10, arg = NULL, ...) {
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c('Aspirin')
   # from = 'name'
-
+  
   foo <- function(query, from, verbose, ...){
     prolog <- 'https://pubchem.ncbi.nlm.nih.gov/rest/pug'
     input <- paste0('/compound/', from)
@@ -232,10 +233,12 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, a
     if (verbose)
       message(qurl)
     Sys.sleep(0.2)
+    
     cont <- try(content(POST(qurl,
-                             body = paste0(from, '=', query)
+                             body = paste0(from, '=', paste0(query,collapse=','))
     )), silent = TRUE
     )
+    
     if (inherits(cont, "try-error")) {
       warning('Problem with web service encountered... Returning NA.')
       return(NA)
@@ -244,17 +247,29 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, a
       warning(cont$Fault$Details, '. Returning NA.')
       return(NA)
     }
-    out <- unlist(cont)
-    names(out) <- NULL
-
-    if (interactive > 0 && length(out) > 1) {
-      pick <- menu(out[seq_len(interactive)], graphics = FALSE, 'Select one:')
-      out <- out[pick]
+    
+    out <- lapply(lapply(cont$InformationList$Information, unlist),unname)
+    names(out) <- query
+    
+    if (interactive > 0) {
+      for (i in 1:length(out)) {
+        results <- out[[i]]
+        if (length(results) > 1) {
+          pick <- menu(results[seq_len(interactive)], graphics = FALSE, 'Select one:')
+          out[[i]] <- results[pick]          
+        }
+      }     
     }
-
     return(out)
   }
-  out <- lapply(query, foo, from = from, verbose = verbose)
+  
+  if (length(query) > CHUNKSIZE) {
+    query_chunks <- split(query, ceiling(seq_along(query)/CHUNKSIZE))
+    out <- lapply(query_chunks, foo, from=from, verbose=verbose)
+    out <- do.call(c, out)
+  } else {
+    out <- foo(query, from = from, verbose = verbose)
+  }
   out <- setNames(out, query)
   return(out)
 }
