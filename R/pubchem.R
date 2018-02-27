@@ -234,18 +234,20 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, C
       message(qurl)
     Sys.sleep(0.2)
     
+    query_commasep = paste0(query,collapse=',')
+    
     cont <- try(content(POST(qurl,
-                             body = paste0(from, '=', paste0(query,collapse=','))
+                             body = paste0(from, '=', query_commasep)
     )), silent = TRUE
     )
     
     if (inherits(cont, "try-error")) {
       warning('Problem with web service encountered... Returning NA.')
-      return(NA)
+      return(rep(NA, length = length(query)))
     }
     if (names(cont) == 'Fault') {
       warning(cont$Fault$Details, '. Returning NA.')
-      return(NA)
+      return(rep(NA, length = length(query)))
     }
     
     out <- lapply(lapply(cont$InformationList$Information, unlist),unname)
