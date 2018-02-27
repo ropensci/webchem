@@ -157,10 +157,10 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
     inchi <- gsub('\\n|\\t', '',
                   xml_text(xml_find_all(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]"))[1]
                   )
-    inchikey <- gsub('\\n|\\t', '',
+    inchikey <- gsub('\\n|\\t|\\r', '',
                      xml_text(xml_find_all(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]"))
     )
-    smiles <- gsub('\\n|\\t', '',
+    smiles <- gsub('\\n|\\t|\\r', '',
                    xml_text(xml_find_all(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]"))
     )
     toxicity <- html_table(xml_find_all(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))[[1]]

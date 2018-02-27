@@ -1,38 +1,32 @@
 language: r
-sudo: false
-cache: packages
-
 r:
   - devel
 #  - release
-
+dist: trusty
+sudo: required
+cache: packages
 env:
   global:
     - _R_CRAN_CHECK_INCOMING_=false
-
-
 r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
-warnings_are_errors: false
 r_check_revdep: false
+warnings_are_errors: false
 
-addons:
-  apt:
-    packages:
-    - libcurl4-openssl-dev
-    - libxml2-dev
-    - oracle-java8-installer
 
-before_install:
-  - jdk_switcher use oraclejdk8
-  - java -version
+apt_packages:
+  - libssl-dev
+  - libcurl4-openssl-dev
+  - libxml2-dev
+  - default-jre
+  - default-jdk
 
 r_packages:
   - devtools
-  - xml2
 
 r_github_packages:
   - jimhester/covr
   - jeroenooms/curl
+
 
 # report to codecov
 after_success:
@@ -42,7 +36,7 @@ after_success:
 notifications:
   email:
     recipients:
-    - szoecs@uni-landau.de
+    - eduardszoecs@gmail.com
     on_success: change
     on_failure: change
 

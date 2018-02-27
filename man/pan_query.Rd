@@ -79,4 +79,3 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
-

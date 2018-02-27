@@ -37,4 +37,3 @@ is.cas('64-17-6')
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
-

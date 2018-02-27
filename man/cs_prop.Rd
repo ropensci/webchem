@@ -35,11 +35,10 @@ sapply(out2, function(y){
 })
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
 \code{\link{cs_compinfo}} for extended compound information.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

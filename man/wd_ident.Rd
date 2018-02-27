@@ -19,16 +19,14 @@ A data.frame of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs
 Retrieve Indentifiers from wikidata
 }
 \note{
-Only matches in labels are returned.
+Only matches in labels are returned. If more than one unique hit is found,
+only the first is returned.
 }
 \examples{
 \dontrun{
  id <- c("Q408646", "Q18216")
  wd_ident(id)
 }
-}
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \references{
 Willighagen, E., 2015. Getting CAS registry numbers out of WikiData. The Winnower.
@@ -40,4 +38,6 @@ Wikidata: A Platform for Data Integration and Dissemination for the Life Science
 \seealso{
 \code{\link{get_wdid}}
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

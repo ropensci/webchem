@@ -37,11 +37,10 @@ out
 sapply(out, function(y) y$ec)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

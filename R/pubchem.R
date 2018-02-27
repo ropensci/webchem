@@ -187,9 +187,13 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' Search synonyms using PUG-REST,
 #' see \url{https://pubchem.ncbi.nlm.nih.gov/}.
 #' @import httr jsonlite
+#' @importFrom utils menu
 #'
 #' @param query character; search term.
-#' @param from character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'
+#' @param from character; type of input, can be one of 'name' (default), 'cid',
+#'     'sid', 'aid', 'smiles', 'inchi', 'inchikey'
+#' @param interactive numeric; if > 0 an interactive mode is entered to pick one of the x displayed synonyms.
+#'     The number specifies how many synonyms are displayed.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments
@@ -211,8 +215,9 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' pc_synonyms('Aspirin')
 #' pc_synonyms(c('Aspirin', 'Triclosan'))
 #' pc_synonyms(5564, from = 'cid')
+#' pc_synonyms(c('Aspirin', 'Triclosan'), interactive = 10)
 #' }
-pc_synonyms <- function(query, from = 'name', verbose = TRUE, arg = NULL, ...) {
+pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, arg = NULL, ...) {
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c('Aspirin')
   # from = 'name'
@@ -241,6 +246,12 @@ pc_synonyms <- function(query, from = 'name', verbose = TRUE, arg = NULL, ...) {
     }
     out <- unlist(cont)
     names(out) <- NULL
+
+    if (interactive > 0 && length(out) > 1) {
+      pick <- menu(out[seq_len(interactive)], graphics = FALSE, 'Select one:')
+      out <- out[pick]
+    }
+
     return(out)
   }
   out <- lapply(query, foo, from = from, verbose = verbose)

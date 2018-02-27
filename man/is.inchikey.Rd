@@ -37,10 +37,9 @@ is.inchikey('BQJCRHHNABKAKU/KBQPJGBKSA/N')
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \references{
 Heller, Stephen R., et al. "InChI, the IUPAC International Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

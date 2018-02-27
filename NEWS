@@ -1,7 +1,54 @@
-webchem 0.1.3
+webchem 0.4
 ======================
 
 NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+
+BUG FIXES
+
+* extr_num() did not work properly with decimal numbers [issue #136, reported and fixed by @stanstrup]
+* cs_prop() failed when epi-suite data was not available [issue #139, reported and fixed by @stanstrup]
+* cs_prop() failed with invalid html [issue #138, reported and fixed by @stanstrup]
+* cs_prop() gave incorrect answer, if entries were not available [issue #142, reported and fixed by @stanstrup]
+* cs_prop() did not parse scientific number correctly [issue #143, reported by @stanstrup, fixed by @EDiLD]
+* is.smiles() failed because of changes in rcdk [PR #140, reported and fixed by @allaway]
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
+webchem 0.3
+======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+* cs_prop() now also return experimental data for Boiling and Melting Points.
+* pc_synonyms gained an argument 'interactive' to enter an interactive mode for
+  selecting synonyms [isse #129, requested by @Aariq]
+* cts_convert now returns NA if no matches are found.
+
+BUG FIXES
+
+* cs_prop() failed with some CSIDs [isse #127, reported by @Aariq]
+* wd_ident() failed if multiple entries where found. Now returns the first hit only.
+* ci_query() did not return fully cleaned smiles and inchi
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
+webchem 0.2
+======================
+
+NEW FEATURES
+
+* fn_percept() extracts flavor percepts using CAS numbers from www.flavornet.org. Flavornet is a database of 738 compounds with human-detectible odors. [contributed by @Aariq]
 
 MINOR IMPROVEMENTS
 
@@ -195,7 +242,7 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 
-* Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribition of @jranke]
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribution of @jranke]
 
 
 

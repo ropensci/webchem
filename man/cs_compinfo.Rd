@@ -32,7 +32,6 @@ Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/
 \dontrun{
 # Fails because no TOKEN is included
 token <- '<YOUR-SECURITY-TOKEN>'
-# convert CAS to CSID
 csid <- get_csid("Triclosan", token = token)
 cs_compinfo(csid, token)
 
@@ -40,11 +39,10 @@ csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
 cs_compinfo(csids, token = token)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \seealso{
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
 \code{\link{cs_extcompinfo}} for extended compound information.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

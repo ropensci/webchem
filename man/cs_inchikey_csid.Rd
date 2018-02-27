@@ -22,14 +22,12 @@ Convert a InChIKey to CSID
 \examples{
 \donttest{
 # might fail if API is not available
-# convert CAS to CSID
 cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 }
-}
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
 \seealso{
 This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}

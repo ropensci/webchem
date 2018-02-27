@@ -261,7 +261,7 @@ is.smiles <- function(x, verbose = TRUE) {
     stop('Cannot handle multiple input strings.')
   }
   out <- try(rcdk::parse.smiles(x), silent = TRUE)
-  if (inherits(out, 'try-error') | is.na(out)) {
+  if (inherits(out[[1]], 'try-error') | is.null(out[[1]])) {
     return(FALSE)
   } else {
     return(TRUE)
@@ -275,10 +275,11 @@ is.smiles <- function(x, verbose = TRUE) {
 #' @export
 #' @examples
 #' extr_num('aaaa -95')
+#' extr_num("Melting Pt : -44.6 deg C")
 extr_num <- function(x) {
   if (length(x) == 0)
     return(NA)
-  as.numeric(gsub("[^0-9\\-]+", "", x))
+  as.numeric(gsub("[^0-9\\.\\-]+", "", x))
 }
 
 

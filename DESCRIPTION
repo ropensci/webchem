@@ -3,21 +3,24 @@ Title: Chemical Information from the Web
 Description: Chemical information from around the web. This package interacts
     with a suite of web APIs for chemical information.
 Type: Package
-Version: 0.1.2.9000
-Date: 2017-01-17
+Version: 0.3.0.9001
+Date: 2018-01-15
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
 Authors@R: c(person("Eduard", "Szöcs", role = c("aut", "cre"),
     email = "eduardszoecs@gmail.com"),
     person("Daniel", "Muench", role = "ctb"),
-    person("Johannes Ranke", role = "ctb"))
+    person("Johannes", "Ranke", role = "ctb"),
+    person("Eric", "Scott", role = "ctb"),
+    person("Jan", "Stanstrup", role = "ctb"),
+    person("Robert", "Allaway", role = "ctb"))
 Maintainer: Eduard Szöcs <eduardszoecs@gmail.com>
 LazyLoad: yes
 LazyData: yes
 Encoding: UTF-8
 Depends:
-    R (>= 2.10)
+    R (>= 3.0)
 Imports:
     xml2,
     httr,
@@ -29,4 +32,4 @@ Imports:
 Suggests:
     testthat,
     rcdk
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

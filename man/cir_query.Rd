@@ -116,9 +116,6 @@ cir_query(comp, 'cas', first = TRUE)
 
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}
 \references{
 \code{cir} relies on the great CIR web service created by the CADD
 Group at NCI/NIH! \cr
@@ -127,4 +124,6 @@ Group at NCI/NIH! \cr
 \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
 \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
 }
-
+\author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+}
