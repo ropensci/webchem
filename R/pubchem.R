@@ -242,17 +242,28 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, C
     )
     
     if (inherits(cont, "try-error")) {
-      warning('Problem with web service encountered... Returning NA.')
-      return(rep(NA, length = length(query)))
-    }
-    if (names(cont) == 'Fault') {
-      warning(cont$Fault$Details, '. Returning NA.')
-      return(rep(NA, length = length(query)))
+      if(length(query) > 1){
+        warning('Problem with web service encountered... Trying chemicals individually.')
+        cont <- lapply(query, foo, from=from, verbose=verbose)
+      } else {
+        warning('Problem with web service encountered... Returning NA.')
+        return(NA)
+      }
+    } else if (names(cont) == 'Fault') {
+      if(length(query) > 1){
+        warning(cont$Fault$Details, '. Trying chemicals individually.')
+        cont <- lapply(query, foo, from=from, verbose=verbose)
+      } else {
+        warning(cont$Fault$Details, '. Returning NA.')
+        return(NA)
+      }
+    } else {
+      cont <- cont$InformationList$Information
     }
     
-    out <- lapply(lapply(cont$InformationList$Information, unlist),unname)
+    out <- lapply(lapply(cont, unlist), unname)
     names(out) <- query
-    
+
     if (interactive > 0) {
       for (i in 1:length(out)) {
         results <- out[[i]]
@@ -263,6 +274,11 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, C
       }     
     }
     return(out)
+  }
+  
+  if(from %in% c('name','smiles','inchi','inchikey','sdf')){
+    #Only single strings per request are suppoprted for these identifiers.
+    CHUNKSIZE = 1
   }
   
   if (length(query) > CHUNKSIZE) {
