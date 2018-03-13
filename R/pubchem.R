@@ -259,6 +259,11 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, C
       }
     } else if (length(query) > 1) {
       cont <- cont$InformationList$Information
+      if (length(cont) > length(query)) {
+        #One or more chemicals map to multiple CIDs.
+        #The current results cannot distinguish which, so redo each chemical individually.
+        cont <- lapply(query, foo, from=from, verbose=verbose)
+      }
     }
     
     out <- lapply(lapply(cont, unlist), unname)
