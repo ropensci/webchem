@@ -242,7 +242,7 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, C
     )
     
     if (inherits(cont, "try-error")) {
-      if(length(query) > 1){
+      if (length(query) > 1) {
         warning('Problem with web service encountered... Trying chemicals individually.')
         cont <- lapply(query, foo, from=from, verbose=verbose)
       } else {
@@ -250,14 +250,14 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, C
         return(NA)
       }
     } else if (names(cont) == 'Fault') {
-      if(length(query) > 1){
+      if (length(query) > 1) {
         warning(cont$Fault$Details, '. Trying chemicals individually.')
         cont <- lapply(query, foo, from=from, verbose=verbose)
       } else {
         warning(cont$Fault$Details, '. Returning NA.')
         return(NA)
       }
-    } else {
+    } else if (length(query) > 1) {
       cont <- cont$InformationList$Information
     }
     
@@ -278,19 +278,18 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, C
   
   if(from %in% c('name','smiles','inchi','inchikey','sdf')){
     #Only single strings per request are suppoprted for these identifiers.
-    CHUNKSIZE = 1
-  }
-  
-  if (length(query) > CHUNKSIZE) {
+    out <- lapply(query, foo, from=from, verbose=verbose)
+    out <- do.call(c, out)
+  } else if (length(query) > CHUNKSIZE) {
     query_chunks <- split(query, ceiling(seq_along(query)/CHUNKSIZE))
     out <- lapply(query_chunks, foo, from=from, verbose=verbose)
     out <- do.call(c, out)
   } else {
     out <- foo(query, from = from, verbose = verbose)
   }
+  
   out <- setNames(out, query)
   return(out)
 }
-
 
 
