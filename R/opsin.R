@@ -23,11 +23,12 @@
 opsin_query <- function(query, verbose = TRUE, ...){
   # query <- 'cyclopropane'
   foo <- function(query, verbose){
+    query <- URLencode(query)
     baseurl <- "http://opsin.ch.cam.ac.uk/opsin/"
     out <- 'json'
     qurl <- paste0(baseurl, query, '.', out)
     if (verbose)
-      message('Querying ', query)
+      message('Querying ', URLdecode(query))
     Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
     h <- try(GET(qurl), silent = TRUE)
     if (inherits(h, "try-error")) {
