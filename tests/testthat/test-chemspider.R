@@ -10,6 +10,9 @@ test_that("get_csid()", {
   o2 <- get_csid(comps, token = token, verbose = TRUE, first = FALSE)
   o3 <- get_csid(c("picoxystrobin", "mandipropamid"), token = token, verbose = TRUE, first = FALSE)
 
+  b1 <- get_csid('acetic acid', token = token, verbose = TRUE)
+  expect_equal(b1, c(`acetic acid` = '171'))
+
   expect_is(o1, 'character')
   expect_is(o2, 'list')
   expect_equal(length(o1),3)
@@ -34,7 +37,7 @@ test_that("cs_compinfo()", {
   expect_equal(dim(o1), c(2, 6))
   expect_equal(o1$csid[1], '2157')
   expect_true(all(is.na(cs_compinfo(NA, token)[ 1, 1:5])))
-  })
+})
 
 
 test_that("cs_extcompinfo()", {
