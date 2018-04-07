@@ -33,6 +33,7 @@ get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
   foo <- function(query, token, first, verbose, ...){
     if (is.na(query))
       return(NA)
+    query <- URLencode(query)
     baseurl <- 'https://www.chemspider.com/Search.asmx/SimpleSearch?'
     qurl <- paste0(baseurl, 'query=', query, '&token=', token)
     if (verbose)

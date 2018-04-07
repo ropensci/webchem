@@ -10,14 +10,14 @@ chk_cts <- function(){
     skip("Server is down!")
 }
 
-chk_cir <- function(){
-  qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
-  Sys.sleep(0.5)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error'))
-    skip("Server is down!")
-}
+# chk_cir <- function(){
+#   qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
+#   Sys.sleep(0.5)
+#   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+#               silent = TRUE)
+#   if (inherits(cont, 'try-error'))
+#     skip("Server is down!")
+# }
 
 
 test_that("cts_compinfo()", {
@@ -48,6 +48,8 @@ test_that("cts_convert()", {
   expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
   expect_equal(length(o1), 2)
   expect_true(is.na(cts_convert('xxxx', 'inchikey', 'Chemical Name')[[1]]))
+
+  # cts_convert('acetic acid', 'Chemical Name', 'CAS', first = TRUE)
 })
 
 
