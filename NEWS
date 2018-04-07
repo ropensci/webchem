@@ -14,6 +14,7 @@ BUG FIXES
 * cs_prop() gave incorrect answer, if entries were not available [issue #142, reported and fixed by @stanstrup]
 * cs_prop() did not parse scientific number correctly [issue #143, reported by @stanstrup, fixed by @EDiLD]
 * is.smiles() failed because of changes in rcdk [PR #140, reported and fixed by @allaway]
+* cir_query() failed with identifiers containin spaces (e.g. 'acetic acid') [issue #146, reported by Lars Nielsen]
 
 DEPRECATED FUNCTIONS
 

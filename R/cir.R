@@ -109,6 +109,7 @@
 cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
                       first = FALSE, verbose = TRUE, ...){
   foo <- function(identifier, representation, resolver, first, verbose) {
+    identifier <- URLencode(identifier)
     baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
     qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
     if (!is.null(resolver)) {

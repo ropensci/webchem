@@ -16,4 +16,7 @@ test_that("cir_query()", {
   expect_equal(length(cir_query('Triclosan', 'cas', first = TRUE, verbose = FALSE)[[1]]), 1)
   Sys.sleep(5)
   expect_equal(length(cir_query(c('Triclosan', 'Aspirin'), 'cas', verbose = FALSE)), 2)
+
+  Sys.sleep(5)
+  expect_equal(cir_query('acetic acid', 'mw', first = TRUE), c(`acetic acid` = 60.0524))
 })
