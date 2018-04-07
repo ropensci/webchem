@@ -16,6 +16,10 @@ test_that("chemid returns correct results", {
   b1 <- ci_query('Tetracyclin', type = 'name')  # BUG: Failed because of multiple matches
   expect_equal(b1[[1]]$name[1], "Tetracycline")
 
+  b2 <- ci_query('Edetic acid', type = 'name', match = 'best')
+  expect_equal(b2[[1]]$name[1], "Edetic acid")
+  expect_equal(attr(b2[[1]],'distance'), 0)
+
   expect_is(o1, 'list')
   expect_is(o2, 'list')
   expect_is(o3, 'list')

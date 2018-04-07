@@ -1,5 +1,6 @@
 #' Query Chemical Identifier Resolver
 #' @import xml2
+#' @importFrom utils URLencode
 #'
 #' @param identifier character; chemical identifier.
 #' @param representation character; what representation of the identifier should
