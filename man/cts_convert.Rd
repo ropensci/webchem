@@ -24,10 +24,10 @@ cts_convert(query, from, to, first = FALSE, verbose = TRUE, ...)
 a list of characters. If first = TRUE a vector.
 }
 \description{
-Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
 }
 \details{
-See also \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+See also \url{http://cts.fiehnlab.ucdavis.edu/}
 for possible values of from and to.
 }
 \examples{
