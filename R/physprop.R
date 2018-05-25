@@ -91,6 +91,12 @@ pp_query <- function(cas, verbose = TRUE){
       }
       c(value, unit, temp, type, ref)
     })), stringsAsFactors = FALSE)
+    
+    if (length(prop)==0) {
+      message('No properties found! Returning NA.\n')
+      return(NA)
+    }
+    
     names(prop) <- c("value", "unit", "temp", "type", "ref")
     prop$variable <- variables
     prop <- prop[, c("variable", "value", "unit", "temp", "type", "ref")]

@@ -6,6 +6,11 @@ test_that("opsin_query()", {
 
   o1 <- opsin_query(c('Cyclopropane', 'Octane'))
   o2 <- opsin_query(c('xxxx'))
+
+  # issue #146
+  b1 <- opsin_query('Acetic acid')
+  expect_equal(b1$query, 'Acetic acid')
+
   expect_is(o1, 'data.frame')
   expect_equal(ncol(o1), 6)
   expect_equal(ncol(o2), 6)

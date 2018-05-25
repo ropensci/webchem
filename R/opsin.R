@@ -4,6 +4,7 @@
 #' \url{http://opsin.ch.cam.ac.uk/instructions.html}.
 #'
 #' @import jsonlite httr xml2
+#' @importFrom utils URLencode URLdecode
 #' @param query character;  chemical name that should be queryed.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
@@ -23,11 +24,12 @@
 opsin_query <- function(query, verbose = TRUE, ...){
   # query <- 'cyclopropane'
   foo <- function(query, verbose){
+    query <- URLencode(query)
     baseurl <- "http://opsin.ch.cam.ac.uk/opsin/"
     out <- 'json'
     qurl <- paste0(baseurl, query, '.', out)
     if (verbose)
-      message('Querying ', query)
+      message('Querying ', URLdecode(query))
     Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
     h <- try(GET(qurl), silent = TRUE)
     if (inherits(h, "try-error")) {

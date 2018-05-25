@@ -36,5 +36,12 @@ test_that("physprop returns correct results", {
   expect_true(is.na(fl5[[4]]))
 })
 
+test_that("bugs are fixed", {
+  skip_on_cran()
+
+  chk_physprop()
+  y <- pp_query(75706126)
+  expect_true(is.na(y))
+})
 
 

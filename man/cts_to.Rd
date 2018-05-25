@@ -16,7 +16,7 @@ a character vector.
 Return a list of all possible ids that can be used in the 'to' argument
 }
 \details{
-See also \url{http://cts.fiehnlab.ucdavis.edu/moreServices/index#fromnames}
+See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 }
 \examples{
 \donttest{

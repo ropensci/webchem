@@ -5,6 +5,7 @@
 #' @import xml2
 #' @importFrom rvest html_table
 #' @importFrom stats rgamma
+#' @importFrom utils URLencode URLdecode
 #'
 #' @param query character; query string
 #' @param type character; type of query string.
@@ -48,10 +49,6 @@
 ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
                      match = c('best', 'first', 'ask', 'na'),
                      verbose = TRUE){
-  # query <- '50-00-0'
-  # query <- 'Triclosan'
-  # query <- 'xxxx'
-  # query <- 'Tetracyclin'
   type <- match.arg(type)
   match <- match.arg(match)
   foo <- function(query, type, match, verbose){
@@ -59,6 +56,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
       message('query is NA! Returning NA.\n')
       return(NA)
     }
+    query <- URLencode(query)
     baseurl <- switch(type,
            rn = 'https://chem.sis.nlm.nih.gov/chemidplus/rn/',
            name = 'https://chem.sis.nlm.nih.gov/chemidplus/name/startswith/',
@@ -104,7 +102,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
         if (verbose)
           message("Returning best match. \n")
         hit_names <- gsub(' \\[.*\\]', '', hit_names)
-        dd <- adist(query, hit_names) / nchar(hit_names)
+        dd <- adist(URLdecode(query), hit_names) / nchar(hit_names)
         hit_cas <- hit_cas[which.min(dd)]
         matched_sub <- hit_names[which.min(dd)]
         d <- dd[which.min(dd)]

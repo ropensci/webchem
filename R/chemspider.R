@@ -33,6 +33,7 @@ get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
   foo <- function(query, token, first, verbose, ...){
     if (is.na(query))
       return(NA)
+    query <- URLencode(query)
     baseurl <- 'https://www.chemspider.com/Search.asmx/SimpleSearch?'
     qurl <- paste0(baseurl, 'query=', query, '&token=', token)
     if (verbose)
@@ -290,26 +291,28 @@ cs_prop <- function(csid, verbose = TRUE, ...){
       ll <- sapply(ll, str_trim)
       ll <- ll[!ll == '']
 
+      # Log Octanol-Water Partition Coef
       prop <- 'Log Octanol-Water Partition Coef'
-      value_pred <- as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
+      value_pred <- save_val(as.numeric(gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)])))
       unit_pred <- NA
-      source_pred <- gsub('(.*) = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)])
+      source_pred <- save_val(gsub('(.*) = \\s(.*)','\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
       value_exp <- save_val(as.numeric(gsub('.* = \\s(.*)',
                                             '\\1', ll[grepl('^Log Kow \\(Exper.', ll)])))
       unit_exp <- NA
       source_exp <- save_val(gsub('^.*\\:\\s(.*)','\\1',
                                   ll[which(grepl('^Log Kow \\(Exper.', ll)) + 1]))
 
+      # Boiling Point
       prop <- c(prop, 'Boiling Point')
       value_pred <- c(value_pred,
-                      as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
+                      save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
                                       '\\1',
-                                      ll[grepl('^Boiling Pt \\(deg C', ll)])))
+                                      ll[grepl('^Boiling Pt \\(deg C', ll)]))))
       unit_pred <- c(unit_pred, 'deg C')
       source_pred <- c(source_pred,
-                       gsub('^.*\\((.*)\\)\\:$',
+                       save_val(gsub('^.*\\((.*)\\)\\:$',
                             '\\1',
-                            ll[grepl('^Boiling Pt, ', ll)]))
+                            ll[grepl('^Boiling Pt, ', ll)])))
 
       value_exp <- c(value_exp, save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
                                                              '\\1',
@@ -317,16 +320,17 @@ cs_prop <- function(csid, verbose = TRUE, ...){
       unit_exp <- c(unit_exp, 'deg C')
       source_exp <- c(source_exp, NA)
 
+      # Melting Point
       prop <- c(prop, 'Melting Point')
       value_pred <- c(value_pred,
-                      as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
+                      save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
                                       '\\1',
-                                      ll[grepl('^Melting Pt \\(deg C', ll)])))
+                                      ll[grepl('^Melting Pt \\(deg C', ll)]))))
       unit_pred <- c(unit_pred, 'deg C')
       source_pred <- c(source_pred,
-                       gsub('^.*\\((.*)\\)\\:$',
+                       save_val(gsub('^.*\\((.*)\\)\\:$',
                             '\\1',
-                            ll[grepl('^Boiling Pt, ', ll)]))
+                            ll[grepl('^Boiling Pt, ', ll)])))
       value_exp <- c(value_exp, save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*',
                                                          '\\1',
                                                          ll[grepl('^MP  \\(exp database', ll)]))))
@@ -335,13 +339,14 @@ cs_prop <- function(csid, verbose = TRUE, ...){
       # epi_mp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^MP\\s+\\(exp', ll)]))
       # epi_bp_exp <- as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*','\\1', ll[grepl('^BP\\s+\\(exp', ll)]))
 
+      # Water Solubility from KOW
       prop <- c(prop, 'Water Solubility from KOW')
-      value_pred <- c(value_pred, as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
+      value_pred <- c(value_pred, save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
                                                   '\\1',
-                                                  ll[grepl('^Water Solubility at 25 deg C', ll)])))
+                                                  ll[grepl('^Water Solubility at 25 deg C', ll)]))))
       unit_pred <- c(unit_pred, 'mg/L (25 deg C)')
-      source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$','\\1',
-                                         ll[grepl('^Water Solubility Estimate from Log Kow', ll)]))
+      source_pred <- c(source_pred, save_val(gsub('^.*\\((.*)\\)\\:$','\\1',
+                                         ll[grepl('^Water Solubility Estimate from Log Kow', ll)])))
       value_exp <- c(value_exp,
                      save_val(as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
                                               '\\1',
@@ -355,25 +360,27 @@ cs_prop <- function(csid, verbose = TRUE, ...){
                                     '\\1',
                                     ll[which(grepl('^Water Sol \\(Exper. database match', ll)) + 1])))
 
+      # Water Solubility from Fragments
       prop <- c(prop, 'Water Solubility from Fragments')
-      value_pred <- c(value_pred, as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
+      value_pred <- c(value_pred, save_val(as.numeric(gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
                                                   '\\1',
-                                                  ll[grepl('^Wat Sol \\(v1.01', ll)])))
+                                                  ll[grepl('^Wat Sol \\(v1.01', ll)]))))
       unit_pred <- c(unit_pred, 'mg/L')
       source_pred <- c(source_pred, NA)
       value_exp <- c(value_exp,  NA)
       unit_exp <- c(unit_exp, NA)
       source_exp <- c(source_exp, NA)
 
+      # Log Octanol-Air Partition Coefficient (25 deg C)
       prop <- c(prop, 'Log Octanol-Air Partition Coefficient (25 deg C)')
 
-      value_pred_new <- as.numeric(gsub('.*:\\s(.*)', '\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)]))
+      value_pred_new <- save_val(as.numeric(gsub('.*:\\s(.*)', '\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)])))
       value_pred <- c(value_pred, ifelse(length(value_pred_new)==0,NA,value_pred_new))
 
       unit_pred <- c(unit_pred, NA)
-      source_pred <- c(source_pred, gsub('^.*\\[(.*)\\]\\:$',
+      source_pred <- c(source_pred, save_val(gsub('^.*\\[(.*)\\]\\:$',
                                          '\\1',
-                                         ll[grepl('^Log Octanol-Air Partition Coefficient', ll)]))
+                                         ll[grepl('^Log Octanol-Air Partition Coefficient', ll)])))
       value_exp <- c(value_exp,
                      save_val(suppressWarnings(as.numeric(gsub('^.*\\:(.*)',
                                               '\\1',
@@ -381,15 +388,16 @@ cs_prop <- function(csid, verbose = TRUE, ...){
       unit_exp <- c(unit_exp, NA)
       source_exp <- c(source_exp, NA)
 
+      # Log Soil Adsorption Coefficient
       prop <- c(prop, 'Log Soil Adsorption Coefficient')
       value_pred <- c(value_pred,
-                      as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*',
+                      save_val(as.numeric(gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*',
                                       '\\1',
-                                      ll[grepl('^Log Koc:', ll)])))
+                                      ll[grepl('^Log Koc:', ll)]))))
       unit_pred <- c(unit_pred, NA)
-      source_pred <- c(source_pred, gsub('^.*\\((.*)\\)\\:$',
+      source_pred <- c(source_pred, save_val(gsub('^.*\\((.*)\\)\\:$',
                                          '\\1',
-                                         ll[grepl('^Soil Adsorption Coefficient', ll)]))
+                                         ll[grepl('^Soil Adsorption Coefficient', ll)])))
       value_exp <- c(value_exp, NA)
       unit_exp <- c(unit_exp, NA)
       source_exp <- c(source_exp, NA)

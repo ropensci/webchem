@@ -2,7 +2,7 @@
 #'
 #' @import jsonlite httr
 #' @importFrom stats rgamma
-#'
+#' @importFrom utils URLencode URLdecode
 #' @param query character; The searchterm
 #' @param language character; the language to search in
 #' @param match character; How should multiple hits be handeled? 'all' returns all matched IDs,
@@ -33,6 +33,7 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
   # query <- 'Triclosan'
   match <- match.arg(match)
   foo <- function(query, language, match, verbose){
+    query <- URLencode(query)
     limit <-  50
     qurl <- paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
     qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query)
@@ -55,7 +56,7 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
     search <- search[tolower(iconv(search$match$text,
                                    "latin1",
                                    "ASCII",
-                                   sub = "")) == tolower(query), ]
+                                   sub = "")) == tolower(URLdecode(query)), ]
 
     if (nrow(search) > 1) {
       if (verbose)
@@ -84,7 +85,7 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
       if (match == 'best') {
         if (verbose)
           message("Returning best match. \n")
-        dd <- adist(query, search$label) / nchar(search$label)
+        dd <- adist(URLdecode(query), search$label) / nchar(search$label)
         id <- search$id[which.min(dd)]
         d <- round(dd[which.min(dd)], 2)
         matched_sub <- search$label[which.min(dd)]
