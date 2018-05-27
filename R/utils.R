@@ -332,3 +332,36 @@ parse_mol <- function(string) {
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
 
+#' Format a CAS number correctly
+#'
+#' @param x a double or character to be converted to a CAS format
+#'
+#' @return correctly formatted CAS
+#'
+#' @author Eric Scott, \email{scottericr@@gmail.com}
+
+.format.cas <- function(x){
+  parsed <- gsub("([0-9]+)([0-9]{2})([0-9]{1})", '\\1-\\2-\\3', x)
+  pass <- is.cas(parsed)
+  out <- ifelse(pass, parsed, NA)
+  return(out)
+}
+
+
+#' Format numbers as CAS numbers
+#' @description This function attempts to format numeric (or character) vectors as character vectors of CAS numbers.  If they cannot be converted to CAS format or don't pass `is.cas()`, `NA` is returned
+#' @param x numeric vector, or character vector of CAS numbers missing the hyphens
+#'
+#' @return character vector of valid CAS numbers
+#' @export
+#' @author Eric Scott, \email{scottericr@@gmail.com}
+#' @examples
+#' x = c(58082, 123456, "hexenol")
+#' as.cas(x)
+#'
+as.cas <- function(x){
+  if(any(!sapply(x, grepl, pattern= "^\\d+$"))){
+    warning("Some elements of x cannot be converted to CAS numbers")
+  }
+  sapply(x, .format.cas, USE.NAMES = FALSE)
+}
