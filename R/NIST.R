@@ -27,12 +27,6 @@ read_html_slow <- function(x, ...){
 #'
 #'
 
-cas = "95-13-6"
-type = "lee"
-polarity = "non-polar"
-temp_prog = "custom"
-
-
 get_RI_tables <- function(cas, type = c("kovats", "linear", "alkane", "lee"), polarity = c("polar", "non-polar"), temp_prog = c("isothermal", "ramp", "custom")){
   type_str <- toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
   URL_detail <- paste0("https://webbook.nist.gov/cgi/cbook.cgi?ID=C",
@@ -44,12 +38,8 @@ get_RI_tables <- function(cas, type = c("kovats", "linear", "alkane", "lee"), po
   if(xml_length(all.tables)==0){
     warning(paste0("There are no RIs for CAS# ", cas, " of type ", type_str, ". Returning NA."))
     tables <- NA
-
-    ### Get rid of this and just use !is.na() to check if its empty?
-    attr(tables, "skip") <- TRUE
   } else {
     tables <- all.tables
-    attr(tables, "skip") <- FALSE
   }
   attr(tables, "type") <- type
   attr(tables, "polarity") <- polarity
@@ -140,9 +130,7 @@ columns_iso <- function(table){
 #' @return a single table
 #'
 tidy_RItable <- function(tables){
-  if(attr(tables, "skip")==TRUE){
-    output <- data.frame(NA)
-  } else {
+  if(!is.na(tables)){
     temp_prog <- attr(tables, "temp_prog")
     tidy1 <- tables %>%
       #transpose tables and fix column names
@@ -195,6 +183,15 @@ tidy_RItable <- function(tables){
 #' @examples
 #' myRIs <- get_RI(c("78-70-6", "873-94-9", "13474-59-4"), "linear", "non-polar", "ramp")
 get_RI <- function(cas, type = c("kovats", "linear", "alkane", "lee"), polarity = c("polar", "non-polar"), temp_prog = c("isothermal", "ramp", "custom")){
+  if(length(type) != 1){
+    stop("Choose exactly one type of retention index")
+  }
+  if(length(polarity) != 1){
+    stop("Choose either polar or non-polar for 'polarity'")
+  }
+  if(length(temp_prog) != 1){
+    stop("Choose exactly one type of temperature program")
+  }
   map(cas, ~get_RI_tables(., type, polarity, temp_prog) %>%
         tidy_RItable()) %>%
     set_names(cas) %>%
