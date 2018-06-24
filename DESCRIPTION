@@ -28,7 +28,9 @@ Imports:
     RCurl,
     jsonlite,
     stringr,
-    methods
+    methods,
+    dplyr,
+    purrr
 Suggests:
     testthat,
     rcdk
