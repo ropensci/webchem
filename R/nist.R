@@ -1,6 +1,3 @@
-## quiets concerns of R CMD check re: the .'s that appear in pipelines
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
-
 #' Read HTML slowly
 #' @description Just adds a rest after `read_html()`.  Useful for web-scraping.
 #' @import xml2
@@ -27,7 +24,7 @@ read_html_slow <- function(x, ...){
 #'
 #' @return an xml nodeset
 #'
-get_RI_xml <- function(cas, type = c("kovats", "linear", "alkane", "lee"),
+get_ri_xml <- function(cas, type = c("kovats", "linear", "alkane", "lee"),
                        polarity = c("polar", "non-polar"),
                        temp_prog = c("isothermal", "ramp", "custom")){
   #Construct URL
@@ -38,28 +35,28 @@ get_RI_xml <- function(cas, type = c("kovats", "linear", "alkane", "lee"),
                        type_str)
   #Read URL and extract xml
   page <- read_html_slow(URL_detail)
-  RI_xml.all <- html_nodes(page, ".data")
+  ri_xml.all <- html_nodes(page, ".data")
 
   #Warn if table doesn't exist at URL
-  if(length(RI_xml.all)==0){
+  if (length(ri_xml.all) == 0) {
     warning(paste0("There are no RIs for CAS# ", cas, " of type ", type_str, ". Returning NA."))
-    RI_xml <- as.data.frame(NA)
+    ri_xml <- as.data.frame(NA)
   } else {
-    RI_xml <- RI_xml.all
+    ri_xml <- ri_xml.all
   }
 
   #set attributes to label what type of RI
-  attr(RI_xml, "type") <- type
-  attr(RI_xml, "polarity") <- polarity
-  attr(RI_xml, "temp_prog") <- temp_prog
+  attr(ri_xml, "type") <- type
+  attr(ri_xml, "polarity") <- polarity
+  attr(ri_xml, "temp_prog") <- temp_prog
 
-  return(RI_xml)
+  return(ri_xml)
 }
 
 
-#' Tidier for webscraped RI RI_xml
+#' Tidier for webscraped RI ri_xml
 #'
-#' @param RI_xml captured by `get_RI_xml`
+#' @param ri_xml captured by `get_ri_xml`
 #'
 #' @import rvest
 #' @importFrom purrr map
@@ -68,14 +65,14 @@ get_RI_xml <- function(cas, type = c("kovats", "linear", "alkane", "lee"),
 #'
 #' @return a single table
 #'
-tidy_RItable <- function(RI_xml){
+tidy_ritable <- function(ri_xml){
   #Skip all these steps if the table didn't exist at the URL and was set to NA
-  if(any(is.na(RI_xml))){
-    output <- RI_xml
+  if (any(is.na(ri_xml))) {
+    output <- ri_xml
 
   } else {
     # Read in the tables from xml
-    table.list <- map(RI_xml, html_table)
+    table.list <- map(ri_xml, html_table)
 
     # Transpose and tidy
     tidy1 <- map_dfr(
@@ -88,9 +85,9 @@ tidy_RItable <- function(RI_xml){
     )
 
     # Extract the temperature program metadata
-    temp_prog <- attr(RI_xml, "temp_prog")
+    temp_prog <- attr(ri_xml, "temp_prog")
 
-    if(temp_prog == "custom"){
+    if (temp_prog == "custom") {
       tidy2 <- rename(tidy1,
                       "type" = "Column type",
                       "phase" = "Active phase",
@@ -107,7 +104,7 @@ tidy_RItable <- function(RI_xml){
         mutate_at(vars("length", "diameter", "thickness", "RI"),
                   as.numeric)
 
-    } else if(temp_prog == "ramp"){
+    } else if (temp_prog == "ramp") {
       tidy2 <- rename(tidy1,
                       "type" = "Column type",
                       "phase" = "Active phase",
@@ -129,7 +126,7 @@ tidy_RItable <- function(RI_xml){
                        "temp_rate", "hold_start", "hold_end",  "RI"),
                   as.numeric)
 
-    } else if(temp_prog == "isothermal"){
+    } else if (temp_prog == "isothermal") {
       tidy2 <- rename(tidy1,
                       "type" = "Column type",
                       "phase" = "Active phase",
@@ -182,20 +179,18 @@ tidy_RItable <- function(RI_xml){
 #' @seealso \code{\link{is.cas}} \code{\link{as.cas}}
 #'
 #' @examples
-#' myRIs <- get_RI(c("78-70-6", "873-94-9", "13474-59-4"), "linear", "non-polar", "ramp")
+#' myRIs <- get_ri(c("78-70-6", "873-94-9", "13474-59-4"), "linear", "non-polar", "ramp")
 #'
-get_RI <- function(cas, type = c("kovats", "linear", "alkane", "lee"), polarity = c("polar", "non-polar"), temp_prog = c("isothermal", "ramp", "custom")){
-  if(length(type) != 1){
-    stop("Choose exactly one type of retention index")
-  }
-  if(length(polarity) != 1){
-    stop("Choose either polar or non-polar for 'polarity'")
-  }
-  if(length(temp_prog) != 1){
-    stop("Choose exactly one type of temperature program")
-  }
-  RI_xmls <- map(cas, ~get_RI_xml(., type, polarity, temp_prog)) %>%
+get_ri <- function(cas,
+                   type = c("kovats", "linear", "alkane", "lee"),
+                   polarity = c("polar", "non-polar"),
+                   temp_prog = c("isothermal", "ramp", "custom")){
+  type <- match.arg(type)
+  polarity <- match.arg(polarity)
+  temp_prog <- match.arg(temp_prog)
+  ri_xmls <- map(cas, ~get_ri_xml(., type, polarity, temp_prog)) %>%
     setNames(cas)
 
-  RI_tables <- map_dfr(RI_xmls, tidy_RItable, .id = "CAS")
+  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "CAS")
+  return(ri_tables)
 }
