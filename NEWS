@@ -1,6 +1,9 @@
 webchem 0.5
 ======================
+
 NEW FEATURES
+
+* Retrieve retention indices from NIST (https://webbook.nist.gov) with get_ri() [PR #154, contributed by @Aariq]
 
 MINOR IMPROVEMENTS
 
