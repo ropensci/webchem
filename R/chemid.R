@@ -5,7 +5,7 @@
 #' @import xml2
 #' @importFrom rvest html_table
 #' @importFrom stats rgamma
-#' @importFrom utils URLencode
+#' @importFrom utils URLencode URLdecode
 #'
 #' @param query character; query string
 #' @param type character; type of query string.

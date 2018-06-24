@@ -4,6 +4,7 @@
 
 # Git
 .gitignore
+.github
 
 # Travis
 .travis.yml
@@ -19,5 +20,6 @@ README.Rmd
 README.md
 README_files
 CONTRIBUTING.md
+README_cache
 
 .vscode

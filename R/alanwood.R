@@ -126,15 +126,16 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE, idx =
 #'@author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 build_aw_idx <- function(){
   idx1 <- read_html('http://www.alanwood.net/pesticides/index_rn.html')
-  idx2 <- read_html('http://www.alanwood.net/pesticides/index_rn1.html')
-  idx3 <- read_html('http://www.alanwood.net/pesticides/index_rn2.html')
+  # idx2 <- read_html('http://www.alanwood.net/pesticides/index_rn1.html')
+  # idx3 <- read_html('http://www.alanwood.net/pesticides/index_rn2.html')
   prep_idx <- function(y) {
     names <- xml_text(xml_find_all(y, "//dl/dt"))
     links <- xml_attr(xml_find_all(y, '//dt/following-sibling::dd[1]/a[1]'), 'href')
     linknames <- xml_text(xml_find_all(y, '//dt/following-sibling::dd[1]/a[1]'))
     return(data.frame(names, links, linknames, stringsAsFactors = FALSE))
   }
-  aw_idx <- rbind(prep_idx(idx1), prep_idx(idx2) ,prep_idx(idx3))
+  # aw_idx <- rbind(prep_idx(idx1), prep_idx(idx2) ,prep_idx(idx3))
+  aw_idx <- rbind(prep_idx(idx1))
   aw_idx[['source']] <- 'rn'
   idx4 <- read_html('http://www.alanwood.net/pesticides/index_cn.html')
   n <- xml_find_all(idx4, '//a')

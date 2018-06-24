@@ -1,10 +1,31 @@
+webchem 0.5
+======================
+
+NEW FEATURES
+
+* Retrieve retention indices from NIST (https://webbook.nist.gov) with get_ri() [PR #154, contributed by @Aariq]
+
+MINOR IMPROVEMENTS
+
+* as.cas() added.
+
+BUG FIXES
+
+* cs_prop() failed with duplicated return values [issue #148, reported and fixed by @stanstrup]
+* pp_query() failed when compound present, but no properties [issue #151, reported and fixed by @stanstrup]
+
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+
 webchem 0.4
 ======================
 
 NEW FEATURES
 
 MINOR IMPROVEMENTS
-
 
 BUG FIXES
 

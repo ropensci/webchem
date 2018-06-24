@@ -4,6 +4,7 @@
 #' \url{http://opsin.ch.cam.ac.uk/instructions.html}.
 #'
 #' @import jsonlite httr xml2
+#' @importFrom utils URLencode URLdecode
 #' @param query character;  chemical name that should be queryed.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.

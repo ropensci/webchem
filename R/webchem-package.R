@@ -4,7 +4,9 @@
 #' @docType package
 #' @name webchem
 #' @importFrom methods is
-NULL
+#' @importFrom utils globalVariables
+if (getRversion() >= "2.15.1")
+  globalVariables(c("."))
 
 
 

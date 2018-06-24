@@ -1,3 +1,10 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    self_contained: no
+  pdf_document: default
+---
 webchem
 =============
 
@@ -37,7 +44,8 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
-[Flavornet](http://www.flavornet.org) | `fn_percept` | none | none
+[Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
+[NIST](https://webbook.nist.gov) | `get_ri()` | none | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -230,17 +238,17 @@ and synonyms
 
 ```r
 pc_synonyms(5564, from = 'cid')[[1]][1:5]
-#> [1] "5564"                                     
-#> [2] "triclosan"                                
-#> [3] "3380-34-5"                                
-#> [4] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
-#> [5] "2,4,4'-Trichloro-2'-hydroxydiphenyl ether"
+#> [1] "5564"                                  
+#> [2] "triclosan"                             
+#> [3] "3380-34-5"                             
+#> [4] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"
+#> [5] "Irgasan"
 pc_synonyms('Triclosan', from = 'name')[[1]][1:5]
-#> [1] "5564"                                     
-#> [2] "triclosan"                                
-#> [3] "3380-34-5"                                
-#> [4] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"   
-#> [5] "2,4,4'-Trichloro-2'-hydroxydiphenyl ether"
+#> [1] "5564"                                  
+#> [2] "triclosan"                             
+#> [3] "3380-34-5"                             
+#> [4] "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL"
+#> [5] "Irgasan"
 ```
 
 
@@ -374,7 +382,7 @@ pp_query('50-00-0')
 #> 5         Henry's Law Constant  3.370e-07       atm-m3/mol 25 deg C  EXP
 #> 6 Atmospheric OH Rate Constant  9.370e-12 cm3/molecule-sec 25 deg C  EXP
 #> 7                Melting Point -9.200e+01            deg C     <NA> <NA>
-#> 8                Boiling Point -1.950e+02            deg C     <NA> <NA>
+#> 8                Boiling Point -1.950e+01            deg C     <NA> <NA>
 #>                                ref
 #> 1        PICKRELL,JA ET AL. (1983)
 #> 2           HANSCH,C ET AL. (1995)
@@ -618,6 +626,32 @@ fn_percept(c("75-07-0", "123-32-0"))
 #> "cocoa, roasted nut, roast beef, medicine"
 ```
 
+#### NIST
+
+```r
+get_ri("78-70-6")
+#>       CAS      type                        phase   RI  length      gas
+#> 1 78-70-6 Capillary                      PEG-20M 1498  50.000 Nitrogen
+#> 2 78-70-6    Packed                 Carbowax 20M 1555      NA     <NA>
+#> 3 78-70-6 Capillary                 Carbowax 20M 1552      NA Nitrogen
+#> 4 78-70-6 Capillary                 Carbowax 20M 1551 152.000     <NA>
+#> 5 78-70-6    Packed                     PEG 4000 1558   6.145 Nitrogen
+#> 6 78-70-6 Capillary Carbowax 20M + Igepal (20:1) 1533 152.000   Helium
+#>      substrate diameter thickness temp                           reference
+#> 1         <NA>     0.27        NA  170 Gribanova, Kharitonov, et al., 1990
+#> 2         <NA>       NA        NA  150                     ter Heide, 1976
+#> 3         <NA>       NA        NA  105               Moore and Brown, 1976
+#> 4         <NA>     0.80        NA  130       Kepner, Ellison, et al., 1974
+#> 5 Chromosorb P       NA        NA  175       Hedin, Thompson, et al., 1972
+#> 6    GAS PAK F     0.80        NA  135         Sakai, Maarse, et al., 1967
+#>   comment
+#> 1 MSDC-RI
+#> 2 MSDC-RI
+#> 3 MSDC-RI
+#> 4 MSDC-RI
+#> 5 MSDC-RI
+#> 6 MSDC-RI
+```
 
 #### Extractor functions
 
@@ -632,8 +666,8 @@ wi
 #> 1 C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl 3380-34-5 5564 222-182-2 5363
 #>                                                                    inchi
 #> 1 1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H
-#>                      inchikey drugbank    zvg  chebi    chembl       unii
-#> 1 XEFQLINVKFYRCS-UHFFFAOYSA-N    08604 490400 164200 CHEMBL849 4NM5039Y5X
+#>                      inchikey drugbank    zvg chebi    chembl       unii
+#> 1 XEFQLINVKFYRCS-UHFFFAOYSA-N    08604 490400 47700 CHEMBL849 4NM5039Y5X
 #>                              source_url   query
 #> 1 https://www.wikidata.org/wiki/Q408646 Q408646
 cas(wi)
@@ -687,10 +721,8 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N', type = 'chemspider')
 
 ```r
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
-#> [1] TRUE
 # 'J' is not found in the periodic table
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
-#> [1] FALSE
 ```
 
 
@@ -710,6 +742,7 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 + [Eduard Szöcs](https://github.com/EDiLD)
 + [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
 + [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
++ [Eric R Scott](https://github.com/ropensci/webchem/commits?author=Aariq)
 
 ### Want to contribute?
 

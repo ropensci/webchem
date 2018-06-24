@@ -16,7 +16,7 @@ a list of lists (for each supplied inchikey):
 a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
 }
 \description{
-Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
+Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu/}
 }
 \examples{
 \donttest{

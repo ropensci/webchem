@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
   warning = FALSE, 
   message = FALSE,
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  cache = TRUE
 )
 ```
 
@@ -51,7 +52,8 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
-[Flavornet](http://www.flavornet.org) | `fn_percept` | none | none
+[Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
+[NIST](https://webbook.nist.gov) | `get_ri()` | none | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -301,6 +303,10 @@ opsin_query(c('Cyclopropane', 'Octane'))
 fn_percept(c("75-07-0", "123-32-0"))
 ```
 
+#### NIST
+```{r nist}
+get_ri("78-70-6")
+```
 
 #### Extractor functions
 
@@ -345,7 +351,7 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N', type = 'chemspider')
 
 ##### Check if a string is a valid SMILES
 
-```{r is.smiles}
+```{r is.smiles, eval=FALSE}
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
 # 'J' is not found in the periodic table
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
@@ -368,6 +374,7 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 + [Eduard Szöcs](https://github.com/EDiLD)
 + [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
 + [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
++ [Eric R Scott](https://github.com/ropensci/webchem/commits?author=Aariq)
 
 ### Want to contribute?
 

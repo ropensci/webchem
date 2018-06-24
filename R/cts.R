@@ -1,6 +1,6 @@
 #' Get record details from Chemical Translation Service (CTS)
 #'
-#' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu}
+#' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import jsonlite
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
@@ -56,7 +56,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 
 #' Convert Ids using Chemical Translation Service (CTS)
 #'
-#' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+#' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import RCurl jsonlite
 #' @importFrom utils URLencode
 #' @importFrom stats rgamma
@@ -70,7 +70,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @param ... currently not used.
 #' @return a list of characters. If first = TRUE a vector.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/conversion/index}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #' for possible values of from and to.
 #'
 #' @seealso \code{\link{cts_from}} for possible values in the 'from' argument and
@@ -128,7 +128,7 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/moreServices/index#fromnames}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 #'
 #' @seealso \code{\link{cts_convert}}
 #'
@@ -151,7 +151,7 @@ cts_from <- function(verbose = TRUE){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/moreServices/index#fromnames}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 #'
 #' @seealso \code{\link{cts_convert}}
 #'

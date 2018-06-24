@@ -3,8 +3,8 @@ Title: Chemical Information from the Web
 Description: Chemical information from around the web. This package interacts
     with a suite of web APIs for chemical information.
 Type: Package
-Version: 0.3.0.9003
-Date: 2018-01-15
+Version: 0.4.0.9003
+Date: 2018-04-12
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
@@ -12,7 +12,7 @@ Authors@R: c(person("Eduard", "Szöcs", role = c("aut", "cre"),
     email = "eduardszoecs@gmail.com"),
     person("Daniel", "Muench", role = "ctb"),
     person("Johannes", "Ranke", role = "ctb"),
-    person("Eric", "Scott", role = "ctb"),
+    person("Eric R", "Scott", role = "ctb"),
     person("Jan", "Stanstrup", role = "ctb"),
     person("Robert", "Allaway", role = "ctb"))
 Maintainer: Eduard Szöcs <eduardszoecs@gmail.com>
@@ -28,7 +28,9 @@ Imports:
     RCurl,
     jsonlite,
     stringr,
-    methods
+    methods,
+    dplyr,
+    purrr
 Suggests:
     testthat,
     rcdk

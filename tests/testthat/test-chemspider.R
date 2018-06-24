@@ -103,6 +103,14 @@ test_that("cs_prop()", {
   r <- m4$`391783`$epi
   expect_equal(r$value_pred[r$prop == 'Water Solubility from KOW'], 13690)
 
+  # issue #148
+  m5 <- cs_prop(7688)
+  expect_is(m5, 'list')
+  expect_equal(length(m5), 1)
+  expect_equal(length(m5[[1]]), 3)
+  expect_is(m5[[1]]$epi, 'data.frame')
+  expect_is(m5[[1]]$acd, 'data.frame')
+
 })
 
 

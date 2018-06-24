@@ -2,7 +2,7 @@
 #'
 #' @import jsonlite httr
 #' @importFrom stats rgamma
-#'
+#' @importFrom utils URLencode URLdecode
 #' @param query character; The searchterm
 #' @param language character; the language to search in
 #' @param match character; How should multiple hits be handeled? 'all' returns all matched IDs,
