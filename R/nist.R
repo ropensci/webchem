@@ -179,9 +179,9 @@ tidy_ritable <- function(ri_xml){
 #' @seealso \code{\link{is.cas}} \code{\link{as.cas}}
 #'
 #' @examples
-#' myRIs <- get_ri(c("78-70-6", "873-94-9", "13474-59-4"), "linear", "non-polar", "ramp")
+#' myRIs <- nist_ri(c("78-70-6", "873-94-9", "13474-59-4"), "linear", "non-polar", "ramp")
 #'
-get_ri <- function(cas,
+nist_ri <- function(cas,
                    type = c("kovats", "linear", "alkane", "lee"),
                    polarity = c("polar", "non-polar"),
                    temp_prog = c("isothermal", "ramp", "custom")){
