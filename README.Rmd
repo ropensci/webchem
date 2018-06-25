@@ -305,7 +305,7 @@ fn_percept(c("75-07-0", "123-32-0"))
 
 #### NIST
 ```{r nist}
-get_ri("78-70-6")
+nist_ri("78-70-6")
 ```
 
 #### Extractor functions
