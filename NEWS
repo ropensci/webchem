@@ -3,6 +3,7 @@ webchem 0.5
 
 NEW FEATURES
 
+* Retrieve odors and flavors from The Good Scents Company (http://www.thegoodscentscompany.com) with tgsc_percept()
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
 
 MINOR IMPROVEMENTS
