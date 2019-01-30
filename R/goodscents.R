@@ -31,9 +31,9 @@ tgsc_percept = function(CAS,
     search.url = 'http://www.thegoodscentscompany.com/search3.php?qName='
     if (!is.na(CAS)) {
       # Paste CAS into url and read that page
-      stink.url = read_html(paste0(search.url, CAS)) #%>%
+      stink.html = read_html(paste0(search.url, CAS)) #%>%
       # Find the relevant data block in the page
-      stink.block = html_nodes(stink.url, '.lstw11') #%>%
+      stink.block = html_nodes(stink.html, '.lstw11') #%>%
       # Read text
       stink = html_text(stink.block)
       out = c(NULL, NULL)
@@ -46,7 +46,7 @@ tgsc_percept = function(CAS,
         out[2] = stink[2]
       }
       # If only flavor, just return flavor element
-      if (!odor & flavor) {
+      if (!odor && flavor) {
         out = out[2]
       }
       return(out)
