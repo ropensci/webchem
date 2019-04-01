@@ -184,6 +184,12 @@ is.cas <-  function(x, verbose = TRUE) {
     stop('Cannot handle multiple input strings.')
   }
 
+  # cas must not have any alpha characters
+  if(grepl(pattern = "[[:alpha:]]", x = x)){
+    if(verbose){message("String contains alpha characters")}
+    return(FALSE)
+  }
+
   # cas must have two hyphens
   nsep <- str_count(x, '-')
   if (nsep != 2) {
