@@ -5,8 +5,8 @@
 \title{Retrieve retention indices from NIST}
 \usage{
 nist_ri(cas, type = c("kovats", "linear", "alkane", "lee"),
-  polarity = c("polar", "non-polar"), temp_prog = c("isothermal", "ramp",
-  "custom"))
+  polarity = c("polar", "non-polar"), temp_prog = c("isothermal",
+  "ramp", "custom"))
 }
 \arguments{
 \item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}

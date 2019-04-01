@@ -1,66 +1,60 @@
 #' Retrieve ChemSpider ID
 #'
 #' Return Chemspider ID (CSID) for a search query, see \url{https://www.chemspider.com/}.
-#' @import xml2
-#' @importFrom stats rgamma
+#' @importFrom httr GET POST
+#' @importFrom jsonlite fromJSON toJSON
 #'
-#' @param query charachter; search term.
-#' @param token character; your security token.
-#' @param first logical; If TRUE (default) return only first result.
-#' @param verbose logical; should a verbose output be printed on the console?
+#' @param query character; search term.
+#' @param apikey character; your API key.
+#' @param orderBy character; used to to specify the sort order for the results.
+#' Valid values for orderBy are recordId, massDefect, molecularWeight,
+#' referenceCount, dataSourceCount, pubMedCount, rscCount.
+#' @param orderDirection character; used to to specify the sort order for the results.
+#' Valid values for orderDirection are ascending, descending.
 #' @param ... currently not used.
-#' @return if first = TRUE a character vector with ChemSpider IDs, otherwise a list.
+#' @return Returns a list of two elements.
 #'
-#' @note A security token is neeeded. Please register at RSC.
-#' \url{https://www.rsc.org/rsc-id/register}
-#' for a security token.
-#' Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
-#'
+#' @note An API key is neeeded. Register at RSC.
+#' \url{https://developer.rsc.org/}
+#' for an API key.
+#' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @seealso \code{\link{cs_compinfo}} and \code{\link{cs_extcompinfo}} to
-#' retrieve compound details from csid.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
-#' # Fails because no TOKEN is included
-#' token <- '<YOUR-SECURITY-TOKEN>'
-#' get_csid("Triclosan", token = token)[[1]]
-#' # [1] "5363"
-#' get_csid(c("Triclosan", "50-00-0"), token = token)
+#' apikey <- '<YOUR-API-KEY>'
+#' get_csid("Triclosan", apikey = apikey)
 #' }
-get_csid <- function(query, token = NULL, first = TRUE, verbose = TRUE,  ...){
-  # token = '37bf5e57-9091-42f5-9274-650a64398aaf'
-  foo <- function(query, token, first, verbose, ...){
-    if (is.na(query))
-      return(NA)
-    query <- URLencode(query)
-    baseurl <- 'https://www.chemspider.com/Search.asmx/SimpleSearch?'
-    qurl <- paste0(baseurl, 'query=', query, '&token=', token)
-    if (verbose)
-      message(qurl, '\n')
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/45))
-    h <- try(read_xml(qurl), silent = TRUE)
-    if (inherits(h, "try-error")) {
-      warning('Problem with web service encountered... Returning NA.')
-      return(NA)
-    }
-    out <- xml_text(xml_find_all(h, './/*'))
-    if (length(out) == 0) {
-      message('No csid found... Returning NA.')
-      return(NA)
-    }
-    if (first)
-      out <- out[1]
-    names(out) <- NULL
-    return(out)
+get_csid <- function(query, apikey, orderBy="recordId",orderDirection="ascending",  ...){
+
+  orderBy_values=c("recordId", "massDefect", "molecularWeight","referenceCount", "dataSourceCount", "pubMedCount", "rscCount")
+  orderDirection_values=c("ascending","descending")
+
+  if(orderBy%in%orderBy_values==FALSE) stop("Invalid argument: orderBy")
+  if(orderDirection%in%orderDirection_values==FALSE) stop("Invalid argument: orderDirection")
+
+  headers <- c("Content-Type" = "","apikey" = apikey)
+  body <-data.frame("name" = query, "orderBy" = orderBy, "orderDirection" = orderDirection)
+  body <- jsonlite::toJSON(body)
+  body <- gsub("\\[|\\]","",body)
+  postres <-httr::POST(url = 'https://api.rsc.org/compounds/v1/filter/name',
+                         httr::add_headers(.headers=headers), body = body)
+
+  if(postres$status_code==200){
+    queryId <- jsonlite::fromJSON(rawToChar(postres$content))$queryId #this could throw error codes
+    getres <- httr::GET(url = paste0('https://api.rsc.org/compounds/v1/filter/',queryId,'/results'),
+                        httr::add_headers(.headers=headers))
+    out <- jsonlite::fromJSON(rawToChar(getres$content))
   }
-  out <- lapply(query, foo, token = token, first = first, verbose = verbose)
-  out <- setNames(out, query)
-  if (first)
-    out <- unlist(out)
+
+  else{
+    out=list("results"=as.numeric(NA),"limitedToMaxAllowed"=FALSE)
+    warning(http_status(postres)$message)
+  }
   return(out)
 }
-
+#test: for a compound of one word, for a compound of multiple words
 
 
 #' Get record details (CSID, StdInChIKey, StdInChI, SMILES) by ChemSpider ID

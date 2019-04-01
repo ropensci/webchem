@@ -4,7 +4,8 @@
 \alias{pan_query}
 \title{Query the PAN Pesticide database}
 \usage{
-pan_query(query, match = c("best", "all", "first"), verbose = TRUE, ...)
+pan_query(query, match = c("best", "all", "first"), verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{query}{character; searchterm, e.g. chemical name or CAS.}

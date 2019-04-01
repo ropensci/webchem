@@ -1,7 +1,6 @@
 context("chemspider")
 token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
 
-
 test_that("get_csid()", {
   skip_on_cran()
 
