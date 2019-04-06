@@ -37,7 +37,8 @@ get_csid <- function(query, apikey, orderBy="recordId",orderDirection="ascending
   headers <- c("Content-Type" = "","apikey" = apikey)
   body <-data.frame("name" = query, "orderBy" = orderBy, "orderDirection" = orderDirection)
   body <- jsonlite::toJSON(body)
-  body <- gsub("\\[|\\]","",body)
+body <- list("name" = query, "orderBy" = orderBy, "orderDirection" = orderDirection)
+jsonlite::toJSON(body, auto_unbox = TRUE)
   postres <-httr::POST(url = 'https://api.rsc.org/compounds/v1/filter/name',
                          httr::add_headers(.headers=headers), body = body)
 
