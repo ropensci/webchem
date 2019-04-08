@@ -34,12 +34,10 @@ get_csid <- function(query, apikey, orderBy = "recordId",
     "rscCount"
   )
   orderDirection_values <- c("ascending", "descending")
-
   if (orderBy %in% orderBy_values == FALSE) stop("Invalid argument: orderBy")
   if (orderDirection %in% orderDirection_values == FALSE) {
     stop("Invalid argument: orderDirection")
   }
-
   headers <- c("Content-Type" = "", "apikey" = apikey)
   body <- list(
     "name" = query, "orderBy" = orderBy,
@@ -50,7 +48,6 @@ get_csid <- function(query, apikey, orderBy = "recordId",
     url = "https://api.rsc.org/compounds/v1/filter/name",
     httr::add_headers(.headers = headers), body = body
   )
-
   if (postres$status_code == 200) {
     queryId <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
     getres <- httr::GET(
@@ -62,7 +59,6 @@ get_csid <- function(query, apikey, orderBy = "recordId",
     )
     out <- jsonlite::fromJSON(rawToChar(getres$content))
   }
-
   else {
     out <- list("results" = as.numeric(NA), "limitedToMaxAllowed" = FALSE)
     warning(http_status(postres)$message)
