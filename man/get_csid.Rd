@@ -4,44 +4,43 @@
 \alias{get_csid}
 \title{Retrieve ChemSpider ID}
 \usage{
-get_csid(query, token = NULL, first = TRUE, verbose = TRUE, ...)
+get_csid(query, apikey, orderBy = "recordId",
+  orderDirection = "ascending", ...)
 }
 \arguments{
-\item{query}{charachter; search term.}
+\item{query}{character; search term.}
 
-\item{token}{character; your security token.}
+\item{apikey}{character; your API key.}
 
-\item{first}{logical; If TRUE (default) return only first result.}
+\item{orderBy}{character; used to to specify the sort order for the results.
+Valid values for orderBy are recordId, massDefect, molecularWeight,
+referenceCount, dataSourceCount, pubMedCount, rscCount.}
 
-\item{verbose}{logical; should a verbose output be printed on the console?}
+\item{orderDirection}{character; used to to specify the sort order for the results.
+Valid values for orderDirection are ascending, descending.}
 
 \item{...}{currently not used.}
 }
 \value{
-if first = TRUE a character vector with ChemSpider IDs, otherwise a list.
+Returns a list of two elements.
 }
 \description{
 Return Chemspider ID (CSID) for a search query, see \url{https://www.chemspider.com/}.
 }
 \note{
-A security token is neeeded. Please register at RSC.
-\url{https://www.rsc.org/rsc-id/register}
-for a security token.
-Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
+An API key is neeeded. Register at RSC.
+\url{https://developer.rsc.org/}
+for an API key.
+Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-# Fails because no TOKEN is included
-token <- '<YOUR-SECURITY-TOKEN>'
-get_csid("Triclosan", token = token)[[1]]
-# [1] "5363"
-get_csid(c("Triclosan", "50-00-0"), token = token)
+apikey <- "<YOUR-API-KEY>"
+get_csid("Triclosan", apikey = apikey)
 }
-}
-\seealso{
-\code{\link{cs_compinfo}} and \code{\link{cs_extcompinfo}} to
-retrieve compound details from csid.
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
+
+Tamas Stirling, \email{stirling.tamas@gmail.com}
 }

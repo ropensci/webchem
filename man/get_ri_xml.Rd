@@ -5,8 +5,8 @@
 \title{Scrape Retention Indices from NIST}
 \usage{
 get_ri_xml(cas, type = c("kovats", "linear", "alkane", "lee"),
-  polarity = c("polar", "non-polar"), temp_prog = c("isothermal", "ramp",
-  "custom"))
+  polarity = c("polar", "non-polar"), temp_prog = c("isothermal",
+  "ramp", "custom"))
 }
 \arguments{
 \item{cas}{cas number}
