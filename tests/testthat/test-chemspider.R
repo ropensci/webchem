@@ -1,5 +1,19 @@
 context("chemspider")
 token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
+apikey <- 'tKAuFrPCLOboXIeGLs5I257Pl0FjNH3e'
+
+test_that("get_csid()",{
+
+  a=get_csid("Triclosan", apikey = apikey)
+  b=get_csid("Acetic Acid", apikey = apikey)
+  c=suppressWarnings(get_csid(NA,apikey = apikey))
+
+  expect_is(a,"list")
+  expect_equal(length(a),2)
+  expect_equal(a$results,5363)
+  expect_equal(b$results,171)
+  expect_true(is.na(c$results))
+})
 
 test_that("get_csid()", {
   skip_on_cran()

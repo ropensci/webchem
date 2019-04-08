@@ -35,7 +35,7 @@ Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-apikey <- '<YOUR-API-KEY>'
+apikey <- "<YOUR-API-KEY>"
 get_csid("Triclosan", apikey = apikey)
 }
 }

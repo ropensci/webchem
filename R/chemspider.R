@@ -23,39 +23,52 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' apikey <- '<YOUR-API-KEY>'
+#' apikey <- "<YOUR-API-KEY>"
 #' get_csid("Triclosan", apikey = apikey)
 #' }
-get_csid <- function(query, apikey, orderBy="recordId",orderDirection="ascending",  ...){
+get_csid <- function(query, apikey, orderBy = "recordId",
+                     orderDirection = "ascending", ...) {
+  orderBy_values <- c(
+    "recordId", "massDefect", "molecularWeight",
+    "referenceCount", "dataSourceCount", "pubMedCount",
+    "rscCount"
+  )
+  orderDirection_values <- c("ascending", "descending")
 
-  orderBy_values=c("recordId", "massDefect", "molecularWeight","referenceCount", "dataSourceCount", "pubMedCount", "rscCount")
-  orderDirection_values=c("ascending","descending")
+  if (orderBy %in% orderBy_values == FALSE) stop("Invalid argument: orderBy")
+  if (orderDirection %in% orderDirection_values == FALSE) {
+    stop("Invalid argument: orderDirection")
+  }
 
-  if(orderBy%in%orderBy_values==FALSE) stop("Invalid argument: orderBy")
-  if(orderDirection%in%orderDirection_values==FALSE) stop("Invalid argument: orderDirection")
+  headers <- c("Content-Type" = "", "apikey" = apikey)
+  body <- list(
+    "name" = query, "orderBy" = orderBy,
+    "orderDirection" = orderDirection
+  )
+  body <- jsonlite::toJSON(body, auto_unbox = TRUE)
+  postres <- httr::POST(
+    url = "https://api.rsc.org/compounds/v1/filter/name",
+    httr::add_headers(.headers = headers), body = body
+  )
 
-  headers <- c("Content-Type" = "","apikey" = apikey)
-  body <-data.frame("name" = query, "orderBy" = orderBy, "orderDirection" = orderDirection)
-  body <- jsonlite::toJSON(body)
-  body <- gsub("\\[|\\]","",body)
-  postres <-httr::POST(url = 'https://api.rsc.org/compounds/v1/filter/name',
-                         httr::add_headers(.headers=headers), body = body)
-
-  if(postres$status_code==200){
-    queryId <- jsonlite::fromJSON(rawToChar(postres$content))$queryId #this could throw error codes
-    getres <- httr::GET(url = paste0('https://api.rsc.org/compounds/v1/filter/',queryId,'/results'),
-                        httr::add_headers(.headers=headers))
+  if (postres$status_code == 200) {
+    queryId <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
+    getres <- httr::GET(
+      url = paste0(
+        "https://api.rsc.org/compounds/v1/filter/",
+        queryId, "/results"
+      ),
+      httr::add_headers(.headers = headers)
+    )
     out <- jsonlite::fromJSON(rawToChar(getres$content))
   }
 
-  else{
-    out=list("results"=as.numeric(NA),"limitedToMaxAllowed"=FALSE)
+  else {
+    out <- list("results" = as.numeric(NA), "limitedToMaxAllowed" = FALSE)
     warning(http_status(postres)$message)
   }
   return(out)
 }
-#test: for a compound of one word, for a compound of multiple words
-
 
 #' Get record details (CSID, StdInChIKey, StdInChI, SMILES) by ChemSpider ID
 #'
