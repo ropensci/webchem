@@ -113,7 +113,7 @@ pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, 
     out <- as.list(ttt)
     # clean
     out$`Detailed Info` <- NULL
-    names(out) <- gsub('\\n', '', names(out))
+    names(out) <- gsub('\\n', ' ', names(out))
     out <- rapply(out, f = function(x){
       ifelse(x %in% c('null', '-', ''), NA, x)
     }, how = "replace" )
