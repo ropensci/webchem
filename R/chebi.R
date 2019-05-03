@@ -169,7 +169,7 @@ get_comp_entity <- function(chebiid, verbose = TRUE, ...) {
       formulae <- l2df(as_list(xml_find_all(cont, '//d1:Formulae')))
       regnumbers <- l2df(as_list(xml_find_all(cont, '//d1:RegistryNumbers')))
       citations <- l2df(as_list(xml_find_all(cont, '//d1:Citations')))
-      struct <- as_list(xml_find_all(cont, '//d1:ChemicalStructures'))
+      chem_structure <- as_list(xml_find_all(cont, '//d1:ChemicalStructures'))
       dblinks <- l2df(as_list(xml_find_all(cont, '//d1:DatabaseLinks')))
       parents <- l2df(as_list(xml_find_all(cont, '//d1:OntologyParents')))
       children <- l2df(as_list(xml_find_all(cont, '//d1:OntologyChildren')))
@@ -180,13 +180,12 @@ get_comp_entity <- function(chebiid, verbose = TRUE, ...) {
       out <- list(
         properties = properties,
         chebiid_snd = chebiid_snd,
-        chem_structure = struct,
+        chem_structure = chem_structure,
         synonyms = synonyms,
         iupacnames = iupacnames,
         formulae = formulae,
         regnumbers = regnumbers,
         citations = citations,
-        struct = struct,
         dblinks = dblinks,
         parents = parents,
         children = children,
