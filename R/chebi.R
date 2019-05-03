@@ -206,6 +206,7 @@ get_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 
 #' Helper function to parse some ChEBI data
 #'
+#' @param x list; a list to bind into a data.frame
 #' @return a data.frame
 #' @seealso \code{\link{get_comp_entity}}
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
@@ -224,6 +225,11 @@ l2df <- function(x) {
 #' Helper function replacing do.call(rbind, list())
 #' to address the issue of different column lengths in a list of data.frames
 #' taken from: https://stackoverflow.com/questions/17308551/do-callrbind-list-for-uneven-number-of-column
+#'
+#' @param x list; a list to bind into a data.frame
+#' @seealso \code{\link{l2df}}
+#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#'
 rbind.named.fill <- function(x) {
   nam <- lapply(x, names)
   unam <- unique(unlist(nam))

@@ -3,6 +3,7 @@ webchem 0.5
 
 NEW FEATURES
 
+* Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_lite_entity() and get_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andreasLD].
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
 
 MINOR IMPROVEMENTS
@@ -53,7 +54,7 @@ MINOR IMPROVEMENTS
 
 * cs_prop() now also return experimental data for Boiling and Melting Points.
 * pc_synonyms gained an argument 'interactive' to enter an interactive mode for
-  selecting synonyms [isse #129, requested by @Aariq]
+  selecting synonyms [issue #129, requested by @Aariq]
 * cts_convert now returns NA if no matches are found.
 
 BUG FIXES
