@@ -32,7 +32,7 @@
 #' get_lite_entity(comp)
 #'
 #' }
-get_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'ALL', verbose = TRUE, ...) {
+chebi_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'ALL', verbose = TRUE, ...) {
 
   foo <- function(query, category, max_res, stars, verbose, ...) {
     # query = 'Isoproturon'; category = 'ALL'; max_res = 200; stars = 'ALL'; verbose = T # debuging
@@ -115,7 +115,7 @@ get_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'ALL
 #' get_comp_entity(comp)
 #'
 #' }
-get_comp_entity <- function(chebiid, verbose = TRUE, ...) {
+chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging
