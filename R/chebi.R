@@ -24,12 +24,12 @@
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' get_lite_entity('Glyphosate')
-#' get_lite_entity('BPGDAMSIGCZZLK-UHFFFAOYSA-N')
+#' chebi_lite_entity('Glyphosate')
+#' chebi_lite_entity('BPGDAMSIGCZZLK-UHFFFAOYSA-N')
 #'
 #' # multiple inputs
 #' comp <- c('Iron', 'Aspirin', 'BPGDAMSIGCZZLK-UHFFFAOYSA-N')
-#' get_lite_entity(comp)
+#' chebi_lite_entity(comp)
 #'
 #' }
 chebi_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'ALL', verbose = TRUE, ...) {
@@ -108,11 +108,11 @@ chebi_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'A
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' get_comp_entity('CHEBI:27744')
+#' chebi_comp_entity('CHEBI:27744')
 #'
 #' # multiple inputs
 #' comp <- c('CHEBI:27744', 'CHEBI:27744')
-#' get_comp_entity(comp)
+#' chebi_comp_entity(comp)
 #'
 #' }
 chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
@@ -208,7 +208,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 #'
 #' @param x list; a list to bind into a data.frame
 #' @return a data.frame
-#' @seealso \code{\link{get_comp_entity}}
+#' @seealso \code{\link{chebi_comp_entity}}
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #'
 #'

@@ -1,8 +1,8 @@
 context('chebi')
 
-a <- get_lite_entity('Glyphosate', category = 'ALL')
-A <- get_comp_entity('CHEBI:27744')
-B <- get_comp_entity('27732')
+a <- chebi_lite_entity('Glyphosate', category = 'ALL')
+A <- chebi_comp_entity('CHEBI:27744')
+B <- chebi_comp_entity('27732')
 
 test_that('chebi returns correct results', {
   skip_on_cran()

@@ -16,7 +16,7 @@ a data.frame
 Helper function to parse some ChEBI data
 }
 \seealso{
-\code{\link{get_comp_entity}}
+\code{\link{chebi_comp_entity}}
 }
 \author{
 Andreas Scharmueller, \email{andschar@protonmail.com}

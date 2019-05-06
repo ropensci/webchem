@@ -54,7 +54,7 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 [Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
 [NIST](https://webbook.nist.gov) | `get_ri()` | none | none
-[ChEBI](https://www.ebi.ac.uk/chebi/) | `get_lite_entity()`, `get_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
+[ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -311,19 +311,19 @@ nist_ri("78-70-6")
 
 #### ChEBI
 
-Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `get_lite_entity()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
+Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `chebi_lite_entity()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
 
 ```{r chebi-lite}
-ids <- get_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
+ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
 ids
 ```
 
-The __chebiid__ can then be used to query the complete ChEBI entity using `get_comp_entity()`. The complete entity contains several different data structures which are returned in a list. The data structures are explained in greater detail at the [ChEBI website](https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:6049). Here, the list elements are showcased:
+The __chebiid__ can then be used to query the complete ChEBI entity using `chebi_comp_entity()`. The complete entity contains several different data structures which are returned in a list. The data structures are explained in greater detail at the [ChEBI website](https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:6049). Here, the list elements are showcased:
 
 ```{r chebi-comp}
 # ecample entities
-isoproturon <- get_comp_entity(ids$Isoproturon$chebiid[1])
-paracetamol <- get_comp_entity(ids$`RZVAJINKPMORJF-UHFFFAOYSA-N`$chebiid[1])
+isoproturon <- chebi_comp_entity(ids$Isoproturon$chebiid[1])
+paracetamol <- chebi_comp_entity(ids$`RZVAJINKPMORJF-UHFFFAOYSA-N`$chebiid[1])
 
 # properties: a data.frame with general properties
 lapply(isoproturon, '[[', 'properties')
