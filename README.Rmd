@@ -54,6 +54,7 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 [Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
 [NIST](https://webbook.nist.gov) | `get_ri()` | none | none
+[ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -306,6 +307,50 @@ fn_percept(c("75-07-0", "123-32-0"))
 #### NIST
 ```{r nist}
 nist_ri("78-70-6")
+```
+
+#### ChEBI
+
+Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `chebi_lite_entity()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
+
+```{r chebi-lite}
+ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
+ids
+```
+
+The __chebiid__ can then be used to query the complete ChEBI entity using `chebi_comp_entity()`. The complete entity contains several different data structures which are returned in a list. The data structures are explained in greater detail at the [ChEBI website](https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:6049). Here, the list elements are showcased:
+
+```{r chebi-comp}
+# ecample entities
+isoproturon <- chebi_comp_entity(ids$Isoproturon$chebiid[1])
+paracetamol <- chebi_comp_entity(ids$`RZVAJINKPMORJF-UHFFFAOYSA-N`$chebiid[1])
+
+# properties: a data.frame with general properties
+lapply(isoproturon, '[[', 'properties')
+# chem_structure: a list of chemical structure formats (e.g. mol)
+lapply(isoproturon, '[[', 'chem_structure')
+# synonyms: a data.frame of synonyms (collected from different sources)
+lapply(isoproturon, '[[', 'synonyms')
+# iupacnames: a data.frame of IUPAC names (collected from different sources)
+lapply(isoproturon, '[[', 'iupacnames')
+# formulae: a data.frame of chemical formulae (collected from different sources)
+lapply(isoproturon, '[[', 'formulae')
+# regnumbers: a data.frame of registry numbers (e.g. CAS, Beilstein, Reaxys) (collected from different sources)
+lapply(isoproturon, '[[', 'regnumbers')
+# chebiid_snd: a data.frame with secondary ChEBI ids
+lapply(paracetamol, '[[', 'chebiid_snd')
+# citations: Publications which cite the entity along with hyperlinks to the PubMed entry via Europe PMC
+head(lapply(paracetamol, '[[', 'citations')[[1]])
+# parents: parent ontologies of the entity
+lapply(paracetamol, '[[', 'parents')
+# children: child ontologies of the entity
+lapply(paracetamol, '[[', 'children')
+# dblinks: Links to other data bases
+lapply(paracetamol, '[[', 'dblinks')
+# comments: General comment(s)
+lapply(paracetamol, '[[', 'comments')
+# Metabolites of Species
+head(lapply(paracetamol, '[[', 'origins')[[1]])
 ```
 
 #### Extractor functions
