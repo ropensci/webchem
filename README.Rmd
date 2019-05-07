@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
   warning = FALSE, 
   message = FALSE,
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  cache = TRUE
 )
 ```
 
@@ -40,7 +41,7 @@ They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpi
 Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](https://developer.rsc.org/) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -51,7 +52,9 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
-[Flavornet](http://www.flavornet.org) | `fn_percept` | none | none
+[Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
+[NIST](https://webbook.nist.gov) | `nist_ri()` | none | none
+[ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -112,7 +115,7 @@ token = '37bf5e57-9091-42f5-9274-650a64398aaf'
 You'll need a API key:
 
 ```{r api_key, eval=FALSE}
-token = '<YOUR TOKEN HERE'
+token = '<YOUR TOKEN HERE>'
 ```
 
 Retrieve the ChemSpider ID of Triclosan
@@ -296,11 +299,62 @@ opsin_query(c('Cyclopropane', 'Octane'))
 ```
 
 
-#### flavornet
+#### Flavornet
 ```{r flavornet}
 fn_percept(c("75-07-0", "123-32-0"))
 ```
 
+#### NIST
+Identification of gas chromatography peaks is often aided by retention idices. NIST provides tables of retention indices reported in the literature organized by retention index type (Kovats, linear, normal alkane, and Lee), column polarity, and temperature program.
+
+```{r nist}
+RIs <- nist_ri("78-70-6", type = "kovats", polarity = "non-polar", temp_prog = "ramp")
+head(RIs)
+```
+
+#### ChEBI
+
+Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `chebi_lite_entity()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
+
+```{r chebi-lite}
+ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
+ids
+```
+
+The __chebiid__ can then be used to query the complete ChEBI entity using `chebi_comp_entity()`. The complete entity contains several different data structures which are returned in a list. The data structures are explained in greater detail at the [ChEBI website](https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:6049). Here, the list elements are showcased:
+
+```{r chebi-comp}
+# ecample entities
+isoproturon <- chebi_comp_entity(ids$Isoproturon$chebiid[1])
+paracetamol <- chebi_comp_entity(ids$`RZVAJINKPMORJF-UHFFFAOYSA-N`$chebiid[1])
+
+# properties: a data.frame with general properties
+lapply(isoproturon, '[[', 'properties')
+# chem_structure: a list of chemical structure formats (e.g. mol)
+lapply(isoproturon, '[[', 'chem_structure')
+# synonyms: a data.frame of synonyms (collected from different sources)
+lapply(isoproturon, '[[', 'synonyms')
+# iupacnames: a data.frame of IUPAC names (collected from different sources)
+lapply(isoproturon, '[[', 'iupacnames')
+# formulae: a data.frame of chemical formulae (collected from different sources)
+lapply(isoproturon, '[[', 'formulae')
+# regnumbers: a data.frame of registry numbers (e.g. CAS, Beilstein, Reaxys) (collected from different sources)
+lapply(isoproturon, '[[', 'regnumbers')
+# chebiid_snd: a data.frame with secondary ChEBI ids
+lapply(paracetamol, '[[', 'chebiid_snd')
+# citations: Publications which cite the entity along with hyperlinks to the PubMed entry via Europe PMC
+head(lapply(paracetamol, '[[', 'citations')[[1]])
+# parents: parent ontologies of the entity
+lapply(paracetamol, '[[', 'parents')
+# children: child ontologies of the entity
+lapply(paracetamol, '[[', 'children')
+# dblinks: Links to other data bases
+lapply(paracetamol, '[[', 'dblinks')
+# comments: General comment(s)
+lapply(paracetamol, '[[', 'comments')
+# Metabolites of Species
+head(lapply(paracetamol, '[[', 'origins')[[1]])
+```
 
 #### Extractor functions
 
@@ -345,7 +399,7 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N', type = 'chemspider')
 
 ##### Check if a string is a valid SMILES
 
-```{r is.smiles}
+```{r is.smiles, eval=FALSE}
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
 # 'J' is not found in the periodic table
 is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
@@ -368,6 +422,7 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 + [Eduard Szöcs](https://github.com/EDiLD)
 + [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
 + [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
++ [Eric R Scott](https://github.com/ropensci/webchem/commits?author=Aariq)
 
 ### Want to contribute?
 
