@@ -41,7 +41,7 @@ They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpi
 Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](https://developer.rsc.org/) | required [(link)](https://www.rsc.org/rsc-id/register )
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -53,7 +53,11 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 [Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
+<<<<<<< HEAD
 [NIST](https://webbook.nist.gov) | `get_ri()` | none | none
+=======
+[NIST](https://webbook.nist.gov) | `nist_ri()` | none | none
+>>>>>>> 615ad7f27e1f366fc27a1819ad6c07ef3eb5ecf8
 [ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
@@ -115,7 +119,7 @@ token = '37bf5e57-9091-42f5-9274-650a64398aaf'
 You'll need a API key:
 
 ```{r api_key, eval=FALSE}
-token = '<YOUR TOKEN HERE'
+token = '<YOUR TOKEN HERE>'
 ```
 
 Retrieve the ChemSpider ID of Triclosan
@@ -299,12 +303,13 @@ opsin_query(c('Cyclopropane', 'Octane'))
 ```
 
 
-#### flavornet
+#### Flavornet
 ```{r flavornet}
 fn_percept(c("75-07-0", "123-32-0"))
 ```
 
 #### NIST
+
 ```{r nist}
 nist_ri("78-70-6")
 ```
