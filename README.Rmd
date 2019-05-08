@@ -53,11 +53,7 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 [Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
-<<<<<<< HEAD
-[NIST](https://webbook.nist.gov) | `get_ri()` | none | none
-=======
 [NIST](https://webbook.nist.gov) | `nist_ri()` | none | none
->>>>>>> 615ad7f27e1f366fc27a1819ad6c07ef3eb5ecf8
 [ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
@@ -309,9 +305,11 @@ fn_percept(c("75-07-0", "123-32-0"))
 ```
 
 #### NIST
+Identification of gas chromatography peaks is often aided by retention idices. NIST provides tables of retention indices reported in the literature organized by retention index type (Kovats, linear, normal alkane, and Lee), column polarity, and temperature program.
 
 ```{r nist}
-nist_ri("78-70-6")
+RIs <- nist_ri("78-70-6", type = "kovats", polarity = "non-polar", temp_prog = "ramp")
+head(RIs)
 ```
 
 #### ChEBI
