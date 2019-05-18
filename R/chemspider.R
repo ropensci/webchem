@@ -1,7 +1,45 @@
+#' Retrieve ChemSpider data sources
+#'
+#' The function returns a vector of available data sources used by ChemSpider.
+#' Many ChemSpider functions allow you to restrict which sources are used to
+#' lookup the requested query. Restricting the sources makes queries faster.
+#' @importFrom httr GET add_headers
+#' @importFrom jsonlite fromJSON
+#' @param apikey character; your API key.
+#' @return Returns a character vector.
+#' @note An API key is neeeded. Register at \url{https://developer.rsc.org/}
+#' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
+#' can be found at \url{https://developer.rsc.org/terms}.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @export
+#' @examples
+#' \dontrun{
+#' apikey <- "<YOUR-API-KEY>"
+#' cs_datasources(apikey = apikey)
+#' }
+cs_datasources <- function(apikey) {
+  headers <- c(
+    `Content-Type` = "",
+    `apikey` = apikey
+  )
+  res <- httr::GET(
+    url = "https://api.rsc.org/compounds/v1/lookups/datasources",
+    httr::add_headers(.headers = headers)
+  )
+  if (res$status_code == 200) {
+    out <- unlist(unname(jsonlite::fromJSON(rawToChar(res$content))))
+  }
+  else {
+    out <- character(0)
+    warning(http_status(res)$message)
+  }
+  return(out)
+}
+
 #' Retrieve ChemSpider ID
 #'
 #' Return Chemspider ID (CSID) for a search query, see \url{https://www.chemspider.com/}.
-#' @importFrom httr GET POST
+#' @importFrom httr GET POST add_headers
 #' @importFrom jsonlite fromJSON toJSON
 #'
 #' @param query character; search term.
@@ -47,7 +85,7 @@ get_csid <- function(query, apikey, orderBy = "recordId",
   postres <- httr::POST(
     url = "https://api.rsc.org/compounds/v1/filter/name",
     httr::add_headers(.headers = headers), body = body
-  )
+  )#filter-name-post
   if (postres$status_code == 200) {
     queryId <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
     getres <- httr::GET(
@@ -56,7 +94,7 @@ get_csid <- function(query, apikey, orderBy = "recordId",
         queryId, "/results"
       ),
       httr::add_headers(.headers = headers)
-    )
+    )#filter-queryId-results-get
     out <- jsonlite::fromJSON(rawToChar(getres$content))
   }
   else {
