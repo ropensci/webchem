@@ -2,7 +2,19 @@ context("chemspider")
 token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
 apikey <- 'tKAuFrPCLOboXIeGLs5I257Pl0FjNH3e'
 
+test_that("cs_datasources()",{
+  skip_on_cran()
+
+  a=cs_datasources(apikey = apikey)
+  b=suppressWarnings(cs_datasources(apikey = NA))
+
+  expect_is(a, "character")
+  expect_is(b, "character")
+  expect_length(b, 0)
+})
+
 test_that("get_csid()",{
+  skip_on_cran()
 
   a=get_csid("Triclosan", apikey = apikey)
   b=get_csid("Acetic Acid", apikey = apikey)
@@ -14,32 +26,6 @@ test_that("get_csid()",{
   expect_equal(b$results,171)
   expect_true(is.na(c$results))
 })
-
-test_that("get_csid()", {
-  skip_on_cran()
-
-  comps <- c("Triclosan", "50-00-0", "xxxxxx")
-  o1 <- get_csid(comps, token = token, verbose = TRUE)
-  o2 <- get_csid(comps, token = token, verbose = TRUE, first = FALSE)
-  o3 <- get_csid(c("picoxystrobin", "mandipropamid"), token = token, verbose = TRUE, first = FALSE)
-
-  b1 <- get_csid('acetic acid', token = token, verbose = TRUE)
-  expect_equal(b1, c(`acetic acid` = '171'))
-
-  expect_is(o1, 'character')
-  expect_is(o2, 'list')
-  expect_equal(length(o1),3)
-  expect_equal(o3, structure(list(picoxystrobin = "9460644", mandipropamid = "9467809"), .Names = c("picoxystrobin",
-      "mandipropamid")))
-  expect_equal(length(o2), 3)
-  expect_true(is.na(o1[[3]]))
-  expect_true(is.na(o2[[3]]))
-  expect_equal(o1[[1]], '5363')
-  expect_equal(o2[[2]], '692')
-  expect_true(is.na(get_csid(NA, token = token, verbose = TRUE)))
-
-})
-
 
 test_that("cs_compinfo()", {
   skip_on_cran()
