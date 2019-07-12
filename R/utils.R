@@ -369,9 +369,9 @@ as.cas <- function(x){
 
 
 #' Interactively choose a result from a menu
-#' @description In interactive sessions, prompts a user to choose an element of a vector from a menu.
+#' @description In interactive sessions, prompts a user to choose an element of a vector from a menu. Use this for all functions that return multiple possible results such as multiple identifiers or synonyms.
 #' @param x a character vector
-#' @param choices If "all" then the entire vector `x` is used for the menu.  If numeric > 1, only that number of elements from the start of `x` are shown.  If `NULL` then `x` is returned unchanged.
+#' @param choices If `choices = "all"` then the entire vector `x` is used for the menu.  If numeric > 1, only that number of elements from the start of `x` are shown. If `choices = 1`, then the first element of `x` is returned without prompting the user.  If `NULL` then `x` is returned unchanged.
 #'
 #' @importFrom utils menu
 #' @return a character vector of length 1
