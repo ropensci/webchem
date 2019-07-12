@@ -192,8 +192,8 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' @param query character; search term.
 #' @param from character; type of input, can be one of 'name' (default), 'cid',
 #'     'sid', 'aid', 'smiles', 'inchi', 'inchikey'
-#' @param interactive numeric; if > 0 an interactive mode is entered to pick one of the x displayed synonyms.
-#'     The number specifies how many synonyms are displayed.
+#' @param interactive deprecated.  Use the `choices` argument instead
+#' @param choices to get only the first synonym, use `choices = 1`, to get a number of synonyms to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments
@@ -217,11 +217,12 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' pc_synonyms(5564, from = 'cid')
 #' pc_synonyms(c('Aspirin', 'Triclosan'), interactive = 10)
 #' }
-pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, arg = NULL, ...) {
+pc_synonyms <- function(query, from = 'name', interactive = 0, choices = NULL, verbose = TRUE, arg = NULL, ...) {
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c('Aspirin')
   # from = 'name'
-
+  if(!missing("interactive"))
+    stop("'interactive' is deprecated. Use 'choices' instead.")
   foo <- function(query, from, verbose, ...){
     prolog <- 'https://pubchem.ncbi.nlm.nih.gov/rest/pug'
     input <- paste0('/compound/', from)
@@ -247,15 +248,13 @@ pc_synonyms <- function(query, from = 'name', interactive = 0, verbose = TRUE, a
     out <- unlist(cont)
     names(out) <- NULL
 
-    if (interactive > 0 && length(out) > 1) {
-      pick <- menu(out[seq_len(interactive)], graphics = FALSE, 'Select one:')
-      out <- out[pick]
-    }
+    out <- chooser(out, choices)
 
-    return(out)
   }
   out <- lapply(query, foo, from = from, verbose = verbose)
   out <- setNames(out, query)
+  if(!is.null(choices)) #if only one choice is returned, convert list to vector
+    out <- unlist(out)
   return(out)
 }
 
