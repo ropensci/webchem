@@ -11,11 +11,11 @@ nist_ri(cas, type = c("kovats", "linear", "alkane", "lee"),
 \arguments{
 \item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}
 
-\item{type}{One of "kovats", "linear", "alkane", or "lee". Type of RI to retrieve. Details about how these are calculated here: [https://webbook.nist.gov/chemistry/gc-ri/]}
+\item{type}{Retention index type. One of `"kovats"`, `"linear"`, `"alkane"`, or `"lee"`. "kovats" returns Kovats retention indices, "linear" returns Van den Dool and Kratz retention indices, "alkane" returns normal alkane retention indices, and "lee" returns Lee retention indices. Details about how these are calculated here: [https://webbook.nist.gov/chemistry/gc-ri/].}
 
-\item{polarity}{One of "polar" or "non-polar" to get RIs calculated for polar or non-polar columns.}
+\item{polarity}{Column polarity. One of "polar" or "non-polar" to get RIs calculated for polar or non-polar columns.}
 
-\item{temp_prog}{One of "isothermal", "ramp", or "custom".}
+\item{temp_prog}{Temperature program. One of "isothermal", "ramp", or "custom".}
 }
 \value{
 a table of literature RIs
