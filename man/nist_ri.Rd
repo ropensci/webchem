@@ -24,8 +24,9 @@ a table of literature RIs
 This function scrapes NIST for literature retention indices given CAS numbers as an input.
 }
 \examples{
-myRIs <- nist_ri(c("78-70-6", "873-94-9", "13474-59-4"), "linear", "non-polar", "ramp")
-
+\dontrun{
+myRIs <- nist_ri(c("78-70-6", "13474-59-4"), "linear", "non-polar", "ramp")
+}
 }
 \seealso{
 \code{\link{is.cas}} \code{\link{as.cas}}
