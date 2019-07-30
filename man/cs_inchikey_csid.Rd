@@ -2,32 +2,40 @@
 % Please edit documentation in R/chemspider.R
 \name{cs_inchikey_csid}
 \alias{cs_inchikey_csid}
-\title{Convert a InChIKey to CSID}
+\title{Retrieve ChemSpider ID from InChIKey}
 \usage{
-cs_inchikey_csid(inchikey, verbose = TRUE, ...)
+cs_inchikey_csid(inchikey, apikey)
 }
 \arguments{
-\item{inchikey}{character,  InChIKey}
+\item{inchikey}{character; search term.}
 
-\item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{...}{currently not used.}
+\item{apikey}{character; your API key.}
 }
 \value{
-A CSID.
+Returns a list of two elements.
 }
 \description{
-Convert a InChIKey to CSID
+Retrieve ChemSpider ID from InChIKey
+}
+\note{
+An API key is needed. Register at RSC
+\url{https://developer.rsc.org/}
+for an API key.
+Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 }
 \examples{
-\donttest{
-# might fail if API is not available
-cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
+\dontrun{
+apikey <- "<YOUR-API-KEY>"
+cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", apikey = apikey)
 }
+}
+\references{
+https://developer.rsc.org/compounds-v1/apis
 }
 \seealso{
-This is a low level function. Please see \code{\link{cs_convert}} for the top level function.
+This is a low level function. See \code{\link{cs_convert()}}
+for the top level function.
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Tamas Stirling, \email{stirling.tamas@gmail.com}
 }

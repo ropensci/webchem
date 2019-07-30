@@ -14,11 +14,11 @@ Returns a character vector.
 }
 \description{
 The function returns a vector of available data sources used by ChemSpider.
-Many ChemSpider functions allow you to restrict which sources are used to
-lookup the requested query. Restricting the sources makes queries faster.
+Some ChemSpider functions allow you to restrict which sources are used to
+lookup the requested query. Restricting the sources makes these queries faster.
 }
 \note{
-An API key is neeeded. Register at \url{https://developer.rsc.org/}
+An API key is needed. Register at \url{https://developer.rsc.org/}
 for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 can be found at \url{https://developer.rsc.org/terms}.
 }
@@ -27,6 +27,9 @@ can be found at \url{https://developer.rsc.org/terms}.
 apikey <- "<YOUR-API-KEY>"
 cs_datasources(apikey = apikey)
 }
+}
+\references{
+https://developer.rsc.org/compounds-v1/apis
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}
