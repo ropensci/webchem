@@ -41,7 +41,7 @@ for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 can be found at \url{https://developer.rsc.org/terms}.
 }
 \examples{
-\donttest{
+\dontrun{
 apikey <- "<YOUR-API-KEY>"
 cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid',
 apikey = apikey)

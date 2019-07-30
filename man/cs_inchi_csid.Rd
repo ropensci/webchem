@@ -33,7 +33,7 @@ cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", apikey = apikey)
 https://developer.rsc.org/compounds-v1/apis
 }
 \seealso{
-This is a low level function. See \code{\link{cs_convert()}}
+This is a low level function. See \code{\link{cs_convert}}
 for the top level function.
 }
 \author{

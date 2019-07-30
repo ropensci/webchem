@@ -29,8 +29,7 @@ cs_datasources <- function(apikey) {
     return(out)
   }
   else {
-    warning(httr::http_status(res)$message)
-    return(NA)
+    stop(httr::http_status(res)$message)
   }
 }
 
@@ -63,7 +62,7 @@ cs_datasources <- function(apikey) {
 #' documentation of the function.
 #' @references https://developer.rsc.org/compounds-v1/apis
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @seealso \code{\link{cs_name_csid()}}, \code{\link{cs_element_csid()}}
+#' @seealso \code{\link{cs_name_csid}}, \code{\link{cs_element_csid}}
 #' @export
 #' @examples
 #' cs_control()
@@ -189,7 +188,7 @@ cs_element_csid <- function(includeElements, excludeElements, apikey,
 #' This function communicates with the second API.
 #' @importFrom httr GET add_headers http_status
 #' @importFrom jsonlite fromJSON
-#' @param postres an object of class \code{\link{response()}} containing the
+#' @param postres an object of class \code{\link{response}} containing the
 #' queryId returned by the previous API.
 #' @param headers list; contains the API key.
 #' @return Returns a list of two elements.
@@ -263,7 +262,7 @@ get_csid <- function(postres, headers){
 #' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 #' @references https://developer.rsc.org/compounds-v1/apis
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @seealso This is a low level function. See \code{\link{cs_convert()}}
+#' @seealso This is a low level function. See \code{\link{cs_convert}}
 #' for the top level function.
 #' @examples
 #' \dontrun{
@@ -299,7 +298,7 @@ cs_smiles_csid <- function(smiles, apikey){
 #' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 #' @references https://developer.rsc.org/compounds-v1/apis
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @seealso This is a low level function. See \code{\link{cs_convert()}}
+#' @seealso This is a low level function. See \code{\link{cs_convert}}
 #' for the top level function.
 #' @examples
 #' \dontrun{
@@ -335,7 +334,7 @@ cs_inchi_csid <- function(inchi, apikey){
 #' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 #' @references https://developer.rsc.org/compounds-v1/apis
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @seealso This is a low level function. See \code{\link{cs_convert()}}
+#' @seealso This is a low level function. See \code{\link{cs_convert}}
 #' for the top level function.
 #' @examples
 #' \dontrun{
@@ -385,9 +384,9 @@ cs_inchikey_csid <- function(inchikey, apikey){
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references https://developer.rsc.org/compounds-v1/apis
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @seealso This is a low level function. See \code{\link{cs_convert()}}
+#' @seealso This is a low level function. See \code{\link{cs_convert}}
 #' for the top level function.
-#' @seealso \code{link{parse_mol()}}
+#' @seealso \code{\link{parse_mol}}
 #' @examples
 #' \dontrun{
 #' apikey <- "<YOUR-API-KEY>"
@@ -444,7 +443,7 @@ cs_convert_multiple <- function(input, from, to, apikey){
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' apikey <- "<YOUR-API-KEY>"
 #' cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid',
 #' apikey = apikey)
@@ -503,7 +502,8 @@ cs_convert <- function(query, from, to, apikey) {
 #' @references https://developer.rsc.org/compounds-v1/apis
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' cs_compinfo(171, c("SMILES","CommonName"), apikey)
 #' }
 cs_compinfo <- function(csid, fields, apikey){

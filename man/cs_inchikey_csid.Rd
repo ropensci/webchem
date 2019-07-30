@@ -33,7 +33,7 @@ cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", apikey = apikey)
 https://developer.rsc.org/compounds-v1/apis
 }
 \seealso{
-This is a low level function. See \code{\link{cs_convert()}}
+This is a low level function. See \code{\link{cs_convert}}
 for the top level function.
 }
 \author{

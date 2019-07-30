@@ -52,10 +52,10 @@ cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N","inchikey","mol",apikey, parse
 https://developer.rsc.org/compounds-v1/apis
 }
 \seealso{
-This is a low level function. See \code{\link{cs_convert()}}
+This is a low level function. See \code{\link{cs_convert}}
 for the top level function.
 
-\code{link{parse_mol()}}
+\code{\link{parse_mol}}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

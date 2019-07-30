@@ -55,7 +55,7 @@ cs_control(orderDirection = "descending")
 https://developer.rsc.org/compounds-v1/apis
 }
 \seealso{
-\code{\link{cs_name_csid()}}, \code{\link{cs_element_csid()}}
+\code{\link{cs_name_csid}}, \code{\link{cs_element_csid}}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

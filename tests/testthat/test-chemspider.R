@@ -23,7 +23,7 @@ test_that("cs_control()",{
   expect_true(cs_control(orderBy = "molecularWeight")$orderBy == "molecularWeight")
   expect_true(cs_control(orderBy = "referenceCount")$orderBy == "referenceCount")
   expect_true(cs_control(orderBy = "dataSourceCount")$orderBy == "dataSourceCount")
-  expect_true(cs_control(orderBy = "pubMedCount")$orderBy == "pudMedCount")
+  expect_true(cs_control(orderBy = "pubMedCount")$orderBy == "pubMedCount")
   expect_true(cs_control(orderBy = "rscCount")$orderBy == "rscCount")
   expect_true(cs_control(orderDirection = "ascending")$orderDirection == "ascending")
   expect_true(cs_control(orderDirection = "descending")$orderDirection == "descending")
@@ -44,8 +44,8 @@ test_that("cs_name_csid()",{
   b <- cs_name_csid("Acetic Acid", apikey = apikey)
   c1 <- cs_name_csid("Oxygen", control = cs_control(orderBy = "recordId"),
                      apikey = apikey)
-  c2 <- cs_name_csid("Oxygen", control = cs_control(orderBy = "massDefect"),
-                     apikey = apikey)
+  #c2 <- cs_name_csid("Oxygen", control = cs_control(orderBy = "massDefect"),
+  #                   apikey = apikey)
   c3 <- cs_name_csid("Oxygen", control = cs_control(orderBy = "molecularWeight"),
                      apikey = apikey)
   c4 <- cs_name_csid("Oxygen", control = cs_control(orderBy = "referenceCount"),
@@ -134,7 +134,7 @@ test_that("cs_convert()",{
   a <- cs_convert(171, "csid", "inchi", apikey)
   a_rev <- cs_convert(a, "inchi", "csid", apikey)
   b <- cs_convert(171, "csid", "inchikey", apikey)
-  b_rev <- cs_convert(b, "inhikey", "csid", apikey)
+  b_rev <- cs_convert(b, "inchikey", "csid", apikey)
   c <- cs_convert(171, "csid", "smiles", apikey)
   c_rev <- cs_convert(c, "smiles", "csid", apikey)
   d <- cs_convert(171, "csid", "mol", apikey)
@@ -150,11 +150,11 @@ test_that("cs_convert()",{
   h_rev <- cs_convert(h, "mol", "inchikey", apikey)
 
   expect_equal(a, "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
-  expect_equal(a_rev, 171)
+  expect_equal(a_rev$results, 171)
   expect_equal(b, "QTBSBXVTEAMEQO-UHFFFAOYAR")
-  expect_equal(b_rev, 171)
+  expect_equal(b_rev$results, 171)
   expect_equal(c, "CC(=O)O")
-  expect_equal(c_rev, 171)
+  expect_equal(c_rev$results, 171)
   expect_is(parse_mol(d), "list")
   expect_equal(e, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
   expect_equal(e_rev, "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
@@ -163,7 +163,7 @@ test_that("cs_convert()",{
   expect_is(parse_mol(g), "list")
   expect_equal(g_rev, "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
   expect_is(parse_mol(h), "list")
-  expect-equal(h_rev, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+  expect_equal(h_rev, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
 })
 
 test_that("cs_compinfo()",{

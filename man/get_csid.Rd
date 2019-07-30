@@ -7,7 +7,7 @@
 get_csid(postres, headers)
 }
 \arguments{
-\item{postres}{an object of class \code{\link{response()}} containing the
+\item{postres}{an object of class \code{\link{response}} containing the
 queryId returned by the previous API.}
 
 \item{headers}{list; contains the API key.}
