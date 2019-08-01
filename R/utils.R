@@ -374,6 +374,7 @@ as.cas <- function(x){
 #' @param choices If `choices = "all"` then the entire vector `x` is used for the menu.  If numeric > 1, only that number of elements from the start of `x` are shown. If `choices = 1`, then the first element of `x` is returned without prompting the user.  If `NULL` then `x` is returned unchanged.
 #'
 #' @importFrom utils menu
+#' @importFrom utils head
 #' @return a character vector of length 1
 #' @export
 #'
@@ -397,7 +398,7 @@ chooser <- function(x, choices){
       out <- x[1]
     }
     if(is.numeric(choices) & choices > 1){
-      pick <- menu(x[seq_len(choices)], graphics = FALSE, 'Select one:')
+      pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
       out <- x[pick]
     }
   } else {
