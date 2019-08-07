@@ -215,9 +215,9 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' pc_synonyms('Aspirin')
 #' pc_synonyms(c('Aspirin', 'Triclosan'))
 #' pc_synonyms(5564, from = 'cid')
-#' pc_synonyms(c('Aspirin', 'Triclosan'), interactive = 10)
+#' pc_synonyms(c('Aspirin', 'Triclosan'), choices = 10)
 #' }
-pc_synonyms <- function(query, from = 'name', interactive = 0, choices = NULL, verbose = TRUE, arg = NULL, ...) {
+pc_synonyms <- function(query, from = 'name', choices = NULL, verbose = TRUE, arg = NULL, interactive = 0, ...) {
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c('Aspirin')
   # from = 'name'
