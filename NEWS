@@ -4,6 +4,7 @@ webchem 0.5
 NEW FEATURES
 
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
+* Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
 
 MINOR IMPROVEMENTS
 
