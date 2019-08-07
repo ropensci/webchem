@@ -6,7 +6,7 @@
 #'@param from character; type of query ID, e.g. \code{'itn'} , \code{'cas'},
 #'  \code{'epaid'}, \code{'tsn'}, \code{'name'}.
 #'
-#'@returna list of lists (for each supplied query): a list of 22. subsKey,
+#'@return a list of lists (for each supplied query): a list of 22. subsKey,
 #'  internalTrackingNumber, systematicName, epaIdentificationNumber,
 #'  currentCasNumber, currentTaxonomicSerialNumber, epaName, substanceType,
 #'  categoryClass, kingdomCode, iupacName, pubChemId, molecularWeight,
