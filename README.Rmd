@@ -41,7 +41,7 @@ They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpi
 Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](https://developer.rsc.org/) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `cs_datasources()`,`get_name_csid()`, `get_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()`| [link](https://developer.rsc.org/compounds-v1/apis) | required [(link)](https://developer.rsc.org/)
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -60,8 +60,8 @@ Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.c
 
 #### API keys
 
-Some ChemSpider functions require a security token. 
-Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
+Some ChemSpider functions require an API key. 
+Please register at RSC (https://developer.rsc.org/) to retrieve an API key.
 
 ## Installation
 #### Install from CRAN (stable version)
@@ -108,26 +108,26 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 
 #### ChemSpider
-```{r token, echo=FALSE}
-token = '37bf5e57-9091-42f5-9274-650a64398aaf'
+```{r apikey, echo=FALSE}
+apikey <- 'tKAuFrPCLOboXIeGLs5I257Pl0FjNH3e'
 ```
 
 You'll need a API key:
 
 ```{r api_key, eval=FALSE}
-token = '<YOUR TOKEN HERE>'
+apikey = '<YOUR TOKEN HERE>'
 ```
 
 Retrieve the ChemSpider ID of Triclosan
 
 ```{r get_csid}
-(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
+(id <- get_name_csid('Triclosan', apikey = apikey))
 ```
 
 Use this ID to query information from ChemSpider
 
 ```{r cs_extcompinfo}
-cs_extcompinfo(id, token = token)
+cs_compinfo(id, fields = c("Formula", "MolecularWeight"), apikey = apikey)
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
@@ -135,18 +135,18 @@ Note that the URL of the source if also returned (`source_url`) and can be used 
 Or to convert to a Mol-Object
 
 ```{r cs_csid_mol}
-mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
-head(mol$ab)
+mol <- cs_convert(id, from = 'csid', to = 'mol', apikey = apikey)
+head(parse_mol(mol$ab))
 ```
-Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a API-key is needed
+Note that the Molfile is parsed into a R object (via `parse_mol()`) and that an API-key is needed
 
 
-`cs_convert()` handles a lot of input / output formats, even without API-key:
+`cs_convert()` handles a lot of input / output formats:
 
 ```{r cs_inchikey_csid}
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
-cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid', apikey = apikey)
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi', apikey = apikey)
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi', apikey = apikey)
 ```
 
 And get EPISuit predictions from ChemSpider

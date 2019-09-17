@@ -16,6 +16,7 @@ BUG FIXES
 * cs_prop() failed with duplicated return values [issue #148, reported and fixed by @stanstrup]
 * pp_query() failed when compound present, but no properties [issue #151, reported and fixed by @stanstrup]
 * get_csid() failed because of a major change in the ChemSpider API [issue #149, PR #165, contributed by @stitam]
+* multiple functions failed because of a major change in the ChemSpider API [issue #149, contributed by @stitam]
 * cir_query() mistook NA for sodium [issue #158, reported and fixed by @Aariq]
 
 
