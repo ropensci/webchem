@@ -87,10 +87,10 @@ library("webchem")
 #### Chemical Identifier Resolver (CIR)
 
 CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
-Use `first` to return only the first hit.
+Use `choices = 1` to return only the first hit.
 ```{r cir_query1}
 cir_query('Triclosan', 'cas')
-cir_query('Triclosan', 'cas', first = TRUE)
+cir_query('Triclosan', 'cas', choices = 1)
 cir_query('Triclosan', 'mw')
 ```
 

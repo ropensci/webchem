@@ -28,9 +28,11 @@ We want to keep dependencies to a minimum:
 
 3. Please use the lightweight [`jsonlite`](https://github.com/jeroenooms/jsonlite) package for handling JSON.
 
-4. Be nice to the resources! Use appropriate timeouts.
+4. Use utilities in utils.R when possible to keep function style consistent across the package.
 
-5. Tests go into a separate tests branch and not in the master branch.
+5. Be nice to the resources! Use appropriate timeouts.
+
+6. Tests go into a separate tests branch and not in the master branch.
 
 
 

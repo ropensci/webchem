@@ -5,6 +5,7 @@ NEW FEATURES
 
 * Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with chebi_lite_entity() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andreasLD].
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
+* "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
 
 MINOR IMPROVEMENTS
 

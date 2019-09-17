@@ -366,3 +366,43 @@ as.cas <- function(x){
   }
   sapply(x, format.cas, USE.NAMES = FALSE)
 }
+
+
+#' Interactively choose a result from a menu
+#' @description In interactive sessions, prompts a user to choose an element of a vector from a menu. Use this for all functions that return multiple possible results such as multiple identifiers or synonyms.
+#' @param x a character vector
+#' @param choices If `choices = "all"` then the entire vector `x` is used for the menu.  If numeric > 1, only that number of elements from the start of `x` are shown. If `choices = 1`, then the first element of `x` is returned without prompting the user.  If `NULL` then `x` is returned unchanged.
+#'
+#' @importFrom utils menu
+#' @importFrom utils head
+#' @return a character vector of length 1
+#' @export
+#'
+#' @examples
+#' test <- c("apples", "bananas", "orange", "plum", "peach", "guava", "kumquat")
+#' chooser(test, "all")
+#' chooser(test, 3)
+chooser <- function(x, choices){
+  if(interactive() & !is.null(choices)){
+    #only in an interactive R session when number of choices is specified
+    if(is.numeric(choices) & choices > length(x)) {
+      choices = "all"
+      warning('Number of choices excedes length of x, using all choices instead',
+              immediate. = TRUE)
+    }
+    if(choices == "all") { #then give all of x as possible choices
+      pick <- menu(x, graphics = FALSE, 'Select one:')
+      out <- x[pick]
+    }
+    if(choices == 1) {
+      out <- x[1]
+    }
+    if(is.numeric(choices) & choices > 1){
+      pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
+      out <- x[pick]
+    }
+  } else {
+    out <- x
+  }
+  return(out)
+}
