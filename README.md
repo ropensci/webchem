@@ -23,7 +23,7 @@ This package interacts with a suite of web APIs to retrieve chemical
 information.
 
 The functions in the package that hit a specific API have a prefix and
-suffix separated by an underscore (`prefix_suffix()`) They follow the
+suffix separated by an underscore (`prefix_suffix()`). They follow the
 format of `source_functionality`, with the exception of functions that
 retrieve database identifiers which follow the format of
 `get_identifier`. e.g.`cs_compinfo` uses ChemSpider to retrieve compound
