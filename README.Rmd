@@ -1,10 +1,8 @@
 ---
-output:
-  html_document:
-    keep_md: yes
-    self_contained: no
-  pdf_document: default
+output: github_document
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 webchem
 =============
 
@@ -21,9 +19,7 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
 [![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
 [![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests)
-<!--
-[![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
--->
+<!-- [![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master) -->
 [![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
 [![Downloads](http://cranlogs.r-pkg.org/badges/webchem)](http://cranlogs.r-pkg.org/badges/webchem)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/webchem)](http://cran.r-project.org/web/packages/webchem)
@@ -33,7 +29,7 @@ knitr::opts_chunk$set(
 This package interacts with a suite of web APIs to retrieve chemical information.
 
 The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`)
-They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations.
+They follow the format of `source_functionality`, with the exception of functions that retrieve database identifiers which follow the format of `get_identifier`. e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations and `get_csid()` retrieves ChemSpider IDs.
 
 
 ## Currently implemented in `webchem`
@@ -115,43 +111,70 @@ apikey <- 'tKAuFrPCLOboXIeGLs5I257Pl0FjNH3e'
 You'll need a API key:
 
 ```{r api_key, eval=FALSE}
+<<<<<<< HEAD
 apikey = '<YOUR TOKEN HERE>'
+=======
+token = '<YOUR TOKEN HERE>'
+>>>>>>> 6da54c23750e8e26600cb652ffef633c5bcf04ac
 ```
 
 Retrieve the ChemSpider ID of Triclosan
 
+<<<<<<< HEAD
 ```{r get_csid}
 (id <- get_name_csid('Triclosan', apikey = apikey))
+=======
+```{r get_csid, eval=FALSE}
+(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
+>>>>>>> 6da54c23750e8e26600cb652ffef633c5bcf04ac
 ```
 
 Use this ID to query information from ChemSpider
 
+<<<<<<< HEAD
 ```{r cs_extcompinfo}
 cs_compinfo(id, fields = c("Formula", "MolecularWeight"), apikey = apikey)
+=======
+```{r cs_extcompinfo, eval=FALSE}
+cs_extcompinfo(id, token = token)
+>>>>>>> 6da54c23750e8e26600cb652ffef633c5bcf04ac
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
 
 Or to convert to a Mol-Object
 
+<<<<<<< HEAD
 ```{r cs_csid_mol}
 mol <- cs_convert(id, from = 'csid', to = 'mol', apikey = apikey)
 head(parse_mol(mol$ab))
+=======
+```{r cs_csid_mol, eval=FALSE}
+mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
+head(mol$ab)
+>>>>>>> 6da54c23750e8e26600cb652ffef633c5bcf04ac
 ```
 Note that the Molfile is parsed into a R object (via `parse_mol()`) and that an API-key is needed
 
 
 `cs_convert()` handles a lot of input / output formats:
 
+<<<<<<< HEAD
 ```{r cs_inchikey_csid}
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid', apikey = apikey)
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi', apikey = apikey)
 cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi', apikey = apikey)
+=======
+```{r cs_inchikey_csid, eval=FALSE}
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+>>>>>>> 6da54c23750e8e26600cb652ffef633c5bcf04ac
 ```
 
 And get EPISuit predictions from ChemSpider
 
-```{r cs_prop}
+```{r cs_prop, eval=FALSE}
 cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 ```
 
@@ -299,13 +322,25 @@ opsin_query(c('Cyclopropane', 'Octane'))
 ```
 
 
+<<<<<<< HEAD
 #### Flavornet
+=======
+#### flavornet
+
+Retrieve flavor percepts from flavornet.org using `fn_percept()`.
+
+>>>>>>> 6da54c23750e8e26600cb652ffef633c5bcf04ac
 ```{r flavornet}
-fn_percept(c("75-07-0", "123-32-0"))
+fn_percept(CAS = c("75-07-0", "123-32-0"))
 ```
 
 #### NIST
+<<<<<<< HEAD
 Identification of gas chromatography peaks is often aided by retention idices. NIST provides tables of retention indices reported in the literature organized by retention index type (Kovats, linear, normal alkane, and Lee), column polarity, and temperature program.
+=======
+
+Retrieve literature retention indices for gas chromatography from NIST with `nist_ri()`
+>>>>>>> 6da54c23750e8e26600cb652ffef633c5bcf04ac
 
 ```{r nist}
 RIs <- nist_ri("78-70-6", type = "kovats", polarity = "non-polar", temp_prog = "ramp")
@@ -426,7 +461,7 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 
 ### Want to contribute?
 
-Checkout our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
+Check out our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
 
 ### Meta
 

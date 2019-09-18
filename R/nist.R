@@ -164,9 +164,9 @@ tidy_ritable <- function(ri_xml){
 #' @description This function scrapes NIST for literature retention indices given CAS numbers as an input.
 #'
 #' @param cas CAS numbers either as numeric or formatted correctly with hyphens.
-#' @param type One of "kovats", "linear", "alkane", or "lee". Type of RI to retrieve. Details about how these are calculated here: [https://webbook.nist.gov/chemistry/gc-ri/]
-#' @param polarity One of "polar" or "non-polar" to get RIs calculated for polar or non-polar columns.
-#' @param temp_prog One of "isothermal", "ramp", or "custom".
+#' @param type Retention index type. One of `"kovats"`, `"linear"`, `"alkane"`, or `"lee"`. "kovats" returns Kovats retention indices, "linear" returns Van den Dool and Kratz retention indices, "alkane" returns normal alkane retention indices, and "lee" returns Lee retention indices. Details about how these are calculated here: [https://webbook.nist.gov/chemistry/gc-ri/].
+#' @param polarity Column polarity. One of "polar" or "non-polar" to get RIs calculated for polar or non-polar columns.
+#' @param temp_prog Temperature program. One of "isothermal", "ramp", or "custom".
 #'
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
