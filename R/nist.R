@@ -172,7 +172,21 @@ tidy_ritable <- function(ri_xml){
 #' @importFrom purrr map_dfr
 #' @import dplyr
 #'
-#' @return a table of literature RIs
+#' @return a table of literature RIs with the following columns:
+#' \itemize{
+#' \item{`CAS` is the CAS number}
+#' \item{`type` is the column type, e.g. "capillary"}
+#' \item{`phase` is the stationary phase (column phase)}
+#' \item{`RI` is retention index}
+#' \item{`length` is column length in meters}
+#' \item{`gas` is the carrier gas used}
+#' \item{`substrate`}
+#' \item{`diameter` is the column diameter in mm}
+#' \item{`thickness` is the phase thickness in µm}
+#' \item{`program`. Depending on whether you searched for "isothermal", "ramp", or "custom" there will be different columns describing the temperature program}
+#' \item{`reference` is where this retention index was published}
+#' \item{`comment`. I believe this is used to note the database these data were aggregated from}
+#'}
 #'
 #' @export
 #'
