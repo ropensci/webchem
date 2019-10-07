@@ -177,7 +177,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
       }
     }}
   rownames(out) <- NULL
-  class(out) <- c('data.frame', 'pc_prop')
   return(out)
 }
 

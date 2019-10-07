@@ -112,7 +112,6 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE, idx =
   }
   out <- lapply(query, foo, type = type, verbose = verbose, idx = idx)
   out <- setNames(out, query)
-  class(out) <- c('list', 'aw_query')
   return(out)
 }
 

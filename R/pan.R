@@ -148,7 +148,6 @@ pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, 
   }
   out <- lapply(query, foo, match = match, verbose = verbose)
   out <- setNames(out, query)
-  class(out) <- c('pan_query', 'list')
   return(out)
 }
 
