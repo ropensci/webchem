@@ -601,6 +601,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...){
   out <- data.frame(t(out), row.names = seq_len(ncol(out)))
   out[['query']] <- rownames(out)
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
+  class(out) <- c('cs_extcompinfo','data.frame')
   return(out)
 }
 

@@ -171,9 +171,11 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
                 physprop = physprop, source_url = source_url)
     attr(out, "matched") <- matched_sub
     attr(out, "distance") <- d
+    class(out) <- 'chemid'
     return(out)
   }
   out <- lapply(query, foo, type = type, match = match, verbose = verbose)
   out <- setNames(out, query)
+  class(out) <- c('ci_query','list')
   return(out)
 }
