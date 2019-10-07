@@ -225,7 +225,6 @@ etox_basic <- function(id, verbose = TRUE) {
   }
   out <- lapply(id, foo,verbose = verbose)
   out <- setNames(out, id)
-  class(out) <- c('list', 'etox_basic')
   return(out)
 }
 

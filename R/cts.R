@@ -49,7 +49,6 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
   }
   out <- lapply(inchikey, foo, verbose = verbose)
   out <- setNames(out, inchikey)
-  class(out) <- c('list', 'cts_compinfo')
   return(out)
 }
 
