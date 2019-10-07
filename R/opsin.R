@@ -50,6 +50,6 @@ opsin_query <- function(query, verbose = TRUE, ...){
   out <- sapply(query, foo, verbose = verbose)
   out <- data.frame(t(out), stringsAsFactors = FALSE)
   out[['query']] <- rownames(out)
-  class(out) <- c('data.frame', 'opsin_query')
+  class(out) <- c('opsin_query','data.frame')
   return(out)
 }
