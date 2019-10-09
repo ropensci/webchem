@@ -13,9 +13,11 @@ status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/mast
 Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests)
 [![Open
 Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
-<http://cranlogs.r-pkg.org/badges/webchem> [![CRAN
+[![](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
+[![CRAN
 status](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
 [![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
+
 <!-- badges: end -->
 
 `webchem` is a R package to retrieve chemical information from the web.
