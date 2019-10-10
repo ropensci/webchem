@@ -2,27 +2,28 @@
 % Please edit documentation in R/chemspider.R
 \name{get_csid}
 \alias{get_csid}
-\title{Retrieve ChemSpider ID from a queryId returned by a non-batch POST request}
+\title{ChemSpider ID from compound name}
 \usage{
-get_csid(postres, headers)
+get_csid(query, apikey, control = cs_control())
 }
 \arguments{
-\item{postres}{an object of class \code{\link{response}} containing the
-queryId returned by the previous API.}
+\item{query}{character; search term.}
 
-\item{headers}{list; contains the API key.}
+\item{apikey}{character; your API key.}
+
+\item{control}{function; see details.}
 }
 \value{
 Returns a list of two elements.
 }
 \description{
-Chemspider IDs (CSIDs) are obtained in multiple steps.
-First we assemble a POST request.
-These requests can take multiple forms and are assembled separately in each
-function that returns a CSID.
-A dedicated API handles the POST request and returns a queryId.
-This queryId is passed to another, more general API, that returns the CSID.
-This function communicates with the second API.
+Submit the name of a compund and retrieve the ChemSpider ID (CSID) of the
+compound.
+}
+\details{
+Control options available for this function are \code{orderBy},
+\code{orderDirection}. See \code{cs_control()} for a full list of valid values
+for these control options.
 }
 \note{
 An API key is needed. Register at RSC.
@@ -30,9 +31,17 @@ An API key is needed. Register at RSC.
 for an API key.
 Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 }
+\examples{
+\dontrun{
+apikey <- "<YOUR-API-KEY>"
+get_csid("Triclosan", apikey = apikey)
+}
+}
 \references{
-\url{https://developer.rsc.org/compounds-v1/apis}
+https://developer.rsc.org/compounds-v1/apis
 }
 \author{
+Eduard Szoecs, \email{eduardszoecs@gmail.com}
+
 Tamas Stirling, \email{stirling.tamas@gmail.com}
 }

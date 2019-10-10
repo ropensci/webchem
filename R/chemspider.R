@@ -62,7 +62,7 @@ cs_datasources <- function(apikey) {
 #' documentation of the function.
 #' @references https://developer.rsc.org/compounds-v1/apis
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @seealso \code{\link{cs_name_csid}}, \code{\link{cs_element_csid}}
+#' @seealso \code{\link{get_csid}}, \code{\link{cs_element_csid}}
 #' @export
 #' @examples
 #' cs_control()
@@ -106,9 +106,9 @@ cs_control <- function(orderBy = "recordId", orderDirection = "ascending",
 #' @examples
 #' \dontrun{
 #' apikey <- "<YOUR-API-KEY>"
-#' cs_name_csid("Triclosan", apikey = apikey)
+#' get_csid("Triclosan", apikey = apikey)
 #' }
-cs_name_csid <- function(query, apikey, control = cs_control()) {
+get_csid <- function(query, apikey, control = cs_control()) {
   headers <- c("Content-Type" = "", "apikey" = apikey)
   body <- list(
     "name" = query, "orderBy" = control$orderBy,
@@ -120,7 +120,7 @@ cs_name_csid <- function(query, apikey, control = cs_control()) {
     httr::add_headers(.headers = headers), body = body
   )
   if (postres$status_code == 200) {
-    out <- get_csid(postres = postres, headers = headers)
+    out <- cs_query_csid(postres = postres, headers = headers)
     return(out)
   }
   else {
@@ -169,7 +169,7 @@ cs_element_csid <- function(includeElements, excludeElements, apikey,
     httr::add_headers(.headers = headers), body = body
   )
   if (postres$status_code == 200) {
-    out <- get_csid(postres = postres, headers = headers)
+    out <- cs_query_csid(postres = postres, headers = headers)
     return(out)
   }
   else {
@@ -198,7 +198,7 @@ cs_element_csid <- function(includeElements, excludeElements, apikey,
 #' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-get_csid <- function(postres, headers){
+cs_query_csid <- function(postres, headers){
   queryId <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
   getstatus <- httr::GET(
     url = paste0(
@@ -277,7 +277,7 @@ cs_smiles_csid <- function(smiles, apikey){
     httr::add_headers(.headers = headers), body = body
   )#filter-smiles-post
   if (postres$status_code == 200) {
-    out <- get_csid(postres = postres, headers = headers)
+    out <- cs_query_csid(postres = postres, headers = headers)
     return(out)
   }
   else {
@@ -313,7 +313,7 @@ cs_inchi_csid <- function(inchi, apikey){
     httr::add_headers(.headers = headers), body = body
   )
   if (postres$status_code == 200) {
-    out <- get_csid(postres = postres, headers = headers)
+    out <- cs_query_csid(postres = postres, headers = headers)
     return(out)
   }
   else {
@@ -349,7 +349,7 @@ cs_inchikey_csid <- function(inchikey, apikey){
     httr::add_headers(.headers = headers), body = body
   )
   if (postres$status_code == 200) {
-    out <- get_csid(postres = postres, headers = headers)
+    out <- cs_query_csid(postres = postres, headers = headers)
     return(out)
   }
   else {
