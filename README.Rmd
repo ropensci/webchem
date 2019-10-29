@@ -1,12 +1,7 @@
 ---
-output:
-  html_document:
-    keep_md: yes
-    self_contained: no
-  pdf_document: default
+output: github_document
 ---
-webchem
-=============
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(
@@ -14,26 +9,30 @@ knitr::opts_chunk$set(
   message = FALSE,
   collapse = TRUE,
   comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
   cache = TRUE
 )
 ```
+# Webchem
 
-[![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
-[![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
-[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests)
-<!--
-[![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
--->
-[![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
-[![Downloads](http://cranlogs.r-pkg.org/badges/webchem)](http://cranlogs.r-pkg.org/badges/webchem)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/webchem)](http://cran.r-project.org/web/packages/webchem)
-[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
+<!-- badges: start -->
+
+[![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem) 
+[![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem) 
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests) 
+[![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues) 
+[![](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
+[![CRAN status](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem) 
+[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem) 
+
+<!-- badges: end -->
 
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
 
-The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`)
-They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations.
+The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`).
+They follow the format of `source_functionality`, with the exception of functions that retrieve database identifiers which follow the format of `get_identifier`. e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations and `get_csid()` retrieves ChemSpider IDs.
 
 
 ## Currently implemented in `webchem`
@@ -41,7 +40,7 @@ They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpi
 Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `cs_datasources()`,`get_name_csid()`, `get_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()`| [link](https://developer.rsc.org/compounds-v1/apis) | required [(link)](https://developer.rsc.org/)
+[ChemSpider](http://www.chemspider.com/) | `cs_datasources()`,`cs_name_csid()`, `cs_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()`| [link](https://developer.rsc.org/compounds-v1/apis) | required [(link)](https://developer.rsc.org/)
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -121,22 +120,24 @@ apikey = '<YOUR TOKEN HERE>'
 Retrieve the ChemSpider ID of Triclosan
 
 ```{r get_csid}
-(id <- get_name_csid('Triclosan', apikey = apikey))
+(id <- cs_name_csid('Triclosan', apikey = apikey))
 ```
 
 Use this ID to query information from ChemSpider
 
+
 ```{r cs_extcompinfo}
-cs_compinfo(id, fields = c("Formula", "MolecularWeight"), apikey = apikey)
+# cs_compinfo(id, fields = c("Formula", "MolecularWeight"), apikey = apikey)
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
 
 Or to convert to a Mol-Object
 
+
 ```{r cs_csid_mol}
-mol <- cs_convert(id, from = 'csid', to = 'mol', apikey = apikey)
-head(parse_mol(mol$ab))
+# mol <- cs_convert(id, from = 'csid', to = 'mol', apikey = apikey)
+# head(parse_mol(mol$ab))
 ```
 Note that the Molfile is parsed into a R object (via `parse_mol()`) and that an API-key is needed
 
@@ -151,7 +152,7 @@ cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi', apik
 
 And get EPISuit predictions from ChemSpider
 
-```{r cs_prop}
+```{r cs_prop, eval=FALSE}
 cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 ```
 
@@ -299,13 +300,17 @@ opsin_query(c('Cyclopropane', 'Octane'))
 ```
 
 
+
 #### Flavornet
+
 ```{r flavornet}
-fn_percept(c("75-07-0", "123-32-0"))
+fn_percept(CAS = c("75-07-0", "123-32-0"))
 ```
 
 #### NIST
+
 Identification of gas chromatography peaks is often aided by retention idices. NIST provides tables of retention indices reported in the literature organized by retention index type (Kovats, linear, normal alkane, and Lee), column polarity, and temperature program.
+
 
 ```{r nist}
 RIs <- nist_ri("78-70-6", type = "kovats", polarity = "non-polar", temp_prog = "ramp")
@@ -368,7 +373,7 @@ cas(wi)
 inchikey(wi)
 smiles(wi)
 
-smiles(etox_basic(5564))
+# smiles(etox_basic(5564))
 ```
 
 
@@ -426,12 +431,13 @@ If you're more familiar with Python you should check out [Matt Swains](https://g
 
 ### Want to contribute?
 
-Checkout our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
+Check out our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
 
 ### Meta
 
-* Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
-* License: MIT
-* Get citation information for `webchem` in R doing `citation(package = 'webchem')`
+- Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
+- License: MIT
+- Get citation information for `webchem` in R doing `citation("webchem")`
+  
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
