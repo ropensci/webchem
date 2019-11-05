@@ -17,24 +17,23 @@ get_csid(query, apikey, control = cs_control())
 Returns a list of two elements.
 }
 \description{
-Submit the name of a compund and retrieve the ChemSpider ID (CSID) of the
-compound.
+Submit names of compunds and retrieve their ChemSpider IDs (CSIDs).
 }
 \details{
-Control options available for this function are \code{orderBy},
-\code{orderDirection}. See \code{cs_control()} for a full list of valid values
-for these control options.
+Control options available for this function are \code{order_by},
+\code{order_direction}. See \code{cs_control()} for a full list of valid
+values for these control options.
 }
 \note{
-An API key is needed. Register at RSC.
-\url{https://developer.rsc.org/}
-for an API key.
-Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
+An API key is needed. Register at \url{https://developer.rsc.org/}
+for an API key. Please respect the Terms & conditions:
+\url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
 apikey <- "<YOUR-API-KEY>"
-get_csid("Triclosan", apikey = apikey)
+get_csid("triclosan", apikey = apikey)
+get_csid(c("triclosan","naproxene"), apikey = apikey)
 }
 }
 \references{

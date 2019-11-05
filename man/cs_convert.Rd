@@ -16,7 +16,8 @@ cs_convert(query, from, to, apikey)
 \item{apikey}{character; your API key.}
 }
 \value{
-Returns a character vector of length one containing the converted identifier.
+Returns a character vector of length one containing the converted
+identifier.
 }
 \description{
 Submit an identifier (CSID, SMILES, InChI, InChIKey or Mol) and return an
@@ -43,12 +44,18 @@ can be found at \url{https://developer.rsc.org/terms}.
 \examples{
 \dontrun{
 apikey <- "<YOUR-API-KEY>"
-cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'csid',
-apikey = apikey)
-cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'inchi',
-apikey = apikey)
-cs_convert('BQJCRHHNABKAKU-KBQPJGBKSA-N', from = 'inchikey', to = 'mol',
-apikey = apikey)
+cs_convert("BQJCRHHNABKAKU-KBQPJGBKSA-N",
+  from = "inchikey", to = "csid",
+  apikey = apikey
+)
+cs_convert("BQJCRHHNABKAKU-KBQPJGBKSA-N",
+  from = "inchikey", to = "inchi",
+  apikey = apikey
+)
+cs_convert("BQJCRHHNABKAKU-KBQPJGBKSA-N",
+  from = "inchikey", to = "mol",
+  apikey = apikey
+)
 }
 }
 \references{

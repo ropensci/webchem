@@ -4,19 +4,19 @@
 \alias{cs_control}
 \title{Control ChemSpider API requests}
 \usage{
-cs_control(orderBy = "recordId", orderDirection = "ascending",
-  includeAll = FALSE, complexity = "any", isotopic = "any")
+cs_control(order_by = "recordId", order_direction = "ascending",
+  include_all = FALSE, complexity = "any", isotopic = "any")
 }
 \arguments{
-\item{orderBy}{character; specifies the sort order for the results.
-Valid values are \code{"recordId"}, \code{"massDefect"}, \code{"molecularWeight"},
-\code{"referenceCount"}, \code{"dataSourceCount"}, \code{"pubMedCount"},
-\code{"rscCount"}.}
+\item{order_by}{character; specifies the sort order for the results.
+Valid values are \code{"recordId"}, \code{"massDefect"},
+\code{"molecularWeight"}, \code{"referenceCount"}, \code{"dataSourceCount"},
+\code{"pubMedCount"}, \code{"rscCount"}.}
 
-\item{orderDirection}{character; specifies the sort order for the results.
+\item{order_direction}{character; specifies the sort order for the results.
 Valid values are \code{"ascending"}, \code{"descending"}.}
 
-\item{includeAll}{logical; see details.}
+\item{include_all}{logical; see details.}
 
 \item{complexity}{character; see details.
 Valid values are \code{"any"} \code{"single"}, \code{"multiple"}.}
@@ -28,17 +28,18 @@ Valid values are \code{"any"}, \code{"labeled"}, \code{"unlabeled"}.}
 Returns a list of specified control options.
 }
 \description{
-For some ChemSpider API requests, you can also specify various control options.
+For some ChemSpider API requests, you can also specify various control
+options.
 This function is used to set these control options.
 }
 \details{
-Setting \code{includeAll} to \code{TRUE} will consider records which
-contain all of the filter criteria specified in the request.
+Setting \code{include_all} to \code{TRUE} will consider records
+which contain all of the filter criteria specified in the request.
 Setting it to \code{FALSE} will consider records which contain any of the
 filter criteria.
 
-A compound with a  \code{complexity} of \code{"multiple"} has more than one
-disconnected system in it or a metal atom or ion.
+A compound with a  \code{complexity} of \code{"multiple"} has more
+than one disconnected system in it or a metal atom or ion.
 }
 \note{
 This is a full list of all API control options.
@@ -49,13 +50,13 @@ documentation of the function.
 }
 \examples{
 cs_control()
-cs_control(orderDirection = "descending")
+cs_control(order_direction = "descending")
 }
 \references{
 https://developer.rsc.org/compounds-v1/apis
 }
 \seealso{
-\code{\link{get_csid}}, \code{\link{cs_element_csid}}
+\code{\link{get_csid}}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}
