@@ -26,7 +26,9 @@ Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 \examples{
 \dontrun{
 apikey <- "<YOUR-API-KEY>"
-cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", apikey = apikey)
+cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", apikey = apikey)
+cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"),
+apikey)
 }
 }
 \references{

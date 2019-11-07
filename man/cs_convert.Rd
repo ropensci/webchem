@@ -56,6 +56,7 @@ cs_convert("BQJCRHHNABKAKU-KBQPJGBKSA-N",
   from = "inchikey", to = "mol",
   apikey = apikey
 )
+cs_convert(160, from = "csid", to = "smiles", apikey = apikey)
 }
 }
 \references{

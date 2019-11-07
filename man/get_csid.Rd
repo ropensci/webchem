@@ -33,7 +33,7 @@ for an API key. Please respect the Terms & conditions:
 \dontrun{
 apikey <- "<YOUR-API-KEY>"
 get_csid("triclosan", apikey = apikey)
-get_csid(c("triclosan","naproxene"), apikey = apikey)
+get_csid(c("carbamazepine", "naproxene"), apikey = apikey)
 }
 }
 \references{

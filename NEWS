@@ -18,10 +18,11 @@ BUG FIXES
 * get_csid() failed because of a major change in the ChemSpider API [issue #149, PR #165, contributed by @stitam]
 * multiple functions failed because of a major change in the ChemSpider API [issue #149, contributed by @stitam]
 * cir_query() mistook NA for sodium [issue #158, reported and fixed by @Aariq]
-
-
+* fixed functions that communicate with the ChemSpider API [issue #149, issue #160, fixed by @stitam]
 
 DEPRECATED FUNCTIONS
+
+* cs_extcompinfo() cannot be fixed as there is no equivalent in the new ChemSpider API yet.
 
 DEFUNCT FUNCTIONS
 

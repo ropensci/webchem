@@ -28,6 +28,9 @@ Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 apikey <- "<YOUR-API-KEY>"
 cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
 apikey = apikey)
+cs_inchi_csid(inchi = c(
+"InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
+"InChI=1/C2H4O/c1-2-3/h2H,1H3"), apikey = apikey)
 }
 }
 \references{

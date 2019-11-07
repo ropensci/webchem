@@ -37,6 +37,7 @@ can be found at \url{https://developer.rsc.org/terms}.
 \examples{
 \dontrun{
 cs_compinfo(171, c("SMILES", "CommonName"), apikey)
+cs_compinfo(171:182, "SMILES", apikey)
 }
 }
 \references{
