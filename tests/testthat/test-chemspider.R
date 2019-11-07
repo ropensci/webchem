@@ -1,6 +1,6 @@
 context("chemspider")
 token <- "37bf5e57-9091-42f5-9274-650a64398aaf"
-apikey <- "tKAuFrPCLOboXIeGLs5I257Pl0FjNH3e"
+apikey <- "LquVCDSulXTUrNy9WGDTAdnEEYYpg4dS"
 
 test_that("cs_datasources()", {
   a <- cs_datasources(apikey = apikey)
@@ -42,7 +42,7 @@ test_that("cs_control()", {
 test_that("get_csid()", {
   a <- get_csid("Triclosan", apikey = apikey)
   b <- get_csid("Naproxene", apikey = apikey)
-  ab <- get_csid(c("Triclosan","Naproxene"), apikey = apikey)
+  ab <- get_csid(c("Triclosan", "Naproxene"), apikey = apikey)
   c1 <- get_csid("Oxygen", control = cs_control(order_by = "recordId"),
                      apikey = apikey)
   #c2 <- get_csid("Oxygen", control = cs_control(order_by = "massDefect"),
@@ -81,40 +81,60 @@ test_that("get_csid()", {
 
 test_that("cs_smiles_csid()", {
   a <- cs_smiles_csid("CC(O)=O", apikey = apikey)
+  b <- cs_smiles_csid(c("CC(O)=O", "COO"), apikey = apikey)
 
   expect_is(a, "list")
-  expect_equal(a$results, 171)
+  expect_equal(a[[1]], 171)
+  expect_is(b, "list")
+  expect_equal(b[[1]], 171)
+  expect_equal(b[[2]], 17190)
 })
 
 test_that("cs_inchi_csid()", {
   a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
                      apikey = apikey)
+  b <- cs_inchi_csid(c(
+    "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
+    "InChI=1/C3H6O/c1-3(2)4/h1-2H3"
+  ), apikey = apikey)
 
   expect_is(a, "list")
-  expect_equal(a$results, 171)
+  expect_equal(a[[1]], 171)
+  expect_is(b, "list")
+  expect_equal(b[[1]], 171)
+  expect_equal(b[[2]], 175)
 })
 
 test_that("cs_inchikey_csid()", {
   a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", apikey = apikey)
+  b <- cs_inshikey_csid(c(
+    "QTBSBXVTEAMEQO-UHFFFAOYSA-N",
+    "CSCPPACGZOOCGX-UHFFFAOYAF"
+  ), apikey = apikey)
 
   expect_is(a, "list")
-  expect_equal(a$results, 171)
+  expect_equal(a[[1]], 171)
+  expect_is(b, "list")
+  expect_equal(b[[1]], 171)
+  expect_equal(b[[2]], 175)
 })
 
 test_that("cs_convert_multiple()", {
   a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi", apikey)
-
+  a2 <- cs_convert_multiple(c("CC(O)=O", "COO"), "smiles", "inchi", apikey)
   b <- cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
                            "inchikey",
                            apikey)
   c <- cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
                            apikey)
 
-  expect_is(a, "character")
-  expect_equal(a, "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
-  expect_is(b, "character")
-  expect_equal(b, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
-  expect_is(c, "character")
+  expect_is(a, "list")
+  expect_equal(a[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(a2[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(a2[[2]], "InChI=1/C3H6O/c1-3(2)4/h1-2H3")
+  expect_is(b, "list")
+  expect_equal(b[[1]], "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+  expect_is(c, "list")
 })
 
 test_that("cs_convert()", {
@@ -138,22 +158,22 @@ test_that("cs_convert()", {
   h <- cs_convert("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", apikey)
   h_rev <- cs_convert(h, "mol", "inchikey", apikey)
 
-  expect_equal(a, "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
-  expect_equal(a_rev$results, 171)
-  expect_equal(b, "QTBSBXVTEAMEQO-UHFFFAOYAR")
-  expect_equal(b_rev$results, 171)
-  expect_equal(c, "CC(=O)O")
-  expect_equal(c_rev$results, 171)
-  expect_is(d, "character")
-  expect_equal(e, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
-  expect_equal(e_rev, "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
-  expect_equal(f, "CC(=O)O")
-  expect_equal(f_rev, "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
-  expect_is(g, "character")
+  expect_equal(a[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(a_rev[[1]], 171)
+  expect_equal(b[[1]], "QTBSBXVTEAMEQO-UHFFFAOYAR")
+  expect_equal(b_rev[[1]], 171)
+  expect_equal(c[[1]], "CC(=O)O")
+  expect_equal(c_rev[[1]], 171)
+  expect_is(d, "list")
+  expect_equal(e[[1]], "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+  expect_equal(e_rev[[1]], "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(f[[1]], "CC(=O)O")
+  expect_equal(f_rev[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_is(g, "list")
   #expect_equal(g_rev, "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
   #possible db error
-  expect_is(h, "character")
-  expect_equal(h_rev, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+  expect_is(h, "list")
+  expect_equal(h_rev[[1]], "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
 })
 
 test_that("cs_compinfo()", {
@@ -188,8 +208,6 @@ test_that("cs_extcompinfo()", {
 
 
 test_that("cs_prop()", {
-  #skip_on_cran()
-
   id <- "5363"
   m1 <- cs_prop(id)
 

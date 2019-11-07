@@ -113,7 +113,7 @@ cs_control <- function(order_by = "recordId", order_direction = "ascending",
 #' \dontrun{
 #' apikey <- "<YOUR-API-KEY>"
 #' get_csid("triclosan", apikey = apikey)
-#' get_csid(c("triclosan","naproxene"), apikey = apikey)
+#' get_csid(c("carbamazepine", "naproxene"), apikey = apikey)
 #' }
 get_csid <- function(query, apikey, control = cs_control()) {
   cs_name_csid <- function(query, apikey, control) {
@@ -233,21 +233,27 @@ cs_query_csid <- function(postres, headers) {
 #' \dontrun{
 #' apikey <- "<YOUR-API-KEY>"
 #' cs_smiles_csid("CC(O)=O", apikey = apikey)
+#' cs_smiles_csid(c("CC(O)=O","CC=O"), apikey = apikey)
 #' }
 cs_smiles_csid <- function(smiles, apikey) {
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- jsonlite::toJSON(list("smiles" = smiles), auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/smiles",
-    httr::add_headers(.headers = headers), body = body
-  ) # filter-smiles-post
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)
-    return(out)
+  query <- function(smiles, apikey) {
+    headers <- c("Content-Type" = "", "apikey" = apikey)
+    body <- jsonlite::toJSON(list("smiles" = smiles), auto_unbox = TRUE)
+    postres <- httr::POST(
+      url = "https://api.rsc.org/compounds/v1/filter/smiles",
+      httr::add_headers(.headers = headers), body = body
+    ) # filter-smiles-post
+    if (postres$status_code == 200) {
+      out <- cs_query_csid(postres = postres, headers = headers)$results
+      return(out)
+    }
+    else {
+      stop(httr::http_status(postres)$message)
+    }
   }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
+  out <- lapply(smiles, function(x) query(x, apikey = apikey))
+  names(out) <- smiles
+  return(out)
 }
 
 #' Retrieve ChemSpider ID from InChI
@@ -270,21 +276,29 @@ cs_smiles_csid <- function(smiles, apikey) {
 #' apikey <- "<YOUR-API-KEY>"
 #' cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
 #' apikey = apikey)
+#' cs_inchi_csid(inchi = c(
+#' "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
+#' "InChI=1/C2H4O/c1-2-3/h2H,1H3"), apikey = apikey)
 #' }
 cs_inchi_csid <- function(inchi, apikey) {
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- jsonlite::toJSON(list("inchi" = inchi), auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/inchi",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)
-    return(out)
+  query <- function(inchi, apikey) {
+    headers <- c("Content-Type" = "", "apikey" = apikey)
+    body <- jsonlite::toJSON(list("inchi" = inchi), auto_unbox = TRUE)
+    postres <- httr::POST(
+      url = "https://api.rsc.org/compounds/v1/filter/inchi",
+      httr::add_headers(.headers = headers), body = body
+    )
+    if (postres$status_code == 200) {
+      out <- cs_query_csid(postres = postres, headers = headers)$results
+      return(out)
+    }
+    else {
+      stop(httr::http_status(postres)$message)
+    }
   }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
+  out <- lapply(inchi, function(x) query(x, apikey = apikey))
+  names(out) <- inchi
+  return(out)
 }
 
 #' Retrieve ChemSpider ID from InChIKey
@@ -305,22 +319,29 @@ cs_inchi_csid <- function(inchi, apikey) {
 #' @examples
 #' \dontrun{
 #' apikey <- "<YOUR-API-KEY>"
-#' cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", apikey = apikey)
+#' cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", apikey = apikey)
+#' cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"),
+#' apikey)
 #' }
 cs_inchikey_csid <- function(inchikey, apikey) {
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- jsonlite::toJSON(list("inchikey" = inchikey), auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/inchikey",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)
-    return(out)
+  query <- function(inchikey, apikey) {
+    headers <- c("Content-Type" = "", "apikey" = apikey)
+    body <- jsonlite::toJSON(list("inchikey" = inchikey), auto_unbox = TRUE)
+    postres <- httr::POST(
+      url = "https://api.rsc.org/compounds/v1/filter/inchikey",
+      httr::add_headers(.headers = headers), body = body
+    )
+    if (postres$status_code == 200) {
+      out <- cs_query_csid(postres = postres, headers = headers)$results
+      return(out)
+    }
+    else {
+      stop(httr::http_status(postres)$message)
+    }
   }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
+  out <- lapply(inchikey, function(x) query(x, apikey = apikey))
+  names(out) <- inchikey
+  return(out)
 }
 
 
@@ -365,23 +386,29 @@ cs_inchikey_csid <- function(inchikey, apikey) {
 #' apikey, parse = TRUE)
 #' }
 cs_convert_multiple <- function(input, from, to, apikey) {
-  headers <- c(`Content-Type` = "", `apikey` = apikey)
-  body <- list(
-    "input" = input, "inputFormat" = from,
-    "outputFormat" = to
-  )
-  body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/tools/convert",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- jsonlite::fromJSON(rawToChar(postres$content))$output
-    return(out)
+  query <- function(input, from, to, apikey) {
+    headers <- c(`Content-Type` = "", `apikey` = apikey)
+    body <- list(
+      "input" = input, "inputFormat" = from,
+      "outputFormat" = to
+    )
+    body <- jsonlite::toJSON(body, auto_unbox = TRUE)
+    postres <- httr::POST(
+      url = "https://api.rsc.org/compounds/v1/tools/convert",
+      httr::add_headers(.headers = headers), body = body
+    )
+    if (postres$status_code == 200) {
+      out <- jsonlite::fromJSON(rawToChar(postres$content))$output
+      return(out)
+    }
+    else {
+      stop(httr::http_status(postres)$message)
+    }
   }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
+  out <- lapply(input, function(x) query(x, from = from, to = to,
+                                         apikey = apikey))
+  names(out) <- input
+  return(out)
 }
 
 #' Convert identifiers using Chemspider
@@ -427,6 +454,7 @@ cs_convert_multiple <- function(input, from, to, apikey) {
 #'   from = "inchikey", to = "mol",
 #'   apikey = apikey
 #' )
+#' cs_convert(160, from = "csid", to = "smiles", apikey = apikey)
 #' }
 cs_convert <- function(query, from, to, apikey) {
   valid <- c("csid", "inchikey", "inchi", "smiles", "mol")
@@ -452,9 +480,10 @@ cs_convert <- function(query, from, to, apikey) {
       return("cs_convert_multiple")
     }
   }
-  switch(cs_convert_router(from, to),
+  out <- switch(cs_convert_router(from, to),
     identity = query,
-    cs_compinfo = cs_compinfo(query, fields = to2, apikey = apikey)[1, 2],
+    cs_compinfo = lapply(query, function(x) cs_compinfo(
+      x, fields = to2, apikey = apikey)[1, 2]),
     cs_convert_multiple = cs_convert_multiple(query,
       from = from, to = to,
       apikey = apikey
@@ -464,6 +493,8 @@ cs_convert <- function(query, from, to, apikey) {
     cs_smiles_csid = cs_smiles_csid(query, apikey = apikey),
     cs_mol_csid = stop("Conversion not supported.")
   )
+  names(out) <- query
+  return(out)
 }
 
 #' Retrieve record details by ChemSpider ID
@@ -492,6 +523,7 @@ cs_convert <- function(query, from, to, apikey) {
 #' @examples
 #' \dontrun{
 #' cs_compinfo(171, c("SMILES", "CommonName"), apikey)
+#' cs_compinfo(171:182, "SMILES", apikey)
 #' }
 cs_compinfo <- function(csid, fields, apikey) {
   fields <- match.arg(fields,
@@ -681,7 +713,7 @@ cs_prop <- function(csid, verbose = TRUE, ...) {
     acd$value <- as.numeric(gsub('^(\\d*\\.?\\d*).*$', '\\1', acd$val))
     acd$error <- as.numeric(ifelse(
       grepl('\u00B1', acd$val),
-      gsub("^\\d*\\.?\\d*\u00B1(\\d*\\.?\\d*)\\s.*$",'\\1', acd$val), NA))
+      gsub("^\\d*\\.?\\d*\u00B1(\\d*\\.?\\d*)\\s.*$", '\\1', acd$val), NA))
     acd$unit <- ifelse(grepl('\\s.*\\d*$', acd$val),
                        gsub('^.*\\d*\\s(.*\\d*)$', '\\1', acd$val),
                        NA)
@@ -712,7 +744,7 @@ cs_prop <- function(csid, verbose = TRUE, ...) {
       source_pred <- save_val(
         gsub('(.*) = \\s(.*)', '\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
       value_exp <- save_val(as.numeric(
-        gsub('.* = \\s(.*)','\\1', ll[grepl('^Log Kow \\(Exper.', ll)])))
+        gsub('.* = \\s(.*)', '\\1', ll[grepl('^Log Kow \\(Exper.', ll)])))
       unit_exp <- NA
       source_exp <- save_val(
         gsub('^.*\\:\\s(.*)', '\\1',
@@ -762,11 +794,11 @@ cs_prop <- function(csid, verbose = TRUE, ...) {
       source_pred <- c(source_pred, save_val(
         gsub('^.*\\((.*)\\)\\:$',
              '\\1', ll[grepl('^Water Solubility Estimate from Log Kow', ll)])))
-      value_exp <- c(value_exp,save_val(as.numeric(gsub(
-        ".*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*",'\\1',
+      value_exp <- c(value_exp, save_val(as.numeric(gsub(
+        ".*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*", '\\1',
                     ll[grepl('^Water Sol \\(Exper. database match', ll)]))))
       unit_exp <- c(unit_exp, save_val(gsub(
-        ".*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*)(.*)",'\\2',
+        ".*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*)(.*)", '\\2',
                     ll[grepl('^Water Sol \\(Exper. database match', ll)])))
       source_exp <- c(source_exp, save_val(gsub('^.*\\:\\s(.*)', '\\1',
                     ll[which(grepl(
