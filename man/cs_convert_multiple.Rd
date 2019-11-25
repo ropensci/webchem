@@ -9,8 +9,8 @@ cs_convert_multiple(input, from, to, apikey)
 \arguments{
 \item{input}{character; the identifier to be converted.}
 
-\item{from}{character; the format to be converted from. Valid values are smiles,
-inchi, inchikey, mol.}
+\item{from}{character; the format to be converted from. Valid values are
+smiles, inchi, inchikey, mol.}
 
 \item{to}{character; the format to be converted to. Valid values are smiles,
 inchi, inhikey, mol.}
@@ -18,12 +18,13 @@ inchi, inhikey, mol.}
 \item{apikey}{character; your API key.}
 }
 \value{
-Returns a character vector of length one containing the converted identifier.
+Returns a character vector of length one containing the converted
+identifier.
 }
 \description{
-Submit an identifier (SMILES, InChI, InChIKey or Mol) and return an identifier
-in another format (SMILES, InChI, InChIKey or Mol). Not all conversions are
-supported.
+Submit an identifier (SMILES, InChI, InChIKey or Mol) and return an
+identifier in another format (SMILES, InChI, InChIKey or Mol). Not all
+conversions are supported.
 }
 \details{
 Not all conversions are supported. Allowed conversions:
@@ -42,10 +43,12 @@ can be found at \url{https://developer.rsc.org/terms}.
 \examples{
 \dontrun{
 apikey <- "<YOUR-API-KEY>"
-cs_convert_multiple("CC(=O)O","smiles","inchi",apikey)
-cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)","inchi","inchikey",apikey)
-cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N","inchikey","mol",apikey)
-cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N","inchikey","mol",apikey, parse = TRUE)
+cs_convert_multiple("CC(=O)O", "smiles", "inchi", apikey)
+cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
+"inchikey", apikey)
+cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", apikey)
+cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
+apikey, parse = TRUE)
 }
 }
 \references{

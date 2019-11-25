@@ -27,6 +27,7 @@ Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 \dontrun{
 apikey <- "<YOUR-API-KEY>"
 cs_smiles_csid("CC(O)=O", apikey = apikey)
+cs_smiles_csid(c("CC(O)=O","CC=O"), apikey = apikey)
 }
 }
 \references{

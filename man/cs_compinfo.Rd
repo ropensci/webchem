@@ -21,12 +21,13 @@ Submit a Chemspider ID (CSID) and the fields you are interested in, and
 retrieve the record details for your query.
 }
 \details{
-Valid values for \code{fields} are \code{"SMILES"}, \code{"Formula"},
-\code{"InChI"}, \code{"InChIKey"}, \code{"StdInChI"}, \code{"StdInChIKey"},
-\code{"AverageMass"}, \code{"MolecularWeight"}, \code{"MonoisotopicMass"},
-\code{"NominalMass"}, \code{"CommonName"}, \code{"ReferenceCount"},
-\code{"DataSourceCount"}, \code{"PubMedCount"}, \code{"RSCCount"},
-\code{"Mol2D"}, \code{"Mol3D"}. You can specify any number of fields.
+Valid values for \code{fields} are \code{"SMILES"},
+\code{"Formula"}, \code{"InChI"}, \code{"InChIKey"}, \code{"StdInChI"},
+\code{"StdInChIKey"}, \code{"AverageMass"}, \code{"MolecularWeight"},
+\code{"MonoisotopicMass"}, \code{"NominalMass"}, \code{"CommonName"},
+\code{"ReferenceCount"}, \code{"DataSourceCount"}, \code{"PubMedCount"},
+\code{"RSCCount"}, \code{"Mol2D"}, \code{"Mol3D"}. You can specify any
+number of fields.
 }
 \note{
 An API key is needed. Register at \url{https://developer.rsc.org/}
@@ -35,7 +36,8 @@ can be found at \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-cs_compinfo(171, c("SMILES","CommonName"), apikey)
+cs_compinfo(171, c("SMILES", "CommonName"), apikey)
+cs_compinfo(171:182, "SMILES", apikey)
 }
 }
 \references{

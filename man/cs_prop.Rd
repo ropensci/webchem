@@ -14,14 +14,16 @@ cs_prop(csid, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-A list of lists with of three: acd (data.frame), epi (data.frame) and source_url.
+A list of lists with of three: acd (data.frame), epi (data.frame)
+and source_url.
 }
 \description{
 Get predicted (ACD/Labs and EPISuite) chemical properties from ChemSpider,
 see \url{https://www.chemspider.com/}
 }
 \note{
-Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
+Please respect the Terms & conditions
+\url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
 }
 \examples{
 \dontrun{
@@ -30,7 +32,7 @@ out[[1]]$epi
 
 out2 <- cs_prop(c(5363, 2157))
 # extract Log Octanol-Water Partition Coef from EPI
-sapply(out2, function(y){
+sapply(out2, function(y) {
   y$epi$value_pred[y$epi$prop == 'Log Octanol-Water Partition Coef']
 })
 }

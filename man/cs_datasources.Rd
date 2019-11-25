@@ -15,7 +15,8 @@ Returns a character vector.
 \description{
 The function returns a vector of available data sources used by ChemSpider.
 Some ChemSpider functions allow you to restrict which sources are used to
-lookup the requested query. Restricting the sources makes these queries faster.
+lookup the requested query. Restricting the sources makes these queries
+faster.
 }
 \note{
 An API key is needed. Register at \url{https://developer.rsc.org/}
