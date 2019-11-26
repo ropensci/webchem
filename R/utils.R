@@ -354,6 +354,8 @@ as.cas <- function(x){
   format.cas <- function(x){
     if(is.na(x)) {
       return(NA)
+    } else if (suppressMessages(is.cas(x))) {
+      return(x)
     } else {
       parsed <- gsub("([0-9]+)([0-9]{2})([0-9]{1})", '\\1-\\2-\\3', x)
       pass <- is.cas(parsed)
@@ -361,9 +363,7 @@ as.cas <- function(x){
       return(out)
     }
   }
-  if(any(!sapply(x, grepl, pattern= "^\\d+$"))){
-    warning("Some elements of x cannot be converted to CAS numbers")
-  }
+
   sapply(x, format.cas, USE.NAMES = FALSE)
 }
 
