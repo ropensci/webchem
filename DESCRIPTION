@@ -6,7 +6,7 @@ Type: Package
 Version: 0.4.0.9004
 Date: 2018-04-12
 License: MIT + file LICENSE
-URL: https://github.com/ropensci/webchem
+URL: https://docs.ropensci.org/webchem, https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
 Authors@R: c(person("Eduard", "Szöcs", role = c("aut", "cre"),
     email = "eduardszoecs@gmail.com"),
