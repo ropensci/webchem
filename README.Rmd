@@ -40,7 +40,7 @@ They follow the format of `source_functionality`, with the exception of function
 Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `cs_datasources()`,`cs_name_csid()`, `cs_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()`| [link](https://developer.rsc.org/compounds-v1/apis) | required [(link)](https://developer.rsc.org/)
+[ChemSpider](http://www.chemspider.com/) | `cs_datasources()`,`get_csid()`, `cs_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()`| [link](https://developer.rsc.org/compounds-v1/apis) | required [(link)](https://developer.rsc.org/)
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -107,27 +107,17 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 
 #### ChemSpider
-```{r apikey, echo=FALSE}
-apikey <- 'tKAuFrPCLOboXIeGLs5I257Pl0FjNH3e'
-```
-
-You'll need a API key:
-
-```{r api_key, eval=FALSE}
-apikey = '<YOUR TOKEN HERE>'
-```
-
 Retrieve the ChemSpider ID of Triclosan
 
 ```{r get_csid}
-(id <- cs_name_csid('Triclosan', apikey = apikey))
+(id <- get_csid('Triclosan'))
 ```
 
 Use this ID to query information from ChemSpider
 
 
 ```{r cs_extcompinfo}
-# cs_compinfo(id, fields = c("Formula", "MolecularWeight"), apikey = apikey)
+# cs_compinfo(id, fields = c("Formula", "MolecularWeight"))
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
@@ -136,7 +126,7 @@ Or to convert to a Mol-Object
 
 
 ```{r cs_csid_mol}
-# mol <- cs_convert(id, from = 'csid', to = 'mol', apikey = apikey)
+# mol <- cs_convert(id, from = 'csid', to = 'mol')
 # head(parse_mol(mol$ab))
 ```
 Note that the Molfile is parsed into a R object (via `parse_mol()`) and that an API-key is needed
@@ -145,9 +135,9 @@ Note that the Molfile is parsed into a R object (via `parse_mol()`) and that an 
 `cs_convert()` handles a lot of input / output formats:
 
 ```{r cs_inchikey_csid}
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid', apikey = apikey)
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi', apikey = apikey)
-cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi', apikey = apikey)
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
 ```
 
 And get EPISuit predictions from ChemSpider
