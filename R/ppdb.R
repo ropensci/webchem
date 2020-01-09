@@ -2,7 +2,7 @@
 #'
 #' This function parses a (substance) html from the website into an R object.
 #' Earlier versions allowed also to search and download the database.
-#' However, this is explicitly against the terms and conditions of use [link removed on request].
+#' However, this is explicitly against the terms and conditions of use \[link removed on request\].
 #' On request we also removed all links to the website / database.
 #'
 #' @param source an object of class \code{xml_document} as returned by  \code{\link[xml2]{read_html}}.
@@ -10,15 +10,15 @@
 #' @return A list of 11 data.frames : ec_regulation, approved_in, general, parents, fate,
 #' deg, soil, metab, etox, names and source_url.
 #'
-#' @note Please read the Terms and Conditions for use [link removed on request] and
-#' the Copyright statement [link removed on request].
+#' @note Please read the Terms and Conditions for use \[link removed on request\] and
+#' the Copyright statement \[link removed on request\].
 #'
 #' This function only parses a html. Saving (or downloading) substantial parts
 #' from the database is explicitly against the terms and conditions and copyright of use
-#' [link removed on request].
+#' \[link removed on request\].
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @references [Reference removed on request.]
+#' @references \[Reference removed on request.\]
 #' @export
 ppdb_parse <- function(source, verbose = TRUE){
   ttt <- source
