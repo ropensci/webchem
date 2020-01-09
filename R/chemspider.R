@@ -1,11 +1,22 @@
 #' Retrieve stored ChemSpider API keys and secure tokens
 #'
-#' Look for and retrieve ChemSpider API keys and secure tokens stored in .Renviron or .Rprofile.
+#' Look for and retrieve ChemSpider API keys and secure tokens stored in
+#' .Renviron or .Rprofile.
 #'
 #' @name check_key
 #' @rdname check_key
-#' @details To use the `cs_*` functions, you'll need to obtain an API key by registering. Register at \url{https://developer.rsc.org/} for an API key. Please respect the Terms & Conditions. The Terms & Conditions
-#' can be found at \url{https://developer.rsc.org/terms}. Rather than store these API keys and tokens in code, which might be shared, it's best practice to keep them hidden. You can store the API key as `CHEMSPIDER_KEY=<your key>` in .Renviron or as `option(chemspider_key = <your key>)` in .Rprofile.  Similarly, the secure token can be stored as `CHEMSPIDER_TOKEN` in.Rprofile or as the option `chemspider_token`.
+#' @details To use the any of the functions in `webchem` that access the
+#'   ChemSpider database, you'll need to obtain an API key by registering.
+#'   Register at \url{https://developer.rsc.org/} for an API key. Please respect
+#'   the Terms & Conditions. The Terms & Conditions can be found at
+#'   \url{https://developer.rsc.org/terms}. Rather than store these API keys and
+#'   tokens in code, which might be shared, it's best practice to keep them
+#'   hidden. You can store the API key as `CHEMSPIDER_KEY=<your key>` in
+#'   .Renviron or as `option(chemspider_key = <your key>)` in .Rprofile.
+#'   Similarly, the secure token can be stored as `CHEMSPIDER_TOKEN` in
+#'   .Rprofile or as the option `chemspider_token`.
+#' @seealso \code{\link[usethis]{edit_r_environ}}
+#'   \code{\link[usethis]{edit_r_profile}}
 #' @return an API key
 NULL
 
@@ -26,7 +37,6 @@ cs_check_key <- function () {
     stop("no API key stored for ChemSpider.  See ?cs_check_key() for details")
   else x
 }
-
 
 
 #' @rdname check_key
