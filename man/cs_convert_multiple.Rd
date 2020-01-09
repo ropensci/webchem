@@ -4,7 +4,7 @@
 \alias{cs_convert_multiple}
 \title{Convert between SMILES, InChI, InChiKey, Mol identifiers using Chemspider}
 \usage{
-cs_convert_multiple(input, from, to, apikey)
+cs_convert_multiple(input, from, to, apikey = NULL)
 }
 \arguments{
 \item{input}{character; the identifier to be converted.}
@@ -15,7 +15,7 @@ smiles, inchi, inchikey, mol.}
 \item{to}{character; the format to be converted to. Valid values are smiles,
 inchi, inhikey, mol.}
 
-\item{apikey}{character; your API key.}
+\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a character vector of length one containing the converted
@@ -42,13 +42,11 @@ can be found at \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-apikey <- "<YOUR-API-KEY>"
-cs_convert_multiple("CC(=O)O", "smiles", "inchi", apikey)
+cs_convert_multiple("CC(=O)O", "smiles", "inchi")
 cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
-"inchikey", apikey)
-cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", apikey)
-cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
-apikey, parse = TRUE)
+"inchikey")
+cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
+cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", parse = TRUE)
 }
 }
 \references{

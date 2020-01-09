@@ -4,12 +4,12 @@
 \alias{cs_inchikey_csid}
 \title{Retrieve ChemSpider ID from InChIKey}
 \usage{
-cs_inchikey_csid(inchikey, apikey)
+cs_inchikey_csid(inchikey, apikey = NULL)
 }
 \arguments{
 \item{inchikey}{character; search term.}
 
-\item{apikey}{character; your API key.}
+\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a list of two elements.
@@ -25,10 +25,8 @@ Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-apikey <- "<YOUR-API-KEY>"
-cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", apikey = apikey)
-cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"),
-apikey)
+cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR")
+cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"))
 }
 }
 \references{

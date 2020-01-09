@@ -4,12 +4,12 @@
 \alias{cs_smiles_csid}
 \title{Retrieve ChemSpider ID from SMILES}
 \usage{
-cs_smiles_csid(smiles, apikey)
+cs_smiles_csid(smiles, apikey = NULL)
 }
 \arguments{
 \item{smiles}{character; search term.}
 
-\item{apikey}{character; your API key.}
+\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a list of two elements.
@@ -25,9 +25,8 @@ Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-apikey <- "<YOUR-API-KEY>"
-cs_smiles_csid("CC(O)=O", apikey = apikey)
-cs_smiles_csid(c("CC(O)=O","CC=O"), apikey = apikey)
+cs_smiles_csid("CC(O)=O")
+cs_smiles_csid(c("CC(O)=O","CC=O"))
 }
 }
 \references{
