@@ -149,22 +149,62 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
       source_url <- gsub('^(.*)\\?.*', '\\1', qurl)
     }
 
-    name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
-    synonyms <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))
-    cas <- xml_text(xml_find_all(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))
-    inchi <- gsub('\\n|\\t', '',
-                  xml_text(xml_find_all(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]"))[1]
-                  )
-    inchikey <- gsub('\\n|\\t|\\r', '',
-                     xml_text(xml_find_all(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]"))
-    )
-    smiles <- gsub('\\n|\\t|\\r', '',
-                   xml_text(xml_find_all(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]"))
-    )
-    toxicity <- html_table(xml_find_all(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))[[1]]
-    physprop <- html_table(xml_find_all(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))[[1]]
-    physprop[ , 'Value'] <- as.numeric(physprop[ , 'Value'])
-    #= same as physprop
+    if(is.na(xml_find_first(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))){
+      name <- NA
+    }else{
+      name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
+    }
+
+    if(is.na(xml_find_first(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))){
+      synonyms <- NA
+    }else{
+      synonyms <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))
+    }
+
+    if(is.na(xml_find_first(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))){
+      cas <- NA
+    } else {
+      cas <- xml_text(xml_find_all(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))
+    }
+
+    if(is.na(xml_find_first(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]"))){
+      inchi <- NA
+    } else {
+      inchi <- gsub('\\n|\\t', '',
+                    xml_text(xml_find_all(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]"))[1]
+      )
+    }
+
+    if(is.na(xml_find_first(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]"))){
+      inchikey <- NA
+    } else {
+      inchikey <- gsub('\\n|\\t|\\r', '',
+                       xml_text(xml_find_all(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]"))
+                       )
+    }
+
+    if(is.na(xml_find_first(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]"))){
+      smiles <- NA
+    } else {
+      smiles <- gsub('\\n|\\t|\\r', '',
+                     xml_text(xml_find_all(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]"))
+      )
+    }
+
+    if(is.na(xml_find_first(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))){
+      toxicity <- NA
+    } else {
+      toxicity <- html_table(xml_find_all(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))[[1]]
+    }
+
+     if(is.na(xml_find_first(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))){
+      physprop <- NA
+    } else {
+      physprop <- html_table(xml_find_all(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))[[1]]
+      physprop[ , 'Value'] <- as.numeric(physprop[ , 'Value'])
+      #= same as physprop
+    }
+
 
     out <- list(name = name, synonyms = synonyms, cas = cas, inchi = inchi,
                 inchikey = inchikey, smiles = smiles, toxicity = toxicity,
