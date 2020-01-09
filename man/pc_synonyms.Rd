@@ -13,13 +13,13 @@ pc_synonyms(query, from = "name", choices = NULL, verbose = TRUE,
 \item{from}{character; type of input, can be one of 'name' (default), 'cid',
 'sid', 'aid', 'smiles', 'inchi', 'inchikey'}
 
-\item{choices}{to get only the first synonym, use `choices = 1`, to get a number of synonyms to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.}
+\item{choices}{to get only the first synonym, use \code{choices = 1}, to get a number of synonyms to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{arg}{character; optinal arguments like 'name_type=word' to match individual words.}
 
-\item{interactive}{deprecated.  Use the `choices` argument instead}
+\item{interactive}{deprecated.  Use the \code{choices} argument instead}
 
 \item{...}{optional arguments}
 }

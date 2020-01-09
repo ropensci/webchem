@@ -15,7 +15,7 @@ smiles, inchi, inchikey, mol.}
 \item{to}{character; the format to be converted to. Valid values are smiles,
 inchi, inhikey, mol.}
 
-\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a character vector of length one containing the converted

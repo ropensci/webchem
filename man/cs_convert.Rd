@@ -13,7 +13,7 @@ cs_convert(query, from, to, apikey = NULL)
 
 \item{to}{character; type to convert to.}
 
-\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a character vector of length one containing the converted

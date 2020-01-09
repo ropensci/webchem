@@ -9,7 +9,7 @@ cs_extcompinfo(csid, token = NULL, verbose = TRUE, ...)
 \arguments{
 \item{csid}{character,  ChemSpider ID.}
 
-\item{token}{character; security token. If NULL (default) `cs_check_token()` will look for it in .Renviron or .Rprofile.}
+\item{token}{character; security token. If NULL (default) \code{cs_check_token()} will look for it in .Renviron or .Rprofile.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

@@ -19,7 +19,7 @@ See details for possible resolvers.}
 
 \item{first}{deprecated, use choices = 1 to return only the first result}
 
-\item{choices}{if `choices = 1`, returns only the first result. To get a number of results to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.}
+\item{choices}{if \code{choices = 1}, returns only the first result. To get a number of results to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -33,72 +33,72 @@ Query Chemical Identifier Resolver
 }
 \details{
 A interface to the Chemical Identifier Resolver (CIR).
- (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
+(\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
 
- CIR can resolve can be of the following \code{identifier}: Chemical Names,
- IUPAC names,
- CAS Numbers, SMILES strings, IUPAC InChI/InChIKeys, NCI/CADD Identifiers,
- CACTVS HASHISY, NSC number, PubChem SID, ZINC Code, ChemSpider ID,
- ChemNavigator SID, eMolecule VID.
+CIR can resolve can be of the following \code{identifier}: Chemical Names,
+IUPAC names,
+CAS Numbers, SMILES strings, IUPAC InChI/InChIKeys, NCI/CADD Identifiers,
+CACTVS HASHISY, NSC number, PubChem SID, ZINC Code, ChemSpider ID,
+ChemNavigator SID, eMolecule VID.
 
- \code{cir_query()} can handle only a part of all possible conversions of CIR.
- Possible \code{representations} are:
- \itemize{
-     \item \code{'smiles'}(SMILES strings),
-     \item \code{'names'} (Names),
-     \item \code{'cas'} (CAS numbers),
-     \item \code{'stdinchikey'} (Standard InChIKey),
-     \item \code{'stdinchi'} (Standard InChI),
-     \item \code{'ficts'} (FICTS Identifier),
-     \item \code{'ficus'} (FICuS Indetifier),
-     \item \code{'uuuuu'} (uuuuu Identifier),
-     \item \code{'mw'} (Molecular weight),
-     \item \code{'monoisotopic_mass'} (Monoisotopic Mass),
-     \item \code{'formula'} (Chemical Formula),
-     \item \code{'chemspider_id'} (ChemSpider ID),
-     \item \code{'pubchem_sid'} (PubChem SID),
-     \item \code{'chemnavigator_sid'} (ChemNavigator SID),
-     \item \code{'h_bond_donor_count'} (Number of Hydrogen Bond Donors),
-     \item \code{'h_bond_acceptor_count'} (Number of Hydrogen Bond Acceptors),
-     \item \code{'h_bond_center_count'} (Number of Hydrogen Bond Centers),
-     \item \code{'rule_of_5_violation_count'} (Number of Rule of 5 Violations),
-     \item \code{'rotor_count'} (Number of Freely Rotatable Bonds),
-     \item \code{'effective_rotor_count'} (Number of Effectively Rotatable Bonds),
-     \item \code{'ring_count'} (Number of Rings),
-     \item \code{'ringsys_count'} (Number of Ring Systems),
-     \item \code{'xlogp2'} (octanol-water partition coefficient),
-     \item \code{'aromatic'} (is the compound aromatic),
-     \item \code{'macrocyclic'} (is the compound macrocyclic),
-     \item \code{'heteroatom_count'} (heteroatom count),
-     \item \code{'hydrogen_atom_count'} (H atom count),
-     \item \code{'heavy_atom_count'} ( Heavy atom count),
-     \item \code{'deprotonable_group_count'} (Number of deprotonable groups),
-     \item \code{'protonable_group_count'} (Number of protonable groups).
- }
+\code{cir_query()} can handle only a part of all possible conversions of CIR.
+Possible \code{representations} are:
+\itemize{
+\item \code{'smiles'}(SMILES strings),
+\item \code{'names'} (Names),
+\item \code{'cas'} (CAS numbers),
+\item \code{'stdinchikey'} (Standard InChIKey),
+\item \code{'stdinchi'} (Standard InChI),
+\item \code{'ficts'} (FICTS Identifier),
+\item \code{'ficus'} (FICuS Indetifier),
+\item \code{'uuuuu'} (uuuuu Identifier),
+\item \code{'mw'} (Molecular weight),
+\item \code{'monoisotopic_mass'} (Monoisotopic Mass),
+\item \code{'formula'} (Chemical Formula),
+\item \code{'chemspider_id'} (ChemSpider ID),
+\item \code{'pubchem_sid'} (PubChem SID),
+\item \code{'chemnavigator_sid'} (ChemNavigator SID),
+\item \code{'h_bond_donor_count'} (Number of Hydrogen Bond Donors),
+\item \code{'h_bond_acceptor_count'} (Number of Hydrogen Bond Acceptors),
+\item \code{'h_bond_center_count'} (Number of Hydrogen Bond Centers),
+\item \code{'rule_of_5_violation_count'} (Number of Rule of 5 Violations),
+\item \code{'rotor_count'} (Number of Freely Rotatable Bonds),
+\item \code{'effective_rotor_count'} (Number of Effectively Rotatable Bonds),
+\item \code{'ring_count'} (Number of Rings),
+\item \code{'ringsys_count'} (Number of Ring Systems),
+\item \code{'xlogp2'} (octanol-water partition coefficient),
+\item \code{'aromatic'} (is the compound aromatic),
+\item \code{'macrocyclic'} (is the compound macrocyclic),
+\item \code{'heteroatom_count'} (heteroatom count),
+\item \code{'hydrogen_atom_count'} (H atom count),
+\item \code{'heavy_atom_count'} ( Heavy atom count),
+\item \code{'deprotonable_group_count'} (Number of deprotonable groups),
+\item \code{'protonable_group_count'} (Number of protonable groups).
+}
 
- CIR first tries to determine the indetifier type submitted and then
- uses 'resolvers' to look up the data.
- If no \code{resolver} is supplied, CIR tries different resolvers in
- turn till a hit is found.
- E.g. for names CIR tries first to look up in OPSIN and if this fails
- the local name index of CIR.
- However, it can be also specified which resolvers to use
- (if you know e.g. know your indentifier type)
- Possible \code{resolvers} are:
- \itemize{
-   \item \code{'name_by_cir'} (Lookup in name index of CIR),
-   \item \code{'name_by_opsin'} (Lookup in OPSIN),
-   \item \code{'name_by_chemspider'} (Lookup in ChemSpider,
-   \url{http://cactus.nci.nih.gov/blog/?p=1386}),
-   \item \code{'smiles'} (Lookup SMILES),
-   \item \code{'stdinchikey'}, \code{'stdinchi'} (InChI),
-   \item \code{'cas_number'} (CAS Number),
-   \item \code{'name_pattern'} (Google-like pattern search
-   (\url{http://cactus.nci.nih.gov/blog/?p=1456})
-   Note, that the pattern search can be combined with other resolvers,
-   e.g. \code{resolver = 'name_by_chemspider,name_pattern'}.
+CIR first tries to determine the indetifier type submitted and then
+uses 'resolvers' to look up the data.
+If no \code{resolver} is supplied, CIR tries different resolvers in
+turn till a hit is found.
+E.g. for names CIR tries first to look up in OPSIN and if this fails
+the local name index of CIR.
+However, it can be also specified which resolvers to use
+(if you know e.g. know your indentifier type)
+Possible \code{resolvers} are:
+\itemize{
+\item \code{'name_by_cir'} (Lookup in name index of CIR),
+\item \code{'name_by_opsin'} (Lookup in OPSIN),
+\item \code{'name_by_chemspider'} (Lookup in ChemSpider,
+\url{http://cactus.nci.nih.gov/blog/?p=1386}),
+\item \code{'smiles'} (Lookup SMILES),
+\item \code{'stdinchikey'}, \code{'stdinchi'} (InChI),
+\item \code{'cas_number'} (CAS Number),
+\item \code{'name_pattern'} (Google-like pattern search
+(\url{http://cactus.nci.nih.gov/blog/?p=1456})
+Note, that the pattern search can be combined with other resolvers,
+e.g. \code{resolver = 'name_by_chemspider,name_pattern'}.
 
- }
+}
 }
 \note{
 You can only make 1 request per second (this is a hard-coded feature).

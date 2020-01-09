@@ -12,7 +12,7 @@ pan_query(query, match = c("best", "all", "first"), verbose = TRUE,
 
 \item{match}{character; \code{match="all"} returns all matches,
 \code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
- Levenshtein distance between query and matching synonym.}
+Levenshtein distance between query and matching synonym.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -20,9 +20,9 @@ pan_query(query, match = c("best", "all", "first"), verbose = TRUE,
 }
 \value{
 a named list of 73 entries,
-  see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
-  If \code{match="best"} an additional entry \code{match_score} with the normalized
-  Levenshtein distance (0 = perfect match, 1 = worst match).
+see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
+If \code{match="best"} an additional entry \code{match_score} with the normalized
+Levenshtein distance (0 = perfect match, 1 = worst match).
 
 CAS Number; U.S. EPAPC Code; CA ChemCode;
 Use Type; Chemical Class; Molecular Weight; U.S. EPARegistered ; CA Reg Status;

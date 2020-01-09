@@ -9,7 +9,7 @@ get_csid(query, apikey = NULL, control = cs_control())
 \arguments{
 \item{query}{character; search term.}
 
-\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 
 \item{control}{function; see details.}
 }

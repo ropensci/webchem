@@ -9,7 +9,7 @@ cs_inchikey_csid(inchikey, apikey = NULL)
 \arguments{
 \item{inchikey}{character; search term.}
 
-\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a list of two elements.

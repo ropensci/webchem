@@ -19,11 +19,13 @@ a logical
 \description{
 This function checks if a string is a valid inchikey.
 Inchikey must fulfill the following criteria:
-1) consist of 27 characters;
-2) be all uppercase, all letters (no numbers);
-3) contain two hyphens at positions 15 and 26;
-4) 24th character (flag character) be 'S' (Standard InChI) or 'N' (non-standard)
-5) 25th character (version character) must be 'A' (currently).
+\enumerate{
+\item consist of 27 characters;
+\item be all uppercase, all letters (no numbers);
+\item contain two hyphens at positions 15 and 26;
+\item 24th character (flag character) be 'S' (Standard InChI) or 'N' (non-standard)
+\item 25th character (version character) must be 'A' (currently).
+}
 }
 \note{
 This function can handle only one SMILES string.

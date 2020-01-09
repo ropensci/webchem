@@ -6,8 +6,8 @@
 \title{Acute toxicity data from U.S. EPA ECOTOX}
 \format{A data frame with 124 rows and 2 variables:
 \describe{
-  \item{cas}{CAS registry number}
-  \item{value}{LC50value}
+\item{cas}{CAS registry number}
+\item{value}{LC50value}
 }}
 \source{
 \url{http://cfpub.epa.gov/ecotox/}

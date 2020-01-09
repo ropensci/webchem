@@ -19,7 +19,7 @@ To rebuild the index use \code{\link{build_aw_idx}}.}
 }
 \value{
 A list of eight entries: common-name, status, preferredd IUPAC Name,
-         IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source url.
+IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source url.
 }
 \description{
 Query Alan Woods Compendium of Pesticide Common Names \url{http://www.alanwood.net/pesticides}

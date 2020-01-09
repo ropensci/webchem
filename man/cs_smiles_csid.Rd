@@ -9,7 +9,7 @@ cs_smiles_csid(smiles, apikey = NULL)
 \arguments{
 \item{smiles}{character; search term.}
 
-\item{apikey}{character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a list of two elements.
