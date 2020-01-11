@@ -15,5 +15,5 @@ read_html_slow(x, ...)
 html
 }
 \description{
-Just adds a rest after `read_html()`.  Useful for web-scraping.
+Just adds a rest after \code{read_html()}.  Useful for web-scraping.
 }

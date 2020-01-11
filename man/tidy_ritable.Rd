@@ -7,7 +7,7 @@
 tidy_ritable(ri_xml)
 }
 \arguments{
-\item{ri_xml}{captured by `get_ri_xml`}
+\item{ri_xml}{captured by \code{get_ri_xml}}
 }
 \value{
 a single table

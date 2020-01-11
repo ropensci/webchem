@@ -4,8 +4,12 @@
 \alias{ci_query}
 \title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}}
 \usage{
-ci_query(query, type = c("name", "rn", "inchikey"), match = c("best",
-  "first", "ask", "na"), verbose = TRUE)
+ci_query(
+  query,
+  type = c("name", "rn", "inchikey"),
+  match = c("best", "first", "ask", "na"),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{query}{character; query string}
