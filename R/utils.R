@@ -340,7 +340,9 @@ parse_mol <- function(string) {
 
 
 #' Format numbers as CAS numbers
-#' @description This function attempts to format numeric (or character) vectors as character vectors of CAS numbers.  If they cannot be converted to CAS format or don't pass `is.cas()`, `NA` is returned
+#' @description This function attempts to format numeric (or character) vectors
+#' as character vectors of CAS numbers.  If they cannot be converted to CAS
+#' format or don't pass \code{is.cas()}, \code{NA} is returned
 #' @param x numeric vector, or character vector of CAS numbers missing the hyphens
 #'
 #' @return character vector of valid CAS numbers
@@ -371,7 +373,11 @@ as.cas <- function(x){
 #' Interactively choose a result from a menu
 #' @description In interactive sessions, prompts a user to choose an element of a vector from a menu. Use this for all functions that return multiple possible results such as multiple identifiers or synonyms.
 #' @param x a character vector
-#' @param choices If `choices = "all"` then the entire vector `x` is used for the menu.  If numeric > 1, only that number of elements from the start of `x` are shown. If `choices = 1`, then the first element of `x` is returned without prompting the user.  If `NULL` then `x` is returned unchanged.
+#' @param choices If \code{choices = "all"} then the entire vector \code{x} is
+#' used for the menu.  If numeric > 1, only that number of elements from the
+#' start of \code{x} are shown. If \code{choices = 1}, then the first element of
+#' \code{x} is returned without prompting the user.  If \code{NULL} then
+#' \code{x} is returned unchanged.
 #'
 #' @importFrom utils menu
 #' @importFrom utils head

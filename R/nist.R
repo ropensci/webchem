@@ -1,5 +1,5 @@
 #' Read HTML slowly
-#' @description Just adds a rest after `read_html()`.  Useful for web-scraping.
+#' @description Just adds a rest after \code{read_html()}.  Useful for web-scraping.
 #' @import xml2
 #' @param x a URL
 #' @param ... currently unused
@@ -68,7 +68,7 @@ get_ri_xml <-
 
 #' Tidier for webscraped RI ri_xml
 #'
-#' @param ri_xml captured by `get_ri_xml`
+#' @param ri_xml captured by \code{get_ri_xml}
 #'
 #' @import rvest
 #' @importFrom purrr map
@@ -190,16 +190,16 @@ tidy_ritable <- function(ri_xml) {
 #'  given CAS numbers as an input.
 #'
 #' @param cas CAS numbers either as numeric or formatted correctly with hyphens.
-#' @param type Retention index type. One of `"kovats"`, `"linear"`,
-#'  `"alkane"`, or `"lee"`. See details for more.
+#' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
+#'  \code{"alkane"}, or \code{"lee"}. See details for more.
 #' @param polarity Column polarity. One of "polar" or "non-polar"
 #'  to get RIs calculated for polar or non-polar columns.
 #' @param temp_prog Temperature program. One of "isothermal", "ramp",
 #'  or "custom".
 #' @details The types of retention indices included in NIST include Kovats
-#'  (`"kovats"`), Van den Dool and Kratz (`"linear"`), normal alkane
-#'  (`"alkane"`), and Lee (`"lee"`). Details about how these are calculated
-#'  are available on the NIST website:
+#'  (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
+#'  (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
+#'  calculated are available on the NIST website:
 #'  https://webbook.nist.gov/chemistry/gc-ri/
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
@@ -207,18 +207,19 @@ tidy_ritable <- function(ri_xml) {
 #'
 #' @return a table of literature RIs with the following columns:
 #' \itemize{
-#' \item{`CAS` is the CAS number}
-#' \item{`type` is the column type, e.g. "capillary"}
-#' \item{`phase` is the stationary phase (column phase)}
-#' \item{`RI` is retention index}
-#' \item{`length` is column length in meters}
-#' \item{`gas` is the carrier gas used}
-#' \item{`substrate`}
-#' \item{`diameter` is the column diameter in mm}
-#' \item{`thickness` is the phase thickness in µm}
-#' \item{`program`. various columns depending on the value of `temp_prog`}
-#' \item{`reference` is where this retention index was published}
-#' \item{`comment`. I believe this denotes the database these data
+#' \item{\code{CAS} is the CAS number}
+#' \item{\code{type} is the column type, e.g. "capillary"}
+#' \item{\code{phase} is the stationary phase (column phase)}
+#' \item{\code{RI} is retention index}
+#' \item{\code{length} is column length in meters}
+#' \item{\code{gas} is the carrier gas used}
+#' \item{\code{substrate}}
+#' \item{\code{diameter} is the column diameter in mm}
+#' \item{\code{thickness} is the phase thickness in µm}
+#' \item{\code{program}. various columns depending on the value of
+#' \code{temp_prog}}
+#' \item{\code{reference} is where this retention index was published}
+#' \item{\code{comment}. I believe this denotes the database these data
 #'       were aggregated from}
 #'}
 #'
