@@ -9,7 +9,9 @@
 #'  the identifier type is detected and the different resolvers are used in turn.
 #'  See details for possible resolvers.
 #' @param first deprecated, use choices = 1 to return only the first result
-#' @param choices if `choices = 1`, returns only the first result. To get a number of results to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.
+#' @param choices if \code{choices = 1}, returns only the first result. To get a
+#' number of results to choose from in an interactive menu, provide the number
+#' of choices you want or "all" to choose from all synonyms.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return A list of character vectors. If first = TRUE a vector.

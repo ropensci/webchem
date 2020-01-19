@@ -4,9 +4,12 @@
 \alias{nist_ri}
 \title{Retrieve retention indices from NIST}
 \usage{
-nist_ri(cas, type = c("kovats", "linear", "alkane", "lee"),
-  polarity = c("polar", "non-polar"), temp_prog = c("isothermal",
-  "ramp", "custom"))
+nist_ri(
+  cas,
+  type = c("kovats", "linear", "alkane", "lee"),
+  polarity = c("polar", "non-polar"),
+  temp_prog = c("isothermal", "ramp", "custom")
+)
 }
 \arguments{
 \item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}
@@ -32,10 +35,11 @@ a table of literature RIs with the following columns:
 \item{\code{substrate}}
 \item{\code{diameter} is the column diameter in mm}
 \item{\code{thickness} is the phase thickness in µm}
-\item{\code{program}. various columns depending on the value of \code{temp_prog}}
+\item{\code{program}. various columns depending on the value of
+\code{temp_prog}}
 \item{\code{reference} is where this retention index was published}
 \item{\code{comment}. I believe this denotes the database these data
-were aggregated from}
+      were aggregated from}
 }
 }
 \description{
@@ -44,10 +48,10 @@ given CAS numbers as an input.
 }
 \details{
 The types of retention indices included in NIST include Kovats
-(\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
-(\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are calculated
-are available on the NIST website:
-https://webbook.nist.gov/chemistry/gc-ri/
+ (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
+ (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
+ calculated are available on the NIST website:
+ https://webbook.nist.gov/chemistry/gc-ri/
 }
 \examples{
 \dontrun{

@@ -9,7 +9,11 @@ chooser(x, choices)
 \arguments{
 \item{x}{a character vector}
 
-\item{choices}{If \code{choices = "all"} then the entire vector \code{x} is used for the menu.  If numeric > 1, only that number of elements from the start of \code{x} are shown. If \code{choices = 1}, then the first element of \code{x} is returned without prompting the user.  If \code{NULL} then \code{x} is returned unchanged.}
+\item{choices}{If \code{choices = "all"} then the entire vector \code{x} is
+used for the menu.  If numeric > 1, only that number of elements from the
+start of \code{x} are shown. If \code{choices = 1}, then the first element of
+\code{x} is returned without prompting the user.  If \code{NULL} then
+\code{x} is returned unchanged.}
 }
 \value{
 a character vector of length 1

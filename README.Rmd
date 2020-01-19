@@ -411,14 +411,6 @@ Therefore, kudos to the web service providers and developers!
 ### Related Projects
 If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPy](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
 
-
-### Contributors
-
-+ [Eduard Szöcs](https://github.com/EDiLD)
-+ [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
-+ [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
-+ [Eric R Scott](https://github.com/ropensci/webchem/commits?author=Aariq)
-
 ### Want to contribute?
 
 Check out our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).

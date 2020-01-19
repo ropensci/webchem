@@ -4,8 +4,15 @@
 \alias{pc_synonyms}
 \title{Search synonyms in pubchem}
 \usage{
-pc_synonyms(query, from = "name", choices = NULL, verbose = TRUE,
-  arg = NULL, interactive = 0, ...)
+pc_synonyms(
+  query,
+  from = "name",
+  choices = NULL,
+  verbose = TRUE,
+  arg = NULL,
+  interactive = 0,
+  ...
+)
 }
 \arguments{
 \item{query}{character; search term.}
