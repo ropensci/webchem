@@ -3,7 +3,7 @@
 .RData
 .Ruserdata
 .vscode*
-
+.Renviron
 README_files*
 README.html
 .github/*.html
