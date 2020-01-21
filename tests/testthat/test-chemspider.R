@@ -1,70 +1,224 @@
 context("chemspider")
-token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
+token <- "37bf5e57-9091-42f5-9274-650a64398aaf"
+apikey <- "LquVCDSulXTUrNy9WGDTAdnEEYYpg4dS"
 
+test_that("cs_datasources()", {
+  a <- cs_datasources(apikey = apikey)
+
+  expect_is(a, "character")
+})
+
+test_that("cs_control()", {
+  expect_is(cs_control(), "list")
+  expect_true("order_by" %in% names(cs_control()))
+  expect_true("order_direction" %in% names(cs_control()))
+  expect_true("include_all" %in% names(cs_control()))
+  expect_true("complexity" %in% names(cs_control()))
+  expect_true("isotopic" %in% names(cs_control()))
+  expect_true(cs_control(order_by = "recordId")$order_by == "recordId")
+  expect_true(cs_control(order_by = "massDefect")$order_by == "massDefect")
+  expect_true(cs_control(order_by = "molecularWeight")$order_by ==
+                "molecularWeight")
+  expect_true(cs_control(order_by = "referenceCount")$order_by ==
+                "referenceCount")
+  expect_true(cs_control(order_by = "dataSourceCount")$order_by ==
+                "dataSourceCount")
+  expect_true(cs_control(order_by = "pubMedCount")$order_by == "pubMedCount")
+  expect_true(cs_control(order_by = "rscCount")$order_by == "rscCount")
+  expect_true(cs_control(order_direction = "ascending")$order_direction ==
+                "ascending")
+  expect_true(cs_control(order_direction = "descending")$order_direction ==
+                "descending")
+  expect_true(cs_control(include_all = TRUE)$include_all == TRUE)
+  expect_true(cs_control(include_all = FALSE)$include_all == FALSE)
+  expect_true(cs_control(complexity = "any")$complexity == "any")
+  expect_true(cs_control(complexity = "single")$complexity == "single")
+  expect_true(cs_control(complexity = "multiple")$complexity == "multiple")
+  expect_true(cs_control(isotopic = "any")$isotopic == "any")
+  expect_true(cs_control(isotopic = "labeled")$isotopic == "labeled")
+  expect_true(cs_control(isotopic = "unlabeled")$isotopic == "unlabeled")
+})
 
 test_that("get_csid()", {
-  skip_on_cran()
+  a <- get_csid("Triclosan", apikey = apikey)
+  b <- get_csid("Naproxene", apikey = apikey)
+  ab <- get_csid(c("Triclosan", "Naproxene"), apikey = apikey)
+  c1 <- get_csid("Oxygen", control = cs_control(order_by = "recordId"),
+                     apikey = apikey)
+  #c2 <- get_csid("Oxygen", control = cs_control(order_by = "massDefect"),
+  #                   apikey = apikey)
+  c3 <- get_csid("Oxygen", control = cs_control(order_by = "molecularWeight"),
+                     apikey = apikey)
+  c4 <- get_csid("Oxygen", control = cs_control(order_by = "referenceCount"),
+                     apikey = apikey)
+  c5 <- get_csid("Oxygen", control = cs_control(order_by = "dataSourceCount"),
+                     apikey = apikey)
+  c6 <- get_csid("Oxygen", control = cs_control(order_by = "pubMedCount"),
+                     apikey = apikey)
+  c7 <- get_csid("Oxygen", control = cs_control(order_by = "rscCount"),
+                     apikey = apikey)
+  c8 <- get_csid("Oxygen", control = cs_control(order_direction = "ascending"),
+                     apikey = apikey)
+  c9 <- get_csid("Oxygen", control = cs_control(order_direction = "descending"),
+                     apikey = apikey)
 
-  comps <- c("Triclosan", "50-00-0", "xxxxxx")
-  o1 <- get_csid(comps, token = token, verbose = TRUE)
-  o2 <- get_csid(comps, token = token, verbose = TRUE, first = FALSE)
-  o3 <- get_csid(c("picoxystrobin", "mandipropamid"), token = token, verbose = TRUE, first = FALSE)
-
-  b1 <- get_csid('acetic acid', token = token, verbose = TRUE)
-  expect_equal(b1, c(`acetic acid` = '171'))
-
-  expect_is(o1, 'character')
-  expect_is(o2, 'list')
-  expect_equal(length(o1),3)
-  expect_equal(o3, structure(list(picoxystrobin = "9460644", mandipropamid = "9467809"), .Names = c("picoxystrobin",
-      "mandipropamid")))
-  expect_equal(length(o2), 3)
-  expect_true(is.na(o1[[3]]))
-  expect_true(is.na(o2[[3]]))
-  expect_equal(o1[[1]], '5363')
-  expect_equal(o2[[2]], '692')
-  expect_true(is.na(get_csid(NA, token = token, verbose = TRUE)))
-
+  expect_is(a, "list")
+  expect_equal(a$Triclosan, 5363)
+  expect_equal(b$Naproxene, 137720)
+  expect_equal(ab$Triclosan, 5363)
+  expect_equal(ab$Naproxene, 137720)
+  expect_equal(c1$Oxygen, c(952, 140526))
+  #expect_equal(c2$Oxygen,c(952,140526)) does not work.
+  #seems to be an API error.
+  expect_equal(c3$Oxygen, c(140526, 952))
+  expect_equal(c4$Oxygen, c(952, 140526))
+  expect_equal(c5$Oxygen, c(140526, 952))
+  expect_equal(c6$Oxygen, c(952, 140526))
+  expect_equal(c7$Oxygen, c(952, 140526))
+  expect_equal(c8$Oxygen, c(952, 140526))
+  expect_equal(c9$Oxygen, c(140526, 952))
 })
 
+test_that("cs_smiles_csid()", {
+  a <- cs_smiles_csid("CC(O)=O", apikey = apikey)
+  b <- cs_smiles_csid(c("CC(O)=O", "COO"), apikey = apikey)
+
+  expect_is(a, "list")
+  expect_equal(a[[1]], 171)
+  expect_is(b, "list")
+  expect_equal(b[[1]], 171)
+  expect_equal(b[[2]], 17190)
+})
+
+test_that("cs_inchi_csid()", {
+  a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
+                     apikey = apikey)
+  b <- cs_inchi_csid(c(
+    "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
+    "InChI=1/C3H6O/c1-3(2)4/h1-2H3"
+  ), apikey = apikey)
+
+  expect_is(a, "list")
+  expect_equal(a[[1]], 171)
+  expect_is(b, "list")
+  expect_equal(b[[1]], 171)
+  expect_equal(b[[2]], 175)
+})
+
+test_that("cs_inchikey_csid()", {
+  a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", apikey = apikey)
+  b <- cs_inshikey_csid(c(
+    "QTBSBXVTEAMEQO-UHFFFAOYSA-N",
+    "CSCPPACGZOOCGX-UHFFFAOYAF"
+  ), apikey = apikey)
+
+  expect_is(a, "list")
+  expect_equal(a[[1]], 171)
+  expect_is(b, "list")
+  expect_equal(b[[1]], 171)
+  expect_equal(b[[2]], 175)
+})
+
+test_that("cs_convert_multiple()", {
+  a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi", apikey)
+  a2 <- cs_convert_multiple(c("CC(O)=O", "COO"), "smiles", "inchi", apikey)
+  b <- cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
+                           "inchikey",
+                           apikey)
+  c <- cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
+                           apikey)
+
+  expect_is(a, "list")
+  expect_equal(a[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(a2[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(a2[[2]], "InChI=1/C3H6O/c1-3(2)4/h1-2H3")
+  expect_is(b, "list")
+  expect_equal(b[[1]], "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+  expect_is(c, "list")
+})
+
+test_that("cs_convert()", {
+  a <- cs_convert(171, "csid", "inchi", apikey)
+  a_rev <- cs_convert(a, "inchi", "csid", apikey)
+  b <- cs_convert(171, "csid", "inchikey", apikey)
+  b_rev <- cs_convert(b, "inchikey", "csid", apikey)
+  c <- cs_convert(171, "csid", "smiles", apikey)
+  c_rev <- cs_convert(c, "smiles", "csid", apikey)
+  d <- cs_convert(171, "csid", "mol", apikey)
+  expect_error(cs_convert(d, "mol", "csid", apikey))
+  e <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "inchikey",
+                  apikey)
+  e_rev <- cs_convert(e, "inchikey", "inchi", apikey)
+  f <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "smiles",
+                  apikey)
+  f_rev <- cs_convert(f, "smiles", "inchi", apikey)
+  g <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "mol",
+                  apikey)
+  #g_rev <- cs_convert(g, "mol", "inchi", apikey) possible db error
+  h <- cs_convert("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", apikey)
+  h_rev <- cs_convert(h, "mol", "inchikey", apikey)
+
+  expect_equal(a[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(a_rev[[1]], 171)
+  expect_equal(b[[1]], "QTBSBXVTEAMEQO-UHFFFAOYAR")
+  expect_equal(b_rev[[1]], 171)
+  expect_equal(c[[1]], "CC(=O)O")
+  expect_equal(c_rev[[1]], 171)
+  expect_is(d, "list")
+  expect_equal(e[[1]], "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+  expect_equal(e_rev[[1]], "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_equal(f[[1]], "CC(=O)O")
+  expect_equal(f_rev[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  expect_is(g, "list")
+  #expect_equal(g_rev, "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  #possible db error
+  expect_is(h, "list")
+  expect_equal(h_rev[[1]], "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+})
 
 test_that("cs_compinfo()", {
-  skip_on_cran()
+  a <- cs_compinfo(171, c("SMILES", "Formula", "InChI", "InChIKey", "StdInChI",
+                          "StdInChIKey", "AverageMass", "MolecularWeight",
+                          "MonoisotopicMass", "NominalMass", "CommonName",
+                          "ReferenceCount", "DataSourceCount", "PubMedCount",
+                          "RSCCount", "Mol2D", "Mol3D"), apikey)
+  b <- cs_compinfo(c(171, 172), c("SMILES", "Formula", "InChI", "InChIKey",
+                                  "StdInChI", "StdInChIKey", "AverageMass",
+                                  "MolecularWeight", "MonoisotopicMass",
+                                  "NominalMass", "CommonName", "ReferenceCount",
+                                  "DataSourceCount", "PubMedCount", "RSCCount",
+                                  "Mol2D", "Mol3D"), apikey)
 
-  comps <- c("2157", "5363" )
-  o1 <- cs_compinfo(comps, token)
-  expect_is(o1, 'data.frame')
-  expect_equal(dim(o1), c(2, 6))
-  expect_equal(o1$csid[1], '2157')
-  expect_true(all(is.na(cs_compinfo(NA, token)[ 1, 1:5])))
+  expect_is(a, "data.frame")
+  expect_equal(dim(a), c(1, 18))
+  expect_is(b, "data.frame")
+  expect_equal(dim(b), c(2, 18))
 })
-
 
 test_that("cs_extcompinfo()", {
   skip_on_cran()
 
-  comps <- c("2157", "5363" )
+  comps <- c("2157", "5363")
   o1 <- cs_extcompinfo(comps, token)
-  expect_is(o1, 'data.frame')
+  expect_is(o1, "data.frame")
   expect_equal(dim(o1), c(2, 14))
-  expect_equal(o1$csid[1], '2157')
-  expect_true(all(is.na(cs_extcompinfo(c(2157, NA), token)[ 2, 1:5])))
+  expect_equal(o1$csid[1], "2157")
+  expect_true(all(is.na(cs_extcompinfo(c(2157, NA), token)[2, 1:5])))
 })
 
 
 test_that("cs_prop()", {
-  skip_on_cran()
-
-  id <- '5363'
+  id <- "5363"
   m1 <- cs_prop(id)
 
-  expect_is(m1, 'list')
+  expect_is(m1, "list")
   expect_equal(length(m1), 1)
   expect_equal(length(m1[[1]]), 3)
 
-  expect_is(m1[[1]]$epi, 'data.frame')
-  expect_is(m1[[1]]$acd, 'data.frame')
-  expect_equal(m1[[1]]$source_url,  "https://www.chemspider.com/Chemical-Structure.5363.html")
+  expect_is(m1[[1]]$epi, "data.frame")
+  expect_is(m1[[1]]$acd, "data.frame")
+  expect_equal(m1[[1]]$source_url,
+               "https://www.chemspider.com/Chemical-Structure.5363.html")
   expect_equal(names(m1[[1]]$epi), c("prop", "value_pred", "unit_pred",
                                      "source_pred", "value_exp",
                                      "unit_exp", "source_exp"))
@@ -72,11 +226,11 @@ test_that("cs_prop()", {
 
   # issue #127
   m2 <- cs_prop(16105)
-  expect_is(m2, 'list')
+  expect_is(m2, "list")
   expect_equal(length(m2), 1)
   expect_equal(length(m2[[1]]), 3)
-  expect_is(m2[[1]]$epi, 'data.frame')
-  expect_is(m2[[1]]$acd, 'data.frame')
+  expect_is(m2[[1]]$epi, "data.frame")
+  expect_is(m2[[1]]$acd, "data.frame")
   expect_equal(m2[[1]]$epi$value_exp[2], 178.5)
 
   # issue #139 (no epi-suite data available)
@@ -85,283 +239,42 @@ test_that("cs_prop()", {
 
   # issue #138 (invalid chemspider html)
   m3 <- cs_prop(8012)
-  expect_is(m3, 'list')
+  expect_is(m3, "list")
   expect_equal(length(m3), 1)
   expect_equal(length(m3[[1]]), 3)
-  expect_is(m3[[1]]$epi, 'data.frame')
-  expect_is(m3[[1]]$acd, 'data.frame')
+  expect_is(m3[[1]]$epi, "data.frame")
+  expect_is(m3[[1]]$acd, "data.frame")
 
   # issue #142
   m4 <- cs_prop(391783)
-  expect_is(m4, 'list')
+  expect_is(m4, "list")
   expect_equal(length(m4), 1)
   expect_equal(length(m4[[1]]), 3)
-  expect_is(m4[[1]]$epi, 'data.frame')
-  expect_is(m4[[1]]$acd, 'data.frame')
+  expect_is(m4[[1]]$epi, "data.frame")
+  expect_is(m4[[1]]$acd, "data.frame")
 
   # issue #143
   r <- m4$`391783`$epi
-  expect_equal(r$value_pred[r$prop == 'Water Solubility from KOW'], 13690)
+  expect_equal(r$value_pred[r$prop == "Water Solubility from KOW"], 13690)
 
   # issue #148
   m5 <- cs_prop(7688)
-  expect_is(m5, 'list')
+  expect_is(m5, "list")
   expect_equal(length(m5), 1)
   expect_equal(length(m5[[1]]), 3)
-  expect_is(m5[[1]]$epi, 'data.frame')
-  expect_is(m5[[1]]$acd, 'data.frame')
+  expect_is(m5[[1]]$epi, "data.frame")
+  expect_is(m5[[1]]$acd, "data.frame")
 
 })
-
 
 # integration tests
 test_that("csid_extcompinfo(get_cid())", {
   skip_on_cran()
 
-  tt <- get_csid('Triclosan', token = token, verbose = FALSE)
+  tt <- get_csid("Triclosan", apikey = apikey)
   tt2 <- cs_extcompinfo(tt,
                         token = token, verbose = FALSE)
-  expect_equal(tt2[['average_mass']],
+  expect_equal(tt2[["average_mass"]],
                "289.5418")
   expect_equal(ncol(tt2), 14)
 })
-
-
-# converters
-test_that("cs_csid_mol()", {
-  skip_on_cran()
-
-  m1 <- cs_csid_mol(5363, token = token, verbose = FALSE)
-  m2 <- cs_csid_mol(5363, token = token, parse = FALSE, verbose = FALSE)
-
-  expect_warning(cs_csid_mol('xxxx', token = token))
-  expect_equal(cs_csid_mol('xxxx', token = token), NA)
-
-  expect_error(cs_csid_mol(c(5363,5363), token = token))
-  expect_message(cs_csid_mol(5363, token = token))
-
-  expect_is(m1, 'list')
-  expect_equal(length(m1), 4)
-  expect_is(m1$ab, 'data.frame')
-  expect_is(m1$bb, 'data.frame')
-  expect_equal(unname(m1$cl[1]), "17")
-  expect_equal(unname(m1$cl[2]), "18")
-
-  expect_is(m2, 'character')
-  expect_equal(length(m2), 1)
-})
-
-
-test_that("cs_inchikey_csid()", {
-  skip_on_cran()
-
-  m1 <- cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-
-  expect_error(cs_inchikey_csid(c('BQJCRHHNABKAKU-KBQPJGBKSA-N','BQJCRHHNABKAKU-KBQPJGBKSA-N')))
-  expect_message(cs_inchikey_csid('BQJCRHHNABKAKU-KBQPJGBKSA-N'))
-
-  expect_is(m1, 'character')
-  expect_equal(length(m1), 1)
-  expect_equal(m1, "4450907")
-
-  expect_warning(cs_inchikey_csid('xxx'))
-  expect_equal(cs_inchikey_csid('xxx'), NA)
-})
-
-
-test_that("cs_inchikey_inchi()", {
-  skip_on_cran()
-
-  m1 <- cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-
-  expect_error(cs_inchikey_inchi(c('BQJCRHHNABKAKU-KBQPJGBKSA-N','BQJCRHHNABKAKU-KBQPJGBKSA-N')))
-  expect_message(cs_inchikey_inchi('BQJCRHHNABKAKU-KBQPJGBKSA-N'))
-
-  expect_is(m1, 'character')
-  expect_equal(length(m1), 1)
-  expect_equal(m1,  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1")
-
-  expect_warning(cs_inchikey_inchi('xxx'))
-  expect_equal(cs_inchikey_inchi('xxx'), NA)
-})
-
-
-test_that("cs_inchikey_mol()", {
-  skip_on_cran()
-
-  m1 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', verbose = FALSE)
-  m2 <- cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N', parse = FALSE, verbose = FALSE)
-
-  expect_warning(cs_inchikey_mol('xxxx'))
-  expect_equal(cs_inchikey_mol('xxxx'), NA)
-
-  expect_error(cs_inchikey_mol(c('BQJCRHHNABKAKU-KBQPJGBKSA-N', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
-  expect_message(cs_inchikey_mol('BQJCRHHNABKAKU-KBQPJGBKSA-N'))
-
-  expect_is(m1, 'list')
-  expect_equal(length(m1), 4)
-  expect_is(m1$ab, 'data.frame')
-  expect_is(m1$bb, 'data.frame')
-  expect_equal(unname(m1$cl[1]), "21")
-  expect_equal(unname(m1$cl[2]), "25")
-
-  expect_is(m2, 'character')
-  expect_equal(length(m2), 1)
-})
-
-
-
-test_that("cs_inchi_csid()", {
-  skip_on_cran()
-
-  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-  m1 <- cs_inchi_csid(inchi)
-
-  expect_error(cs_inchi_csid(c(inchi, inchi)))
-  expect_message(cs_inchi_csid(inchi))
-
-  expect_is(m1, 'character')
-  expect_equal(length(m1), 1)
-  expect_equal(m1, "4450907")
-
-  expect_warning(cs_inchi_csid('xxx'))
-  expect_equal(cs_inchi_csid('xxx'), NA)
-})
-
-
-test_that("cs_inchi_inchikey()", {
-  skip_on_cran()
-
-  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-  m1 <- cs_inchi_inchikey(inchi)
-
-  expect_error(cs_inchi_inchikey(c(inchi, inchi)))
-  expect_message(cs_inchi_inchikey(inchi))
-
-  expect_is(m1, 'character')
-  expect_equal(length(m1), 1)
-  expect_equal(m1, "BQJCRHHNABKAKU-KBQPJGBKSA-N")
-
-  expect_warning(cs_inchi_inchikey('xxx'))
-  expect_equal(cs_inchi_inchikey('xxx'), NA)
-})
-
-
-test_that("cs_inchi_mol()", {
-  skip_on_cran()
-
-  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-  m1 <- cs_inchi_mol(inchi, verbose = FALSE)
-  m2 <- cs_inchi_mol(inchi, parse = FALSE, verbose = FALSE)
-
-  expect_warning(cs_inchi_mol('xxxx'))
-  expect_equal(cs_inchi_mol('xxxx'), NA)
-
-  expect_error(cs_inchi_mol(c(inchi, inchi)))
-  expect_message(cs_inchi_mol(inchi))
-
-  expect_is(m1, 'list')
-  expect_equal(length(m1), 4)
-  expect_is(m1$ab, 'data.frame')
-  expect_is(m1$bb, 'data.frame')
-  expect_equal(unname(m1$cl[1]), "25")
-  expect_equal(unname(m1$cl[2]), "29")
-
-  expect_is(m2, 'character')
-  expect_equal(length(m2), 1)
-})
-
-
-test_that("cs_inchi_smiles()", {
-  skip_on_cran()
-
-  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-  m1 <- cs_inchi_smiles(inchi)
-
-  expect_error(cs_inchi_smiles(c(inchi, inchi)))
-  expect_message(cs_inchi_smiles(inchi))
-
-  expect_is(m1, 'character')
-  expect_equal(length(m1), 1)
-  expect_equal(m1,  "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O")
-
-  expect_warning(cs_inchi_smiles('xxx'))
-  expect_equal(cs_inchi_smiles('xxx'), NA)
-})
-
-
-test_that("cs_smiles_inchi()", {
-  skip_on_cran()
-
-  smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
-  m1 <- cs_smiles_inchi(smiles)
-
-  expect_error(cs_smiles_inchi(c(smiles, smiles)))
-  expect_message(cs_smiles_inchi(smiles))
-
-  expect_is(m1, 'character')
-  expect_equal(length(m1), 1)
-
-  expect_warning(cs_smiles_inchi('xxx'))
-  expect_equal(cs_smiles_inchi('xxx'), NA)
-})
-
-
-test_that("cs_convert()", {
-  skip_on_cran()
-
-  inchikey <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
-  csid <- "4450907"
-  inchi <-  "InChI=1S/C17H19NO3/c1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18/h2-5,10-11,13,16,19-20H,6-8H2,1H3/t10-,11+,13-,16-,17-/m0/s1"
-  smiles <- "CN1CC[C@]23[C@H]4C=C[C@@H]([C@@H]3Oc3c(ccc(C[C@@H]14)c23)O)O"
-
-  expect_error(cs_convert(csid, from = 'csid', to = 'mol'))
-  expect_error(cs_convert(csid, from = 'csid', to = 'inchikey'))
-
-  m1 <- cs_convert(csid, from = 'csid', to = 'mol', token = token)
-  m1r <- cs_convert(csid, from = 'csid', to = 'mol', token = token, parse = FALSE)
-  expect_is(m1, 'list')
-  expect_equal(length(m1[[1]]), 4)
-  expect_is(m1[[1]]$ab, 'data.frame')
-  expect_is(m1[[1]]$bb, 'data.frame')
-  expect_equal(unname(m1[[1]]$cl[1]), "21")
-  expect_equal(unname(m1[[1]]$cl[2]), "25")
-  expect_is(m1r[[1]], 'character')
-  expect_equal(length(m1r[[1]]), 1)
-
-  m2 <- cs_convert(inchikey, from = 'inchikey', to = 'csid')
-  expect_equal(m2[[1]], csid)
-
-  m3 <- cs_convert(inchikey, from = 'inchikey', to = 'inchi')
-  expect_equal(m3[[1]], inchi)
-
-  m4 <- cs_convert(inchikey, from = 'inchikey', to = 'mol')
-  expect_is(m4[[1]], 'list')
-  expect_equal(length(m4[[1]]), 4)
-  expect_is(m4[[1]]$ab, 'data.frame')
-  expect_is(m4[[1]]$bb, 'data.frame')
-  expect_equal(unname(m4[[1]]$cl[1]), "21")
-  expect_equal(unname(m4[[1]]$cl[2]), "25")
-
-  m5 <- cs_convert(inchi, from = 'inchi', to = 'csid')
-  expect_equal(m5[[1]], csid)
-
-  m6 <- cs_convert(inchi, from = 'inchi', to = 'inchikey')
-  expect_equal(m6[[1]], inchikey)
-
-  m7 <- cs_convert(inchi, from = 'inchi', to = 'mol')
-  expect_is(m7[[1]], 'list')
-  expect_equal(length(m7[[1]]), 4)
-  expect_is(m7[[1]]$ab, 'data.frame')
-  expect_is(m7[[1]]$bb, 'data.frame')
-  expect_equal(unname(m7[[1]]$cl[1]), "25")
-  expect_equal(unname(m7[[1]]$cl[2]), "29")
-
-  m8 <- cs_convert(inchi, from = 'inchi', to = 'smiles')
-  expect_equal(m8[[1]], smiles)
-
-  m9 <- cs_convert(smiles, from = 'smiles', to = 'inchi')
-  expect_equal(m9[[1]], inchi)
-})
-
-

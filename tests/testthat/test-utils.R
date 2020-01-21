@@ -13,6 +13,12 @@ test_that("is.cas() returns correct results", {
   expect_error(is.cas(c('64-17-5', '64-17-5')))
 })
 
+test_that("as.cas() handles properly formatted CAS",{
+  skip_on_cran()
+
+  expect_identical(as.cas("64-17-5"), "64-17-5")
+  expect_silent(as.cas("64-17-5"))
+})
 
 test_that("is.inchikey() returns correct results", {
   skip_on_cran()

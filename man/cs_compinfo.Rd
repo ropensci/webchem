@@ -2,47 +2,47 @@
 % Please edit documentation in R/chemspider.R
 \name{cs_compinfo}
 \alias{cs_compinfo}
-\title{Get record details (CSID, StdInChIKey, StdInChI, SMILES) by ChemSpider ID}
+\title{Retrieve record details by ChemSpider ID}
 \usage{
-cs_compinfo(csid, token, verbose = TRUE, ...)
+cs_compinfo(csid, fields, apikey)
 }
 \arguments{
-\item{csid}{character, ChemSpider ID.}
+\item{csid}{numeric}
 
-\item{token}{character; security token.}
+\item{fields}{character; see details.}
 
-\item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{...}{currently not used.}
+\item{apikey}{character; your API key.}
 }
 \value{
-a data.frame with 5 colums csid (ChemSpider ID), inchi,
-  inchikey, smiles, source_url and the query
+Returns a data frame.
 }
 \description{
-Get record details from ChemspiderId (CSID), see \url{https://www.chemspider.com/}
+Submit a Chemspider ID (CSID) and the fields you are interested in, and
+retrieve the record details for your query.
+}
+\details{
+Valid values for \code{fields} are \code{"SMILES"},
+\code{"Formula"}, \code{"InChI"}, \code{"InChIKey"}, \code{"StdInChI"},
+\code{"StdInChIKey"}, \code{"AverageMass"}, \code{"MolecularWeight"},
+\code{"MonoisotopicMass"}, \code{"NominalMass"}, \code{"CommonName"},
+\code{"ReferenceCount"}, \code{"DataSourceCount"}, \code{"PubMedCount"},
+\code{"RSCCount"}, \code{"Mol2D"}, \code{"Mol3D"}. You can specify any
+number of fields.
 }
 \note{
-A security token is neeeded. Please register at RSC
-\url{https://www.rsc.org/rsc-id/register}
-for a security token.
-Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
+An API key is needed. Register at \url{https://developer.rsc.org/}
+for an API key. Please respect the Terms & Conditions. The Terms & Conditions
+can be found at \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-# Fails because no TOKEN is included
-token <- '<YOUR-SECURITY-TOKEN>'
-csid <- get_csid("Triclosan", token = token)
-cs_compinfo(csid, token)
-
-csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
-cs_compinfo(csids, token = token)
+cs_compinfo(171, c("SMILES", "CommonName"), apikey)
+cs_compinfo(171:182, "SMILES", apikey)
 }
 }
-\seealso{
-\code{\link{get_csid}} to retrieve ChemSpider IDs,
-\code{\link{cs_extcompinfo}} for extended compound information.
+\references{
+https://developer.rsc.org/compounds-v1/apis
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Tamas Stirling, \email{stirling.tamas@gmail.com}
 }

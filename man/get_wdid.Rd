@@ -4,8 +4,12 @@
 \alias{get_wdid}
 \title{Get Wikidata Item ID}
 \usage{
-get_wdid(query, language = "en", match = c("best", "first", "all", "ask",
-  "na"), verbose = TRUE)
+get_wdid(
+  query,
+  language = "en",
+  match = c("best", "first", "all", "ask", "na"),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{query}{character; The searchterm}

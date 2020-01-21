@@ -20,3 +20,8 @@ test_that("cir_query()", {
   Sys.sleep(5)
   expect_equal(cir_query('acetic acid', 'mw', first = TRUE), c(`acetic acid` = 60.0524))
 })
+
+test_that("cir_query() doesn't mistake NA for sodium", {
+  Sys.sleep(5)
+  expect_true(is.na(cir_query(as.character(NA), 'cas')))
+})

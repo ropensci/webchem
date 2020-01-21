@@ -2,46 +2,45 @@
 % Please edit documentation in R/chemspider.R
 \name{get_csid}
 \alias{get_csid}
-\title{Retrieve ChemSpider ID}
+\title{ChemSpider ID from compound name}
 \usage{
-get_csid(query, token = NULL, first = TRUE, verbose = TRUE, ...)
+get_csid(query, apikey, control = cs_control())
 }
 \arguments{
-\item{query}{charachter; search term.}
+\item{query}{character; search term.}
 
-\item{token}{character; your security token.}
+\item{apikey}{character; your API key.}
 
-\item{first}{logical; If TRUE (default) return only first result.}
-
-\item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{...}{currently not used.}
+\item{control}{function; see details.}
 }
 \value{
-if first = TRUE a character vector with ChemSpider IDs, otherwise a list.
+Returns a list of two elements.
 }
 \description{
-Return Chemspider ID (CSID) for a search query, see \url{https://www.chemspider.com/}.
+Submit names of compunds and retrieve their ChemSpider IDs (CSIDs).
+}
+\details{
+Control options available for this function are \code{order_by},
+\code{order_direction}. See \code{cs_control()} for a full list of valid
+values for these control options.
 }
 \note{
-A security token is neeeded. Please register at RSC.
-\url{https://www.rsc.org/rsc-id/register}
-for a security token.
-Please respect the Terms & conditions \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
+An API key is needed. Register at \url{https://developer.rsc.org/}
+for an API key. Please respect the Terms & conditions:
+\url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-# Fails because no TOKEN is included
-token <- '<YOUR-SECURITY-TOKEN>'
-get_csid("Triclosan", token = token)[[1]]
-# [1] "5363"
-get_csid(c("Triclosan", "50-00-0"), token = token)
+apikey <- "<YOUR-API-KEY>"
+get_csid("triclosan", apikey = apikey)
+get_csid(c("carbamazepine", "naproxene"), apikey = apikey)
 }
 }
-\seealso{
-\code{\link{cs_compinfo}} and \code{\link{cs_extcompinfo}} to
-retrieve compound details from csid.
+\references{
+https://developer.rsc.org/compounds-v1/apis
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
+
+Tamas Stirling, \email{stirling.tamas@gmail.com}
 }

@@ -4,7 +4,15 @@
 \alias{cts_convert}
 \title{Convert Ids using Chemical Translation Service (CTS)}
 \usage{
-cts_convert(query, from, to, first = FALSE, verbose = TRUE, ...)
+cts_convert(
+  query,
+  from,
+  to,
+  first = FALSE,
+  choices = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{character; query ID.}
@@ -14,7 +22,9 @@ cts_convert(query, from, to, first = FALSE, verbose = TRUE, ...)
 
 \item{to}{character; type to convert to.}
 
-\item{first}{logical; return only first result be returned?}
+\item{first}{deprecated.  Use choices = 1 instead.}
+
+\item{choices}{to return only the first result, use 'choices = 1'.  To choose a result from an interative menu, provide a number of choices to choose from or "all".}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

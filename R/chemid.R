@@ -216,6 +216,6 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
   }
   out <- lapply(query, foo, type = type, match = match, verbose = verbose)
   out <- setNames(out, query)
-  class(out) <- c('list', 'ci_query')
+  class(out) <- c('ci_query','list')
   return(out)
 }

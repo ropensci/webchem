@@ -184,6 +184,12 @@ is.cas <-  function(x, verbose = TRUE) {
     stop('Cannot handle multiple input strings.')
   }
 
+  # cas must not have any alpha characters
+  if(grepl(pattern = "[[:alpha:]]", x = x)){
+    if(verbose){message("String contains alpha characters")}
+    return(FALSE)
+  }
+
   # cas must have two hyphens
   nsep <- str_count(x, '-')
   if (nsep != 2) {
@@ -332,24 +338,11 @@ parse_mol <- function(string) {
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
 
-#' Format a CAS number correctly
-#'
-#' @param x a double or character to be converted to a CAS format
-#'
-#' @return correctly formatted CAS
-#'
-#' @author Eric Scott, \email{scottericr@@gmail.com}
-
-.format.cas <- function(x){
-  parsed <- gsub("([0-9]+)([0-9]{2})([0-9]{1})", '\\1-\\2-\\3', x)
-  pass <- is.cas(parsed)
-  out <- ifelse(pass, parsed, NA)
-  return(out)
-}
-
 
 #' Format numbers as CAS numbers
-#' @description This function attempts to format numeric (or character) vectors as character vectors of CAS numbers.  If they cannot be converted to CAS format or don't pass `is.cas()`, `NA` is returned
+#' @description This function attempts to format numeric (or character) vectors
+#' as character vectors of CAS numbers.  If they cannot be converted to CAS
+#' format or don't pass \code{is.cas()}, \code{NA} is returned
 #' @param x numeric vector, or character vector of CAS numbers missing the hyphens
 #'
 #' @return character vector of valid CAS numbers
@@ -360,8 +353,62 @@ parse_mol <- function(string) {
 #' as.cas(x)
 #'
 as.cas <- function(x){
-  if(any(!sapply(x, grepl, pattern= "^\\d+$"))){
-    warning("Some elements of x cannot be converted to CAS numbers")
+  format.cas <- function(x){
+    if(is.na(x)) {
+      return(NA)
+    } else if (suppressMessages(is.cas(x))) {
+      return(x)
+    } else {
+      parsed <- gsub("([0-9]+)([0-9]{2})([0-9]{1})", '\\1-\\2-\\3', x)
+      pass <- is.cas(parsed)
+      out <- ifelse(pass, parsed, NA)
+      return(out)
+    }
   }
-  sapply(x, .format.cas, USE.NAMES = FALSE)
+
+  sapply(x, format.cas, USE.NAMES = FALSE)
+}
+
+
+#' Interactively choose a result from a menu
+#' @description In interactive sessions, prompts a user to choose an element of a vector from a menu. Use this for all functions that return multiple possible results such as multiple identifiers or synonyms.
+#' @param x a character vector
+#' @param choices If \code{choices = "all"} then the entire vector \code{x} is
+#' used for the menu.  If numeric > 1, only that number of elements from the
+#' start of \code{x} are shown. If \code{choices = 1}, then the first element of
+#' \code{x} is returned without prompting the user.  If \code{NULL} then
+#' \code{x} is returned unchanged.
+#'
+#' @importFrom utils menu
+#' @importFrom utils head
+#' @return a character vector of length 1
+#' @export
+#'
+#' @examples
+#' test <- c("apples", "bananas", "orange", "plum", "peach", "guava", "kumquat")
+#' chooser(test, "all")
+#' chooser(test, 3)
+chooser <- function(x, choices){
+  if(interactive() & !is.null(choices)){
+    #only in an interactive R session when number of choices is specified
+    if(is.numeric(choices) & choices > length(x)) {
+      choices = "all"
+      warning('Number of choices excedes length of x, using all choices instead',
+              immediate. = TRUE)
+    }
+    if(choices == "all") { #then give all of x as possible choices
+      pick <- menu(x, graphics = FALSE, 'Select one:')
+      out <- x[pick]
+    }
+    if(choices == 1) {
+      out <- x[1]
+    }
+    if(is.numeric(choices) & choices > 1){
+      pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
+      out <- x[pick]
+    }
+  } else {
+    out <- x
+  }
+  return(out)
 }

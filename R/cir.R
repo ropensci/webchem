@@ -8,7 +8,10 @@
 #' @param resolver character; what resolver should be used? If NULL (default)
 #'  the identifier type is detected and the different resolvers are used in turn.
 #'  See details for possible resolvers.
-#' @param first logical; If TRUE return only first result.
+#' @param first deprecated, use choices = 1 to return only the first result
+#' @param choices if \code{choices = 1}, returns only the first result. To get a
+#' number of results to choose from in an interactive menu, provide the number
+#' of choices you want or "all" to choose from all synonyms.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return A list of character vectors. If first = TRUE a vector.
@@ -108,7 +111,7 @@
 #'}
 #' @export
 cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
-                      first = FALSE, verbose = TRUE, ...){
+                      first = FALSE, choices = NULL, verbose = TRUE, ...){
   foo <- function(identifier, representation, resolver, first, verbose) {
     if (is.na(identifier)) {
       return(NA)
@@ -135,8 +138,9 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
         message('No representation found... Returning NA.')
         return(NA)
       }
-      if (first)
-        out <- out[1]
+      # if (first)
+      #   out <- out[1]
+      out <- chooser(out, choices)
       # convert to numeric
       if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
                                 'h_bond_acceptor_count', 'h_bond_center_count',
@@ -152,7 +156,8 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   out <- lapply(identifier, foo, representation = representation,
                 resolver = resolver, first = first, verbose = verbose)
   out <- setNames(out, identifier)
-  if (first)
+  # if (first)
+  if(!is.null(choices))
     out <- unlist(out)
   return(out)
 }

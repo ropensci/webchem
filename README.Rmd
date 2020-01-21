@@ -1,12 +1,7 @@
 ---
-output:
-  html_document:
-    keep_md: yes
-    self_contained: no
-  pdf_document: default
+output: github_document
 ---
-webchem
-=============
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(
@@ -14,26 +9,30 @@ knitr::opts_chunk$set(
   message = FALSE,
   collapse = TRUE,
   comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
   cache = TRUE
 )
 ```
+# Webchem
 
-[![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
-[![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
-[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests)
-<!--
-[![Coverage Status](https://coveralls.io/repos/ropensci/webchem/badge.svg?branch=master)](https://coveralls.io/r/ropensci/webchem?branch=master)
--->
-[![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
-[![Downloads](http://cranlogs.r-pkg.org/badges/webchem)](http://cranlogs.r-pkg.org/badges/webchem)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/webchem)](http://cran.r-project.org/web/packages/webchem)
-[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
+<!-- badges: start -->
+
+[![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem) 
+[![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem) 
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests) 
+[![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues) 
+[![](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
+[![CRAN status](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem) 
+[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem) 
+
+<!-- badges: end -->
 
 `webchem` is a R package to retrieve chemical information from  the web. 
 This package interacts with a suite of web APIs to retrieve chemical information.
 
-The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`)
-They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations.
+The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`).
+They follow the format of `source_functionality`, with the exception of functions that retrieve database identifiers which follow the format of `get_identifier`. e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations and `get_csid()` retrieves ChemSpider IDs.
 
 
 ## Currently implemented in `webchem`
@@ -41,7 +40,7 @@ They follow the format of `source_functionality`, e.g.`cs_compinfo` uses ChemSpi
 Source | Function(s) | API Docs | API key
 ------ | --------- | -------- | --------
 [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `get_csid()`, `cs_compinfo()`, `cs_extcompinfo()` , `cs_convert()`, `cs_prop()`| [link](http://www.chemspider.com/AboutServices.aspx?) | required [(link)](https://www.rsc.org/rsc-id/register )
+[ChemSpider](http://www.chemspider.com/) | `cs_datasources()`,`cs_name_csid()`, `cs_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()`| [link](https://developer.rsc.org/compounds-v1/apis) | required [(link)](https://developer.rsc.org/)
 [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
@@ -53,14 +52,15 @@ PPDB | `ppdb_parse()` (only parsing) | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 [Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
-[NIST](https://webbook.nist.gov) | `get_ri()` | none | none
+[NIST](https://webbook.nist.gov) | `nist_ri()` | none | none
+[ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
 #### API keys
 
-Some ChemSpider functions require a security token. 
-Please register at RSC (https://www.rsc.org/rsc-id/register) to retrieve a security token.
+Some ChemSpider functions require an API key. 
+Please register at RSC (https://developer.rsc.org/) to retrieve an API key.
 
 ## Installation
 #### Install from CRAN (stable version)
@@ -86,10 +86,10 @@ library("webchem")
 #### Chemical Identifier Resolver (CIR)
 
 CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
-Use `first` to return only the first hit.
+Use `choices = 1` to return only the first hit.
 ```{r cir_query1}
 cir_query('Triclosan', 'cas')
-cir_query('Triclosan', 'cas', first = TRUE)
+cir_query('Triclosan', 'cas', choices = 1)
 cir_query('Triclosan', 'mw')
 ```
 
@@ -107,50 +107,52 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 
 #### ChemSpider
-```{r token, echo=FALSE}
-token = '37bf5e57-9091-42f5-9274-650a64398aaf'
+```{r apikey, echo=FALSE}
+apikey <- 'tKAuFrPCLOboXIeGLs5I257Pl0FjNH3e'
 ```
 
 You'll need a API key:
 
 ```{r api_key, eval=FALSE}
-token = '<YOUR TOKEN HERE'
+apikey = '<YOUR TOKEN HERE>'
 ```
 
 Retrieve the ChemSpider ID of Triclosan
 
 ```{r get_csid}
-(id <- get_csid(c('Aspirin', 'Triclosan'), token = token))
+(id <- cs_name_csid('Triclosan', apikey = apikey))
 ```
 
 Use this ID to query information from ChemSpider
 
+
 ```{r cs_extcompinfo}
-cs_extcompinfo(id, token = token)
+# cs_compinfo(id, fields = c("Formula", "MolecularWeight"), apikey = apikey)
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
 
 Or to convert to a Mol-Object
 
+
 ```{r cs_csid_mol}
-mol <- cs_convert(id, from = 'csid', to = 'mol', token = token)
-head(mol$ab)
+# mol <- cs_convert(id, from = 'csid', to = 'mol', apikey = apikey)
+# head(parse_mol(mol$ab))
 ```
-Note that the Molfile is parsed into a R object (via `parse_mol()`) and that a API-key is needed
+Note that the Molfile is parsed into a R object (via `parse_mol()`) and that an API-key is needed
 
 
-`cs_convert()` handles a lot of input / output formats, even without API-key:
+`cs_convert()` handles a lot of input / output formats:
 
 ```{r cs_inchikey_csid}
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
-cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid', apikey = apikey)
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi', apikey = apikey)
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi', apikey = apikey)
 ```
 
 And get EPISuit predictions from ChemSpider
 
-```{r cs_prop}
+```{r cs_prop, eval=FALSE}
 cs_prop('5363')[['5363']]$epi[ , c(1:4)]
 ```
 
@@ -298,14 +300,65 @@ opsin_query(c('Cyclopropane', 'Octane'))
 ```
 
 
-#### flavornet
+
+#### Flavornet
+
 ```{r flavornet}
-fn_percept(c("75-07-0", "123-32-0"))
+fn_percept(CAS = c("75-07-0", "123-32-0"))
 ```
 
 #### NIST
+
+Identification of gas chromatography peaks is often aided by retention idices. NIST provides tables of retention indices reported in the literature organized by retention index type (Kovats, linear, normal alkane, and Lee), column polarity, and temperature program.
+
+
 ```{r nist}
-nist_ri("78-70-6")
+RIs <- nist_ri("78-70-6", type = "kovats", polarity = "non-polar", temp_prog = "ramp")
+head(RIs)
+```
+
+#### ChEBI
+
+Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `chebi_lite_entity()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
+
+```{r chebi-lite}
+ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
+ids
+```
+
+The __chebiid__ can then be used to query the complete ChEBI entity using `chebi_comp_entity()`. The complete entity contains several different data structures which are returned in a list. The data structures are explained in greater detail at the [ChEBI website](https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:6049). Here, the list elements are showcased:
+
+```{r chebi-comp}
+# ecample entities
+isoproturon <- chebi_comp_entity(ids$Isoproturon$chebiid[1])
+paracetamol <- chebi_comp_entity(ids$`RZVAJINKPMORJF-UHFFFAOYSA-N`$chebiid[1])
+
+# properties: a data.frame with general properties
+lapply(isoproturon, '[[', 'properties')
+# chem_structure: a list of chemical structure formats (e.g. mol)
+lapply(isoproturon, '[[', 'chem_structure')
+# synonyms: a data.frame of synonyms (collected from different sources)
+lapply(isoproturon, '[[', 'synonyms')
+# iupacnames: a data.frame of IUPAC names (collected from different sources)
+lapply(isoproturon, '[[', 'iupacnames')
+# formulae: a data.frame of chemical formulae (collected from different sources)
+lapply(isoproturon, '[[', 'formulae')
+# regnumbers: a data.frame of registry numbers (e.g. CAS, Beilstein, Reaxys) (collected from different sources)
+lapply(isoproturon, '[[', 'regnumbers')
+# chebiid_snd: a data.frame with secondary ChEBI ids
+lapply(paracetamol, '[[', 'chebiid_snd')
+# citations: Publications which cite the entity along with hyperlinks to the PubMed entry via Europe PMC
+head(lapply(paracetamol, '[[', 'citations')[[1]])
+# parents: parent ontologies of the entity
+lapply(paracetamol, '[[', 'parents')
+# children: child ontologies of the entity
+lapply(paracetamol, '[[', 'children')
+# dblinks: Links to other data bases
+lapply(paracetamol, '[[', 'dblinks')
+# comments: General comment(s)
+lapply(paracetamol, '[[', 'comments')
+# Metabolites of Species
+head(lapply(paracetamol, '[[', 'origins')[[1]])
 ```
 
 #### Extractor functions
@@ -320,7 +373,7 @@ cas(wi)
 inchikey(wi)
 smiles(wi)
 
-smiles(etox_basic(5564))
+# smiles(etox_basic(5564))
 ```
 
 
@@ -368,22 +421,15 @@ Therefore, kudos to the web service providers and developers!
 ### Related Projects
 If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPy](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
 
-
-### Contributors
-
-+ [Eduard Szöcs](https://github.com/EDiLD)
-+ [Daniel Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
-+ [Johannes Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
-+ [Eric R Scott](https://github.com/ropensci/webchem/commits?author=Aariq)
-
 ### Want to contribute?
 
-Checkout our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
+Check out our [contribution guide here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
 
 ### Meta
 
-* Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
-* License: MIT
-* Get citation information for `webchem` in R doing `citation(package = 'webchem')`
+- Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
+- License: MIT
+- Get citation information for `webchem` in R doing `citation("webchem")`
+  
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

@@ -1,12 +1,12 @@
 #' Read HTML slowly
-#' @description Just adds a rest after `read_html()`.  Useful for web-scraping.
+#' @description Just adds a rest after \code{read_html()}.  Useful for web-scraping.
 #' @import xml2
 #' @param x a URL
 #' @param ... currently unused
 #'
 #' @return html
 #'
-read_html_slow <- function(x, ...){
+read_html_slow <- function(x, ...) {
   output <- xml2::read_html(x)
   Sys.sleep(1)
   return(output)
@@ -24,39 +24,51 @@ read_html_slow <- function(x, ...){
 #'
 #' @return an xml nodeset
 #'
-get_ri_xml <- function(cas, type = c("kovats", "linear", "alkane", "lee"),
-                       polarity = c("polar", "non-polar"),
-                       temp_prog = c("isothermal", "ramp", "custom")){
-  #Construct URL
-  type_str <- toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
-  URL_detail <- paste0("https://webbook.nist.gov/cgi/cbook.cgi?ID=C",
-                       gsub("-", "", cas),
-                       "&Units=SI&Mask=2000&Type=",
-                       type_str)
-  #Read URL and extract xml
-  page <- read_html_slow(URL_detail)
-  ri_xml.all <- html_nodes(page, ".data")
+get_ri_xml <-
+  function(cas,
+           type = c("kovats", "linear", "alkane", "lee"),
+           polarity = c("polar", "non-polar"),
+           temp_prog = c("isothermal", "ramp", "custom")) {
+    #Construct URL
+    type_str <-
+      toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
+    URL_detail <-
+      paste0(
+        "https://webbook.nist.gov/cgi/cbook.cgi?ID=C",
+        gsub("-", "", cas),
+        "&Units=SI&Mask=2000&Type=",
+        type_str
+      )
+    #Read URL and extract xml
+    page <- read_html_slow(URL_detail)
+    ri_xml.all <- html_nodes(page, ".data")
 
-  #Warn if table doesn't exist at URL
-  if (length(ri_xml.all) == 0) {
-    warning(paste0("There are no RIs for CAS# ", cas, " of type ", type_str, ". Returning NA."))
-    ri_xml <- as.data.frame(NA)
-  } else {
-    ri_xml <- ri_xml.all
+    #Warn if table doesn't exist at URL
+    if (length(ri_xml.all) == 0) {
+      warning(paste0(
+        "There are no RIs for CAS# ",
+        cas,
+        " of type ",
+        type_str,
+        ". Returning NA."
+      ))
+      ri_xml <- as.data.frame(NA)
+    } else {
+      ri_xml <- ri_xml.all
+    }
+
+    #set attributes to label what type of RI
+    attr(ri_xml, "type") <- type
+    attr(ri_xml, "polarity") <- polarity
+    attr(ri_xml, "temp_prog") <- temp_prog
+
+    return(ri_xml)
   }
-
-  #set attributes to label what type of RI
-  attr(ri_xml, "type") <- type
-  attr(ri_xml, "polarity") <- polarity
-  attr(ri_xml, "temp_prog") <- temp_prog
-
-  return(ri_xml)
-}
 
 
 #' Tidier for webscraped RI ri_xml
 #'
-#' @param ri_xml captured by `get_ri_xml`
+#' @param ri_xml captured by \code{get_ri_xml}
 #'
 #' @import rvest
 #' @importFrom purrr map
@@ -65,7 +77,7 @@ get_ri_xml <- function(cas, type = c("kovats", "linear", "alkane", "lee"),
 #'
 #' @return a single table
 #'
-tidy_ritable <- function(ri_xml){
+tidy_ritable <- function(ri_xml) {
   #Skip all these steps if the table didn't exist at the URL and was set to NA
   if (any(is.na(ri_xml))) {
     output <- ri_xml
@@ -122,9 +134,20 @@ tidy_ritable <- function(ri_xml){
                       "reference" = "Reference",
                       "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
-        mutate_at(vars("length", "diameter", "thickness", "temp_start", "temp_end",
-                       "temp_rate", "hold_start", "hold_end",  "RI"),
-                  as.numeric)
+        mutate_at(
+          vars(
+            "length",
+            "diameter",
+            "thickness",
+            "temp_start",
+            "temp_end",
+            "temp_rate",
+            "hold_start",
+            "hold_end",
+            "RI"
+          ),
+          as.numeric
+        )
 
     } else if (temp_prog == "isothermal") {
       tidy2 <- rename(tidy1,
@@ -146,13 +169,15 @@ tidy_ritable <- function(ri_xml){
 
     # make NAs explicit and gas abbreviations consistent
     output <- tidy2 %>%
-      mutate_all(~na_if(., "")) %>%
-      mutate(gas = case_when(
-        str_detect(gas, "He") ~ "Helium",
-        str_detect(gas, "H2") ~ "Hydrogen",
-        str_detect(gas, "N2") ~ "Nitrogen",
-        TRUE                  ~ as.character(NA)
-      )) %>%
+      mutate_all(~ na_if(., "")) %>%
+      mutate(
+        gas = case_when(
+          str_detect(gas, "He") ~ "Helium",
+          str_detect(gas, "H2") ~ "Hydrogen",
+          str_detect(gas, "N2") ~ "Nitrogen",
+          TRUE                  ~ as.character(NA)
+        )
+      ) %>%
       # reorder columns
       select("type", "phase", "RI", everything())
   }
@@ -161,30 +186,55 @@ tidy_ritable <- function(ri_xml){
 
 
 #' Retrieve retention indices from NIST
-#' @description This function scrapes NIST for literature retention indices given CAS numbers as an input.
+#' @description This function scrapes NIST for literature retention indices
+#'  given CAS numbers as an input.
 #'
 #' @param cas CAS numbers either as numeric or formatted correctly with hyphens.
-#' @param type One of "kovats", "linear", "alkane", or "lee". Type of RI to retrieve. Details about how these are calculated here: [https://webbook.nist.gov/chemistry/gc-ri/]
-#' @param polarity One of "polar" or "non-polar" to get RIs calculated for polar or non-polar columns.
-#' @param temp_prog One of "isothermal", "ramp", or "custom".
-#'
+#' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
+#'  \code{"alkane"}, or \code{"lee"}. See details for more.
+#' @param polarity Column polarity. One of "polar" or "non-polar"
+#'  to get RIs calculated for polar or non-polar columns.
+#' @param temp_prog Temperature program. One of "isothermal", "ramp",
+#'  or "custom".
+#' @details The types of retention indices included in NIST include Kovats
+#'  (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
+#'  (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
+#'  calculated are available on the NIST website:
+#'  https://webbook.nist.gov/chemistry/gc-ri/
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @import dplyr
 #'
-#' @return a table of literature RIs
+#' @return a table of literature RIs with the following columns:
+#' \itemize{
+#' \item{\code{CAS} is the CAS number}
+#' \item{\code{type} is the column type, e.g. "capillary"}
+#' \item{\code{phase} is the stationary phase (column phase)}
+#' \item{\code{RI} is retention index}
+#' \item{\code{length} is column length in meters}
+#' \item{\code{gas} is the carrier gas used}
+#' \item{\code{substrate}}
+#' \item{\code{diameter} is the column diameter in mm}
+#' \item{\code{thickness} is the phase thickness in µm}
+#' \item{\code{program}. various columns depending on the value of
+#' \code{temp_prog}}
+#' \item{\code{reference} is where this retention index was published}
+#' \item{\code{comment}. I believe this denotes the database these data
+#'       were aggregated from}
+#'}
 #'
 #' @export
 #'
 #' @seealso \code{\link{is.cas}} \code{\link{as.cas}}
 #'
 #' @examples
-#' myRIs <- nist_ri(c("78-70-6", "873-94-9", "13474-59-4"), "linear", "non-polar", "ramp")
-#'
+#' \dontrun{
+#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), "linear", "non-polar", "ramp")
+#' }
 nist_ri <- function(cas,
                    type = c("kovats", "linear", "alkane", "lee"),
                    polarity = c("polar", "non-polar"),
-                   temp_prog = c("isothermal", "ramp", "custom")){
+                   temp_prog = c("isothermal", "ramp", "custom")) {
   type <- match.arg(type)
   polarity <- match.arg(polarity)
   temp_prog <- match.arg(temp_prog)

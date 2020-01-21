@@ -49,7 +49,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
   }
   out <- lapply(inchikey, foo, verbose = verbose)
   out <- setNames(out, inchikey)
-  class(out) <- c('list', 'cts_compinfo')
+  class(out) <- c('cts_compinfo','list')
   return(out)
 }
 
@@ -65,7 +65,8 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
 #'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
 #' @param to character; type to convert to.
-#' @param first logical; return only first result be returned?
+#' @param first deprecated.  Use choices = 1 instead.
+#' @param choices to return only the first result, use 'choices = 1'.  To choose a result from an interative menu, provide a number of choices to choose from or "all".
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of characters. If first = TRUE a vector.
@@ -88,7 +89,9 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
 #' cts_convert(comp, 'inchikey', 'Chemical Name')
 #' }
-cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
+cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose = TRUE, ...){
+  if(!missing("first"))
+    stop('"first" is deprecated.  Use "choices = 1" instead.')
   if (length(from) > 1 | length(to) > 1) {
     stop('Cannot handle multiple input strings.')
   }
@@ -109,13 +112,15 @@ cts_convert <- function(query, from, to, first = FALSE, verbose = TRUE, ...){
         return(NA)
     }
     out <- out$result[[1]]
-    if (first)
-      out <- out[1]
+    # if (first)
+    #   out <- out[1]
+    out <- chooser(out, choices)
     return(out)
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
-  if (first)
+  # if (first)
+  if(!is.null(choices))
     out <- unlist(out)
   return(out)
 }
