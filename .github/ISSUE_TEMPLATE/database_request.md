@@ -6,10 +6,11 @@ Below are three criteria we use to evaluate and prioritize candidate databases f
 
 ### Suggested database: <name and link to home page>
 
-1. **Feasibility**.  Does the database provide an API?  If not, do you think it would it be easy to scrape?  For example, database websites that have separate pages for each compound and provide data in a tabular format may be easier to scrape. Note that if a database does not provide an API, explicitly forbids web-scraping, or is a paid service, it cannot be a candidate for integration.
+1. **Feasibility**.  Does the database provide an API?  If not, do you think it would it be easy to scrape?  For example, database websites that have separate pages for each compound and provide data in a tabular format may be easier to scrape. Note that if a database does not provide an API and explicitly forbids web-scraping, or is a paid service, it cannot be a candidate for integration.
 
-2. **Overlap**.  How much does the data overlap with current databases? Does it contain data on many chemical properties not covered by other databases? Does it contain data on chemicals not found in other databases? Some combination of both?
+2. **Scope**. What kind of data does the database contain? It should be primarily chemical properties, but databases of chemical identifiers or synonyms may also be considered.
 
-3. **Community need**.  Are these data likely to be used by a large constituency of users?  Note that a database catering to a very narrow field may still be of use to a large number of users.
+3. **Overlap**.  How much does the database contents overlap with current databases that webchem can access? 
 
-4. **Scope**. Is the database within the scope of the webchem package?  That is, does it contain mainly data on *chemical* properties?
+4. **Community need**.  Are these data likely to be used by a large constituency of users?  Note that a database catering to a very narrow field may still be of use to a large number of users.
+
