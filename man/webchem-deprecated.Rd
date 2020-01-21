@@ -18,6 +18,6 @@ removed.
 \details{
 Deprecated functions are:
 \tabular{rl}{
-\code{pc_compinfo} \tab is now a synonym for \code{\link{cid_compinfo}}\cr
+  \code{pc_compinfo} \tab is now a synonym for \code{\link{cid_compinfo}}\cr
 }
 }

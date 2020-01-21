@@ -3,13 +3,13 @@
 #' Look for and retrieve ChemSpider API keys and secure tokens stored in
 #' .Renviron or .Rprofile.
 #'
-#' @details To use the any of the functions in `webchem` that access the
+#' @details To use the any of the functions in \code{webchem} that access the
 #'   ChemSpider database, you'll need to obtain an API key by registering.
 #'   Register at \url{https://developer.rsc.org/} for an API key. Please respect
 #'   the Terms & Conditions. The Terms & Conditions can be found at
 #'   \url{https://developer.rsc.org/terms}. Rather than store the API key in code, which might be shared, it's best practice to keep it
-#'   hidden. You can store the API key as `CHEMSPIDER_KEY=<your key>` in
-#'   .Renviron or as `option(chemspider_key = <your key>)` in .Rprofile.
+#'   hidden. You can store the API key as \code{CHEMSPIDER_KEY=<your key>} in
+#'   .Renviron or as \code{option(chemspider_key = <your key>)} in .Rprofile.
 #' @seealso \code{\link[usethis]{edit_r_environ}}
 #'   \code{\link[usethis]{edit_r_profile}}
 #' @return an API key
@@ -38,7 +38,7 @@ cs_check_key <- function () {
 #' faster.
 #' @importFrom httr GET add_headers
 #' @importFrom jsonlite fromJSON
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a character vector.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
@@ -130,7 +130,7 @@ cs_control <- function(order_by = "recordId", order_direction = "ascending",
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param query character; search term.
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @param control function; see details.
 #' @details Control options available for this function are \code{order_by},
 #' \code{order_direction}. See \code{cs_control()} for a full list of valid
@@ -255,7 +255,7 @@ cs_query_csid <- function(postres, headers) {
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param smiles character; search term.
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a list of two elements.
 #' @note An API key is needed. Register at RSC
 #' \url{https://developer.rsc.org/}
@@ -299,7 +299,7 @@ cs_smiles_csid <- function(smiles, apikey = NULL) {
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param inchi character; search term.
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a list of two elements.
 #' @note An API key is needed. Register at RSC
 #' \url{https://developer.rsc.org/}
@@ -345,7 +345,7 @@ cs_inchi_csid <- function(inchi, apikey = NULL) {
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param inchikey character; search term.
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a list of two elements.
 #' @note An API key is needed. Register at RSC
 #' \url{https://developer.rsc.org/}
@@ -397,7 +397,7 @@ cs_inchikey_csid <- function(inchikey, apikey = NULL) {
 #' smiles, inchi, inchikey, mol.
 #' @param to character; the format to be converted to. Valid values are smiles,
 #' inchi, inhikey, mol.
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Not all conversions are supported. Allowed conversions:
 #' \itemize{
 #' \item InChI <-> InChIKey
@@ -459,7 +459,7 @@ cs_convert_multiple <- function(input, from, to, apikey = NULL) {
 #' @param query character; query ID.
 #' @param from character; type of query ID.
 #' @param to character; type to convert to.
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Not all conversions are supported. Allowed conversions:
 #' \itemize{
 #' \item CSID <-> InChI
@@ -545,7 +545,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' @importFrom httr POST add_headers
 #' @param csid numeric
 #' @param fields character; see details.
-#' @param apikey character; your API key. If NULL (default), `cs_check_key()` will look for it in .Renviron or .Rprofile.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Valid values for \code{fields} are \code{"SMILES"},
 #' \code{"Formula"}, \code{"InChI"}, \code{"InChIKey"}, \code{"StdInChI"},
 #' \code{"StdInChIKey"}, \code{"AverageMass"}, \code{"MolecularWeight"},

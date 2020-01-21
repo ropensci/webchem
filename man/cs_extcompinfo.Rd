@@ -4,12 +4,12 @@
 \alias{cs_extcompinfo}
 \title{Get extended record details by ChemSpider ID}
 \usage{
-cs_extcompinfo(csid, token = NULL, verbose = TRUE, ...)
+cs_extcompinfo(csid, token, verbose = TRUE, ...)
 }
 \arguments{
 \item{csid}{character,  ChemSpider ID.}
 
-\item{token}{character; security token. If NULL (default) \code{cs_check_token()} will look for it in .Renviron or .Rprofile.}
+\item{token}{character; security token.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -35,8 +35,9 @@ use \code{\link{cs_compinfo}} to retrieve standard inchikey.
 }
 \examples{
 \dontrun{
+token <- "<redacted>"
 csid <- get_csid("Triclosan")
-cs_extcompinfo(csid)
+cs_extcompinfo(csid, token)
 
 csids <- get_csid(c('Aspirin', 'Triclosan'))
 cs_compinfo(csids)

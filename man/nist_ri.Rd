@@ -4,12 +4,9 @@
 \alias{nist_ri}
 \title{Retrieve retention indices from NIST}
 \usage{
-nist_ri(
-  cas,
-  type = c("kovats", "linear", "alkane", "lee"),
-  polarity = c("polar", "non-polar"),
-  temp_prog = c("isothermal", "ramp", "custom")
-)
+nist_ri(cas, type = c("kovats", "linear", "alkane", "lee"),
+  polarity = c("polar", "non-polar"), temp_prog = c("isothermal",
+  "ramp", "custom"))
 }
 \arguments{
 \item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}
@@ -44,7 +41,7 @@ a table of literature RIs with the following columns:
 }
 \description{
 This function scrapes NIST for literature retention indices
-given CAS numbers as an input.
+ given CAS numbers as an input.
 }
 \details{
 The types of retention indices included in NIST include Kovats
