@@ -3,25 +3,16 @@
 #' Look for and retrieve ChemSpider API keys and secure tokens stored in
 #' .Renviron or .Rprofile.
 #'
-#' @name check_key
-#' @rdname check_key
 #' @details To use the any of the functions in `webchem` that access the
 #'   ChemSpider database, you'll need to obtain an API key by registering.
 #'   Register at \url{https://developer.rsc.org/} for an API key. Please respect
 #'   the Terms & Conditions. The Terms & Conditions can be found at
-#'   \url{https://developer.rsc.org/terms}. Rather than store these API keys and
-#'   tokens in code, which might be shared, it's best practice to keep them
+#'   \url{https://developer.rsc.org/terms}. Rather than store the API key in code, which might be shared, it's best practice to keep it
 #'   hidden. You can store the API key as `CHEMSPIDER_KEY=<your key>` in
 #'   .Renviron or as `option(chemspider_key = <your key>)` in .Rprofile.
-#'   Similarly, the secure token can be stored as `CHEMSPIDER_TOKEN` in
-#'   .Rprofile or as the option `chemspider_token`.
 #' @seealso \code{\link[usethis]{edit_r_environ}}
 #'   \code{\link[usethis]{edit_r_profile}}
 #' @return an API key
-NULL
-
-
-#' @rdname check_key
 #' @export
 #'
 #' @examples
@@ -38,23 +29,6 @@ cs_check_key <- function () {
   else x
 }
 
-
-#' @rdname check_key
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' cs_check_token()
-#' }
-cs_check_token <- function() {
-  x <- Sys.getenv("CHEMSPIDER_TOKEN", "")
-  if (x == "") {
-    x <- getOption("chemspider_token", "")
-  }
-  if (x == "")
-    stop("no security token stored for ChemSpider.  See ?cs_check_token() for details")
-  else x
-}
 
 #' Retrieve ChemSpider data sources
 #'
@@ -630,7 +604,7 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
 #' @import xml2
 #' @importFrom stats rgamma
 #' @param csid character,  ChemSpider ID.
-#' @param token character; security token. If NULL (default) `cs_check_token()` will look for it in .Renviron or .Rprofile.
+#' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a data.frame with entries: 'csid', 'mf' (molecular formula),
@@ -649,19 +623,17 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
 #' @export
 #' @examples
 #' \dontrun{
+#' token <- "<redacted>"
 #' csid <- get_csid("Triclosan")
-#' cs_extcompinfo(csid)
+#' cs_extcompinfo(csid, token)
 #'
 #' csids <- get_csid(c('Aspirin', 'Triclosan'))
 #' cs_compinfo(csids)
 #' }
-cs_extcompinfo <- function(csid, token = NULL, verbose = TRUE, ...) {
+cs_extcompinfo <- function(csid, token, verbose = TRUE, ...) {
   .Deprecated("cs_compinfo()", old = "cs_extcompinfo()",
               msg = "'cs_extcompinfo' is deprecated.
 use 'cs_commpinfo()' instead.")
-  if(is.null(token)){
-    token <- cs_check_token()
-  }
   foo <- function(csid, token, verbose) {
     if (is.na(csid)) {
       out <- as.list(rep(NA, 13))
