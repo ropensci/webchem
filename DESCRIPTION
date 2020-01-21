@@ -16,6 +16,7 @@ Authors@R: c(person("Eduard", "Szöcs", role = c("aut", "cre"),
     person("Andreas", "Scharmüller", role = "ctb"),        
     person("Eric R", "Scott", role = "ctb"),
     person("Jan", "Stanstrup", role = "ctb"),
+    person("Gordon", "Getzinger", role = "ctb"),
     person("Tamás", "Stirling", role = "ctb"))
 Maintainer: Tamás Stirling <stirling.tamas@gmail.com>
 LazyLoad: yes
@@ -36,4 +37,4 @@ Imports:
 Suggests:
     testthat,
     rcdk
-RoxygenNote: 7.0.2
+RoxygenNote: 6.1.1
