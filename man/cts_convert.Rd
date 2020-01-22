@@ -4,8 +4,15 @@
 \alias{cts_convert}
 \title{Convert Ids using Chemical Translation Service (CTS)}
 \usage{
-cts_convert(query, from, to, first = FALSE, choices = NULL,
-  verbose = TRUE, ...)
+cts_convert(
+  query,
+  from,
+  to,
+  first = FALSE,
+  choices = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{character; query ID.}

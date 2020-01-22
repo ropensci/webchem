@@ -4,8 +4,7 @@
 \alias{aw_query}
 \title{Query http://www.alanwood.net/pesticides}
 \usage{
-aw_query(query, type = c("commonname", "cas"), verbose = TRUE,
-  idx = NULL)
+aw_query(query, type = c("commonname", "cas"), verbose = TRUE, idx = NULL)
 }
 \arguments{
 \item{query}{character; search string}
