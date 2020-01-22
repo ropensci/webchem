@@ -3,7 +3,6 @@ context("chemspider")
 test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_cran()
   expect_type(cs_check_key(), "character")
-  expect_type(cs_check_token(), "character")
 })
 
 test_that("cs_datasources()", {
