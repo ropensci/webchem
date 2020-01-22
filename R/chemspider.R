@@ -1,3 +1,35 @@
+#' Retrieve stored ChemSpider API keys and secure tokens
+#'
+#' Look for and retrieve ChemSpider API keys and secure tokens stored in
+#' .Renviron or .Rprofile.
+#'
+#' @details To use the any of the functions in \code{webchem} that access the
+#'   ChemSpider database, you'll need to obtain an API key by registering.
+#'   Register at \url{https://developer.rsc.org/} for an API key. Please respect
+#'   the Terms & Conditions. The Terms & Conditions can be found at
+#'   \url{https://developer.rsc.org/terms}. Rather than store the API key in code, which might be shared, it's best practice to keep it
+#'   hidden. You can store the API key as \code{CHEMSPIDER_KEY=<your key>} in
+#'   .Renviron or as \code{option(chemspider_key = <your key>)} in .Rprofile.
+#' @seealso \code{\link[usethis]{edit_r_environ}}
+#'   \code{\link[usethis]{edit_r_profile}}
+#' @return an API key
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' cs_check_key()
+#' }
+cs_check_key <- function () {
+  x <- Sys.getenv("CHEMSPIDER_KEY", "")
+  if (x == "") {
+    x <- getOption("chemspider_key", "")
+  }
+  if (x == "")
+    stop("no API key stored for ChemSpider.  See ?cs_check_key() for details")
+  else x
+}
+
+
 #' Retrieve ChemSpider data sources
 #'
 #' The function returns a vector of available data sources used by ChemSpider.
@@ -6,7 +38,7 @@
 #' faster.
 #' @importFrom httr GET add_headers
 #' @importFrom jsonlite fromJSON
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a character vector.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
@@ -16,10 +48,12 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' apikey <- "<YOUR-API-KEY>"
-#' cs_datasources(apikey = apikey)
+#' cs_datasources()
 #' }
-cs_datasources <- function(apikey) {
+cs_datasources <- function(apikey = NULL) {
+  if(is.null(apikey)){
+    apikey <- cs_check_key()
+  }
   headers <- c("Content-Type" = "", "apikey" = apikey)
   res <- httr::GET(
     url = "https://api.rsc.org/compounds/v1/lookups/datasources",
@@ -96,7 +130,7 @@ cs_control <- function(order_by = "recordId", order_direction = "ascending",
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param query character; search term.
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @param control function; see details.
 #' @details Control options available for this function are \code{order_by},
 #' \code{order_direction}. See \code{cs_control()} for a full list of valid
@@ -111,11 +145,13 @@ cs_control <- function(order_by = "recordId", order_direction = "ascending",
 #' @export
 #' @examples
 #' \dontrun{
-#' apikey <- "<YOUR-API-KEY>"
-#' get_csid("triclosan", apikey = apikey)
-#' get_csid(c("carbamazepine", "naproxene"), apikey = apikey)
+#' get_csid("triclosan")
+#' get_csid(c("carbamazepine", "naproxene"))
 #' }
-get_csid <- function(query, apikey, control = cs_control()) {
+get_csid <- function(query, apikey = NULL, control = cs_control()) {
+  if(is.null(apikey)) {
+    apikey <- cs_check_key()
+  }
   cs_name_csid <- function(query, apikey, control) {
     headers <- c("Content-Type" = "", "apikey" = apikey)
     body <- list(
@@ -219,7 +255,7 @@ cs_query_csid <- function(postres, headers) {
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param smiles character; search term.
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a list of two elements.
 #' @note An API key is needed. Register at RSC
 #' \url{https://developer.rsc.org/}
@@ -231,11 +267,13 @@ cs_query_csid <- function(postres, headers) {
 #' for the top level function.
 #' @examples
 #' \dontrun{
-#' apikey <- "<YOUR-API-KEY>"
-#' cs_smiles_csid("CC(O)=O", apikey = apikey)
-#' cs_smiles_csid(c("CC(O)=O","CC=O"), apikey = apikey)
+#' cs_smiles_csid("CC(O)=O")
+#' cs_smiles_csid(c("CC(O)=O","CC=O"))
 #' }
-cs_smiles_csid <- function(smiles, apikey) {
+cs_smiles_csid <- function(smiles, apikey = NULL) {
+  if(is.null(apikey)){
+    apikey <- cs_check_key()
+  }
   query <- function(smiles, apikey) {
     headers <- c("Content-Type" = "", "apikey" = apikey)
     body <- jsonlite::toJSON(list("smiles" = smiles), auto_unbox = TRUE)
@@ -261,7 +299,7 @@ cs_smiles_csid <- function(smiles, apikey) {
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param inchi character; search term.
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a list of two elements.
 #' @note An API key is needed. Register at RSC
 #' \url{https://developer.rsc.org/}
@@ -273,14 +311,15 @@ cs_smiles_csid <- function(smiles, apikey) {
 #' for the top level function.
 #' @examples
 #' \dontrun{
-#' apikey <- "<YOUR-API-KEY>"
-#' cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
-#' apikey = apikey)
+#' cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
 #' cs_inchi_csid(inchi = c(
 #' "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
-#' "InChI=1/C2H4O/c1-2-3/h2H,1H3"), apikey = apikey)
+#' "InChI=1/C2H4O/c1-2-3/h2H,1H3"))
 #' }
-cs_inchi_csid <- function(inchi, apikey) {
+cs_inchi_csid <- function(inchi, apikey = NULL) {
+  if(is.null(apikey)){
+    apikey <- cs_check_key()
+  }
   query <- function(inchi, apikey) {
     headers <- c("Content-Type" = "", "apikey" = apikey)
     body <- jsonlite::toJSON(list("inchi" = inchi), auto_unbox = TRUE)
@@ -306,7 +345,7 @@ cs_inchi_csid <- function(inchi, apikey) {
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @param inchikey character; search term.
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @return Returns a list of two elements.
 #' @note An API key is needed. Register at RSC
 #' \url{https://developer.rsc.org/}
@@ -318,12 +357,13 @@ cs_inchi_csid <- function(inchi, apikey) {
 #' for the top level function.
 #' @examples
 #' \dontrun{
-#' apikey <- "<YOUR-API-KEY>"
-#' cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", apikey = apikey)
-#' cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"),
-#' apikey)
+#' cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR")
+#' cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"))
 #' }
-cs_inchikey_csid <- function(inchikey, apikey) {
+cs_inchikey_csid <- function(inchikey, apikey = NULL) {
+  if(is.null(apikey)) {
+    apikey <- cs_check_key()
+  }
   query <- function(inchikey, apikey) {
     headers <- c("Content-Type" = "", "apikey" = apikey)
     body <- jsonlite::toJSON(list("inchikey" = inchikey), auto_unbox = TRUE)
@@ -357,7 +397,7 @@ cs_inchikey_csid <- function(inchikey, apikey) {
 #' smiles, inchi, inchikey, mol.
 #' @param to character; the format to be converted to. Valid values are smiles,
 #' inchi, inhikey, mol.
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Not all conversions are supported. Allowed conversions:
 #' \itemize{
 #' \item InChI <-> InChIKey
@@ -377,15 +417,16 @@ cs_inchikey_csid <- function(inchikey, apikey) {
 #' @seealso \code{\link{parse_mol}}
 #' @examples
 #' \dontrun{
-#' apikey <- "<YOUR-API-KEY>"
-#' cs_convert_multiple("CC(=O)O", "smiles", "inchi", apikey)
+#' cs_convert_multiple("CC(=O)O", "smiles", "inchi")
 #' cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
-#' "inchikey", apikey)
-#' cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", apikey)
-#' cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
-#' apikey, parse = TRUE)
+#' "inchikey")
+#' cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
+#' cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", parse = TRUE)
 #' }
-cs_convert_multiple <- function(input, from, to, apikey) {
+cs_convert_multiple <- function(input, from, to, apikey = NULL) {
+  if(is.null(apikey)){
+    apikey <- cs_check_key()
+  }
   query <- function(input, from, to, apikey) {
     headers <- c(`Content-Type` = "", `apikey` = apikey)
     body <- list(
@@ -418,7 +459,7 @@ cs_convert_multiple <- function(input, from, to, apikey) {
 #' @param query character; query ID.
 #' @param from character; type of query ID.
 #' @param to character; type to convert to.
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Not all conversions are supported. Allowed conversions:
 #' \itemize{
 #' \item CSID <-> InChI
@@ -441,22 +482,21 @@ cs_convert_multiple <- function(input, from, to, apikey) {
 #' @export
 #' @examples
 #' \dontrun{
-#' apikey <- "<YOUR-API-KEY>"
 #' cs_convert("BQJCRHHNABKAKU-KBQPJGBKSA-N",
-#'   from = "inchikey", to = "csid",
-#'   apikey = apikey
+#'   from = "inchikey", to = "csid"
 #' )
 #' cs_convert("BQJCRHHNABKAKU-KBQPJGBKSA-N",
-#'   from = "inchikey", to = "inchi",
-#'   apikey = apikey
+#'   from = "inchikey", to = "inchi"
 #' )
 #' cs_convert("BQJCRHHNABKAKU-KBQPJGBKSA-N",
-#'   from = "inchikey", to = "mol",
-#'   apikey = apikey
+#'   from = "inchikey", to = "mol"
 #' )
-#' cs_convert(160, from = "csid", to = "smiles", apikey = apikey)
+#' cs_convert(160, from = "csid", to = "smiles")
 #' }
-cs_convert <- function(query, from, to, apikey) {
+cs_convert <- function(query, from, to, apikey = NULL) {
+  if(is.null(apikey)){
+    apikey <- cs_check_key()
+  }
   valid <- c("csid", "inchikey", "inchi", "smiles", "mol")
   from <- match.arg(from, choices = valid)
   to <- match.arg(to, choices = valid)
@@ -505,7 +545,7 @@ cs_convert <- function(query, from, to, apikey) {
 #' @importFrom httr POST add_headers
 #' @param csid numeric
 #' @param fields character; see details.
-#' @param apikey character; your API key.
+#' @param apikey character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Valid values for \code{fields} are \code{"SMILES"},
 #' \code{"Formula"}, \code{"InChI"}, \code{"InChIKey"}, \code{"StdInChI"},
 #' \code{"StdInChIKey"}, \code{"AverageMass"}, \code{"MolecularWeight"},
@@ -522,10 +562,13 @@ cs_convert <- function(query, from, to, apikey) {
 #' @export
 #' @examples
 #' \dontrun{
-#' cs_compinfo(171, c("SMILES", "CommonName"), apikey)
-#' cs_compinfo(171:182, "SMILES", apikey)
+#' cs_compinfo(171, c("SMILES", "CommonName"))
+#' cs_compinfo(171:182, "SMILES")
 #' }
-cs_compinfo <- function(csid, fields, apikey) {
+cs_compinfo <- function(csid, fields, apikey = NULL) {
+  if(is.null(apikey)){
+    apikey <- cs_check_key()
+  }
   fields <- match.arg(fields,
     choices = c(
       "SMILES", "Formula", "InChI", "InChIKey",
@@ -580,13 +623,12 @@ cs_compinfo <- function(csid, fields, apikey) {
 #' @export
 #' @examples
 #' \dontrun{
-#' # Fails because no TOKEN is included
-#' token <- '<YOUR-SECURITY-TOKEN>'
-#' csid <- get_csid("Triclosan", token = token)
+#' token <- "<redacted>"
+#' csid <- get_csid("Triclosan")
 #' cs_extcompinfo(csid, token)
 #'
-#' csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
-#' cs_compinfo(csids, token = token)
+#' csids <- get_csid(c('Aspirin', 'Triclosan'))
+#' cs_compinfo(csids)
 #' }
 cs_extcompinfo <- function(csid, token, verbose = TRUE, ...) {
   .Deprecated("cs_compinfo()", old = "cs_extcompinfo()",

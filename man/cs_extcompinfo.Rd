@@ -35,13 +35,12 @@ use \code{\link{cs_compinfo}} to retrieve standard inchikey.
 }
 \examples{
 \dontrun{
-# Fails because no TOKEN is included
-token <- '<YOUR-SECURITY-TOKEN>'
-csid <- get_csid("Triclosan", token = token)
+token <- "<redacted>"
+csid <- get_csid("Triclosan")
 cs_extcompinfo(csid, token)
 
-csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
-cs_compinfo(csids, token = token)
+csids <- get_csid(c('Aspirin', 'Triclosan'))
+cs_compinfo(csids)
 }
 }
 \seealso{

@@ -7,6 +7,7 @@ NEW FEATURES
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
 * Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
 * "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
+* ChemSpider functions now look for an API token stored in .Renviron or .Rprofile by default so you can keep them hidden more easily.
 
 MINOR IMPROVEMENTS
 
