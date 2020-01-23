@@ -95,7 +95,7 @@ get_etoxid <- function(query, match = c('best', 'all', 'first', 'ask', 'na'), ve
       if (match == 'first') {
         if (verbose)
           message("Returning first match. \n")
-        id <- gsub('^.*\\?id=(.*)', '\\1', ulinks[2])
+        id <- gsub('^.*\\?id=(.*)', '\\1', ulinks[1])
         matched_sub <- ename[grep(id[1], ename)[1]]
         d <- 'first'
       }
