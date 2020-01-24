@@ -47,7 +47,6 @@ Source | Function(s) | API Docs | API key
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
 [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `pp_query()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
-PPDB | `ppdb_parse()` (only parsing) | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
@@ -249,17 +248,7 @@ tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value'
 ```
 
 
-#### PPDB
 
-The PPDB holds a lot of chemical and ecotoxicological information.
-Earlier versions of `webchem` allowed also to search and download the database.
-However, this is explicitly against the terms and conditions of use.
-On request we also removed all links to the database.
-
-Therefore, `webchem` can only provide a function to parse html-code into a R object:
-`parse_ppdb()`.
-However, no examples can be given as saving and downloading the html source is explicitly 
-against the terms and conditions of use.
 
 
 
