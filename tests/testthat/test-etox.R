@@ -1,7 +1,7 @@
 context("etox")
 
 test_that("get_etoxid returns correct results", {
-  #skip_on_cran()
+  skip_on_cran()
 
   # test general
   comps <- c("Triclosan", "Glyphosate")
