@@ -58,72 +58,63 @@ get_etoxid <- function(query,
     if (length(subs) == 0) {
       if (verbose)
         message("Substance not found! Returning NA. \n")
-      out <- NA
-      attr(out, "matched") <- NA
-      attr(out, "distance") <- NA
-      return(out)
+      id <- NA
+      matched_sub <- NA
+      d <- NA
     }
-    type <- clean_char(xml_text(xml_find_all(
-      tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
-    links <- xml_attr(xml_find_all(
-      tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
-    if (!"ETOX_NAME" %in% type) {
-      warning(paste0(
-      "No ETOX_NAME found for ",
-      query,
-      ". Returning match for synonyms"))
-      ename <- subs
-      ulinks <- links
-    }
-    else{
-      index <- which(type == "ETOX_NAME")
-      ename <- subs[index]
-      ulinks <- links [index]
-    }
-    # multiple hits
-    if (length(ulinks) > 1) {
-      if (verbose)
-        message("More then one Link found. \n")
-      if (match == "na") {
+    if (length(subs) > 0) {
+      # types can be ETOX_NAME, SYNONYM
+      # the function currently uses all types, there is no filtering
+      type <- clean_char(xml_text(xml_find_all(
+        tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
+      links <- xml_attr(xml_find_all(
+        tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
+      }
+      # multiple hits
+      if (length(subs) == 1) {
+        id <- gsub("^.*\\?id=(.*)", "\\1", links)
+        d <- ifelse(match == "best", 0, as.character(0))
+        matched_sub <- subs[1]
+      }
+      if (length(subs) > 1){
         if (verbose)
-          message("Returning NA. \n")
-        id <- NA
-        matched_sub <- NA
-        d <- "na"
+          message("More then one Link found. \n")
+        if (match == "na") {
+          if (verbose)
+            message("Returning NA. \n")
+          id <- NA
+          matched_sub <- NA
+          d <- "na"
+        }
+        if (match == "all") {
+          if (verbose)
+            message("Returning all matches. \n")
+          id <- gsub("^.*\\?id=(.*)", "\\1", links)
+          matched_sub <- subs[sapply(id, function(x) grep(x, subs)[1])]
+          d <- "all"
+        }
+        if (match == "first") {
+          if (verbose)
+            message("Returning first match. \n")
+          id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
+          matched_sub <- subs[grep(id[1], subs)[1]]
+          d <- "first"
+        }
+        if (match == "best") {
+          if (verbose)
+            message("Returning best match. \n")
+          msubs <- gsub(" \\(.*\\)", "", subs)
+          dd <- adist(query, msubs) / nchar(msubs)
+          id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
+          d <- round(dd[which.min(dd)], 2)
+          matched_sub <- subs[which.min(dd)]
+        }
+        if (match == "ask") {
+          matched_sub <- chooser(subs, "all")
+          id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
+          d <- "interactive"
+        }
       }
-      if (match == "all") {
-        if (verbose)
-          message("Returning all matches. \n")
-        id <- gsub("^.*\\?id=(.*)", "\\1", ulinks)
-        matched_sub <- ename[sapply(id, function(x) grep(x, ename)[1])]
-        d <- "all"
-      }
-      if (match == "first") {
-        if (verbose)
-          message("Returning first match. \n")
-        id <- gsub("^.*\\?id=(.*)", "\\1", ulinks[1])
-        matched_sub <- ename[grep(id[1], ename)[1]]
-        d <- "first"
-      }
-      if (match == "best") {
-        if (verbose)
-          message("Returning best match. \n")
-        msubs <- gsub(" \\(.*\\)", "", subs)
-        dd <- adist(query, msubs) / nchar(msubs)
-        id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
-        d <- round(dd[which.min(dd)], 2)
-        matched_sub <- subs[which.min(dd)]
-      }
-      if (match == "ask") {
-        matched_sub <- chooser(ename, "all")
-        id <- gsub("^.*\\?id=(.*)", "\\1", ulinks[which(ename == matched_sub)])
-        d <- "interactive"
-      }
-    } else {
-      id <- gsub("^.*\\?id=(.*)", "\\1", unique(links))
-      d <- ifelse(match == "best", 0, as.character(0))
-      matched_sub <- subs[1]
-    }
     # return object
     hit <- data.frame(
       "etoxid" = id,
