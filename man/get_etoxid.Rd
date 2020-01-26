@@ -4,11 +4,8 @@
 \alias{get_etoxid}
 \title{Get ETOX ID}
 \usage{
-get_etoxid(
-  query,
-  match = c("best", "all", "first", "ask", "na"),
-  verbose = TRUE
-)
+get_etoxid(query, match = c("best", "all", "first", "ask", "na"),
+  verbose = TRUE)
 }
 \arguments{
 \item{query}{character; The searchterm}

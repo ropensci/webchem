@@ -6,6 +6,7 @@
 \alias{ppdb_parse}
 \alias{ppdb}
 \alias{cir}
+\alias{pp_query}
 \title{Defunct function(s) in the webchem package}
 \usage{
 ppdb_query()
@@ -15,6 +16,8 @@ ppdb_parse()
 ppdb()
 
 cir()
+
+pp_query()
 }
 \description{
 These functions are defunct and no longer available.
