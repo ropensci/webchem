@@ -1,7 +1,7 @@
 context("etox")
 
 test_that("get_etoxid returns correct results", {
-  skip_on_cran()
+  #skip_on_cran()
 
   # test general
   comps <- c("Triclosan", "Glyphosate")
@@ -24,6 +24,31 @@ test_that("get_etoxid returns correct results", {
 
   # only synonyms found
   expect_warning(get_etoxid("Tetracyclin"))
+
+  # tests for the article
+  data("jagst")
+  ids <- get_etoxid(head(unique(jagst$substance),6), match = "best")
+
+  expect_is(ids, "data.frame")
+  expect_equal(ids$etoxid, c("8932","8494",NA,"8397","7240","7331"))
+  expect_equal(ids$match,c(
+    "2,4-Dimethylphenol ( 8932 )",
+    "4-Chlor-2-methylphenol ( 8494 )",
+    NA,
+    "Atrazin ( 8397 )",
+    "Benzol ( 7240 )",
+    "Desethylatrazin ( 7331 )"
+  ))
+  expect_equal(ids$distance, c(0, 0, NA, 0, 0, 0))
+  expect_equal(ids$query, c(
+    "2,4-Dimethylphenol",
+    "4-Chlor-2-methylphenol",
+    "4-para-nonylphenol",
+    "Atrazin",
+    "Benzol",
+    "Desethylatrazin"
+  ))
+
 })
 
 

@@ -67,6 +67,9 @@ get_etoxid <- function(query,
       # the function currently uses all types, there is no filtering
       type <- clean_char(xml_text(xml_find_all(
         tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
+      if (!'ETOX_NAME' %in% type) {
+        warning('No ETOX_NAME found. Returning SYNONYM.')
+      }
       links <- xml_attr(xml_find_all(
         tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
       }
