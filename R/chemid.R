@@ -18,9 +18,6 @@
 #' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
 #' physprop (data.frame) and source_url.
 #'
-#' @note The data of the entry physprop was identical to the result returned
-#' by \code{\link{pp_query} in webchem versions < 0.5}.
-#'
 #' @export
 #' @examples
 #' \dontrun{

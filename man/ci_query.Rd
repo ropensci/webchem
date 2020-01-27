@@ -4,8 +4,12 @@
 \alias{ci_query}
 \title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}}
 \usage{
-ci_query(query, type = c("name", "rn", "inchikey"), match = c("best",
-  "first", "ask", "na"), verbose = TRUE)
+ci_query(
+  query,
+  type = c("name", "rn", "inchikey"),
+  match = c("best", "first", "ask", "na"),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{query}{character; query string}
@@ -26,10 +30,6 @@ physprop (data.frame) and source_url.
 }
 \description{
 Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}
-}
-\note{
-The data of the entry \code{pp_query} is identical to the result returned
-by \code{\link{pp_query}}.
 }
 \examples{
 \dontrun{

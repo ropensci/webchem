@@ -4,8 +4,15 @@
 \alias{cir_query}
 \title{Query Chemical Identifier Resolver}
 \usage{
-cir_query(identifier, representation = "smiles", resolver = NULL,
-  first = FALSE, choices = NULL, verbose = TRUE, ...)
+cir_query(
+  identifier,
+  representation = "smiles",
+  resolver = NULL,
+  first = FALSE,
+  choices = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{identifier}{character; chemical identifier.}
