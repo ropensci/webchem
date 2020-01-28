@@ -38,3 +38,18 @@ ppdb <- function() {
 cir <- function() {
   .Defunct("cir_query", package = "webchem")
 }
+
+#' @rdname webchem-defunct
+#' @export
+pp_query <- function() {
+  .Defunct(
+    "pp_query",
+    package = "webchem",
+    msg = "pp_query() has been removed from the package since the Physprop API is no longer active."
+  )
+}
+
+
+
+
+
