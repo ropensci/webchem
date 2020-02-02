@@ -18,9 +18,6 @@
 #' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
 #' physprop (data.frame) and source_url.
 #'
-#' @note The data of the entry \code{pp_query} is identical to the result returned
-#' by \code{\link{pp_query}}.
-#'
 #' @export
 #' @examples
 #' \dontrun{

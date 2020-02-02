@@ -31,10 +31,6 @@ physprop (data.frame) and source_url.
 \description{
 Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}
 }
-\note{
-The data of the entry \code{pp_query} is identical to the result returned
-by \code{\link{pp_query}}.
-}
 \examples{
 \dontrun{
 # might fail if API is not available

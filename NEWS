@@ -22,6 +22,7 @@ BUG FIXES
 * multiple functions failed because of a major change in the ChemSpider API [issue #149, contributed by @stitam]
 * cir_query() mistook NA for sodium [issue #158, reported and fixed by @Aariq]
 * fixed functions that communicate with the ChemSpider API [issue #149, issue #160, fixed by @stitam]
+* get_etoxid() printed incorrect results for certain match types [issue #201, fixed by @stitam]
 
 DEPRECATED FUNCTIONS
 
@@ -30,6 +31,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 * ppdb_parse() has been removed. webchem no longer offers any support for PPDB.
+* pp_query() has been removed. Physprop API is no longer active.
 
 
 webchem 0.4
