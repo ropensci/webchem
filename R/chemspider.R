@@ -370,8 +370,7 @@ cs_inchikey_csid <- function(inchikey, apikey = NULL) {
 #' Queries by formula also use \code{datasources}. See \code{cs_control()} for a
 #' full list of valid values for these control options.
 #' @details \code{formula} can be expressed with and without LaTeX syntax.
-#' @return Returns a named list where each element of the list contains a
-#' numeric vector of ChemSpider IDs for a given compound.
+#' @return Returns a data frame.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & conditions:
 #' \url{https://developer.rsc.org/terms}.

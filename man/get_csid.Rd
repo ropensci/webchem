@@ -19,8 +19,7 @@ values are \code{"name"}, \code{"formula"}, \code{"smiles"}, \code{"inchi"},
 \item{control}{list; see details.}
 }
 \value{
-Returns a named list where each element of the list contains a
-numeric vector of ChemSpider IDs for a given compound.
+Returns a data frame.
 }
 \description{
 Query one or more compunds by name, formula, SMILES, InChI or InChIKey and
