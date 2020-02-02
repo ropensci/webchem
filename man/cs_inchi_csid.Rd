@@ -9,19 +9,21 @@ cs_inchi_csid(inchi, apikey = NULL)
 \arguments{
 \item{inchi}{character; search term.}
 
-\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default),
+\code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
-Returns a list of two elements.
+Returns a numeric vector of ChemSpider IDs.
 }
 \description{
-Retrieve ChemSpider ID from InChI
+Query a single compund by InChI and return a vector of ChemSpider IDs.
 }
 \note{
-An API key is needed. Register at RSC
-\url{https://developer.rsc.org/}
-for an API key.
-Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
+An API key is needed. Register at RSC \url{https://developer.rsc.org/}
+for an API key. Please respect the Terms & conditions
+\url{https://developer.rsc.org/terms}.
+
+This is a low level function and is not exported.
 }
 \examples{
 \dontrun{
@@ -33,10 +35,6 @@ cs_inchi_csid(inchi = c(
 }
 \references{
 https://developer.rsc.org/compounds-v1/apis
-}
-\seealso{
-This is a low level function. See \code{\link{cs_convert}}
-for the top level function.
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

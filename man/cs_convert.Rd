@@ -13,15 +13,16 @@ cs_convert(query, from, to, apikey = NULL)
 
 \item{to}{character; type to convert to.}
 
-\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default),
+\code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
-Returns a character vector of length one containing the converted
-identifier.
+Returns a vector containing the converted identifier(s).
 }
 \description{
-Submit an identifier (CSID, SMILES, InChI, InChIKey or Mol) and return an
-identifier in another format (CSID, SMILES, InChI, InChIKey or Mol).
+Submit one or more identifiers (CSID, SMILES, InChI, InChIKey or Mol) and
+return one or more identifiers in another format (CSID, SMILES, InChI,
+InChIKey or Mol).
 }
 \details{
 Not all conversions are supported. Allowed conversions:
@@ -32,7 +33,7 @@ Not all conversions are supported. Allowed conversions:
 \item CSID -> Mol file
 \item InChI <-> InChIKey
 \item InChI <-> SMILES
-\item InChI <-> Mol file
+\item InChI -> Mol file
 \item InChIKey <-> Mol file
 }
 }

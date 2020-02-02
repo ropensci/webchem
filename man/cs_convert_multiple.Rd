@@ -10,19 +10,20 @@ cs_convert_multiple(input, from, to, apikey = NULL)
 \item{input}{character; the identifier to be converted.}
 
 \item{from}{character; the format to be converted from. Valid values are
-smiles, inchi, inchikey, mol.}
+\code{"smiles"}, \code{"inchi"}, \code{"inchikey"}, \code{"mol"}.}
 
-\item{to}{character; the format to be converted to. Valid values are smiles,
-inchi, inhikey, mol.}
+\item{to}{character; the format to be converted to. Valid values are
+\code{"smiles"}, \code{"inchi"}, \code{"inchikey"}, \code{"mol"}.}
 
-\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default),
+\code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a character vector of length one containing the converted
 identifier.
 }
 \description{
-Submit an identifier (SMILES, InChI, InChIKey or Mol) and return an
+Submit a single identifier (SMILES, InChI, InChIKey or Mol) and return an
 identifier in another format (SMILES, InChI, InChIKey or Mol). Not all
 conversions are supported.
 }
@@ -31,7 +32,7 @@ Not all conversions are supported. Allowed conversions:
 \itemize{
 \item InChI <-> InChIKey
 \item InChI <-> SMILES
-\item InChI <-> Mol file
+\item InChI -> Mol file
 \item InChIKey <-> Mol file
 }
 }
@@ -46,15 +47,16 @@ cs_convert_multiple("CC(=O)O", "smiles", "inchi")
 cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
 "inchikey")
 cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
-cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", parse = TRUE)
+cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
+parse = TRUE)
 }
 }
 \references{
 https://developer.rsc.org/compounds-v1/apis
 }
 \seealso{
-This is a low level function. See \code{\link{cs_convert}}
-for the top level function.
+This is a low level function and is not exported. See
+\code{\link{cs_convert}} for the top level function.
 
 \code{\link{parse_mol}}
 }

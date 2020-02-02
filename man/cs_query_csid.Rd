@@ -13,7 +13,7 @@ queryId returned by the previous API.}
 \item{headers}{list; contains the API key.}
 }
 \value{
-Returns a list of two elements.
+Returns a numeric vector of ChemSpider IDs.
 }
 \description{
 Chemspider IDs (CSIDs) are obtained in multiple steps.

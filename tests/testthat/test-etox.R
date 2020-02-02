@@ -26,7 +26,6 @@ test_that("get_etoxid returns correct results", {
   expect_warning(get_etoxid('Tetracyclin'))
 })
 
-
 # test_that("etox_basic returns correct results", {
 #   skip_on_cran()
 #
@@ -40,7 +39,7 @@ test_that("get_etoxid returns correct results", {
 #   expect_is(o1[['20179']]$synonyms, 'data.frame')
 #   expect_true(is.na(o1[[3]]))
 #   expect_true(is.na(o1[[4]]))
-# })
+#})
 #
 #
 # test_that("etox_targets returns correct results", {
@@ -57,8 +56,7 @@ test_that("get_etoxid returns correct results", {
 #   expect_true(is.na(o1[[3]]))
 #   expect_true(is.na(o1[[4]]))
 # })
-#
-#
+
 # test_that("etox_tests returns correct results", {
 #   skip_on_cran()
 #
