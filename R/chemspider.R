@@ -213,6 +213,7 @@ get_csid <- function(query, from = "name", apikey = NULL,
 #' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @noRd
 cs_query_csid <- function(postres, headers) {
   query_id <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
   getstatus <- httr::GET(
@@ -289,6 +290,7 @@ cs_query_csid <- function(postres, headers) {
 #' \dontrun{
 #' cs_name_csid("ethanol")
 #' }
+#' @noRd
 cs_name_csid <- function(name, apikey = NULL, control = cs_control()) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
@@ -338,6 +340,7 @@ cs_name_csid <- function(name, apikey = NULL, control = cs_control()) {
 #' cs_formula_csid("C2H6O")
 #' cs_formula_csid("C_{2}H_{6}O")
 #' }
+#' @noRd
 cs_formula_csid <- function(formula, apikey = NULL, control = cs_control()) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
@@ -382,6 +385,7 @@ cs_formula_csid <- function(formula, apikey = NULL, control = cs_control()) {
 #' cs_smiles_csid("CC(O)=O")
 #' cs_smiles_csid(c("CC(O)=O","CC=O"))
 #' }
+#' @noRd
 cs_smiles_csid <- function(smiles, apikey = NULL) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
@@ -425,6 +429,7 @@ cs_smiles_csid <- function(smiles, apikey = NULL) {
 #' "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
 #' "InChI=1/C2H4O/c1-2-3/h2H,1H3"))
 #' }
+#' @noRd
 cs_inchi_csid <- function(inchi, apikey = NULL) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
@@ -466,6 +471,7 @@ cs_inchi_csid <- function(inchi, apikey = NULL) {
 #' cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR")
 #' cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"))
 #' }
+#' @noRd
 cs_inchikey_csid <- function(inchikey, apikey = NULL) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
@@ -526,6 +532,7 @@ cs_inchikey_csid <- function(inchikey, apikey = NULL) {
 #' cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
 #' parse = TRUE)
 #' }
+#' @noRd
 cs_convert_multiple <- function(input, from, to, apikey = NULL) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
