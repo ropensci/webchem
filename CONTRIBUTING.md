@@ -16,11 +16,17 @@ We love collaboration.
 * **Push** up to your account.
 * Submit a **pull request** to home base at `ropensci/webchem`.
 
+### New databases (IMPORTANT!)
+
+If your code accesses a database not previously accessed by `webchem`, please check that the database service is OK with being accessed by third a third party.  If your code accesses the database through an API this is *usually* OK.  For web scraping, please check the site's robots.txt (we recommend using the `polite` package for web scraping, which does this automatically) **and** the site's About or FAQ page for any information on permission for web scraping or indexing.  If you are uncertain, please create a database request issue first so the package maintainers can look into it.
+
 ### Code guidelines
 
 We do not have strong guideline for our contributions and are happy to help.
 
 1. Please follow [this](http://adv-r.had.co.nz/Style.html) styleguide for your contributions.
+
+2. For web scraping, we recommend the use of the [polite](https://dmi3kno.github.io/polite/) package.
 
 We want to keep dependencies to a minimum:
 
