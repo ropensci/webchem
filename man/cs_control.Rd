@@ -4,8 +4,13 @@
 \alias{cs_control}
 \title{Control ChemSpider API requests}
 \usage{
-cs_control(order_by = "recordId", order_direction = "ascending",
-  include_all = FALSE, complexity = "any", isotopic = "any")
+cs_control(
+  order_by = "recordId",
+  order_direction = "ascending",
+  include_all = FALSE,
+  complexity = "any",
+  isotopic = "any"
+)
 }
 \arguments{
 \item{order_by}{character; specifies the sort order for the results.

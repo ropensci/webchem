@@ -4,15 +4,18 @@
 \alias{nist_ri}
 \title{Retrieve retention indices from NIST}
 \usage{
-nist_ri(cas, type = c("kovats", "linear", "alkane", "lee"),
-  polarity = c("polar", "non-polar"), temp_prog = c("isothermal",
-  "ramp", "custom"))
+nist_ri(
+  cas,
+  type = c("kovats", "linear", "alkane", "lee"),
+  polarity = c("polar", "non-polar"),
+  temp_prog = c("isothermal", "ramp", "custom")
+)
 }
 \arguments{
 \item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}
 
-\item{type}{Retention index type. One of `"kovats"`, `"linear"`,
-`"alkane"`, or `"lee"`. See details for more.}
+\item{type}{Retention index type. One of \code{"kovats"}, \code{"linear"},
+\code{"alkane"}, or \code{"lee"}. See details for more.}
 
 \item{polarity}{Column polarity. One of "polar" or "non-polar"
 to get RIs calculated for polar or non-polar columns.}
@@ -23,18 +26,19 @@ or "custom".}
 \value{
 a table of literature RIs with the following columns:
 \itemize{
-\item{`CAS` is the CAS number}
-\item{`type` is the column type, e.g. "capillary"}
-\item{`phase` is the stationary phase (column phase)}
-\item{`RI` is retention index}
-\item{`length` is column length in meters}
-\item{`gas` is the carrier gas used}
-\item{`substrate`}
-\item{`diameter` is the column diameter in mm}
-\item{`thickness` is the phase thickness in µm}
-\item{`program`. various columns depending on the value of `temp_prog`}
-\item{`reference` is where this retention index was published}
-\item{`comment`. I believe this denotes the database these data
+\item{\code{CAS} is the CAS number}
+\item{\code{type} is the column type, e.g. "capillary"}
+\item{\code{phase} is the stationary phase (column phase)}
+\item{\code{RI} is retention index}
+\item{\code{length} is column length in meters}
+\item{\code{gas} is the carrier gas used}
+\item{\code{substrate}}
+\item{\code{diameter} is the column diameter in mm}
+\item{\code{thickness} is the phase thickness in µm}
+\item{\code{program}. various columns depending on the value of
+\code{temp_prog}}
+\item{\code{reference} is where this retention index was published}
+\item{\code{comment}. I believe this denotes the database these data
       were aggregated from}
 }
 }
@@ -44,9 +48,9 @@ This function scrapes NIST for literature retention indices
 }
 \details{
 The types of retention indices included in NIST include Kovats
- (`"kovats"`), Van den Dool and Kratz (`"linear"`), normal alkane
- (`"alkane"`), and Lee (`"lee"`). Details about how these are calculated
- are available on the NIST website:
+ (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
+ (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
+ calculated are available on the NIST website:
  https://webbook.nist.gov/chemistry/gc-ri/
 }
 \examples{

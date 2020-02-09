@@ -192,8 +192,8 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' @param query character; search term.
 #' @param from character; type of input, can be one of 'name' (default), 'cid',
 #'     'sid', 'aid', 'smiles', 'inchi', 'inchikey'
-#' @param interactive deprecated.  Use the `choices` argument instead
-#' @param choices to get only the first synonym, use `choices = 1`, to get a number of synonyms to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.
+#' @param interactive deprecated.  Use the \code{choices} argument instead
+#' @param choices to get only the first synonym, use \code{choices = 1}, to get a number of synonyms to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments

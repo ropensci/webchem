@@ -1,9 +1,12 @@
 context("chemspider")
-token <- "37bf5e57-9091-42f5-9274-650a64398aaf"
-apikey <- "LquVCDSulXTUrNy9WGDTAdnEEYYpg4dS"
+
+test_that("cs_check_key() can find API key in my local .Renviron", {
+  skip_on_cran()
+  expect_type(cs_check_key(), "character")
+})
 
 test_that("cs_datasources()", {
-  a <- cs_datasources(apikey = apikey)
+  a <- cs_datasources()
 
   expect_is(a, "character")
 })
@@ -40,27 +43,18 @@ test_that("cs_control()", {
 })
 
 test_that("get_csid()", {
-  a <- get_csid("Triclosan", apikey = apikey)
-  b <- get_csid("Naproxene", apikey = apikey)
-  ab <- get_csid(c("Triclosan", "Naproxene"), apikey = apikey)
-  c1 <- get_csid("Oxygen", control = cs_control(order_by = "recordId"),
-                     apikey = apikey)
-  #c2 <- get_csid("Oxygen", control = cs_control(order_by = "massDefect"),
-  #                   apikey = apikey)
-  c3 <- get_csid("Oxygen", control = cs_control(order_by = "molecularWeight"),
-                     apikey = apikey)
-  c4 <- get_csid("Oxygen", control = cs_control(order_by = "referenceCount"),
-                     apikey = apikey)
-  c5 <- get_csid("Oxygen", control = cs_control(order_by = "dataSourceCount"),
-                     apikey = apikey)
-  c6 <- get_csid("Oxygen", control = cs_control(order_by = "pubMedCount"),
-                     apikey = apikey)
-  c7 <- get_csid("Oxygen", control = cs_control(order_by = "rscCount"),
-                     apikey = apikey)
-  c8 <- get_csid("Oxygen", control = cs_control(order_direction = "ascending"),
-                     apikey = apikey)
-  c9 <- get_csid("Oxygen", control = cs_control(order_direction = "descending"),
-                     apikey = apikey)
+  a <- get_csid("Triclosan")
+  b <- get_csid("Naproxene")
+  ab <- get_csid(c("Triclosan", "Naproxene"))
+  c1 <- get_csid("Oxygen", control = cs_control(order_by = "recordId"))
+  #c2 <- get_csid("Oxygen", control = cs_control(order_by = "massDefect"))
+  c3 <- get_csid("Oxygen", control = cs_control(order_by = "molecularWeight"))
+  c4 <- get_csid("Oxygen", control = cs_control(order_by = "referenceCount"))
+  c5 <- get_csid("Oxygen", control = cs_control(order_by = "dataSourceCount"))
+  c6 <- get_csid("Oxygen", control = cs_control(order_by = "pubMedCount"))
+  c7 <- get_csid("Oxygen", control = cs_control(order_by = "rscCount"))
+  c8 <- get_csid("Oxygen", control = cs_control(order_direction = "ascending"))
+  c9 <- get_csid("Oxygen", control = cs_control(order_direction = "descending"))
 
   expect_is(a, "list")
   expect_equal(a$Triclosan, 5363)
@@ -80,8 +74,8 @@ test_that("get_csid()", {
 })
 
 test_that("cs_smiles_csid()", {
-  a <- cs_smiles_csid("CC(O)=O", apikey = apikey)
-  b <- cs_smiles_csid(c("CC(O)=O", "COO"), apikey = apikey)
+  a <- cs_smiles_csid("CC(O)=O")
+  b <- cs_smiles_csid(c("CC(O)=O", "COO"))
 
   expect_is(a, "list")
   expect_equal(a[[1]], 171)
@@ -91,12 +85,10 @@ test_that("cs_smiles_csid()", {
 })
 
 test_that("cs_inchi_csid()", {
-  a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
-                     apikey = apikey)
+  a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
   b <- cs_inchi_csid(c(
     "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
-    "InChI=1/C3H6O/c1-3(2)4/h1-2H3"
-  ), apikey = apikey)
+    "InChI=1/C3H6O/c1-3(2)4/h1-2H3"))
 
   expect_is(a, "list")
   expect_equal(a[[1]], 171)
@@ -106,11 +98,10 @@ test_that("cs_inchi_csid()", {
 })
 
 test_that("cs_inchikey_csid()", {
-  a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", apikey = apikey)
+  a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N")
   b <- cs_inshikey_csid(c(
     "QTBSBXVTEAMEQO-UHFFFAOYSA-N",
-    "CSCPPACGZOOCGX-UHFFFAOYAF"
-  ), apikey = apikey)
+    "CSCPPACGZOOCGX-UHFFFAOYAF"))
 
   expect_is(a, "list")
   expect_equal(a[[1]], 171)
@@ -120,13 +111,11 @@ test_that("cs_inchikey_csid()", {
 })
 
 test_that("cs_convert_multiple()", {
-  a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi", apikey)
-  a2 <- cs_convert_multiple(c("CC(O)=O", "COO"), "smiles", "inchi", apikey)
+  a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi")
+  a2 <- cs_convert_multiple(c("CC(O)=O", "COO"), "smiles", "inchi")
   b <- cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
-                           "inchikey",
-                           apikey)
-  c <- cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
-                           apikey)
+                           "inchikey")
+  c <- cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
 
   expect_is(a, "list")
   expect_equal(a[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
@@ -138,25 +127,22 @@ test_that("cs_convert_multiple()", {
 })
 
 test_that("cs_convert()", {
-  a <- cs_convert(171, "csid", "inchi", apikey)
-  a_rev <- cs_convert(a, "inchi", "csid", apikey)
-  b <- cs_convert(171, "csid", "inchikey", apikey)
-  b_rev <- cs_convert(b, "inchikey", "csid", apikey)
-  c <- cs_convert(171, "csid", "smiles", apikey)
-  c_rev <- cs_convert(c, "smiles", "csid", apikey)
-  d <- cs_convert(171, "csid", "mol", apikey)
-  expect_error(cs_convert(d, "mol", "csid", apikey))
-  e <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "inchikey",
-                  apikey)
-  e_rev <- cs_convert(e, "inchikey", "inchi", apikey)
-  f <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "smiles",
-                  apikey)
-  f_rev <- cs_convert(f, "smiles", "inchi", apikey)
-  g <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "mol",
-                  apikey)
-  #g_rev <- cs_convert(g, "mol", "inchi", apikey) possible db error
-  h <- cs_convert("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol", apikey)
-  h_rev <- cs_convert(h, "mol", "inchikey", apikey)
+  a <- cs_convert(171, "csid", "inchi")
+  a_rev <- cs_convert(a, "inchi", "csid")
+  b <- cs_convert(171, "csid", "inchikey")
+  b_rev <- cs_convert(b, "inchikey", "csid")
+  c <- cs_convert(171, "csid", "smiles")
+  c_rev <- cs_convert(c, "smiles", "csid")
+  d <- cs_convert(171, "csid", "mol")
+  expect_error(cs_convert(d, "mol", "csid"))
+  e <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "inchikey")
+  e_rev <- cs_convert(e, "inchikey", "inchi")
+  f <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "smiles")
+  f_rev <- cs_convert(f, "smiles", "inchi")
+  g <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "mol")
+  #g_rev <- cs_convert(g, "mol", "inchi") possible db error
+  h <- cs_convert("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
+  h_rev <- cs_convert(h, "mol", "inchikey")
 
   expect_equal(a[[1]], "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
   expect_equal(a_rev[[1]], 171)
@@ -181,13 +167,13 @@ test_that("cs_compinfo()", {
                           "StdInChIKey", "AverageMass", "MolecularWeight",
                           "MonoisotopicMass", "NominalMass", "CommonName",
                           "ReferenceCount", "DataSourceCount", "PubMedCount",
-                          "RSCCount", "Mol2D", "Mol3D"), apikey)
+                          "RSCCount", "Mol2D", "Mol3D"))
   b <- cs_compinfo(c(171, 172), c("SMILES", "Formula", "InChI", "InChIKey",
                                   "StdInChI", "StdInChIKey", "AverageMass",
                                   "MolecularWeight", "MonoisotopicMass",
                                   "NominalMass", "CommonName", "ReferenceCount",
                                   "DataSourceCount", "PubMedCount", "RSCCount",
-                                  "Mol2D", "Mol3D"), apikey)
+                                  "Mol2D", "Mol3D"))
 
   expect_is(a, "data.frame")
   expect_equal(dim(a), c(1, 18))
@@ -199,11 +185,11 @@ test_that("cs_extcompinfo()", {
   skip_on_cran()
 
   comps <- c("2157", "5363")
-  o1 <- cs_extcompinfo(comps, token)
+  o1 <- cs_extcompinfo(comps)
   expect_is(o1, "data.frame")
   expect_equal(dim(o1), c(2, 14))
   expect_equal(o1$csid[1], "2157")
-  expect_true(all(is.na(cs_extcompinfo(c(2157, NA), token)[2, 1:5])))
+  expect_true(all(is.na(cs_extcompinfo(c(2157, NA))[2, 1:5])))
 })
 
 
@@ -271,9 +257,8 @@ test_that("cs_prop()", {
 test_that("csid_extcompinfo(get_cid())", {
   skip_on_cran()
 
-  tt <- get_csid("Triclosan", apikey = apikey)
-  tt2 <- cs_extcompinfo(tt,
-                        token = token, verbose = FALSE)
+  tt <- get_csid("Triclosan")
+  tt2 <- cs_extcompinfo(tt, verbose = FALSE)
   expect_equal(tt2[["average_mass"]],
                "289.5418")
   expect_equal(ncol(tt2), 14)

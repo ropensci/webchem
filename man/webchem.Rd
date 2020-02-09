@@ -3,7 +3,6 @@
 \docType{package}
 \name{webchem}
 \alias{webchem}
-\alias{webchem-package}
 \title{webchem: An R package to retrieve chemical information from the web.}
 \description{
 webchem: An R package to retrieve chemical information from the web.

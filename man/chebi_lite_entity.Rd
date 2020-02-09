@@ -4,8 +4,14 @@
 \alias{chebi_lite_entity}
 \title{Retrieve Lite Entity from ChEBI}
 \usage{
-chebi_lite_entity(query, category = "ALL", max_res = 200,
-  stars = "ALL", verbose = TRUE, ...)
+chebi_lite_entity(
+  query,
+  category = "ALL",
+  max_res = 200,
+  stars = "ALL",
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{character; search term.}
