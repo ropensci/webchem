@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemspider.R
 \name{cs_convert}
 \alias{cs_convert}
-\title{Convert identifiers using Chemspider}
+\title{Convert identifiers using ChemSpider}
 \usage{
 cs_convert(query, from, to, apikey = NULL)
 }

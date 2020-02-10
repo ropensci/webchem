@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{parse_mol}
 \alias{parse_mol}
-\title{Parse Molfile (as returned by chemspider) into a R-object.}
+\title{Parse Molfile (as returned by ChemSpider) into a R-object.}
 \usage{
 parse_mol(string)
 }
@@ -26,7 +26,7 @@ c = reacting center status.
 For more information see  \url{infochim.u-strasbg.fr/recherche/Download/Fragmentor/MDL_SDF.pdf}.
 }
 \description{
-Parse Molfile (as returned by chemspider) into a R-object.
+Parse Molfile (as returned by ChemSpider) into a R-object.
 }
 \references{
 Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:

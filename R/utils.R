@@ -287,7 +287,7 @@ extr_num <- function(x) {
 }
 
 
-#' Parse Molfile (as returned by chemspider) into a R-object.
+#' Parse Molfile (as returned by ChemSpider) into a R-object.
 #'
 #' @param string molfile as one string
 #' @return A list with of four entries: header (eh), counts line (cl), atom block (ab) and bond block (bb).

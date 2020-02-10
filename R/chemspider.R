@@ -194,7 +194,7 @@ get_csid <- function(query, from = "name", apikey = NULL,
 
 #' Retrieve ChemSpider ID from a queryId returned by a non-batch POST request
 #'
-#' Chemspider IDs (CSIDs) are obtained in multiple steps.
+#' ChemSpider IDs (CSIDs) are obtained in multiple steps.
 #' First we assemble a POST request.
 #' These requests can take multiple forms and are assembled separately in each
 #' function that returns a CSID.
@@ -492,7 +492,7 @@ cs_inchikey_csid <- function(inchikey, apikey = NULL) {
   return(out)
 }
 
-#' Convert between SMILES, InChI, InChiKey, Mol identifiers using Chemspider
+#' Convert between SMILES, InChI, InChiKey, Mol identifiers using ChemSpider
 #'
 #' Submit a single identifier (SMILES, InChI, InChIKey or Mol) and return an
 #' identifier in another format (SMILES, InChI, InChIKey or Mol). Not all
@@ -557,7 +557,7 @@ cs_convert_multiple <- function(input, from, to, apikey = NULL) {
   return(out)
 }
 
-#' Convert identifiers using Chemspider
+#' Convert identifiers using ChemSpider
 #'
 #' Submit one or more identifiers (CSID, SMILES, InChI, InChIKey or Mol) and
 #' return one or more identifiers in another format (CSID, SMILES, InChI,
@@ -647,7 +647,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 
 #' Retrieve record details by ChemSpider ID
 #'
-#' Submit a Chemspider ID (CSID) and the fields you are interested in, and
+#' Submit a ChemSpider ID (CSID) and the fields you are interested in, and
 #' retrieve the record details for your query.
 #' @importFrom jsonlite toJSON
 #' @importFrom httr POST add_headers
@@ -709,7 +709,7 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
 
 #' Get extended record details by ChemSpider ID
 #'
-#' Get extended info from Chemspider, see \url{https://www.chemspider.com/}
+#' Get extended info from ChemSpider, see \url{https://www.chemspider.com/}
 #' @import xml2
 #' @importFrom stats rgamma
 #' @param csid character,  ChemSpider ID.

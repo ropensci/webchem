@@ -131,7 +131,7 @@ get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', '
 
 
 
-#' Retrieve Indentifiers from wikidata
+#' Retrieve Indentifiers from Wikidata
 #'
 #' @import jsonlite
 #' @importFrom stats rgamma

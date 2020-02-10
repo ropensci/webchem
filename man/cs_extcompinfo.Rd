@@ -22,7 +22,7 @@ a data.frame with entries: 'csid', 'mf' (molecular formula),
 'alogp', 'xlogp', 'common_name' and 'source_url'
 }
 \description{
-Get extended info from Chemspider, see \url{https://www.chemspider.com/}
+Get extended info from ChemSpider, see \url{https://www.chemspider.com/}
 }
 \note{
 A security token is needed. Please register at RSC

@@ -258,7 +258,7 @@ out[['Triclosan']]$physprop
 ids <- get_wdid(query = 'Triclosan')
 ids
 
-# quera identifiers from wikidata
+# query identifiers from Wikidata
 wd_ident(ids$id)[1:5]
 ```
 

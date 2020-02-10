@@ -18,7 +18,7 @@ cs_compinfo(csid, fields, apikey = NULL)
 Returns a data frame.
 }
 \description{
-Submit a Chemspider ID (CSID) and the fields you are interested in, and
+Submit a ChemSpider ID (CSID) and the fields you are interested in, and
 retrieve the record details for your query.
 }
 \details{
