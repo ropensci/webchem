@@ -13,7 +13,7 @@
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
-#' @note This function can handle only one SMILES string.
+#' @note This function can handle only one inchikey string.
 #'
 #' @references Heller, Stephen R., et al. "InChI, the IUPAC International Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
 #'
@@ -165,7 +165,7 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' @param x character; input CAS
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
-#'
+#' @note This function can only handle one CAS string
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
 #' @export
@@ -184,14 +184,14 @@ is.cas <-  function(x, verbose = TRUE) {
 
   # cas must not have any alpha characters
   if(grepl(pattern = "[[:alpha:]]", x = x)){
-    if(verbose){message("String contains alpha characters")}
+    if(isTRUE(verbose)){message("String contains alpha characters")}
     return(FALSE)
   }
 
   # cas must have two hyphens
   nsep <- str_count(x, '-')
   if (nsep != 2) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Less than 2 hyphens in string.')
     return(FALSE)
   }
@@ -199,7 +199,7 @@ is.cas <-  function(x, verbose = TRUE) {
   # first part 2 to 7 digits
   fi <- gsub('^(.*)-(.*)-(.*)$', '\\1', x)
   if (nchar(fi) > 7 | nchar(fi) < 2) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('First part with more than 7 digits!')
     return(FALSE)
   }
@@ -207,7 +207,7 @@ is.cas <-  function(x, verbose = TRUE) {
   # second part must be two digits
   se <- gsub('^(.*)-(.*)-(.*)$', '\\2', x)
   if (nchar(se) != 2) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Second part has not two digits!')
     return(FALSE)
   }
@@ -215,7 +215,7 @@ is.cas <-  function(x, verbose = TRUE) {
   # third part (checksum) must be 1 digit
   th <- gsub('^(.*)-(.*)-(.*)$', '\\3', x)
   if (nchar(th) != 1) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Third part has not 1 digit!')
     return(FALSE)
   }
@@ -224,7 +224,7 @@ is.cas <-  function(x, verbose = TRUE) {
   di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x), split = '')[[1]])
   checksum <- sum(rev(seq_along(di)) * di)
   if (checksum %% 10 != as.numeric(th)) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Checksum is not correct! ', checksum %% 10, ' vs. ', th)
     return(FALSE)
   }
