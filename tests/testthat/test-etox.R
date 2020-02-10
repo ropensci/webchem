@@ -4,28 +4,52 @@ test_that("get_etoxid returns correct results", {
   skip_on_cran()
 
   # test general
-  comps <- c('Triclosan', 'Glyphosate', 'xxxx')
-  o1 <- get_etoxid(comps, match = 'best')
-  o2 <- get_etoxid(comps, match = 'all')
-  o3 <- get_etoxid('Triclosan', match = 'first')
-  o4 <- get_etoxid('Triclosan', match = 'na')
-  do2 <- get_etoxid('Thiamethoxam')
+  comps <- c("Triclosan", "Glyphosate")
+  o1 <- get_etoxid(comps, match = "best")
+  o2 <- get_etoxid(comps, match = "all")
+  o3 <- get_etoxid("Triclosan", match = "first")
+  o4 <- get_etoxid("Triclosan", match = "na")
+  do2 <- get_etoxid("Thiamethoxam")
 
-  expect_is(o1, 'data.frame')
-  expect_is(o2, 'list')
-  expect_is(o3, 'data.frame')
-  expect_is(o4, 'data.frame')
-  expect_is(do2, 'data.frame')
+  expect_is(o1, "data.frame")
+  expect_is(o2, "data.frame")
+  expect_is(o3, "data.frame")
+  expect_is(o4, "data.frame")
+  expect_is(do2, "data.frame")
 
-  expect_equal(o1$etoxid, c('20179', '9051', NA))
-  expect_equivalent(o2[[1]], c('20179', '89236'))
-  expect_equal(o3$distance, 'first')
-  expect_equal(do2$distance, '0')
+  expect_equal(o1$etoxid, c("20179", "9051"))
+  expect_equal(o2$etoxid, c("89236", "20179", "9051"))
+  expect_equal(o3$distance, "first")
+  expect_equal(do2$distance, 0)
 
   # only synonyms found
-  expect_warning(get_etoxid('Tetracyclin'))
-})
+  expect_warning(get_etoxid("Tetracyclin"))
 
+  # tests for the article
+  data("jagst")
+  ids <- get_etoxid(head(unique(jagst$substance),6), match = "best")
+
+  expect_is(ids, "data.frame")
+  expect_equal(ids$etoxid, c("8932","8494",NA,"8397","7240","7331"))
+  expect_equal(ids$match,c(
+    "2,4-Dimethylphenol ( 8932 )",
+    "4-Chlor-2-methylphenol ( 8494 )",
+    NA,
+    "Atrazin ( 8397 )",
+    "Benzol ( 7240 )",
+    "Desethylatrazin ( 7331 )"
+  ))
+  expect_equal(ids$distance, c(0, 0, NA, 0, 0, 0))
+  expect_equal(ids$query, c(
+    "2,4-Dimethylphenol",
+    "4-Chlor-2-methylphenol",
+    "4-para-nonylphenol",
+    "Atrazin",
+    "Benzol",
+    "Desethylatrazin"
+  ))
+
+})
 
 # test_that("etox_basic returns correct results", {
 #   skip_on_cran()
@@ -40,7 +64,7 @@ test_that("get_etoxid returns correct results", {
 #   expect_is(o1[['20179']]$synonyms, 'data.frame')
 #   expect_true(is.na(o1[[3]]))
 #   expect_true(is.na(o1[[4]]))
-# })
+#})
 #
 #
 # test_that("etox_targets returns correct results", {
@@ -57,8 +81,7 @@ test_that("get_etoxid returns correct results", {
 #   expect_true(is.na(o1[[3]]))
 #   expect_true(is.na(o1[[4]]))
 # })
-#
-#
+
 # test_that("etox_tests returns correct results", {
 #   skip_on_cran()
 #

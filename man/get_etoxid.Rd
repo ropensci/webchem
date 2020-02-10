@@ -4,43 +4,51 @@
 \alias{get_etoxid}
 \title{Get ETOX ID}
 \usage{
-get_etoxid(query, match = c("best", "all", "first", "ask", "na"),
-  verbose = TRUE)
+get_etoxid(
+  query,
+  match = c("best", "all", "first", "ask", "na"),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{query}{character; The searchterm}
 
-\item{match}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
-'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
-'na' returns NA if multiple hits are found.}
+\item{match}{character; How should multiple hits be handeled? "all" returns
+all matched IDs, "first" only the first match, "best" the best matching (by
+name) ID, "ask" is a interactive mode and the user is asked for input, "na"
+returns NA if multiple hits are found.}
 
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-if match = 'all' a list with etoxids, otherwise a dataframe with 4 columns:
-etoxID, matched substance, string distance to match and the queried string
+a dataframe with 4 columns: etoxID, matched substance, string
+distance to match and the queried string
 }
 \description{
-Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-\url{https://webetox.uba.de/webETOX/index.do} for their substance ID
+Query ETOX: Information System Ecotoxicology and Environmental Quality
+Targets \url{https://webetox.uba.de/webETOX/index.do} for their substance ID
 }
 \note{
-Before using this function, please read the disclaimer \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+Before using this function, please read the disclaimer
+\url{https://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
 # might fail if API is not available
-get_etoxid('Triclosan')
+get_etoxid("Triclosan")
 # multiple inputs
-comps <- c('Triclosan', 'Glyphosate', 'xxxx')
+comps <- c("Triclosan", "Glyphosate")
 get_etoxid(comps)
-get_etoxid(comps, match = 'all')
+get_etoxid(comps, match = "all")
 }
 }
 \seealso{
 \code{\link{etox_basic}} for basic information,
-\code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results.
+\code{\link{etox_targets}} for quality targets and
+\code{\link{etox_tests}} for test results.
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
+
+Tamas Stirling, \email{stirling.tamas@gmail.com}
 }

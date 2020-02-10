@@ -3,7 +3,7 @@
 #' Return CompoundID (CID) for a search query using PUG-REST,
 #' see \url{https://pubchem.ncbi.nlm.nih.gov/}.
 #' @import httr
-#'
+#' @importFrom stats rgamma
 #' @param query character; search term.
 #' @param from character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'
 #' @param first logical; If TRUE return only first result.
@@ -50,7 +50,7 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
     qurl <- paste0(prolog, input, output, arg)
     if (verbose)
       message(qurl)
-    Sys.sleep(0.2)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
                              ), type = 'text', encoding = 'UTF-8'),
@@ -192,8 +192,8 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' @param query character; search term.
 #' @param from character; type of input, can be one of 'name' (default), 'cid',
 #'     'sid', 'aid', 'smiles', 'inchi', 'inchikey'
-#' @param interactive deprecated.  Use the `choices` argument instead
-#' @param choices to get only the first synonym, use `choices = 1`, to get a number of synonyms to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.
+#' @param interactive deprecated.  Use the \code{choices} argument instead
+#' @param choices to get only the first synonym, use \code{choices = 1}, to get a number of synonyms to choose from in an interactive menu, provide the number of choices you want or "all" to choose from all synonyms.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments

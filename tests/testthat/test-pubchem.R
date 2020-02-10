@@ -33,7 +33,6 @@ test_that("pc_synonyms", {
   expect_true(is.na(pc_synonyms('xxxxx')[[1]]))
 })
 
-
 test_that("cid integration tests", {
   skip_on_cran()
 
