@@ -51,7 +51,7 @@ The types of retention indices included in NIST include Kovats
  (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
  (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
  calculated are available on the NIST website:
- https://webbook.nist.gov/chemistry/gc-ri/
+ \url{https://webbook.nist.gov/chemistry/gc-ri/}
 }
 \examples{
 \dontrun{

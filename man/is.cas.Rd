@@ -23,6 +23,9 @@ The checksum is found by taking the last digit (excluding the check digit) multi
 the second last multiplied with 2, the third-last multiplied with 3 etc.
 The modulo 10 of the sum of these is the checksum.
 }
+\note{
+This function can only handle one CAS string
+}
 \examples{
 is.cas('64-17-5')
 is.cas('64175')

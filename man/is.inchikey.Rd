@@ -26,7 +26,7 @@ Inchikey must fulfill the following criteria:
 5) 25th character (version character) must be 'A' (currently).
 }
 \note{
-This function can handle only one SMILES string.
+This function can handle only one inchikey string.
 }
 \examples{
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')

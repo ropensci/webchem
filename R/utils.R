@@ -308,7 +308,7 @@ extr_num <- function(x) {
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 #' a toolset for transforming SD/Molfile structure information into R objects.
-#' Source Code for Biology and Medicine, 7, 12. http://doi.org/10.1186/1751-0473-7-12
+#' Source Code for Biology and Medicine, 7, 12. \url{http://doi.org/10.1186/1751-0473-7-12}
 #' @export
 
 parse_mol <- function(string) {
