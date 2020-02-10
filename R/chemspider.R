@@ -43,7 +43,7 @@ cs_check_key <- function() {
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
@@ -100,7 +100,7 @@ cs_datasources <- function(apikey = NULL) {
 #' Each API uses a subset of these controls.
 #' The controls that are available for a given function are indicated within the
 #' documentation of the function.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{get_csid}}
 #' @export
@@ -153,7 +153,7 @@ cs_control <- function(datasources = "Wikidata",
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & conditions:
 #' \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
@@ -332,7 +332,7 @@ cs_name_csid <- function(name, apikey = NULL, control = cs_control()) {
 #' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
@@ -377,7 +377,7 @@ cs_formula_csid <- function(formula, apikey = NULL, control = cs_control()) {
 #' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
@@ -419,7 +419,7 @@ cs_smiles_csid <- function(smiles, apikey = NULL) {
 #' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
@@ -463,7 +463,7 @@ cs_inchi_csid <- function(inchi, apikey = NULL) {
 #' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
@@ -518,7 +518,7 @@ cs_inchikey_csid <- function(inchikey, apikey = NULL) {
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso This is a low level function and is not exported. See
 #' \code{\link{cs_convert}} for the top level function.
@@ -582,7 +582,7 @@ cs_convert_multiple <- function(input, from, to, apikey = NULL) {
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
@@ -651,7 +651,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' retrieve the record details for your query.
 #' @importFrom jsonlite toJSON
 #' @importFrom httr POST add_headers
-#' @param csid numeric
+#' @param csid numeric; can be obtained using \code{\link{get_csid}}
 #' @param fields character; see details.
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
@@ -666,7 +666,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples

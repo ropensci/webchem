@@ -1,4 +1,8 @@
 #' Query Chemical Identifier Resolver
+#'
+#' A interface to the Chemical Identifier Resolver (CIR).
+#'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
+#'
 #' @import xml2
 #' @importFrom utils URLencode
 #'
@@ -15,9 +19,7 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return A list of character vectors. If first = TRUE a vector.
-#' @details A interface to the Chemical Identifier Resolver (CIR).
-#'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
-#'
+#' @details
 #'  CIR can resolve can be of the following \code{identifier}: Chemical Names,
 #'  IUPAC names,
 #'  CAS Numbers, SMILES strings, IUPAC InChI/InChIKeys, NCI/CADD Identifiers,

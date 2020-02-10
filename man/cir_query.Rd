@@ -38,13 +38,11 @@ of choices you want or "all" to choose from all synonyms.}
 A list of character vectors. If first = TRUE a vector.
 }
 \description{
-Query Chemical Identifier Resolver
-}
-\details{
 A interface to the Chemical Identifier Resolver (CIR).
  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
-
- CIR can resolve can be of the following \code{identifier}: Chemical Names,
+}
+\details{
+CIR can resolve can be of the following \code{identifier}: Chemical Names,
  IUPAC names,
  CAS Numbers, SMILES strings, IUPAC InChI/InChIKeys, NCI/CADD Identifiers,
  CACTVS HASHISY, NSC number, PubChem SID, ZINC Code, ChemSpider ID,

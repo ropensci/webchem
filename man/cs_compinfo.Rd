@@ -7,7 +7,7 @@
 cs_compinfo(csid, fields, apikey = NULL)
 }
 \arguments{
-\item{csid}{numeric}
+\item{csid}{numeric; can be obtained using \code{\link{get_csid}}}
 
 \item{fields}{character; see details.}
 
@@ -42,7 +42,7 @@ cs_compinfo(171:182, "SMILES")
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

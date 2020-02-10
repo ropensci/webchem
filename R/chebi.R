@@ -13,11 +13,27 @@
 #' @param ... optional arguments
 #' @return returns a list of data.frames containing a chebiid, a chebiasciiname, a searchscore and stars if matches were found. If not, data.frame(NA) is returned
 #'
-#' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V, Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016: Improved services and an expanding collection of metabolites. Nucleic Acids Res.
-#' Hastings, J., de Matos, P., Dekker, A., Ennis, M., Harsha, B., Kale, N., Muthukrishnan, V., Owen, G., Turner, S., Williams, M., and Steinbeck, C. (2013) The ChEBI reference database and ontology for biologically relevant chemistry: enhancements for 2013. Nucleic Acids Res.
-#' de Matos, P., Alcantara, R., Dekker, A., Ennis, M., Hastings, J., Haug, K., Spiteri, I., Turner, S., and Steinbeck, C. (2010) Chemical entities of biological interest: an update. Nucleic Acids Res.
-#' Degtyarenko, K., Hastings, J., de Matos, P., and Ennis, M. (2009). ChEBI: an open bioinformatics and cheminformatics resource. Current protocols in bioinformatics / editoral board, Andreas D. Baxevanis et al., Chapter 14.
-#' Degtyarenko, K., de Matos, P., Ennis, M., Hastings, J., Zbinden, M., McNaught, A., Alcántara, R., Darsow, M., Guedj, M. and Ashburner, M. (2008) ChEBI: a database and ontology for chemical entities of biological interest. Nucleic Acids Res. 36, D344–D350.
+#' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
+#'   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
+#'   Improved services and an expanding collection of metabolites. Nucleic Acids
+#'   Res.
+#'
+#'   Hastings, J., de Matos, P., Dekker, A., Ennis, M., Harsha, B., Kale, N.,
+#'   Muthukrishnan, V., Owen, G., Turner, S., Williams, M., and Steinbeck, C.
+#'   (2013) The ChEBI reference database and ontology for biologically relevant
+#'   chemistry: enhancements for 2013. Nucleic Acids Res.
+#'
+#'   de Matos, P., Alcantara, R., Dekker, A., Ennis, M., Hastings, J., Haug, K.,
+#'   Spiteri, I., Turner, S., and Steinbeck, C. (2010) Chemical entities of
+#'   biological interest: an update. Nucleic Acids Res. Degtyarenko, K.,
+#'   Hastings, J., de Matos, P., and Ennis, M. (2009). ChEBI: an open
+#'   bioinformatics and cheminformatics resource. Current protocols in
+#'   bioinformatics / editoral board, Andreas D. Baxevanis et al., Chapter 14.
+#'
+#'   Degtyarenko, K., de Matos, P., Ennis, M., Hastings, J., Zbinden, M.,
+#'   McNaught, A., Alcántara, R., Darsow, M., Guedj, M. and Ashburner, M. (2008)
+#'   ChEBI: a database and ontology for chemical entities of biological
+#'   interest. Nucleic Acids Res. 36, D344–D350.
 #'
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #' @export
@@ -97,11 +113,27 @@ chebi_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'A
 #' @param ... optional arguments
 #' @return returns a list of data.frames or lists containing a complete ChEBI entity
 #'
-#' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V, Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016: Improved services and an expanding collection of metabolites. Nucleic Acids Res.
-#' Hastings, J., de Matos, P., Dekker, A., Ennis, M., Harsha, B., Kale, N., Muthukrishnan, V., Owen, G., Turner, S., Williams, M., and Steinbeck, C. (2013) The ChEBI reference database and ontology for biologically relevant chemistry: enhancements for 2013. Nucleic Acids Res.
-#' de Matos, P., Alcantara, R., Dekker, A., Ennis, M., Hastings, J., Haug, K., Spiteri, I., Turner, S., and Steinbeck, C. (2010) Chemical entities of biological interest: an update. Nucleic Acids Res.
-#' Degtyarenko, K., Hastings, J., de Matos, P., and Ennis, M. (2009). ChEBI: an open bioinformatics and cheminformatics resource. Current protocols in bioinformatics / editoral board, Andreas D. Baxevanis et al., Chapter 14.
-#' Degtyarenko, K., de Matos, P., Ennis, M., Hastings, J., Zbinden, M., McNaught, A., Alcántara, R., Darsow, M., Guedj, M. and Ashburner, M. (2008) ChEBI: a database and ontology for chemical entities of biological interest. Nucleic Acids Res. 36, D344–D350.
+#' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
+#'   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
+#'   Improved services and an expanding collection of metabolites. Nucleic Acids
+#'   Res.
+#'
+#'   Hastings, J., de Matos, P., Dekker, A., Ennis, M., Harsha, B., Kale, N.,
+#'   Muthukrishnan, V., Owen, G., Turner, S., Williams, M., and Steinbeck, C.
+#'   (2013) The ChEBI reference database and ontology for biologically relevant
+#'   chemistry: enhancements for 2013. Nucleic Acids Res.
+#'
+#'   de Matos, P., Alcantara, R., Dekker, A., Ennis, M., Hastings, J., Haug, K.,
+#'   Spiteri, I., Turner, S., and Steinbeck, C. (2010) Chemical entities of
+#'   biological interest: an update. Nucleic Acids Res. Degtyarenko, K.,
+#'   Hastings, J., de Matos, P., and Ennis, M. (2009). ChEBI: an open
+#'   bioinformatics and cheminformatics resource. Current protocols in
+#'   bioinformatics / editoral board, Andreas D. Baxevanis et al., Chapter 14.
+#'
+#'   Degtyarenko, K., de Matos, P., Ennis, M., Hastings, J., Zbinden, M.,
+#'   McNaught, A., Alcántara, R., Darsow, M., Guedj, M. and Ashburner, M. (2008)
+#'   ChEBI: a database and ontology for chemical entities of biological
+#'   interest. Nucleic Acids Res. 36, D344–D350.
 #'
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #' @export

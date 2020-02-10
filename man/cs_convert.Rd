@@ -57,7 +57,7 @@ cs_convert(160, from = "csid", to = "smiles")
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
