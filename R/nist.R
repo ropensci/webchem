@@ -3,7 +3,7 @@
 #' @import xml2
 #' @param x a URL
 #' @param ... currently unused
-#'
+#' @noRd
 #' @return html
 #'
 read_html_slow <- function(x, ...) {
@@ -18,7 +18,7 @@ read_html_slow <- function(x, ...) {
 #' @param type what kind of RI
 #' @param polarity polar or non-polar
 #' @param temp_prog what kind of temperature program
-#'
+#' @noRd
 #' @import rvest
 #' @import xml2
 #'
