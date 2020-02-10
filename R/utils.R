@@ -278,7 +278,7 @@ is.smiles <- function(x, verbose = TRUE) {
 #' Extract a number from a string
 #' @param x character; input string
 #' @return a numeric vector
-#' @export
+#' @noRd
 #' @examples
 #' extr_num('aaaa -95')
 #' extr_num("Melting Pt : -44.6 deg C")
@@ -342,10 +342,11 @@ parse_mol <- function(string) {
 #' Format numbers as CAS numbers
 #' @description This function attempts to format numeric (or character) vectors
 #' as character vectors of CAS numbers.  If they cannot be converted to CAS
-#' format or don't pass \code{is.cas()}, \code{NA} is returned
+#' format or don't pass \code{\link{is.cas}}, \code{NA} is returned
 #' @param x numeric vector, or character vector of CAS numbers missing the hyphens
 #'
 #' @return character vector of valid CAS numbers
+#' @seealso \code{\link{is.cas}}
 #' @export
 #' @author Eric Scott, \email{scottericr@@gmail.com}
 #' @examples
@@ -382,7 +383,7 @@ as.cas <- function(x){
 #' @importFrom utils menu
 #' @importFrom utils head
 #' @return a character vector of length 1
-#' @export
+#' @noRd
 #'
 #' @examples
 #' test <- c("apples", "bananas", "orange", "plum", "peach", "guava", "kumquat")
