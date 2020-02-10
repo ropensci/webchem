@@ -242,7 +242,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 #' @return a data.frame
 #' @seealso \code{\link{chebi_comp_entity}}
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
-#'
+#' @noRd
 #'
 l2df <- function(x) {
   out <- data.frame(rbind.named.fill(lapply(x, unlist)),
