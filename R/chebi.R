@@ -261,6 +261,7 @@ l2df <- function(x) {
 #' @param x list; a list to bind into a data.frame
 #' @seealso \code{\link{l2df}}
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#' @noRd
 #'
 rbind.named.fill <- function(x) {
   nam <- lapply(x, names)

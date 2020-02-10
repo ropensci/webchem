@@ -74,6 +74,7 @@ get_ri_xml <-
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @import dplyr
+#' @noRd
 #'
 #' @return a single table
 #'
@@ -200,7 +201,7 @@ tidy_ritable <- function(ri_xml) {
 #'  (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
 #'  (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
 #'  calculated are available on the NIST website:
-#'  https://webbook.nist.gov/chemistry/gc-ri/
+#'  \url{https://webbook.nist.gov/chemistry/gc-ri/}
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @import dplyr
