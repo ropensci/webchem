@@ -166,8 +166,6 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
-#' @note This function can handle only one SMILES string.
-#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
 #' @export
