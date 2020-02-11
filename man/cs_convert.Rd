@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemspider.R
 \name{cs_convert}
 \alias{cs_convert}
-\title{Convert identifiers using Chemspider}
+\title{Convert identifiers using ChemSpider}
 \usage{
 cs_convert(query, from, to, apikey = NULL)
 }
@@ -57,7 +57,7 @@ cs_convert(160, from = "csid", to = "smiles")
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

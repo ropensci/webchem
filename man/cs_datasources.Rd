@@ -30,7 +30,7 @@ cs_datasources()
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

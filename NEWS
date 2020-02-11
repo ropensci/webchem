@@ -12,6 +12,7 @@ NEW FEATURES
 MINOR IMPROVEMENTS
 
 * as.cas() added.
+* removed documentation files for non-exported functions that were only used internally.
 
 BUG FIXES
 

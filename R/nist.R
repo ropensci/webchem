@@ -3,7 +3,7 @@
 #' @import xml2
 #' @param x a URL
 #' @param ... currently unused
-#'
+#' @noRd
 #' @return html
 #'
 read_html_slow <- function(x, ...) {
@@ -18,7 +18,7 @@ read_html_slow <- function(x, ...) {
 #' @param type what kind of RI
 #' @param polarity polar or non-polar
 #' @param temp_prog what kind of temperature program
-#'
+#' @noRd
 #' @import rvest
 #' @import xml2
 #'
@@ -74,6 +74,7 @@ get_ri_xml <-
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @import dplyr
+#' @noRd
 #'
 #' @return a single table
 #'
@@ -200,7 +201,7 @@ tidy_ritable <- function(ri_xml) {
 #'  (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
 #'  (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
 #'  calculated are available on the NIST website:
-#'  https://webbook.nist.gov/chemistry/gc-ri/
+#'  \url{https://webbook.nist.gov/chemistry/gc-ri/}
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @import dplyr

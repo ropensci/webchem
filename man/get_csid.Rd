@@ -50,7 +50,7 @@ get_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", from = "inchikey")
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

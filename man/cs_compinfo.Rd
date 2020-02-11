@@ -7,7 +7,7 @@
 cs_compinfo(csid, fields, apikey = NULL)
 }
 \arguments{
-\item{csid}{numeric}
+\item{csid}{numeric; can be obtained using \code{\link{get_csid}}}
 
 \item{fields}{character; see details.}
 
@@ -18,7 +18,7 @@ cs_compinfo(csid, fields, apikey = NULL)
 Returns a data frame.
 }
 \description{
-Submit a Chemspider ID (CSID) and the fields you are interested in, and
+Submit a ChemSpider ID (CSID) and the fields you are interested in, and
 retrieve the record details for your query.
 }
 \details{
@@ -42,7 +42,7 @@ cs_compinfo(171:182, "SMILES")
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}
