@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemid.R
 \name{ci_query}
 \alias{ci_query}
-\title{Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}}
+\title{Retrieve information from ChemIDPlus}
 \usage{
 ci_query(
   query,
@@ -14,12 +14,13 @@ ci_query(
 \arguments{
 \item{query}{character; query string}
 
-\item{type}{character; type of query string.
-'rn' for regeistry number or 'name' for common name or 'inchikey' for inchikey as input.}
+\item{type}{character; type of query string. \code{"rn"} for registry number
+or \code{"name"} for common name or \code{"inchikey"} for inchikey as input.}
 
-\item{match}{character; How should multiple hits be handeled?
-'first' returns only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
-'na' returns NA if multiple hits are found.}
+\item{match}{character; How should multiple hits be handeled? \code{"first"}
+returns only the first match, \code{"best"} the best matching (by name) ID,
+\code{"ask"} enters an interactive mode and the user is asked for input,
+\code{"na"} returns NA if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 }
@@ -29,7 +30,12 @@ inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
 physprop (data.frame) and source_url.
 }
 \description{
-Retrieve information from ChemIDPlus \url{http://chem.sis.nlm.nih.gov/chemidplus}
+Retrieve information from ChemIDPlus
+\url{http://chem.sis.nlm.nih.gov/chemidplus}
+}
+\note{
+Please respect the Terms and Conditions of the National Library of
+Medicine, \url{https://www.nlm.nih.gov/databases/download.html}.
 }
 \examples{
 \dontrun{
