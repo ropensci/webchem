@@ -225,7 +225,8 @@ tidy_ritable <- function(ri_xml) {
 #'}
 #'
 #' @export
-#'
+#' @note Copyright for NIST Standard Reference Data is governed by the Standard
+#' Reference Data Act, \url{https://www.nist.gov/srd/public-law}.
 #' @seealso \code{\link{is.cas}} \code{\link{as.cas}}
 #'
 #' @examples

@@ -53,6 +53,10 @@ The types of retention indices included in NIST include Kovats
  calculated are available on the NIST website:
  \url{https://webbook.nist.gov/chemistry/gc-ri/}
 }
+\note{
+Copyright for NIST Standard Reference Data is governed by the Standard
+Reference Data Act, \url{https://www.nist.gov/srd/public-law}.
+}
 \examples{
 \dontrun{
 myRIs <- nist_ri(c("78-70-6", "13474-59-4"), "linear", "non-polar", "ramp")
