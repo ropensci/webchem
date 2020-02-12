@@ -11,3 +11,5 @@ citEntry(entry = "Manual",
   paste("Eduard Szöcs et al. (2015). webchem: zenodo release. ",
         "Zenodo. 10.5281/zenodo.33823")
 )
+
+citFooter("In addition to citing webchem in publications, please check attribution guidelines for any data sources you accessed.  Links to documentation can be found in help files for webchem functions")
