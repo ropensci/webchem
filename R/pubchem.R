@@ -23,8 +23,8 @@
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
 #' usage policies of National Center for Biotechnology Information,
-#' \url {https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url {https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -110,8 +110,8 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
 #' usage policies of National Center for Biotechnology Information,
-#' \url {https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url {https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @export
 #' @examples
 #' \donttest{
@@ -218,8 +218,8 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
 #' usage policies of National Center for Biotechnology Information,
-#' \url {https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url {https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
