@@ -1,4 +1,4 @@
-#' Retrieve Lite Entity from ChEBI
+#' Retrieve Lite Entity (i.e. ChEBI id) from ChEBI
 #'
 #' Returns a data.frame with a ChEBI entity ID (chebiid), a ChEBI entity name (chebiasciiname), a search scroe (searchscore) and stars (stars) using the SOAP protocol \url{https://www.ebi.ac.uk/chebi/webServices.do}
 #' @import httr xml2
@@ -6,7 +6,11 @@
 #' @importFrom stats setNames
 #'
 #' @param query character; search term.
-#' @param category charatcer; type of input, can be one of 'ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.
+#' @param match character; character; How should multiple hits be handeled? \code{"first"}
+#' returns only the first match, \code{"best"} the best matching (by name) ID,
+#' \code{"ask"} enters an interactive mode and the user is asked for input,
+#' \code{"na"} returns NA if multiple hits are found.
+#' @param from charatcer; type of input, can be one of 'ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.
 #' @param max_res integer; maximum number of results to be retrieved from the web service
 #' @param stars character; type of input can be one of 'ALL', 'TWO ONLY', 'THREE ONLY'.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -40,21 +44,30 @@
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' chebi_lite_entity('Glyphosate')
-#' chebi_lite_entity('BPGDAMSIGCZZLK-UHFFFAOYSA-N')
+#' get_chebiid('Glyphosate')
+#' get_chebiid('BPGDAMSIGCZZLK-UHFFFAOYSA-N')
 #'
 #' # multiple inputs
 #' comp <- c('Iron', 'Aspirin', 'BPGDAMSIGCZZLK-UHFFFAOYSA-N')
-#' chebi_lite_entity(comp)
+#' get_chebiid(comp)
 #'
 #' }
-chebi_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'ALL', verbose = TRUE, ...) {
+get_chebiid <- function(query,
+                        from = 'ALL',
+                        match = 'all',
+                        max_res = 200,
+                        stars = 'ALL',
+                        verbose = TRUE,
+                        ...) {
 
-  foo <- function(query, category, max_res, stars, verbose, ...) {
-    # query = 'Isoproturon'; category = 'ALL'; max_res = 200; stars = 'ALL'; verbose = T # debuging
+  foo <- function(query, match, from, max_res, stars, verbose, ...) {
+    # query = 'Isoproturon'; from = 'ALL'; match = 'ask'; max_res = 200; stars = 'ALL'; verbose = T # debuging
+    # from = 'CITATIONS'
     # arguments
-    category_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES')
-    category <- match.arg(category, category_all)
+    from_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES')
+    from <- match.arg(from, from_all)
+    match_all <- c('all', 'best', 'ask', 'na')
+    match <- match.arg(match, match_all)
     stars_all <- c('ALL', 'TWO ONLY', 'THREE ONLY')
     stars <- match.arg(stars, stars_all)
     # query
@@ -67,7 +80,7 @@ chebi_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'A
                       <soapenv:Body>
                         <chebi:getLiteEntity>
                           <chebi:search>', query, '</chebi:search>
-                          <chebi:searchCategory>', category, '</chebi:searchCategory>
+                          <chebi:searchCategory>', from, '</chebi:searchCategory>
                           <chebi:maximumResults>', max_res, '</chebi:maximumResults>
                           <chebi:stars>', stars, '</chebi:stars>
                         </chebi:getLiteEntity>
@@ -83,16 +96,34 @@ chebi_lite_entity <- function(query, category = 'ALL', max_res = 200, stars = 'A
       cont <- try(content(res, type = 'text/xml', encoding = 'utf-8'), silent = TRUE)
       out <- l2df(as_list(xml_children(xml_find_first(cont, '//d1:return'))))
       out <- setNames(out, tolower(names(out)))
-
-      return(out)
+      if (nrow(out) == 0) {
+        message('No result found. \n')
+        return(out)
+      }
+      if (match == 'all') {
+        return(out)
+      }
+      if (match == 'best') {
+        if (verbose)
+          message('Returning best match. \n')
+        out <- out[ with(out, order(searchscore, decreasing = TRUE)), ] # NOTE should be ordered anyway
+        return(out[ which.max(out$searchscore), ])
+      }
+      if (match == "ask") {
+        matched <- webchem:::chooser(out$chebiid, 'all')
+        return(out[ out$chebiid == matched, ])
+      }
+      if (match == 'na') {
+        return(data.frame(chebiid = NA))
+      }
     } else {
       out <- data.frame(chebiid = NA)
-      warning(http_status(res)$message)
+      message('Returning NA (http_status(res)$message). \n')
 
       return(out)
     }
   }
-  out <- lapply(query, foo, category = category, max_res = max_res, stars = stars, verbose = verbose)
+  out <- lapply(query, foo, match = match, from = from, max_res = max_res, stars = stars, verbose = verbose)
   out <- setNames(out, query)
 
   return(out)

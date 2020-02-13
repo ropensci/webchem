@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -51,7 +53,7 @@ Source | Function(s) | API Docs | API key
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 [Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
 [NIST](https://webbook.nist.gov) | `nist_ri()` | none | none
-[ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
+[ChEBI](https://www.ebi.ac.uk/chebi/) | `get_chebiid()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -288,10 +290,10 @@ head(RIs)
 
 #### ChEBI
 
-Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `chebi_lite_entity()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
+Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `get_chebiid()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
 
 ```{r chebi-lite}
-ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
+ids <- get_chebiid(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
 ids
 ```
 
