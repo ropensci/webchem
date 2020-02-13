@@ -6,11 +6,12 @@
 #' @importFrom stats setNames
 #'
 #' @param query character; search term.
-#' @param match character; character; How should multiple hits be handeled? \code{"first"}
-#' returns only the first match, \code{"best"} the best matching (by name) ID,
+#' @param from charatcer; type of input, can be one of 'ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.
+#' @param match character; character; How should multiple hits be handeled?,
+#' \code{"all"} all matches are returned,
+#' \code{"best"} the best matching (by the ChEBI searchscore) is returned,
 #' \code{"ask"} enters an interactive mode and the user is asked for input,
 #' \code{"na"} returns NA if multiple hits are found.
-#' @param from charatcer; type of input, can be one of 'ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.
 #' @param max_res integer; maximum number of results to be retrieved from the web service
 #' @param stars character; type of input can be one of 'ALL', 'TWO ONLY', 'THREE ONLY'.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -62,7 +63,6 @@ get_chebiid <- function(query,
 
   foo <- function(query, match, from, max_res, stars, verbose, ...) {
     # query = 'Isoproturon'; from = 'ALL'; match = 'ask'; max_res = 200; stars = 'ALL'; verbose = T # debuging
-    # from = 'CITATIONS'
     # arguments
     from_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES')
     from <- match.arg(from, from_all)

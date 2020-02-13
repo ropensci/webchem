@@ -19,8 +19,9 @@ get_chebiid(
 
 \item{from}{charatcer; type of input, can be one of 'ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.}
 
-\item{match}{character; character; How should multiple hits be handeled? \code{"first"}
-returns only the first match, \code{"best"} the best matching (by name) ID,
+\item{match}{character; character; How should multiple hits be handeled?,
+\code{"all"} all matches are returned,
+\code{"best"} the best matching (by the ChEBI searchscore) is returned,
 \code{"ask"} enters an interactive mode and the user is asked for input,
 \code{"na"} returns NA if multiple hits are found.}
 
