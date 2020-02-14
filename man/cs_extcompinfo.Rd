@@ -22,7 +22,7 @@ a data.frame with entries: 'csid', 'mf' (molecular formula),
 'alogp', 'xlogp', 'common_name' and 'source_url'
 }
 \description{
-Get extended info from Chemspider, see \url{https://www.chemspider.com/}
+Get extended info from ChemSpider, see \url{https://www.chemspider.com/}
 }
 \note{
 A security token is needed. Please register at RSC
@@ -35,13 +35,12 @@ use \code{\link{cs_compinfo}} to retrieve standard inchikey.
 }
 \examples{
 \dontrun{
-# Fails because no TOKEN is included
-token <- '<YOUR-SECURITY-TOKEN>'
-csid <- get_csid("Triclosan", token = token)
+token <- "<redacted>"
+csid <- get_csid("Triclosan")
 cs_extcompinfo(csid, token)
 
-csids <- get_csid(c('Aspirin', 'Triclosan'), token = token)
-cs_compinfo(csids, token = token)
+csids <- get_csid(c('Aspirin', 'Triclosan'))
+cs_compinfo(csids)
 }
 }
 \seealso{

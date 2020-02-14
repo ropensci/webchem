@@ -12,7 +12,7 @@
 #'
 #' @references Lowe, D. M., Corbett, P. T., Murray-Rust, P., & Glen, R. C. (2011).
 #' Chemical Name to Structure: OPSIN, an Open Source Solution. Journal of Chemical Information and Modeling,
-#' 51(3), 739–753. http://doi.org/10.1021/ci100384d
+#' 51(3), 739–753. \url{http://doi.org/10.1021/ci100384d}
 #' @examples
 #' \donttest{
 #' opsin_query('Cyclopropane')

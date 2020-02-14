@@ -34,23 +34,21 @@ IDs.
 
 ## Currently implemented in `webchem`
 
-| Source                                                                                        | Function(s)                                                                                                                | API Docs                                                           | API key                                       |
-| --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------------- |
-| [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure)            | `cir_query()`                                                                                                              | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none                                          |
-| [ChemSpider](http://www.chemspider.com/)                                                      | `cs_datasources()`,`cs_name_csid()`, `cs_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()` | [link](https://developer.rsc.org/compounds-v1/apis)                | required [(link)](https://developer.rsc.org/) |
-| [PubChem](https://pubchem.ncbi.nlm.nih.gov/)                                                  | `get_cid()`, `pc_prop()`, `pc_synonyms()`                                                                                  | [link](https://pubchem.ncbi.nlm.nih.gov/)                          | none                                          |
-| [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)                        | `cts_convert()`, `cts_compinfo()`                                                                                          | none                                                               | none                                          |
-| [PAN Pesticide Database](http://www.pesticideinfo.org/)                                       | `pan_query()`                                                                                                              | none                                                               | none                                          |
-| [Alan Wood’s Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/)       | `aw_query()`                                                                                                               | none                                                               | none                                          |
-| [PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `pp_query()`                                                                                                               | none                                                               | none                                          |
-| [ETOX](http://webetox.uba.de/webETOX/index.do)                                                | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()`                                                           | none                                                               | none                                          |
-| PPDB                                                                                          | `ppdb_parse()` (only parsing)                                                                                              | none                                                               | none                                          |
-| [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/)                                         | `ci_query()`                                                                                                               | none                                                               | none                                          |
-| [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)                      | `get_wdid()`, `wd_ident()`                                                                                                 | [link](https://www.mediawiki.org/wiki/API:Main_page)               | none                                          |
-| [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)                                          | `opsin_query()`                                                                                                            | [link](http://opsin.ch.cam.ac.uk/instructions.html)                | none                                          |
-| [Flavornet](http://www.flavornet.org)                                                         | `fn_percept()`                                                                                                             | none                                                               | none                                          |
-| [NIST](https://webbook.nist.gov)                                                              | `nist_ri()`                                                                                                                | none                                                               | none                                          |
-| [ChEBI](https://www.ebi.ac.uk/chebi/)                                                         | `chebi_lite_entity()`, `chebi_comp_entity()`                                                                               | [link](https://www.ebi.ac.uk/chebi/webServices.do)                 | none                                          |
+| Source                                                                                  | Function(s)                                                                                                            | API Docs                                                           | API key                                       |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------------- |
+| [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure)      | `cir_query()`                                                                                                          | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none                                          |
+| [ChemSpider](http://www.chemspider.com/)                                                | `cs_datasources()`,`get_csid()`, `cs_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()` | [link](https://developer.rsc.org/compounds-v1/apis)                | required [(link)](https://developer.rsc.org/) |
+| [PubChem](https://pubchem.ncbi.nlm.nih.gov/)                                            | `get_cid()`, `pc_prop()`, `pc_synonyms()`                                                                              | [link](https://pubchem.ncbi.nlm.nih.gov/)                          | none                                          |
+| [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)                  | `cts_convert()`, `cts_compinfo()`                                                                                      | none                                                               | none                                          |
+| [PAN Pesticide Database](http://www.pesticideinfo.org/)                                 | `pan_query()`                                                                                                          | none                                                               | none                                          |
+| [Alan Wood’s Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()`                                                                                                           | none                                                               | none                                          |
+| [ETOX](http://webetox.uba.de/webETOX/index.do)                                          | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()`                                                       | none                                                               | none                                          |
+| [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/)                                   | `ci_query()`                                                                                                           | none                                                               | none                                          |
+| [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)                | `get_wdid()`, `wd_ident()`                                                                                             | [link](https://www.mediawiki.org/wiki/API:Main_page)               | none                                          |
+| [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)                                    | `opsin_query()`                                                                                                        | [link](http://opsin.ch.cam.ac.uk/instructions.html)                | none                                          |
+| [Flavornet](http://www.flavornet.org)                                                   | `fn_percept()`                                                                                                         | none                                                               | none                                          |
+| [NIST](https://webbook.nist.gov)                                                        | `nist_ri()`                                                                                                            | none                                                               | none                                          |
+| [ChEBI](https://www.ebi.ac.uk/chebi/)                                                   | `chebi_lite_entity()`, `chebi_comp_entity()`                                                                           | [link](https://www.ebi.ac.uk/chebi/webServices.do)                 | none                                          |
 
 Moreover, there are some functions to check indentifiers:
 `is.inchikey()`, `is.cas()` and `is.smiles()`.
@@ -122,28 +120,18 @@ cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
 
 #### ChemSpider
 
-You’ll need a API key:
-
-``` r
-apikey = '<YOUR TOKEN HERE>'
-```
-
 Retrieve the ChemSpider ID of Triclosan
 
 ``` r
-(id <- cs_name_csid('Triclosan', apikey = apikey))
-#> $results
+(id <- get_csid('Triclosan'))
+#> $Triclosan
 #> [1] 5363
-#> 
-#> $limitedToMaxAllowed
-#> [1] FALSE
 ```
 
-Use this ID to query information from
-ChemSpider
+Use this ID to query information from ChemSpider
 
 ``` r
-# cs_compinfo(id, fields = c("Formula", "MolecularWeight"), apikey = apikey)
+# cs_compinfo(id, fields = c("Formula", "MolecularWeight"))
 ```
 
 Note that the URL of the source if also returned (`source_url`) and can
@@ -152,26 +140,24 @@ be used for (micro-)attribution.
 Or to convert to a Mol-Object
 
 ``` r
-# mol <- cs_convert(id, from = 'csid', to = 'mol', apikey = apikey)
+# mol <- cs_convert(id, from = 'csid', to = 'mol')
 # head(parse_mol(mol$ab))
 ```
 
 Note that the Molfile is parsed into a R object (via `parse_mol()`) and
 that an API-key is needed
 
-`cs_convert()` handles a lot of input / output
-formats:
+`cs_convert()` handles a lot of input / output formats:
 
 ``` r
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid', apikey = apikey)
-#> $results
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+#> $`XEFQLINVKFYRCS-UHFFFAOYAS`
 #> [1] 5363
-#> 
-#> $limitedToMaxAllowed
-#> [1] FALSE
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi', apikey = apikey)
+cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+#> $`XEFQLINVKFYRCS-UHFFFAOYAS`
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
-cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi', apikey = apikey)
+cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+#> $`c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl`
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 ```
 
@@ -324,53 +310,9 @@ aw_query('Fluazinam', type = 'commonname')
 #> 
 #> 
 #> attr(,"class")
-#> [1] "list"     "aw_query"
+#> [1] "aw_query" "list"
 aw_query('79622-59-6', type = 'cas')[[1]]$cname
 #> [1] "fluazinam"
-```
-
-#### SRC PHYSPROP Database
-
-[SRCs PHYSPROP
-Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html)
-contains chemical structures, names and physical properties for over
-41,000 chemicals. You can use `pp_query()` to query this database using
-a CAS number:
-
-``` r
-pp_query('50-00-0')
-#> $`50-00-0`
-#> $`50-00-0`$cas
-#> [1] "50-00-0"
-#> 
-#> $`50-00-0`$cname
-#> [1] "FORMALDEHYDE"
-#> 
-#> $`50-00-0`$mw
-#> [1] 30.026
-#> 
-#> $`50-00-0`$prop
-#>                       variable      value             unit     temp type
-#> 1             Water Solubility  4.000e+05             mg/L 20 deg C  EXP
-#> 2        Log P (octanol-water)  3.500e-01                  25 deg C  EXP
-#> 3               Vapor Pressure  3.886e+03            mm Hg 25 deg C  EXT
-#> 4    pKa Dissociation Constant  1.327e+01                  25 deg C  EXP
-#> 5         Henry's Law Constant  3.370e-07       atm-m3/mol 25 deg C  EXP
-#> 6 Atmospheric OH Rate Constant  9.370e-12 cm3/molecule-sec 25 deg C  EXP
-#> 7                Melting Point -9.200e+01            deg C     <NA> <NA>
-#> 8                Boiling Point -1.950e+01            deg C     <NA> <NA>
-#>                                ref
-#> 1        PICKRELL,JA ET AL. (1983)
-#> 2           HANSCH,C ET AL. (1995)
-#> 3          BOUBLIK,T ET AL. (1984)
-#> 4   SERJEANT,EP & DEMPSEY,B (1979)
-#> 5 BETTERTON,EA & HOFFMAN,MR (1988)
-#> 6     KWOK,ESC & ATKINSON,R (1994)
-#> 7                             <NA>
-#> 8                             <NA>
-#> 
-#> $`50-00-0`$source_url
-#> [1] "http://esc.syrres.com/fatepointer/webprop.asp?CAS=50000"
 ```
 
 #### ETOX
@@ -522,18 +464,6 @@ tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value'
 #> 25         d     NOEC   5.000 µg/l
 ```
 
-#### PPDB
-
-The PPDB holds a lot of chemical and ecotoxicological information.
-Earlier versions of `webchem` allowed also to search and download the
-database. However, this is explicitly against the terms and conditions
-of use. On request we also removed all links to the database.
-
-Therefore, `webchem` can only provide a function to parse html-code into
-a R object: `parse_ppdb()`. However, no examples can be given as saving
-and downloading the html source is explicitly against the terms and
-conditions of use.
-
 #### ChemIDplus
 
 ``` r
@@ -563,7 +493,7 @@ ids
 #>          id     match distance     query
 #> 1 Q56228675 Triclosan        0 Triclosan
 
-# quera identifiers from wikidata
+# query identifiers from Wikidata
 wd_ident(ids$id)[1:5]
 #>   smiles  cas  cid einecs csid
 #> 1   <NA> <NA> <NA>   <NA> <NA>
@@ -646,14 +576,14 @@ ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbos
 ids
 #> $Isoproturon
 #>       chebiid           chebiasciiname searchscore entitystar
-#> 1  CHEBI:6049              isoproturon        0.58          3
-#> 2 CHEBI:83468 isoproturon-monodemethyl        0.29          3
-#> 3 CHEBI:83514   isoproturon-didemethyl        0.29          3
+#> 1  CHEBI:6049              isoproturon        0.54          3
+#> 2 CHEBI:83468 isoproturon-monodemethyl        0.27          3
+#> 3 CHEBI:83514   isoproturon-didemethyl        0.27          3
 #> 4 CHEBI:43405    para-isopropylaniline        0.06          3
 #> 
 #> $`RZVAJINKPMORJF-UHFFFAOYSA-N`
 #>       chebiid chebiasciiname searchscore entitystar
-#> 1 CHEBI:46195    paracetamol        0.03          3
+#> 1 CHEBI:46195    paracetamol        0.02          3
 ```
 
 The **chebiid** can then be used to query the complete ChEBI entity
@@ -916,16 +846,6 @@ Swains](https://github.com/mcs07) repositories:
 [PubChemPy](https://github.com/mcs07/PubChemPy) and
 [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as
 `webchem`.
-
-### Contributors
-
-  - [Eduard Szöcs](https://github.com/EDiLD)
-  - [Daniel
-    Münch](https://github.com/ropensci/webchem/commits?author=Dahaniel)
-  - [Johannes
-    Ranke](https://github.com/ropensci/webchem/commits?author=jranke)
-  - [Eric R
-    Scott](https://github.com/ropensci/webchem/commits?author=Aariq)
 
 ### Want to contribute?
 

@@ -4,10 +4,11 @@
 \alias{cs_datasources}
 \title{Retrieve ChemSpider data sources}
 \usage{
-cs_datasources(apikey)
+cs_datasources(apikey = NULL)
 }
 \arguments{
-\item{apikey}{character; your API key.}
+\item{apikey}{character; your API key. If NULL (default),
+\code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a character vector.
@@ -25,12 +26,11 @@ can be found at \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-apikey <- "<YOUR-API-KEY>"
-cs_datasources(apikey = apikey)
+cs_datasources()
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

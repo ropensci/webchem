@@ -1,8 +1,11 @@
+.Rprofile
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 .vscode*
+.Renviron
+.Rprofile
 
 README_files*
 README.html

@@ -3,24 +3,22 @@
 \name{webchem-defunct}
 \alias{webchem-defunct}
 \alias{ppdb_query}
+\alias{ppdb_parse}
 \alias{ppdb}
 \alias{cir}
+\alias{pp_query}
 \title{Defunct function(s) in the webchem package}
 \usage{
 ppdb_query()
 
+ppdb_parse()
+
 ppdb()
 
 cir()
+
+pp_query()
 }
 \description{
 These functions are defunct and no longer available.
-}
-\details{
-Defunct functions are:
-\tabular{rl}{
-  \code{ppdb_query} \cr
-  \code{ppdb} \cr
-  \code{cir} \cr
-}
 }

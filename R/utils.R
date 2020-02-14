@@ -13,7 +13,7 @@
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
-#' @note This function can handle only one SMILES string.
+#' @note This function can handle only one inchikey string.
 #'
 #' @references Heller, Stephen R., et al. "InChI, the IUPAC International Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
 #'
@@ -165,9 +165,7 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' @param x character; input CAS
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
-#'
-#' @note This function can handle only one SMILES string.
-#'
+#' @note This function can only handle one CAS string
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
 #' @export
@@ -186,14 +184,14 @@ is.cas <-  function(x, verbose = TRUE) {
 
   # cas must not have any alpha characters
   if(grepl(pattern = "[[:alpha:]]", x = x)){
-    if(verbose){message("String contains alpha characters")}
+    if(isTRUE(verbose)){message("String contains alpha characters")}
     return(FALSE)
   }
 
   # cas must have two hyphens
   nsep <- str_count(x, '-')
   if (nsep != 2) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Less than 2 hyphens in string.')
     return(FALSE)
   }
@@ -201,7 +199,7 @@ is.cas <-  function(x, verbose = TRUE) {
   # first part 2 to 7 digits
   fi <- gsub('^(.*)-(.*)-(.*)$', '\\1', x)
   if (nchar(fi) > 7 | nchar(fi) < 2) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('First part with more than 7 digits!')
     return(FALSE)
   }
@@ -209,7 +207,7 @@ is.cas <-  function(x, verbose = TRUE) {
   # second part must be two digits
   se <- gsub('^(.*)-(.*)-(.*)$', '\\2', x)
   if (nchar(se) != 2) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Second part has not two digits!')
     return(FALSE)
   }
@@ -217,7 +215,7 @@ is.cas <-  function(x, verbose = TRUE) {
   # third part (checksum) must be 1 digit
   th <- gsub('^(.*)-(.*)-(.*)$', '\\3', x)
   if (nchar(th) != 1) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Third part has not 1 digit!')
     return(FALSE)
   }
@@ -226,7 +224,7 @@ is.cas <-  function(x, verbose = TRUE) {
   di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x), split = '')[[1]])
   checksum <- sum(rev(seq_along(di)) * di)
   if (checksum %% 10 != as.numeric(th)) {
-    if (verbose)
+    if (isTRUE(verbose))
       message('Checksum is not correct! ', checksum %% 10, ' vs. ', th)
     return(FALSE)
   }
@@ -278,7 +276,7 @@ is.smiles <- function(x, verbose = TRUE) {
 #' Extract a number from a string
 #' @param x character; input string
 #' @return a numeric vector
-#' @export
+#' @noRd
 #' @examples
 #' extr_num('aaaa -95')
 #' extr_num("Melting Pt : -44.6 deg C")
@@ -289,7 +287,7 @@ extr_num <- function(x) {
 }
 
 
-#' Parse Molfile (as returned by chemspider) into a R-object.
+#' Parse Molfile (as returned by ChemSpider) into a R-object.
 #'
 #' @param string molfile as one string
 #' @return A list with of four entries: header (eh), counts line (cl), atom block (ab) and bond block (bb).
@@ -310,7 +308,7 @@ extr_num <- function(x) {
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 #' a toolset for transforming SD/Molfile structure information into R objects.
-#' Source Code for Biology and Medicine, 7, 12. http://doi.org/10.1186/1751-0473-7-12
+#' Source Code for Biology and Medicine, 7, 12. \url{http://doi.org/10.1186/1751-0473-7-12}
 #' @export
 
 parse_mol <- function(string) {
@@ -342,10 +340,11 @@ parse_mol <- function(string) {
 #' Format numbers as CAS numbers
 #' @description This function attempts to format numeric (or character) vectors
 #' as character vectors of CAS numbers.  If they cannot be converted to CAS
-#' format or don't pass \code{is.cas()}, \code{NA} is returned
+#' format or don't pass \code{\link{is.cas}}, \code{NA} is returned
 #' @param x numeric vector, or character vector of CAS numbers missing the hyphens
 #'
 #' @return character vector of valid CAS numbers
+#' @seealso \code{\link{is.cas}}
 #' @export
 #' @author Eric Scott, \email{scottericr@@gmail.com}
 #' @examples
@@ -382,7 +381,7 @@ as.cas <- function(x){
 #' @importFrom utils menu
 #' @importFrom utils head
 #' @return a character vector of length 1
-#' @export
+#' @noRd
 #'
 #' @examples
 #' test <- c("apples", "bananas", "orange", "plum", "peach", "guava", "kumquat")

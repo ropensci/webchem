@@ -15,12 +15,15 @@ character vector of valid CAS numbers
 \description{
 This function attempts to format numeric (or character) vectors
 as character vectors of CAS numbers.  If they cannot be converted to CAS
-format or don't pass \code{is.cas()}, \code{NA} is returned
+format or don't pass \code{\link{is.cas}}, \code{NA} is returned
 }
 \examples{
 x = c(58082, 123456, "hexenol")
 as.cas(x)
 
+}
+\seealso{
+\code{\link{is.cas}}
 }
 \author{
 Eric Scott, \email{scottericr@gmail.com}

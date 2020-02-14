@@ -7,10 +7,12 @@ NEW FEATURES
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
 * Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
 * "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
+* ChemSpider functions now look for an API token stored in .Renviron or .Rprofile by default so you can keep them hidden more easily.
 
 MINOR IMPROVEMENTS
 
 * as.cas() added.
+* removed documentation files for non-exported functions that were only used internally.
 
 BUG FIXES
 
@@ -21,12 +23,16 @@ BUG FIXES
 * multiple functions failed because of a major change in the ChemSpider API [issue #149, contributed by @stitam]
 * cir_query() mistook NA for sodium [issue #158, reported and fixed by @Aariq]
 * fixed functions that communicate with the ChemSpider API [issue #149, issue #160, fixed by @stitam]
+* get_etoxid() printed incorrect results for certain match types [issue #201, fixed by @stitam]
 
 DEPRECATED FUNCTIONS
 
 * cs_extcompinfo() cannot be fixed as there is no equivalent in the new ChemSpider API yet.
 
 DEFUNCT FUNCTIONS
+
+* ppdb_parse() has been removed. webchem no longer offers any support for PPDB.
+* pp_query() has been removed. Physprop API is no longer active.
 
 
 webchem 0.4

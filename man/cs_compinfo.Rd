@@ -4,20 +4,21 @@
 \alias{cs_compinfo}
 \title{Retrieve record details by ChemSpider ID}
 \usage{
-cs_compinfo(csid, fields, apikey)
+cs_compinfo(csid, fields, apikey = NULL)
 }
 \arguments{
-\item{csid}{numeric}
+\item{csid}{numeric; can be obtained using \code{\link{get_csid}}}
 
 \item{fields}{character; see details.}
 
-\item{apikey}{character; your API key.}
+\item{apikey}{character; your API key. If NULL (default),
+\code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a data frame.
 }
 \description{
-Submit a Chemspider ID (CSID) and the fields you are interested in, and
+Submit a ChemSpider ID (CSID) and the fields you are interested in, and
 retrieve the record details for your query.
 }
 \details{
@@ -36,12 +37,12 @@ can be found at \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-cs_compinfo(171, c("SMILES", "CommonName"), apikey)
-cs_compinfo(171:182, "SMILES", apikey)
+cs_compinfo(171, c("SMILES", "CommonName"))
+cs_compinfo(171:182, "SMILES")
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

@@ -5,6 +5,7 @@
 \title{Control ChemSpider API requests}
 \usage{
 cs_control(
+  datasources = "Wikidata",
   order_by = "recordId",
   order_direction = "ascending",
   include_all = FALSE,
@@ -13,6 +14,9 @@ cs_control(
 )
 }
 \arguments{
+\item{datasources}{character; specifies the databases to query. Use
+\code{cs_datasources()} to retrieve available ChemSpider data sources.}
+
 \item{order_by}{character; specifies the sort order for the results.
 Valid values are \code{"recordId"}, \code{"massDefect"},
 \code{"molecularWeight"}, \code{"referenceCount"}, \code{"dataSourceCount"},
@@ -34,14 +38,17 @@ Returns a list of specified control options.
 }
 \description{
 For some ChemSpider API requests, you can also specify various control
-options.
-This function is used to set these control options.
+options. This function is used to set these control options.
 }
 \details{
+The only function that currently uses \code{databases} is
+\code{get_csid()} and only when you query a CSID from a formula. This
+parameter is disregarded in all other queries.
+
 Setting \code{include_all} to \code{TRUE} will consider records
-which contain all of the filter criteria specified in the request.
-Setting it to \code{FALSE} will consider records which contain any of the
-filter criteria.
+which contain all of the filter criteria specified in the request. Setting
+it to \code{FALSE} will consider records which contain any of the filter
+criteria.
 
 A compound with a  \code{complexity} of \code{"multiple"} has more
 than one disconnected system in it or a metal atom or ion.
@@ -58,7 +65,7 @@ cs_control()
 cs_control(order_direction = "descending")
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \seealso{
 \code{\link{get_csid}}
