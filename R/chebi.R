@@ -136,7 +136,7 @@ get_chebiid <- function(query,
       }
     } else {
       out <- data.frame(chebiid = NA)
-      message('Returning NA (http_status(res)$message). \n')
+      message('Returning NA (', http_status(res)$message, '). \n')
 
       return(out)
     }
