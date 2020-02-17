@@ -2,7 +2,7 @@
 % Please edit documentation in R/chebi.R
 \name{get_chebiid}
 \alias{get_chebiid}
-\title{Retrieve Lite Entity (i.e. ChEBI id) from ChEBI}
+\title{Retrieve Lite Entity (identifiers) from ChEBI}
 \usage{
 get_chebiid(
   query,
@@ -17,27 +17,37 @@ get_chebiid(
 \arguments{
 \item{query}{character; search term.}
 
-\item{from}{charatcer; type of input, can be one of 'ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.}
+\item{from}{character; type of input, can be one of 'ALL', 'CHEBI ID',
+'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS',
+'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS',
+'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.}
 
-\item{match}{character; character; How should multiple hits be handeled?,
+\item{match}{character; How should multiple hits be handled?,
 \code{"all"} all matches are returned,
 \code{"best"} the best matching (by the ChEBI searchscore) is returned,
 \code{"ask"} enters an interactive mode and the user is asked for input,
 \code{"na"} returns NA if multiple hits are found.}
 
-\item{max_res}{integer; maximum number of results to be retrieved from the web service}
+\item{max_res}{integer; maximum number of results to be retrieved from the
+web service}
 
-\item{stars}{character; type of input can be one of 'ALL', 'TWO ONLY', 'THREE ONLY'.}
+\item{stars}{character; type of input can be one of 'ALL', 'TWO ONLY',
+'THREE ONLY'.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{...}{optional arguments}
 }
 \value{
-returns a list of data.frames containing a chebiid, a chebiasciiname, a searchscore and stars if matches were found. If not, data.frame(NA) is returned
+returns a list of data.frames containing a chebiid, a chebiasciiname,
+a searchscore and stars if matches were found.
+If not, data.frame(NA) is returned
 }
 \description{
-Returns a data.frame with a ChEBI entity ID (chebiid), a ChEBI entity name (chebiasciiname), a search scroe (searchscore) and stars (stars) using the SOAP protocol \url{https://www.ebi.ac.uk/chebi/webServices.do}
+Returns a data.frame with a ChEBI entity ID (chebiid),
+a ChEBI entity name (chebiasciiname), a search score (searchscore) and
+stars (stars) using the SOAP protocol:
+\url{https://www.ebi.ac.uk/chebi/webServices.do}
 }
 \examples{
 \donttest{
@@ -54,7 +64,7 @@ get_chebiid(comp)
 \references{
 Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
-  Improved services and an expanding collection of metabolites. Nucleic Acids
+  Improved services and an expanding collection of metabfolites. Nucleic Acids
   Res.
 
   Hastings, J., de Matos, P., Dekker, A., Ennis, M., Harsha, B., Kale, N.,

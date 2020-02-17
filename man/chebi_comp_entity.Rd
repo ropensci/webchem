@@ -14,10 +14,16 @@ chebi_comp_entity(chebiid, verbose = TRUE, ...)
 \item{...}{optional arguments}
 }
 \value{
-returns a list of data.frames or lists containing a complete ChEBI entity
+returns a list of data.frames or lists containing a complete ChEBI
+entity
 }
 \description{
-Returns a list of Complete ChEBI entities. ChEBI data are parsed as data.frames ("properties", "chebiid_snd", "synonyms", "iupacnames", "formulae", "regnumbers", "citations", "dblinks", "parents", "children", "comments", "origins") or as a list ("chem_structure") in the list. The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
+Returns a list of Complete ChEBI entities.
+ChEBI data are parsed as data.frames ("properties", "chebiid_snd",
+"synonyms", "iupacnames", "formulae", "regnumbers", "citations", "dblinks",
+"parents", "children", "comments", "origins") or
+as a list ("chem_structure") in the list.
+The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
 }
 \examples{
 \donttest{
