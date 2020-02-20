@@ -1,47 +1,40 @@
 # CONTRIBUTING #
 
-Thank you for your interest in contributing to the project! The goal of this guide is to help you with your endevour. There are many ways to contribute and we have outlines some which might be interesting to you. If you have another idea, feel free to contact the maintainter with it.
+Thank you for your interest in contributing to the project! The goal of this guide is to help you with your endevour. There are many ways to contribute and we have outlined some opportunities which might be interesting to you. If you have any questions or suggestions, feel free to contact us at <webchem@ropensci.org>.
 
 ### Fill out the survey
 
-The ```webchem``` survey allows us to learn who you are, how you would like to use the package, and how you think the project should develop to become more useful to you. This is extremely valuable information for us and guides our development efforts. We really appreciate if you share your thoughts with us.
-
-You can fill out the survey [here](<link here>) (under development).
+The ```webchem``` survey allows us to learn who you are, which databases you use and how you interact with chemical data. This is extremely valuable information for us and guides our development efforts. The survey take about 5 minutes to fill out. You can fill out the survey [here](<link here>) (under development).
 
 ### Share a use case
 
-Write us an e-mail and show us a full example about how you use ```webchem``` in your data analysis! This would again help us in developing the package further, and would also help us create better vignettes that help others get started.
+Write us an e-mail and show us a full example of how you use or how you would like to use ```webchem``` in your data analysis! This would give us ideas about new features and also help us create better vignettes that help others get started. Please send your e-mails to <webchem@ropensci.org>.
 
-Please send your e-mails to <webchem@ropensci.com>.
+### Raise a new issue or join discussion on an existing issue
 
-### Raise an issue
+If you found a bug either in the code or the documentation, or a data source you would like us to integrate into ```webchem```, maybe you dreamed up a new functionality that would be nice to implement, raise an issue and let's discuss it! Even if you don't have the time or the coding background to resolve the issue yourself, maybe others do, and so just by giving a good problem you might help others who are looking for interesting problems to solve. You can raise an issue [here](https://github.com/ropensci/webchem/issues). Feel free to join discussions on existing issues as well!
 
-If you found a bug either in the code or the documentation, or a data source you would like us to integrate into ```webchem```, maybe you dreamed up a new functionality that would be nice to implement, raise an issue and let's discuss it! Even if you don't have the time or the coding background to resolve the issue yourself, maybe others do, and so just by giving a good problem you might help others who are looking for interesting issues to solve. 
+### Code contributions
 
-You can raise an issue [here](https://github.com/ropensci/webchem/issues)
+If you know some coding, you can also add code contributions.
 
-Thank you The goal of this guide is to help those who want to contribute to the project.
-There are multiple ways to contribute, not only code contribution. This gui
+1. **Fork** this repo to your Github account.
+2. **Clone** your version on your account down to your machine from your account, e.g,. `git clone https://github.com/<yourgithubusername>/webchem.git`.
+3. Make sure to **track upstream** progress (i.e., on our version of `webchem` at `ropensci/webchem`) by doing `git remote add upstream https://github.com/ropensci/webchem.git`. Before making changes make sure to pull changes in from upstream by doing either `git fetch upstream` then merge later or `git pull upstream` to fetch and merge in one step
+4. Make your **changes**. Bonus points for making changes on a new branch.
 
-Check if packages are updated.
-Separate branch for each contribution.
+Creating new branches is good practice. This is because if you finish with a topic, open a pull request and start working on another topic without starting a new branch, any further commits you push to your account will be automatically added to your pull request as well, making it much harder for us to evaluate your request. To aboid this, open a new branch for each new topic.
 
-### Code contributions?
+5. **Push** up to your account.
+6. Submit a **pull request** to home base at `ropensci/webchem`.
 
-* **Fork** this repo to your Github account.
-* **Clone** your version on your account down to your machine from your account, e.g,. `git clone https://github.com/<yourgithubusername>/webchem.git`.
-* Make sure to **track upstream** progress (i.e., on our version of `webchem` at `ropensci/webchem`) by doing `git remote add upstream https://github.com/ropensci/webchem.git`. Before making changes make sure to pull changes in from upstream by doing either `git fetch upstream` then merge later or `git pull upstream` to fetch and merge in one step
-* Make your **changes** (bonus points for making changes on a new branch).
-* **Push** up to your account.
-* Submit a **pull request** to home base at `ropensci/webchem`.
+### Guidelines for code contributions
 
-### Code guidelines
-
-We do not have strong guidelines for code contributions and are happy to help.
+We do not have strong guidelines for code contributions and are happy to help at any point in your work.
 
 1. We follow the [tidyverse](https://tidyverse.org) style. You can find the style guide [here](https://style.tidyverse.org/). Before committing your code, we encourage you to use ```lintr::lint_file()``` to check for nonconformances.
 
-2. We use ```roxygen2``` for documentation. Please make sure you update the package to the latest version before you update the documentation with ```devtools::document()```.
+2. We use ```roxygen2``` for documentation. Please make sure you update the package to the latest version before you update the documentation with ```devtools::document()```. In fact, it is good practice to update all the packages that are used by webchem before making changes.
 
 We want to keep dependencies to a minimum:
 
@@ -63,10 +56,10 @@ Some consistency guidelines:
 
 ### Data Sources
 
-You might think all webscraping is perfectly legal but it is unfortunately not that simple. Some services allow you to browse their website but do not allwo you to scrape it, for various reasons. Therefore, we always have to check the Terms & Conditons and any legal documents that might restrict programmable access. ```webchem``` only provides access to databases where programmable access is clearly approved by the database provider. A provider might create a publicly accessible API, and if they do not have a restrcitive T&C, this indicates their implicit approval for programmatically accessing their data. In all other cases explicit approval is required, i.e. either the T&C has to state that sraping is allowed, or we have to acquire written consent from the database provider before scraping their website.
+You might think all webscraping is perfectly legal but it is unfortunately not that simple.
 
-### Questions? 
+Some services allow you to browse their website but do not allow you programmable access, for various reasons. Therefore, we always have to check the Terms & Conditons and any other legal documents that might restrict programmable access. ```webchem``` only provides access to databases where programmable access is clearly approved by the database provider. A provider might create a publicly accessible API, and if they do not have a restrictive T&C, this indicates their implicit approval for programmatically accessing their data. In all other cases explicit approval is required, i.e. either the T&C has to state that scraping is allowed, or we have to acquire written consent from the database provider before developing functions that scrape their website.
 
-If you have any questions, get in touch with us at <webchem@ropensci.com>.
+And there is a big difference between scraping and crawling. ```webchem``` does provide some scraping functionality but it does not provide crawling functionality. We aim to query databases not to download them.
 
 ### Thanks for contributing!
