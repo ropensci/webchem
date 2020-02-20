@@ -48,7 +48,7 @@ IDs.
 | [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)                                    | `opsin_query()`                                                                                                        | [link](http://opsin.ch.cam.ac.uk/instructions.html)                | none                                          |
 | [Flavornet](http://www.flavornet.org)                                                   | `fn_percept()`                                                                                                         | none                                                               | none                                          |
 | [NIST](https://webbook.nist.gov)                                                        | `nist_ri()`                                                                                                            | none                                                               | none                                          |
-| [ChEBI](https://www.ebi.ac.uk/chebi/)                                                   | `chebi_lite_entity()`, `chebi_comp_entity()`                                                                           | [link](https://www.ebi.ac.uk/chebi/webServices.do)                 | none                                          |
+| [ChEBI](https://www.ebi.ac.uk/chebi/)                                                   | `get_chebiid()`, `chebi_comp_entity()`                                                                                 | [link](https://www.ebi.ac.uk/chebi/webServices.do)                 | none                                          |
 
 Moreover, there are some functions to check indentifiers:
 `is.inchikey()`, `is.cas()` and `is.smiles()`.
@@ -124,8 +124,8 @@ Retrieve the ChemSpider ID of Triclosan
 
 ``` r
 (id <- get_csid('Triclosan'))
-#> $Triclosan
-#> [1] 5363
+#>   csid     query
+#> 1 5363 Triclosan
 ```
 
 Use this ID to query information from ChemSpider
@@ -151,13 +151,10 @@ that an API-key is needed
 
 ``` r
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
-#> $`XEFQLINVKFYRCS-UHFFFAOYAS`
 #> [1] 5363
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
-#> $`XEFQLINVKFYRCS-UHFFFAOYAS`
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
-#> $`c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl`
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 ```
 
@@ -337,15 +334,9 @@ distance attributes), if multiple hits are found. Other options are
 
 ``` r
 get_etoxid('Triclosan', match = 'all')
-#> [[1]]
-#> [1] "/webETOX/public/search/stoff.do?orderBy=name"
-#> [2] "89236"                                       
-#> [3] "20179"                                       
-#> attr(,"matched")
-#> [1] NA                          "Methyltriclosan ( 89236 )"
-#> [3] "Triclosan ( 20179 )"      
-#> attr(,"distance")
-#> [1] "all"
+#>   etoxid                     match distance     query
+#> 1  89236 Methyltriclosan ( 89236 )      all Triclosan
+#> 2  20179       Triclosan ( 20179 )      all Triclosan
 ```
 
 With this substance ID we can query further information from ETOX, e.g.:
@@ -410,58 +401,58 @@ and results of ecotox tests:
 ``` r
 tests <- etox_tests(ids$etoxid)[[1]]
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
-#>                           Organism                 Effect Duration
-#> 1              Anabaena flos-aquae           not reported        4
-#> 2          Brachionus calyciflorus           not reported        2
-#> 3          Brachionus calyciflorus           not reported        2
-#> 4          Brachionus calyciflorus           not reported        2
-#> 5                Brachydanio rerio Embryo-Larval-Toxicity       10
-#> 6               Ceriodaphnia dubia              Lethality        7
-#> 7               Ceriodaphnia dubia              Mortality        2
-#> 8               Ceriodaphnia dubia              Mortality        7
-#> 9               Ceriodaphnia dubia           not reported        7
-#> 10              Ceriodaphnia dubia           Reproduction        7
-#> 11              Ceriodaphnia dubia           Reproduction        7
-#> 12                   Daphnia magna              Mortality       21
-#> 13                   Daphnia magna           Reproduction       21
-#> 14         Desmodesmus subspicatus     Cell Proliferation        4
-#> 15          Dunaliella tertiolecta     Cell Proliferation        4
-#> 16          Dunaliella tertiolecta     Cell Proliferation        4
-#> 17             Oncorhynchus mykiss Embryo-Larval-Toxicity        4
-#> 18             Pimephales promelas              Mortality        4
-#> 19 Pseudokirchneriella subcapitata       Wachstumshemmung        3
-#> 20         Scenedesmus subspicatus                Biomass        3
-#> 21         Scenedesmus subspicatus           not reported        4
-#> 22         Scenedesmus subspicatus           not reported        4
-#> 23         Scenedesmus subspicatus           not reported        4
-#> 24         Scenedesmus subspicatus           Reproduction        3
-#> 25                 Hyalella azteca              Mortality       10
-#>    Time_Unit Endpoint   Value Unit
-#> 1          d     NOEC   0.810     
-#> 2          d     NOEC  50.000 µg/l
-#> 3          d     NOEC  50.000 µg/l
-#> 4          d     NOEC  50.000 µg/l
-#> 5          d     NOEC 200.000 µg/l
-#> 6          d     NOEC 339.000 µg/l
-#> 7          d     EC50 120.000 µg/l
-#> 8          d     NOEC  50.000 µg/l
-#> 9          d     NOEC   4.000 µg/l
-#> 10         d     NOEC   6.000 µg/l
-#> 11         d     NOEC 182.000 µg/l
-#> 12         d     NOEC 132.000 µg/l
-#> 13         d     NOEC  40.000 µg/l
-#> 14         d    ErC50   1.610 µg/l
-#> 15         d     NOEC   1.600 µg/l
-#> 16         d    EbC50   3.550 µg/l
-#> 17         d     NOEC  34.100 µg/l
-#> 18         d     LC50 260.000 µg/l
-#> 19         d     NOEC   0.200 µg/l
-#> 20         d     NOEC   0.500 µg/l
-#> 21         d     NOEC   0.690 µg/l
-#> 22         d     NOEC   0.742 µg/l
-#> 23         d     NOEC   2.380 µg/l
-#> 24         d     NOEC   0.500 µg/l
-#> 25         d     NOEC   5.000 µg/l
+#>                           Organism                 Effect Duration Time_Unit
+#> 1              Anabaena flos-aquae           not reported        4         d
+#> 2          Brachionus calyciflorus           not reported        2         d
+#> 3          Brachionus calyciflorus           not reported        2         d
+#> 4          Brachionus calyciflorus           not reported        2         d
+#> 5                Brachydanio rerio Embryo-Larval-Toxicity       10         d
+#> 6               Ceriodaphnia dubia              Lethality        7         d
+#> 7               Ceriodaphnia dubia              Mortality        2         d
+#> 8               Ceriodaphnia dubia              Mortality        7         d
+#> 9               Ceriodaphnia dubia           not reported        7         d
+#> 10              Ceriodaphnia dubia           Reproduction        7         d
+#> 11              Ceriodaphnia dubia           Reproduction        7         d
+#> 12                   Daphnia magna              Mortality       21         d
+#> 13                   Daphnia magna           Reproduction       21         d
+#> 14         Desmodesmus subspicatus     Cell Proliferation        4         d
+#> 15          Dunaliella tertiolecta     Cell Proliferation        4         d
+#> 16          Dunaliella tertiolecta     Cell Proliferation        4         d
+#> 17             Oncorhynchus mykiss Embryo-Larval-Toxicity        4         d
+#> 18             Pimephales promelas              Mortality        4         d
+#> 19 Pseudokirchneriella subcapitata       Wachstumshemmung        3         d
+#> 20         Scenedesmus subspicatus                Biomass        3         d
+#> 21         Scenedesmus subspicatus           not reported        4         d
+#> 22         Scenedesmus subspicatus           not reported        4         d
+#> 23         Scenedesmus subspicatus           not reported        4         d
+#> 24         Scenedesmus subspicatus           Reproduction        3         d
+#> 25                 Hyalella azteca              Mortality       10         d
+#>    Endpoint   Value Unit
+#> 1      NOEC   0.810     
+#> 2      NOEC  50.000 µg/l
+#> 3      NOEC  50.000 µg/l
+#> 4      NOEC  50.000 µg/l
+#> 5      NOEC 200.000 µg/l
+#> 6      NOEC 339.000 µg/l
+#> 7      EC50 120.000 µg/l
+#> 8      NOEC  50.000 µg/l
+#> 9      NOEC   4.000 µg/l
+#> 10     NOEC   6.000 µg/l
+#> 11     NOEC 182.000 µg/l
+#> 12     NOEC 132.000 µg/l
+#> 13     NOEC  40.000 µg/l
+#> 14    ErC50   1.610 µg/l
+#> 15     NOEC   1.600 µg/l
+#> 16    EbC50   3.550 µg/l
+#> 17     NOEC  34.100 µg/l
+#> 18     LC50 260.000 µg/l
+#> 19     NOEC   0.200 µg/l
+#> 20     NOEC   0.500 µg/l
+#> 21     NOEC   0.690 µg/l
+#> 22     NOEC   0.742 µg/l
+#> 23     NOEC   2.380 µg/l
+#> 24     NOEC   0.500 µg/l
+#> 25     NOEC   5.000 µg/l
 ```
 
 #### ChemIDplus
@@ -469,20 +460,13 @@ tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value'
 ``` r
 out <- ci_query(query = 'Triclosan', type = 'name', match = 'best')
 out[['Triclosan']]$physprop
-#>              Physical Property    Value            Units Temp (deg C)
-#> 1                Melting Point       NA            deg C           NA
-#> 2        log P (octanol-water) 4.76e+00           (none)           NA
-#> 3             Water Solubility 1.00e+01             mg/L           20
-#> 4               Vapor Pressure 6.45e-07            mm Hg           25
-#> 5         Henry's Law Constant 4.99e-09      atm-m3/mole           25
-#> 6 Atmospheric OH Rate Constant 1.61e-11 cm3/molecule-sec           25
-#>   Source
-#> 1    EXP
-#> 2    EXP
-#> 3    EXP
-#> 4    EST
-#> 5    EST
-#> 6    EST
+#>              Physical Property    Value            Units Temp (deg C) Source
+#> 1                Melting Point       NA            deg C           NA    EXP
+#> 2        log P (octanol-water) 4.76e+00           (none)           NA    EXP
+#> 3             Water Solubility 1.00e+01             mg/L           20    EXP
+#> 4               Vapor Pressure 6.45e-07            mm Hg           25    EST
+#> 5         Henry's Law Constant 4.99e-09      atm-m3/mole           25    EST
+#> 6 Atmospheric OH Rate Constant 1.61e-11 cm3/molecule-sec           25    EST
 ```
 
 #### Wikidata
@@ -509,12 +493,9 @@ opsin_query(c('Cyclopropane', 'Octane'))
 #>                                                  stdinchi
 #> Cyclopropane                InChI=1S/C3H6/c1-2-3-1/h1-3H2
 #> Octane       InChI=1S/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3
-#>                              stdinchikey   smiles message  status
-#> Cyclopropane LVZWSLJZHVFIQJ-UHFFFAOYSA-N    C1CC1         SUCCESS
-#> Octane       TVMXDCGIABBOFY-UHFFFAOYSA-N CCCCCCCC         SUCCESS
-#>                     query
-#> Cyclopropane Cyclopropane
-#> Octane             Octane
+#>                              stdinchikey   smiles message  status        query
+#> Cyclopropane LVZWSLJZHVFIQJ-UHFFFAOYSA-N    C1CC1         SUCCESS Cyclopropane
+#> Octane       TVMXDCGIABBOFY-UHFFFAOYSA-N CCCCCCCC         SUCCESS       Octane
 ```
 
 #### Flavornet
@@ -565,14 +546,14 @@ head(RIs)
 
 Chemical Entities of Biological Interest (ChEBI) is a freely available
 dictionary of molecular entities focused on ‘small’ chemical compounds.
-`chebi_lite_entity()` returns a list of data.frames which matching query
+`get_chebiid()` returns a list of data.frames which matching query
 results. The data.frames contain the **chebiid**, the
 **chebiiasciiname**, a **searchscore** and **entity stars** (either 2 or
 3, depending on whether the entity was checked
 thoroughly).
 
 ``` r
-ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
+ids <- get_chebiid(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
 ids
 #> $Isoproturon
 #>       chebiid           chebiasciiname searchscore entitystar
