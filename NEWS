@@ -33,7 +33,7 @@ DEFUNCT FUNCTIONS
 
 * ppdb_parse() has been removed. webchem no longer offers any support for PPDB.
 * pp_query() has been removed. Physprop API is no longer active.
-
+* cs_query() has been removed.
 
 webchem 0.4
 ======================
