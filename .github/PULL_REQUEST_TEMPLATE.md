@@ -1,5 +1,9 @@
 ## Pull Request
 
+**Please do not include API keys in your pull request**. You should store any API keys or tokens in `.Renviron` or `.Rprofile` and be sure to have these files added to `.gitignore`. Do not include API keys in function examples or tests. See `cs_check_key()` for an example.
+
+If this pull request adds a new database to the list of databases `webchem` can access, please provide some evidence that this database is OK with being accessed by a third-party---for example, a link to an About or FAQ page.
+
 Before you submit a pull request, please do the following:
 
 * Add an entry to NEWS concisely describing what you changed.
@@ -10,11 +14,6 @@ Doing these things will make it easier to evaluate your pull request.
 
 We will try to be responsive and provide feedback.
 
-## Minimal reproducible example
-
-Finally, please include a minimal reproducible example (reprex). 
-The goal of a reprex is to make it as easy as possible for me to recreate your problem so that we can fix it. 
-If you've never heard of a reprex before, start by reading <https://github.com/jennybc/reprex#what-is-a-reprex> or <http://tinyurl.com/reproducible-000>. 
 
 ## Testing
 
@@ -30,9 +29,6 @@ Delete these instructions once you have read them.
 
 Brief description of the PR
 
-```r
-# insert reprex here
-```
 
 PR task list:
 - [ ] Update NEWS
