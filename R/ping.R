@@ -30,10 +30,10 @@ ping_pubchem <- function(...) {
 }
 
 
-# Chemspider webpage -----------------------------------------------------------
+# ChemSpider webpage -----------------------------------------------------------
 #' @import httr
 #' @rdname ping
-#' @return TRUE if chemspider is reachable
+#' @return TRUE if ChemSpider is reachable
 #' @export
 #' @examples
 #' \dontrun{

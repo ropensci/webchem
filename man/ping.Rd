@@ -21,7 +21,7 @@ A logical, TRUE or FALSE
 
 TRUE if pubchem is reachable
 
-TRUE if chemspider is reachable
+TRUE if ChemSpider is reachable
 
 TRUE if PAN is reachable
 }

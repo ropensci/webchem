@@ -7,7 +7,8 @@
 cs_datasources(apikey = NULL)
 }
 \arguments{
-\item{apikey}{character; your API key. If NULL (default), \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
+\item{apikey}{character; your API key. If NULL (default),
+\code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }
 \value{
 Returns a character vector.
@@ -29,7 +30,7 @@ cs_datasources()
 }
 }
 \references{
-https://developer.rsc.org/compounds-v1/apis
+\url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

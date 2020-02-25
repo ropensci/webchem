@@ -23,6 +23,13 @@ a data.frame
 \description{
 Retrieve compound information from pubchem CID, see \url{https://pubchem.ncbi.nlm.nih.gov/}
 }
+\note{
+Please respect the Terms and Conditions of the National Library of
+Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+usage policies of National Center for Biotechnology Information,
+\url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+}
 \examples{
 \donttest{
 # might fail if API is not available

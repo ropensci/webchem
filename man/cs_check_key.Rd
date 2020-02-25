@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemspider.R
 \name{cs_check_key}
 \alias{cs_check_key}
-\title{Retrieve stored ChemSpider API keys and secure tokens}
+\title{Retrieve ChemSpider API key}
 \usage{
 cs_check_key()
 }
@@ -10,17 +10,19 @@ cs_check_key()
 an API key
 }
 \description{
-Look for and retrieve ChemSpider API keys and secure tokens stored in
-.Renviron or .Rprofile.
+Look for and retrieve ChemSpider API key stored in .Renviron or .Rprofile.
 }
 \details{
 To use the any of the functions in \code{webchem} that access the
-  ChemSpider database, you'll need to obtain an API key by registering.
-  Register at \url{https://developer.rsc.org/} for an API key. Please respect
-  the Terms & Conditions. The Terms & Conditions can be found at
-  \url{https://developer.rsc.org/terms}. Rather than store the API key in code, which might be shared, it's best practice to keep it
-  hidden. You can store the API key as \code{CHEMSPIDER_KEY=<your key>} in
-  .Renviron or as \code{option(chemspider_key = <your key>)} in .Rprofile.
+ChemSpider database, you'll need to obtain an API key. Register at
+\url{https://developer.rsc.org/} for an API key. Please respect the Terms &
+Conditions \url{https://developer.rsc.org/terms}.
+
+You can store your API key as \code{CHEMSPIDER_KEY=<your key>} in
+.Renviron or as \code{options(chemspider_key = <your key>)} in .Rprofile.
+This will allow you to use ChemSpider without adding your API key in the
+beginning of each session, and will also allow you to share your analysis
+without sharing your API key. Keeping your API key hidden is good practice.
 }
 \examples{
 \dontrun{
@@ -29,5 +31,5 @@ cs_check_key()
 }
 \seealso{
 \code{\link[usethis]{edit_r_environ}}
-  \code{\link[usethis]{edit_r_profile}}
+\code{\link[usethis]{edit_r_profile}}
 }

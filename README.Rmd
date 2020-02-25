@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -45,14 +47,13 @@ Source | Function(s) | API Docs | API key
 [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
 [PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
 [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
-[PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) | `pp_query()` | none | none
 [ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
 [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
 [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
 [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
 [Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
 [NIST](https://webbook.nist.gov) | `nist_ri()` | none | none
-[ChEBI](https://www.ebi.ac.uk/chebi/) | `chebi_lite_entity()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
+[ChEBI](https://www.ebi.ac.uk/chebi/) | `get_chebiid()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
 
 Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
 
@@ -199,15 +200,6 @@ aw_query('Fluazinam', type = 'commonname')
 aw_query('79622-59-6', type = 'cas')[[1]]$cname
 ```
 
-#### SRC PHYSPROP Database
-[SRCs PHYSPROP Database](http://www.srcinc.com/what-we-do/environmental/scientific-databases.html) contains chemical structures, names and physical properties for over 41,000 chemicals.
-You can use `pp_query()` to query this database using a CAS number:
-
-```{r physprop}
-pp_query('50-00-0')
-```
-
-
 #### ETOX
 ETOX: Information System Ecotoxicology and Environmental Quality Targets is a database run by the Federal Environment Agency of Germany and provides data on synonyms, identifiers, Quality Targest and Effects.
 
@@ -268,7 +260,7 @@ out[['Triclosan']]$physprop
 ids <- get_wdid(query = 'Triclosan')
 ids
 
-# quera identifiers from wikidata
+# query identifiers from Wikidata
 wd_ident(ids$id)[1:5]
 ```
 
@@ -298,10 +290,10 @@ head(RIs)
 
 #### ChEBI
 
-Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `chebi_lite_entity()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
+Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `get_chebiid()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
 
 ```{r chebi-lite}
-ids <- chebi_lite_entity(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
+ids <- get_chebiid(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
 ids
 ```
 

@@ -3,7 +3,7 @@
 #' Return CompoundID (CID) for a search query using PUG-REST,
 #' see \url{https://pubchem.ncbi.nlm.nih.gov/}.
 #' @import httr
-#'
+#' @importFrom stats rgamma
 #' @param query character; search term.
 #' @param from character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'
 #' @param first logical; If TRUE return only first result.
@@ -20,7 +20,11 @@
 #'
 #' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical information in PubChem. Nucleic acids research, gkv396.
-#'
+#' @note Please respect the Terms and Conditions of the National Library of
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' usage policies of National Center for Biotechnology Information,
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -50,7 +54,7 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
     qurl <- paste0(prolog, input, output, arg)
     if (verbose)
       message(qurl)
-    Sys.sleep(0.2)
+    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     cont <- try(content(POST(qurl,
                              body = paste0(from, '=', query)
                              ), type = 'text', encoding = 'UTF-8'),
@@ -103,7 +107,11 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
 #'
 #' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical information in PubChem. Nucleic acids research, gkv396.
-#'
+#' @note Please respect the Terms and Conditions of the National Library of
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' usage policies of National Center for Biotechnology Information,
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @export
 #' @examples
 #' \donttest{
@@ -207,7 +215,11 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...){
 #'
 #' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical information in PubChem. Nucleic acids research, gkv396.
-#'
+#' @note Please respect the Terms and Conditions of the National Library of
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' usage policies of National Center for Biotechnology Information,
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples

@@ -1,9 +1,11 @@
+.Rprofile
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 .vscode*
 .Renviron
+
 README_files*
 README.html
 .github/*.html

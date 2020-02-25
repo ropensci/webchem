@@ -1,6 +1,6 @@
 context('chebi')
 
-a <- chebi_lite_entity('Glyphosate', category = 'ALL')
+a <- get_chebiid('Glyphosate', category = 'ALL')
 A <- chebi_comp_entity('CHEBI:27744')
 B <- chebi_comp_entity('27732')
 
