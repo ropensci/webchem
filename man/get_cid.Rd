@@ -4,7 +4,15 @@
 \alias{get_cid}
 \title{Retrieve Pubchem Id (CID)}
 \usage{
-get_cid(query, from = "name", first = FALSE, verbose = TRUE, arg = NULL, ...)
+get_cid(
+  query,
+  from = "name",
+  first = FALSE,
+  search_substances = FALSE,
+  verbose = TRUE,
+  arg = NULL,
+  ...
+)
 }
 \arguments{
 \item{query}{character; search term.}
@@ -12,6 +20,8 @@ get_cid(query, from = "name", first = FALSE, verbose = TRUE, arg = NULL, ...)
 \item{from}{character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'}
 
 \item{first}{logical; If TRUE return only first result.}
+
+\item{search_substances}{logical; If TRUE also searches PubChem SIDs}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
