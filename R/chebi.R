@@ -128,7 +128,7 @@ get_chebiid <- function(query,
         return(out[ which.max(out$searchscore), ])
       }
       if (match == "ask") {
-        matched <- webchem:::chooser(out$chebiid, 'all')
+        matched <- chooser(out$chebiid, 'all')
         return(out[ out$chebiid == matched, ])
       }
       if (match == 'na') {
