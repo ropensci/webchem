@@ -7,6 +7,7 @@
 #' @param query character; search term.
 #' @param from character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'
 #' @param first logical; If TRUE return only first result.
+#' @param search_substances logical; If TRUE also searches PubChem SIDs
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like 'name_type=word' to match individual words.
 #' @param ... optional arguments
@@ -26,6 +27,7 @@
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @importFrom purrr map2
 #' @export
 #' @examples
 #' \donttest{
@@ -40,14 +42,14 @@
 #' get_cid(comp)
 #'
 #' }
-get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = NULL, ...) {
+get_cid <- function(query, from = 'name', first = FALSE, search_substances = FALSE, verbose = TRUE, arg = NULL, ...) {
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c('Aspirin')
   # from = 'name'
 
-  foo <- function(query, from, first, verbose, ...){
+  foo <- function(query, from, first, scope = 'compound', verbose, ...){
     prolog <- 'https://pubchem.ncbi.nlm.nih.gov/rest/pug'
-    input <- paste0('/compound/', from)
+    input <- paste0('/',scope,'/', from)
     output <- '/cids/JSON'
     if (!is.null(arg))
       arg <- paste0('?', arg)
@@ -69,16 +71,36 @@ get_cid <- function(query, from = 'name', first = FALSE, verbose = TRUE, arg = N
       warning(cont$Fault$Details, '. Returning NA.')
       return(NA)
     }
-    out <- unlist(cont)
+
+    if(scope=='substance'){
+      cont <- cont$InformationList$Information$CID
+    }
+
+    out <- unique(unlist(cont))
+
+
     if (first)
       out <- out[1]
     names(out) <- NULL
     return(out)
   }
+
   out <- lapply(query, foo, from = from, first = first, verbose = verbose)
   out <- setNames(out, query)
-  if (first)
+
+  if(search_substances){
+  out2 <- lapply(query, foo, from = from, first = first, scope = 'substance', verbose = verbose)
+  out2 <- setNames(out2, query)
+
+  out <- map2(out, out2, c)
+  out <- lapply(out, unique)
+  }
+
+
+  if (first){
     out <- unlist(out)
+  }
+
   return(out)
 }
 

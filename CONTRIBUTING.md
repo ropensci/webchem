@@ -36,6 +36,8 @@ We do not have strong guidelines for code contributions and are happy to help at
 
 2. We use ```roxygen2``` for documentation. Please make sure you update the package to the latest version before you update the documentation with ```devtools::document()```. In fact, it is good practice to update all the packages that are used by webchem before making changes.
 
+2. For web scraping, we recommend the use of the [polite](https://dmi3kno.github.io/polite/) package.
+
 We want to keep dependencies to a minimum:
 
 3. Please use the [`xml2`](https://github.com/hadley/xml2) package instead of the `XML` package. The maintainance of xml2 is much better.

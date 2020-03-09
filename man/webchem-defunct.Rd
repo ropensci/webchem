@@ -7,6 +7,7 @@
 \alias{ppdb}
 \alias{cir}
 \alias{pp_query}
+\alias{cs_prop}
 \title{Defunct function(s) in the webchem package}
 \usage{
 ppdb_query()
@@ -18,6 +19,8 @@ ppdb()
 cir()
 
 pp_query()
+
+cs_prop()
 }
 \description{
 These functions are defunct and no longer available.

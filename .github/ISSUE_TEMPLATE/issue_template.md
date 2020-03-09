@@ -1,3 +1,7 @@
+---
+name: Bug report
+about: Describe a bug you've seen or problem you've encountered
+---
 Please briefly describe your problem and what output you expect. 
 If you have a question, please try using stackoverflow <http://stackoverflow.com> first.
 

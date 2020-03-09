@@ -12,7 +12,8 @@ ppdb_query <- function() {
   .Defunct(
     "ppdb_parse",
     package = "webchem",
-    msg = "ppdb_query() has been removed from the package due to copyright issues.")
+    msg = "ppdb_query() has been removed from the package due to copyright
+    issues.")
 }
 
 #' @rdname webchem-defunct
@@ -21,7 +22,8 @@ ppdb_parse <- function() {
   .Defunct(
     "ppdb",
     package = "webchem",
-    msg = "ppdb_parse() has been removed from the package due to copyright issues.")
+    msg = "ppdb_parse() has been removed from the package due to copyright
+    issues.")
 }
 
 #' @rdname webchem-defunct
@@ -45,11 +47,18 @@ pp_query <- function() {
   .Defunct(
     "pp_query",
     package = "webchem",
-    msg = "pp_query() has been removed from the package since the Physprop API is no longer active."
+    msg = "pp_query() has been removed from the package since the Physprop API
+    is no longer active."
   )
 }
 
-
-
-
-
+#' @rdname webchem-defunct
+#' @export
+cs_prop <- function() {
+  .Defunct(
+    "cs_prop",
+    package = "webchem",
+    msg = "cs_prop() has been removed from the package since RSC does not allow
+    the scraping of ChemSpider pages."
+  )
+}

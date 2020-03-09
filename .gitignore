@@ -5,7 +5,6 @@
 .Ruserdata
 .vscode*
 .Renviron
-.Rprofile
 
 README_files*
 README.html
