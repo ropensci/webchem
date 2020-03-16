@@ -64,7 +64,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
                   activity = NA,
                   subactivity = NA,
                   inchikey = NA,
-                  inch = NA,
+                  inchi = NA,
                   source_url = NA))
     }
     if (length(takelink) > 1) {

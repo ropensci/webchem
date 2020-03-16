@@ -1,4 +1,19 @@
-webchem 0.5
+webchem 0.6.0
+======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+BUG FIXES
+
+* aw_query() returned a list for successful queries, NA for unsuccessful queries [PR #222, fixed by stitam]
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+webchem 0.5.0
 ======================
 
 NEW FEATURES
@@ -35,7 +50,7 @@ DEFUNCT FUNCTIONS
 * pp_query() has been removed. Physprop API is no longer active.
 * cs_prop() has been removed.
 
-webchem 0.4
+webchem 0.4.0
 ======================
 
 NEW FEATURES
@@ -58,7 +73,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 
-webchem 0.3
+webchem 0.3.0
 ======================
 
 NEW FEATURES
@@ -81,7 +96,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 
-webchem 0.2
+webchem 0.2.0
 ======================
 
 NEW FEATURES
@@ -157,7 +172,7 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 
 
-webchem 0.0.5.0
+webchem 0.0.5
 ======================
 
 NEW FEATURES
@@ -209,7 +224,7 @@ DEFUNCT FUNCTIONS
 
 
 
-webchem 0.0.4.0
+webchem 0.0.4
 ======================
 
 NEW FEATURES
