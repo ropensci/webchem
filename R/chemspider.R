@@ -6,7 +6,7 @@
 #' ChemSpider database, you'll need to obtain an API key. Register at
 #' \url{https://developer.rsc.org/} for an API key. Please respect the Terms &
 #' Conditions \url{https://developer.rsc.org/terms}.
-#' @details You can store your API key as \code{CHEMSPIDER_KEY=<your key>} in
+#' @details You can store your API key as \code{CHEMSPIDER_KEY = <your key>} in
 #' .Renviron or as \code{options(chemspider_key = <your key>)} in .Rprofile.
 #' This will allow you to use ChemSpider without adding your API key in the
 #' beginning of each session, and will also allow you to share your analysis
