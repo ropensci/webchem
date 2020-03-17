@@ -17,7 +17,8 @@ get_cid(
 \arguments{
 \item{query}{character; search term.}
 
-\item{from}{character; type of input, can be one of 'name' (default), 'cid', 'sid', 'aid', 'smiles', 'inchi', 'inchikey'}
+\item{from}{character; type of input, can be one of "name" (default), "cid",
+"sid", "aid", "smiles", "inchi", "inchikey"}
 
 \item{first}{logical; If TRUE return only first result.}
 
@@ -25,7 +26,8 @@ get_cid(
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{arg}{character; optinal arguments like 'name_type=word' to match individual words.}
+\item{arg}{character; optinal arguments like "name_type=word" to match
+individual words.}
 
 \item{...}{optional arguments}
 }
@@ -46,26 +48,30 @@ usage policies of National Center for Biotechnology Information,
 \examples{
 \donttest{
 # might fail if API is not available
-get_cid('Triclosan')
-get_cid('Triclosan', arg = 'name_type=word')
-get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = 'inchikey')
-get_cid("CCCC", from = 'smiles')
+get_cid("Triclosan")
+get_cid("Triclosan", arg = "name_type=word")
+get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")
+get_cid("CCCC", from = "smiles")
 
 # multiple inputs
-comp <- c('Triclosan', 'Aspirin')
+comp <- c("Triclosan", "Aspirin")
 get_cid(comp)
 
 }
 }
 \references{
-Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public Information System for
-Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37: 623–633.
+Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
+Information System for
+Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37:
+623–633.
 
 Kim, Sunghwan, Paul A. Thiessen, Evan E. Bolton, et al. 2016
-PubChem Substance and Compound Databases. Nucleic Acids Research 44(D1): D1202–D1213.
+PubChem Substance and Compound Databases. Nucleic Acids Research 44(D1):
+D1202–D1213.
 
 Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
-PUG-SOAP and PUG-REST: web services for programmatic access to chemical information in PubChem. Nucleic acids research, gkv396.
+PUG-SOAP and PUG-REST: web services for programmatic access to chemical
+information in PubChem. Nucleic acids research, gkv396.
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
