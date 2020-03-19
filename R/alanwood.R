@@ -53,6 +53,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
     }
 
     takelink <- links[tolower(names) == tolower(query)]
+    if (is.na(query)) takelink <- vector()
     if (length(takelink) == 0) {
       message("Not found! Returning NA.\n")
       return(list(cname = NA,
@@ -77,7 +78,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
     if (verbose)
       message("Querying ", takelink)
 
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+    Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
     ttt <- read_html(paste0("http://www.alanwood.net/pesticides/", takelink))
 
     status <- xml_text(
@@ -133,7 +134,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
     out <- list(cname = cname, status = status,
                 pref_iupac_name = pref_iupac_name, iupac_name = iupac_name,
                 cas = cas, formula = formula, activity = activity,
-                subactivity = subactivity, inchikey = inchikey, inch = inchi,
+                subactivity = subactivity, inchikey = inchikey, inchi = inchi,
                 source_url = source_url)
     return(out)
   }
@@ -153,8 +154,6 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
 #'@author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 build_aw_idx <- function() {
   idx1 <- read_html("http://www.alanwood.net/pesticides/index_rn.html")
-  # idx2 <- read_html("http://www.alanwood.net/pesticides/index_rn1.html")
-  # idx3 <- read_html("http://www.alanwood.net/pesticides/index_rn2.html")
   prep_idx <- function(y) {
     names <- xml_text(xml_find_all(y, "//dl/dt"))
     links <- xml_attr(
@@ -162,7 +161,6 @@ build_aw_idx <- function() {
     linknames <- xml_text(xml_find_all(y, "//dt/following-sibling::dd[1]/a[1]"))
     return(data.frame(names, links, linknames, stringsAsFactors = FALSE))
   }
-  # aw_idx <- rbind(prep_idx(idx1), prep_idx(idx2) ,prep_idx(idx3))
   aw_idx <- rbind(prep_idx(idx1))
   aw_idx[["source"]] <- "rn"
   idx4 <- read_html("http://www.alanwood.net/pesticides/index_cn.html")
@@ -183,6 +181,8 @@ build_aw_idx <- function() {
   aw_idx$linknames <- ln
   attr(aw_idx, "date") <- Sys.Date()
 
+  # do not delete this line
+  # occasionally the data file should be updated in the package
   # save(aw_idx, file = "data/aw_idx.rda")
   return(aw_idx)
 }
