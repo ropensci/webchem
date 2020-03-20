@@ -70,7 +70,7 @@ get_chebiid <- function(query,
                         stars = 'ALL',
                         verbose = TRUE,
                         ...) {
-
+  match <- match.arg(match)
   foo <- function(query, match, from, max_res, stars, verbose, ...) {
     if (is.na(query)){
       return(data.frame(chebiid = NA,
@@ -83,8 +83,6 @@ get_chebiid <- function(query,
                   'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS',
                   'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES')
     from <- match.arg(from, from_all)
-    match_all <- c('all', 'best', 'ask', 'na')
-    match <- match.arg(match, match_all)
     stars_all <- c('ALL', 'TWO ONLY', 'THREE ONLY')
     stars <- match.arg(stars, stars_all)
     # query
