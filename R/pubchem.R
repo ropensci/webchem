@@ -232,7 +232,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
   return(out)
 }
 
-
 #' Search synonyms in pubchem
 #'
 #' Search synonyms using PUG-REST,
@@ -319,4 +318,67 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   if (!is.null(choices)) #if only one choice is returned, convert list to vector
     out <- unlist(out)
   return(out)
+}
+
+#' Query PubChem for custom information
+#' @importFrom jsonlite fromJSON
+#'
+#' @details The full list of queries can be found at
+#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}
+#' @examples
+#' \donttest{
+#' pc_query(176, "pka")
+#'
+#' }
+#'
+
+pc_query <- function(cid, query) {
+  query <- gsub(" +", "+", query)
+  foo <- function(cid, query){
+    if (is.na(cid)) {
+      message("Invalid input. Returning NA.")
+      return(NA)
+    }
+    qurl <- paste0(
+      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
+      cid,"/JSON?heading=",query)
+    cont <- try(jsonlite::fromJSON(qurl), silent = TRUE)
+    if (inherits(cont, "try-error")) {
+      message(paste0("CID ",cid, ": Query not found. Returning NA."))
+      return(NA)
+    }
+    return(cont)
+  }
+  cont <- lapply(cid, function(x) foo(x, query))
+
+  #return(cont)
+
+  info <- rbind(lapply(cont, function(x) {
+    x$Record$Section$Section[[1]]$Section[[1]]$Information[[1]]
+  }))
+
+
+
+  #info <- cont$Record$Section$Section[[1]]$Section[[1]]$Information[[1]]
+  #if("Reference" %in% names(info)) {
+  #  info <- info[,-which(names(info) == "Reference")]
+  #}
+  xinfo <- cbind(cid, info)
+  #ref <- cont$Record$Reference
+  #ref <- lapply(split(ref, ref$ReferenceNumber),as.list)
+
+  #out <- list(
+  #  "Information" = info,
+  #  "References" = ref
+  #)
+  #return(out)
+
+
+
+
+  #names(out) <- cid
+
+
+  return(info)
+
 }
