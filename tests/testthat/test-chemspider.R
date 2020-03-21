@@ -50,6 +50,7 @@ test_that("get_csid()", {
   a <- get_csid("Triclosan")
   b <- get_csid("Naproxene")
   ab <- get_csid(c("Triclosan", "Naproxene"))
+  abcd <- get_csid(c("ethanol", "balloon", NA, "acetic acid"))
   c1 <- get_csid("Oxygen", control = cs_control(order_by = "recordId"))
   #c2 <- get_csid("Oxygen", control = cs_control(order_by = "massDefect"))
   c3 <- get_csid("Oxygen", control = cs_control(order_by = "molecularWeight"))
@@ -74,6 +75,7 @@ test_that("get_csid()", {
   expect_equal(c7$csid, c(952, 140526))
   expect_equal(c8$csid, c(952, 140526))
   expect_equal(c9$csid, c(140526, 952))
+  expect_equal(abcd$csid, c(682, NA, NA, 171))
 })
 
 test_that("cs_smiles_csid()", {
