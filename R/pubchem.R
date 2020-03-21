@@ -331,8 +331,16 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #'
 #' }
 #'
+# 5564, 3496
+# test <-pc_query(176, "pka")
+# test2 <-pc_query(176, "experimental properties")
+# tree <- as.Node(test[[1]], nameName = "TOCHeading")
+# pka <- FindNode(tree, "pKa")
+# tree2 <- as.Node(test2[[1]], nameName = "TOCHeading")
+# test2 <- pc_query(c(176,264), "pka")
 
 pc_query <- function(cid, query) {
+
   query <- gsub(" +", "+", query)
   foo <- function(cid, query){
     if (is.na(cid)) {
@@ -342,6 +350,29 @@ pc_query <- function(cid, query) {
     qurl <- paste0(
       "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
       cid,"/JSON?heading=",query)
+    cont <- try(jsonlite::fromJSON(qurl, simplifyDataFrame = FALSE),
+                silent = TRUE)
+    if (inherits(cont, "try-error")) {
+      message(paste0("CID ",cid, ": Query not found. Returning NA."))
+      return(NA)
+    }
+    return(cont)
+  }
+  cont <- lapply(cid, function(x) foo(x, query))
+  class(cont) <- c("pc_query", "list")
+  return(cont)
+}
+
+pc_full <- function(cid) {
+
+  foo <- function(cid, query){
+    if (is.na(cid)) {
+      message("Invalid input. Returning NA.")
+      return(NA)
+    }
+    qurl <- paste0(
+      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
+      cid,"/JSON")
     cont <- try(jsonlite::fromJSON(qurl), silent = TRUE)
     if (inherits(cont, "try-error")) {
       message(paste0("CID ",cid, ": Query not found. Returning NA."))
@@ -350,35 +381,6 @@ pc_query <- function(cid, query) {
     return(cont)
   }
   cont <- lapply(cid, function(x) foo(x, query))
-
-  #return(cont)
-
-  info <- rbind(lapply(cont, function(x) {
-    x$Record$Section$Section[[1]]$Section[[1]]$Information[[1]]
-  }))
-
-
-
-  #info <- cont$Record$Section$Section[[1]]$Section[[1]]$Information[[1]]
-  #if("Reference" %in% names(info)) {
-  #  info <- info[,-which(names(info) == "Reference")]
-  #}
-  xinfo <- cbind(cid, info)
-  #ref <- cont$Record$Reference
-  #ref <- lapply(split(ref, ref$ReferenceNumber),as.list)
-
-  #out <- list(
-  #  "Information" = info,
-  #  "References" = ref
-  #)
-  #return(out)
-
-
-
-
-  #names(out) <- cid
-
-
-  return(info)
-
+  class(cont) <- c("pc_query", "list")
+  return(cont)
 }
