@@ -174,7 +174,7 @@ get_csid <- function(query,
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
-  from <- match.arg(from, choices = , several.ok = FALSE)
+  from <- match.arg(from)
   out <- lapply(query, function(x) {
     if (is.na(x)) return(NA)
     res <- switch(from,
