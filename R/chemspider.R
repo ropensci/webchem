@@ -635,6 +635,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
   }
   else {
     out <- unname(sapply(query, function(x) {
+      if (is.na(x)) return(NA)
       switch(cs_convert_router(from, to),
              identity = query,
              cs_convert_multiple = cs_convert_multiple(
@@ -695,7 +696,7 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
   )
   headers <- c("Content-Type" = "", "apikey" = apikey)
   body <- list(
-    "recordIds" = csid, "fields" = fields
+    "recordIds" = csid[!is.na(csid)], "fields" = fields
   )
   body <- jsonlite::toJSON(body)
   postres <- httr::POST(
@@ -703,7 +704,9 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
     httr::add_headers(.headers = headers), body = body
   )
   if (postres$status_code == 200) {
-    out <- jsonlite::fromJSON(rawToChar(postres$content))$records
+    res <- jsonlite::fromJSON(rawToChar(postres$content))$records
+    out <- data.frame("id" = csid)
+    out <- dplyr::left_join(out, res)
     return(out)
   }
   else {
