@@ -656,6 +656,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' retrieve the record details for your query.
 #' @importFrom jsonlite toJSON
 #' @importFrom httr POST add_headers
+#' @importFrom dplyr left_join
 #' @param csid numeric; can be obtained using \code{\link{get_csid}}
 #' @param fields character; see details.
 #' @param apikey character; your API key. If NULL (default),
@@ -706,7 +707,7 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
   if (postres$status_code == 200) {
     res <- jsonlite::fromJSON(rawToChar(postres$content))$records
     out <- data.frame("id" = csid)
-    out <- dplyr::left_join(out, res)
+    out <- dplyr::left_join(out, res, by = "id")
     return(out)
   }
   else {
