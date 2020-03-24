@@ -72,12 +72,7 @@ get_chebiid <- function(query,
                         ...) {
   match <- match.arg(match)
   foo <- function(query, match, from, max_res, stars, verbose, ...) {
-    if (is.na(query)){
-      return(data.frame(chebiid = NA,
-                        chebiasciiname = NA,
-                        searchscore = NA,
-                        entitystar = NA))
-    }
+    if (is.na(query)) return(data.frame(chebiid = NA))
     from_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES',
                   'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS',
                   'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS',
@@ -118,11 +113,7 @@ get_chebiid <- function(query,
       out <- setNames(out, tolower(names(out)))
       if (nrow(out) == 0) {
         message('No result found. \n')
-        return(data.frame(
-          chebiid = NA,
-          chebiasciiname = NA,
-          searchscore = NA,
-          entitystar = NA))
+        return(data.frame(chebiid = NA))
       }
       if (match == 'all') {
         return(out)
@@ -138,10 +129,7 @@ get_chebiid <- function(query,
         return(out[out$chebiid == matched, ])
       }
       if (match == 'na') {
-        return(data.frame(chebiid = NA,
-                          chebiasciiname = NA,
-                          searchscore = NA,
-                          entitystar = NA))
+        return(data.frame(chebiid = NA))
       }
     } else {
       out <- data.frame(chebiid = NA)
