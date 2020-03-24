@@ -72,7 +72,9 @@ get_chebiid <- function(query,
                         ...) {
   match <- match.arg(match)
   foo <- function(query, match, from, max_res, stars, verbose, ...) {
-    if (is.na(query)) return(data.frame(chebiid = NA))
+    if (is.na(query)) return(data.frame(chebiid = NA_character_,
+                                        query = NA_character_,
+                                        stringsAsFactors = FALSE))
     from_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES',
                   'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS',
                   'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS',
@@ -113,8 +115,12 @@ get_chebiid <- function(query,
       out <- setNames(out, tolower(names(out)))
       if (nrow(out) == 0) {
         message('No result found. \n')
-        return(data.frame(chebiid = NA))
+        return(data.frame(chebiid = NA_character_,
+                          query = query,
+                          stringsAsFactors = FALSE))
       }
+      if (nrow(out) > 0) out$query <- query
+      if (nrow(out) == 1) return(out)
       if (match == 'all') {
         return(out)
       }
@@ -129,10 +135,14 @@ get_chebiid <- function(query,
         return(out[out$chebiid == matched, ])
       }
       if (match == 'na') {
-        return(data.frame(chebiid = NA))
+        return(data.frame(chebiid = NA_character_,
+                          query = query,
+                          stringsAsFactors = FALSE))
       }
     } else {
-      out <- data.frame(chebiid = NA)
+      out <- data.frame(chebiid = NA_character_,
+                        query = query,
+                        stringsAsFactors = FALSE)
       message('Returning NA (', http_status(res)$message, '). \n')
 
       return(out)
@@ -146,7 +156,7 @@ get_chebiid <- function(query,
                 stars = stars,
                 verbose = verbose)
   out <- setNames(out, query)
-
+  out <- bind_rows(out)
   return(out)
 }
 
@@ -344,95 +354,95 @@ rbind_named_fill <- function(x) {
 #' chebi_comp_entity() output element. This is used in chebi_comp_entity() to
 #' provide a valid output for invalid inputs and allow vectorisation.
 #' @noRd
-#' @autor Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 empty_chebi_comp_entity <- function() {
   properties <- data.frame(
-    chebiid = as.character(NA),
-    chebiasciiname = as.character(NA),
-    definition = as.character(NA),
-    status = as.character(NA),
-    smiles = as.character(NA),
-    inchi = as.character(NA),
-    inchikey = as.character(NA),
-    charge = as.character(NA),
-    mass = as.character(NA),
-    monoisotopicmass = as.character(NA),
-    entitystar = as.character(NA)
+    chebiid = NA_character_,
+    chebiasciiname = NA_character_,
+    definition = NA_character_,
+    status = NA_character_,
+    smiles = NA_character_,
+    inchi = NA_character_,
+    inchikey = NA_character_,
+    charge = NA_character_,
+    mass = NA_character_,
+    monoisotopicmass = NA_character_,
+    entitystar = NA_character_
   )
   chebiid_snd <- data.frame(
-    chebiids = as.character(NA)
+    chebiids = NA_character_
   )
   chem_structure <- list(
-    list("structure" = list(as.character(NA)),
-         "type" = list(as.character(NA)),
-         "dimension" = list(as.character(NA)),
-         "defaultStructure" = list(as.character(NA)))
+    list("structure" = list(NA_character_),
+         "type" = list(NA_character_),
+         "dimension" = list(NA_character_),
+         "defaultStructure" = list(NA_character_))
     )
   synonyms <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
+    data = NA_character_,
+    type = NA_character_,
+    source = NA_character_
   )
   iupacnames <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
+    data = NA_character_,
+    type = NA_character_,
+    source = NA_character_
   )
   formulae <- data.frame(
-    data = as.character(NA),
-    source = as.character(NA)
+    data = NA_character_,
+    source = NA_character_
   )
   regnumbers <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
+    data = NA_character_,
+    type = NA_character_,
+    source = NA_character_
   )
   citations <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
+    data = NA_character_,
+    type = NA_character_,
+    source = NA_character_
   )
   dblinks <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA)
+    data = NA_character_,
+    type = NA_character_
   )
   parents <- data.frame(
-    chebiName = as.character(NA),
-    chebiId = as.character(NA),
-    type = as.character(NA),
-    status = as.character(NA),
-    cyclicRelationship = as.character(NA)
+    chebiName = NA_character_,
+    chebiId = NA_character_,
+    type = NA_character_,
+    status = NA_character_,
+    cyclicRelationship = NA_character_
   )
   children <- data.frame(
-    chebiName = as.character(NA),
-    chebiId = as.character(NA),
-    type = as.character(NA),
-    status = as.character(NA),
-    cyclicRelationship = as.character(NA)
+    chebiName = NA_character_,
+    chebiId = NA_character_,
+    type = NA_character_,
+    status = NA_character_,
+    cyclicRelationship = NA_character_
   )
   comments <- data.frame(
-    text = as.character(NA),
-    date = as.character(NA)
+    text = NA_character_,
+    date = NA_character_
   )
   origins <- data.frame(
-    speciesText = as.character(NA),
-    speciesAccession = as.character(NA),
-    SourceType = as.character(NA),
-    SourceAccession = as.character(NA),
-    componentText = as.character(NA),
-    componentAccession = as.character(NA)
+    speciesText = NA_character_,
+    speciesAccession = NA_character_,
+    SourceType = NA_character_,
+    SourceAccession = NA_character_,
+    componentText = NA_character_,
+    componentAccession = NA_character_
   )
-  return(list("properties" = properties,
-              "chebiid_snd" = chebiid_snd,
-              "chem_structure" = chem_structure,
-              "synonyms" = synonyms,
-              "iupacnames" = iupacnames,
-              "formulae" = formulae,
-              "regnumbers" = regnumbers,
-              "citations" = citations,
-              "dblinks" = dblinks,
-              "parents" = parents,
-              "children" = children,
-              "comments" = comments,
-              "origins" = origins))
+  return(list(properties = properties,
+              chebiid_snd = chebiid_snd,
+              chem_structure = chem_structure,
+              synonyms = synonyms,
+              iupacnames = iupacnames,
+              formulae = formulae,
+              regnumbers = regnumbers,
+              citations = citations,
+              dblinks = dblinks,
+              parents = parents,
+              children = children,
+              comments = comments,
+              origins = origins))
 }
