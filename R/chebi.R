@@ -358,7 +358,7 @@ rbind_named_fill <- function(x) {
 #' chebi_comp_entity() output element. This is used in chebi_comp_entity() to
 #' provide a valid output for invalid inputs and allow vectorisation.
 #' @noRd
-#' @autor Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 empty_chebi_comp_entity <- function() {
   properties <- data.frame(
     chebiid = as.character(NA),

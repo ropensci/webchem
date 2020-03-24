@@ -137,30 +137,3 @@ smiles.pc_prop <- function(x, ...) {
 smiles.wd_ident <- function(x, ...) {
   x$smiles
 }
-
-#pKa --------------------------------------------------------------------------
-#' @rdname extractors
-#' @export
-pka <- function(x, ...){
-  UseMethod("pka")
-}
-
-#' @export
-pka.pc_query <- function(x, ...) {
-  info <- lapply(x, function(x) {
-
-    #we should take the pc_query object and find the location of the pka
-    tree <- data.tree::as.Node(x,nameName = "TOCHeading")
-    pka <- data.tree::FindNode(tree, "pKa")
-    info <- as.data.frame(as.list(FindNode(pka, "1")))
-    #info <- info[,-which(names(info) == "Reference")]
-
-
-
-    #info <- x$Record$Section$Section[[1]]$Section[[1]]$Information[[1]]
-    #info <- data.frame("cid" = x$Record$RecordNumber, info)
-    #info <- info[,-which(names(info) == "Reference")]})
-    return(info)
-  })
-  return(info)
-}

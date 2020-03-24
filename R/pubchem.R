@@ -320,24 +320,34 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   return(out)
 }
 
-#' Query PubChem for custom information
+#' Import a full PubChem content page
+pc_full <- function(cid) {
+
+  foo <- function(cid, query){
+    if (is.na(cid)) {
+      message("Invalid input. Returning NA.")
+      return(NA)
+    }
+    qurl <- paste0(
+      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
+      cid,"/JSON")
+    cont <- try(jsonlite::fromJSON(qurl), silent = TRUE)
+    if (inherits(cont, "try-error")) {
+      message(paste0("CID ",cid, ": Query not found. Returning NA."))
+      return(NA)
+    }
+    return(cont)
+  }
+  cont <- lapply(cid, function(x) foo(x, query))
+  class(cont) <- c("pc_query", "list")
+  return(cont)
+}
+
+#' Import part of a PubChem content page
 #' @importFrom jsonlite fromJSON
 #'
 #' @details The full list of queries can be found at
 #' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}
-#' @examples
-#' \donttest{
-#' pc_query(176, "pka")
-#'
-#' }
-#'
-# 5564, 3496
-# test <-pc_query(176, "pka")
-# test2 <-pc_query(176, "experimental properties")
-# tree <- as.Node(test[[1]], nameName = "TOCHeading")
-# pka <- FindNode(tree, "pKa")
-# tree2 <- as.Node(test2[[1]], nameName = "TOCHeading")
-# test2 <- pc_query(c(176,264), "pka")
 
 pc_query <- function(cid, query) {
 
@@ -363,24 +373,48 @@ pc_query <- function(cid, query) {
   return(cont)
 }
 
-pc_full <- function(cid) {
+#' Extract part of a PubChem content page
 
-  foo <- function(cid, query){
-    if (is.na(cid)) {
-      message("Invalid input. Returning NA.")
-      return(NA)
-    }
-    qurl <- paste0(
-      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
-      cid,"/JSON")
-    cont <- try(jsonlite::fromJSON(qurl), silent = TRUE)
-    if (inherits(cont, "try-error")) {
-      message(paste0("CID ",cid, ": Query not found. Returning NA."))
-      return(NA)
-    }
-    return(cont)
-  }
-  cont <- lapply(cid, function(x) foo(x, query))
-  class(cont) <- c("pc_query", "list")
-  return(cont)
+#' @importFrom data.tree as.Node FindNode
+#' @export
+#' 176, 311, density rosszul működik
+pc_extract <- function(query, heading) {
+  info <- lapply(query, function(x) {
+    tree <- data.tree::as.Node(x,nameName = "TOCHeading")
+    node <- FindNode(tree, heading) #ha nincs, error
+    node <- FindNode(node, "Information") #ha nincs, error
+    info <- lapply(node, function(y){
+      refnum <- y$ReferenceNumber
+      info <- y$Value
+      info <-data.frame(info,
+                        "ReferenceNumber" = refnum,
+                        stringsAsFactors = FALSE)
+      return(info)
+    })
+    info <- dplyr::bind_rows(info)
+    info <- data.frame("CID" = x$Record$RecordNumber,
+                       "Name" = x$Record$RecordTitle,
+                       info,
+                       stringsAsFactors = FALSE)
+    return(info)
+  })
+  info <- dplyr::bind_rows(info)
+  ref <- lapply(query, function(x) {
+    tree <- data.tree::as.Node(x,nameName = "TOCHeading")
+    node <- FindNode(tree, "Reference")
+    ref <- lapply(node, function(y){
+      ref <- data.frame(
+        "ReferenceNumber" = y$ReferenceNumber,
+        "SourceName" = y$SourceName,
+        "SourceID" = y$SourceID,
+        stringsAsFactors = FALSE
+      )
+      return(ref)
+    })
+    ref <- dplyr::bind_rows(ref)
+  })
+  ref <- dplyr::bind_rows(ref)
+  ref <- ref[which(ref$ReferenceNumber %in% info$ReferenceNumber),]
+  return(list("info" = info, "ref" = ref))
+  return(info)
 }

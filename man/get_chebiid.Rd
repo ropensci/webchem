@@ -64,8 +64,8 @@ get_chebiid(comp)
 \references{
 Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
-  Improved services and an expanding collection of metabfolites. Nucleic Acids
-  Res.
+  Improved services and an expanding collection of metabfolites. Nucleic
+  Acids Res.
 
   Hastings, J., de Matos, P., Dekker, A., Ennis, M., Harsha, B., Kale, N.,
   Muthukrishnan, V., Owen, G., Turner, S., Williams, M., and Steinbeck, C.
