@@ -48,13 +48,13 @@ We do not have strong guidelines for code contributions and are happy to help at
 
 Some consistency guidelines:
 
-8. Functions that query a database for one or more database specific identifiers should follow the naming convention `get_*`, e.g. the function that queries ChEBI IDs is called `get_chebiid()`.
+8. Functions that query a database for one or more database specific identifiers should follow the naming convention `get_*`, e.g. the function that queries ChEBI IDs is called `get_chebiid()`. These functions should take a vector of queries and return a single [tibble](https://cran.r-project.org/web/packages/tibble/index.html). Whenever possible these functions should have arguments `query`, `from`, `match`, `verbose` and `...`. The first column of the tibble should contain the ID-s and the last should contain the queries. Invalid queries should return a row of NA-s (apart from the last element of the row which should be the query itself).
 
-9. The naming of functions that query a database for chemical information should start with the name of the database, followed by the functionality, e.g. `pc_synonyms()` searches for synonyms in PubChem.
+9. The naming of functions that query a database for chemical information should start with the name of the database, followed by the functionality, e.g. `pc_synonyms()` searches for synonyms in PubChem. These functions should take a vector of queries and return a list of responses. Invalid queries should return `NA`.
 
 10. Functions should always validate their input when appropriate. Use `match.arg()` for input validation.
 
-11. Functions should always return the same output structure, even for invalid inputs, e.g. unknown chemicals, or `NA`. Make sure `NA` is not confused with sodium. Include tests.
+11. Make sure `NA` is not confused with sodium.
 
 ### Data Sources
 
