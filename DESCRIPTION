@@ -32,7 +32,8 @@ Imports:
     stringr,
     methods,
     dplyr,
-    purrr
+    purrr,
+    urltools
 Suggests:
     testthat,
     rcdk
