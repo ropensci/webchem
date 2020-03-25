@@ -320,10 +320,33 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   return(out)
 }
 
-#' Import a full PubChem content page
-pc_full <- function(cid) {
+#' Import PubChem content pages
+#'
+#' both full and partial!!
+#' @importFrom jsonlite fromJSON
+#'
+#' @details The full list of queries can be found at
+#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}
 
-  foo <- function(cid, query){
+pc_query <- function(cid, chapter) {
+  chapter <- gsub(" +", "+", chapter)
+  part <- function(cid, chapter){
+    if (is.na(cid)) {
+      message("Invalid input. Returning NA.")
+      return(NA)
+    }
+    qurl <- paste0(
+      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
+      cid,"/JSON?heading=",chapter)
+    cont <- try(jsonlite::fromJSON(qurl, simplifyDataFrame = FALSE),
+                silent = TRUE)
+    if (inherits(cont, "try-error")) {
+      message(paste0("CID ",cid, ": Chapter not found. Returning NA."))
+      return(NA)
+    }
+    return(cont)
+  }
+  full <- function(cid){
     if (is.na(cid)) {
       message("Invalid input. Returning NA.")
       return(NA)
@@ -338,51 +361,41 @@ pc_full <- function(cid) {
     }
     return(cont)
   }
-  cont <- lapply(cid, function(x) foo(x, query))
-  class(cont) <- c("pc_query", "list")
-  return(cont)
-}
-
-#' Import part of a PubChem content page
-#' @importFrom jsonlite fromJSON
-#'
-#' @details The full list of queries can be found at
-#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}
-
-pc_query <- function(cid, query) {
-
-  query <- gsub(" +", "+", query)
-  foo <- function(cid, query){
-    if (is.na(cid)) {
-      message("Invalid input. Returning NA.")
-      return(NA)
-    }
-    qurl <- paste0(
-      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
-      cid,"/JSON?heading=",query)
-    cont <- try(jsonlite::fromJSON(qurl, simplifyDataFrame = FALSE),
-                silent = TRUE)
-    if (inherits(cont, "try-error")) {
-      message(paste0("CID ",cid, ": Query not found. Returning NA."))
-      return(NA)
-    }
-    return(cont)
+  if (chapter == "all"){
+    cont <- lapply(cid, function(x) full(x))
   }
-  cont <- lapply(cid, function(x) foo(x, query))
-  class(cont) <- c("pc_query", "list")
+  else {
+    cont <- lapply(cid, function(x) part(x, chapter))
+  }
   return(cont)
 }
 
-#' Extract part of a PubChem content page
+#' Extract data from PubChem content pages
 
+#' When accessing information from the PubChem content pages, this function is
+#' the last step in the data pipeline. This function takes a list of content
+#' pages, and extracts the required information and references from them.
 #' @importFrom data.tree as.Node FindNode
+#' @param query list; a list of PubChem content pages returned by
+#' \code{pc_query().
+#' @param heading character; lowest level heading of the data to be accessed.
+#' @details
 #' @export
 #' 176, 311, density rosszul működik
+#' full page-ből nem tudok data.treet készíteni...
+#' computed properties - elementekre működik!!
+#' boiling point elcsúszik
 pc_extract <- function(query, heading) {
   info <- lapply(query, function(x) {
-    tree <- data.tree::as.Node(x,nameName = "TOCHeading")
-    node <- FindNode(tree, heading) #ha nincs, error
-    node <- FindNode(node, "Information") #ha nincs, error
+    if(is.na(x)) return(NA)
+    tree <- data.tree::as.Node(x,nameName = "TOCHeading") #fails for full page
+    node <- FindNode(tree, heading)
+    if (is.null(node)) return(data.frame(
+      "CID" = x$Record$RecordNumber,
+      "Name" = x$Record$RecordTitle,
+      stringsAsFactors = FALSE
+    ))
+    node <- FindNode(node, "Information")
     info <- lapply(node, function(y){
       refnum <- y$ReferenceNumber
       info <- y$Value
