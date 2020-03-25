@@ -161,13 +161,13 @@ get_etoxid <- function(query,
 #' id <- get_etoxid('Triclosan', match = 'best')
 #' etox_basic(id$etoxid)
 #'
-#' # Retrieve CAS for multiple inputs
+#' # Retrieve data for multiple inputs
 #' ids <- c("20179", "9051")
 #' out <- etox_basic(ids)
 #' out
 #'
-#' # extract ec numbers
-#' sapply(out, function(y) y$ec)
+#' # extract gsbl numbers
+#' sapply(out, function(y) y[[1]]$gsbl)
 #' }
 etox_basic <- function(id, verbose = TRUE) {
   if (!mode(id) %in% c("numeric","character")) {
@@ -189,7 +189,7 @@ etox_basic <- function(id, verbose = TRUE) {
       message('ID not found! Returning NA.\n')
       return(NA)
     }
-    tabs <- try(html_table(tt, fill = TRUE), silent = TRUE)
+    tabs <- try(suppressWarnings(html_table(tt, fill = TRUE)), silent = TRUE)
     if (inherits(tabs, 'try-error')) {
       message('ID found. No data available. Returning NA.\n')
       return(NA)
@@ -209,7 +209,8 @@ etox_basic <- function(id, verbose = TRUE) {
     # return list of data.frames
     l <- list(cas = cas,
               ec = ec,
-              gsbl = gsbl)
+              gsbl = gsbl,
+              source_url = qurl)
     data <- as.data.frame(t(do.call(rbind, l)),
                           stringsAsFactors = FALSE)
     chem_group <- as.data.frame(t(group), stringsAsFactors = FALSE)
