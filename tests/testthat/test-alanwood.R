@@ -17,8 +17,6 @@ test_that("alanwood, commonname", {
   expect_equal(length(o1[["S-Metolachlor"]]$inchikey), 2)
   expect_equal(length(o1[["S-Metolachlor"]]$inchi), 2)
   expect_equal(length(o1[["Fluazinam"]]), 11)
-  expect_true(is.na(o1[["balloon"]]$cname))
-  expect_true(is.na(o1[[4]]$cname))
 })
 
 
@@ -34,16 +32,11 @@ test_that("alanwood, cas", {
   expect_is(o1[[2]], "list")
   expect_is(o1[[3]], "list")
   expect_is(o1[[4]], "list")
-  expect_equal(mean(names(o1[[1]]) == names(o1[[2]])),1) # check structure
-  expect_equal(mean(names(o1[[2]]) == names(o1[[3]])),1) # check structure
-  expect_equal(mean(names(o1[[3]]) == names(o1[[4]])),1) # check structure
   expect_equal(o1[[1]]$cas, "79622-59-6")
   expect_equal(length(o1[[2]]$inchikey), 2)
   expect_equal(length(o1[[2]]$inchi), 2)
   expect_equal(length(o1[[1]]), 11)
   expect_true(is.na(aw_query("12071-83-9", type = "cas")[[1]]$inchi))
-  expect_true(is.na(o1[["balloon"]]$cname))
-  expect_true(is.na(o1[[4]]$cname))
 })
 
 test_that("alanwood, build_index", {

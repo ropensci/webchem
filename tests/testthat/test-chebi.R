@@ -11,6 +11,7 @@ test_that("chebi returns correct results", {
   expect_is(a, "data.frame")
   expect_is(b, "data.frame")
   expect_is(A, "list")
+  expect_is(B, "list")
 
   expect_equal(names(a)[1], "chebiid")
   expect_length(names(a), 5)

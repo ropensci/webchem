@@ -219,7 +219,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging
-    if (is.na(chebiid)) return(empty_chebi_comp_entity())
+    if (is.na(chebiid)) return(list())
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
     headers <- c(Accept = 'text/xml',
                  Accept = 'multipart/*',
@@ -244,7 +244,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
                 body = body)
     if (res$status_code != 200) {
       warning(http_status(res)$message)
-      return(empty_chebi_comp_entity())
+      return(list())
     } else {
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')
       # restricted to one entry
@@ -346,103 +346,4 @@ rbind_named_fill <- function(x) {
     out[[i]] <- unname(x[[i]])[match(unam, nam[[i]])]
   }
   setNames(as.data.frame(do.call(rbind, out), stringsAsFactors = FALSE), unam)
-}
-
-#' Create empty list for chebi_comp_entity
-#'
-#' The function creates a list with identical internal structure as a
-#' chebi_comp_entity() output element. This is used in chebi_comp_entity() to
-#' provide a valid output for invalid inputs and allow vectorisation.
-#' @noRd
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-empty_chebi_comp_entity <- function() {
-  properties <- data.frame(
-    chebiid = NA_character_,
-    chebiasciiname = NA_character_,
-    definition = NA_character_,
-    status = NA_character_,
-    smiles = NA_character_,
-    inchi = NA_character_,
-    inchikey = NA_character_,
-    charge = NA_character_,
-    mass = NA_character_,
-    monoisotopicmass = NA_character_,
-    entitystar = NA_character_
-  )
-  chebiid_snd <- data.frame(
-    chebiids = NA_character_
-  )
-  chem_structure <- list(
-    list("structure" = list(NA_character_),
-         "type" = list(NA_character_),
-         "dimension" = list(NA_character_),
-         "defaultStructure" = list(NA_character_))
-    )
-  synonyms <- data.frame(
-    data = NA_character_,
-    type = NA_character_,
-    source = NA_character_
-  )
-  iupacnames <- data.frame(
-    data = NA_character_,
-    type = NA_character_,
-    source = NA_character_
-  )
-  formulae <- data.frame(
-    data = NA_character_,
-    source = NA_character_
-  )
-  regnumbers <- data.frame(
-    data = NA_character_,
-    type = NA_character_,
-    source = NA_character_
-  )
-  citations <- data.frame(
-    data = NA_character_,
-    type = NA_character_,
-    source = NA_character_
-  )
-  dblinks <- data.frame(
-    data = NA_character_,
-    type = NA_character_
-  )
-  parents <- data.frame(
-    chebiName = NA_character_,
-    chebiId = NA_character_,
-    type = NA_character_,
-    status = NA_character_,
-    cyclicRelationship = NA_character_
-  )
-  children <- data.frame(
-    chebiName = NA_character_,
-    chebiId = NA_character_,
-    type = NA_character_,
-    status = NA_character_,
-    cyclicRelationship = NA_character_
-  )
-  comments <- data.frame(
-    text = NA_character_,
-    date = NA_character_
-  )
-  origins <- data.frame(
-    speciesText = NA_character_,
-    speciesAccession = NA_character_,
-    SourceType = NA_character_,
-    SourceAccession = NA_character_,
-    componentText = NA_character_,
-    componentAccession = NA_character_
-  )
-  return(list(properties = properties,
-              chebiid_snd = chebiid_snd,
-              chem_structure = chem_structure,
-              synonyms = synonyms,
-              iupacnames = iupacnames,
-              formulae = formulae,
-              regnumbers = regnumbers,
-              citations = citations,
-              dblinks = dblinks,
-              parents = parents,
-              children = children,
-              comments = comments,
-              origins = origins))
 }
