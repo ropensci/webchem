@@ -219,7 +219,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging
-    if (is.na(chebiid)) return(list())
+    if (is.na(chebiid)) return(NA)
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
     headers <- c(Accept = 'text/xml',
                  Accept = 'multipart/*',
@@ -244,7 +244,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
                 body = body)
     if (res$status_code != 200) {
       warning(http_status(res)$message)
-      return(list())
+      return(NA)
     } else {
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')
       # restricted to one entry
@@ -304,7 +304,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
   }
   out <- lapply(chebiid, foo, verbose = verbose)
   out <- setNames(out, chebiid)
-
+  class(out) <- c("chebi_comp_entity","list")
   return(out)
 }
 

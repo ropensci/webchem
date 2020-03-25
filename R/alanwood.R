@@ -56,7 +56,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
     if (is.na(query)) takelink <- vector()
     if (length(takelink) == 0) {
       message("Not found! Returning NA.\n")
-      return(list())
+      return(NA)
     }
     if (length(takelink) > 1) {
       takelink <- unique(takelink)
