@@ -51,20 +51,20 @@ test_that("get_etoxid returns correct results", {
 
 })
 
-# test_that("etox_basic returns correct results", {
-#   skip_on_cran()
-#
-#   ids <- c("20179", "9051", "xxxxx", NA)
-#   o1 <- etox_basic(ids)
-#
-#   expect_is(o1, 'list')
-#   expect_equal(length(o1), 4)
-#   expect_equal(o1[['20179']]$cas, "3380-34-5")
-#   expect_equal(length(o1[['20179']]), 5)
-#   expect_is(o1[['20179']]$synonyms, 'data.frame')
-#   expect_true(is.na(o1[[3]]))
-#   expect_true(is.na(o1[[4]]))
-#})
+test_that("etox_basic returns correct results", {
+  skip_on_cran()
+
+  ids <- c("20179", "9051", "xxxxx", NA)
+  o1 <- etox_basic(ids)
+
+  expect_is(o1, 'list')
+  expect_equal(length(o1), 4)
+  expect_equal(o1[['20179']]$data$cas, "3380-34-5")
+  expect_equal(length(o1[['20179']]), 3)
+  expect_is(o1[['20179']]$synonyms, 'data.frame')
+  expect_true(is.na(o1[[3]]))
+  expect_true(is.na(o1[[4]]))
+})
 #
 #
 # test_that("etox_targets returns correct results", {
