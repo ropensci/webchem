@@ -47,3 +47,37 @@ test_that("cid integration tests", {
   expect_true(is.na(pc_prop(NA, properties = "CanonicalSmiles",
                             verbose = FALSE)))
 })
+
+test_that("pc_page()", {
+  a <- pc_page(c(311, 176, 1118, "balloon", NA), "pKa")
+  b <- pc_page(c(311, 176, 1118, "balloon", NA), "therapeutic uses")
+  c <- pc_page(c(311, 176, 1118, "balloon", NA), "spectral information")
+
+  expect_is(a, "list")
+  expect_length(a, 5)
+  expect_is(a[[1]], "list")
+  expect_is(a[[2]], "list")
+  expect_equal(a[[3]], NA)
+  expect_equal(a[[4]], NA)
+  expect_equal(a[[5]], NA)
+
+  expect_is(b, "list")
+  expect_length(b, 5)
+  expect_is(b[[1]], "list")
+  expect_is(b[[2]], "list")
+  expect_is(b[[3]], "list")
+  expect_equal(a[[4]], NA)
+  expect_equal(a[[5]], NA)
+
+  expect_is(c, "list")
+  expect_length(c, 5)
+  expect_is(c[[1]], "list")
+  expect_is(c[[2]], "list")
+  expect_is(c[[3]], "list")
+  expect_equal(a[[4]], NA)
+  expect_equal(a[[5]], NA)
+})
+
+test_that("pc_extract() chemical and physical properties", {
+  s <- pc_page(c(NA, 311, "balloon", 1118), "chemical and physical properties")
+})

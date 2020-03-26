@@ -28,10 +28,12 @@
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
 #' @note Please respect the Terms and Conditions of the National Library of
-#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @importFrom purrr map2
 #' @export
@@ -147,10 +149,12 @@ get_cid <- function(query, from = "name", first = FALSE,
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
 #' @note Please respect the Terms and Conditions of the National Library of
-#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @export
 #' @examples
 #' \donttest{
@@ -265,10 +269,12 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
 #' @note Please respect the Terms and Conditions of the National Library of
-#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -322,112 +328,171 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 
 #' Import PubChem content pages
 #'
-#' both full and partial!!
+#' When you search for a compound at \url{https://pubchem.ncbi.nlm.nih.gov/},
+#' and select the compound you are interested in, you will be forwarded to a
+#' PubChem content page. This function is used to import a section of that page
+#' into your workflow.
 #' @importFrom jsonlite fromJSON
-#'
-#' @details The full list of queries can be found at
-#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}
-
-pc_query <- function(cid, chapter) {
-  chapter <- gsub(" +", "+", chapter)
-  part <- function(cid, chapter){
-    if (is.na(cid)) {
-      message("Invalid input. Returning NA.")
+#' @param cid numeric; a vector of identifiers to search for.
+#' @param section character; the section of the conent page to be imported.
+#' @return a list of PubChem content pages.
+#' @details \code{section} can be any section of a PubChem content page, e.g.
+#' \code{section = "solubility"} will import the section on solubility, or
+#' \code{section = "experimental properties"} will import all experimental
+#' properties. The \code{section} argument is not case sensitive but it
+#' is sensitive to typing errors and it requires the full name of the section as
+#' it is printed on the content page. The PubChem Table of Contents Tree can
+#' also be found at
+#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
+#' @details The function will return a list of content pages where each
+#' element is a list itself. While it is possible to navigate the returned
+#' objects through list operations, it is more convenient to use
+#' \code{pc_extract()} to access low level data.
+#' @note Please respect the Terms and Conditions of the National Library of
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
+#' usage policies of National Center for Biotechnology Information,
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @examples
+#' \donttest{
+#' pka <- pc_page(176, "pKa")
+#' ep <- pc_page(c(176, 311), "experimental properties")
+#' tox <- pc_page(176, "toxicity")
+#' }
+#' @export
+pc_page <- function(cid, section, verbose = TRUE) {
+  section <- gsub(" +", "+", section)
+  foo <- function(cid, section) {
+    if (is.na(cid) | is.na(suppressWarnings(as.numeric(cid)))) {
+      if (verbose == TRUE) {
+        message("Querying ", cid, ": Invalid input. Returning NA.")
+      }
       return(NA)
     }
     qurl <- paste0(
       "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
-      cid,"/JSON?heading=",chapter)
+      cid, "/JSON?heading=", section)
+    if (verbose == TRUE) message("Querying ", cid, ": ", appendLF = FALSE)
+    Sys.sleep(0.2)
     cont <- try(jsonlite::fromJSON(qurl, simplifyDataFrame = FALSE),
                 silent = TRUE)
     if (inherits(cont, "try-error")) {
-      message(paste0("CID ",cid, ": Chapter not found. Returning NA."))
+      if (verbose == TRUE) message("Section not found. Returning NA.")
       return(NA)
+    }
+    else{
+      if (verbose == TRUE) message("Section found.")
     }
     return(cont)
   }
-  full <- function(cid){
-    if (is.na(cid)) {
-      message("Invalid input. Returning NA.")
-      return(NA)
-    }
-    qurl <- paste0(
-      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
-      cid,"/JSON")
-    cont <- try(jsonlite::fromJSON(qurl), silent = TRUE)
-    if (inherits(cont, "try-error")) {
-      message(paste0("CID ",cid, ": Query not found. Returning NA."))
-      return(NA)
-    }
-    return(cont)
-  }
-  if (chapter == "all"){
-    cont <- lapply(cid, function(x) full(x))
-  }
-  else {
-    cont <- lapply(cid, function(x) part(x, chapter))
-  }
+  cont <- lapply(cid, function(x) foo(x, section))
   return(cont)
 }
 
 #' Extract data from PubChem content pages
 
-#' When accessing information from the PubChem content pages, this function is
-#' the last step in the data pipeline. This function takes a list of content
-#' pages, and extracts the required information and references from them.
+#' This function takes a list of PubChem content pages, and extracts the
+#' required low level information from them.
 #' @importFrom data.tree as.Node FindNode
-#' @param query list; a list of PubChem content pages returned by
-#' \code{pc_query().
-#' @param heading character; lowest level heading of the data to be accessed.
-#' @details
+#' @importFrom dplyr bind_rows as_tibble
+#' @param query list; a list of PubChem content pages.
+#' @param section character; a low level section of data to be accessed.
+#' @return a tibble of chemical information with references.
+#' @details When you look at a PubChem content page, you can see that chemical
+#' information is organised into sections, subsections, etc. The chemical data
+#' live at the low levels of these sections. Use this function to extract low
+#' level information from PubChem content pages.
+#' @details Contrary to \code{pc_page()}, the \code{section} argument in
+#' \code{pc_extract} is case sensitive, sensitive to typing errors, and requires
+#' the full name of the section as it is printed on the content page. The
+#' PubChem Table of Contents Tree can also be found at
+#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
+#' @note Please respect the Terms and Conditions of the National Library of
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
+#' usage policies of National Center for Biotechnology Information,
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @examples
+#' \donttest{
+#' # Import all experimental properties for acetic acid and citric acid
+#' pages <- pc_page(c(176, 311), "experimental properties")
+#' # Extract pKa data
+#' pc_extract(pages, "pKa")
+#'
+#' # Import all toxicity data for benzene
+#' pages <- pc_page(241, "toxicity")
+#' # Extract exposure routes
+#' pc_extract(pages, "Exposure Routes")$String
+#'
+#' # Import all hazards identification data for formaldehyde
+#' pages <- pc_page(712, "hazards identification")
+#' # Extract
+#' pc_extract(pages, "EPA Hazardous Waste Number")$String
+#' }
 #' @export
-#' 176, 311, density rosszul működik
-#' full page-ből nem tudok data.treet készíteni...
-#' computed properties - elementekre működik!!
-#' boiling point elcsúszik
-pc_extract <- function(query, heading) {
-  info <- lapply(query, function(x) {
-    if(is.na(x)) return(NA)
-    tree <- data.tree::as.Node(x,nameName = "TOCHeading") #fails for full page
-    node <- FindNode(tree, heading)
+pc_extract <- function(query, section) {
+  foo <- function(x) {
+    if (is.na(x)) return(data.frame(CID = NA))
+    tree <- data.tree::as.Node(x, nameName = "TOCHeading")
+    node <- data.tree::FindNode(tree, section)
     if (is.null(node)) return(data.frame(
-      "CID" = x$Record$RecordNumber,
-      "Name" = x$Record$RecordTitle,
-      stringsAsFactors = FALSE
-    ))
+      CID = x$Record$RecordNumber,
+      Name = x$Record$RecordTitle,
+      stringsAsFactors = FALSE))
     node <- FindNode(node, "Information")
-    info <- lapply(node, function(y){
-      refnum <- y$ReferenceNumber
-      info <- y$Value
-      info <-data.frame(info,
-                        "ReferenceNumber" = refnum,
-                        stringsAsFactors = FALSE)
-      return(info)
+    if (is.null(node)) return(data.frame(
+      CID = x$Record$RecordNumber,
+      Name = x$Record$RecordTitle,
+      stringsAsFactors = FALSE))
+    info <- lapply(node, function(y) {
+      lownode <- data.tree::FindNode(data.tree::as.Node(y), "StringWithMarkup")
+      if (is.null(lownode)) {
+        info <- data.frame(String = paste(y$Value, collapse = " "),
+                          ReferenceNumber = y$ReferenceNumber,
+                          stringsAsFactors = FALSE)
+        return(info)
+      }
+      else{
+        info <- data.frame(String = sapply(lownode, function(z) z$String),
+                           ReferenceNumber = y$ReferenceNumber,
+                           stringsAsFactors = FALSE)
+      }
     })
     info <- dplyr::bind_rows(info)
-    info <- data.frame("CID" = x$Record$RecordNumber,
-                       "Name" = x$Record$RecordTitle,
+    info <- data.frame(CID = x$Record$RecordNumber,
+                       Name = x$Record$RecordTitle,
                        info,
                        stringsAsFactors = FALSE)
-    return(info)
-  })
-  info <- dplyr::bind_rows(info)
-  ref <- lapply(query, function(x) {
-    tree <- data.tree::as.Node(x,nameName = "TOCHeading")
     node <- FindNode(tree, "Reference")
-    ref <- lapply(node, function(y){
+    if (is.null(node)) return(data.frame(
+      info,
+      SourceName = NA,
+      SourceID = NA))
+    ref <- lapply(node, function(y) {
       ref <- data.frame(
-        "ReferenceNumber" = y$ReferenceNumber,
-        "SourceName" = y$SourceName,
-        "SourceID" = y$SourceID,
+        ReferenceNumber = y$ReferenceNumber,
+        SourceName = y$SourceName,
+        SourceID = y$SourceID,
         stringsAsFactors = FALSE
       )
       return(ref)
     })
     ref <- dplyr::bind_rows(ref)
-  })
-  ref <- dplyr::bind_rows(ref)
-  ref <- ref[which(ref$ReferenceNumber %in% info$ReferenceNumber),]
-  return(list("info" = info, "ref" = ref))
+    info$SourceName <- sapply(info$ReferenceNumber, function(x) {
+      ref$SourceName[ref$ReferenceNumber == x]
+    })
+    info$SourceID <- sapply(info$ReferenceNumber, function(x) {
+      ref$SourceID[ref$ReferenceNumber == x]
+    })
+    return(info)
+  }
+  info <- dplyr::as_tibble(dplyr::bind_rows(lapply(query, foo)))
+  info <- info[, -which(names(info) == "ReferenceNumber")]
   return(info)
 }
