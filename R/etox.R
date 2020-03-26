@@ -166,8 +166,8 @@ get_etoxid <- function(query,
 #' out <- etox_basic(ids)
 #' out
 #'
-#' # extract gsbl numbers
-#' sapply(out, function(y) y[[1]]$gsbl)
+#' # extract ec numbers
+#' sapply(out, function(y) y$ec)
 #' }
 etox_basic <- function(id, verbose = TRUE) {
   if (!mode(id) %in% c("numeric","character")) {
@@ -200,27 +200,43 @@ etox_basic <- function(id, verbose = TRUE) {
     gsbl <- binf[, 1][binf[, 2] == 'GSBL']
 
     syns <- tabs[[2]][c(1, 3, 4)]
-    names(syns) <- tolower(gsub('\\s+', '_', names(syns)))
-    group <- tolower(syns[ syns$substance_name_typ == 'GROUP_USE' &
-                             syns$language == 'English', ]$notation)
-    syn <- syns[ syns$substance_name_typ == 'SYNONYM', ]
-    syn <- syn[ ,-2]
-    names(syn) <- c('name', 'language')
-    # return list of data.frames
-    l <- list(cas = cas,
-              ec = ec,
-              gsbl = gsbl,
-              source_url = qurl)
-    data <- as.data.frame(t(do.call(rbind, l)),
-                          stringsAsFactors = FALSE)
-    chem_group <- as.data.frame(t(group), stringsAsFactors = FALSE)
-    names(chem_group) <- chem_group[1, ]
-    chem_group[1, ] <- TRUE
-    out <- list(data = data,
-                chemical_group = chem_group,
-                synonyms = syn)
+    colnames(syns) <- syns[1, ]
+    syns <- syns[-1, ]
+    syns <- syns[syns[ , 2] == 'SYNONYM' & !is.na(syns[ , 2]), ]
+    syns <- syns[ , -2]
+    names(syns) <- c('name', 'language')
 
+    out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns,
+                source_url = qurl)
     return(out)
+
+    # CODE FOR A POSSIBLE FUTURE RELEASE
+    # binf <- tabs[[length(tabs)]]
+    # cas <- binf[, 1][binf[, 2] == 'CAS']
+    # ec <- binf[, 1][grepl('^EC$|EINEC', binf[, 2])]
+    # gsbl <- binf[, 1][binf[, 2] == 'GSBL']
+    #
+    # syns <- tabs[[2]][c(1, 3, 4)]
+    # names(syns) <- tolower(gsub('\\s+', '_', names(syns)))
+    # group <- tolower(syns[ syns$substance_name_typ == 'GROUP_USE' &
+    #                          syns$language == 'English', ]$notation)
+    # syn <- syns[ syns$substance_name_typ == 'SYNONYM', ]
+    # syn <- syn[ ,-2]
+    # names(syn) <- c('name', 'language')
+    # # return list of data.frames
+    # l <- list(cas = cas,
+    #           ec = ec,
+    #           gsbl = gsbl,
+    #           source_url = qurl)
+    # data <- as.data.frame(t(do.call(rbind, l)),
+    #                       stringsAsFactors = FALSE)
+    # chem_group <- as.data.frame(t(group), stringsAsFactors = FALSE)
+    # names(chem_group) <- chem_group[1, ]
+    # chem_group[1, ] <- TRUE
+    # out <- list(data = data,
+    #             chemical_group = chem_group,
+    #             synonyms = syn)
+    ### END
   }
   out <- lapply(id, foo, verbose = verbose)
   out <- setNames(out, id)
