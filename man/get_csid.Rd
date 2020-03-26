@@ -4,7 +4,12 @@
 \alias{get_csid}
 \title{ChemSpider ID from compound name, formula, SMILES, InChI or InChIKey}
 \usage{
-get_csid(query, from = "name", apikey = NULL, control = cs_control())
+get_csid(
+  query,
+  from = c("name", "formula", "inchi", "inchikey", "smiles"),
+  apikey = NULL,
+  control = cs_control()
+)
 }
 \arguments{
 \item{query}{character; search term.}

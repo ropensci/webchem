@@ -9,7 +9,6 @@ cas <- function(x, ...){
   UseMethod("cas")
 }
 
-
 #' @export
 cas.default <- function(x, ...) {
   sapply(x, function(y) {
@@ -17,6 +16,14 @@ cas.default <- function(x, ...) {
       return(NA)
     y$cas
     })
+}
+
+#' @export
+cas.chebi_comp_entity <- function(x, ...) {
+  sapply(x, function(y) {
+    if (length(y) == 1 && is.na(y)) return(NA)
+    unique(y$regnumbers$data[y$regnumbers$type == "CAS Registry Number"])
+  })
 }
 
 #' @export
@@ -29,18 +36,34 @@ cas.wd_ident <- function(x, ...) {
   x$cas
 }
 
-
-
 # InChIKey ----------------------------------------------------------------
 #' @rdname extractors
 #' @export
 inchikey <- function(x, ...){
   UseMethod("inchikey")
 }
+
 #' @export
 inchikey.default <- function(x, ...) {
   sapply(x, function(y) y$inchikey)
 }
+
+#' @export
+inchikey.aw_query <- function(x, ...) {
+  sapply(x, function(y) {
+    if (length(y) == 1 && is.na(y)) return(NA)
+    y$inchikey
+  })
+}
+
+#' @export
+inchikey.chebi_comp_entity <- function(x, ...) {
+  sapply(x, function (y) {
+    if (length(y) == 1 && is.na(y)) return(NA)
+    y$properties$inchikey
+  })
+}
+
 #' @export
 inchikey.cs_compinfo <- function(x, ...) {
   x$inchikey
@@ -60,7 +83,6 @@ inchikey.pan_query <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
 }
 
-
 #' @export
 inchikey.opsin_query <- function(x, ...) {
   x$stdinchikey
@@ -79,16 +101,24 @@ inchikey.wd_ident <- function(x, ...) {
   x$inchikey
 }
 
-
 # SMILES ------------------------------------------------------------------
 #' @rdname extractors
 #' @export
 smiles <- function(x, ...){
   UseMethod("smiles")
 }
+
 #' @export
 smiles.default <- function(x, ...) {
   sapply(x, function(y) y$smiles)
+}
+
+#' @export
+smiles.chebi_comp_entity <- function(x, ...) {
+  sapply(x, function(y) {
+    if (length(y) == 1 && is.na(y)) return(NA)
+    y$properties$smiles
+  })
 }
 
 #' @export

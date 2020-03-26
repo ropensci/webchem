@@ -7,7 +7,7 @@
 get_chebiid(
   query,
   from = "ALL",
-  match = "all",
+  match = c("all", "best", "ask", "na"),
   max_res = 200,
   stars = "ALL",
   verbose = TRUE,

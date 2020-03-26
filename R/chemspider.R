@@ -167,20 +167,24 @@ cs_control <- function(datasources = "Wikidata",
 #' get_csid("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", from = "inchi")
 #' get_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", from = "inchikey")
 #' }
-get_csid <- function(query, from = "name", apikey = NULL,
+get_csid <- function(query,
+                     from = c("name", "formula", "inchi", "inchikey", "smiles"),
+                     apikey = NULL,
                      control = cs_control()) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
-  from <- match.arg(from, choices = c("name", "formula", "inchi", "inchikey",
-                                      "smiles"), several.ok = FALSE)
+  from <- match.arg(from)
   out <- lapply(query, function(x) {
-    switch(from,
+    if (is.na(x)) return(NA)
+    res <- switch(from,
            name = cs_name_csid(x, apikey = apikey, control = control),
            formula = cs_formula_csid(x, apikey = apikey, control = control),
            inchi = cs_inchi_csid(x, apikey = apikey),
            inchikey = cs_inchikey_csid(x, apikey = apikey),
            smiles = cs_smiles_csid(x, apikey = apikey))
+    if (length(res) == 0) res <- NA
+    return(res)
   })
   names(out) <- query
   out <- data.frame(

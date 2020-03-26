@@ -65,26 +65,21 @@
 #' }
 get_chebiid <- function(query,
                         from = 'ALL',
-                        match = 'all',
+                        match = c("all", "best", "ask", "na"),
                         max_res = 200,
                         stars = 'ALL',
                         verbose = TRUE,
                         ...) {
-
+  match <- match.arg(match)
   foo <- function(query, match, from, max_res, stars, verbose, ...) {
-    if (is.na(query)){
-      return(data.frame(chebiid = NA,
-                        chebiasciiname = NA,
-                        searchscore = NA,
-                        entitystar = NA))
-    }
+    if (is.na(query)) return(data.frame(chebiid = NA_character_,
+                                        query = NA_character_,
+                                        stringsAsFactors = FALSE))
     from_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES',
                   'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS',
                   'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS',
                   'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES')
     from <- match.arg(from, from_all)
-    match_all <- c('all', 'best', 'ask', 'na')
-    match <- match.arg(match, match_all)
     stars_all <- c('ALL', 'TWO ONLY', 'THREE ONLY')
     stars <- match.arg(stars, stars_all)
     # query
@@ -120,12 +115,12 @@ get_chebiid <- function(query,
       out <- setNames(out, tolower(names(out)))
       if (nrow(out) == 0) {
         message('No result found. \n')
-        return(data.frame(
-          chebiid = NA,
-          chebiasciiname = NA,
-          searchscore = NA,
-          entitystar = NA))
+        return(data.frame(chebiid = NA_character_,
+                          query = query,
+                          stringsAsFactors = FALSE))
       }
+      if (nrow(out) > 0) out$query <- query
+      if (nrow(out) == 1) return(out)
       if (match == 'all') {
         return(out)
       }
@@ -140,13 +135,14 @@ get_chebiid <- function(query,
         return(out[out$chebiid == matched, ])
       }
       if (match == 'na') {
-        return(data.frame(chebiid = NA,
-                          chebiasciiname = NA,
-                          searchscore = NA,
-                          entitystar = NA))
+        return(data.frame(chebiid = NA_character_,
+                          query = query,
+                          stringsAsFactors = FALSE))
       }
     } else {
-      out <- data.frame(chebiid = NA)
+      out <- data.frame(chebiid = NA_character_,
+                        query = query,
+                        stringsAsFactors = FALSE)
       message('Returning NA (', http_status(res)$message, '). \n')
 
       return(out)
@@ -160,7 +156,7 @@ get_chebiid <- function(query,
                 stars = stars,
                 verbose = verbose)
   out <- setNames(out, query)
-
+  out <- bind_rows(out)
   return(out)
 }
 
@@ -223,7 +219,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging
-    if (is.na(chebiid)) return(empty_chebi_comp_entity())
+    if (is.na(chebiid)) return(NA)
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
     headers <- c(Accept = 'text/xml',
                  Accept = 'multipart/*',
@@ -248,7 +244,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
                 body = body)
     if (res$status_code != 200) {
       warning(http_status(res)$message)
-      return(empty_chebi_comp_entity())
+      return(NA)
     } else {
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')
       # restricted to one entry
@@ -308,7 +304,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
   }
   out <- lapply(chebiid, foo, verbose = verbose)
   out <- setNames(out, chebiid)
-
+  class(out) <- c("chebi_comp_entity","list")
   return(out)
 }
 
@@ -350,103 +346,4 @@ rbind_named_fill <- function(x) {
     out[[i]] <- unname(x[[i]])[match(unam, nam[[i]])]
   }
   setNames(as.data.frame(do.call(rbind, out), stringsAsFactors = FALSE), unam)
-}
-
-#' Create empty list for chebi_comp_entity
-#'
-#' The function creates a list with identical internal structure as a
-#' chebi_comp_entity() output element. This is used in chebi_comp_entity() to
-#' provide a valid output for invalid inputs and allow vectorisation.
-#' @noRd
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-empty_chebi_comp_entity <- function() {
-  properties <- data.frame(
-    chebiid = as.character(NA),
-    chebiasciiname = as.character(NA),
-    definition = as.character(NA),
-    status = as.character(NA),
-    smiles = as.character(NA),
-    inchi = as.character(NA),
-    inchikey = as.character(NA),
-    charge = as.character(NA),
-    mass = as.character(NA),
-    monoisotopicmass = as.character(NA),
-    entitystar = as.character(NA)
-  )
-  chebiid_snd <- data.frame(
-    chebiids = as.character(NA)
-  )
-  chem_structure <- list(
-    list("structure" = list(as.character(NA)),
-         "type" = list(as.character(NA)),
-         "dimension" = list(as.character(NA)),
-         "defaultStructure" = list(as.character(NA)))
-    )
-  synonyms <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
-  )
-  iupacnames <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
-  )
-  formulae <- data.frame(
-    data = as.character(NA),
-    source = as.character(NA)
-  )
-  regnumbers <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
-  )
-  citations <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA),
-    source = as.character(NA)
-  )
-  dblinks <- data.frame(
-    data = as.character(NA),
-    type = as.character(NA)
-  )
-  parents <- data.frame(
-    chebiName = as.character(NA),
-    chebiId = as.character(NA),
-    type = as.character(NA),
-    status = as.character(NA),
-    cyclicRelationship = as.character(NA)
-  )
-  children <- data.frame(
-    chebiName = as.character(NA),
-    chebiId = as.character(NA),
-    type = as.character(NA),
-    status = as.character(NA),
-    cyclicRelationship = as.character(NA)
-  )
-  comments <- data.frame(
-    text = as.character(NA),
-    date = as.character(NA)
-  )
-  origins <- data.frame(
-    speciesText = as.character(NA),
-    speciesAccession = as.character(NA),
-    SourceType = as.character(NA),
-    SourceAccession = as.character(NA),
-    componentText = as.character(NA),
-    componentAccession = as.character(NA)
-  )
-  return(list("properties" = properties,
-              "chebiid_snd" = chebiid_snd,
-              "chem_structure" = chem_structure,
-              "synonyms" = synonyms,
-              "iupacnames" = iupacnames,
-              "formulae" = formulae,
-              "regnumbers" = regnumbers,
-              "citations" = citations,
-              "dblinks" = dblinks,
-              "parents" = parents,
-              "children" = children,
-              "comments" = comments,
-              "origins" = origins))
 }
