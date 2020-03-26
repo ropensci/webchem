@@ -4,11 +4,11 @@ Thank you for your interest in contributing to the project! The goal of this gui
 
 ### Fill out the survey
 
-The ```webchem``` survey allows us to learn who you are, which databases you use and how you interact with chemical data. This is extremely valuable information for us and guides our development efforts. The survey take about 5 minutes to fill out. You can fill out the survey [here](<link here>) (under development).
+The `webchem` survey allows us to learn which databases you use and how you interact with chemical data. This is extremely valuable information for us and guides our development efforts. The survey take about 5 minutes to fill out. You can fill out the survey [here](<link here>) (under development).
 
 ### Share a use case
 
-Write us an e-mail and show us a full example of how you use or how you would like to use ```webchem``` in your data analysis! This would give us ideas about new features and also help us create better vignettes that help others get started. Please send your e-mails to <webchem@ropensci.org>.
+Write us an e-mail and show us a full example of how you use or how you would like to use `webchem` in your data analysis! This would give us ideas about new features and also help us create better vignettes that help others get started. Please send your e-mails to <webchem@ropensci.org>.
 
 ### Raise a new issue or join discussion on an existing issue
 
@@ -34,34 +34,34 @@ We do not have strong guidelines for code contributions and are happy to help at
 
 1. We follow the [tidyverse](https://tidyverse.org) style. You can find the style guide [here](https://style.tidyverse.org/). Before committing your code, we encourage you to use ```lintr::lint_file()``` to check for nonconformances.
 
-2. We use ```roxygen2``` for documentation. Please make sure you update the package to the latest version before you update the documentation with ```devtools::document()```. In fact, it is good practice to update all the packages that are used by webchem before making changes.
+2. We use [`roxygen2`](https://cran.r-project.org/web/packages/roxygen2/index.html) for documentation. Please make sure you update the package to the latest version before you update the documentation with `devtools::document()`. Use `@noRd` for non exported functions.
 
-2. For web scraping, we recommend the use of the [polite](https://dmi3kno.github.io/polite/) package.
+3. Please use the [`xml2`](https://cran.r-project.org/web/packages/xml2/index.html) package instead of the `XML` package. The maintainance of xml2 is much better.
 
-We want to keep dependencies to a minimum:
+4. Please use the lightweight [`jsonlite`](https://cran.r-project.org/web/packages/jsonlite/index.html) package for handling JSON.
 
-3. Please use the [`xml2`](https://github.com/hadley/xml2) package instead of the `XML` package. The maintainance of xml2 is much better.
+5. Use utilities in `webchem::utils.R` when possible to keep function style consistent across the package.
 
-4. Please use the lightweight [`jsonlite`](https://github.com/jeroenooms/jsonlite) package for handling JSON.
-
-5. Use utilities in utils.R when possible to keep function style consistent across the package.
-
-6. Be nice to the resources! Use appropriate timeouts.
+6. Be nice to the resources! Minimise interaction with the servers. Use appropriate timeouts. For web scraping, we recommend the use of the [`polite`](https://cran.r-project.org/web/packages/polite/index.html) package.
 
 7. Tests go into a separate tests branch and not in the master branch.
 
 Some consistency guidelines:
 
-8. Functions that query a database for one or more database specific identifiers should follow the naming convention ```get_*```, e.g. the function that queries ChEBI IDs is called ```get_chebiid()```.
+8. Functions that query a database for one or more database specific identifiers should follow the naming convention `get_*`, e.g. the function that queries ChEBI IDs is called `get_chebiid()`. These functions should take a vector of queries and return a single [tibble](https://cran.r-project.org/web/packages/tibble/index.html). Whenever possible these functions should have arguments `query`, `from`, `match`, `verbose` and `...`. The first column of the tibble should contain the ID-s and the last should contain the queries. Invalid queries should return a row of NA-s (apart from the last element of the row which should be the query itself).
 
-9. The naming of functions that query a database for chemical information should start with the name of the database, followed by the functionality, e.g. ```pc_synonyms()``` searches for synonyms in PubChem.
+9. The naming of functions that query a database for chemical information should start with the name of the database, followed by the functionality, e.g. `pc_synonyms()` searches for synonyms in PubChem. These functions should take a vector of queries and return a list of responses. Invalid queries should return `NA`.
+
+10. Functions should always validate their input when appropriate. Use `match.arg()` for input validation.
+
+11. Make sure `NA` is not confused with sodium.
 
 ### Data Sources
 
 You might think all webscraping is perfectly legal but it is unfortunately not that simple.
 
-Some services allow you to browse their website but do not allow you programmable access, for various reasons. Therefore, we always have to check the Terms & Conditons and any other legal documents that might restrict programmable access. ```webchem``` only provides access to databases where programmable access is clearly approved by the database provider. A provider might create a publicly accessible API, and if they do not have a restrictive T&C, this indicates their implicit approval for programmatically accessing their data. In all other cases explicit approval is required, i.e. either the T&C has to state that scraping is allowed, or we have to acquire written consent from the database provider before developing functions that scrape their website.
+Some services allow you to browse their website but do not allow you programmable access, for various reasons. Therefore, we always have to check the Terms & Conditons and any other legal documents that might restrict programmable access. `webchem` only provides access to databases where programmable access is clearly approved by the database provider. A provider might create a publicly accessible API, and if they do not have a restrictive T&C, this indicates their implicit approval for programmatically accessing their data. In all other cases explicit approval is required, i.e. either the T&C has to state that scraping is allowed, or we have to acquire written consent from the database provider before developing functions that scrape their website.
 
-And there is a big difference between scraping and crawling. ```webchem``` does provide some scraping functionality but it does not provide crawling functionality. We aim to query databases not to download them.
+And there is a big difference between scraping and crawling. `webchem` does provide some scraping functionality but it does not provide crawling functionality.
 
 ### Thanks for contributing!

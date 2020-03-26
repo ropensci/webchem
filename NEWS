@@ -8,6 +8,7 @@ MINOR IMPROVEMENTS
 BUG FIXES
 
 * get_csid() returned an error when query was NA [PR #226, fixed by stitam]
+* get_chebiid() and chebi_comp_entity() fixed for invalid queries [PR #225, fixed by stitam]
 * get_cid() returned the PubChem ID of sodium when the query was NA [PR #223, fixed by stitam]
 * aw_query() returned a list for successful queries, NA for unsuccessful queries [PR #222, fixed by stitam]
 
