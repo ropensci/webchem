@@ -28,8 +28,10 @@ get_ri_xml <-
     ))
 
     # Open session
-    session <- bow("https://webbook.nist.gov/cgi/cbook.cgi")
-    #TODO: get rid of "no encoding supplied: defaulting to UTF-9" warning
+    #TODO: get rid of "no encoding supplied: defaulting to UTF-9" message correctly
+    session <- suppressMessages(bow("https://webbook.nist.gov/cgi/cbook.cgi"))
+    # Unclear if this actually randomizes or just sets a single value.  Should re-set everyt time this gets run though
+    set_scrape_delay(rgamma(1, shape = 15, scale = 1/10))
 
     if (from == "cas") {
       ID <- paste0("C", gsub("-", "", query))
@@ -38,9 +40,21 @@ get_ri_xml <-
         scrape(session,
                query = list2(!!from_str := query,
                              Units = "SI"))
-
-      #TODO: error if more than one compound found
-
+      #Warnings
+      result <- page %>%
+        html_node("main h1") %>%
+        html_text()
+      # if cquery not found
+      if(str_detect(result, "Not Found")) {
+        warning(paste0("'", query, "' not found. Returning NA."))
+        return(as.data.frame(NA))
+      }
+      # if more than one compound found
+      if(result == "Search Results") {
+        warning(paste0("More than one match for '", query,
+                "'. Returning NA."))
+        return(as.data.frame(NA))
+      }
       links <-
         page %>%
         html_nodes("li li a") %>%
@@ -50,9 +64,9 @@ get_ri_xml <-
 
       if (length(gaschrom) == 0) {
         warning(paste0(
-          "There are no chromatography data for ",
+          "There are no chromatography data for '",
           query,
-          ". Returning NA"
+          "'. Returning NA."
         ))
         # ri_xml <- as.data.frame(NA)
         return(as.data.frame(NA))
@@ -97,9 +111,6 @@ get_ri_xml <-
   }
 
 
-
-
-
 #' Tidier for webscraped RI ri_xml
 #'
 #' @param ri_xml captured by \code{get_ri_xml}
@@ -127,7 +138,7 @@ tidy_ritable <- function(ri_xml) {
       ~{
         transposed <- t(.x)
         colnames(transposed) <- transposed[1, ]
-        transposed[-1, ] %>%
+        transposed[-1, , drop = FALSE] %>%
           as_tibble()
       }
     )
@@ -136,7 +147,7 @@ tidy_ritable <- function(ri_xml) {
     temp_prog <- attr(ri_xml, "temp_prog")
 
     if (temp_prog == "custom") {
-      tidy2 <- rename(tidy1,
+      tidy2 <- dplyr::rename(tidy1,
                       "type" = "Column type",
                       "phase" = "Active phase",
                       "length" = "Column length (m)",
@@ -149,11 +160,11 @@ tidy_ritable <- function(ri_xml) {
                       "reference" = "Reference",
                       "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
-        mutate_at(vars("length", "diameter", "thickness", "RI"),
+        dplyr::mutate_at(vars("length", "diameter", "thickness", "RI"),
                   as.numeric)
 
     } else if (temp_prog == "ramp") {
-      tidy2 <- rename(tidy1,
+      tidy2 <- dplyr::rename(tidy1,
                       "type" = "Column type",
                       "phase" = "Active phase",
                       "length" = "Column length (m)",
@@ -170,8 +181,8 @@ tidy_ritable <- function(ri_xml) {
                       "reference" = "Reference",
                       "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
-        mutate_at(
-          vars(
+        dplyr::mutate_at(
+          dplyr::vars(
             "length",
             "diameter",
             "thickness",
@@ -186,7 +197,7 @@ tidy_ritable <- function(ri_xml) {
         )
 
     } else if (temp_prog == "isothermal") {
-      tidy2 <- rename(tidy1,
+      tidy2 <- dplyr::rename(tidy1,
                       "type" = "Column type",
                       "phase" = "Active phase",
                       "length" = "Column length (m)",
@@ -199,23 +210,23 @@ tidy_ritable <- function(ri_xml) {
                       "reference" = "Reference",
                       "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
-        mutate_at(vars("length", "diameter", "thickness", "temp",  "RI"),
+        dplyr::mutate_at(vars("length", "diameter", "thickness", "temp",  "RI"),
                   as.numeric)
     }
 
     # make NAs explicit and gas abbreviations consistent
     output <- tidy2 %>%
-      mutate_all(~ na_if(., "")) %>%
-      mutate(
+      dplyr::mutate_all(~ na_if(., "")) %>%
+      dplyr::mutate(
         gas = case_when(
-          str_detect(gas, "He") ~ "Helium",
-          str_detect(gas, "H2") ~ "Hydrogen",
-          str_detect(gas, "N2") ~ "Nitrogen",
+          stringr::str_detect(gas, "He") ~ "Helium",
+          stringr::str_detect(gas, "H2") ~ "Hydrogen",
+          stringr::str_detect(gas, "N2") ~ "Nitrogen",
           TRUE                  ~ as.character(NA)
         )
       ) %>%
       # reorder columns
-      select("type", "phase", "RI", everything())
+      dplyr::select("type", "phase", "RI", everything())
   }
   return(output)
 }
