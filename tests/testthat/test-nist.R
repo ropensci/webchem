@@ -1,7 +1,7 @@
 context("nist")
 
 test_that("nist_ri() warns when no results", {
-  expect_warning(nist_ri("78-70-6", type = 'linear', polarity = 'non-polar'),
+  expect_warning(nist_ri("78-70-6", from = "cas", type = 'linear', polarity = 'non-polar'),
                  regexp = "There are no RIs for 78-70-6")
 })
 
@@ -87,4 +87,9 @@ test_that("nist_ri() warns when no chromatography data", {
     nist_ri("methane", from = "name"),
     "There are no chromatography data for 'methane'. Returning NA."
   )
+})
+
+test_that("cas =  is deprecated gently", {
+  expect_warning(nist_ri(cas = "78-70-6"),
+                 "`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
 })

@@ -118,6 +118,7 @@ get_ri_xml <-
 #' @import rvest
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
+#' @importFrom tibble as_tibble
 #' @import dplyr
 #' @noRd
 #'
@@ -234,26 +235,30 @@ tidy_ritable <- function(ri_xml) {
 
 #' Retrieve retention indices from NIST
 #' @description This function scrapes NIST for literature retention indices
-#'  given CAS numbers as an input.
+#'   given CAS numbers as an input.
 #'
-#' @param query query
-#' @param from what kind of search
+#' @param query character; the search term
+#' @param from character; type of search term. can be one of \cocde{"name"},
+#'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
+#'   preferred to \code{"name"} since \code{NA} is returned in the even of
+#'   multiple matches to a query.
 #' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
-#'  \code{"alkane"}, or \code{"lee"}. See details for more.
-#' @param polarity Column polarity. One of "polar" or "non-polar"
-#'  to get RIs calculated for polar or non-polar columns.
-#' @param temp_prog Temperature program. One of "isothermal", "ramp",
-#'  or "custom".
+#'   \code{"alkane"}, or \code{"lee"}. See details for more.
+#' @param polarity Column polarity. One of "polar" or "non-polar" to get RIs
+#'   calculated for polar or non-polar columns.
+#' @param temp_prog Temperature program. One of "isothermal", "ramp", or
+#'   "custom".
+#' @param cas deprecated.  Use \code{query} instead.
 #' @details The types of retention indices included in NIST include Kovats
-#'  (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
-#'  (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
-#'  calculated are available on the NIST website:
-#'  \url{https://webbook.nist.gov/chemistry/gc-ri/}
+#'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
+#'   (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
+#'   calculated are available on the NIST website:
+#'   \url{https://webbook.nist.gov/chemistry/gc-ri/}
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @import dplyr
 #'
-#' @return a table of literature RIs with the following columns:
+#' @return returns a tibble of literature RIs with the following columns:
 #' \itemize{
 #' \item{\code{CAS} is the CAS number}
 #' \item{\code{type} is the column type, e.g. "capillary"}
@@ -278,13 +283,20 @@ tidy_ritable <- function(ri_xml) {
 #'
 #' @examples
 #' \dontrun{
-#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), "linear", "non-polar", "ramp")
+#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear", "non-polar", "ramp")
 #' }
 nist_ri <- function(query,
                     from = c("cas", "inchi", "inchikey", "name"),
                     type = c("kovats", "linear", "alkane", "lee"),
                     polarity = c("polar", "non-polar"),
-                    temp_prog = c("isothermal", "ramp", "custom")) {
+                    temp_prog = c("isothermal", "ramp", "custom"),
+                    cas = NULL) {
+
+  if(!is.null(cas)){
+    warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
+    query <- cas
+    from <- "cas"
+  }
 
   from <- match.arg(from)
   type <- match.arg(type)
