@@ -25,24 +25,17 @@ read_html_slow <- function(x, ...) {
 #' @return an xml nodeset
 #'
 get_ri_xml <-
-  function(query,
-           from,
+  function(cas,
            type = c("kovats", "linear", "alkane", "lee"),
            polarity = c("polar", "non-polar"),
            temp_prog = c("isothermal", "ramp", "custom")) {
     #Construct URL
     type_str <-
       toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
-    from_str <- switch(from,
-                        "name" = "Name=",
-                        "inchi" = "InChi=",
-                        "inchikey" = "InChI=",
-                        "cas"= "ID=")
     URL_detail <-
       paste0(
-        "https://webbook.nist.gov/cgi/cbook.cgi?",
-        from_str,
-        urltools::url_encode(query),
+        "https://webbook.nist.gov/cgi/cbook.cgi?ID=C",
+        gsub("-", "", cas),
         "&Units=SI&Mask=2000&Type=",
         type_str
       )
@@ -50,7 +43,6 @@ get_ri_xml <-
     page <- read_html_slow(URL_detail)
     ri_xml.all <- html_nodes(page, ".data")
 
-    #Warn if more than one result.  Consider using InChiKey
     #Warn if table doesn't exist at URL
     if (length(ri_xml.all) == 0) {
       warning(paste0(
@@ -241,19 +233,16 @@ tidy_ritable <- function(ri_xml) {
 #' \dontrun{
 #' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), "linear", "non-polar", "ramp")
 #' }
-nist_ri <- function(query,
-                    from = c("name", "inchikey", "inchi", "cas"),
-                    type = c("kovats", "linear", "alkane", "lee"),
-                    polarity = c("polar", "non-polar"),
-                    temp_prog = c("isothermal", "ramp", "custom"),
-                    ...) { #include cas in ... and remind user that it's deprecated.
+nist_ri <- function(cas,
+                   type = c("kovats", "linear", "alkane", "lee"),
+                   polarity = c("polar", "non-polar"),
+                   temp_prog = c("isothermal", "ramp", "custom")) {
   type <- match.arg(type)
-  from <- match.arg(from)
   polarity <- match.arg(polarity)
   temp_prog <- match.arg(temp_prog)
-  ri_xmls <- map(query, ~get_ri_xml(., from, type, polarity, temp_prog)) %>%
-    setNames(query)
+  ri_xmls <- map(cas, ~get_ri_xml(., type, polarity, temp_prog)) %>%
+    setNames(cas)
 
-  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = from)
+  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "CAS")
   return(ri_tables)
 }
