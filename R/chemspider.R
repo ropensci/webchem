@@ -631,7 +631,13 @@ cs_convert <- function(query, from, to, apikey = NULL) {
     }
   }
   if (from == "csid") {
-    out <- cs_compinfo(query, fields = to2, apikey = apikey)[, 2]
+    out <- cs_compinfo(query, fields = to2, apikey = apikey)
+    if (ncol(out) == 2) {
+      out <- out[, 2]
+    }
+    else {
+      out <- out[, 1]
+    }
   }
   else {
     out <- unname(sapply(query, function(x) {
@@ -681,6 +687,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' cs_compinfo(171:182, "SMILES")
 #' }
 cs_compinfo <- function(csid, fields, apikey = NULL) {
+  if (mean(is.na(csid)) == 1) return(data.frame(id = NA))
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
@@ -706,7 +713,8 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
   )
   if (postres$status_code == 200) {
     res <- jsonlite::fromJSON(rawToChar(postres$content))$records
-    out <- data.frame("id" = csid)
+    if (length(res) == 0) return(data.frame(id = NA))
+    out <- data.frame(id = csid)
     out <- dplyr::left_join(out, res, by = "id")
     return(out)
   }
