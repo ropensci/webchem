@@ -5,15 +5,15 @@
 \title{Retrieve retention indices from NIST}
 \usage{
 nist_ri(
-  query,
-  from = c("name", "inchikey", "inchi", "cas"),
+  cas,
   type = c("kovats", "linear", "alkane", "lee"),
   polarity = c("polar", "non-polar"),
-  temp_prog = c("isothermal", "ramp", "custom"),
-  ...
+  temp_prog = c("isothermal", "ramp", "custom")
 )
 }
 \arguments{
+\item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}
+
 \item{type}{Retention index type. One of \code{"kovats"}, \code{"linear"},
 \code{"alkane"}, or \code{"lee"}. See details for more.}
 
@@ -22,8 +22,6 @@ to get RIs calculated for polar or non-polar columns.}
 
 \item{temp_prog}{Temperature program. One of "isothermal", "ramp",
 or "custom".}
-
-\item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}
 }
 \value{
 a table of literature RIs with the following columns:

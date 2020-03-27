@@ -1,17 +1,3 @@
-#' Read HTML slowly
-#' @description Just adds a rest after \code{read_html()}.  Useful for web-scraping.
-#' @import xml2
-#' @param x a URL
-#' @param ... currently unused
-#' @noRd
-#' @return html
-#'
-read_html_slow <- function(x, ...) {
-  output <- xml2::read_html(x)
-  Sys.sleep(1)
-  return(output)
-}
-
 #' Scrape Retention Indices from NIST
 #'
 #' @param cas cas number
@@ -21,6 +7,7 @@ read_html_slow <- function(x, ...) {
 #' @noRd
 #' @import rvest
 #' @import xml2
+#' @import polite
 #'
 #' @return an xml nodeset
 #'
@@ -29,18 +16,23 @@ get_ri_xml <-
            type = c("kovats", "linear", "alkane", "lee"),
            polarity = c("polar", "non-polar"),
            temp_prog = c("isothermal", "ramp", "custom")) {
+
+     # Open session
+    session <- bow("https://webbook.nist.gov/cgi/cbook.cgi")
+
     #Construct URL
     type_str <-
       toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
-    URL_detail <-
-      paste0(
-        "https://webbook.nist.gov/cgi/cbook.cgi?ID=C",
-        gsub("-", "", cas),
-        "&Units=SI&Mask=2000&Type=",
-        type_str
-      )
-    #Read URL and extract xml
-    page <- read_html_slow(URL_detail)
+
+    ID <- paste0("C", gsub("-", "", cas))
+
+    page <- scrape(session, query = list(
+      ID = ID,
+      Units = "SI",
+      Mask = "2000",
+      Type = type_str
+    ))
+
     ri_xml.all <- html_nodes(page, ".data")
 
     #Warn if table doesn't exist at URL
