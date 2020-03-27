@@ -1,4 +1,22 @@
-webchem 0.5
+webchem 0.6.0
+======================
+
+NEW FEATURES
+
+MINOR IMPROVEMENTS
+
+BUG FIXES
+
+* get_csid() returned an error when query was NA [PR #226, fixed by stitam]
+* get_chebiid() and chebi_comp_entity() fixed for invalid queries [PR #225, fixed by stitam]
+* get_cid() returned the PubChem ID of sodium when the query was NA [PR #223, fixed by stitam]
+* aw_query() returned a list for successful queries, NA for unsuccessful queries [PR #222, fixed by stitam]
+
+DEPRECATED FUNCTIONS
+
+DEFUNCT FUNCTIONS
+
+webchem 0.5.0
 ======================
 
 NEW FEATURES
@@ -35,7 +53,7 @@ DEFUNCT FUNCTIONS
 * pp_query() has been removed. Physprop API is no longer active.
 * cs_prop() has been removed.
 
-webchem 0.4
+webchem 0.4.0
 ======================
 
 NEW FEATURES
@@ -58,7 +76,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 
-webchem 0.3
+webchem 0.3.0
 ======================
 
 NEW FEATURES
@@ -81,7 +99,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 
-webchem 0.2
+webchem 0.2.0
 ======================
 
 NEW FEATURES
@@ -157,7 +175,7 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 
 
-webchem 0.0.5.0
+webchem 0.0.5
 ======================
 
 NEW FEATURES
@@ -209,7 +227,7 @@ DEFUNCT FUNCTIONS
 
 
 
-webchem 0.0.4.0
+webchem 0.0.4
 ======================
 
 NEW FEATURES

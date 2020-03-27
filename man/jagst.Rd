@@ -4,13 +4,15 @@
 \name{jagst}
 \alias{jagst}
 \title{Organic plant protection products in the river Jagst / Germany in 2013}
-\format{A data frame with 442 rows and 4 variables:
+\format{
+A data frame with 442 rows and 4 variables:
 \describe{
   \item{date}{sampling data}
   \item{substance}{substance names}
   \item{value}{concentration in ug/L}
   \item{qual}{qualifier, indicating values < LOQ}
-}}
+}
+}
 \source{
 \url{http://jdkfg.lubw.baden-wuerttemberg.de/servlet/is/300/}
 }

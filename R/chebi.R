@@ -30,8 +30,8 @@
 #'
 #' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
 #'   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
-#'   Improved services and an expanding collection of metabfolites. Nucleic Acids
-#'   Res.
+#'   Improved services and an expanding collection of metabfolites. Nucleic
+#'   Acids Res.
 #'
 #'   Hastings, J., de Matos, P., Dekker, A., Ennis, M., Harsha, B., Kale, N.,
 #'   Muthukrishnan, V., Owen, G., Turner, S., Williams, M., and Steinbeck, C.
@@ -65,22 +65,21 @@
 #' }
 get_chebiid <- function(query,
                         from = 'ALL',
-                        match = 'all',
+                        match = c("all", "best", "ask", "na"),
                         max_res = 200,
                         stars = 'ALL',
                         verbose = TRUE,
                         ...) {
-
+  match <- match.arg(match)
   foo <- function(query, match, from, max_res, stars, verbose, ...) {
-    # query = 'Isoproturon'; from = 'ALL'; match = 'ask'; max_res = 200; stars = 'ALL'; verbose = T # debuging
-    # arguments
+    if (is.na(query)) return(data.frame(chebiid = NA_character_,
+                                        query = NA_character_,
+                                        stringsAsFactors = FALSE))
     from_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES',
                   'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS',
                   'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS',
                   'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES')
     from <- match.arg(from, from_all)
-    match_all <- c('all', 'best', 'ask', 'na')
-    match <- match.arg(match, match_all)
     stars_all <- c('ALL', 'TWO ONLY', 'THREE ONLY')
     stars <- match.arg(stars, stars_all)
     # query
@@ -116,26 +115,34 @@ get_chebiid <- function(query,
       out <- setNames(out, tolower(names(out)))
       if (nrow(out) == 0) {
         message('No result found. \n')
-        return(out)
+        return(data.frame(chebiid = NA_character_,
+                          query = query,
+                          stringsAsFactors = FALSE))
       }
+      if (nrow(out) > 0) out$query <- query
+      if (nrow(out) == 1) return(out)
       if (match == 'all') {
         return(out)
       }
       if (match == 'best') {
         if (verbose)
           message('Returning best match. \n')
-        out <- out[ with(out, order(searchscore, decreasing = TRUE)), ]
-        return(out[ which.max(out$searchscore), ])
+        out <- out[with(out, order(searchscore, decreasing = TRUE)), ]
+        return(out[which.max(out$searchscore), ])
       }
       if (match == "ask") {
         matched <- chooser(out$chebiid, 'all')
-        return(out[ out$chebiid == matched, ])
+        return(out[out$chebiid == matched, ])
       }
       if (match == 'na') {
-        return(data.frame(chebiid = NA))
+        return(data.frame(chebiid = NA_character_,
+                          query = query,
+                          stringsAsFactors = FALSE))
       }
     } else {
-      out <- data.frame(chebiid = NA)
+      out <- data.frame(chebiid = NA_character_,
+                        query = query,
+                        stringsAsFactors = FALSE)
       message('Returning NA (', http_status(res)$message, '). \n')
 
       return(out)
@@ -149,7 +156,7 @@ get_chebiid <- function(query,
                 stars = stars,
                 verbose = verbose)
   out <- setNames(out, query)
-
+  out <- bind_rows(out)
   return(out)
 }
 
@@ -212,6 +219,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging
+    if (is.na(chebiid)) return(NA)
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
     headers <- c(Accept = 'text/xml',
                  Accept = 'multipart/*',
@@ -235,10 +243,8 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
                 add_headers(headers),
                 body = body)
     if (res$status_code != 200) {
-      out <- data.frame(chebiid = NA)
       warning(http_status(res)$message)
-
-      return(out)
+      return(NA)
     } else {
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')
       # restricted to one entry
@@ -298,7 +304,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
   }
   out <- lapply(chebiid, foo, verbose = verbose)
   out <- setNames(out, chebiid)
-
+  class(out) <- c("chebi_comp_entity","list")
   return(out)
 }
 
@@ -313,7 +319,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 #' @noRd
 #'
 l2df <- function(x) {
-  out <- data.frame(rbind.named.fill(lapply(x, unlist)),
+  out <- data.frame(rbind_named_fill(lapply(x, unlist)),
                     row.names = NULL,
                     stringsAsFactors = FALSE)
 
@@ -331,7 +337,7 @@ l2df <- function(x) {
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #' @noRd
 #'
-rbind.named.fill <- function(x) {
+rbind_named_fill <- function(x) {
   nam <- lapply(x, names)
   unam <- unique(unlist(nam))
   len <- lapply(x, length)
