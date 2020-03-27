@@ -5,14 +5,17 @@
 \title{Retrieve retention indices from NIST}
 \usage{
 nist_ri(
-  cas,
+  query,
+  from = c("cas", "inchi", "inchikey", "name"),
   type = c("kovats", "linear", "alkane", "lee"),
   polarity = c("polar", "non-polar"),
   temp_prog = c("isothermal", "ramp", "custom")
 )
 }
 \arguments{
-\item{cas}{CAS numbers either as numeric or formatted correctly with hyphens.}
+\item{query}{query}
+
+\item{from}{what kind of search}
 
 \item{type}{Retention index type. One of \code{"kovats"}, \code{"linear"},
 \code{"alkane"}, or \code{"lee"}. See details for more.}

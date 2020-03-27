@@ -1,6 +1,7 @@
 #' Scrape Retention Indices from NIST
 #'
-#' @param cas cas number
+#' @param query query of type matching the options in `from`
+#' @param from one of "name", "cas", "inchi", or "inchikey"
 #' @param type what kind of RI
 #' @param polarity polar or non-polar
 #' @param temp_prog what kind of temperature program
@@ -8,54 +9,95 @@
 #' @import rvest
 #' @import xml2
 #' @import polite
-#'
+#' @importFrom rlang list2
 #' @return an xml nodeset
 #'
 get_ri_xml <-
-  function(cas,
-           type = c("kovats", "linear", "alkane", "lee"),
-           polarity = c("polar", "non-polar"),
-           temp_prog = c("isothermal", "ramp", "custom")) {
+  function(query,
+           from,
+           type,
+           polarity,
+           temp_prog) {
 
-     # Open session
+    from_str <- (switch(
+      from,
+      "name" = "Name",
+      "inchi" = "InChI",
+      "inchikey" = "InChI",
+      "cas" = "ID"
+    ))
+
+    # Open session
     session <- bow("https://webbook.nist.gov/cgi/cbook.cgi")
+    #TODO: get rid of "no encoding supplied: defaulting to UTF-9" warning
 
-    #Construct URL
+    if (from == "cas") {
+      ID <- paste0("C", gsub("-", "", query))
+    } else {
+      page <-
+        scrape(session,
+               query = list2(!!from_str := query,
+                             Units = "SI"))
+
+      #TODO: error if more than one compound found
+
+      links <-
+        page %>%
+        html_nodes("li li a") %>%
+        html_attr("href")
+
+      gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
+
+      if (length(gaschrom) == 0) {
+        warning(paste0(
+          "There are no chromatography data for ",
+          query,
+          ". Returning NA"
+        ))
+        # ri_xml <- as.data.frame(NA)
+        return(as.data.frame(NA))
+      } else {
+        ID <- str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+      }
+    }
+        #scrape RI table
     type_str <-
       toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
 
-    ID <- paste0("C", gsub("-", "", cas))
-
-    page <- scrape(session, query = list(
-      ID = ID,
-      Units = "SI",
-      Mask = "2000",
-      Type = type_str
-    ))
+    page <- scrape(session,
+                   query = list(
+                     ID = ID,
+                     Units = "SI",
+                     Mask = "2000",
+                     Type = type_str
+                   ))
 
     ri_xml.all <- html_nodes(page, ".data")
 
     #Warn if table doesn't exist at URL
     if (length(ri_xml.all) == 0) {
       warning(paste0(
-        "There are no RIs for CAS# ",
-        cas,
+        "There are no RIs for ",
+        query,
         " of type ",
         type_str,
         ". Returning NA."
       ))
-      ri_xml <- as.data.frame(NA)
+      ri_xml <- as.data.frame(NA) #TODO: is this the right thing?
     } else {
       ri_xml <- ri_xml.all
     }
 
     #set attributes to label what type of RI
+    attr(ri_xml, "from") <- from
     attr(ri_xml, "type") <- type
     attr(ri_xml, "polarity") <- polarity
     attr(ri_xml, "temp_prog") <- temp_prog
-
     return(ri_xml)
   }
+
+
+
 
 
 #' Tidier for webscraped RI ri_xml
@@ -77,16 +119,17 @@ tidy_ritable <- function(ri_xml) {
 
   } else {
     # Read in the tables from xml
-    table.list <- map(ri_xml, html_table)
+    table.list <- purrr::map(ri_xml, html_table)
 
     # Transpose and tidy
-    tidy1 <- map_dfr(
+    tidy1 <- purrr::map_dfr(
       table.list,
-      ~t(.) %>%
-        as.data.frame(stringsAsFactors = FALSE) %>%
-        # pull column names from first row
-        setNames(.[1, ]) %>%
-        .[-1, ]
+      ~{
+        transposed <- t(.x)
+        colnames(transposed) <- transposed[1, ]
+        transposed[-1, ] %>%
+          as_tibble()
+      }
     )
 
     # Extract the temperature program metadata
@@ -182,7 +225,8 @@ tidy_ritable <- function(ri_xml) {
 #' @description This function scrapes NIST for literature retention indices
 #'  given CAS numbers as an input.
 #'
-#' @param cas CAS numbers either as numeric or formatted correctly with hyphens.
+#' @param query query
+#' @param from what kind of search
 #' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
 #'  \code{"alkane"}, or \code{"lee"}. See details for more.
 #' @param polarity Column polarity. One of "polar" or "non-polar"
@@ -225,16 +269,30 @@ tidy_ritable <- function(ri_xml) {
 #' \dontrun{
 #' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), "linear", "non-polar", "ramp")
 #' }
-nist_ri <- function(cas,
-                   type = c("kovats", "linear", "alkane", "lee"),
-                   polarity = c("polar", "non-polar"),
-                   temp_prog = c("isothermal", "ramp", "custom")) {
+nist_ri <- function(query,
+                    from = c("cas", "inchi", "inchikey", "name"),
+                    type = c("kovats", "linear", "alkane", "lee"),
+                    polarity = c("polar", "non-polar"),
+                    temp_prog = c("isothermal", "ramp", "custom")) {
+
+  from <- match.arg(from)
   type <- match.arg(type)
   polarity <- match.arg(polarity)
   temp_prog <- match.arg(temp_prog)
-  ri_xmls <- map(cas, ~get_ri_xml(., type, polarity, temp_prog)) %>%
-    setNames(cas)
 
-  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "CAS")
+  ri_xmls <-
+    map(
+      query,
+      ~ get_ri_xml(
+        query = .x,
+        from = from,
+        type = type,
+        polarity = polarity,
+        temp_prog = temp_prog
+      )
+    ) %>%
+    setNames(query)
+
+  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "query")
   return(ri_tables)
 }

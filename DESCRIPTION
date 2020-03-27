@@ -33,7 +33,9 @@ Imports:
     methods,
     dplyr,
     purrr,
-    urltools
+    urltools,
+    polite,
+    rlang
 Suggests:
     testthat,
     rcdk
