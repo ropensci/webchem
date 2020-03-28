@@ -28,9 +28,9 @@ get_ri_xml <-
     ))
 
     # Open session
-    #TODO: get rid of "no encoding supplied: defaulting to UTF-9" message correctly
+    #TODO: get rid of "no encoding supplied: defaulting to UTF-9" message
+    #properly
     session <- suppressMessages(bow("https://webbook.nist.gov/cgi/cbook.cgi"))
-    # Unclear if this actually randomizes or just sets a single value.  Should re-set everyt time this gets run though
     set_scrape_delay(rgamma(1, shape = 15, scale = 1/10))
 
     if (from == "cas") {
@@ -45,12 +45,12 @@ get_ri_xml <-
         html_node("main h1") %>%
         html_text()
       # if cquery not found
-      if(str_detect(result, "Not Found")) {
+      if (str_detect(result, "Not Found")) {
         warning(paste0("'", query, "' not found. Returning NA."))
         return(as.data.frame(NA))
       }
       # if more than one compound found
-      if(result == "Search Results") {
+      if (result == "Search Results") {
         warning(paste0("More than one match for '", query,
                 "'. Returning NA."))
         return(as.data.frame(NA))
@@ -68,7 +68,6 @@ get_ri_xml <-
           query,
           "'. Returning NA."
         ))
-        # ri_xml <- as.data.frame(NA)
         return(as.data.frame(NA))
       } else {
         ID <- str_extract(gaschrom, "(?<=ID=).+?(?=&)")
@@ -283,7 +282,8 @@ tidy_ritable <- function(ri_xml) {
 #'
 #' @examples
 #' \dontrun{
-#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear", "non-polar", "ramp")
+#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
+#' "non-polar", "ramp")
 #' }
 nist_ri <- function(query,
                     from = c("cas", "inchi", "inchikey", "name"),
@@ -292,7 +292,7 @@ nist_ri <- function(query,
                     temp_prog = c("isothermal", "ramp", "custom"),
                     cas = NULL) {
 
-  if(!is.null(cas)){
+  if (!is.null(cas)) {
     warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
     query <- cas
     from <- "cas"
