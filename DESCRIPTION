@@ -35,7 +35,8 @@ Imports:
     purrr,
     urltools,
     polite,
-    rlang
+    rlang,
+    tibble
 Suggests:
     testthat,
     rcdk
