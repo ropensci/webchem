@@ -33,7 +33,6 @@ Imports:
     methods,
     dplyr,
     purrr,
-    urltools,
     polite,
     rlang,
     tibble
