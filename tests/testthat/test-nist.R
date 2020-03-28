@@ -1,11 +1,13 @@
 context("nist")
 
 test_that("nist_ri() warns when no results", {
+  skip_on_cran()
   expect_warning(nist_ri("78-70-6", from = "cas", type = 'linear', polarity = 'non-polar'),
                  regexp = "There are no RIs for 78-70-6")
 })
 
 test_that("nist_ri() works when only one row of data", {
+  skip_on_cran()
   testdf <- nist_ri("78-70-6")
   expect_s3_class(testdf, "data.frame")
   expect_true(!anyNA(testdf$RI))
@@ -29,6 +31,7 @@ test_that("nist_ri() returns results", {
 })
 
 test_that("nist_ri() works with inchikey query", {
+  skip_on_cran()
   testdf <- nist_ri(
     "UHEPJGULSIKKTP-UHFFFAOYSA-N",
     from = "inchikey",
@@ -41,6 +44,7 @@ test_that("nist_ri() works with inchikey query", {
 })
 
 test_that("nist_ri() works with inchi query", {
+  skip_on_cran()
   testdf <- nist_ri(
     "1S/C8H14O/c1-7(2)5-4-6-8(3)9/h5H,4,6H2,1-3H3",
     from = "inchi",
@@ -53,6 +57,7 @@ test_that("nist_ri() works with inchi query", {
 })
 
 test_that("nist_ri() works with name query", {
+  skip_on_cran()
   testdf <- nist_ri(
     "myrcene",
     from = "name",
@@ -65,6 +70,7 @@ test_that("nist_ri() works with name query", {
 })
 
 test_that("nist_ri() works with multiple queries", {
+  skip_on_cran()
   myRIs <-
     nist_ri(
       c("78-70-6", "13474-59-4"),
@@ -77,12 +83,14 @@ test_that("nist_ri() works with multiple queries", {
 })
 
 test_that("nist_ri() warns when multiple results", {
+  skip_on_cran()
   expect_warning(
     nist_ri("Longipinene", from = "name"),
     "More than one match for 'Longipinene'. Returning NA.")
 })
 
 test_that("nist_ri() warns when no chromatography data", {
+  skip_on_cran()
   expect_warning(
     nist_ri("methane", from = "name"),
     "There are no chromatography data for 'methane'. Returning NA."
@@ -90,6 +98,7 @@ test_that("nist_ri() warns when no chromatography data", {
 })
 
 test_that("cas =  is deprecated gently", {
+  skip_on_cran()
   expect_warning(nist_ri(cas = "78-70-6"),
                  "`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
 })
