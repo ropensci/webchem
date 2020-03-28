@@ -16,7 +16,7 @@ nist_ri(
 \arguments{
 \item{query}{character; the search term}
 
-\item{from}{character; type of search term. can be one of \cocde{"name"},
+\item{from}{character; type of search term. can be one of \code{"name"},
 \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
 preferred to \code{"name"} since \code{NA} is returned in the even of
 multiple matches to a query.}

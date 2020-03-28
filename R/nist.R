@@ -9,7 +9,7 @@
 #' @import rvest
 #' @import xml2
 #' @import polite
-#' @importFrom rlang list2
+#' @importFrom rlang list2 :=
 #' @return an xml nodeset
 #'
 get_ri_xml <-
@@ -238,7 +238,7 @@ tidy_ritable <- function(ri_xml) {
 #'   given CAS numbers as an input.
 #'
 #' @param query character; the search term
-#' @param from character; type of search term. can be one of \cocde{"name"},
+#' @param from character; type of search term. can be one of \code{"name"},
 #'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
 #'   preferred to \code{"name"} since \code{NA} is returned in the even of
 #'   multiple matches to a query.
