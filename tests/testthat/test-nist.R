@@ -102,3 +102,32 @@ test_that("cas =  is deprecated gently", {
   expect_warning(nist_ri(cas = "78-70-6"),
                  "`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
 })
+
+
+test_that("nist_ri works with NAs", {
+  expect_identical(
+    colnames(nist_ri(c(NA, "107-86-8"),
+                     from = "cas",
+                     type = "linear",
+                     polarity = "non-polar",
+                     temp_prog = "ramp")),
+    c(
+      "query",
+      "type",
+      "phase",
+      "RI",
+      "length",
+      "gas",
+      "substrate",
+      "diameter",
+      "thickness",
+      "temp_start",
+      "temp_end",
+      "temp_rate",
+      "hold_start",
+      "hold_end",
+      "reference",
+      "comment"
+    )
+  )
+})
