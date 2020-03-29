@@ -68,7 +68,8 @@ Reference Data Act, \url{https://www.nist.gov/srd/public-law}.
 }
 \examples{
 \dontrun{
-myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear", "non-polar", "ramp")
+myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
+"non-polar", "ramp")
 }
 }
 \seealso{

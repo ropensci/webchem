@@ -130,7 +130,7 @@ get_ri_xml <-
 #'
 tidy_ritable <- function(ri_xml) {
   #Skip all these steps if the table didn't exist at the URL and was set to NA
-  if (is.na(ri_xml)) {
+  if (any(is.na(ri_xml))) {
     return(tibble(RI = NA))
 
   } else {
@@ -152,7 +152,7 @@ tidy_ritable <- function(ri_xml) {
     temp_prog <- attr(ri_xml, "temp_prog")
 
     if (temp_prog == "custom") {
-      tidy2 <- dplyr::rename(tidy1,
+      tidy2 <- dplyr::select(tidy1,
                              "RI" = "I",
                              "type" = "Column type",
                              "phase" = "Active phase",
@@ -169,7 +169,7 @@ tidy_ritable <- function(ri_xml) {
                   as.numeric)
 
     } else if (temp_prog == "ramp") {
-      tidy2 <- dplyr::rename(tidy1,
+      tidy2 <- dplyr::select(tidy1,
                              "RI" = "I",
                              "type" = "Column type",
                              "phase" = "Active phase",
@@ -202,7 +202,7 @@ tidy_ritable <- function(ri_xml) {
         )
 
     } else if (temp_prog == "isothermal") {
-      tidy2 <- dplyr::rename(tidy1,
+      tidy2 <- dplyr::select(tidy1,
                              "RI" = "I",
                              "type" = "Column type",
                              "phase" = "Active phase",
@@ -231,7 +231,7 @@ tidy_ritable <- function(ri_xml) {
         )
       ) %>%
       # reorder columns
-      dplyr::select("type", "phase", "RI", everything())
+      dplyr::select("RI", "type", "phase", everything())
   }
   return(output)
 }
@@ -260,6 +260,7 @@ tidy_ritable <- function(ri_xml) {
 #'   \url{https://webbook.nist.gov/chemistry/gc-ri/}
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
+#' @importFrom tidyr replace_na
 #' @import dplyr
 #'
 #' @return returns a tibble of literature RIs with the following columns:
@@ -319,9 +320,10 @@ nist_ri <- function(query,
         temp_prog = temp_prog
       )
     ) %>%
-    setNames(query)
+    setNames(tidyr::replace_na(query, ".NA"))
 
-  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "query")
+  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
+    mutate(query = na_if(query, ".NA"))
   return(ri_tables)
 }
 
