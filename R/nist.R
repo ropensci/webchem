@@ -33,74 +33,79 @@ get_ri_xml <-
     session <- suppressMessages(bow("https://webbook.nist.gov/cgi/cbook.cgi"))
     set_scrape_delay(rgamma(1, shape = 15, scale = 1/10))
 
-    if (from == "cas") {
-      ID <- paste0("C", gsub("-", "", query))
+    #handle NAs
+    if (is.na(query)) {
+      ri_xml <- as.data.frame(NA)
     } else {
-      page <-
-        scrape(session,
-               query = list2(!!from_str := query,
-                             Units = "SI"))
-      #Warnings
-      result <- page %>%
-        html_node("main h1") %>%
-        html_text()
-      # if cquery not found
-      if (str_detect(result, "Not Found")) {
-        warning(paste0("'", query, "' not found. Returning NA."))
-        return(as.data.frame(NA))
-      }
-      # if more than one compound found
-      if (result == "Search Results") {
-        warning(paste0("More than one match for '", query,
-                "'. Returning NA."))
-        return(as.data.frame(NA))
-      }
-      links <-
-        page %>%
-        html_nodes("li li a") %>%
-        html_attr("href")
 
-      gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
-
-      if (length(gaschrom) == 0) {
-        warning(paste0(
-          "There are no chromatography data for '",
-          query,
-          "'. Returning NA."
-        ))
-        return(as.data.frame(NA))
+      if (from == "cas") {
+        ID <- paste0("C", gsub("-", "", query))
       } else {
-        ID <- str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+        page <-
+          scrape(session,
+                 query = list2(!!from_str := query,
+                               Units = "SI"))
+        #Warnings
+        result <- page %>%
+          html_node("main h1") %>%
+          html_text()
+        # if cquery not found
+        if (str_detect(result, "Not Found")) {
+          warning(paste0("'", query, "' not found. Returning NA."))
+          ri_xml <- as.data.frame(NA)
+        }
+        # if more than one compound found
+        if (result == "Search Results") {
+          warning(paste0("More than one match for '", query,
+                         "'. Returning NA."))
+          ri_xml <- as.data.frame(NA)
+        }
+        links <-
+          page %>%
+          html_nodes("li li a") %>%
+          html_attr("href")
+
+        gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
+
+        if (length(gaschrom) == 0) {
+          warning(paste0(
+            "There are no chromatography data for '",
+            query,
+            "'. Returning NA."
+          ))
+          ri_xml <- as.data.frame(NA)
+        } else {
+          ID <- str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+        }
+      }
+      #scrape RI table
+      type_str <-
+        toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
+
+      page <- scrape(session,
+                     query = list(
+                       ID = ID,
+                       Units = "SI",
+                       Mask = "2000",
+                       Type = type_str
+                     ))
+
+      ri_xml.all <- html_nodes(page, ".data")
+
+      #Warn if table doesn't exist at URL
+      if (length(ri_xml.all) == 0) {
+        warning(paste0(
+          "There are no RIs for ",
+          query,
+          " of type ",
+          type_str,
+          ". Returning NA."
+        ))
+        ri_xml <- as.data.frame(NA) #TODO: is this the right thing?
+      } else {
+        ri_xml <- ri_xml.all
       }
     }
-        #scrape RI table
-    type_str <-
-      toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
-
-    page <- scrape(session,
-                   query = list(
-                     ID = ID,
-                     Units = "SI",
-                     Mask = "2000",
-                     Type = type_str
-                   ))
-
-    ri_xml.all <- html_nodes(page, ".data")
-
-    #Warn if table doesn't exist at URL
-    if (length(ri_xml.all) == 0) {
-      warning(paste0(
-        "There are no RIs for ",
-        query,
-        " of type ",
-        type_str,
-        ". Returning NA."
-      ))
-      ri_xml <- as.data.frame(NA) #TODO: is this the right thing?
-    } else {
-      ri_xml <- ri_xml.all
-    }
-
     #set attributes to label what type of RI
     attr(ri_xml, "from") <- from
     attr(ri_xml, "type") <- type
