@@ -35,7 +35,7 @@ get_ri_xml <-
 
     #handle NAs
     if (is.na(query)) {
-      ri_xml <- as.data.frame(NA)
+      return(NA)
     } else {
 
       if (from == "cas") {
@@ -43,22 +43,22 @@ get_ri_xml <-
       } else {
         page <-
           scrape(session,
-                 query = list2(!!from_str := query,
+                 query = rlang::list2(!!from_str := query,
                                Units = "SI"))
         #Warnings
         result <- page %>%
           html_node("main h1") %>%
           html_text()
         # if cquery not found
-        if (str_detect(result, "Not Found")) {
+        if (stringr::str_detect(result, "Not Found")) {
           warning(paste0("'", query, "' not found. Returning NA."))
-          ri_xml <- as.data.frame(NA)
+          ri_xml <- tibble(query = query)
         }
         # if more than one compound found
         if (result == "Search Results") {
           warning(paste0("More than one match for '", query,
                          "'. Returning NA."))
-          ri_xml <- as.data.frame(NA)
+          return(NA)
         }
         links <-
           page %>%
@@ -73,7 +73,7 @@ get_ri_xml <-
             query,
             "'. Returning NA."
           ))
-          ri_xml <- as.data.frame(NA)
+          return(NA)
         } else {
           ID <- str_extract(gaschrom, "(?<=ID=).+?(?=&)")
         }
@@ -101,7 +101,7 @@ get_ri_xml <-
           type_str,
           ". Returning NA."
         ))
-        ri_xml <- as.data.frame(NA) #TODO: is this the right thing?
+        return(NA)
       } else {
         ri_xml <- ri_xml.all
       }
@@ -130,8 +130,8 @@ get_ri_xml <-
 #'
 tidy_ritable <- function(ri_xml) {
   #Skip all these steps if the table didn't exist at the URL and was set to NA
-  if (any(is.na(ri_xml))) {
-    output <- ri_xml
+  if (is.na(ri_xml)) {
+    return(tibble(RI = NA))
 
   } else {
     # Read in the tables from xml
@@ -153,38 +153,38 @@ tidy_ritable <- function(ri_xml) {
 
     if (temp_prog == "custom") {
       tidy2 <- dplyr::rename(tidy1,
-                      "type" = "Column type",
-                      "phase" = "Active phase",
-                      "length" = "Column length (m)",
-                      "gas" = "Carrier gas",
-                      "substrate" = "Substrate",
-                      "diameter" = "Column diameter (mm)",
-                      "thickness" = "Phase thickness (m)",
-                      "program" = "Program",
-                      "RI" = "I",
-                      "reference" = "Reference",
-                      "comment" = "Comment") %>%
+                             "RI" = "I",
+                             "type" = "Column type",
+                             "phase" = "Active phase",
+                             "length" = "Column length (m)",
+                             "gas" = "Carrier gas",
+                             "substrate" = "Substrate",
+                             "diameter" = "Column diameter (mm)",
+                             "thickness" = "Phase thickness (m)",
+                             "program" = "Program",
+                             "reference" = "Reference",
+                             "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
         dplyr::mutate_at(vars("length", "diameter", "thickness", "RI"),
                   as.numeric)
 
     } else if (temp_prog == "ramp") {
       tidy2 <- dplyr::rename(tidy1,
-                      "type" = "Column type",
-                      "phase" = "Active phase",
-                      "length" = "Column length (m)",
-                      "gas" = "Carrier gas",
-                      "substrate" = "Substrate",
-                      "diameter" = "Column diameter (mm)",
-                      "thickness" = "Phase thickness (m)",
-                      "temp_start" = "Tstart (C)",
-                      "temp_end" = "Tend (C)",
-                      "temp_rate" = "Heat rate (K/min)",
-                      "hold_start" = "Initial hold (min)",
-                      "hold_end" = "Final hold (min)",
-                      "RI" = "I",
-                      "reference" = "Reference",
-                      "comment" = "Comment") %>%
+                             "RI" = "I",
+                             "type" = "Column type",
+                             "phase" = "Active phase",
+                             "length" = "Column length (m)",
+                             "gas" = "Carrier gas",
+                             "substrate" = "Substrate",
+                             "diameter" = "Column diameter (mm)",
+                             "thickness" = "Phase thickness (m)",
+                             "temp_start" = "Tstart (C)",
+                             "temp_end" = "Tend (C)",
+                             "temp_rate" = "Heat rate (K/min)",
+                             "hold_start" = "Initial hold (min)",
+                             "hold_end" = "Final hold (min)",
+                             "reference" = "Reference",
+                             "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
         dplyr::mutate_at(
           dplyr::vars(
@@ -203,17 +203,17 @@ tidy_ritable <- function(ri_xml) {
 
     } else if (temp_prog == "isothermal") {
       tidy2 <- dplyr::rename(tidy1,
-                      "type" = "Column type",
-                      "phase" = "Active phase",
-                      "length" = "Column length (m)",
-                      "gas" = "Carrier gas",
-                      "substrate" = "Substrate",
-                      "diameter" = "Column diameter (mm)",
-                      "thickness" = "Phase thickness (m)",
-                      "temp" = "Temperature (C)",
-                      "RI" = "I",
-                      "reference" = "Reference",
-                      "comment" = "Comment") %>%
+                             "RI" = "I",
+                             "type" = "Column type",
+                             "phase" = "Active phase",
+                             "length" = "Column length (m)",
+                             "gas" = "Carrier gas",
+                             "substrate" = "Substrate",
+                             "diameter" = "Column diameter (mm)",
+                             "thickness" = "Phase thickness (m)",
+                             "temp" = "Temperature (C)",
+                             "reference" = "Reference",
+                             "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
         dplyr::mutate_at(vars("length", "diameter", "thickness", "temp",  "RI"),
                   as.numeric)
@@ -324,3 +324,4 @@ nist_ri <- function(query,
   ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "query")
   return(ri_tables)
 }
+
