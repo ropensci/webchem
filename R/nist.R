@@ -260,7 +260,6 @@ tidy_ritable <- function(ri_xml) {
 #'   \url{https://webbook.nist.gov/chemistry/gc-ri/}
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
-#' @importFrom tidyr replace_na
 #' @import dplyr
 #'
 #' @return returns a tibble of literature RIs with the following columns:
@@ -319,11 +318,15 @@ nist_ri <- function(query,
         polarity = polarity,
         temp_prog = temp_prog
       )
-    ) %>%
-    setNames(tidyr::replace_na(query, ".NA"))
+    )
+
+  querynames <- query
+  querynames [is.na(querynames)] <- ".NA"
+  ri_xmls <- setNames(ri_xmls, querynames)
 
   ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
     mutate(query = na_if(query, ".NA"))
+
   return(ri_tables)
 }
 
