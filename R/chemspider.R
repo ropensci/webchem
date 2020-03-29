@@ -631,10 +631,17 @@ cs_convert <- function(query, from, to, apikey = NULL) {
     }
   }
   if (from == "csid") {
-    out <- cs_compinfo(query, fields = to2, apikey = apikey)[, 2]
+    out <- cs_compinfo(query, fields = to2, apikey = apikey)
+    if (ncol(out) == 2) {
+      out <- out[, 2]
+    }
+    else {
+      out <- out[, 1]
+    }
   }
   else {
     out <- unname(sapply(query, function(x) {
+      if (is.na(x)) return(NA)
       switch(cs_convert_router(from, to),
              identity = query,
              cs_convert_multiple = cs_convert_multiple(
@@ -655,6 +662,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' retrieve the record details for your query.
 #' @importFrom jsonlite toJSON
 #' @importFrom httr POST add_headers
+#' @importFrom dplyr left_join
 #' @param csid numeric; can be obtained using \code{\link{get_csid}}
 #' @param fields character; see details.
 #' @param apikey character; your API key. If NULL (default),
@@ -679,6 +687,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' cs_compinfo(171:182, "SMILES")
 #' }
 cs_compinfo <- function(csid, fields, apikey = NULL) {
+  if (mean(is.na(csid)) == 1) return(data.frame(id = NA))
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
@@ -695,7 +704,7 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
   )
   headers <- c("Content-Type" = "", "apikey" = apikey)
   body <- list(
-    "recordIds" = csid, "fields" = fields
+    "recordIds" = csid[!is.na(csid)], "fields" = fields
   )
   body <- jsonlite::toJSON(body)
   postres <- httr::POST(
@@ -703,7 +712,10 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
     httr::add_headers(.headers = headers), body = body
   )
   if (postres$status_code == 200) {
-    out <- jsonlite::fromJSON(rawToChar(postres$content))$records
+    res <- jsonlite::fromJSON(rawToChar(postres$content))$records
+    if (length(res) == 0) return(data.frame(id = NA))
+    out <- data.frame(id = csid)
+    out <- dplyr::left_join(out, res, by = "id")
     return(out)
   }
   else {
