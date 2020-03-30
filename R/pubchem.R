@@ -376,7 +376,7 @@ pc_page <- function(cid, section, verbose = TRUE) {
       "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
       cid, "/JSON?heading=", section)
     if (verbose == TRUE) message("Querying ", cid, ": ", appendLF = FALSE)
-    Sys.sleep(0.2)
+    Sys.sleep(0.3)
     cont <- try(jsonlite::fromJSON(qurl, simplifyDataFrame = FALSE),
                 silent = TRUE)
     if (inherits(cont, "try-error")) {
@@ -393,42 +393,46 @@ pc_page <- function(cid, section, verbose = TRUE) {
 }
 
 #' Extract data from PubChem content pages
-
+#'
 #' This function takes a list of PubChem content pages, and extracts the
-#' required low level information from them.
+#' required information from them.
 #' @importFrom data.tree as.Node FindNode
 #' @importFrom dplyr bind_rows as_tibble
-#' @param query list; a list of PubChem content pages.
-#' @param section character; a low level section of data to be accessed.
-#' @return a tibble of chemical information with references.
+#' @param page list; a list of PubChem content pages.
+#' @param section character; the lowest level section of the data to be
+#' accessed.
+#' @return A tibble of chemical information with references.
 #' @details When you look at a PubChem content page, you can see that chemical
 #' information is organised into sections, subsections, etc. The chemical data
-#' live at the low levels of these sections. Use this function to extract low
-#' level information from PubChem content pages.
-#' @details Contrary to \code{pc_page()}, the \code{section} argument in
-#' \code{pc_extract} is case sensitive, sensitive to typing errors, and requires
-#' the full name of the section as it is printed on the content page. The
-#' PubChem Table of Contents Tree can also be found at
-#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
-#' @note Please respect the Terms and Conditions of the National Library of
-#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
-#' usage policies of National Center for Biotechnology Information,
-#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
-#' usage policies of the indicidual data sources
-#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
+#' live at the lowest levels of these sections. Use this function to extract the
+#' lowest level information from PubChem content pages, e.g. IUPAC Name, Boiling
+#' Point, Lower Explosive Limit (LEL).
+#' @details The \code{section} argument is not case sensitive, but it is
+#' sensitive to typing errors, and requires the full name of the section as it
+#' is printed on the content page. The PubChem Table of Contents Tree can also
+#' be found at \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
+#' @note Please respect the Terms and Conditions and data usage policies of the
+#' service provider and the data providers:
+#' \itemize{
+#' \item National Library of Medicine: \cr
+#' \url{https://www.nlm.nih.gov/databases/download.html}
+#' \item National Center for Biotechnology Information: \cr
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/}
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}
+#' \item Data providers: \cr
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @examples
 #' \donttest{
 #' # Import all experimental properties for acetic acid and citric acid
 #' pages <- pc_page(c(176, 311), "experimental properties")
 #' # Extract pKa data
-#' pc_extract(pages, "pKa")
+#' pc_extract(pages, "pka")
 #'
 #' # Import all toxicity data for benzene
 #' pages <- pc_page(241, "toxicity")
 #' # Extract exposure routes
-#' pc_extract(pages, "Exposure Routes")$String
+#' pc_extract(pages, "exposure routes")$String
 #'
 #' # Import all hazards identification data for formaldehyde
 #' pages <- pc_page(712, "hazards identification")
@@ -436,24 +440,26 @@ pc_page <- function(cid, section, verbose = TRUE) {
 #' pc_extract(pages, "EPA Hazardous Waste Number")$String
 #' }
 #' @export
-pc_extract <- function(query, section) {
-  foo <- function(x) {
-    if (is.na(x)) return(data.frame(CID = NA))
-    tree <- data.tree::as.Node(x, nameName = "TOCHeading")
+pc_extract <- function(page, section) {
+  section <- tolower(section)
+  foo <- function(tree, section) {
+    if (is.na(tree)) return(data.frame(CID = NA))
+    tree <- data.tree::as.Node(tree, nameName = "TOCHeading")
+    tree$Do(function(node) node$name <- tolower(node$name))
     node <- data.tree::FindNode(tree, section)
     if (is.null(node)) return(data.frame(
-      CID = x$Record$RecordNumber,
-      Name = x$Record$RecordTitle,
+      CID = tree$record$RecordNumber,
+      Name = tree$record$RecordTitle,
       stringsAsFactors = FALSE))
-    node <- FindNode(node, "Information")
+    node <- FindNode(node, "information")
     if (is.null(node)) return(data.frame(
-      CID = x$Record$RecordNumber,
-      Name = x$Record$RecordTitle,
+      CID = tree$record$RecordNumber,
+      Name = tree$record$RecordTitle,
       stringsAsFactors = FALSE))
     info <- lapply(node, function(y) {
-      lownode <- data.tree::FindNode(data.tree::as.Node(y), "StringWithMarkup")
+      lownode <- data.tree::FindNode(data.tree::as.Node(y), "stringwithmarkup")
       if (is.null(lownode)) {
-        info <- data.frame(String = paste(y$Value, collapse = " "),
+        info <- data.frame(String = paste(y$value, collapse = " "),
                           ReferenceNumber = y$ReferenceNumber,
                           stringsAsFactors = FALSE)
         return(info)
@@ -465,11 +471,11 @@ pc_extract <- function(query, section) {
       }
     })
     info <- dplyr::bind_rows(info)
-    info <- data.frame(CID = x$Record$RecordNumber,
-                       Name = x$Record$RecordTitle,
+    info <- data.frame(CID = tree$record$RecordNumber,
+                       Name = tree$record$RecordTitle,
                        info,
                        stringsAsFactors = FALSE)
-    node <- FindNode(tree, "Reference")
+    node <- FindNode(tree, "reference")
     if (is.null(node)) return(data.frame(
       info,
       SourceName = NA,
@@ -492,7 +498,8 @@ pc_extract <- function(query, section) {
     })
     return(info)
   }
-  info <- dplyr::as_tibble(dplyr::bind_rows(lapply(query, foo)))
+  info <- lapply(page, function(x) foo(x, section = section))
+  info <- dplyr::as_tibble(dplyr::bind_rows(info))
   info <- info[, -which(names(info) == "ReferenceNumber")]
   return(info)
 }

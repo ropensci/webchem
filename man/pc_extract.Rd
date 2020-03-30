@@ -2,57 +2,58 @@
 % Please edit documentation in R/pubchem.R
 \name{pc_extract}
 \alias{pc_extract}
-\title{Extract data from PubChem content pages
-This function takes a list of PubChem content pages, and extracts the
-required low level information from them.}
+\title{Extract data from PubChem content pages}
 \usage{
-pc_extract(query, section)
+pc_extract(page, section)
 }
 \arguments{
-\item{query}{list; a list of PubChem content pages.}
+\item{page}{list; a list of PubChem content pages.}
 
-\item{section}{character; a low level section of data to be accessed.}
+\item{section}{character; the lowest level section of the data to be
+accessed.}
 }
 \value{
-a tibble of chemical information with references.
+A tibble of chemical information with references.
 }
 \description{
-Extract data from PubChem content pages
 This function takes a list of PubChem content pages, and extracts the
-required low level information from them.
+required information from them.
 }
 \details{
 When you look at a PubChem content page, you can see that chemical
 information is organised into sections, subsections, etc. The chemical data
-live at the low levels of these sections. Use this function to extract low
-level information from PubChem content pages.
+live at the lowest levels of these sections. Use this function to extract the
+lowest level information from PubChem content pages, e.g. IUPAC Name, Boiling
+Point, Lower Explosive Limit (LEL).
 
-Contrary to \code{pc_page()}, the \code{section} argument in
-\code{pc_extract} is case sensitive, sensitive to typing errors, and requires
-the full name of the section as it is printed on the content page. The
-PubChem Table of Contents Tree can also be found at
-\url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
+The \code{section} argument is not case sensitive, but it is
+sensitive to typing errors, and requires the full name of the section as it
+is printed on the content page. The PubChem Table of Contents Tree can also
+be found at \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
 }
 \note{
-Please respect the Terms and Conditions of the National Library of
-Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
-usage policies of National Center for Biotechnology Information,
-\url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
-usage policies of the indicidual data sources
-\url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
+Please respect the Terms and Conditions and data usage policies of the
+service provider and the data providers:
+\itemize{
+\item National Library of Medicine: \cr
+\url{https://www.nlm.nih.gov/databases/download.html}
+\item National Center for Biotechnology Information: \cr
+\url{https://www.ncbi.nlm.nih.gov/home/about/policies/}
+\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}
+\item data providers: \cr
+\url{https://pubchem.ncbi.nlm.nih.gov/sources/}}
 }
 \examples{
 \donttest{
 # Import all experimental properties for acetic acid and citric acid
 pages <- pc_page(c(176, 311), "experimental properties")
 # Extract pKa data
-pc_extract(pages, "pKa")
+pc_extract(pages, "pka")
 
 # Import all toxicity data for benzene
 pages <- pc_page(241, "toxicity")
 # Extract exposure routes
-pc_extract(pages, "Exposure Routes")$String
+pc_extract(pages, "exposure routes")$String
 
 # Import all hazards identification data for formaldehyde
 pages <- pc_page(712, "hazards identification")
