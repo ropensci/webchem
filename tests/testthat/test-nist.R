@@ -2,8 +2,13 @@ context("nist")
 
 test_that("nist_ri() warns when no results", {
   skip_on_cran()
-  expect_warning(nist_ri("78-70-6", from = "cas", type = 'linear', polarity = 'non-polar'),
-                 regexp = "There are no RIs for 78-70-6")
+  expect_warning(nist_ri(
+    "78-70-6",
+    from = "cas",
+    type = "linear",
+    polarity = "non-polar"
+  ),
+  regexp = "There are no RIs for 78-70-6")
 })
 
 test_that("nist_ri() works when only one row of data", {
@@ -25,8 +30,8 @@ test_that("nist_ri() works when only one row of data", {
 
 test_that("nist_ri() returns results", {
   skip_on_cran()
-  out <- nist_ri("78-70-6", type = 'linear', temp_prog = 'custom')
-  expect_s3_class(out, 'data.frame')
+  out <- nist_ri("78-70-6", type = "linear", temp_prog = "custom")
+  expect_s3_class(out, "data.frame")
   expect_true(!anyNA(out$RI))
 })
 
@@ -52,7 +57,7 @@ test_that("nist_ri() works with inchi query", {
     polarity = "non-polar",
     temp_prog = "isothermal"
   )
-  expect_s3_class(testdf,"data.frame")
+  expect_s3_class(testdf, "data.frame")
   expect_true(!anyNA(testdf$RI))
 })
 
@@ -65,7 +70,7 @@ test_that("nist_ri() works with name query", {
     polarity = "non-polar",
     temp_prog = "isothermal"
   )
-  expect_s3_class(testdf,"data.frame")
+  expect_s3_class(testdf, "data.frame")
   expect_true(!anyNA(testdf$RI))
 })
 
@@ -99,8 +104,10 @@ test_that("nist_ri() warns when no chromatography data", {
 
 test_that("cas =  is deprecated gently", {
   skip_on_cran()
-  expect_warning(nist_ri(cas = "78-70-6"),
-                 "`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
+  expect_warning(
+    nist_ri(cas = "78-70-6"),
+    "`cas` is deprecated.  Using `query` instead with `from = 'cas'`."
+  )
 })
 
 

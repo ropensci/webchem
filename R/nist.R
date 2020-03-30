@@ -30,8 +30,11 @@ get_ri_xml <-
     # Open session
     #TODO: get rid of "no encoding supplied: defaulting to UTF-9" message
     #properly
-    session <- suppressMessages(bow("https://webbook.nist.gov/cgi/cbook.cgi"))
-    set_scrape_delay(rgamma(1, shape = 15, scale = 1/10))
+    session <-
+      suppressMessages(
+        polite::bow("https://webbook.nist.gov/cgi/cbook.cgi")
+        )
+    polite::set_scrape_delay(rgamma(1, shape = 15, scale = 1/10))
 
     #handle NAs
     if (is.na(query)) {
@@ -42,7 +45,7 @@ get_ri_xml <-
         ID <- paste0("C", gsub("-", "", query))
       } else {
         page <-
-          scrape(session,
+          polite::scrape(session,
                  query = rlang::list2(!!from_str := query,
                                Units = "SI"))
         #Warnings
@@ -82,7 +85,7 @@ get_ri_xml <-
       type_str <-
         toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
 
-      page <- scrape(session,
+      page <- polite::scrape(session,
                      query = list(
                        ID = ID,
                        Units = "SI",
@@ -248,10 +251,10 @@ tidy_ritable <- function(ri_xml) {
 #'   multiple matches to a query.
 #' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
 #'   \code{"alkane"}, or \code{"lee"}. See details for more.
-#' @param polarity Column polarity. One of "polar" or "non-polar" to get RIs
-#'   calculated for polar or non-polar columns.
-#' @param temp_prog Temperature program. One of "isothermal", "ramp", or
-#'   "custom".
+#' @param polarity Column polarity. One of \code{"polar"} or \code{"non-polar"}
+#'   to get RIs calculated for polar or non-polar columns.
+#' @param temp_prog Temperature program. One of \code{"isothermal"},
+#'   \code{"ramp"}, or \code{"custom"}.
 #' @param cas deprecated.  Use \code{query} instead.
 #' @details The types of retention indices included in NIST include Kovats
 #'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
@@ -324,9 +327,8 @@ nist_ri <- function(query,
   querynames [is.na(querynames)] <- ".NA"
   ri_xmls <- setNames(ri_xmls, querynames)
 
-  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
-    mutate(query = na_if(query, ".NA"))
+  ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
+    dplyr::mutate(query = na_if(query, ".NA"))
 
   return(ri_tables)
 }
-
