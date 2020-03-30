@@ -9,6 +9,7 @@ cas <- function(x, ...){
   UseMethod("cas")
 }
 
+# CAS ---------------------------------------------------------------------
 #' @export
 cas.default <- function(x, ...) {
   sapply(x, function(y) {
@@ -17,7 +18,6 @@ cas.default <- function(x, ...) {
     y$cas
     })
 }
-
 #' @export
 cas.chebi_comp_entity <- function(x, ...) {
   sapply(x, function(y) {
@@ -30,10 +30,17 @@ cas.chebi_comp_entity <- function(x, ...) {
 cas.pan_query <- function(x, ...) {
   sapply(x, function(y) y$`CAS Number`)
 }
-
 #' @export
 cas.wd_ident <- function(x, ...) {
   x$cas
+}
+
+cas.etox_basic <- function(x, ...) {
+  sapply(x, function(y) {
+    if (length(y) == 1 && is.na(y))
+      return(NA)
+    unique(y[[1]]$cas)
+  })
 }
 
 # InChIKey ----------------------------------------------------------------
@@ -68,12 +75,10 @@ inchikey.chebi_comp_entity <- function(x, ...) {
 inchikey.cs_compinfo <- function(x, ...) {
   x$inchikey
 }
-
 #' @export
 inchikey.cs_extcompinfo <- function(x, ...) {
   x$inchikey
 }
-
 #' @export
 inchikey.etox_basic <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
@@ -87,7 +92,6 @@ inchikey.pan_query <- function(x, ...) {
 inchikey.opsin_query <- function(x, ...) {
   x$stdinchikey
 }
-
 #' @export
 inchikey.pc_prop <- function(x, ...) {
   if (!"InChIKey" %in% names(x)) {
@@ -95,7 +99,6 @@ inchikey.pc_prop <- function(x, ...) {
   }
   x$InChIKey
 }
-
 #' @export
 inchikey.wd_ident <- function(x, ...) {
   x$inchikey
@@ -112,7 +115,6 @@ smiles <- function(x, ...){
 smiles.default <- function(x, ...) {
   sapply(x, function(y) y$smiles)
 }
-
 #' @export
 smiles.chebi_comp_entity <- function(x, ...) {
   sapply(x, function(y) {
@@ -125,18 +127,14 @@ smiles.chebi_comp_entity <- function(x, ...) {
 smiles.cs_compinfo <- function(x, ...) {
   x$smiles
 }
-
 #' @export
 smiles.cs_extcompinfo <- function(x, ...) {
   x$smiles
 }
-
-
 #' @export
 smiles.cts_compinfo <- function(x, ...) {
   stop("SMILES is not returned by this datasource!")
 }
-
 #' @export
 smiles.etox_basic <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
@@ -145,7 +143,6 @@ smiles.etox_basic <- function(x, ...) {
 smiles.pan_query <- function(x, ...) {
   stop("SMILES is not returned by this datasource!")
 }
-
 #' @export
 smiles.opsin_query <- function(x, ...) {
   x$smiles
@@ -154,7 +151,6 @@ smiles.opsin_query <- function(x, ...) {
 smiles.aw_query <- function(x, ...) {
   stop("SMILES is not returned by this datasource!")
 }
-
 #' @export
 smiles.pc_prop <- function(x, ...) {
   if (!"CanonicalSMILES" %in% names(x)) {
@@ -162,7 +158,6 @@ smiles.pc_prop <- function(x, ...) {
   }
   x$CanonicalSMILES
 }
-
 #' @export
 smiles.wd_ident <- function(x, ...) {
   x$smiles
