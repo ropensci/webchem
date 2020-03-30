@@ -28,8 +28,8 @@ get_ri_xml <-
     ))
 
     # Open session
-    #TODO: get rid of "no encoding supplied: defaulting to UTF-9" message
-    #properly
+    #TODO: remove `suppressMessages()` once polite is updated on CRAN to fix
+    #bow() printing a message about UTF-8 encoding
     session <-
       suppressMessages(
         polite::bow("https://webbook.nist.gov/cgi/cbook.cgi")
