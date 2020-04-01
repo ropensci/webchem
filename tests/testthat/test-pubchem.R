@@ -52,6 +52,10 @@ test_that("pc_page()", {
   a <- pc_page(c(311, 176, 1118, "balloon", NA), "pKa")
   b <- pc_page(c(311, 176, 1118, "balloon", NA), "therapeutic uses")
   c <- pc_page(c(311, 176, 1118, "balloon", NA), "spectral information")
+  d <- pc_page(1, "external id", type = "substance")
+  e <- pc_page(1, "description", type = "assay")
+  f <- pc_page("US5837728", "patent title", type = "patent")
+  g <- pc_page(1, "synonyms", type = "gene")
 
   expect_is(a, "list")
   expect_length(a, 5)
@@ -79,5 +83,16 @@ test_that("pc_page()", {
 })
 
 test_that("pc_extract() chemical and physical properties", {
-  s <- pc_page(c(NA, 311, "balloon", 1118), "chemical and physical properties")
+  s <- pc_page(c(NA,176,311,"balloon"), "chemical and physical properties")
+  mw <- pc_extract(s, "molecular weight") # example for a computed property
+  pd <- pc_extract(s, "physical description") # textual description
+  bp <- pc_extract(s, "boiling point")
+  mp <- pc_extract(s, "melting point")
+  fp <- pc_extract(s, "flash point")
+  so <- pc_extract(s, "solubility") # data with headers
+  ow <- pc_extract(s, "octanol/water partition coefficient") #negative numbers
+  logs <- pc_extract(s, "logs")
+  logkoa <- pc_extract(s, "logkoa")
+  ri <- pc_extract(s, "kovats retention index")
+
 })

@@ -40,7 +40,7 @@ service provider and the data providers:
 \item National Center for Biotechnology Information: \cr
 \url{https://www.ncbi.nlm.nih.gov/home/about/policies/}
 \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}
-\item data providers: \cr
+\item Data providers: \cr
 \url{https://pubchem.ncbi.nlm.nih.gov/sources/}}
 }
 \examples{

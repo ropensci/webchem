@@ -4,12 +4,21 @@
 \alias{pc_page}
 \title{Import PubChem content pages}
 \usage{
-pc_page(cid, section, verbose = TRUE)
+pc_page(
+  id,
+  section,
+  type = c("compound", "substance", "assay", "gene", "patent"),
+  verbose = TRUE
+)
 }
 \arguments{
-\item{cid}{numeric; a vector of identifiers to search for.}
+\item{id}{numeric; a vector of identifiers to search for.}
 
-\item{section}{character; the section of the conent page to be imported.}
+\item{section}{character; the section of the content page to be imported.}
+
+\item{type}{character; the type of data to search for. Can be one of
+\code{"compound"}, \code{"substance"}, \code{"assay"}, \code{"gene"},
+\code{"patent"}.}
 }
 \value{
 a list of PubChem content pages.

@@ -333,8 +333,11 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' PubChem content page. This function is used to import a section of that page
 #' into your workflow.
 #' @importFrom jsonlite fromJSON
-#' @param cid numeric; a vector of identifiers to search for.
-#' @param section character; the section of the conent page to be imported.
+#' @param id numeric; a vector of identifiers to search for.
+#' @param section character; the section of the content page to be imported.
+#' @param type character; the type of data to search for. Can be one of
+#' \code{"compound"}, \code{"substance"}, \code{"assay"}, \code{"gene"},
+#' \code{"patent"}.
 #' @return a list of PubChem content pages.
 #' @details \code{section} can be any section of a PubChem content page, e.g.
 #' \code{section = "solubility"} will import the section on solubility, or
@@ -363,19 +366,23 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' tox <- pc_page(176, "toxicity")
 #' }
 #' @export
-pc_page <- function(cid, section, verbose = TRUE) {
+pc_page <- function(id,
+                    section,
+                    type = c("compound", "substance", "assay", "gene","patent"),
+                    verbose = TRUE) {
+  type <- match.arg(type)
   section <- gsub(" +", "+", section)
-  foo <- function(cid, section) {
-    if (is.na(cid) | is.na(suppressWarnings(as.numeric(cid)))) {
+  foo <- function(id, section, type) {
+    if (is.na(id)) {
       if (verbose == TRUE) {
-        message("Querying ", cid, ": Invalid input. Returning NA.")
+        message("Querying ", id, ": Invalid input. Returning NA.")
       }
       return(NA)
     }
     qurl <- paste0(
-      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/",
-      cid, "/JSON?heading=", section)
-    if (verbose == TRUE) message("Querying ", cid, ": ", appendLF = FALSE)
+      "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/", type, "/", id,
+      "/JSON?heading=", section)
+    if (verbose == TRUE) message("Querying ", id, ": ", appendLF = FALSE)
     Sys.sleep(0.3)
     cont <- try(jsonlite::fromJSON(qurl, simplifyDataFrame = FALSE),
                 silent = TRUE)
@@ -388,7 +395,7 @@ pc_page <- function(cid, section, verbose = TRUE) {
     }
     return(cont)
   }
-  cont <- lapply(cid, function(x) foo(x, section))
+  cont <- lapply(id, function(x) foo(x, section, type))
   return(cont)
 }
 
