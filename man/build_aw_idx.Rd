@@ -3,17 +3,28 @@
 \name{build_aw_idx}
 \alias{build_aw_idx}
 \title{Function to build index}
+\source{
+\url{http://www.alanwood.net/pesticides}
+}
 \usage{
-build_aw_idx()
+build_aw_idx(verbose = TRUE, force_build = FALSE)
+}
+\arguments{
+\item{verbose}{logical; print message during processing to console?}
+
+\item{force_build}{logical; force building a new index?}
 }
 \value{
 a data.frame with three columns: cas, url, and name
 }
 \description{
-Function to build index
+This function builds an index of Alan Woods Compendium of Pesticides
+\url{http://www.alanwood.net/pesticides} and saves it to \code{tempdir()}.
+This is a utility function for \code{aw_query()} and will not be exported in
+future releases.
 }
 \seealso{
-\code{\link{aw_query}}, \code{\link{aw_idx}}
+\code{\link{aw_query}}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
