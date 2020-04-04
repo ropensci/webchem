@@ -28,7 +28,7 @@ Before using this function, please read the disclaimer
 id <- get_etoxid('Triclosan', match = 'best')
 etox_basic(id$etoxid)
 
-# Retrieve CAS for multiple inputs
+# Retrieve data for multiple inputs
 ids <- c("20179", "9051")
 out <- etox_basic(ids)
 out
