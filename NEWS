@@ -7,6 +7,7 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 
+* get_csid() now returns all csids when queried from formula
 * get_csid() returned an error when query was NA [PR #226, fixed by stitam]
 * get_chebiid() and chebi_comp_entity() fixed for invalid queries [PR #225, fixed by stitam]
 * get_cid() returned the PubChem ID of sodium when the query was NA [PR #223, fixed by stitam]
