@@ -39,18 +39,33 @@ Submit a query to the SMARTS viewer webservice at
 University of Hamburg
 }
 \examples{
-img <- smarts_viewer("[CX3](=[OX1])[OX2][CX3](=[OX1])", "image", "png", 1, "both")
+\donttest{
+img <- smarts_viewer(
+   "[CX3](=[OX1])[OX2][CX3](=[OX1])",
+   "image", "png", 1, "both"
+   )
 plot(0:1,0:1, 'n')
 rasterImage(img[[1]],0,0,1,1)
+}
 
-smarts <- c("[CX3](=[OX1])[OX2][CX3](=[OX1])", "[$([nr5]:[nr5,or5,sr5]),$([nr5]:[cr5]:[nr5,or5,sr5])]", "[#6][$([NX2]=O),$(N=C=O),$(OC#N),$(SC#N)]")
+\donttest{
+smarts <- c("[CX3](=[OX1])[OX2][CX3](=[OX1])",
+"[$([nr5]:[nr5,or5,sr5]),$([nr5]:[cr5]:[nr5,or5,sr5])]",
+"[#6][$([NX2]=O),$(N=C=O),$(OC#N),$(SC#N)]"
+)
 img <- smarts_viewer(smarts, "image", "png", 1, "both")
 par(mfcol = c(1,length(smarts)))
 sapply(img, function(i){
  plot(0:1,0:1, 'n')
  rasterImage(i,0,0,1,1)
 })
+}
 
-smarts_viewer(smarts, output = "download", image_format = "pdf", visualization_modus = 1, legend_option = "both", filename = "test.pdf")
-
+\donttest{
+smarts_viewer(
+    smarts, output = "download",
+    image_format = "pdf",
+    visualization_modus = 1,
+    legend_option = "both", filename = "test.pdf")
+}
 }
