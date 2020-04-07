@@ -303,8 +303,6 @@ extr_num <- function(x) {
 #' 1 = first atom, 2 = second atom, t = bond type, s = stereo type, x = not used, r = bond typology,
 #' c = reacting center status.
 #'
-#' For more information see  \url{infochim.u-strasbg.fr/recherche/Download/Fragmentor/MDL_SDF.pdf}.
-#'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 #' a toolset for transforming SD/Molfile structure information into R objects.

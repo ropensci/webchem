@@ -22,8 +22,6 @@ m = atom-atom mapping number, n = inversion/retention flag, e = exact change fla
 bond block:
 1 = first atom, 2 = second atom, t = bond type, s = stereo type, x = not used, r = bond typology,
 c = reacting center status.
-
-For more information see  \url{infochim.u-strasbg.fr/recherche/Download/Fragmentor/MDL_SDF.pdf}.
 }
 \description{
 Parse Molfile (as returned by ChemSpider) into a R-object.
