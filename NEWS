@@ -2,7 +2,8 @@ webchem 0.5
 ======================
 
 NEW FEATURES
-
+* Submit a query to the ZBH Center for Bioinformatics' SMARTS viewer webservice at (https://smartsview.zbh.uni-hamburg.de) with smarts_viewer(). Retrieves images for plotting in R or downloads image in specified format.
+#' University of Hamburg
 * Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with chebi_lite_entity() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andreasLD].
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
 * Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
