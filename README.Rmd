@@ -345,7 +345,14 @@ smiles(wi)
 # smiles(etox_basic(5564))
 ```
 
+#### SMARTS Viewer 
+Render a depiction of a SMARTS string (\url{https://www.daylight.com/dayhtml/doc/theory/theory.smarts.html}) by submitting a query to the SMARTS viewer web service at \url{http://smartsview.zbh.uni-hamburg.de}, ZBH Center for Bioinformatics, University of Hamburg. 
 
+```{r smartsviewer}
+smarts_viewer("[CX3](=[OX1])[OX2][CX3](=[OX1])","image", "png", 1, "both")
+plot(0:1,0:1, 'n')
+rasterImage(img[[1]],0,0,1,1)
+```
 
 #### Misc functions
 

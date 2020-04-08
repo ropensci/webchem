@@ -1,7 +1,7 @@
 #' Query SMARTS Viewer
 #'
 #' Submit a query to the SMARTS viewer webservice at
-#' \url{smartsview.zbh.uni-hamburg.de}, ZBH Center for Bioinformatics,
+#' \url{http://smartsview.zbh.uni-hamburg.de}, ZBH Center for Bioinformatics,
 #' University of Hamburg
 #'
 #' @param smarts A SMARTS string to visualize
@@ -13,22 +13,20 @@
 #' @param legend_option both, none, static, dynamic
 #' @param filename Filename to use if output is to be downloaded
 #'
-#' @return Either an a raster object (output = image) suitable for adding to an
+#' @return Either a raster object (output = image) suitable for adding to an
 #'   R plot using \code{rasterImage} or the image is downloaded in the specified
 #'   format to the indicated filename.
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' img <- smarts_viewer(
 #'    "[CX3](=[OX1])[OX2][CX3](=[OX1])",
 #'    "image", "png", 1, "both"
 #'    )
 #' plot(0:1,0:1, 'n')
 #' rasterImage(img[[1]],0,0,1,1)
-#' }
 #'
-#' \donttest{
 #' smarts <- c("[CX3](=[OX1])[OX2][CX3](=[OX1])",
 #' "[$([nr5]:[nr5,or5,sr5]),$([nr5]:[cr5]:[nr5,or5,sr5])]",
 #' "[#6][$([NX2]=O),$(N=C=O),$(OC#N),$(SC#N)]"
@@ -39,15 +37,14 @@
 #'  plot(0:1,0:1, 'n')
 #'  rasterImage(i,0,0,1,1)
 #' })
-#' }
 #'
-#' \donttest{
 #' smarts_viewer(
 #'     smarts, output = "download",
 #'     image_format = "pdf",
 #'     visualization_modus = 1,
 #'     legend_option = "both", filename = "test.pdf")
 #' }
+#'
 smarts_viewer <-
   function(smarts,
            output = c('image', 'download'),
