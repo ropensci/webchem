@@ -1,28 +1,11 @@
 webchem 0.6.0
 ======================
 
-NEW FEATURES
-
-MINOR IMPROVEMENTS
-
-BUG FIXES
-
-* get_csid() now returns all csids when queried from formula
-* get_csid() returned an error when query was NA [PR #226, fixed by stitam]
-* get_chebiid() and chebi_comp_entity() fixed for invalid queries [PR #225, fixed by stitam]
-* get_cid() returned the PubChem ID of sodium when the query was NA [PR #223, fixed by stitam]
-* aw_query() returned a list for successful queries, NA for unsuccessful queries [PR #222, fixed by stitam]
-
-DEPRECATED FUNCTIONS
-
-DEFUNCT FUNCTIONS
-
-webchem 0.5.0
-======================
 
 NEW FEATURES
 
 * Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_chebiid() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andschar].
+* Submit a query to the ZBH Center for Bioinformatics' SMARTS viewer webservice at (https://smartsview.zbh.uni-hamburg.de) with smarts_viewer(). Retrieves images for plotting in R or downloads image in specified format [contributed by @gjgetzinger].
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
 * Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
 * "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
