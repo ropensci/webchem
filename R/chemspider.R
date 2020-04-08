@@ -6,7 +6,7 @@
 #' ChemSpider database, you'll need to obtain an API key. Register at
 #' \url{https://developer.rsc.org/} for an API key. Please respect the Terms &
 #' Conditions \url{https://developer.rsc.org/terms}.
-#' @details You can store your API key as \code{CHEMSPIDER_KEY=<your key>} in
+#' @details You can store your API key as \code{CHEMSPIDER_KEY = <your key>} in
 #' .Renviron or as \code{options(chemspider_key = <your key>)} in .Rprofile.
 #' This will allow you to use ChemSpider without adding your API key in the
 #' beginning of each session, and will also allow you to share your analysis
@@ -107,7 +107,7 @@ cs_datasources <- function(apikey = NULL) {
 #' @examples
 #' cs_control()
 #' cs_control(order_direction = "descending")
-cs_control <- function(datasources = "Wikidata",
+cs_control <- function(datasources = vector(),
                        order_by = "recordId", order_direction = "ascending",
                        include_all = FALSE, complexity = "any",
                        isotopic = "any") {
@@ -167,20 +167,24 @@ cs_control <- function(datasources = "Wikidata",
 #' get_csid("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", from = "inchi")
 #' get_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", from = "inchikey")
 #' }
-get_csid <- function(query, from = "name", apikey = NULL,
+get_csid <- function(query,
+                     from = c("name", "formula", "inchi", "inchikey", "smiles"),
+                     apikey = NULL,
                      control = cs_control()) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
-  from <- match.arg(from, choices = c("name", "formula", "inchi", "inchikey",
-                                      "smiles"), several.ok = FALSE)
+  from <- match.arg(from)
   out <- lapply(query, function(x) {
-    switch(from,
+    if (is.na(x)) return(NA)
+    res <- switch(from,
            name = cs_name_csid(x, apikey = apikey, control = control),
            formula = cs_formula_csid(x, apikey = apikey, control = control),
            inchi = cs_inchi_csid(x, apikey = apikey),
            inchikey = cs_inchikey_csid(x, apikey = apikey),
            smiles = cs_smiles_csid(x, apikey = apikey))
+    if (length(res) == 0) res <- NA
+    return(res)
   })
   names(out) <- query
   out <- data.frame(
@@ -627,10 +631,17 @@ cs_convert <- function(query, from, to, apikey = NULL) {
     }
   }
   if (from == "csid") {
-    out <- cs_compinfo(query, fields = to2, apikey = apikey)[, 2]
+    out <- cs_compinfo(query, fields = to2, apikey = apikey)
+    if (ncol(out) == 2) {
+      out <- out[, 2]
+    }
+    else {
+      out <- out[, 1]
+    }
   }
   else {
     out <- unname(sapply(query, function(x) {
+      if (is.na(x)) return(NA)
       switch(cs_convert_router(from, to),
              identity = query,
              cs_convert_multiple = cs_convert_multiple(
@@ -651,6 +662,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' retrieve the record details for your query.
 #' @importFrom jsonlite toJSON
 #' @importFrom httr POST add_headers
+#' @importFrom dplyr left_join
 #' @param csid numeric; can be obtained using \code{\link{get_csid}}
 #' @param fields character; see details.
 #' @param apikey character; your API key. If NULL (default),
@@ -675,6 +687,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' cs_compinfo(171:182, "SMILES")
 #' }
 cs_compinfo <- function(csid, fields, apikey = NULL) {
+  if (mean(is.na(csid)) == 1) return(data.frame(id = NA))
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
@@ -691,7 +704,7 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
   )
   headers <- c("Content-Type" = "", "apikey" = apikey)
   body <- list(
-    "recordIds" = csid, "fields" = fields
+    "recordIds" = csid[!is.na(csid)], "fields" = fields
   )
   body <- jsonlite::toJSON(body)
   postres <- httr::POST(
@@ -699,7 +712,10 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
     httr::add_headers(.headers = headers), body = body
   )
   if (postres$status_code == 200) {
-    out <- jsonlite::fromJSON(rawToChar(postres$content))$records
+    res <- jsonlite::fromJSON(rawToChar(postres$content))$records
+    if (length(res) == 0) return(data.frame(id = NA))
+    out <- data.frame(id = csid)
+    out <- dplyr::left_join(out, res, by = "id")
     return(out)
   }
   else {
@@ -783,232 +799,5 @@ use 'cs_commpinfo()' instead.")
   out[['query']] <- rownames(out)
   out <- data.frame(t(apply(out, 1, unlist)), stringsAsFactors = FALSE)
   class(out) <- c('cs_extcompinfo', 'data.frame')
-  return(out)
-}
-
-#' Get predicted chemical properties from ChemSpider
-#'
-#' Get predicted (ACD/Labs and EPISuite) chemical properties from ChemSpider,
-#' see \url{https://www.chemspider.com/}
-#' @import xml2 stringr rvest
-#' @importFrom stats rgamma
-#'
-#' @param csid character,  ChemSpider ID.
-#' @param verbose logical; should a verbose output be printed on the console?
-#' @param ... currently not used.
-#'
-#' @return A list of lists with of three: acd (data.frame), epi (data.frame)
-#' and source_url.
-#'
-#' @note Please respect the Terms & conditions
-#' \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
-#' \code{\link{cs_compinfo}} for extended compound information.
-#' @export
-#' @examples
-#' \dontrun{
-#' out <- cs_prop(5363)
-#' out[[1]]$epi
-#'
-#' out2 <- cs_prop(c(5363, 2157))
-#' # extract Log Octanol-Water Partition Coef from EPI
-#' sapply(out2, function(y) {
-#'   y$epi$value_pred[y$epi$prop == 'Log Octanol-Water Partition Coef']
-#' })
-#' }
-cs_prop <- function(csid, verbose = TRUE, ...) {
-
-  save_val <- function(x) {
-    if (length(x) == 0) {
-      return(NA)
-    }
-    if (length(x) > 1) {
-      return(x[1])
-    } else {
-      return(x)
-    }
-  }
-
-  foo <- function(csid, verbose) {
-    qurl <- paste0('https://www.chemspider.com/Chemical-Structure.', csid,
-                   '.html')
-    if (verbose)
-      message(qurl)
-    Sys.sleep(rgamma(1, shape = 10, scale = 1/10))
-    # readLines to catch html errors in CS
-    doc <- try(readLines(qurl), silent = TRUE)
-    if (inherits(doc, "try-error")) {
-      warning('CSID not found... Returning NA.')
-      return(NA)
-    }
-
-    doc <- paste(doc, collapse = "\n")
-    # CS contains some invalid syntax that we try to fix here before parsing.
-    doc <- gsub("MP  (exp database):  <", "MP  (exp database):  ", doc,
-                fixed = TRUE)
-    h <- read_html(doc)
-
-    ### acd
-    acd <- do.call(rbind, html_table(xml_find_all(
-      h, "//div[@class='column two']/table")))
-    names(acd) <- c('variable', 'val')
-    acd$variable <- gsub('^(.*)\\:$', '\\1', acd$variable)
-
-    # ^ - Beginning of the line;
-    # \\d* - 0 or more digits;
-    # \\.? - An optional dot (escaped, because in regex, . is a special
-    # character);
-    # \\d* - 0 or more digits (the decimal part);
-    # $ - End of the line.
-    acd$value <- as.numeric(gsub('^(\\d*\\.?\\d*).*$', '\\1', acd$val))
-    acd$error <- as.numeric(ifelse(
-      grepl('\u00B1', acd$val),
-      gsub("^\\d*\\.?\\d*\u00B1(\\d*\\.?\\d*)\\s.*$", '\\1', acd$val), NA))
-    acd$unit <- ifelse(grepl('\\s.*\\d*$', acd$val),
-                       gsub('^.*\\d*\\s(.*\\d*)$', '\\1', acd$val),
-                       NA)
-    acd$val <- NULL
-
-
-    ### episuite
-    epi <- data.frame(property = character(),
-                      value_pred = numeric(),
-                      unit_pred = character(),
-                      source_pred = character(),
-                      value_exp = numeric(),
-                      unit_exp = character(),
-                      source_exp = character())
-
-
-    kow_raw <- xml_text(xml_find_all(h, '//div[@id="epiTab"]/pre'))
-    if (length(kow_raw) != 0) {
-      ll <- str_split(kow_raw, '\n')
-      ll <- sapply(ll, str_trim)
-      ll <- ll[!ll == '']
-
-      # Log Octanol-Water Partition Coef
-      prop <- 'Log Octanol-Water Partition Coef'
-      value_pred <- save_val(as.numeric(
-        gsub('.* = \\s(.*)', '\\1', ll[grepl('^Log Kow \\(KOWW', ll)])))
-      unit_pred <- NA
-      source_pred <- save_val(
-        gsub('(.*) = \\s(.*)', '\\1', ll[grepl('^Log Kow \\(KOWW', ll)]))
-      value_exp <- save_val(as.numeric(
-        gsub('.* = \\s(.*)', '\\1', ll[grepl('^Log Kow \\(Exper.', ll)])))
-      unit_exp <- NA
-      source_exp <- save_val(
-        gsub('^.*\\:\\s(.*)', '\\1',
-             ll[which(grepl('^Log Kow \\(Exper.', ll)) + 1]))
-
-      # Boiling Point
-      prop <- c(prop, 'Boiling Point')
-      value_pred <- c(value_pred,
-                      save_val(as.numeric(
-                        gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
-                             '\\1', ll[grepl('^Boiling Pt \\(deg C', ll)]))))
-      unit_pred <- c(unit_pred, 'deg C')
-      source_pred <- c(source_pred,
-                       save_val(gsub('^.*\\((.*)\\)\\:$',
-                                     '\\1',
-                                     ll[grepl('^Boiling Pt, ', ll)])))
-
-      value_exp <- c(value_exp, save_val(as.numeric(
-        gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
-             '\\1', ll[grepl('^BP  \\(exp database', ll)]))))
-      unit_exp <- c(unit_exp, 'deg C')
-      source_exp <- c(source_exp, NA)
-
-      # Melting Point
-      prop <- c(prop, 'Melting Point')
-      value_pred <- c(value_pred,
-                      save_val(as.numeric(
-                        gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
-                             '\\1', ll[grepl('^Melting Pt \\(deg C', ll)]))))
-      unit_pred <- c(unit_pred, 'deg C')
-      source_pred <- c(source_pred,
-                       save_val(
-                         gsub('^.*\\((.*)\\)\\:$',
-                              '\\1', ll[grepl('^Boiling Pt, ', ll)])))
-      value_exp <- c(value_exp, save_val(as.numeric(
-        gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*',
-             '\\1', ll[grepl('^MP  \\(exp database', ll)]))))
-      unit_exp <- c(unit_exp, 'deg C')
-      source_exp <- c(source_exp, NA)
-
-      # Water Solubility from KOW
-      prop <- c(prop, 'Water Solubility from KOW')
-      value_pred <- c(value_pred, save_val(as.numeric(
-        gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
-             '\\1', ll[grepl('^Water Solubility at 25 deg C', ll)]))))
-      unit_pred <- c(unit_pred, 'mg/L (25 deg C)')
-      source_pred <- c(source_pred, save_val(
-        gsub('^.*\\((.*)\\)\\:$',
-             '\\1', ll[grepl('^Water Solubility Estimate from Log Kow', ll)])))
-      value_exp <- c(value_exp, save_val(as.numeric(gsub(
-        ".*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*", '\\1',
-                    ll[grepl('^Water Sol \\(Exper. database match', ll)]))))
-      unit_exp <- c(unit_exp, save_val(gsub(
-        ".*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*)(.*)", '\\2',
-                    ll[grepl('^Water Sol \\(Exper. database match', ll)])))
-      source_exp <- c(source_exp, save_val(gsub('^.*\\:\\s(.*)', '\\1',
-                    ll[which(grepl(
-                      '^Water Sol \\(Exper. database match', ll)) + 1])))
-
-      # Water Solubility from Fragments
-      prop <- c(prop, 'Water Solubility from Fragments')
-      value_pred <- c(value_pred, save_val(as.numeric(
-        gsub('.*=\\s+([-+]?[0-9]*\\.?[0-9]+[eE]?[-+]?[0-9]*).*',
-             '\\1', ll[grepl('^Wat Sol \\(v1.01', ll)]))))
-      unit_pred <- c(unit_pred, 'mg/L')
-      source_pred <- c(source_pred, NA)
-      value_exp <- c(value_exp,  NA)
-      unit_exp <- c(unit_exp, NA)
-      source_exp <- c(source_exp, NA)
-
-      # Log Octanol-Air Partition Coefficient (25 deg C)
-      prop <- c(prop, 'Log Octanol-Air Partition Coefficient (25 deg C)')
-
-      value_pred_new <- save_val(as.numeric(
-        gsub('.*:\\s(.*)', '\\1', ll[grepl('^Log Koa \\(KOAWIN', ll)])))
-      value_pred <- c(value_pred, ifelse(length(value_pred_new)==0, NA,
-                                         value_pred_new))
-
-      unit_pred <- c(unit_pred, NA)
-      source_pred <- c(source_pred, save_val(
-        gsub('^.*\\[(.*)\\]\\:$',
-             '\\1', ll[grepl('^Log Octanol-Air Partition Coefficient', ll)])))
-      value_exp <- c(value_exp, save_val(suppressWarnings(
-        as.numeric(gsub('^.*\\:(.*)',
-             '\\1', ll[grepl('^Log Koa \\(experimental database\\).*', ll)])))))
-      unit_exp <- c(unit_exp, NA)
-      source_exp <- c(source_exp, NA)
-
-      # Log Soil Adsorption Coefficient
-      prop <- c(prop, 'Log Soil Adsorption Coefficient')
-      value_pred <- c(value_pred, save_val(as.numeric(
-        gsub('.*:\\s+([-+]?[0-9]*\\.?[0-9]+).*',
-             '\\1', ll[grepl('^Log Koc:', ll)]))))
-      unit_pred <- c(unit_pred, NA)
-      source_pred <- c(source_pred, save_val(
-        gsub('^.*\\((.*)\\)\\:$',
-             '\\1', ll[grepl('^Soil Adsorption Coefficient', ll)])))
-      value_exp <- c(value_exp, NA)
-      unit_exp <- c(unit_exp, NA)
-      source_exp <- c(source_exp, NA)
-
-      epi <- data.frame(prop, value_pred, unit_pred, source_pred,
-                        value_exp, unit_exp, source_exp,
-                        stringsAsFactors = FALSE)
-    }
-
-    out <- list(acd = acd,
-                epi = epi,
-                source_url = qurl)
-    return(out)
-  }
-
-  out <- lapply(csid, foo, verbose = verbose)
-  out <- setNames(out, csid)
   return(out)
 }

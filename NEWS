@@ -1,10 +1,11 @@
-webchem 0.5
+webchem 0.6.0
 ======================
 
+
 NEW FEATURES
-* Submit a query to the ZBH Center for Bioinformatics' SMARTS viewer webservice at (https://smartsview.zbh.uni-hamburg.de) with smarts_viewer(). Retrieves images for plotting in R or downloads image in specified format.
-#' University of Hamburg
-* Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with chebi_lite_entity() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andreasLD].
+
+* Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_chebiid() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andschar].
+* Submit a query to the ZBH Center for Bioinformatics' SMARTS viewer webservice at (https://smartsview.zbh.uni-hamburg.de) with smarts_viewer(). Retrieves images for plotting in R or downloads image in specified format [contributed by @gjgetzinger].
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
 * Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
 * "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
@@ -34,9 +35,9 @@ DEFUNCT FUNCTIONS
 
 * ppdb_parse() has been removed. webchem no longer offers any support for PPDB.
 * pp_query() has been removed. Physprop API is no longer active.
+* cs_prop() has been removed.
 
-
-webchem 0.4
+webchem 0.4.0
 ======================
 
 NEW FEATURES
@@ -59,7 +60,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 
-webchem 0.3
+webchem 0.3.0
 ======================
 
 NEW FEATURES
@@ -82,7 +83,7 @@ DEPRECATED FUNCTIONS
 DEFUNCT FUNCTIONS
 
 
-webchem 0.2
+webchem 0.2.0
 ======================
 
 NEW FEATURES
@@ -158,7 +159,7 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 
 
-webchem 0.0.5.0
+webchem 0.0.5
 ======================
 
 NEW FEATURES
@@ -210,7 +211,7 @@ DEFUNCT FUNCTIONS
 
 
 
-webchem 0.0.4.0
+webchem 0.0.4
 ======================
 
 NEW FEATURES

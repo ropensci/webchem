@@ -161,7 +161,7 @@ get_etoxid <- function(query,
 #' id <- get_etoxid('Triclosan', match = 'best')
 #' etox_basic(id$etoxid)
 #'
-#' # Retrieve CAS for multiple inputs
+#' # Retrieve data for multiple inputs
 #' ids <- c("20179", "9051")
 #' out <- etox_basic(ids)
 #' out
@@ -179,7 +179,6 @@ etox_basic <- function(id, verbose = TRUE) {
       message('ID is NA! Returning NA.\n')
       return(NA)
     }
-    # id <- '20179'
     baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
     qurl <- paste0(baseurl, id)
     if (verbose)
@@ -190,10 +189,14 @@ etox_basic <- function(id, verbose = TRUE) {
       message('ID not found! Returning NA.\n')
       return(NA)
     }
-    tabs <- html_table(tt, fill = TRUE)
+    tabs <- try(suppressWarnings(html_table(tt, fill = TRUE)), silent = TRUE)
+    if (inherits(tabs, 'try-error')) {
+      message('ID found. No data available. Returning NA.\n')
+      return(NA)
+    }
     binf <- tabs[[length(tabs)]]
     cas <- binf[, 1][binf[, 2] == 'CAS']
-    ec <- binf[, 1][grepl('EINEC', binf[, 2])]
+    ec <- binf[, 1][grepl('^EC$|EINEC', binf[, 2])]
     gsbl <- binf[, 1][binf[, 2] == 'GSBL']
 
     syns <- tabs[[2]][c(1, 3, 4)]
@@ -206,8 +209,36 @@ etox_basic <- function(id, verbose = TRUE) {
     out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns,
                 source_url = qurl)
     return(out)
+
+    # CODE FOR A POSSIBLE FUTURE RELEASE
+    # binf <- tabs[[length(tabs)]]
+    # cas <- binf[, 1][binf[, 2] == 'CAS']
+    # ec <- binf[, 1][grepl('^EC$|EINEC', binf[, 2])]
+    # gsbl <- binf[, 1][binf[, 2] == 'GSBL']
+    #
+    # syns <- tabs[[2]][c(1, 3, 4)]
+    # names(syns) <- tolower(gsub('\\s+', '_', names(syns)))
+    # group <- tolower(syns[ syns$substance_name_typ == 'GROUP_USE' &
+    #                          syns$language == 'English', ]$notation)
+    # syn <- syns[ syns$substance_name_typ == 'SYNONYM', ]
+    # syn <- syn[ ,-2]
+    # names(syn) <- c('name', 'language')
+    # # return list of data.frames
+    # l <- list(cas = cas,
+    #           ec = ec,
+    #           gsbl = gsbl,
+    #           source_url = qurl)
+    # data <- as.data.frame(t(do.call(rbind, l)),
+    #                       stringsAsFactors = FALSE)
+    # chem_group <- as.data.frame(t(group), stringsAsFactors = FALSE)
+    # names(chem_group) <- chem_group[1, ]
+    # chem_group[1, ] <- TRUE
+    # out <- list(data = data,
+    #             chemical_group = chem_group,
+    #             synonyms = syn)
+    ### END
   }
-  out <- lapply(id, foo,verbose = verbose)
+  out <- lapply(id, foo, verbose = verbose)
   out <- setNames(out, id)
   class(out) <- c('etox_basic','list')
   return(out)

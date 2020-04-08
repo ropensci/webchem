@@ -1,18 +1,22 @@
-context('chebi')
+context("chebi")
 
-a <- chebi_lite_entity('Glyphosate', category = 'ALL')
-A <- chebi_comp_entity('CHEBI:27744')
-B <- chebi_comp_entity('27732')
+a <- get_chebiid("Glyphosate", from = "ALL")
+b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
+A <- chebi_comp_entity("CHEBI:27744")
+B <- chebi_comp_entity("27732")
 
-test_that('chebi returns correct results', {
+test_that("chebi returns correct results", {
   skip_on_cran()
 
-  expect_is(a, 'list')
-  expect_is(a[[1]], 'data.frame')
-  expect_is(A, 'list')
+  expect_is(a, "data.frame")
+  expect_is(b, "data.frame")
+  expect_is(A, "list")
+  expect_is(B, "list")
 
-  expect_equal(names(a[[1]])[1], 'chebiid')
-  expect_equal(A$`CHEBI:27744`$regnumbers$data[1], '1071-83-6')
-  expect_equal(B$`27732`$properties$chebiasciiname, 'caffeine')
-  expect_equal(B$`27732`$properties$entitystar, '3')
+  expect_equal(names(a)[1], "chebiid")
+  expect_length(names(a), 5)
+  expect_length(names(b), 5)
+  expect_equal(A$`CHEBI:27744`$regnumbers$data[1], "1071-83-6")
+  expect_equal(B$`27732`$properties$chebiasciiname, "caffeine")
+  expect_equal(B$`27732`$properties$entitystar, "3")
 })
