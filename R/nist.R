@@ -65,8 +65,8 @@ get_ri_xml <-
         }
         links <-
           page %>%
-          html_nodes("li li a") %>%
-          html_attr("href")
+          rvest::html_nodes("li li a") %>%
+          rvest::html_attr("href")
 
         gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
 
@@ -78,7 +78,7 @@ get_ri_xml <-
           ))
           return(NA)
         } else {
-          ID <- str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+          ID <- stringr::str_extract(gaschrom, "(?<=ID=).+?(?=&)")
         }
       }
       #scrape RI table
@@ -247,7 +247,7 @@ tidy_ritable <- function(ri_xml) {
 #' @param query character; the search term
 #' @param from character; type of search term. can be one of \code{"name"},
 #'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
-#'   preferred to \code{"name"} since \code{NA} is returned in the even of
+#'   preferred to \code{"name"} since \code{NA} is returned in the event of
 #'   multiple matches to a query.
 #' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
 #'   \code{"alkane"}, or \code{"lee"}. See details for more.
@@ -312,7 +312,7 @@ nist_ri <- function(query,
   temp_prog <- match.arg(temp_prog)
 
   ri_xmls <-
-    map(
+    purrr::map(
       query,
       ~ get_ri_xml(
         query = .x,
