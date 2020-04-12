@@ -5,7 +5,7 @@
 \title{Control ChemSpider API requests}
 \usage{
 cs_control(
-  datasources = "Wikidata",
+  datasources = vector(),
   order_by = "recordId",
   order_direction = "ascending",
   include_all = FALSE,
