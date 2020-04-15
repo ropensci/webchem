@@ -27,8 +27,12 @@
 #' comps <- c('Triclosan', 'Glyphosate')
 #' get_wdid(comps)
 #' }
-get_wdid <- function(query, language = 'en', match = c('best', 'first', 'all', 'ask', 'na'),
-                     verbose = TRUE){
+get_wdid <-
+  function(query,
+           match = c('best', 'first', 'all', 'ask', 'na'),
+           verbose = TRUE,
+           language = 'en') {
+
   # language <-  'en'
   # query <- 'Triclosan'
   match <- match.arg(match)
