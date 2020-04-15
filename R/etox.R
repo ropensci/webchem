@@ -6,11 +6,13 @@
 #' @import xml2 httr
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
-#' @param query character; The searchterm
+#' @param query character; A compound name to search for corresponding to the
+#'   ETOX_ID field on the web interface.  This function will also search for
+#'   synonyms if no ETOX_ID is found.
 #' @param match character; How should multiple hits be handeled? "all" returns
 #' all matched IDs, "first" only the first match, "best" the best matching (by
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
-#' returns NA if multiple hits are found.
+#' returns \code{NA} if multiple hits are found.
 #' @param verbose logical; print message during processing to console?
 #' @return a dataframe with 4 columns: etoxID, matched substance, string
 #' distance to match and the queried string
@@ -32,6 +34,7 @@
 #' get_etoxid(comps, match = "all")
 #' }
 get_etoxid <- function(query,
+                       # from = c("name", "cas", "formula", "iupac"),
                        match = c("best", "all", "first", "ask", "na"),
                        verbose = TRUE) {
   clean_char <- function(x) {
