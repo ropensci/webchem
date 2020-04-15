@@ -425,7 +425,7 @@ matcher <-
       return(x)
     } else {
       if(verbose) {
-        message("More then one Link found. \n")
+        message("More then one Link found for '", query, "'. \n")
       }
 
       if(match == "all") {
@@ -454,7 +454,7 @@ matcher <-
         } else {
           choices <- x
         }
-        pick <- menu(choices, graphics = FALSE, paste0('Query = "', query, '"\n Select one:'))
+        pick <- menu(choices, graphics = FALSE, "Select one:")
         return(x[pick])
 
       } else if (match == "na") {
