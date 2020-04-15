@@ -110,7 +110,7 @@ get_cid <-
         cont <- cont$InformationList$Information$CID
       }
       out <- unique(unlist(cont))
-      out <- matcher(out, match)
+      out <- matcher(x = out, match = match, verbose = verbose)
       out <- as.character(out)
       names(out) <- NULL
       return(out)
