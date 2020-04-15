@@ -5,7 +5,7 @@
 #'
 #' @import xml2 httr
 #' @importFrom stats rgamma
-#' @importFrom dplyr bind_rows
+#' @importFrom dplyr bind_rows select
 #' @param query character; A compound name to search for corresponding to the
 #'   ETOX_ID field on the web interface.  This function will also search for
 #'   synonyms if no ETOX_ID is found.
@@ -34,7 +34,6 @@
 #' get_etoxid(comps, match = "all")
 #' }
 get_etoxid <- function(query,
-                       # from = c("name", "cas", "formula", "iupac"),
                        match = c("best", "all", "first", "ask", "na"),
                        verbose = TRUE) {
   clean_char <- function(x) {
@@ -77,6 +76,7 @@ get_etoxid <- function(query,
         tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
       }
       # multiple hits
+    #TODO: replace with matcher maybe?
       if (length(subs) == 1) {
         id <- gsub("^.*\\?id=(.*)", "\\1", links)
         d <- ifelse(match == "best", 0, as.character(0))
@@ -132,7 +132,7 @@ get_etoxid <- function(query,
     return(hit)
   }
   out <- lapply(query, foo, match = match, verbose = verbose)
-  out <- dplyr::bind_rows(out)
+  out <- dplyr::select(dplyr::bind_rows(out), query, match, etoxid)
   return(out)
 }
 
