@@ -143,7 +143,7 @@ cs_control <- function(datasources = "Wikidata",
 #' @param from character; the type of the identifier to convert from. Valid
 #' values are \code{"name"}, \code{"formula"}, \code{"smiles"}, \code{"inchi"},
 #' \code{"inchikey"}. The default value is \code{"name"}.
-#' @param control list; see details.
+#' @param ... furthrer arguments passed to \code{\link{cs_control}}
 #' @details Queries by SMILES, InChI or InChiKey do not use \code{cs_control}
 #' options. Queries by name use \code{order_by} and \code{order_direction}.
 #' Queries by formula also use \code{datasources}. See \code{cs_control()} for a
@@ -170,7 +170,7 @@ cs_control <- function(datasources = "Wikidata",
 get_csid <- function(query,
                      from = c("name", "formula", "inchi", "inchikey", "smiles"),
                      apikey = NULL,
-                     control = cs_control()) {
+                     ...) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
@@ -178,8 +178,8 @@ get_csid <- function(query,
   out <- lapply(query, function(x) {
     if (is.na(x)) return(NA)
     res <- switch(from,
-           name = cs_name_csid(x, apikey = apikey, control = control),
-           formula = cs_formula_csid(x, apikey = apikey, control = control),
+           name = cs_name_csid(x, apikey = apikey, control = cs_control(...)),
+           formula = cs_formula_csid(x, apikey = apikey, control = cs_control(...)),
            inchi = cs_inchi_csid(x, apikey = apikey),
            inchikey = cs_inchikey_csid(x, apikey = apikey),
            smiles = cs_smiles_csid(x, apikey = apikey))
