@@ -409,3 +409,23 @@ chooser <- function(x, choices){
   }
   return(out)
 }
+
+
+matcher <- function(x, match = c("all", "first", "ask", "na")) {
+  match <- match.arg(match)
+
+  if(match == "all") {
+    return(x)
+  } else if (match == "first") {
+    return(x[1])
+  } else if (match == "ask" & interactive()) {
+    pick <- menu(x, graphics = FALSE, 'Select one:')
+    return(x[pick])
+  } else if (match == "na") {
+    if (length(x) > 1) {
+      return(NA)
+    } else {
+      return(x)
+    }
+  }
+}
