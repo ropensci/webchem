@@ -12,7 +12,7 @@
 #' individual words.
 #' @param first deprecated. Use `match` instead.
 #' @param ... currently unused.
-#' @return a list of cids. If first = TRUE a vector.
+#' @return a tibble.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -36,6 +36,7 @@
 #' @importFrom purrr map2
 #' @importFrom jsonlite fromJSON
 #' @importFrom stats rgamma
+#' @importFrom tibble enframe
 #' @export
 #' @examples
 #' \donttest{
@@ -130,11 +131,7 @@ get_cid <-
   out <- map(out, unique)
   }
 
-#TODO: replace with converting output to tibble regardless of match
-  if (match == "first") {
-    out <- unlist(out)
-  }
-
+  out <- unnest(enframe(out, name = "query", value = "cid"), cols = c("cid"))
   return(out)
 }
 
