@@ -44,7 +44,7 @@ get_wdid <-
   match <- match.arg(match)
   foo <- function(query, language, match, verbose){
     query <- URLencode(query)
-    limit <-  50
+    limit <- 50
     qurl <-
       paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
     qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query)
@@ -81,28 +81,24 @@ get_wdid <-
           message("Returning NA. \n")
         id <- NA
         matched_sub <- NA
-        d <- NA
       }
       if (match == 'all') {
         if (verbose)
           message("Returning all matches. \n")
         id <- search$id
         matched_sub <- search$label
-        d <- 'all'
       }
       if (match == 'first') {
         if (verbose)
           message("Returning first match. \n")
         id <- search$id[1]
         matched_sub <- search$label[1]
-        d <- 'first'
       }
       if (match == 'best') {
         if (verbose)
           message("Returning best match. \n")
         dd <- adist(URLdecode(query), search$label) / nchar(search$label)
         id <- search$id[which.min(dd)]
-        d <- round(dd[which.min(dd)], 2)
         matched_sub <- search$label[which.min(dd)]
       }
       if (match == 'ask') {
@@ -118,12 +114,10 @@ get_wdid <-
         if (length(take) == 0) {
           id <- NA
           matched_sub <- NA
-          d <- NA
         }
         if (take %in% seq_len(nrow(tochoose))) {
           id <- search$id[take]
           matched_sub <- search$label[take]
-          d <- 'interactive'
         }
       }
     } else {
@@ -131,19 +125,17 @@ get_wdid <-
       d <- 0
       matched_sub <- search$label
     }
-    names(id) <- NULL
-    attr(id, "matched") <- matched_sub
-    attr(id, "distance") <- d
-    return(id)
+    out <- tibble(query = query, match = matched_sub, wdid = id)
+    return(out)
   }
-  out <- lapply(query, foo, language = language, match = match, verbose = verbose)
-  if (match != 'all') {
-    out <- data.frame(t(sapply(out, function(y) {
-      c(y, attr(y, 'matched'), attr(y, 'distance'))
-    })), stringsAsFactors = FALSE)
-    names(out) <- c('id', 'match', 'distance')
-    out[['query']] <- query
-  }
+  out <-
+    map_df(query,
+           ~ foo(
+             query = .x,
+             match = match,
+             language = language,
+             verbose = verbose
+           ))
   return(out)
 }
 
