@@ -135,8 +135,6 @@ cs_control <- function(datasources = "Wikidata",
 #' Query one or more compunds by name, formula, SMILES, InChI or InChIKey and
 #' return a vector of ChemSpider IDs.
 #'
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
 #' @param query character; search term.
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
@@ -156,6 +154,12 @@ cs_control <- function(datasources = "Wikidata",
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @importFrom httr POST add_headers http_status
+#' @importFrom jsonlite toJSON
+#' @importFrom purrr map
+#' @importFrom tidyr unnest
+#' @importFrom tibble enframe
+#'
 #' @export
 #' @examples
 #' \dontrun{
@@ -169,30 +173,35 @@ cs_control <- function(datasources = "Wikidata",
 #' }
 get_csid <- function(query,
                      from = c("name", "formula", "inchi", "inchikey", "smiles"),
+                     match = c("all", "first", "ask", "na"),
+                     verbose = TRUE,
                      apikey = NULL,
                      ...) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
   from <- match.arg(from)
-  out <- lapply(query, function(x) {
+  match <- match.arg(match)
+
+  foo <- function(x#,
+                  # from = from, match = match, apikey = apikey, verbose, ...
+                  ) {
     if (is.na(x)) return(NA)
     res <- switch(from,
-           name = cs_name_csid(x, apikey = apikey, control = cs_control(...)),
-           formula = cs_formula_csid(x, apikey = apikey, control = cs_control(...)),
-           inchi = cs_inchi_csid(x, apikey = apikey),
-           inchikey = cs_inchikey_csid(x, apikey = apikey),
-           smiles = cs_smiles_csid(x, apikey = apikey))
+                  name = cs_name_csid(x, apikey = apikey, control = cs_control()),
+                  formula = cs_formula_csid(x, apikey = apikey, control = cs_control()),
+                  inchi = cs_inchi_csid(x, apikey = apikey),
+                  inchikey = cs_inchikey_csid(x, apikey = apikey),
+                  smiles = cs_smiles_csid(x, apikey = apikey))
+    res <- matcher(res, query = x, match = match, verbose = verbose)
     if (length(res) == 0) res <- NA
     return(res)
-  })
+  }
+  out <- purrr::map(query, foo)
   names(out) <- query
-  out <- data.frame(
-    "csid" = unlist(out),
-    "query" = rep(names(out), times = sapply(out, length)),
-    row.names = NULL,
-    stringsAsFactors = FALSE
-  )
+  out <-
+    tidyr::unnest(tibble::enframe(out, name = "query", value = "csid"),
+                  cols = c("csid"))
   return(out)
 }
 
