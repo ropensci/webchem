@@ -1,13 +1,15 @@
 #' Get Wikidata Item ID
 #'
-#' @import jsonlite httr
-#' @importFrom stats rgamma
-#' @importFrom utils URLencode URLdecode
+#' Search www.wikidata.org for wikidata item identifiers.  Note that this search
+#' is currently not limited to chemical substances, so be sure to check your
+#' results.
+#'
 #' @param query character; The searchterm
 #' @param language character; the language to search in
-#' @param match character; How should multiple hits be handeled? 'all' returns all matched IDs,
-#' 'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
-#' 'na' returns NA if multiple hits are found.
+#' @param match character; How should multiple hits be handeled? 'all' returns
+#'   all matched IDs, 'first' only the first match, 'best' the best matching (by
+#'   name) ID, 'ask' is a interactive mode and the user is asked for input, na'
+#'   returns NA if multiple hits are found.
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return if match = 'all' a list with ids, otherwise a dataframe with 4 columns:
@@ -16,6 +18,10 @@
 #' @note Only matches in labels are returned.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#'
+#' @import jsonlite httr
+#' @importFrom stats rgamma
+#' @importFrom utils URLencode URLdecode
 #' @export
 #' @examples
 #' \dontrun{
@@ -39,12 +45,17 @@ get_wdid <-
   foo <- function(query, language, match, verbose){
     query <- URLencode(query)
     limit <-  50
-    qurl <- paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
+    qurl <-
+      paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
     qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query)
     if (verbose)
       message('Querying ', qurl)
     Sys.sleep(0.3)
-    cont <- fromJSON(content(GET(qurl, user_agent('webchem (https://github.com/ropensci/webchem)')), 'text'))
+    cont <-
+      fromJSON(content(GET(
+        qurl,
+        user_agent('webchem (https://github.com/ropensci/webchem)')
+      ), 'text'))
     search <- cont$search
     if (length(search) == 0) {
       if (verbose)
@@ -95,7 +106,12 @@ get_wdid <-
         matched_sub <- search$label[which.min(dd)]
       }
       if (match == 'ask') {
-        tochoose <- data.frame(match = search$label, url = search$url, description = search$description)
+        tochoose <-
+          data.frame(
+            match = search$label,
+            url = search$url,
+            description = search$description
+          )
         print(tochoose)
         message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
         take <- as.numeric(scan(n = 1, quiet = TRUE))
