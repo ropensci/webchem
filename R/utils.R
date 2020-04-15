@@ -454,7 +454,7 @@ matcher <-
         } else {
           choices <- x
         }
-        pick <- menu(choices, graphics = FALSE, 'Select one:')
+        pick <- menu(choices, graphics = FALSE, paste0('Query = "', query, '"\n Select one:'))
         return(x[pick])
 
       } else if (match == "na") {
