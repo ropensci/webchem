@@ -90,21 +90,18 @@ get_etoxid <- function(query,
             message("Returning NA. \n")
           id <- NA
           matched_sub <- NA
-          d <- "na"
         }
         if (match == "all") {
           if (verbose)
             message("Returning all matches. \n")
           id <- gsub("^.*\\?id=(.*)", "\\1", links)
           matched_sub <- subs[sapply(id, function(x) grep(x, subs)[1])]
-          d <- "all"
         }
         if (match == "first") {
           if (verbose)
             message("Returning first match. \n")
           id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
           matched_sub <- subs[grep(id[1], subs)[1]]
-          d <- "first"
         }
         if (match == "best") {
           if (verbose)
@@ -112,27 +109,23 @@ get_etoxid <- function(query,
           msubs <- gsub(" \\(.*\\)", "", subs)
           dd <- adist(query, msubs) / nchar(msubs)
           id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
-          d <- round(dd[which.min(dd)], 2)
           matched_sub <- subs[which.min(dd)]
         }
         if (match == "ask") {
           matched_sub <- chooser(subs, "all")
           id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
-          d <- "interactive"
         }
       }
     # return object
-    hit <- data.frame(
-      "etoxid" = id,
-      "match" = matched_sub,
-      "distance" = d,
+    hit <- tibble::tibble(
       "query" = query,
-      stringsAsFactors = FALSE
+      "match" = matched_sub,
+      "etoxid" = id
     )
     return(hit)
   }
   out <- lapply(query, foo, match = match, verbose = verbose)
-  out <- dplyr::select(dplyr::bind_rows(out), query, match, etoxid)
+  out <- dplyr::bind_rows(out)
   return(out)
 }
 
