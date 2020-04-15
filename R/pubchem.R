@@ -53,7 +53,7 @@
 get_cid <-
   function(query,
            from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
-           match = c("all", "best", "first", "ask", "na"),
+           match = c("all", "first", "ask", "na"),
            verbose = TRUE,
            search_substances = FALSE,
            arg = NULL,
@@ -109,13 +109,13 @@ get_cid <-
         cont <- cont$InformationList$Information$CID
       }
       out <- unique(unlist(cont))
-      if (match == "first")
-        out <- out[1]
+      out <- matcher(out, match)
+      out <- as.character(out)
       names(out) <- NULL
       return(out)
     }
 
-  out <- map_chr(query,
+  out <- map(query,
              ~foo(query = .x, from = from, match = match,
                   verbose = verbose, arg = arg))
   out <- setNames(out, query)
@@ -130,7 +130,7 @@ get_cid <-
   out <- map(out, unique)
   }
 
-
+#TODO: replace with converting output to tibble regardless of match
   if (match == "first") {
     out <- unlist(out)
   }
