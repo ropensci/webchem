@@ -74,55 +74,17 @@ get_wdid <-
                                    sub = "")) == tolower(URLdecode(query)), ]
 
     if (nrow(search) > 1) {
-      if (verbose)
-        message("More then one Link found. \n")
-      if (match == 'na') {
-        if (verbose)
-          message("Returning NA. \n")
-        id <- NA
-        matched_sub <- NA
-      }
-      if (match == 'all') {
-        if (verbose)
-          message("Returning all matches. \n")
-        id <- search$id
-        matched_sub <- search$label
-      }
-      if (match == 'first') {
-        if (verbose)
-          message("Returning first match. \n")
-        id <- search$id[1]
-        matched_sub <- search$label[1]
-      }
-      if (match == 'best') {
-        if (verbose)
-          message("Returning best match. \n")
-        dd <- adist(URLdecode(query), search$label) / nchar(search$label)
-        id <- search$id[which.min(dd)]
-        matched_sub <- search$label[which.min(dd)]
-      }
-      if (match == 'ask') {
-        tochoose <-
-          data.frame(
-            match = search$label,
-            url = search$url,
-            description = search$description
-          )
-        print(tochoose)
-        message("\nEnter rownumber of compounds (other inputs will return 'NA'):\n") # prompt
-        take <- as.numeric(scan(n = 1, quiet = TRUE))
-        if (length(take) == 0) {
-          id <- NA
-          matched_sub <- NA
-        }
-        if (take %in% seq_len(nrow(tochoose))) {
-          id <- search$id[take]
-          matched_sub <- search$label[take]
-        }
-      }
+      id <-
+        matcher(
+          search$id,
+          query = query,
+          result = search$label,
+          match = match,
+          verbose = verbose
+        )
+      matched_sub <- names(id)
     } else {
       id <- search$id
-      d <- 0
       matched_sub <- search$label
     }
     out <- tibble(query = query, match = matched_sub, wdid = id)

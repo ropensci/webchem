@@ -419,6 +419,7 @@ matcher <-
            verbose = FALSE) {
 
     match <- match.arg(match)
+    names(x) <- result
 
     if(length(x) == 1) {
       return(x)
