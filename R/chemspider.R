@@ -147,7 +147,7 @@ cs_control <- function(datasources = "Wikidata",
 #' Queries by formula also use \code{datasources}. See \code{cs_control()} for a
 #' full list of valid values for these control options.
 #' @details \code{formula} can be expressed with and without LaTeX syntax.
-#' @return Returns a data frame.
+#' @return Returns a tibble.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & conditions:
 #' \url{https://developer.rsc.org/terms}.
@@ -183,13 +183,11 @@ get_csid <- function(query,
   from <- match.arg(from)
   match <- match.arg(match)
 
-  foo <- function(x#,
-                  # from = from, match = match, apikey = apikey, verbose, ...
-                  ) {
+  foo <- function(x) {
     if (is.na(x)) return(NA)
     res <- switch(from,
-                  name = cs_name_csid(x, apikey = apikey, control = cs_control()),
-                  formula = cs_formula_csid(x, apikey = apikey, control = cs_control()),
+                  name = cs_name_csid(x, apikey = apikey, control = cs_control(...)),
+                  formula = cs_formula_csid(x, apikey = apikey, control = cs_control(...)),
                   inchi = cs_inchi_csid(x, apikey = apikey),
                   inchikey = cs_inchikey_csid(x, apikey = apikey),
                   smiles = cs_smiles_csid(x, apikey = apikey))
