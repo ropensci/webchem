@@ -320,24 +320,40 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   return(out)
 }
 
-#' Construct PubChem PUG-REST URL path
+#' Search PubChem through highly customizable requests
 #'
-#' Constructs a PUG-REST url and returns a listkey
+#' @description This function gives you more control over your communications
+#' with the PubChem PUG-REST webservice. This documentation page was created
+#' from the original PubChem PUG-REST specification document which can be found
+#' at \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}.
 #' @importFrom httr POST http_status
-#' @param query character; comma-separated list of positive integers (e.g.
-#' cid, sid, aid) or identifier strings (source, inchikey, formula). In some
-#' cases only a single identifier string (name, smiles, xref; inchi, sdf by POST
-#' only).
+#' @param query character; search term. A comma-separated list of positive
+#' integers (e.g. cid, sid, aid) or identifier strings (source, inchikey,
+#' formula). In some cases only a single identifier string (name, smiles, xref;
+#' inchi, sdf by POST only).
 #' @param domain character; the domain of the search term. Can be one of
-#' \code{"compound"}, \code{"substance"}, \code{"assay"} or
-#' \code{<other input>}. See details for more information.
-#' @param namespace character; the namespace within the domain. Valid values
-#' depend on the domain. See details for more information.
-
-#' @param operation character; tells the service which part of the record to
-#' retrieve. Currently, if no operation is specified at all, the default is to
-#' retrieve the entire record. See details for more information.
-#' @details Valid \code{namespace} values for \code{domain = "compound"} are:
+#' \code{"compound"}, \code{"substance"}, \code{"assay"},
+#' \code{"sources/[substance, assay]"}, \code{"sourcetable"},
+#' \code{"conformers"},
+#' \code{"annotations/[sourcename/<source name>|heading/<heading>]"}. See
+#' details for more information.
+#' @param from character; the type of the search term, refered to as
+#' \code{namespace} within the reference. Valid values depend on the domain.
+#' See details for more information.
+#' @param to character; refered to as \code{operations} within the reference.
+#' Tells the service which part of the record to retrieve. Currently, if no
+#' operation is specified at all, the default is to retrieve the entire record.
+#' See details for more information.
+#' @param output character; the format of the output. Can be one of
+#' \code{"XML"}, \code{"ASNT"}, \code{"ASNB"}, \code{"JSON"},
+#' \code{"JSONP[?callback=<callback name>]"}, \code{"SDF"}, \code{"CSV"},
+#' \code{"PNG"}, \code{"TXT"}. Note that not all formats are applicable to the
+#' results of all operations; one cannot, for example, retrieve a whole compound
+#' record as CSV or a property table as SDF. TXT output is only available in a
+#' restricted set of cases where all the information is the same – for example,
+#' synonyms for a single CID where there is one synonym per line.
+#' @return a html POST response.
+#' @details Valid \code{from} values for \code{domain = "compound"} are:
 #' \itemize{
 #' \item \code{"cid"}, \code{"name"}, \code{"smiles"}, \code{"inchi"},
 #' \code{"sdf"}, \code{"inchikey"}, \code{"formula"}, \code{<structure search>},
@@ -345,25 +361,26 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' \item \code{<structure search>} is assembled as "\{\code{substructure},
 #' \code{superstructure}, \code{similarity}, \code{identity}\}/\{\code{smiles},
 #' \code{inchi}, \code{sdf}, \code{cid}\}", e.g.
-#' \code{namespace = "substructure/smiles"}.
+#' \code{from = "substructure/smiles"}.
 #' \item \code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID},
 #' \code{RN}, \code{PubMedID}, \code{MMDBID}, \code{ProteinGI},
 #' \code{NucleotideGI}, \code{TaxonomyID}, \code{MIMID}, \code{GeneID},
-#' \code{ProbeID}, \code{PatentID}\}, e.g. \code{namespace = "xref/RN"}.
+#' \code{ProbeID}, \code{PatentID}\}, e.g. \code{from = "xref/RN"}. <xref> is
+#' not case sensitive.
 #' \item \code{<fast search>} is either \code{"fastformula"} or is assembled as
 #' "\{\code{fastidentity}, \code{fastsimilarity_2d}, \code{fastsimilarity_3d},
 #' \code{fastsubstructure}, \code{fastsuperstructure}\}/\{\code{smiles},
 #' \code{smarts}, \code{inchi}, \code{sdf} or \code{cid}\}", e.g.
-#' \code{namespace = "fastidentity/smiles"}.
+#' \code{from = "fastidentity/smiles"}.
 #' }
-#' @details Valid \code{namespace} values for \code{domain = "substance"} are:
+#' @details Valid \code{from} values for \code{domain = "substance"} are:
 #' \itemize{
 #' \item \code{"sid"}, \code{"sourceid/<source id>"},
 #' \code{"sourceall/<source name>"}, \code{name}, \code{<xref>} or
 #' \code{listkey}.
 #' \item \code{<source name>} is any valid PubChem depositor name.
 #' }
-#' @details Valid \code{namespace} values for \code{domain = "assay"} are:
+#' @details Valid \code{from} values for \code{domain = "assay"} are:
 #' \itemize{
 #' \item \code{"aid"}, \code{"listkey"}, \code{"type/<assay type>"},
 #' \code{"sourceall/<source name>"}, \code{"target/<assay target>"} or
@@ -378,16 +395,34 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' @details \code{<other inputs>} for domain can be \code{"sources/[substance,
 #' assay]"}, \code{"sourcetable"}, \code{"conformers"}, \code{"annotations/
 #' [sourcename/<source name>, heading/<heading>]"}.
-#' @details Valid \code{operation} values for \code{domain = "compound"} are:
+#' @details Valid \code{to} values for \code{domain = "compound"} are:
 #' \itemize{
 #' \item \code{"record"}, \code{<compound property>}, \code{"synonyms"},
 #' \code{"sids"}, \code{"cids"}, \code{"aids"}, \code{"assaysummary"},
 #' \code{"classification"}, \code{<xrefs>}, \code{"description"} or
 #' \code{"conformers"}.
-#' \item \code{<compound property} is assembled as \code{"property/
-#' [comma-separated list of property tags]"}.
+#' \item \code{<compound property>} is assembled as \code{"property/
+#' [comma-separated list of <property tags>]"}.
+#' \item Valid \code{<property tags>} are \code{"MolecularFormula"},
+#' \code{"MolecularWeight"}, \code{"CanonicalSMILES"}, \code{"IsomericSMILES"},
+#' \code{"InChI"}, \code{"InChIKey"}, \code{"IUPACname"}, \code{"XlogP"},
+#' \code{"ExactMass"}, \code{"MonoisotopicMass"}, \code{"TPSA"},
+#' \code{"Complexity"}, \code{"Charge"}, \code{"HBondDonorCount"},
+#' \code{"HBondAcceptorCount"}, \code{"RotatableBondCount"},
+#' \code{"HeavyAtomCount"}, \code{"IsotopeAtomCount"}, \code{"AtomStereoCount"},
+#' \code{"DefinedAtomStereoCount"}, \code{"UndefinedAtomStereoCount"},
+#' \code{"BondStereoCount"}, \code{"DefinedBondStereoCount"},
+#' \code{"UndefinedBondStereoCount"}, \code{"CovalentUnitCount"},
+#' \code{"Volume3D"}, \code{"XStericQuadrupole3D"},
+#' \code{"YStericQuadrupole3D"}, \code{"ZStericQuadrupole3D"},
+#' \code{"FeatureCount3D"}, \code{"FeatureAcceptorCount3D"},
+#' \code{"FeatureDonorCount3D"}, \code{"FeatureAnionCount3D"},
+#' \code{"FeatureCationCount3D"}, \code{"FeatureRingCount3D"},
+#' \code{"FeatureHydrophobeCount3D"}, \code{"ConformerModelRMSD3D"},
+#' \code{"EffectiveRotorCount3D"}, \code{"ConformerCount3D"},
+#' \code{"Fingerprint2D"}. <property tags> are not case sensitive.
 #' }
-#' @details Valid \code{operation} values for \code{domain = "substance"} are:
+#' @details Valid \code{to} values for \code{domain = "substance"} are:
 #' \itemize{
 #' \item \code{"record"}, \code{"synonyms"}, \code{"sids"}, \code{"cids"},
 #' \code{"aids"}, \code{"assaysummary"}, \code{"classification"},
@@ -395,7 +430,7 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' \item \code{<xrefs>} is assembled as \code{"xrefs/
 #' [comma-separated list of xrefs tags]"}.
 #' }
-#' @details Valid \code{operation} values for \code{domain = "assay"} are:
+#' @details Valid \code{to} values for \code{domain = "assay"} are:
 #' \itemize{
 #' \item \code{"record"}, \code{"concise"}, \code{"aids"}, \code{"sids"},
 #' \code{"cids"}, \code{"description"}, \code{"targets/<target type>"},
@@ -404,49 +439,50 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' \code{"GeneID"} or \code{"GeneSymbol"}.
 #' \item \code{<doseresponse>} is assembled as \code{"doseresponse/sid"}.
 #' }
-#' @note Some source names contain the "/" character, which which is
-#' incompatible with the URL syntax. Replace "/" with ".".
 #' @note Other special characters may need to be escaped, such as "&" should be
 #' replaced by "\%26".
 #' @references For more information, visit
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
 #' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
-pc_pugrest <- function(query, domain, from, to, output) {
-  query <- paste(query, collapse = ",")
-  domain <- try(match.arg(domain, choices = c("compound", "substance", "assay",
-                                              "other")), silent = TRUE)
-  if (inherits(domain, "try-error")) stop("domain = ", domain, " is invalid.",
-                                          call. = FALSE)
-  from <- pc_validate(from, domain = domain, type ="from")
-  to <- pc_validate(to, domain = domain, type = "to")
-  output <- pc_validate(output, domain = domain, type = "output")
-
-  url <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from, query,
-               to, output, sep = "/")
-  cont <- try(jsonlite::fromJSON(url), silent = TRUE)
-  if (inherits(cont, "try-error")) {
-    stop(httr::http_status(httr::POST(url))$message)
+pc_pugrest <- function(query, domain, from, to = "all", output) {
+  request <- pc_validate(query, domain, from, to, output)
+  Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+  response <- try(POST(request$qurl, body = request$body), silent = TRUE)
+  if (response$status_code != 200) {
+    stop(httr::http_status(response)$message)
   }
-  return(cont)
+  return(response)
 }
 
 #' Validate a PubChem PUG-REST API query and construct the query URL and body
 #'
+#' @description This function validates a PubChem PUG-REST API query according
+#' to teh PubChem PUG-REST specification document, which can be found at
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}. If a query argument is
+#' invalid the function prints an informative error message. If all query
+#' arguments are valid, the function returns the query url and body that can
+#' then be used in http requests. See \code{\link{pc_pugrest}} for lists of
+#' valid values for each argument.
 #' @param query character;
-#' @param domain character;
-#' @param from character;
-#' @param to character;
+#' @param domain character; \code{"compound"}, \code{"substance"}, etc.
+#' @param from character; mentioned as \code{"namespace"} in the PubChem
+#' PUG-REST specification document.
+#' @param to character; mentioned as \code{"operations"} in the PubChem
+#' PUG-REST specification document.
 #' @param output character;
-#' @return a character vector of length 1 or an error message.
-#' @note When validating an entry for \code{domain = "substance"},
-#' \code{type = "from"}, the function cannot tell if a source id or a depositor
+#' @return a list of two elements, \code{url} and \code{body}.
+#' @note The function cannot tell if a source id or a depositor
 #' name is valid. If the entry starts with \code{"sourceid/"} or
 #' \code{"sourceall/"} it will acept the entry.
 #' @note When validating an entry for \code{domain = "assay"},
 #' \code{type = "from"}, the function cannot tell if a depositor name or an
 #' activity is valid. If the entry starts with \code{"sourceall/"} or
 #' \code{"activity/"} it will acept the entry.
+#' @note Some source names contain the "/" character, which which is
+#' incompatible with the URL syntax, e.g. EU REGULATION (EC) No 1272/2008.
+#' The functions attempts to convert "/" to "." as recommended by the
+#' specification document.
 #' @note It is possible to query multiple properties or multiple xrefs in the
 #' same query. When validating an entry for \code{domain = "compound"},
 #' \code{type = "to"} if the entry starts with \code{property/} or \code{xrefs/}
@@ -454,8 +490,8 @@ pc_pugrest <- function(query, domain, from, to, output) {
 #' slash and evaluate whether the entry can be whitelisted.
 #' @references \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
 #' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
+#' @seealso \code{\link{pc_pugrest}}
 #' @noRd
-#' @examples
 pc_validate <- function(query, domain, from, to = "all", output) {
   domain <- tolower(gsub(" *", "", domain))
   from <- tolower(gsub(" *", "", from))
@@ -464,12 +500,12 @@ pc_validate <- function(query, domain, from, to = "all", output) {
   xref <- paste(
     "xref",
     c("registryid", "rn", "pubmedid", "mmdbid", "proteingi", "nucleotidegi",
-      "taxonomyic", "mimid", "geneid", "probeid", "patentid"),
+      "taxonomyid", "mimid", "geneid", "probeid", "patentid"),
     sep = "/"
   )
-  xrefs <- c("registryid", "rn", "pubmedid", "mmdbid", "dburl", "sburl",
-             "proteingi", "nucleotidegi", "taxonomyid", "mimid", "geneid",
-             "probeid","patentid", "sourcename", "sourcecategory")
+  xrefs <- c("registryid", "rn", "pubmedid", "mmdbid", "proteingi",
+             "nucleotidegi", "taxonomyid", "mimid", "geneid", "probeid",
+             "patentid", "dburl", "sburl", "sourcename", "sourcecategory")
   #from_choices for domain = "compound"
   if(domain == "compound") {
     structure_search <- expand.grid(
