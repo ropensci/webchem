@@ -461,7 +461,9 @@ matcher <-
         if (verbose) {
           message("Returning NA. \n")
         }
-        return(NA)
+        x <- NA
+        names(x)<-NA
+        return(x)
       }
     }
   }

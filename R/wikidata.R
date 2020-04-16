@@ -22,6 +22,7 @@
 #' @import jsonlite httr
 #' @importFrom stats rgamma
 #' @importFrom utils URLencode URLdecode
+#' @importFrom purrr map_df
 #' @export
 #' @examples
 #' \dontrun{
@@ -41,57 +42,62 @@ get_wdid <-
 
   # language <-  'en'
   # query <- 'Triclosan'
+
   match <- match.arg(match)
   foo <- function(query, language, match, verbose){
-    query <- URLencode(query)
-    limit <- 50
-    qurl <-
-      paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
-    qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query)
-    if (verbose)
-      message('Querying ', qurl)
-    Sys.sleep(0.3)
-    cont <-
-      fromJSON(content(GET(
-        qurl,
-        user_agent('webchem (https://github.com/ropensci/webchem)')
-      ), 'text'))
-    search <- cont$search
-    if (length(search) == 0) {
-      if (verbose)
-        message('Substance not found! Returing NA. \n')
+    if (is.na(query)){
       id <- NA
-      attr(id, "matched") <- NA
-      attr(id, "distance") <- NA
-      return(id)
-    }
-    # use only matches on label
-    search <- search[search$match$type %in% c('label', 'alias'), ]
-    # # check matches
-    search <- search[tolower(iconv(search$match$text,
-                                   "latin1",
-                                   "ASCII",
-                                   sub = "")) == tolower(URLdecode(query)), ]
-
-    if (nrow(search) > 1) {
-      id <-
-        matcher(
-          search$id,
-          query = query,
-          result = search$label,
-          match = match,
-          verbose = verbose
-        )
-      matched_sub <- names(id)
+      matched_sub <- NA
     } else {
-      id <- search$id
-      matched_sub <- search$label
+      query1 <- URLencode(query)
+      limit <- 50
+      qurl <-
+        paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
+      qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query1)
+      if (verbose)
+        message('Querying ', qurl)
+      Sys.sleep(0.3)
+      cont <-
+        fromJSON(content(GET(
+          qurl,
+          user_agent('webchem (https://github.com/ropensci/webchem)')
+        ), 'text'))
+      search <- cont$search
+      if (length(search) == 0) {
+        if (verbose)
+          message('Substance not found! Returing NA. \n')
+        id <- NA
+        matched_sub <- NA
+      } else {
+        # use only matches on label
+        search <- search[search$match$type %in% c('label', 'alias'), ]
+        # # check matches
+        search <- search[tolower(iconv(search$match$text,
+                                       "latin1",
+                                       "ASCII",
+                                       sub = "")) == tolower(query), ]
+
+        if (nrow(search) > 1) {
+          id <-
+            matcher(
+              search$id,
+              query = query,
+              result = search$label,
+              match = match,
+              verbose = verbose
+            )
+          matched_sub <- names(id)
+        } else {
+          id <- search$id
+          matched_sub <- search$label
+        }
+      }
     }
     out <- tibble(query = query, match = matched_sub, wdid = id)
     return(out)
   }
   out <-
-    map_df(query,
+    purrr::map_df(query,
            ~ foo(
              query = .x,
              match = match,
