@@ -17,8 +17,15 @@ get_csid(
 \item{query}{character; search term.}
 
 \item{from}{character; the type of the identifier to convert from. Valid
-values are \code{"name"}, \code{"formula"}, \code{"smiles"}, \code{"inchi"},
-\code{"inchikey"}. The default value is \code{"name"}.}
+values are \code{"name"}, \code{"formula"}, \code{"smiles"},
+\code{"inchi"}, \code{"inchikey"}. The default value is \code{"name"}.}
+
+\item{match}{character; How should multiple hits be handled?, "all" all
+matches are returned, "best" the best matching is returned, "ask" enters an
+interactive mode and the user is asked for input, "na" returns NA if
+multiple hits are found.}
+
+\item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{apikey}{character; your API key. If NULL (default),
 \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
@@ -26,7 +33,7 @@ values are \code{"name"}, \code{"formula"}, \code{"smiles"}, \code{"inchi"},
 \item{...}{furthrer arguments passed to \code{\link{cs_control}}}
 }
 \value{
-Returns a data frame.
+Returns a tibble.
 }
 \description{
 Query one or more compunds by name, formula, SMILES, InChI or InChIKey and
@@ -34,16 +41,16 @@ return a vector of ChemSpider IDs.
 }
 \details{
 Queries by SMILES, InChI or InChiKey do not use \code{cs_control}
-options. Queries by name use \code{order_by} and \code{order_direction}.
-Queries by formula also use \code{datasources}. See \code{cs_control()} for a
-full list of valid values for these control options.
+  options. Queries by name use \code{order_by} and \code{order_direction}.
+  Queries by formula also use \code{datasources}. See \code{cs_control()} for
+  a full list of valid values for these control options.
 
 \code{formula} can be expressed with and without LaTeX syntax.
 }
 \note{
-An API key is needed. Register at \url{https://developer.rsc.org/}
-for an API key. Please respect the Terms & conditions:
-\url{https://developer.rsc.org/terms}.
+An API key is needed. Register at \url{https://developer.rsc.org/} for
+  an API key. Please respect the Terms & conditions:
+  \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{

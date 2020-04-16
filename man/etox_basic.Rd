@@ -12,16 +12,17 @@ etox_basic(id, verbose = TRUE)
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-a list with lists of four entries: cas (the CAS numbers), ec (the EC number),
-gsbl (the gsbl number), a data.frame synonys with synonyms and the source url.
+a list with lists of four entries: cas (the CAS numbers), ec (the EC
+  number), gsbl (the gsbl number), a data.frame synonys with synonyms and the
+  source url.
 }
 \description{
-Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-\url{https://webetox.uba.de/webETOX/index.do} for basic information
+Query ETOX: Information System Ecotoxicology and Environmental Quality
+Targets \url{https://webetox.uba.de/webETOX/index.do} for basic information
 }
 \note{
 Before using this function, please read the disclaimer
-\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+  \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 }
 \examples{
 \dontrun{
@@ -38,8 +39,9 @@ sapply(out, function(y) y$ec)
 }
 }
 \seealso{
-\code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
-\code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
+\code{\link{get_etoxid}} to retrieve ETOX IDs,
+  \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
+  for quality targets and \code{\link{etox_tests}} for test results
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

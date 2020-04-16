@@ -32,7 +32,9 @@ Imports:
     stringr,
     methods,
     dplyr,
-    purrr
+    purrr,
+    tibble,
+    tidyr
 Suggests:
     testthat,
     rcdk

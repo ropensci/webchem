@@ -137,20 +137,25 @@ cs_control <- function(datasources = vector(),
 #'
 #' @param query character; search term.
 #' @param apikey character; your API key. If NULL (default),
-#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
+#'   \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @param from character; the type of the identifier to convert from. Valid
-#' values are \code{"name"}, \code{"formula"}, \code{"smiles"}, \code{"inchi"},
-#' \code{"inchikey"}. The default value is \code{"name"}.
+#'   values are \code{"name"}, \code{"formula"}, \code{"smiles"},
+#'   \code{"inchi"}, \code{"inchikey"}. The default value is \code{"name"}.
+#' @param match character; How should multiple hits be handled?, "all" all
+#'   matches are returned, "best" the best matching is returned, "ask" enters an
+#'   interactive mode and the user is asked for input, "na" returns NA if
+#'   multiple hits are found.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... furthrer arguments passed to \code{\link{cs_control}}
 #' @details Queries by SMILES, InChI or InChiKey do not use \code{cs_control}
-#' options. Queries by name use \code{order_by} and \code{order_direction}.
-#' Queries by formula also use \code{datasources}. See \code{cs_control()} for a
-#' full list of valid values for these control options.
+#'   options. Queries by name use \code{order_by} and \code{order_direction}.
+#'   Queries by formula also use \code{datasources}. See \code{cs_control()} for
+#'   a full list of valid values for these control options.
 #' @details \code{formula} can be expressed with and without LaTeX syntax.
 #' @return Returns a tibble.
-#' @note An API key is needed. Register at \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & conditions:
-#' \url{https://developer.rsc.org/terms}.
+#' @note An API key is needed. Register at \url{https://developer.rsc.org/} for
+#'   an API key. Please respect the Terms & conditions:
+#'   \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
@@ -183,11 +188,13 @@ get_csid <- function(query,
   from <- match.arg(from)
   match <- match.arg(match)
 
-  foo <- function(x) {
+  foo <- function(x, from, match, verbose, apikey, ...) {
     if (is.na(x)) return(NA)
     res <- switch(from,
-                  name = cs_name_csid(x, apikey = apikey, control = cs_control(...)),
-                  formula = cs_formula_csid(x, apikey = apikey, control = cs_control(...)),
+                  name = cs_name_csid(x, apikey = apikey,
+                                      control = cs_control(...)),
+                  formula = cs_formula_csid(x, apikey = apikey,
+                                            control = cs_control(...)),
                   inchi = cs_inchi_csid(x, apikey = apikey),
                   inchikey = cs_inchikey_csid(x, apikey = apikey),
                   smiles = cs_smiles_csid(x, apikey = apikey))
@@ -195,7 +202,16 @@ get_csid <- function(query,
     if (length(res) == 0) res <- NA
     return(res)
   }
-  out <- purrr::map(query, foo)
+  out <-
+    purrr::map(query,
+               ~ foo(
+                 x = .x,
+                 from = from,
+                 match = match,
+                 verbose = verbose,
+                 apikey = apikey,
+                 ...
+               ))
   names(out) <- query
   out <-
     tidyr::unnest(tibble::enframe(out, name = "query", value = "csid"),
