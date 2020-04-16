@@ -232,7 +232,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
   return(out)
 }
 
-
 #' Search synonyms in pubchem
 #'
 #' Search synonyms using PUG-REST,
@@ -319,4 +318,299 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   if (!is.null(choices)) #if only one choice is returned, convert list to vector
     out <- unlist(out)
   return(out)
+}
+
+#' Construct PubChem PUG-REST URL path
+#'
+#' Constructs a PUG-REST url and returns a listkey
+#' @importFrom httr POST http_status
+#' @param query character; comma-separated list of positive integers (e.g.
+#' cid, sid, aid) or identifier strings (source, inchikey, formula). In some
+#' cases only a single identifier string (name, smiles, xref; inchi, sdf by POST
+#' only).
+#' @param domain character; the domain of the search term. Can be one of
+#' \code{"compound"}, \code{"substance"}, \code{"assay"} or
+#' \code{<other input>}. See details for more information.
+#' @param namespace character; the namespace within the domain. Valid values
+#' depend on the domain. See details for more information.
+
+#' @param operation character; tells the service which part of the record to
+#' retrieve. Currently, if no operation is specified at all, the default is to
+#' retrieve the entire record. See details for more information.
+#' @details Valid \code{namespace} values for \code{domain = "compound"} are:
+#' \itemize{
+#' \item \code{"cid"}, \code{"name"}, \code{"smiles"}, \code{"inchi"},
+#' \code{"sdf"}, \code{"inchikey"}, \code{"formula"}, \code{<structure search>},
+#' \code{<xref>}, \code{"listkey"}, \code{<fast search>}.
+#' \item \code{<structure search>} is assembled as "\{\code{substructure},
+#' \code{superstructure}, \code{similarity}, \code{identity}\}/\{\code{smiles},
+#' \code{inchi}, \code{sdf}, \code{cid}\}", e.g.
+#' \code{namespace = "substructure/smiles"}.
+#' \item \code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID},
+#' \code{RN}, \code{PubMedID}, \code{MMDBID}, \code{ProteinGI},
+#' \code{NucleotideGI}, \code{TaxonomyID}, \code{MIMID}, \code{GeneID},
+#' \code{ProbeID}, \code{PatentID}\}, e.g. \code{namespace = "xref/RN"}.
+#' \item \code{<fast search>} is either \code{"fastformula"} or is assembled as
+#' "\{\code{fastidentity}, \code{fastsimilarity_2d}, \code{fastsimilarity_3d},
+#' \code{fastsubstructure}, \code{fastsuperstructure}\}/\{\code{smiles},
+#' \code{smarts}, \code{inchi}, \code{sdf} or \code{cid}\}", e.g.
+#' \code{namespace = "fastidentity/smiles"}.
+#' }
+#' @details Valid \code{namespace} values for \code{domain = "substance"} are:
+#' \itemize{
+#' \item \code{"sid"}, \code{"sourceid/<source id>"},
+#' \code{"sourceall/<source name>"}, \code{name}, \code{<xref>} or
+#' \code{listkey}.
+#' \item \code{<source name>} is any valid PubChem depositor name.
+#' }
+#' @details Valid \code{namespace} values for \code{domain = "assay"} are:
+#' \itemize{
+#' \item \code{"aid"}, \code{"listkey"}, \code{"type/<assay type>"},
+#' \code{"sourceall/<source name>"}, \code{"target/<assay target>"} or
+#' \code{"activity/<activity column name>"}.
+#' \item \code{<assay type>} can be \code{all}, \code{confirmatory},
+#' \code{doseresponse}, \code{onhold}, \code{panel}, \code{rnai},
+#' \code{screening}, \code{summary}, \code{cellbased}, \code{biochemical},
+#' \code{invivo}, \code{invitro} or \code{activeconcentrationspecified}.
+#' \item \code{<assay target>} can be \code{gi}, \code{proteinname},
+#' \code{geneid}, \code{genesymbol} or \code{accession}.
+#' }
+#' @details \code{<other inputs>} for domain can be \code{"sources/[substance,
+#' assay]"}, \code{"sourcetable"}, \code{"conformers"}, \code{"annotations/
+#' [sourcename/<source name>, heading/<heading>]"}.
+#' @details Valid \code{operation} values for \code{domain = "compound"} are:
+#' \itemize{
+#' \item \code{"record"}, \code{<compound property>}, \code{"synonyms"},
+#' \code{"sids"}, \code{"cids"}, \code{"aids"}, \code{"assaysummary"},
+#' \code{"classification"}, \code{<xrefs>}, \code{"description"} or
+#' \code{"conformers"}.
+#' \item \code{<compound property} is assembled as \code{"property/
+#' [comma-separated list of property tags]"}.
+#' }
+#' @details Valid \code{operation} values for \code{domain = "substance"} are:
+#' \itemize{
+#' \item \code{"record"}, \code{"synonyms"}, \code{"sids"}, \code{"cids"},
+#' \code{"aids"}, \code{"assaysummary"}, \code{"classification"},
+#' \code{<xrefs>}, \code{"description"}.
+#' \item \code{<xrefs>} is assembled as \code{"xrefs/
+#' [comma-separated list of xrefs tags]"}.
+#' }
+#' @details Valid \code{operation} values for \code{domain = "assay"} are:
+#' \itemize{
+#' \item \code{"record"}, \code{"concise"}, \code{"aids"}, \code{"sids"},
+#' \code{"cids"}, \code{"description"}, \code{"targets/<target type>"},
+#' \code{<doseresponse>}, \code{"summary"} or \code{"classification"}.
+#' \item \code{<target type>}  can be \code{"ProteinGI"}, \code{"ProteinName"},
+#' \code{"GeneID"} or \code{"GeneSymbol"}.
+#' \item \code{<doseresponse>} is assembled as \code{"doseresponse/sid"}.
+#' }
+#' @note Some source names contain the "/" character, which which is
+#' incompatible with the URL syntax. Replace "/" with ".".
+#' @note Other special characters may need to be escaped, such as "&" should be
+#' replaced by "\%26".
+#' @references For more information, visit
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
+#' @export
+pc_pugrest <- function(query, domain, from, to, output) {
+  query <- paste(query, collapse = ",")
+  domain <- try(match.arg(domain, choices = c("compound", "substance", "assay",
+                                              "other")), silent = TRUE)
+  if (inherits(domain, "try-error")) stop("domain = ", domain, " is invalid.",
+                                          call. = FALSE)
+  from <- pc_validate(from, domain = domain, type ="from")
+  to <- pc_validate(to, domain = domain, type = "to")
+  output <- pc_validate(output, domain = domain, type = "output")
+
+  url <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from, query,
+               to, output, sep = "/")
+  cont <- try(jsonlite::fromJSON(url), silent = TRUE)
+  if (inherits(cont, "try-error")) {
+    stop(httr::http_status(httr::POST(url))$message)
+  }
+  return(cont)
+}
+
+#' Validate a PubChem PUG-REST API query and construct the query URL and body
+#'
+#' @param query character;
+#' @param domain character;
+#' @param from character;
+#' @param to character;
+#' @param output character;
+#' @return a character vector of length 1 or an error message.
+#' @note When validating an entry for \code{domain = "substance"},
+#' \code{type = "from"}, the function cannot tell if a source id or a depositor
+#' name is valid. If the entry starts with \code{"sourceid/"} or
+#' \code{"sourceall/"} it will acept the entry.
+#' @note When validating an entry for \code{domain = "assay"},
+#' \code{type = "from"}, the function cannot tell if a depositor name or an
+#' activity is valid. If the entry starts with \code{"sourceall/"} or
+#' \code{"activity/"} it will acept the entry.
+#' @note It is possible to query multiple properties or multiple xrefs in the
+#' same query. When validating an entry for \code{domain = "compound"},
+#' \code{type = "to"} if the entry starts with \code{property/} or \code{xrefs/}
+#' the function will also check the comma separated values after the forward
+#' slash and evaluate whether the entry can be whitelisted.
+#' @references \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
+#' @noRd
+#' @examples
+pc_validate <- function(query, domain, from, to = "all", output) {
+  domain <- tolower(gsub(" *", "", domain))
+  from <- tolower(gsub(" *", "", from))
+  to <- tolower(gsub(" *", "", to))
+  output <- tolower(gsub(" *", "", output))
+  xref <- paste(
+    "xref",
+    c("registryid", "rn", "pubmedid", "mmdbid", "proteingi", "nucleotidegi",
+      "taxonomyic", "mimid", "geneid", "probeid", "patentid"),
+    sep = "/"
+  )
+  xrefs <- c("registryid", "rn", "pubmedid", "mmdbid", "dburl", "sburl",
+             "proteingi", "nucleotidegi", "taxonomyid", "mimid", "geneid",
+             "probeid","patentid", "sourcename", "sourcecategory")
+  #from_choices for domain = "compound"
+  if(domain == "compound") {
+    structure_search <- expand.grid(
+      c("substructure", "superstructure", "similarity", "identity"),
+      c("smiles", "inchi", "sdf", "cid")
+    )
+    structure_search <- with(structure_search, paste(Var1, Var2, sep = "/"))
+    fast_search <- expand.grid(
+      c("fastidentity", "fastsimilarity_2d", "fastsimilarity_3d",
+        "fastsubstructure", "fastsuperstructure"),
+      c("smiles", "smarts", "inchi", "sdf", "cid")
+    )
+    fast_search <- c(with(fast_search, paste(Var1, Var2, sep = "/")),
+                     "fastformula")
+    from_choices <-c("cid", "name", "smiles", "inchi", "sdf", "inchikey",
+                     "formula", structure_search, xref, "listkey", fast_search)
+  }
+  #from_choices for domain = "substance"
+  if (domain == "substance") {
+    #from = "sourceid/IBM", from = "sourceid/EU REGULATION (EC) No 1272/2008"
+    pre <- strsplit(from, "/")[[1]][1]
+    post <- paste(strsplit(from, "/")[[1]][-1], collapse =".")
+    if (pre == "sourceid") {
+      from <- paste(pre, post, sep = "/")
+      from_choices <- from
+    }
+    else {
+      from_choices <- c("sid", "name", "sourceall", xref, "listkey")
+    }
+  }
+  # from_choices for domain = "assay"
+  if (domain == "assay") {
+    from_choices <- c("aid", "listkey", "type", "sourceall", "target",
+                      "activity")
+  }
+  # query_choices
+  if ("sourceall" %in% from_choices) {
+    # how to validate against all valid source names?
+    query <- gsub("/", ".", query) #ensure URL syntax
+    query_choice <- query
+  }
+  if ("type" %in% from_choices){
+    query_choices <- c("all", "confirmatory", "doseresponse", "onhold",
+                       "panel", "rnai", "screening", "summary", "cellbased",
+                       "biochemical", "invivo", "invitro",
+                       "activeconcentrationspecified")
+  }
+  if ("target" %in% from_choices){
+    query_choices <- c("gi", "proteinname", "geneid", "genesymbol", "accession")
+  }
+  if (mean(c("sourceall", "type", "target") %in%
+           from_choices) == 0) {
+    query_choices <- query
+  }
+  #to_choices for domain = "compound"
+  if (domain == "compound") {
+    properties <- c("molecularformula", "molecularweight", "canonicalsmiles",
+                    "isomericsmiles", "inchi", "inchikey", "iupacname",
+                    "xlogp", "exactmass", "monoisotopicmass", "tpsa",
+                    "complexity", "charge", "hbonddonorcount",
+                    "hbondacceptorcount", "rotatablebondcount", "heavyatomcount",
+                    "isotopeatomcount", "atomstereocount",
+                    "definedatomstereocount", "undefinedatomstereocount",
+                    "bondstereocount", "definedbondstereocount",
+                    "undefinedbondstereocount", "covalentunitcount", "volume3d",
+                    "xstericquadrupole3d", "ystericquadrupole3d",
+                    "zstericquadrupole3d", "featurecount3d",
+                    "featureacceptorcount3d", "featuredonorcount3d",
+                    "featureanioncount3d", "featurecationcount3d",
+                    "featureringcount3d", "featurehydrophobecount3d",
+                    "conformermodelrmsd3d", "effectiverotorcount3d",
+                    "conformercount3d", "fingerprint2d")
+    pre <- strsplit(to, "/")[[1]][1]
+    post <- paste(strsplit(to, "/")[[1]][-1], collapse =",")
+    if(pre == "property") {
+      props <- strsplit(post, ",")[[1]]
+      if (mean(props %in% properties) == 1) to_choices <- to
+    }
+    if (pre == "xrefs") {
+      refs <- strsplit(post, ",")[[1]]
+      if (mean(refs %in% xrefs) == 1) to_choices <- to
+    }
+    if (sum(pre %in% c("property", "xrefs")) == 0) {
+      to_choices <- c("record", "synonyms", "sids", "cids", "aids",
+                      "assaysummary", "classification", "description",
+                      "conformers")
+    }
+  }
+  #to_choices for domain = "substance"
+  if (domain == "substance") {
+    pre <- strsplit(to, "/")[[1]][1]
+    post <- paste(strsplit(to, "/")[[1]][-1], collapse =",")
+    if (pre == "xrefs") {
+      refs <- strsplit(post, ",")[[1]]
+      if (mean(refs %in% xrefs) == 1) to_choices <- to
+    }
+    else {
+      to_choices <- c("record", "synonyms", "sids", "cids", "aids",
+                      "assaysummary", "classification", "description")
+    }
+  }
+  if (domain == "assay") {
+    pre <- strsplit(to, "/")[[1]][1]
+    post <- paste(strsplit(to, "/")[[1]][-1], collapse =",")
+    if (pre == "targets") {
+      tgts <- c("proteingi", "proteinname", "geneid", "genesymbol")
+      targets <- strsplit(post, ",")[[1]]
+      if (mean(targets %in% tgts) == 1) to_choices <- to
+    }
+    else {
+      to_choices <- c("record", "concise", "aids", "sids", "cids",
+                      "description", "doseresponse/sid", "summary",
+                      "classification")
+    }
+  }
+  if (strsplit(output, "?")[[1]][1] == "jsonp") output_choices <- output
+  else  output_choices <- c("xml", "asnt", "asnb", "json", "sdf", "csv",
+                            "png", "txt")
+  for (i in query) {
+    if (i %in% query_choices == FALSE) {
+      stop(paste0("query = ", i, " is invalid."))
+    }
+  }
+  if (from %in% from_choices == FALSE) {
+    stop(paste0("from = ", from, " is invalid."))
+  }
+  if (to %in% to_choices == FALSE & to != "all") {
+    stop(paste0("to = ", to, " is invalid."))
+  }
+  if (output %in% output_choices == FALSE) {
+    stop(paste0("output = ", output, " is invalid."))
+  }
+  if (to == "all") {
+    qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from,
+                  output, sep = "/")
+  }
+  else {
+    qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from, to,
+                  output, sep = "/")
+  }
+  qurl <- URLencode(qurl)
+  body <- paste0(strsplit(from, "/")[[1]][1], "=", paste(query, collapse = ","))
+  return(list(qurl = qurl, body = body))
 }

@@ -47,3 +47,64 @@ test_that("cid integration tests", {
   expect_true(is.na(pc_prop(NA, properties = "CanonicalSmiles",
                             verbose = FALSE)))
 })
+
+test_that("pc_prurl", {
+  #name/names to cid
+
+  a <- pc_prurl(2244, domain = "compound", from = "cid",
+                to = "property/MolecularFormula", output = "JSON")
+  expect_equal(strsplit(a$qurl, "pug/")[[1]][2],
+               "compound/cid/property/molecularformula/json")
+  expect_equal(a$body, "cid=2244")
+  b <- pc_prurl(c(1234,2244), domain = "compound", from = "cid",
+                to = "property/MolecularFormula", output = "JSON")
+  expect_equal(strsplit(b$qurl, "pug/")[[1]][2],
+               "compound/cid/property/molecularformula/json")
+  expect_equal(b$body, "cid=1234,2244")
+  c <- pc_prurl("5F1CA2B314D35F28C7F94168627B29E3", domain = "substance",
+                from = "sourceid/ibm", output = "ASNT")
+  expect_equal(strsplit(c$qurl, "pug/")[[1]][2],
+               "substance/sourceid/ibm/asnt")
+  expect_equal(c$body, "sourceid=5F1CA2B314D35F28C7F94168627B29E3")
+  d <- pc_prurl(747285, domain = "substance",
+                from = "sourceid/dtp/nci", output = "sdf")
+  expect_equal(strsplit(d$qurl, "pug/")[[1]][2],
+               "substance/sourceid/dtp.nci/sdf")
+  expect_equal(d$body, "sourceid=747285")
+  e <- pc_prurl(747285, domain = "substance",
+                from = "sourceid/dtp/nci", output = "png")
+  expect_equal(strsplit(e$qurl, "pug/")[[1]][2],
+               "substance/sourceid/dtp.nci/png")
+  expect_equal(e$body, "sourceid=747285")
+  f <- pc_prurl(2244, domain = "compound",
+                from = "cid", output = "sdf")
+  expect_equal(strsplit(f$qurl, "pug/")[[1]][2],
+               "compound/cid/sdf")
+  expect_equal(f$body, "cid = 2244")
+  g <- pc_prurl("aspirin", domain = "compound",
+                from = "name", output = "json")
+  expect_equal(strsplit(g$qurl, "pug/")[[1]][2],
+               "compound/name/json")
+  expect_equal(g$body, "name = aspirin")
+  h <- pc_prurl(c(1,2,3,4,5), domain = "compound", from = "cid",
+                to = "property/molecularformula,molecularweight",
+                output = "xml")
+  expect_equal(strsplit(h$qurl, "pug/")[[1]][2],
+               "compound/cid/property/molecularformula,molecularweight/xml")
+  expect_equal(h$body, "cid=1,2,3,4,5")
+  i <- pc_prurl("acetic acid", domain = "compound", from = "name",
+                to = "cids",
+                output = "json")
+  expect_equal(strsplit(i$qurl, "pug/")[[1]][2],
+               "compound/name/cids/json")
+  expect_equal(h$body, "name=acetic acid")
+
+
+
+})
+
+test_that("pc_pugrest", {
+  #pc_pugrest(176, "compound", "cid",  "synonyms", "JSON")
+  #pc_pugrest("EU REGULATION (EC) No 1272/2008", substance, )
+  #pc_pugrest("DC Chemicals", "substance", "sourceall",  "sids", "JSON")
+})
