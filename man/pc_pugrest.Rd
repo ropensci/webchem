@@ -73,7 +73,9 @@ Valid \code{from} values for \code{domain = "substance"} are:
 \item \code{"sid"}, \code{"sourceid/<source id>"},
 \code{"sourceall/<source name>"}, \code{name}, \code{<xref>} or
 \code{listkey}.
-\item \code{<source name>} is any valid PubChem depositor name.
+\item \code{<source name>} is any valid PubChem depositor name. Valid names
+can be found at \url{https://pubchem.ncbi.nlm.nih.gov/sources/}. Special
+characters may need to be escaped, such as "&" should be replaced by "\%26".
 }
 
 Valid \code{from} values for \code{domain = "assay"} are:
@@ -139,10 +141,6 @@ Valid \code{to} values for \code{domain = "assay"} are:
 \code{"GeneID"} or \code{"GeneSymbol"}.
 \item \code{<doseresponse>} is assembled as \code{"doseresponse/sid"}.
 }
-}
-\note{
-Other special characters may need to be escaped, such as "&" should be
-replaced by "\%26".
 }
 \references{
 For more information, visit
