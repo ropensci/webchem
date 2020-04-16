@@ -18,17 +18,17 @@ nist_ri(
 
 \item{from}{character; type of search term. can be one of \code{"name"},
 \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
-preferred to \code{"name"} since \code{NA} is returned in the even of
+preferred to \code{"name"} since \code{NA} is returned in the event of
 multiple matches to a query.}
 
 \item{type}{Retention index type. One of \code{"kovats"}, \code{"linear"},
 \code{"alkane"}, or \code{"lee"}. See details for more.}
 
-\item{polarity}{Column polarity. One of "polar" or "non-polar" to get RIs
-calculated for polar or non-polar columns.}
+\item{polarity}{Column polarity. One of \code{"polar"} or \code{"non-polar"}
+to get RIs calculated for polar or non-polar columns.}
 
-\item{temp_prog}{Temperature program. One of "isothermal", "ramp", or
-"custom".}
+\item{temp_prog}{Temperature program. One of \code{"isothermal"},
+\code{"ramp"}, or \code{"custom"}.}
 
 \item{cas}{deprecated.  Use \code{query} instead.}
 }

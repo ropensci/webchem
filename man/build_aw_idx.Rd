@@ -15,16 +15,16 @@ build_aw_idx(verbose = TRUE, force_build = FALSE)
 \item{force_build}{logical; force building a new index?}
 }
 \value{
-a data.frame with three columns: cas, url, and name
+a data.frame
 }
 \description{
 This function builds an index of Alan Woods Compendium of Pesticides
-\url{http://www.alanwood.net/pesticides} and saves it to \code{tempdir()}.
-This is a utility function for \code{aw_query()} and will not be exported in
-future releases.
+\url{http://www.alanwood.net/pesticides} and saves it to
+\code{\link{tempdir}}. This is a utility function for
+\code{\link{aw_query}} and will not be exported in future releases.
 }
 \seealso{
-\code{\link{aw_query}}
+\code{\link{aw_query}}, \code{\link{tempdir}}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

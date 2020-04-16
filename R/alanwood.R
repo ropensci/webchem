@@ -9,7 +9,7 @@
 #' @param type character; type of input ('cas' or 'commonname')
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index? See
-#' \code{build_aw_idx()} for more details.
+#' \code{\link{build_aw_idx}} for more details.
 #' @return A list of eight entries: common-name, status, preferred IUPAC Name,
 #' IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source
 #' url.
@@ -29,9 +29,10 @@
 #' # use CAS-numbers
 #' aw_query("79622-59-6", type = 'cas')
 #' }
+#' @seealso \code{\link{build_aw_idx}}
 aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
                      force_build = FALSE) {
-  aw_idx <- suppressMessages(build_aw_idx(verbose, force_build))
+  aw_idx <- build_aw_idx(verbose, force_build)
   foo <- function(query, type = c("commonname", "cas"), verbose) {
     type <- match.arg(type)
   # search links in indexes
@@ -131,27 +132,27 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
   return(out)
 }
 
-
 #' Function to build index
 #'
 #' This function builds an index of Alan Woods Compendium of Pesticides
-#' \url{http://www.alanwood.net/pesticides} and saves it to \code{tempdir()}.
-#' This is a utility function for \code{aw_query()} and will not be exported in
-#' future releases.
+#' \url{http://www.alanwood.net/pesticides} and saves it to
+#' \code{\link{tempdir}}. This is a utility function for
+#' \code{\link{aw_query}} and will not be exported in future releases.
 #' @import xml2
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index?
-#' @return a data.frame with three columns: cas, url, and name
-#' @seealso \code{\link{aw_query}}
+#' @return a data.frame
+#' @seealso \code{\link{aw_query}}, \code{\link{tempdir}}
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @source \url{http://www.alanwood.net/pesticides}
+#' @export
 build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
   message(msg = "build_aw_idx() will not be exported in future releases.")
   suppressWarnings(try(load(paste0(tempdir(), "/data/aw_idx.rda")),
                        silent = TRUE))
   if (!file.exists(paste0(tempdir(), "/data/aw_idx.rda")) |
       force_build == TRUE |
-      Sys.Date() - attr(aw_idx, "date") > 30) {
+      try(Sys.Date() - attr(aw_idx, "date"), silent = TRUE) > 30) {
     if (!dir.exists(paste0(tempdir(), "/data"))) {
       dir.create(paste0(tempdir(), "/data"))
     }
