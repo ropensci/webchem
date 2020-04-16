@@ -60,6 +60,10 @@ test_that("get_csid()", {
   c7 <- get_csid("Oxygen", order_by = "rscCount")
   c8 <- get_csid("Oxygen", order_direction = "ascending")
   c9 <- get_csid("Oxygen", order_direction = "descending")
+  f <- get_csid("C47H93N2O6P", from = "formula",
+                order_by = "dataSourceCount",
+                order_direction = "descending"
+  )
 
   expect_is(a, "data.frame")
   expect_equal(a$csid, 5363)
@@ -76,6 +80,7 @@ test_that("get_csid()", {
   expect_equal(c8$csid, c(952, 140526))
   expect_equal(c9$csid, c(140526, 952))
   expect_equal(abcd$csid, c(682, NA, NA, 171))
+  expect_equal(f$csid, c(24846874, 59696525, 68025876, 71044200, 24608396))
 })
 
 test_that("cs_smiles_csid()", {
@@ -211,24 +216,24 @@ test_that("cs_compinfo()", {
   expect_equal(dim(b), c(2, 18))
 })
 
-test_that("cs_extcompinfo()", {
-  skip_on_cran()
-
-  comps <- c("2157", "5363")
-  o1 <- cs_extcompinfo(comps)
-  expect_is(o1, "data.frame")
-  expect_equal(dim(o1), c(2, 14))
-  expect_equal(o1$csid[1], "2157")
-  expect_true(all(is.na(cs_extcompinfo(c(2157, NA))[2, 1:5])))
-})
+# test_that("cs_extcompinfo()", {
+#   skip_on_cran()
+#
+#   comps <- c("2157", "5363")
+#   # o1 <- cs_extcompinfo(comps)
+#   expect_is(o1, "data.frame")
+#   expect_equal(dim(o1), c(2, 14))
+#   expect_equal(o1$csid[1], "2157")
+#   expect_true(all(is.na(cs_extcompinfo(c(2157, NA))[2, 1:5])))
+# })
 
 # integration tests
-test_that("csid_extcompinfo(get_cid())", {
-  skip_on_cran()
-
-  tt <- get_csid("Triclosan")
-  tt2 <- cs_extcompinfo(tt, verbose = FALSE)
-  expect_equal(tt2[["average_mass"]],
-               "289.5418")
-  expect_equal(ncol(tt2), 14)
-})
+# test_that("csid_extcompinfo(get_cid())", {
+#   skip_on_cran()
+#
+#   tt <- get_csid("Triclosan")
+#   tt2 <- cs_extcompinfo(tt, verbose = FALSE)
+#   expect_equal(tt2[["average_mass"]],
+#                "289.5418")
+#   expect_equal(ncol(tt2), 14)
+# })
