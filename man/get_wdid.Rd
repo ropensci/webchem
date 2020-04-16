@@ -6,28 +6,31 @@
 \usage{
 get_wdid(
   query,
-  language = "en",
   match = c("best", "first", "all", "ask", "na"),
-  verbose = TRUE
+  verbose = TRUE,
+  language = "en"
 )
 }
 \arguments{
 \item{query}{character; The searchterm}
 
-\item{language}{character; the language to search in}
-
-\item{match}{character; How should multiple hits be handeled? 'all' returns all matched IDs,
-'first' only the first match, 'best' the best matching (by name) ID, 'ask' is a interactive mode and the user is asked for input,
-'na' returns NA if multiple hits are found.}
+\item{match}{character; How should multiple hits be handeled? 'all' returns
+all matched IDs, 'first' only the first match, 'best' the best matching (by
+name) ID, 'ask' is a interactive mode and the user is asked for input, na'
+returns NA if multiple hits are found.}
 
 \item{verbose}{logical; print message during processing to console?}
+
+\item{language}{character; the language to search in}
 }
 \value{
 if match = 'all' a list with ids, otherwise a dataframe with 4 columns:
 id, matched text, string distance to match and the queried string
 }
 \description{
-Get Wikidata Item ID
+Search www.wikidata.org for wikidata item identifiers.  Note that this search
+is currently not limited to chemical substances, so be sure to check your
+results.
 }
 \note{
 Only matches in labels are returned.

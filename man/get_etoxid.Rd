@@ -11,12 +11,14 @@ get_etoxid(
 )
 }
 \arguments{
-\item{query}{character; The searchterm}
+\item{query}{character; A compound name to search for corresponding to the
+ETOX_ID field on the web interface.  This function will also search for
+synonyms if no ETOX_ID is found.}
 
 \item{match}{character; How should multiple hits be handeled? "all" returns
 all matched IDs, "first" only the first match, "best" the best matching (by
 name) ID, "ask" is a interactive mode and the user is asked for input, "na"
-returns NA if multiple hits are found.}
+returns \code{NA} if multiple hits are found.}
 
 \item{verbose}{logical; print message during processing to console?}
 }

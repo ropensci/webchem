@@ -7,8 +7,10 @@
 get_csid(
   query,
   from = c("name", "formula", "inchi", "inchikey", "smiles"),
+  match = c("all", "first", "ask", "na"),
+  verbose = TRUE,
   apikey = NULL,
-  control = cs_control()
+  ...
 )
 }
 \arguments{
@@ -21,7 +23,7 @@ values are \code{"name"}, \code{"formula"}, \code{"smiles"}, \code{"inchi"},
 \item{apikey}{character; your API key. If NULL (default),
 \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 
-\item{control}{list; see details.}
+\item{...}{furthrer arguments passed to \code{\link{cs_control}}}
 }
 \value{
 Returns a data frame.
