@@ -4,7 +4,7 @@
 \alias{pc_pugrest}
 \title{Search PubChem through highly customizable requests}
 \usage{
-pc_pugrest(query, domain, from, to = "all", output)
+pc_pugrest(query, domain, from, to = "all", output, single_url = FALSE)
 }
 \arguments{
 \item{query}{character; search term. A comma-separated list of positive

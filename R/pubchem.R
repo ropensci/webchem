@@ -445,11 +445,21 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
 #' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
-pc_pugrest <- function(query, domain, from, to = "all", output) {
-  request <- pc_validate(query, domain, from, to, output)
+pc_pugrest <- function(query,
+                       domain,
+                       from,
+                       to = "all",
+                       output,
+                       single_url = FALSE) {
+  request <- pc_validate(query, domain, from, to, output, single_url)
   Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-  response <- try(POST(request$qurl, body = request$body), silent = TRUE)
-  if (response$status_code != 200) {
+  if (single_url == TRUE){
+    response <- try(POST(request$qurl), silent = TRUE)
+  }
+  else {
+    response <- try(POST(request$qurl, body = request$body), silent = TRUE)
+  }
+  if (response$status_code %in% c(200,202) == FALSE) {
     stop(httr::http_status(response)$message)
   }
   return(response)
@@ -492,7 +502,12 @@ pc_pugrest <- function(query, domain, from, to = "all", output) {
 #' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{pc_pugrest}}
 #' @noRd
-pc_validate <- function(query, domain, from, to = "all", output) {
+pc_validate <- function(query,
+                        domain,
+                        from,
+                        to = "all",
+                        output,
+                        single_url = FALSE) {
   domain <- tolower(gsub(" *", "", domain))
   from <- tolower(gsub(" *", "", from))
   to <- tolower(gsub(" *", "", to))
@@ -639,14 +654,31 @@ pc_validate <- function(query, domain, from, to = "all", output) {
     stop(paste0("output = ", output, " is invalid."))
   }
   if (to == "all") {
-    qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from,
+    if (single_url == TRUE) {
+      qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from,
+                    query, output, sep = "/")
+    }
+    else {
+      qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from,
                   output, sep = "/")
+    }
   }
   else {
-    qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from, to,
-                  output, sep = "/")
+    if (single_url == TRUE){
+      qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from,
+                    query, to, output, sep = "/")
+    }
+    else{
+      qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug", domain, from,
+                    to, output, sep = "/")
+    }
   }
   qurl <- URLencode(qurl)
   body <- paste0(strsplit(from, "/")[[1]][1], "=", paste(query, collapse = ","))
-  return(list(qurl = qurl, body = body))
+  if (single_url == TRUE){
+    return(list(qurl = qurl))
+  }
+  else{
+    return(list(qurl = qurl, body = body))
+  }
 }
