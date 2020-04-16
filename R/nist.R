@@ -1,67 +1,119 @@
-#' Read HTML slowly
-#' @description Just adds a rest after \code{read_html()}.  Useful for web-scraping.
-#' @import xml2
-#' @param x a URL
-#' @param ... currently unused
-#' @noRd
-#' @return html
-#'
-read_html_slow <- function(x, ...) {
-  output <- xml2::read_html(x)
-  Sys.sleep(1)
-  return(output)
-}
-
 #' Scrape Retention Indices from NIST
 #'
-#' @param cas cas number
+#' @param query query of type matching the options in `from`
+#' @param from one of "name", "cas", "inchi", or "inchikey"
 #' @param type what kind of RI
 #' @param polarity polar or non-polar
 #' @param temp_prog what kind of temperature program
 #' @noRd
 #' @import rvest
 #' @import xml2
-#'
+#' @import polite
+#' @importFrom rlang list2 :=
 #' @return an xml nodeset
 #'
 get_ri_xml <-
-  function(cas,
-           type = c("kovats", "linear", "alkane", "lee"),
-           polarity = c("polar", "non-polar"),
-           temp_prog = c("isothermal", "ramp", "custom")) {
-    #Construct URL
-    type_str <-
-      toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
-    URL_detail <-
-      paste0(
-        "https://webbook.nist.gov/cgi/cbook.cgi?ID=C",
-        gsub("-", "", cas),
-        "&Units=SI&Mask=2000&Type=",
-        type_str
-      )
-    #Read URL and extract xml
-    page <- read_html_slow(URL_detail)
-    ri_xml.all <- html_nodes(page, ".data")
+  function(query,
+           from,
+           type,
+           polarity,
+           temp_prog) {
 
-    #Warn if table doesn't exist at URL
-    if (length(ri_xml.all) == 0) {
-      warning(paste0(
-        "There are no RIs for CAS# ",
-        cas,
-        " of type ",
-        type_str,
-        ". Returning NA."
-      ))
-      ri_xml <- as.data.frame(NA)
+    from_str <- (switch(
+      from,
+      "name" = "Name",
+      "inchi" = "InChI",
+      "inchikey" = "InChI",
+      "cas" = "ID"
+    ))
+
+    # Open session
+    #TODO: remove `suppressMessages()` once polite is updated on CRAN to fix
+    #bow() printing a message about UTF-8 encoding
+    session <-
+      suppressMessages(
+        polite::bow("https://webbook.nist.gov/cgi/cbook.cgi")
+        )
+    polite::set_scrape_delay(rgamma(1, shape = 15, scale = 1/10))
+
+    #handle NAs
+    if (is.na(query)) {
+      return(NA)
     } else {
-      ri_xml <- ri_xml.all
-    }
 
+      if (from == "cas") {
+        ID <- paste0("C", gsub("-", "", query))
+      } else {
+        page <-
+          polite::scrape(session,
+                 query = rlang::list2(!!from_str := query,
+                               Units = "SI"))
+        #Warnings
+        result <- page %>%
+          html_node("main h1") %>%
+          html_text()
+        # if cquery not found
+        if (stringr::str_detect(result, "Not Found")) {
+          warning(paste0("'", query, "' not found. Returning NA."))
+          ri_xml <- tibble(query = query)
+        }
+        # if more than one compound found
+        if (result == "Search Results") {
+          warning(paste0("More than one match for '", query,
+                         "'. Returning NA."))
+          return(NA)
+        }
+        links <-
+          page %>%
+          rvest::html_nodes("li li a") %>%
+          rvest::html_attr("href")
+
+        gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
+
+        if (length(gaschrom) == 0) {
+          warning(paste0(
+            "There are no chromatography data for '",
+            query,
+            "'. Returning NA."
+          ))
+          return(NA)
+        } else {
+          ID <- stringr::str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+        }
+      }
+      #scrape RI table
+      type_str <-
+        toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
+
+      page <- polite::scrape(session,
+                     query = list(
+                       ID = ID,
+                       Units = "SI",
+                       Mask = "2000",
+                       Type = type_str
+                     ))
+
+      ri_xml.all <- html_nodes(page, ".data")
+
+      #Warn if table doesn't exist at URL
+      if (length(ri_xml.all) == 0) {
+        warning(paste0(
+          "There are no RIs for ",
+          query,
+          " of type ",
+          type_str,
+          ". Returning NA."
+        ))
+        return(NA)
+      } else {
+        ri_xml <- ri_xml.all
+      }
+    }
     #set attributes to label what type of RI
+    attr(ri_xml, "from") <- from
     attr(ri_xml, "type") <- type
     attr(ri_xml, "polarity") <- polarity
     attr(ri_xml, "temp_prog") <- temp_prog
-
     return(ri_xml)
   }
 
@@ -73,6 +125,7 @@ get_ri_xml <-
 #' @import rvest
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
+#' @importFrom tibble as_tibble
 #' @import dplyr
 #' @noRd
 #'
@@ -81,62 +134,63 @@ get_ri_xml <-
 tidy_ritable <- function(ri_xml) {
   #Skip all these steps if the table didn't exist at the URL and was set to NA
   if (any(is.na(ri_xml))) {
-    output <- ri_xml
+    return(tibble(RI = NA))
 
   } else {
     # Read in the tables from xml
-    table.list <- map(ri_xml, html_table)
+    table.list <- purrr::map(ri_xml, html_table)
 
     # Transpose and tidy
-    tidy1 <- map_dfr(
+    tidy1 <- purrr::map_dfr(
       table.list,
-      ~t(.) %>%
-        as.data.frame(stringsAsFactors = FALSE) %>%
-        # pull column names from first row
-        setNames(.[1, ]) %>%
-        .[-1, ]
+      ~{
+        transposed <- t(.x)
+        colnames(transposed) <- transposed[1, ]
+        transposed[-1, , drop = FALSE] %>%
+          as_tibble()
+      }
     )
 
     # Extract the temperature program metadata
     temp_prog <- attr(ri_xml, "temp_prog")
 
     if (temp_prog == "custom") {
-      tidy2 <- rename(tidy1,
-                      "type" = "Column type",
-                      "phase" = "Active phase",
-                      "length" = "Column length (m)",
-                      "gas" = "Carrier gas",
-                      "substrate" = "Substrate",
-                      "diameter" = "Column diameter (mm)",
-                      "thickness" = "Phase thickness (m)",
-                      "program" = "Program",
-                      "RI" = "I",
-                      "reference" = "Reference",
-                      "comment" = "Comment") %>%
+      tidy2 <- dplyr::select(tidy1,
+                             "RI" = "I",
+                             "type" = "Column type",
+                             "phase" = "Active phase",
+                             "length" = "Column length (m)",
+                             "gas" = "Carrier gas",
+                             "substrate" = "Substrate",
+                             "diameter" = "Column diameter (mm)",
+                             "thickness" = "Phase thickness (m)",
+                             "program" = "Program",
+                             "reference" = "Reference",
+                             "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
-        mutate_at(vars("length", "diameter", "thickness", "RI"),
+        dplyr::mutate_at(vars("length", "diameter", "thickness", "RI"),
                   as.numeric)
 
     } else if (temp_prog == "ramp") {
-      tidy2 <- rename(tidy1,
-                      "type" = "Column type",
-                      "phase" = "Active phase",
-                      "length" = "Column length (m)",
-                      "gas" = "Carrier gas",
-                      "substrate" = "Substrate",
-                      "diameter" = "Column diameter (mm)",
-                      "thickness" = "Phase thickness (m)",
-                      "temp_start" = "Tstart (C)",
-                      "temp_end" = "Tend (C)",
-                      "temp_rate" = "Heat rate (K/min)",
-                      "hold_start" = "Initial hold (min)",
-                      "hold_end" = "Final hold (min)",
-                      "RI" = "I",
-                      "reference" = "Reference",
-                      "comment" = "Comment") %>%
+      tidy2 <- dplyr::select(tidy1,
+                             "RI" = "I",
+                             "type" = "Column type",
+                             "phase" = "Active phase",
+                             "length" = "Column length (m)",
+                             "gas" = "Carrier gas",
+                             "substrate" = "Substrate",
+                             "diameter" = "Column diameter (mm)",
+                             "thickness" = "Phase thickness (m)",
+                             "temp_start" = "Tstart (C)",
+                             "temp_end" = "Tend (C)",
+                             "temp_rate" = "Heat rate (K/min)",
+                             "hold_start" = "Initial hold (min)",
+                             "hold_end" = "Final hold (min)",
+                             "reference" = "Reference",
+                             "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
-        mutate_at(
-          vars(
+        dplyr::mutate_at(
+          dplyr::vars(
             "length",
             "diameter",
             "thickness",
@@ -151,36 +205,36 @@ tidy_ritable <- function(ri_xml) {
         )
 
     } else if (temp_prog == "isothermal") {
-      tidy2 <- rename(tidy1,
-                      "type" = "Column type",
-                      "phase" = "Active phase",
-                      "length" = "Column length (m)",
-                      "gas" = "Carrier gas",
-                      "substrate" = "Substrate",
-                      "diameter" = "Column diameter (mm)",
-                      "thickness" = "Phase thickness (m)",
-                      "temp" = "Temperature (C)",
-                      "RI" = "I",
-                      "reference" = "Reference",
-                      "comment" = "Comment") %>%
+      tidy2 <- dplyr::select(tidy1,
+                             "RI" = "I",
+                             "type" = "Column type",
+                             "phase" = "Active phase",
+                             "length" = "Column length (m)",
+                             "gas" = "Carrier gas",
+                             "substrate" = "Substrate",
+                             "diameter" = "Column diameter (mm)",
+                             "thickness" = "Phase thickness (m)",
+                             "temp" = "Temperature (C)",
+                             "reference" = "Reference",
+                             "comment" = "Comment") %>%
         # fix column types and make uniform contents of some columns
-        mutate_at(vars("length", "diameter", "thickness", "temp",  "RI"),
+        dplyr::mutate_at(vars("length", "diameter", "thickness", "temp",  "RI"),
                   as.numeric)
     }
 
     # make NAs explicit and gas abbreviations consistent
     output <- tidy2 %>%
-      mutate_all(~ na_if(., "")) %>%
-      mutate(
+      dplyr::mutate_all(~ na_if(., "")) %>%
+      dplyr::mutate(
         gas = case_when(
-          str_detect(gas, "He") ~ "Helium",
-          str_detect(gas, "H2") ~ "Hydrogen",
-          str_detect(gas, "N2") ~ "Nitrogen",
+          stringr::str_detect(gas, "He") ~ "Helium",
+          stringr::str_detect(gas, "H2") ~ "Hydrogen",
+          stringr::str_detect(gas, "N2") ~ "Nitrogen",
           TRUE                  ~ as.character(NA)
         )
       ) %>%
       # reorder columns
-      select("type", "phase", "RI", everything())
+      dplyr::select("RI", "type", "phase", everything())
   }
   return(output)
 }
@@ -188,25 +242,30 @@ tidy_ritable <- function(ri_xml) {
 
 #' Retrieve retention indices from NIST
 #' @description This function scrapes NIST for literature retention indices
-#'  given CAS numbers as an input.
+#'   given CAS numbers as an input.
 #'
-#' @param cas CAS numbers either as numeric or formatted correctly with hyphens.
+#' @param query character; the search term
+#' @param from character; type of search term. can be one of \code{"name"},
+#'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
+#'   preferred to \code{"name"} since \code{NA} is returned in the event of
+#'   multiple matches to a query.
 #' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
-#'  \code{"alkane"}, or \code{"lee"}. See details for more.
-#' @param polarity Column polarity. One of "polar" or "non-polar"
-#'  to get RIs calculated for polar or non-polar columns.
-#' @param temp_prog Temperature program. One of "isothermal", "ramp",
-#'  or "custom".
+#'   \code{"alkane"}, or \code{"lee"}. See details for more.
+#' @param polarity Column polarity. One of \code{"polar"} or \code{"non-polar"}
+#'   to get RIs calculated for polar or non-polar columns.
+#' @param temp_prog Temperature program. One of \code{"isothermal"},
+#'   \code{"ramp"}, or \code{"custom"}.
+#' @param cas deprecated.  Use \code{query} instead.
 #' @details The types of retention indices included in NIST include Kovats
-#'  (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
-#'  (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
-#'  calculated are available on the NIST website:
-#'  \url{https://webbook.nist.gov/chemistry/gc-ri/}
+#'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
+#'   (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
+#'   calculated are available on the NIST website:
+#'   \url{https://webbook.nist.gov/chemistry/gc-ri/}
 #' @importFrom purrr map
 #' @importFrom purrr map_dfr
 #' @import dplyr
 #'
-#' @return a table of literature RIs with the following columns:
+#' @return returns a tibble of literature RIs with the following columns:
 #' \itemize{
 #' \item{\code{CAS} is the CAS number}
 #' \item{\code{type} is the column type, e.g. "capillary"}
@@ -231,18 +290,45 @@ tidy_ritable <- function(ri_xml) {
 #'
 #' @examples
 #' \dontrun{
-#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), "linear", "non-polar", "ramp")
+#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
+#' "non-polar", "ramp")
 #' }
-nist_ri <- function(cas,
-                   type = c("kovats", "linear", "alkane", "lee"),
-                   polarity = c("polar", "non-polar"),
-                   temp_prog = c("isothermal", "ramp", "custom")) {
+nist_ri <- function(query,
+                    from = c("cas", "inchi", "inchikey", "name"),
+                    type = c("kovats", "linear", "alkane", "lee"),
+                    polarity = c("polar", "non-polar"),
+                    temp_prog = c("isothermal", "ramp", "custom"),
+                    cas = NULL) {
+
+  if (!is.null(cas)) {
+    warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
+    query <- cas
+    from <- "cas"
+  }
+
+  from <- match.arg(from)
   type <- match.arg(type)
   polarity <- match.arg(polarity)
   temp_prog <- match.arg(temp_prog)
-  ri_xmls <- map(cas, ~get_ri_xml(., type, polarity, temp_prog)) %>%
-    setNames(cas)
 
-  ri_tables <- map_dfr(ri_xmls, tidy_ritable, .id = "CAS")
+  ri_xmls <-
+    purrr::map(
+      query,
+      ~ get_ri_xml(
+        query = .x,
+        from = from,
+        type = type,
+        polarity = polarity,
+        temp_prog = temp_prog
+      )
+    )
+
+  querynames <- query
+  querynames [is.na(querynames)] <- ".NA"
+  ri_xmls <- setNames(ri_xmls, querynames)
+
+  ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
+    dplyr::mutate(query = na_if(query, ".NA"))
+
   return(ri_tables)
 }

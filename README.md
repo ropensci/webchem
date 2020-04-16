@@ -124,8 +124,8 @@ Retrieve the ChemSpider ID of Triclosan
 
 ``` r
 (id <- get_csid('Triclosan'))
-#>   csid     query
-#> 1 5363 Triclosan
+#> $Triclosan
+#> [1] 5363
 ```
 
 Use this ID to query information from ChemSpider
@@ -151,10 +151,13 @@ that an API-key is needed
 
 ``` r
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
+#> $`XEFQLINVKFYRCS-UHFFFAOYAS`
 #> [1] 5363
 cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
+#> $`XEFQLINVKFYRCS-UHFFFAOYAS`
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
+#> $`c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl`
 #> [1] "InChI=1/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H"
 ```
 
@@ -334,9 +337,15 @@ distance attributes), if multiple hits are found. Other options are
 
 ``` r
 get_etoxid('Triclosan', match = 'all')
-#>   etoxid                     match distance     query
-#> 1  89236 Methyltriclosan ( 89236 )      all Triclosan
-#> 2  20179       Triclosan ( 20179 )      all Triclosan
+#> [[1]]
+#> [1] "/webETOX/public/search/stoff.do?orderBy=name"
+#> [2] "89236"                                       
+#> [3] "20179"                                       
+#> attr(,"matched")
+#> [1] NA                          "Methyltriclosan ( 89236 )"
+#> [3] "Triclosan ( 20179 )"      
+#> attr(,"distance")
+#> [1] "all"
 ```
 
 With this substance ID we can query further information from ETOX, e.g.:
@@ -401,58 +410,58 @@ and results of ecotox tests:
 ``` r
 tests <- etox_tests(ids$etoxid)[[1]]
 tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
-#>                           Organism                 Effect Duration Time_Unit
-#> 1              Anabaena flos-aquae           not reported        4         d
-#> 2          Brachionus calyciflorus           not reported        2         d
-#> 3          Brachionus calyciflorus           not reported        2         d
-#> 4          Brachionus calyciflorus           not reported        2         d
-#> 5                Brachydanio rerio Embryo-Larval-Toxicity       10         d
-#> 6               Ceriodaphnia dubia              Lethality        7         d
-#> 7               Ceriodaphnia dubia              Mortality        2         d
-#> 8               Ceriodaphnia dubia              Mortality        7         d
-#> 9               Ceriodaphnia dubia           not reported        7         d
-#> 10              Ceriodaphnia dubia           Reproduction        7         d
-#> 11              Ceriodaphnia dubia           Reproduction        7         d
-#> 12                   Daphnia magna              Mortality       21         d
-#> 13                   Daphnia magna           Reproduction       21         d
-#> 14         Desmodesmus subspicatus     Cell Proliferation        4         d
-#> 15          Dunaliella tertiolecta     Cell Proliferation        4         d
-#> 16          Dunaliella tertiolecta     Cell Proliferation        4         d
-#> 17             Oncorhynchus mykiss Embryo-Larval-Toxicity        4         d
-#> 18             Pimephales promelas              Mortality        4         d
-#> 19 Pseudokirchneriella subcapitata       Wachstumshemmung        3         d
-#> 20         Scenedesmus subspicatus                Biomass        3         d
-#> 21         Scenedesmus subspicatus           not reported        4         d
-#> 22         Scenedesmus subspicatus           not reported        4         d
-#> 23         Scenedesmus subspicatus           not reported        4         d
-#> 24         Scenedesmus subspicatus           Reproduction        3         d
-#> 25                 Hyalella azteca              Mortality       10         d
-#>    Endpoint   Value Unit
-#> 1      NOEC   0.810     
-#> 2      NOEC  50.000 µg/l
-#> 3      NOEC  50.000 µg/l
-#> 4      NOEC  50.000 µg/l
-#> 5      NOEC 200.000 µg/l
-#> 6      NOEC 339.000 µg/l
-#> 7      EC50 120.000 µg/l
-#> 8      NOEC  50.000 µg/l
-#> 9      NOEC   4.000 µg/l
-#> 10     NOEC   6.000 µg/l
-#> 11     NOEC 182.000 µg/l
-#> 12     NOEC 132.000 µg/l
-#> 13     NOEC  40.000 µg/l
-#> 14    ErC50   1.610 µg/l
-#> 15     NOEC   1.600 µg/l
-#> 16    EbC50   3.550 µg/l
-#> 17     NOEC  34.100 µg/l
-#> 18     LC50 260.000 µg/l
-#> 19     NOEC   0.200 µg/l
-#> 20     NOEC   0.500 µg/l
-#> 21     NOEC   0.690 µg/l
-#> 22     NOEC   0.742 µg/l
-#> 23     NOEC   2.380 µg/l
-#> 24     NOEC   0.500 µg/l
-#> 25     NOEC   5.000 µg/l
+#>                           Organism                 Effect Duration
+#> 1              Anabaena flos-aquae           not reported        4
+#> 2          Brachionus calyciflorus           not reported        2
+#> 3          Brachionus calyciflorus           not reported        2
+#> 4          Brachionus calyciflorus           not reported        2
+#> 5                Brachydanio rerio Embryo-Larval-Toxicity       10
+#> 6               Ceriodaphnia dubia              Lethality        7
+#> 7               Ceriodaphnia dubia              Mortality        2
+#> 8               Ceriodaphnia dubia              Mortality        7
+#> 9               Ceriodaphnia dubia           not reported        7
+#> 10              Ceriodaphnia dubia           Reproduction        7
+#> 11              Ceriodaphnia dubia           Reproduction        7
+#> 12                   Daphnia magna              Mortality       21
+#> 13                   Daphnia magna           Reproduction       21
+#> 14         Desmodesmus subspicatus     Cell Proliferation        4
+#> 15          Dunaliella tertiolecta     Cell Proliferation        4
+#> 16          Dunaliella tertiolecta     Cell Proliferation        4
+#> 17             Oncorhynchus mykiss Embryo-Larval-Toxicity        4
+#> 18             Pimephales promelas              Mortality        4
+#> 19 Pseudokirchneriella subcapitata       Wachstumshemmung        3
+#> 20         Scenedesmus subspicatus                Biomass        3
+#> 21         Scenedesmus subspicatus           not reported        4
+#> 22         Scenedesmus subspicatus           not reported        4
+#> 23         Scenedesmus subspicatus           not reported        4
+#> 24         Scenedesmus subspicatus           Reproduction        3
+#> 25                 Hyalella azteca              Mortality       10
+#>    Time_Unit Endpoint   Value Unit
+#> 1          d     NOEC   0.810     
+#> 2          d     NOEC  50.000 µg/l
+#> 3          d     NOEC  50.000 µg/l
+#> 4          d     NOEC  50.000 µg/l
+#> 5          d     NOEC 200.000 µg/l
+#> 6          d     NOEC 339.000 µg/l
+#> 7          d     EC50 120.000 µg/l
+#> 8          d     NOEC  50.000 µg/l
+#> 9          d     NOEC   4.000 µg/l
+#> 10         d     NOEC   6.000 µg/l
+#> 11         d     NOEC 182.000 µg/l
+#> 12         d     NOEC 132.000 µg/l
+#> 13         d     NOEC  40.000 µg/l
+#> 14         d    ErC50   1.610 µg/l
+#> 15         d     NOEC   1.600 µg/l
+#> 16         d    EbC50   3.550 µg/l
+#> 17         d     NOEC  34.100 µg/l
+#> 18         d     LC50 260.000 µg/l
+#> 19         d     NOEC   0.200 µg/l
+#> 20         d     NOEC   0.500 µg/l
+#> 21         d     NOEC   0.690 µg/l
+#> 22         d     NOEC   0.742 µg/l
+#> 23         d     NOEC   2.380 µg/l
+#> 24         d     NOEC   0.500 µg/l
+#> 25         d     NOEC   5.000 µg/l
 ```
 
 #### ChemIDplus
@@ -460,13 +469,20 @@ tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value'
 ``` r
 out <- ci_query(query = 'Triclosan', type = 'name', match = 'best')
 out[['Triclosan']]$physprop
-#>              Physical Property    Value            Units Temp (deg C) Source
-#> 1                Melting Point       NA            deg C           NA    EXP
-#> 2        log P (octanol-water) 4.76e+00           (none)           NA    EXP
-#> 3             Water Solubility 1.00e+01             mg/L           20    EXP
-#> 4               Vapor Pressure 6.45e-07            mm Hg           25    EST
-#> 5         Henry's Law Constant 4.99e-09      atm-m3/mole           25    EST
-#> 6 Atmospheric OH Rate Constant 1.61e-11 cm3/molecule-sec           25    EST
+#>              Physical Property    Value            Units Temp (deg C)
+#> 1                Melting Point       NA            deg C           NA
+#> 2        log P (octanol-water) 4.76e+00           (none)           NA
+#> 3             Water Solubility 1.00e+01             mg/L           20
+#> 4               Vapor Pressure 6.45e-07            mm Hg           25
+#> 5         Henry's Law Constant 4.99e-09      atm-m3/mole           25
+#> 6 Atmospheric OH Rate Constant 1.61e-11 cm3/molecule-sec           25
+#>   Source
+#> 1    EXP
+#> 2    EXP
+#> 3    EXP
+#> 4    EST
+#> 5    EST
+#> 6    EST
 ```
 
 #### Wikidata
@@ -493,9 +509,12 @@ opsin_query(c('Cyclopropane', 'Octane'))
 #>                                                  stdinchi
 #> Cyclopropane                InChI=1S/C3H6/c1-2-3-1/h1-3H2
 #> Octane       InChI=1S/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3
-#>                              stdinchikey   smiles message  status        query
-#> Cyclopropane LVZWSLJZHVFIQJ-UHFFFAOYSA-N    C1CC1         SUCCESS Cyclopropane
-#> Octane       TVMXDCGIABBOFY-UHFFFAOYSA-N CCCCCCCC         SUCCESS       Octane
+#>                              stdinchikey   smiles message  status
+#> Cyclopropane LVZWSLJZHVFIQJ-UHFFFAOYSA-N    C1CC1         SUCCESS
+#> Octane       TVMXDCGIABBOFY-UHFFFAOYSA-N CCCCCCCC         SUCCESS
+#>                     query
+#> Cyclopropane Cyclopropane
+#> Octane             Octane
 ```
 
 #### Flavornet
@@ -513,33 +532,30 @@ fn_percept(CAS = c("75-07-0", "123-32-0"))
 Identification of gas chromatography peaks is often aided by retention
 idices. NIST provides tables of retention indices reported in the
 literature organized by retention index type (Kovats, linear, normal
-alkane, and Lee), column polarity, and temperature
-program.
+alkane, and Lee), column polarity, and temperature program.
 
 ``` r
-RIs <- nist_ri("78-70-6", type = "kovats", polarity = "non-polar", temp_prog = "ramp")
+RIs <-
+  nist_ri(
+    query = "78-70-6",
+    from = "cas",
+    type = "kovats",
+    polarity = "non-polar",
+    temp_prog = "ramp"
+  )
 head(RIs)
-#>       CAS      type  phase   RI length    gas substrate diameter thickness
-#> 1 78-70-6 Capillary   DB-5 1098     30 Helium      <NA>     0.26      0.25
-#> 2 78-70-6 Capillary   DB-1 1086     30 Helium      <NA>     0.25      0.25
-#> 3 78-70-6 Capillary DB-5MS 1101     30 Helium      <NA>     0.25      0.25
-#> 4 78-70-6 Capillary HP-5MS 1104     30 Helium      <NA>     0.25      0.25
-#> 5 78-70-6 Capillary HP-5MS 1106     60 Helium      <NA>     0.25      0.25
-#> 6 78-70-6 Capillary   DB-5 1099     30 Helium      <NA>     0.25      0.25
-#>   temp_start temp_end temp_rate hold_start hold_end
-#> 1         60      246         3         NA       NA
-#> 2         50      280         5          3       NA
-#> 3         60      180         3         NA       15
-#> 4         60      280         2          8       30
-#> 5         40      250         3          1       20
-#> 6         60       NA         3         NA       NA
-#>                                reference comment
-#> 1 Adams, González Elizondo, et al., 2006 MSDC-RI
-#> 2     Allegrone, Belliardo, et al., 2006 MSDC-RI
-#> 3           Angioni, Barra, et al., 2006 MSDC-RI
-#> 4      Hazzit, Baaliouamer, et al., 2006 MSDC-RI
-#> 5   Jalali-Heravi, Zekavat, et al., 2006 MSDC-RI
-#> 6      Lucero, Fredrickson, et al., 2006 MSDC-RI
+#> # A tibble: 6 x 16
+#>   query type  phase    RI length gas   substrate diameter thickness
+#>   <chr> <chr> <chr> <dbl>  <dbl> <chr> <chr>        <dbl>     <dbl>
+#> 1 78-7… Capi… DB-5   1098     30 Heli… <NA>          0.26      0.25
+#> 2 78-7… Capi… DB-1   1086     30 Heli… <NA>          0.25      0.25
+#> 3 78-7… Capi… DB-5…  1101     30 Heli… <NA>          0.25      0.25
+#> 4 78-7… Capi… HP-5…  1104     30 Heli… <NA>          0.25      0.25
+#> 5 78-7… Capi… HP-5…  1106     60 Heli… <NA>          0.25      0.25
+#> 6 78-7… Capi… DB-5   1099     30 Heli… <NA>          0.25      0.25
+#> # … with 7 more variables: temp_start <dbl>, temp_end <dbl>,
+#> #   temp_rate <dbl>, hold_start <dbl>, hold_end <dbl>, reference <chr>,
+#> #   comment <chr>
 ```
 
 #### ChEBI
@@ -555,16 +571,24 @@ thoroughly).
 ``` r
 ids <- get_chebiid(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
 ids
-#> $Isoproturon
-#>       chebiid           chebiasciiname searchscore entitystar
-#> 1  CHEBI:6049              isoproturon        0.54          3
-#> 2 CHEBI:83468 isoproturon-monodemethyl        0.27          3
-#> 3 CHEBI:83514   isoproturon-didemethyl        0.27          3
-#> 4 CHEBI:43405    para-isopropylaniline        0.06          3
-#> 
-#> $`RZVAJINKPMORJF-UHFFFAOYSA-N`
-#>       chebiid chebiasciiname searchscore entitystar
-#> 1 CHEBI:46195    paracetamol        0.02          3
+#>                                 chebiid           chebiasciiname
+#> Isoproturon1                 CHEBI:6049              isoproturon
+#> Isoproturon2                CHEBI:83468 isoproturon-monodemethyl
+#> Isoproturon3                CHEBI:83514   isoproturon-didemethyl
+#> Isoproturon4                CHEBI:43405    para-isopropylaniline
+#> RZVAJINKPMORJF-UHFFFAOYSA-N CHEBI:46195              paracetamol
+#>                             searchscore entitystar
+#> Isoproturon1                       0.54          3
+#> Isoproturon2                       0.27          3
+#> Isoproturon3                       0.27          3
+#> Isoproturon4                       0.06          3
+#> RZVAJINKPMORJF-UHFFFAOYSA-N        0.02          3
+#>                                                   query
+#> Isoproturon1                                Isoproturon
+#> Isoproturon2                                Isoproturon
+#> Isoproturon3                                Isoproturon
+#> Isoproturon4                                Isoproturon
+#> RZVAJINKPMORJF-UHFFFAOYSA-N RZVAJINKPMORJF-UHFFFAOYSA-N
 ```
 
 The **chebiid** can then be used to query the complete ChEBI entity
