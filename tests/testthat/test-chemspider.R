@@ -60,6 +60,10 @@ test_that("get_csid()", {
   c7 <- get_csid("Oxygen", control = cs_control(order_by = "rscCount"))
   c8 <- get_csid("Oxygen", control = cs_control(order_direction = "ascending"))
   c9 <- get_csid("Oxygen", control = cs_control(order_direction = "descending"))
+  f <- get_csid("C47H93N2O6P", from = "formula", control = cs_control(
+    order_by = "dataSourceCount",
+    order_direction = "descending"
+  ))
 
   expect_is(a, "data.frame")
   expect_equal(a$csid, 5363)
@@ -76,6 +80,7 @@ test_that("get_csid()", {
   expect_equal(c8$csid, c(952, 140526))
   expect_equal(c9$csid, c(140526, 952))
   expect_equal(abcd$csid, c(682, NA, NA, 171))
+  expect_equal(f$csid, c(24846874, 59696525, 68025876, 71044200, 24608396))
 })
 
 test_that("cs_smiles_csid()", {

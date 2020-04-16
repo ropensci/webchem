@@ -284,7 +284,14 @@ Identification of gas chromatography peaks is often aided by retention idices. N
 
 
 ```{r nist}
-RIs <- nist_ri("78-70-6", type = "kovats", polarity = "non-polar", temp_prog = "ramp")
+RIs <-
+  nist_ri(
+    query = "78-70-6",
+    from = "cas",
+    type = "kovats",
+    polarity = "non-polar",
+    temp_prog = "ramp"
+  )
 head(RIs)
 ```
 
