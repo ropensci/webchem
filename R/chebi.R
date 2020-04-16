@@ -156,7 +156,7 @@ get_chebiid <- function(query,
                 stars = stars,
                 verbose = verbose)
   out <- setNames(out, query)
-  out <- bind_rows(out)
+  out <- as_tibble(bind_rows(out))
   return(out)
 }
 
