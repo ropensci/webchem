@@ -1,12 +1,11 @@
 context("chebi")
 
-a <- get_chebiid("Glyphosate", from = "ALL")
-b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
-A <- chebi_comp_entity("CHEBI:27744")
-B <- chebi_comp_entity("27732")
-
 test_that("chebi returns correct results", {
   skip_on_cran()
+  a <- get_chebiid("Glyphosate", from = "ALL")
+  b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
+  A <- chebi_comp_entity("CHEBI:27744")
+  B <- chebi_comp_entity("27732")
 
   expect_is(a, "data.frame")
   expect_is(b, "data.frame")
