@@ -4,7 +4,9 @@ Thank you for your interest in contributing to the project! The goal of this gui
 
 ### Fill out the survey
 
-The `webchem` survey allows us to learn which databases you use and how you interact with chemical data. This is extremely valuable information for us and guides our development efforts. The survey take about 5 minutes to fill out. You can fill out the survey [here](<link here>) (under development).
+You can fill out our survey at https://forms.gle/V7dfGGn73dkesn5L6.
+
+The `webchem` survey allows us to learn which databases you use and how you interact with chemical data. This is extremely valuable information for us and guides our development efforts. The survey takes about 5 minutes to fill out.
 
 ### Share a use case
 
@@ -30,7 +32,9 @@ Creating new branches is good practice. This is because if you finish with a top
 
 ### Guidelines for code contributions
 
-We do not have strong guidelines for code contributions and are happy to help at any point in your work.
+You can find the rOpenSci developer guide at https://devguide.ropensci.org/
+
+We are happy to help at any point in your work.
 
 1. We follow the [tidyverse](https://tidyverse.org) style. You can find the style guide [here](https://style.tidyverse.org/). Before committing your code, we encourage you to use ```lintr::lint_file()``` to check for nonconformances.
 
