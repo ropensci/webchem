@@ -15,6 +15,8 @@ get_sid(query, from, match = NULL, verbose = TRUE, ...)
 \item{match}{character; functionality not yet implemented.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{...}{currently not used.}
 }
 \value{
 Returns a tibble of substance id-s.

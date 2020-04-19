@@ -128,6 +128,7 @@ get_cid <- function(query, from = "name", first = FALSE,
 #' @param match character; functionality not yet implemented.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return Returns a tibble of substance id-s.
+#' @param ... currently not used.
 #' @details \code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID},
 #' \code{RN}, \code{PubMedID}, \code{MMDBID}, \code{ProteinGI},
 #' \code{NucleotideGI}, \code{TaxonomyID}, \code{MIMID}, \code{GeneID},
