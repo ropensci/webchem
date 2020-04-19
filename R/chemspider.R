@@ -107,7 +107,7 @@ cs_datasources <- function(apikey = NULL) {
 #' @examples
 #' cs_control()
 #' cs_control(order_direction = "descending")
-cs_control <- function(datasources = "Wikidata",
+cs_control <- function(datasources = vector(),
                        order_by = "recordId", order_direction = "ascending",
                        include_all = FALSE, complexity = "any",
                        isotopic = "any") {
