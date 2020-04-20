@@ -16,7 +16,7 @@ get_etoxid(
 
 \item{from}{character; Type of input, can be one of "name" (chemical name),
 "cas" (CAS Number), "ec" (European Community number for regulatory purposes),
-"gsbl" (Identifier used by https://www.gsbl.de/) and "rtecs" (Identifier used
+"gsbl" (Identifier used by \url{https://www.gsbl.de}) and "rtecs" (Identifier used
 by the Registry of Toxic Effects of Chemical Substances database).}
 
 \item{match}{character; How should multiple hits be handeled? "all" returns
