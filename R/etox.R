@@ -7,8 +7,10 @@
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
 #' @param query character; The searchterm
-#' @param from character; type of input, can be one of "name", "cas",
-#' "ec", "gsbl", "rtecs"
+#' @param from character; Type of input, can be one of "name" (chemical name),
+#' "cas" (CAS Number), "ec" (European Community number for regulatory purposes),
+#' "gsbl" (Identifier used by https://www.gsbl.de/) and "rtecs" (Identifier used
+#' by the Registry of Toxic Effects of Chemical Substances database).
 #' @param match character; How should multiple hits be handeled? "all" returns
 #' all matched IDs, "first" only the first match, "best" the best matching (by
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
@@ -73,7 +75,6 @@ get_etoxid <- function(query,
     }
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
     h <- POST(url = baseurl,
-              handle = httr::handle(''), # deletes cookies
               body = body)
     tt <- read_html(h)
     subs <- clean_char(xml_text(xml_find_all(

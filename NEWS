@@ -3,7 +3,7 @@ webchem 0.5.0.9000
 
 NEW FEATURES
 
-* get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #240, added by @andschar]
+* get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #241, added by @andschar]
 
 * nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
 

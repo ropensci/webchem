@@ -14,8 +14,10 @@ get_etoxid(
 \arguments{
 \item{query}{character; The searchterm}
 
-\item{from}{character; type of input, can be one of "name", "cas",
-"ec", "gsbl", "rtecs"}
+\item{from}{character; Type of input, can be one of "name" (chemical name),
+"cas" (CAS Number), "ec" (European Community number for regulatory purposes),
+"gsbl" (Identifier used by https://www.gsbl.de/) and "rtecs" (Identifier used
+by the Registry of Toxic Effects of Chemical Substances database).}
 
 \item{match}{character; How should multiple hits be handeled? "all" returns
 all matched IDs, "first" only the first match, "best" the best matching (by
