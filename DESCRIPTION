@@ -33,7 +33,7 @@ Imports:
     methods,
     dplyr,
     purrr,
-    data.tree
+    data.tree,
     polite,
     rlang,
     tibble

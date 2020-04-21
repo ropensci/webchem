@@ -30,7 +30,8 @@ test_that("is.inchikey() returns correct results", {
   expect_false(is.inchikey('BQJCRHHNABKAKU/KBQPJGBKSA/N'))
   expect_false(is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N'))
   expect_false(is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N'))
-  expect_error(is.inchikey(c('BQJCRHHNABKAKU-KBQPJGBKSA-N', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
+  expect_error(is.inchikey(c('BQJCRHHNABKAKU-KBQPJGBKSA-N',
+                             'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
 
   g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
   b <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA', type = 'chemspider')
@@ -38,9 +39,13 @@ test_that("is.inchikey() returns correct results", {
   expect_true(g)
   expect_false(b)
 
-  expect_error(is.inchikey(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N'), type = 'chemspider'))
-  expect_error(is.inchikey_cs(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
-  expect_error(is.inchikey_format(c('BQJCRHHNABKAKU-KBQPJGBKSA', 'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
+  expect_error(is.inchikey(c('BQJCRHHNABKAKU-KBQPJGBKSA',
+                             'BQJCRHHNABKAKU-KBQPJGBKSA-N'),
+                           type = 'chemspider'))
+  expect_error(is.inchikey_cs(c('BQJCRHHNABKAKU-KBQPJGBKSA',
+                                'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
+  expect_error(is.inchikey_format(c('BQJCRHHNABKAKU-KBQPJGBKSA',
+                                    'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
   expect_equal(length(g), 1)
 })
 
@@ -50,7 +55,8 @@ test_that("is.smiles() returns correct results", {
 
   expect_true(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl'))
   expect_false(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)ClWWX'))
-  expect_error(is.smiles(c('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl', 'Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl')))
+  expect_error(is.smiles(c('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl',
+                           'Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl')))
 })
 
 test_that("extr_num() returns correct results", {
@@ -61,10 +67,43 @@ test_that("extr_num() returns correct results", {
   expect_equal(extr_num("Melting Pt : 446 deg C"), 446)
 })
 
-test_that("as.cas() returns correct reults", {
+test_that("as.cas() returns correct results", {
   skip_on_cran()
   expect_equal(as.cas(58082), "58-08-2")
   expect_equal(as.cas(123456789), NA)
-  expect_identical(as.cas(c(761659, 123456789, "hexenol")), c("761-65-9", NA, NA))
+  expect_identical(as.cas(c(761659, 123456789, "hexenol")),
+                   c("761-65-9", NA, NA))
 })
 
+test_that("webchem_submit() returns correct results and informative messages", {
+  skip_on_cran()
+
+  qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
+                 "compound/176/json?heading=pka")
+  res <- webchem_submit(176, qurl, verbose = TRUE)
+  msg <- capture_messages(webchem_submit(176, qurl, verbose = TRUE))
+  expect_is(res, "response")
+  expect_equal(paste(msg, collapse = ""), "Querying 176. OK (HTTP 200).\n")
+
+  res <- webchem_submit(NA, qurl, verbose = TRUE)
+  msg <- capture_messages(webchem_submit(NA, qurl, verbose = TRUE))
+  expect_equal(res, NA)
+  expect_equal(paste(msg, collapse = ""),
+               "Querying NA. Invalid input. Returning NA.\n")
+
+  qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
+                 "compound/balloon/json?heading=pka")
+  res <- webchem_submit("balloon", qurl, verbose = TRUE)
+  msg <- capture_messages(webchem_submit("balloon", qurl, verbose = TRUE))
+  expect_equal(res, NA)
+  expect_equal(paste(msg, collapse = ""),
+               "Querying balloon. Bad Request (HTTP 400). Returning NA.\n")
+
+  qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
+                 "compound/176/json?heading=balloon")
+  res <- webchem_submit(176, qurl, verbose = TRUE)
+  msg <- capture_messages(webchem_submit(176, qurl, verbose = TRUE))
+  expect_equal(res, NA)
+  expect_equal(paste(msg, collapse = ""),
+               "Querying 176. Bad Request (HTTP 400). Returning NA.\n")
+})

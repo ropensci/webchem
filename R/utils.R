@@ -9,13 +9,15 @@
 #' 5) 25th character (version character) must be 'A' (currently).
 #'
 #' @param x character; input InChIKey
-#' @param type character; How should be checked? Either, by format (see above) ('format') or by ChemSpider ('chemspider').
+#' @param type character; How should be checked? Either, by format (see above)
+#' ('format') or by ChemSpider ('chemspider').
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
 #' @note This function can handle only one inchikey string.
 #'
-#' @references Heller, Stephen R., et al. "InChI, the IUPAC International Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
+#' @references Heller, Stephen R., et al. "InChI, the IUPAC International
+#' Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
@@ -87,7 +89,8 @@ is.inchikey_cs <- function(x, verbose = TRUE){
 #' 1) consist of 27 characters;
 #' 2) be all uppercase, all letters (no numbers);
 #' 3) contain two hyphens at positions 15 and 26;
-#' 4) 24th character (flag character) be 'S' (Standard InChI) or 'N' (non-standard)
+#' 4) 24th character (flag character) be 'S' (Standard InChI) or 'N'
+#' (non-standard)
 #' 5) 25th character (version character) must be 'A' (currently).
 #'
 #' @param x character; input string
@@ -155,11 +158,12 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #'
 #' @description This function checks if a string is a valid CAS registry number.
 #' A valid CAS is 1) separated by two hyphes into three parts; 2) the first part
-#' consists from two up to seven digits; 3) the second of two digits; 4) the third
-#' of one digit (check digit); 5) the check digits corresponds the checksum.
-#' The checksum is found by taking the last digit (excluding the check digit) multiplyingit with 1,
-#' the second last multiplied with 2, the third-last multiplied with 3 etc.
-#' The modulo 10 of the sum of these is the checksum.
+#' consists from two up to seven digits; 3) the second of two digits; 4) the
+#' third of one digit (check digit); 5) the check digits corresponds the
+#' checksum. The checksum is found by taking the last digit (excluding the check
+#' digit) multiplyingit with 1, the second last multiplied with 2, the
+#' third-last multiplied with 3 etc. The modulo 10 of the sum of these is the
+#' checksum.
 #'
 #' @import stringr
 #' @param x character; input CAS
@@ -221,7 +225,8 @@ is.cas <-  function(x, verbose = TRUE) {
   }
 
   # check checksum
-  di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x), split = '')[[1]])
+  di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x),
+                             split = '')[[1]])
   checksum <- sum(rev(seq_along(di)) * di)
   if (checksum %% 10 != as.numeric(th)) {
     if (isTRUE(verbose))
@@ -235,8 +240,9 @@ is.cas <-  function(x, verbose = TRUE) {
 
 #' Check if input is a SMILES string
 #'
-#' @description This function checks if a string is a valid SMILES by checking if (R)CDK can parse it.
-#' If it cannot be parsed by rcdk FALSE is returned, else TRUE.
+#' @description This function checks if a string is a valid SMILES by checking
+#' if (R)CDK can parse it. If it cannot be parsed by rcdk FALSE is returned,
+#' else TRUE.
 #' @param x character; input SMILES.
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
@@ -245,7 +251,8 @@ is.cas <-  function(x, verbose = TRUE) {
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #'
-#' @references Egon Willighagen (2015). How to test SMILES strings in Supplementary Information.
+#' @references Egon Willighagen (2015). How to test SMILES strings in
+#' Supplementary Information.
 #' \url{https://chem-bla-ics.blogspot.nl/2015/10/how-to-test-smiles-strings-in.html}
 #'
 #' @export
@@ -290,23 +297,27 @@ extr_num <- function(x) {
 #' Parse Molfile (as returned by ChemSpider) into a R-object.
 #'
 #' @param string molfile as one string
-#' @return A list with of four entries: header (eh), counts line (cl), atom block (ab) and bond block (bb).
-#' header: a = number of atoms, b = number of bonds, l = number of atom lists, f = obsolete,
-#' c = chiral flag (0=not chiral, 1 = chiral), s = number of stext entries, x, r, p, i = obsolete,
-#' m = 999, v0 version
+#' @return A list with of four entries: header (eh), counts line (cl), atom
+#' block (ab) and bond block (bb).
 #'
-#' atom block: x, y, z = atom coordinates, a = mass difference, c= charge, s= stereo parity,
-#' h = hydrogen count 1, b = stereo care box, v = valence, h = h0 designator, r, i = not used,
-#' m = atom-atom mapping number, n = inversion/retention flag, e = exact change flag
+#' header: a = number of atoms, b = number of bonds, l = number of atom lists,
+#' f = obsolete, c = chiral flag (0=not chiral, 1 = chiral), s = number of stext
+#' entries, x, r, p, i = obsolete, m = 999, v0 version
+#'
+#' atom block: x, y, z = atom coordinates, a = mass difference, c= charge,
+#' s= stereo parity, h = hydrogen count 1, b = stereo care box, v = valence,
+#' h = h0 designator, r, i = not used, m = atom-atom mapping number,
+#' n = inversion/retention flag, e = exact change flag
 #'
 #' bond block:
-#' 1 = first atom, 2 = second atom, t = bond type, s = stereo type, x = not used, r = bond typology,
-#' c = reacting center status.
+#' 1 = first atom, 2 = second atom, t = bond type, s = stereo type, x = not
+#' used, r = bond typology, c = reacting center status.
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 #' a toolset for transforming SD/Molfile structure information into R objects.
-#' Source Code for Biology and Medicine, 7, 12. \url{http://doi.org/10.1186/1751-0473-7-12}
+#' Source Code for Biology and Medicine, 7, 12.
+#' \url{http://doi.org/10.1186/1751-0473-7-12}
 #' @export
 
 parse_mol <- function(string) {
@@ -325,7 +336,8 @@ parse_mol <- function(string) {
   na <- as.numeric(cl[1])
   ab <- m[5:(4 + na)]
   ab <- read.table(text = ab)
-  names(ab) <- c('x', 'y', 'z', 'a', 'd', 'c', 's', 'h', 'b', 'v', 'H', 'm', 'n', 'e')
+  names(ab) <- c('x', 'y', 'z', 'a', 'd', 'c', 's', 'h', 'b', 'v', 'H', 'm',
+                 'n', 'e')
   # bound block
   nb <- as.numeric(cl[2])
   bb <- m[(5 + na):(4 + na + nb)]
@@ -339,7 +351,8 @@ parse_mol <- function(string) {
 #' @description This function attempts to format numeric (or character) vectors
 #' as character vectors of CAS numbers.  If they cannot be converted to CAS
 #' format or don't pass \code{\link{is.cas}}, \code{NA} is returned
-#' @param x numeric vector, or character vector of CAS numbers missing the hyphens
+#' @param x numeric vector, or character vector of CAS numbers missing the
+#' hyphens
 #'
 #' @return character vector of valid CAS numbers
 #' @seealso \code{\link{is.cas}}
@@ -368,7 +381,9 @@ as.cas <- function(x){
 
 
 #' Interactively choose a result from a menu
-#' @description In interactive sessions, prompts a user to choose an element of a vector from a menu. Use this for all functions that return multiple possible results such as multiple identifiers or synonyms.
+#' @description In interactive sessions, prompts a user to choose an element of
+#' a vector from a menu. Use this for all functions that return multiple
+#' possible results such as multiple identifiers or synonyms.
 #' @param x a character vector
 #' @param choices If \code{choices = "all"} then the entire vector \code{x} is
 #' used for the menu.  If numeric > 1, only that number of elements from the
@@ -408,4 +423,57 @@ chooser <- function(x, choices){
     out <- x
   }
   return(out)
+}
+
+#' Submit http request and print informative messages
+#'
+#' @description Many webchem functions use http requests to communicate with web
+#' services. Use this function inside other webchem functions for http requests
+#' to ensure consistent output and consistent messages when verbose = TRUE.
+#' @importFrom httr POST GET message_for_status
+#' @importFrom stats rgamma
+#' @param query numeric or character; the query to be printed in the message.
+#' @param qurl character; the query url.
+#' @param sleep numeric; the minimum timeout between requests.
+#' @param verbose logical; print message during processing to console?
+#' @param ... additional arguments for http request functions.
+#' @return An object of class response, or NA.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @examples
+#' # might fail if API is not available
+#' \donttest{
+#' webchem_post(query = 176, qurl = paste0("https://pubchem.ncbi.nlm.nih.gov/",
+#' "rest/pug_view/data/compound/176/json?heading=pka"), verbose = TRUE)
+#' }
+#' @noRd
+webchem_submit <- function(query,
+                         qurl,
+                         type = c("POST", "GET"),
+                         sleep = 0.3,
+                         verbose, ...) {
+  type <- match.arg(type)
+  if (verbose == TRUE) message("Querying ", query, ". ", appendLF = FALSE)
+  if (is.na(query)) {
+    if (verbose == TRUE) {
+      message("Invalid input. Returning NA.")
+    }
+    return(NA_character_)
+  }
+  Sys.sleep(sleep + stats::rgamma(1, shape = 15, scale = 1 / 10))
+  if (type == "POST") {
+    res <- httr::POST(qurl, user_agent("webchem"), timeout(10), ...)
+  }
+  if (type == "GET") {
+    res <- httr::GET(qurl, user_agent("webchem"), timeout(10), ...)
+  }
+  if (res$status_code < 300) {
+    if (verbose == TRUE) message(httr::message_for_status(res))
+  }
+  else {
+    if (verbose == TRUE) {
+      message(paste0(httr::message_for_status(res), " Returning NA."))
+    }
+    return(NA_character_)
+  }
+  return(res)
 }
