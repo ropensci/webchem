@@ -410,7 +410,23 @@ chooser <- function(x, choices){
   return(out)
 }
 
-#TODO add match = "best" functionality with adist() and an (optional) result argument
+#' matcher utility
+#'
+#' @param x a vector
+#' @param query what the query was, only used if match = "best"
+#' @param result what the result of the query was, only used if match = "best
+#' @param match haracter; How should multiple hits be handeled? "all" returns
+#' all matched IDs, "first" only the first match, "best" the best matching (by
+#' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
+#' @param verbose print messages?
+#'
+#' @return
+#' @noRd
+#'
+#' @examples
+#' testids <- c("123", "456", "789")
+#' results <- c("apple", "banana", "orange")
+#' matcher(testids, query = "bananananan", result = results, match = "best")
 matcher <-
   function(x,
            query = NULL,
