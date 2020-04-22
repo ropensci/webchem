@@ -80,30 +80,30 @@ test_that("webchem_submit() returns correct results and informative messages", {
 
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                  "compound/176/json?heading=pka")
-  res <- webchem_submit(176, qurl, verbose = TRUE)
-  msg <- capture_messages(webchem_submit(176, qurl, verbose = TRUE))
+  res <- webchem_submit(176, qurl)
+  msg <- capture_messages(webchem_submit(176, qurl))
   expect_is(res, "response")
-  expect_equal(paste(msg, collapse = ""), "Querying 176. OK (HTTP 200).\n")
+  expect_equal(paste(msg, collapse = ""), "Searching 176. OK (HTTP 200).\n")
 
-  res <- webchem_submit(NA, qurl, verbose = TRUE)
-  msg <- capture_messages(webchem_submit(NA, qurl, verbose = TRUE))
-  expect_equal(res, NA)
+  res <- webchem_submit(NA, qurl)
+  msg <- capture_messages(webchem_submit(NA, qurl))
+  expect_equal(res, NA_character_)
   expect_equal(paste(msg, collapse = ""),
-               "Querying NA. Invalid input. Returning NA.\n")
+               "Searching NA. Invalid input. Returning NA.\n")
 
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                  "compound/balloon/json?heading=pka")
-  res <- webchem_submit("balloon", qurl, verbose = TRUE)
-  msg <- capture_messages(webchem_submit("balloon", qurl, verbose = TRUE))
-  expect_equal(res, NA)
+  res <- webchem_submit("balloon", qurl)
+  msg <- capture_messages(webchem_submit("balloon", qurl))
+  expect_equal(res, NA_character_)
   expect_equal(paste(msg, collapse = ""),
-               "Querying balloon. Bad Request (HTTP 400). Returning NA.\n")
+               "Searching balloon. Bad Request (HTTP 400). Returning NA.\n")
 
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                  "compound/176/json?heading=balloon")
-  res <- webchem_submit(176, qurl, verbose = TRUE)
-  msg <- capture_messages(webchem_submit(176, qurl, verbose = TRUE))
-  expect_equal(res, NA)
+  res <- webchem_submit(176, qurl)
+  msg <- capture_messages(webchem_submit(176, qurl))
+  expect_equal(res, NA_character_)
   expect_equal(paste(msg, collapse = ""),
-               "Querying 176. Bad Request (HTTP 400). Returning NA.\n")
+               "Searching 176. Bad Request (HTTP 400). Returning NA.\n")
 })

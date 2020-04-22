@@ -431,7 +431,7 @@ chooser <- function(x, choices){
 #' services. Use this function inside other webchem functions for http requests
 #' to ensure consistent output and consistent messages when verbose = TRUE.
 #' @importFrom httr POST GET message_for_status
-#' @importFrom stats rgamma
+#' @importFrom stats rexp
 #' @param query numeric or character; the query to be printed in the message.
 #' @param qurl character; the query url.
 #' @param sleep numeric; the minimum timeout between requests.
@@ -442,29 +442,30 @@ chooser <- function(x, choices){
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
-#' webchem_post(query = 176, qurl = paste0("https://pubchem.ncbi.nlm.nih.gov/",
-#' "rest/pug_view/data/compound/176/json?heading=pka"), verbose = TRUE)
+#' webchem_submit(query = 176, qurl = paste0("https://pubchem.ncbi.nlm.nih.gov/",
+#' "rest/pug_view/data/compound/176/json?heading=pka"))
 #' }
 #' @noRd
 webchem_submit <- function(query,
-                         qurl,
-                         type = c("POST", "GET"),
-                         sleep = 0.3,
-                         verbose, ...) {
+                           qurl,
+                           type = c("POST", "GET"),
+                           ...,
+                           sleep = 0.3,
+                           verbose = TRUE) {
   type <- match.arg(type)
-  if (verbose == TRUE) message("Querying ", query, ". ", appendLF = FALSE)
+  if (verbose == TRUE) message("Searching ", query, ". ", appendLF = FALSE)
   if (is.na(query)) {
     if (verbose == TRUE) {
       message("Invalid input. Returning NA.")
     }
     return(NA_character_)
   }
-  Sys.sleep(sleep + stats::rgamma(1, shape = 15, scale = 1 / 10))
+  Sys.sleep(sleep + stats::rexp(1, rate = 10/sleep))
   if (type == "POST") {
-    res <- httr::POST(qurl, user_agent("webchem"), timeout(10), ...)
+    res <- httr::POST(qurl, user_agent("webchem"), ...)
   }
   if (type == "GET") {
-    res <- httr::GET(qurl, user_agent("webchem"), timeout(10), ...)
+    res <- httr::GET(qurl, user_agent("webchem"), ...)
   }
   if (res$status_code < 300) {
     if (verbose == TRUE) message(httr::message_for_status(res))
