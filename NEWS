@@ -1,7 +1,9 @@
-webchem 0.6.0
+webchem 0.5.0.9000
 ======================
 
 NEW FEATURES
+
+* nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
 
 MINOR IMPROVEMENTS
 
@@ -10,6 +12,8 @@ MINOR IMPROVEMENTS
 
 BUG FIXES
 
+
+* nist_ri() returned malformed tables or errored if there was only one entry for a query
 * get_csid() now returns all csids when queried from formula
 * get_csid() returned an error when query was NA [PR #226, fixed by stitam]
 * get_chebiid() and chebi_comp_entity() fixed for invalid queries [PR #225, fixed by stitam]
