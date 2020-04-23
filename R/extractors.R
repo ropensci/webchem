@@ -35,13 +35,13 @@ cas.wd_ident <- function(x, ...) {
   x$cas
 }
 
-cas.etox_basic <- function(x, ...) {
-  sapply(x, function(y) {
-    if (length(y) == 1 && is.na(y))
-      return(NA)
-    unique(y[[1]]$cas)
-  })
-}
+#cas.etox_basic <- function(x, ...) {
+#  sapply(x, function(y) {
+#    if (length(y) == 1 && is.na(y))
+#      return(NA)
+#    unique(y[[1]]$cas)
+#  })
+#}
 
 # InChIKey ----------------------------------------------------------------
 #' @rdname extractors
