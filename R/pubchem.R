@@ -37,7 +37,6 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom stats rgamma
 #' @importFrom tibble enframe
-#' @importFrom tidyr unnest
 #' @export
 #' @examples
 #' \donttest{
@@ -132,7 +131,9 @@ get_cid <-
   out <- map(out, unique)
   }
 
-  out <- tidyr::unnest(tibble::enframe(out, name = "query", value = "cid"), cols = c("cid"))
+  out <-
+    lapply(out, enframe, name = NULL, value = "cid") %>%
+    bind_rows(.id = "query")
   return(out)
 }
 

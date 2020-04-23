@@ -161,8 +161,6 @@ cs_control <- function(datasources = vector(),
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
-#' @importFrom purrr map
-#' @importFrom tidyr unnest
 #' @importFrom tibble enframe
 #'
 #' @export
@@ -203,19 +201,19 @@ get_csid <- function(query,
     return(res)
   }
   out <-
-    purrr::map(query,
-               ~ foo(
-                 x = .x,
-                 from = from,
-                 match = match,
-                 verbose = verbose,
-                 apikey = apikey,
-                 ...
-               ))
+    lapply(
+      query,
+      foo,
+      from = from,
+      match = match,
+      verbose = verbose,
+      apikey = apikey,
+      ...
+    )
   names(out) <- query
   out <-
-    tidyr::unnest(tibble::enframe(out, name = "query", value = "csid"),
-                  cols = c("csid"))
+    lapply(out, enframe, name = NULL, value = "csid") %>%
+    bind_rows(.id = "query")
   return(out)
 }
 
