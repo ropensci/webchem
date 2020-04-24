@@ -9,18 +9,27 @@ test_that("get_etoxid returns correct results", {
   o2 <- get_etoxid(comps, match = "all")
   o3 <- get_etoxid("Triclosan", match = "first")
   o4 <- get_etoxid("Triclosan", match = "na")
+  o5 <- get_etoxid("1071-83-6", from = 'cas', match = 'best')
+  o6 <- get_etoxid("133483", from = "gsbl")
+  o7 <- get_etoxid("203-157-5", from = "ec")
   do2 <- get_etoxid("Thiamethoxam")
 
   expect_is(o1, "data.frame")
   expect_is(o2, "data.frame")
   expect_is(o3, "data.frame")
   expect_is(o4, "data.frame")
+  expect_is(o5, "data.frame")
+  expect_is(o6, "data.frame")
+  expect_is(o7, "data.frame")
   expect_is(do2, "data.frame")
 
   expect_equal(o1$etoxid, c("20179", "9051"))
   expect_equal(o2$etoxid, c("89236", "20179", "9051"))
   expect_equal(o3$distance, "first")
   expect_equal(do2$distance, 0)
+  expect_equal(o5$etoxid, "7419")
+  expect_equal(o6$etoxid, "97558")
+  expect_equal(o7$etoxid, "12416")
 
   # only synonyms found
   expect_warning(get_etoxid("Tetracyclin"))
