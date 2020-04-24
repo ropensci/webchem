@@ -75,6 +75,7 @@ get_etoxid <- function(query,
     }
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
     h <- POST(url = baseurl,
+              handle = handle(''),
               body = body)
     tt <- read_html(h)
     subs <- clean_char(xml_text(xml_find_all(
