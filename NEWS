@@ -1,4 +1,4 @@
-webchem 0.5.0.9000
+webchem 0.5.0.9001
 ======================
 
 NEW FEATURES
@@ -8,6 +8,8 @@ NEW FEATURES
 * nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
 
 MINOR IMPROVEMENTS
+
+* aw_idx.rda is no longer included in the package as a data set. Instead, it is built by build_aw_idx() to tempdir().
 
 BUG FIXES
 

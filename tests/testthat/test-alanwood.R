@@ -11,8 +11,8 @@ test_that("alanwood, commonname", {
   expect_equal(length(o1), 4)
   expect_is(o1[[1]], "list")
   expect_is(o1[[2]], "list")
-  expect_is(o1[[3]], "list")
-  expect_is(o1[[4]], "list")
+  expect_equal(o1[[3]], NA)
+  expect_equal(o1[[4]], NA)
   expect_equal(o1[["Fluazinam"]]$cas, "79622-59-6")
   expect_equal(length(o1[["S-Metolachlor"]]$inchikey), 2)
   expect_equal(length(o1[["S-Metolachlor"]]$inchi), 2)
@@ -30,8 +30,8 @@ test_that("alanwood, cas", {
   expect_equal(length(o1), 4)
   expect_is(o1[[1]], "list")
   expect_is(o1[[2]], "list")
-  expect_is(o1[[3]], "list")
-  expect_is(o1[[4]], "list")
+  expect_equal(o1[[3]], NA)
+  expect_equal(o1[[4]], NA)
   expect_equal(o1[[1]]$cas, "79622-59-6")
   expect_equal(length(o1[[2]]$inchikey), 2)
   expect_equal(length(o1[[2]]$inchi), 2)
@@ -42,16 +42,10 @@ test_that("alanwood, cas", {
 test_that("alanwood, build_index", {
   skip_on_cran()
 
-  idx <- build_aw_idx()
+  idx <- suppressWarnings(build_aw_idx(verbose = FALSE, force_build = TRUE))
   expect_is(idx, "data.frame")
   expect_equal(ncol(idx), 4)
   expect_equal(names(idx), c("names", "links", "linknames", "source"))
   expect_equal(unique(idx$source), c("rn", "cn"))
   expect_equal(idx$names[1], "50-00-0")
-})
-
-test_that("alanwood index is up to date", {
-  skip_on_cran()
-
-  expect_true(Sys.Date() - attr(aw_idx, "date") < 90)
 })
