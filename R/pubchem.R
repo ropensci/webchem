@@ -426,7 +426,7 @@ pc_page <- function(id,
   foo <- function(id, section, domain) {
     qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                    domain, "/", id, "/JSON?heading=", section)
-    res <- webchem_submit(id, qurl, verbose = verbose)
+    res <- send_request(id, qurl, verbose = verbose)
     if (length(res) == 1 && is.na(res)) return(NA)
     cont <- httr::content(res, type = "text", encoding = "UTF-8")
     cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)

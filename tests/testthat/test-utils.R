@@ -75,34 +75,34 @@ test_that("as.cas() returns correct results", {
                    c("761-65-9", NA, NA))
 })
 
-test_that("webchem_submit() returns correct results and informative messages", {
+test_that("send_request() returns correct results and informative messages", {
   skip_on_cran()
 
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                  "compound/176/json?heading=pka")
-  res <- webchem_submit(176, qurl)
-  msg <- capture_messages(webchem_submit(176, qurl))
+  res <- send_request(176, qurl)
+  msg <- capture_messages(send_request(176, qurl))
   expect_is(res, "response")
   expect_equal(paste(msg, collapse = ""), "Searching 176. OK (HTTP 200).\n")
 
-  res <- webchem_submit(NA, qurl)
-  msg <- capture_messages(webchem_submit(NA, qurl))
+  res <- send_request(NA, qurl)
+  msg <- capture_messages(send_request(NA, qurl))
   expect_equal(res, NA_character_)
   expect_equal(paste(msg, collapse = ""),
                "Searching NA. Invalid input. Returning NA.\n")
 
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                  "compound/balloon/json?heading=pka")
-  res <- webchem_submit("balloon", qurl)
-  msg <- capture_messages(webchem_submit("balloon", qurl))
+  res <- send_request("balloon", qurl)
+  msg <- capture_messages(send_request("balloon", qurl))
   expect_equal(res, NA_character_)
   expect_equal(paste(msg, collapse = ""),
                "Searching balloon. Bad Request (HTTP 400). Returning NA.\n")
 
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                  "compound/176/json?heading=balloon")
-  res <- webchem_submit(176, qurl)
-  msg <- capture_messages(webchem_submit(176, qurl))
+  res <- send_request(176, qurl)
+  msg <- capture_messages(send_request(176, qurl))
   expect_equal(res, NA_character_)
   expect_equal(paste(msg, collapse = ""),
                "Searching 176. Bad Request (HTTP 400). Returning NA.\n")

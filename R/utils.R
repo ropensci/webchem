@@ -446,12 +446,12 @@ chooser <- function(x, choices){
 #' "rest/pug_view/data/compound/176/json?heading=pka"))
 #' }
 #' @noRd
-webchem_submit <- function(query,
-                           qurl,
-                           type = c("POST", "GET"),
-                           ...,
-                           sleep = 0.3,
-                           verbose = TRUE) {
+send_request <- function(query,
+                         qurl,
+                         type = c("POST", "GET"),
+                         ...,
+                         sleep = 0.3,
+                         verbose = TRUE) {
   type <- match.arg(type)
   if (verbose == TRUE) message("Searching ", query, ". ", appendLF = FALSE)
   if (is.na(query)) {
@@ -460,12 +460,12 @@ webchem_submit <- function(query,
     }
     return(NA_character_)
   }
-  Sys.sleep(sleep + stats::rexp(1, rate = 10/sleep))
+  Sys.sleep(sleep + stats::rexp(1, rate = 10 / sleep))
   if (type == "POST") {
-    res <- httr::POST(qurl, user_agent("webchem"), ...)
+    res <- httr::POST(qurl, user_agent("webchem"), handle = handle(""), ...)
   }
   if (type == "GET") {
-    res <- httr::GET(qurl, user_agent("webchem"), ...)
+    res <- httr::GET(qurl, user_agent("webchem"), handle = handle(""), ...)
   }
   if (res$status_code < 300) {
     if (verbose == TRUE) message(httr::message_for_status(res))
