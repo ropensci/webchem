@@ -5,10 +5,12 @@
 #'
 #' @import xml2 httr
 #' @importFrom stats rgamma
-#' @importFrom dplyr bind_rows select
-#' @param query character; A compound name to search for corresponding to the
-#'   ETOX_ID field on the web interface.  This function will also search for
-#'   synonyms if no ETOX_ID is found.
+#' @importFrom dplyr bind_rows
+#' @param query character; The searchterm
+#' @param from character; Type of input, can be one of "name" (chemical name),
+#' "cas" (CAS Number), "ec" (European Community number for regulatory purposes),
+#' "gsbl" (Identifier used by \url{https://www.gsbl.de}) and "rtecs" (Identifier used
+#' by the Registry of Toxic Effects of Chemical Substances database).
 #' @param match character; How should multiple hits be handeled? "all" returns
 #' all matched IDs, "first" only the first match, "best" the best matching (by
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
@@ -23,6 +25,7 @@
 #' \code{\link{etox_tests}} for test results.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -32,8 +35,12 @@
 #' comps <- c("Triclosan", "Glyphosate")
 #' get_etoxid(comps)
 #' get_etoxid(comps, match = "all")
+#' get_etoxid("34123-59-6", from = "cas") # Isoproturon
+#' get_etoxid("133483", from = "gsbl") # 3-Butin-1-ol
+#' get_etoxid("203-157-5", from = "ec") # Paracetamol
 #' }
 get_etoxid <- function(query,
+                       from = c("name", "cas", "ec", "gsbl", "rtecs"),
                        match = c("best", "all", "first", "ask", "na"),
                        verbose = TRUE) {
   clean_char <- function(x) {
@@ -45,44 +52,78 @@ get_etoxid <- function(query,
     x <- gsub("(?<=[\\s])\\s*|^\\s+$", "", x, perl = TRUE)
     return(x)
   }
+  # checks
+  from <- match.arg(from)
   match <- match.arg(match)
-  foo <- function(query, match, verbose) {
+  foo <- function(query, from, match, verbose) {
     if (verbose)
       message("Searching ", query)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
+    if (from == 'name') {
+      body <- list("stoffname.selection[0].name" = query,
+                   "stoffname.selection[0].type" = "",
+                   event = "Search")
+    } else {
+      from_look <- c(cas = 69,
+                     ec = 70,
+                     rtecs = 72,
+                     gsbl = 73)
+      type <- from_look[ names(from_look) == from ]
+      body <- list('stoffnummer.selection[0].name' = query,
+                   'stoffnummer.selection[0].type' = type,
+                   event = "Search")
+    }
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-    h <- POST(url = baseurl, body = list("stoffname.selection[0].name" = query,
-                                    event = "Search"))
-    # get substances and links
+    h <- POST(url = baseurl,
+              handle = handle(''),
+              body = body)
     tt <- read_html(h)
     subs <- clean_char(xml_text(xml_find_all(
       tt, "//*/table[@class = 'listForm resultList']//a")))[-1]
     if (length(subs) == 0) {
       if (verbose)
-        message("Substance not found! Returning NA. \n")
+        message("Substance not found! Returning NA.")
       id <- NA
       matched_sub <- NA
       d <- NA
     }
     if (length(subs) > 0) {
-      # types can be ETOX_NAME, SYNONYM
-      # the function currently uses all types, there is no filtering
-      type <- clean_char(xml_text(xml_find_all(
-        tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
-      if (!'ETOX_NAME' %in% type) {
-        warning('No ETOX_NAME found. Returning SYNONYM.')
-      }
       links <- xml_attr(xml_find_all(
         tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
+    }
+    if (length(subs) == 1) {
+      id <- gsub("^.*\\?id=(.*)", "\\1", links)
+      d <- ifelse(match == "best", 0, as.character(0))
+      matched_sub <- subs[1]
+    }
+    # multiple hits
+    if (length(subs) > 1) {
+      if (verbose)
+        message("More then one Link found.")
+      if (match == "na") {
+        if (verbose)
+          message("Returning NA.")
+        id <- NA
+        matched_sub <- NA
+        d <- "na"
       }
       # multiple hits
     #TODO: replace with matcher maybe?
       if (length(subs) == 1) {
         id <- gsub("^.*\\?id=(.*)", "\\1", links)
-        d <- ifelse(match == "best", 0, as.character(0))
-        matched_sub <- subs[1]
+        matched_sub <-
+          subs[sapply(id, function(x)
+            grep(x, subs)[1])]
+        d <- "all"
       }
-      if (length(subs) > 1){
+      if (match == "first") {
+        if (verbose)
+          message("Returning first match.")
+        id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
+        matched_sub <- subs[grep(id[1], subs)[1]]
+        d <- "first"
+      }
+      if (match == "best") {
         if (verbose)
           message("More then one Link found. \n")
         if (match == "na") {
@@ -116,6 +157,13 @@ get_etoxid <- function(query,
           id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
         }
       }
+      if (match == "ask") {
+        matched_sub <- chooser(subs, "all")
+        id <-
+          gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
+        d <- "interactive"
+      }
+    }
     # return object
     hit <- tibble::tibble(
       "query" = query,
@@ -124,7 +172,7 @@ get_etoxid <- function(query,
     )
     return(hit)
   }
-  out <- lapply(query, foo, match = match, verbose = verbose)
+  out <- lapply(query, foo, from = from, match = match, verbose = verbose)
   out <- dplyr::bind_rows(out)
   return(out)
 }
