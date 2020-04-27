@@ -99,69 +99,36 @@ get_etoxid <- function(query,
     # multiple hits
     if (length(subs) > 1) {
       if (verbose)
-        message("More then one Link found.")
+        message("More then one Link found. \n")
       if (match == "na") {
         if (verbose)
-          message("Returning NA.")
+          message("Returning NA. \n")
         id <- NA
         matched_sub <- NA
-        d <- "na"
       }
-      # multiple hits
-    #TODO: replace with matcher maybe?
-      if (length(subs) == 1) {
+      if (match == "all") {
+        if (verbose)
+          message("Returning all matches. \n")
         id <- gsub("^.*\\?id=(.*)", "\\1", links)
-        matched_sub <-
-          subs[sapply(id, function(x)
-            grep(x, subs)[1])]
-        d <- "all"
+        matched_sub <- subs[sapply(id, function(x) grep(x, subs)[1])]
       }
       if (match == "first") {
         if (verbose)
-          message("Returning first match.")
+          message("Returning first match. \n")
         id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
         matched_sub <- subs[grep(id[1], subs)[1]]
-        d <- "first"
       }
       if (match == "best") {
         if (verbose)
-          message("More then one Link found. \n")
-        if (match == "na") {
-          if (verbose)
-            message("Returning NA. \n")
-          id <- NA
-          matched_sub <- NA
-        }
-        if (match == "all") {
-          if (verbose)
-            message("Returning all matches. \n")
-          id <- gsub("^.*\\?id=(.*)", "\\1", links)
-          matched_sub <- subs[sapply(id, function(x) grep(x, subs)[1])]
-        }
-        if (match == "first") {
-          if (verbose)
-            message("Returning first match. \n")
-          id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
-          matched_sub <- subs[grep(id[1], subs)[1]]
-        }
-        if (match == "best") {
-          if (verbose)
-            message("Returning best match. \n")
-          msubs <- gsub(" \\(.*\\)", "", subs)
-          dd <- adist(query, msubs) / nchar(msubs)
-          id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
-          matched_sub <- subs[which.min(dd)]
-        }
-        if (match == "ask") {
-          matched_sub <- chooser(subs, "all")
-          id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
-        }
+          message("Returning best match. \n")
+        msubs <- gsub(" \\(.*\\)", "", subs)
+        dd <- adist(query, msubs) / nchar(msubs)
+        id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
+        matched_sub <- subs[which.min(dd)]
       }
       if (match == "ask") {
         matched_sub <- chooser(subs, "all")
-        id <-
-          gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
-        d <- "interactive"
+        id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
       }
     }
     # return object
