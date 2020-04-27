@@ -335,7 +335,8 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' sections, subsections, etc. The chemical data live at the lowest levels of
 #' these sections. Use this function to retrieve the lowest level information
 #' from PubChem content pages.
-#' @param id numeric or character; a vector of identifiers to search for.
+#' @param id numeric or character; a vector of PubChem identifiers to search
+#' for.
 #' @param section character; the section of the content page to be imported.
 #' @param domain character; the query domain. Can be one of \code{"compound"},
 #' \code{"substance"}, \code{"assay"}, \code{"gene"}, \code{"protein"} or
@@ -390,6 +391,7 @@ pc_sect <- function(id,
 #'
 #' @importFrom jsonlite fromJSON
 #' @importFrom data.tree as.Node Do
+#' @importFrom stats rexp
 #' @param id numeric or character; a vector of identifiers to search for.
 #' @param section character; the section of the content page to be imported.
 #' @param domain character; the query domain. Can be one of \code{"compound"},
@@ -426,13 +428,29 @@ pc_page <- function(id,
   foo <- function(id, section, domain) {
     qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                    domain, "/", id, "/JSON?heading=", section)
-    res <- send_request(id, qurl, verbose = verbose)
-    if (length(res) == 1 && is.na(res)) return(NA)
-    cont <- httr::content(res, type = "text", encoding = "UTF-8")
-    cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
-    tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
-    tree$Do(function(node) node$name <- tolower(node$name))
-    return(tree)
+    if (verbose == TRUE) message("Searching ", id, ". ", appendLF = FALSE)
+    if (is.na(id)) {
+      if (verbose == TRUE) {
+        message("Invalid input. Returning NA.")
+      }
+      return(NA)
+    }
+    Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
+    res <- httr::POST(qurl, user_agent("webchem"), handle = handle(""))
+    if (res$status_code < 300) {
+      if (verbose == TRUE) message(httr::message_for_status(res))
+      cont <- httr::content(res, type = "text", encoding = "UTF-8")
+      cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
+      tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
+      tree$Do(function(node) node$name <- tolower(node$name))
+      return(tree)
+    }
+    else {
+      if (verbose == TRUE) {
+        message(paste0(httr::message_for_status(res), " Returning NA."))
+      }
+      return(NA)
+    }
   }
   cont <- lapply(id, function(x) foo(x, section, domain))
   names(cont) <- id

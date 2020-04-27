@@ -12,7 +12,8 @@ pc_sect(
 )
 }
 \arguments{
-\item{id}{numeric or character; a vector of identifiers to search for.}
+\item{id}{numeric or character; a vector of PubChem identifiers to search
+for.}
 
 \item{section}{character; the section of the content page to be imported.}
 
