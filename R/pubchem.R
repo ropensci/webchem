@@ -33,7 +33,7 @@
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @import httr
-#' @importFrom purrr map2
+#' @importFrom purrr map map2
 #' @importFrom jsonlite fromJSON
 #' @importFrom stats rgamma
 #' @importFrom tibble enframe
