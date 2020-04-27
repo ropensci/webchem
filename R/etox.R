@@ -284,7 +284,7 @@ etox_basic <- function(id, verbose = TRUE) {
 #' @examples
 #' \dontrun{
 #' id <- get_etoxid('Triclosan', match = 'best')
-#' out <- etox_targets(id)
+#' out <- etox_targets(id$etoxid)
 #' out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 #' 'Value_Target_LR', 'Unit')]
 #' etox_targets( c("20179", "9051"))
@@ -372,7 +372,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' @examples
 #' \dontrun{
 #' id <- get_etoxid('Triclosan', match = 'best')
-#' out <- etox_tests(id)
+#' out <- etox_tests(id$etoxid)
 #' out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
 #' 'Endpoint', 'Value', 'Unit')]
 #' etox_tests( c("20179", "9051"))
