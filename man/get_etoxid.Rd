@@ -12,9 +12,7 @@ get_etoxid(
 )
 }
 \arguments{
-\item{query}{character; A compound name to search for corresponding to the
-ETOX_ID field on the web interface.  This function will also search for
-synonyms if no ETOX_ID is found.}
+\item{query}{character; The searchterm}
 
 \item{from}{character; Type of input, can be one of "name" (chemical name),
 "cas" (CAS Number), "ec" (European Community number for regulatory purposes),
