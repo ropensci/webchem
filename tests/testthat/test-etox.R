@@ -26,9 +26,6 @@ test_that("get_etoxid returns correct results", {
   expect_equal(o1$etoxid, c("20179", "9051"))
   expect_equal(o2$etoxid, c("89236", "20179", "9051"))
 
-  # only synonyms found
-  expect_warning(get_etoxid("Tetracyclin"), "No ETOX_NAME found. Returning SYNONYM.")
-
   # tests for the article
   data("jagst")
   ids <- get_etoxid(head(unique(jagst$substance),6), match = "best")
