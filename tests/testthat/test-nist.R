@@ -1,4 +1,11 @@
 context("nist")
+library(robotstxt)
+test_that("NIST webbook is still OK with being scraped", {
+  expect_true(
+    paths_allowed("https://webbook.nist.gov/cgi/cbook.cgi",
+                  user_agent = 'webchem (https://github.com/ropensci/webchem)')
+    )
+})
 
 test_that("nist_ri() warns when no results", {
   skip_on_cran()
