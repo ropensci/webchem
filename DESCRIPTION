@@ -33,9 +33,9 @@ Imports:
     methods,
     dplyr,
     purrr,
+    tibble,
     polite,
-    rlang,
-    tibble
+    rlang
 Suggests:
     testthat,
     rcdk

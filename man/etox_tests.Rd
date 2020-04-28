@@ -25,7 +25,7 @@ Before using this function, please read the disclaimer
 \examples{
 \dontrun{
 id <- get_etoxid('Triclosan', match = 'best')
-out <- etox_tests(id)
+out <- etox_tests(id$etoxid)
 out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
 'Endpoint', 'Value', 'Unit')]
 etox_tests( c("20179", "9051"))
