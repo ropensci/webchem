@@ -801,3 +801,24 @@ use 'cs_commpinfo()' instead.")
   class(out) <- c('cs_extcompinfo', 'data.frame')
   return(out)
 }
+
+cs_image <- function(csid, apikey = NULL, verbose = TRUE) {
+  if (is.null(apikey)) {
+    apikey <- cs_check_key()
+  }
+  foo <- function(csid, apikey = apikey, verbose = verbose) {
+    if (verbose == TRUE) message("Searching ", query, ". ", appendLF = FALSE)
+    if (is.na(csid)) {
+      if (verbose == TRUE) {
+        message("Invalid input. Returning NA.")
+      }
+      return(NA)
+    }
+    else {
+      url <- paste0("https://api.rsc.org/compounds/v1/records/", csid, "/image")
+      headers <- c("Content-Type" = "", "apikey" = apikey)
+      res <- httr::GET(url, httr::add_headers(.headers = headers))
+    }
+
+  }
+}
