@@ -240,7 +240,9 @@ tidy_ritable <- function(ri_xml) {
 #' @param from character; type of search term. can be one of \code{"name"},
 #'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
 #'   preferred to \code{"name"} since \code{NA} is returned in the event of
-#'   multiple matches to a query.
+#'   multiple matches to a query. Using an identifier other than a CAS number
+#'   will cause this function to run slower as CAS numbers are used as internal
+#'   identifiers by NIST.
 #' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
 #'   \code{"alkane"}, or \code{"lee"}. See details for more.
 #' @param polarity Column polarity. One of \code{"polar"} or \code{"non-polar"}
