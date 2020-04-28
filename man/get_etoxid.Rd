@@ -6,6 +6,7 @@
 \usage{
 get_etoxid(
   query,
+  from = c("name", "cas", "ec", "gsbl", "rtecs"),
   match = c("best", "all", "first", "ask", "na"),
   verbose = TRUE
 )
@@ -13,10 +14,15 @@ get_etoxid(
 \arguments{
 \item{query}{character; The searchterm}
 
+\item{from}{character; Type of input, can be one of "name" (chemical name),
+"cas" (CAS Number), "ec" (European Community number for regulatory purposes),
+"gsbl" (Identifier used by \url{https://www.gsbl.de}) and "rtecs" (Identifier used
+by the Registry of Toxic Effects of Chemical Substances database).}
+
 \item{match}{character; How should multiple hits be handeled? "all" returns
 all matched IDs, "first" only the first match, "best" the best matching (by
 name) ID, "ask" is a interactive mode and the user is asked for input, "na"
-returns NA if multiple hits are found.}
+returns \code{NA} if multiple hits are found.}
 
 \item{verbose}{logical; print message during processing to console?}
 }
@@ -40,6 +46,9 @@ get_etoxid("Triclosan")
 comps <- c("Triclosan", "Glyphosate")
 get_etoxid(comps)
 get_etoxid(comps, match = "all")
+get_etoxid("34123-59-6", from = "cas") # Isoproturon
+get_etoxid("133483", from = "gsbl") # 3-Butin-1-ol
+get_etoxid("203-157-5", from = "ec") # Paracetamol
 }
 }
 \seealso{
@@ -51,4 +60,6 @@ get_etoxid(comps, match = "all")
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 
 Tamas Stirling, \email{stirling.tamas@gmail.com}
+
+Andreas Scharmueller, \email{andschar@protonmail.com}
 }

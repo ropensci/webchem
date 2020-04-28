@@ -1,14 +1,20 @@
-webchem 0.5.0.9000
+webchem 0.5.0.9001
 ======================
 
 NEW FEATURES
+
+* get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #241, added by @andschar]
 
 * nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
 
 MINOR IMPROVEMENTS
 
-BUG FIXES
+* all `get_*()` functions now output tibbles with a column for the query and a column for the retrieved ID
+* changes to arguments in `get_*()` functions to make them more consistent
+* aw_idx.rda is no longer included in the package as a data set. Instead, it is built by build_aw_idx() to tempdir().
 
+
+BUG FIXES
 
 * nist_ri() returned malformed tables or errored if there was only one entry for a query
 * get_csid() now returns all csids when queried from formula

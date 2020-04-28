@@ -7,10 +7,14 @@
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
 #' @param query character; The searchterm
+#' @param from character; Type of input, can be one of "name" (chemical name),
+#' "cas" (CAS Number), "ec" (European Community number for regulatory purposes),
+#' "gsbl" (Identifier used by \url{https://www.gsbl.de}) and "rtecs" (Identifier used
+#' by the Registry of Toxic Effects of Chemical Substances database).
 #' @param match character; How should multiple hits be handeled? "all" returns
 #' all matched IDs, "first" only the first match, "best" the best matching (by
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
-#' returns NA if multiple hits are found.
+#' returns \code{NA} if multiple hits are found.
 #' @param verbose logical; print message during processing to console?
 #' @return a dataframe with 4 columns: etoxID, matched substance, string
 #' distance to match and the queried string
@@ -21,6 +25,7 @@
 #' \code{\link{etox_tests}} for test results.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -30,8 +35,12 @@
 #' comps <- c("Triclosan", "Glyphosate")
 #' get_etoxid(comps)
 #' get_etoxid(comps, match = "all")
+#' get_etoxid("34123-59-6", from = "cas") # Isoproturon
+#' get_etoxid("133483", from = "gsbl") # 3-Butin-1-ol
+#' get_etoxid("203-157-5", from = "ec") # Paracetamol
 #' }
 get_etoxid <- function(query,
+                       from = c("name", "cas", "ec", "gsbl", "rtecs"),
                        match = c("best", "all", "first", "ask", "na"),
                        verbose = TRUE) {
   clean_char <- function(x) {
@@ -43,100 +52,102 @@ get_etoxid <- function(query,
     x <- gsub("(?<=[\\s])\\s*|^\\s+$", "", x, perl = TRUE)
     return(x)
   }
+  # checks
+  from <- match.arg(from)
   match <- match.arg(match)
-  foo <- function(query, match, verbose) {
+  foo <- function(query, from, match, verbose) {
     if (verbose)
       message("Searching ", query)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
+    if (from == 'name') {
+      body <- list("stoffname.selection[0].name" = query,
+                   "stoffname.selection[0].type" = "",
+                   event = "Search")
+    } else {
+      from_look <- c(cas = 69,
+                     ec = 70,
+                     rtecs = 72,
+                     gsbl = 73)
+      type <- from_look[ names(from_look) == from ]
+      body <- list('stoffnummer.selection[0].name' = query,
+                   'stoffnummer.selection[0].type' = type,
+                   event = "Search")
+    }
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-    h <- POST(url = baseurl, body = list("stoffname.selection[0].name" = query,
-                                    event = "Search"))
-    # get substances and links
+    h <- POST(url = baseurl,
+              handle = handle(''),
+              body = body)
     tt <- read_html(h)
     subs <- clean_char(xml_text(xml_find_all(
       tt, "//*/table[@class = 'listForm resultList']//a")))[-1]
     if (length(subs) == 0) {
       if (verbose)
-        message("Substance not found! Returning NA. \n")
+        message("Substance not found! Returning NA.")
       id <- NA
       matched_sub <- NA
       d <- NA
     }
     if (length(subs) > 0) {
-      # types can be ETOX_NAME, SYNONYM
-      # the function currently uses all types, there is no filtering
-      type <- clean_char(xml_text(xml_find_all(
-        tt, "//*/table[@class = 'listForm resultList']/tr/td[2]")))
-      if (!'ETOX_NAME' %in% type) {
-        warning('No ETOX_NAME found. Returning SYNONYM.')
-      }
       links <- xml_attr(xml_find_all(
         tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
-      }
-      # multiple hits
-      if (length(subs) == 1) {
-        id <- gsub("^.*\\?id=(.*)", "\\1", links)
-        d <- ifelse(match == "best", 0, as.character(0))
-        matched_sub <- subs[1]
-      }
-      if (length(subs) > 1){
+    }
+    if (length(subs) == 1) {
+      id <- gsub("^.*\\?id=(.*)", "\\1", links)
+      d <- ifelse(match == "best", 0, as.character(0))
+      matched_sub <- subs[1]
+    }
+    # multiple hits
+    if (length(subs) > 1) {
+      if (verbose)
+        message("More then one Link found. \n")
+      if (match == "na") {
         if (verbose)
-          message("More then one Link found. \n")
-        if (match == "na") {
-          if (verbose)
-            message("Returning NA. \n")
-          id <- NA
-          matched_sub <- NA
-          d <- "na"
-        }
-        if (match == "all") {
-          if (verbose)
-            message("Returning all matches. \n")
-          id <- gsub("^.*\\?id=(.*)", "\\1", links)
-          matched_sub <- subs[sapply(id, function(x) grep(x, subs)[1])]
-          d <- "all"
-        }
-        if (match == "first") {
-          if (verbose)
-            message("Returning first match. \n")
-          id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
-          matched_sub <- subs[grep(id[1], subs)[1]]
-          d <- "first"
-        }
-        if (match == "best") {
-          if (verbose)
-            message("Returning best match. \n")
-          msubs <- gsub(" \\(.*\\)", "", subs)
-          dd <- adist(query, msubs) / nchar(msubs)
-          id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
-          d <- round(dd[which.min(dd)], 2)
-          matched_sub <- subs[which.min(dd)]
-        }
-        if (match == "ask") {
-          matched_sub <- chooser(subs, "all")
-          id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
-          d <- "interactive"
-        }
+          message("Returning NA. \n")
+        id <- NA
+        matched_sub <- NA
       }
+      if (match == "all") {
+        if (verbose)
+          message("Returning all matches. \n")
+        id <- gsub("^.*\\?id=(.*)", "\\1", links)
+        matched_sub <- subs[sapply(id, function(x) grep(x, subs)[1])]
+      }
+      if (match == "first") {
+        if (verbose)
+          message("Returning first match. \n")
+        id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
+        matched_sub <- subs[grep(id[1], subs)[1]]
+      }
+      if (match == "best") {
+        if (verbose)
+          message("Returning best match. \n")
+        msubs <- gsub(" \\(.*\\)", "", subs)
+        dd <- adist(query, msubs) / nchar(msubs)
+        id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
+        matched_sub <- subs[which.min(dd)]
+      }
+      if (match == "ask") {
+        matched_sub <- chooser(subs, "all")
+        id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
+      }
+    }
     # return object
-    hit <- data.frame(
-      "etoxid" = id,
-      "match" = matched_sub,
-      "distance" = d,
+    hit <- tibble::tibble(
       "query" = query,
-      stringsAsFactors = FALSE
+      "match" = matched_sub,
+      "etoxid" = id
     )
     return(hit)
   }
-  out <- lapply(query, foo, match = match, verbose = verbose)
+  out <- lapply(query, foo, from = from, match = match, verbose = verbose)
   out <- dplyr::bind_rows(out)
   return(out)
 }
 
 #' Get basic information from a ETOX ID
 #'
-#' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-#' \url{https://webetox.uba.de/webETOX/index.do} for basic information
+#' Query ETOX: Information System Ecotoxicology and Environmental Quality
+#' Targets \url{https://webetox.uba.de/webETOX/index.do} for basic information
 #'
 #' @import xml2
 #' @importFrom rvest html_table
@@ -145,14 +156,16 @@ get_etoxid <- function(query,
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return a list with lists of four entries: cas (the CAS numbers), ec (the EC number),
-#' gsbl (the gsbl number), a data.frame synonys with synonyms and the source url.
+#' @return a list with lists of four entries: cas (the CAS numbers), ec (the EC
+#'   number), gsbl (the gsbl number), a data.frame synonys with synonyms and the
+#'   source url.
 #'
 #' @note Before using this function, please read the disclaimer
-#' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+#'   \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #'
-#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
-#' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
+#'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
+#'   for quality targets and \code{\link{etox_tests}} for test results
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
@@ -170,11 +183,11 @@ get_etoxid <- function(query,
 #' sapply(out, function(y) y$ec)
 #' }
 etox_basic <- function(id, verbose = TRUE) {
-  if (!mode(id) %in% c("numeric","character")) {
+  if (!mode(id) %in% c("numeric", "character")) {
     stop("id must be a vector!")
   }
   # id <- c("20179", "9051")
-  foo <- function(id, verbose){
+  foo <- function(id, verbose) {
     if (is.na(id)) {
       message('ID is NA! Returning NA.\n')
       return(NA)
@@ -183,7 +196,7 @@ etox_basic <- function(id, verbose = TRUE) {
     qurl <- paste0(baseurl, id)
     if (verbose)
       message('Querying ', qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
     tt <- try(read_html(qurl), silent = TRUE)
     if (inherits(tt, 'try-error')) {
       message('ID not found! Returning NA.\n')
@@ -240,15 +253,15 @@ etox_basic <- function(id, verbose = TRUE) {
   }
   out <- lapply(id, foo, verbose = verbose)
   out <- setNames(out, id)
-  class(out) <- c('etox_basic','list')
+  class(out) <- c('etox_basic', 'list')
   return(out)
 }
 
 
 #' Get Quality Targets from a ETOX ID
 #'
-#' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-#' \url{https://webetox.uba.de/webETOX/index.do} for quality targets
+#' Query ETOX: Information System Ecotoxicology and Environmental Quality
+#' Targets \url{https://webetox.uba.de/webETOX/index.do} for quality targets
 #'
 #' @import xml2 RCurl
 #' @importFrom utils read.table
@@ -257,29 +270,31 @@ etox_basic <- function(id, verbose = TRUE) {
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
-#' @return A list of lists of two: \code{res} a data.frame with quality targets from the ETOX database, and source_url.
+#' @return A list of lists of two: \code{res} a data.frame with quality targets
+#'   from the ETOX database, and source_url.
 #'
 #' @note Before using this function, please read the disclaimer
-#' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
-#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
-#' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
+#'   \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+#' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
+#'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
+#'   for quality targets and \code{\link{etox_tests}} for test results
 #'
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
 #' id <- get_etoxid('Triclosan', match = 'best')
-#' out <- etox_targets(id)
+#' out <- etox_targets(id$etoxid)
 #' out[ , c('Substance', 'CAS_NO', 'Country_or_Region', 'Designation',
 #' 'Value_Target_LR', 'Unit')]
 #' etox_targets( c("20179", "9051"))
 #'
 #' }
 etox_targets <- function(id, verbose = TRUE) {
-  if (!mode(id) %in% c("numeric","character")) {
+  if (!mode(id) %in% c("numeric", "character")) {
     stop("id must be a vector!")
   }
-  foo <- function(id, verbose){
+  foo <- function(id, verbose) {
     if (is.na(id)) {
       message('ID is NA! Returning NA.\n')
       return(NA)
@@ -288,17 +303,26 @@ etox_targets <- function(id, verbose = TRUE) {
     qurl <- paste0(baseurl, id)
     if (verbose)
       message('Querying ', qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
     tt <- try(read_html(qurl), silent = TRUE)
     if (inherits(tt, 'try-error')) {
       message('ID not found! Returning NA.\n')
       return(NA)
     }
-    link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Quali') and contains(@href,'stoff')]"), 'href')
+    link2 <-
+      xml_attrs(xml_find_all(tt, "//a[contains(.,'Quali') and contains(@href,'stoff')]"),
+                'href')
     id2 <- gsub('.*=(\\d+)', '\\1', link2)
 
     tt2 <-  read_html(paste0('https://webetox.uba.de', link2, '&language=en'))
-    mssg <- xml_text(xml_find_all(tt2, "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]"), trim = TRUE)
+    mssg <-
+      xml_text(
+        xml_find_all(
+          tt2,
+          "//div[contains(@class, 'messages')]/ul/li/span[contains(@class, 'message')]"
+        ),
+        trim = TRUE
+      )
     if (length(mssg) > 0) {
       if (grepl('no result', mssg)) {
         message('No targets found found! Returning NA.\n')
@@ -318,7 +342,7 @@ etox_targets <- function(id, verbose = TRUE) {
     out <- list(res = res, source_url = source_url)
     return(out)
   }
-  out <- lapply(id, foo,verbose = verbose)
+  out <- lapply(id, foo, verbose = verbose)
   out <- setNames(out, id)
   return(out)
 }
@@ -348,7 +372,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' @examples
 #' \dontrun{
 #' id <- get_etoxid('Triclosan', match = 'best')
-#' out <- etox_tests(id)
+#' out <- etox_tests(id$etoxid)
 #' out[ , c('Organism', 'Effect', 'Duration', 'Time_Unit',
 #' 'Endpoint', 'Value', 'Unit')]
 #' etox_tests( c("20179", "9051"))
@@ -399,7 +423,7 @@ etox_tests <- function(id, verbose = TRUE) {
     out <- list(res = res, source_url = source_url)
     return(out)
   }
-  out <- lapply(id, foo,verbose = verbose)
+  out <- lapply(id, foo, verbose = verbose)
   out <- setNames(out, id)
   return(out)
 }

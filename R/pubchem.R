@@ -2,18 +2,17 @@
 #'
 #' Return CompoundID (CID) for a search query using PUG-REST,
 #' see \url{https://pubchem.ncbi.nlm.nih.gov/}.
-#' @import httr
-#' @importFrom stats rgamma
 #' @param query character; search term.
 #' @param from character; type of input, can be one of "name" (default), "cid",
 #' "sid", "aid", "smiles", "inchi", "inchikey"
-#' @param first logical; If TRUE return only first result.
+#' @param match character; How should multiple hits be handled?, "all" all matches are returned, "best" the best matching is returned, "ask" enters an interactive mode and the user is asked for input, "na" returns NA if multiple hits are found.
 #' @param search_substances logical; If TRUE also searches PubChem SIDs
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like "name_type=word" to match
 #' individual words.
-#' @param ... optional arguments
-#' @return a list of cids. If first = TRUE a vector.
+#' @param first deprecated. Use `match` instead.
+#' @param ... currently unused.
+#' @return a tibble.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -33,7 +32,11 @@
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @importFrom purrr map2
+#' @import httr
+#' @importFrom purrr map map2
+#' @importFrom jsonlite fromJSON
+#' @importFrom stats rgamma
+#' @importFrom tibble enframe
 #' @export
 #' @examples
 #' \donttest{
@@ -48,69 +51,89 @@
 #' get_cid(comp)
 #'
 #' }
-get_cid <- function(query, from = "name", first = FALSE,
-                    search_substances = FALSE, verbose = TRUE,
-                    arg = NULL, ...) {
+get_cid <-
+  function(query,
+           from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
+           match = c("all", "first", "ask", "na"),
+           verbose = TRUE,
+           search_substances = FALSE,
+           arg = NULL,
+           first = NULL,
+           ...) {
+
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c("Aspirin")
   # from = "name"
 
-  foo <- function(query, from, first, scope = "compound", verbose, ...) {
-    if (is.na(query)) return(NA)
-    prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
-    input <- paste0("/", scope, "/", from)
-    output <- "/cids/JSON"
-    if (!is.null(arg))
-      arg <- paste0("?", arg)
-    qurl <- paste0(prolog, input, output, arg)
-    if (verbose)
-      message(qurl)
-    Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
-    cont <- try(content(POST(qurl,
-                             body = paste0(from, "=", query)
-                             ), type = "text", encoding = "UTF-8"),
-                silent = TRUE
-    )
-    if (inherits(cont, "try-error")) {
-      warning("Problem with web service encountered... Returning NA.")
-      return(NA)
-    }
-    cont <- fromJSON(cont)
-    if (names(cont) == "Fault") {
-      warning(cont$Fault$Details, ". Returning NA.")
-      return(NA)
-    }
-
-    if (scope == "substance") {
-      cont <- cont$InformationList$Information$CID
-    }
-
-    out <- unique(unlist(cont))
-
-
-    if (first)
-      out <- out[1]
-    names(out) <- NULL
-    return(out)
+  #deprecate `first`
+  if (!is.null(first) && first == TRUE) {
+    message("`first = TRUE` is deprecated. Use `match = 'first'` instead")
+    match <- "first"
+  } else if (!is.null(first) && first==FALSE) {
+    message("`first = FALSE` is deprecated. Use `match = 'all'` instead")
+    match <- "all"
   }
 
-  out <- lapply(query, foo, from = from, first = first, verbose = verbose)
+    from <- match.arg(from)
+    match <- match.arg(match)
+
+    foo <- function(query, from, match, scope = "compound",
+                    verbose, arg, ...) {
+      if (is.na(query))
+        return(NA)
+      prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
+      input <- paste0("/", scope, "/", from)
+      output <- "/cids/JSON"
+      if (!is.null(arg))
+        arg <- paste0("?", arg)
+      qurl <- paste0(prolog, input, output, arg)
+      if (verbose)
+        message(qurl)
+      Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+      cont <- try(
+        content(
+          POST(qurl,
+               body = paste0(from, "=", query)),
+          type = "text", encoding = "UTF-8"),
+        silent = TRUE
+        )
+      if (inherits(cont, "try-error")) {
+        warning("Problem with web service encountered... Returning NA.")
+        return(NA)
+      }
+      cont <- jsonlite::fromJSON(cont)
+      if (names(cont) == "Fault") {
+        warning(cont$Fault$Details, ". Returning NA.")
+        return(NA)
+      }
+      if (scope == "substance") {
+        cont <- cont$InformationList$Information$CID
+      }
+      out <- unique(unlist(cont))
+      out <- matcher(x = out, match = match, verbose = verbose)
+      out <- as.character(out)
+      names(out) <- NULL
+      return(out)
+    }
+
+  out <- map(query,
+             ~foo(query = .x, from = from, match = match,
+                  verbose = verbose, arg = arg))
   out <- setNames(out, query)
 
   if (search_substances) {
-  out2 <- lapply(query, foo, from = from, first = first, scope = "substance",
-                 verbose = verbose)
+  out2 <- map(query,
+              ~foo(query = .x, from = from, match = match, scope = "substance",
+                   verbose = verbose, arg = arg))
   out2 <- setNames(out2, query)
 
   out <- map2(out, out2, c)
-  out <- lapply(out, unique)
+  out <- map(out, unique)
   }
 
-
-  if (first) {
-    out <- unlist(out)
-  }
-
+  out <-
+    lapply(out, enframe, name = NULL, value = "cid") %>%
+    bind_rows(.id = "query")
   return(out)
 }
 
@@ -268,8 +291,8 @@ get_sid <- function(query, from, match = NULL, verbose = TRUE, ...) {
 #' ###
 #' # multiple CIDS
 #' comp <- c("Triclosan", "Aspirin")
-#' cids <- unlist(get_cid(comp))
-#' pc_prop(cids, properties = c("MolecularFormula", "MolecularWeight",
+#' cids <- get_cid(comp)
+#' pc_prop(cids$cid, properties = c("MolecularFormula", "MolecularWeight",
 #' "CanonicalSMILES"))
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
