@@ -35,9 +35,11 @@ get_ri_xml <-
         ID <- paste0("C", gsub("-", "", query))
       } else {
         qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
-        #TODO add user agent
         Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-        page <- xml2::read_html(qurl)
+        page <- httr::with_config(
+          user_agent('webchem (https://github.com/ropensci/webchem)'),
+          xml2::read_html(qurl)
+        )
 
         #Warnings
         result <- page %>%
@@ -77,9 +79,12 @@ get_ri_xml <-
 
       qurl <- paste0(baseurl, "?ID=", ID, "&Units-SI&Mask=2000&Type=", type_str)
 
-      #TODO: add user_agent()
       Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-      page <- xml2::read_html(qurl)
+      page <-
+        httr::with_config(
+          user_agent('webchem (https://github.com/ropensci/webchem)'),
+          xml2::read_html(qurl)
+        )
       ri_xml.all <- html_nodes(page, ".data")
 
       #Warn if table doesn't exist at URL
