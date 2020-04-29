@@ -4,35 +4,44 @@
 \alias{get_sid}
 \title{Retrieve PubChem Substance ID (SID)}
 \usage{
-get_sid(query, from, match = NULL, verbose = TRUE, ...)
+get_sid(
+  query,
+  from = "name",
+  match = c("all", "first", "ask", "na"),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{character; search term, one ore more substances or depositors.}
 
 \item{from}{character; type of input. Valid values are \code{"name"},
-\code{<xref>}, \code{"sourceid/<source id>"} or \code{"sourceall"}.}
+\code{<xref>}, \code{"sourceid/<source id>"} or \code{"sourceall"}. See
+details for more information.}
 
-\item{match}{character; functionality not yet implemented.}
+\item{match}{character; How should multiple hits be handled?, "all" all
+matches are returned, "best" the best matching is returned, "ask" enters an
+interactive mode and the user is asked for input, "na" returns NA if multiple
+hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{...}{currently not used.}
+\item{...}{currently not used.
+#' @details \code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID} |
+\code{RN} | \code{PubMedID} | \code{MMDBID} | \code{ProteinGI},
+\code{NucleotideGI} | \code{TaxonomyID} | \code{MIMID} | \code{GeneID} |
+\code{ProbeID} | \code{PatentID}\}", e.g. \code{from = "xref/RN"} will query by
+CAS RN.}
 }
 \value{
 Returns a tibble of substance id-s.
 }
 \description{
-Retrieve one or more substance IDs (SIDs) from PubChem based on
-substance name, registry ID (e.g. CAS RN), or source ID. Alternatively,
-retrieve SIDs of all substances provided by a PubChem depositor.
+Retrieve substance IDs (SIDs) from PubChem based on substance
+name, registry ID (e.g. CAS RN), or source ID. Alternatively, retrieve SIDs
+of all substances provided by a PubChem depositor.
 }
 \details{
-\code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID},
-\code{RN}, \code{PubMedID}, \code{MMDBID}, \code{ProteinGI},
-\code{NucleotideGI}, \code{TaxonomyID}, \code{MIMID}, \code{GeneID},
-\code{ProbeID}, \code{PatentID}\}, e.g. \code{from = "xref/RN"} will query by
-CAS RN.
-
 \code{<source id>} is any valid PubChem Data Source ID.
 
 If \code{from = "sourceall"} the query is one or more valid Pubchem

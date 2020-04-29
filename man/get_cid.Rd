@@ -2,30 +2,31 @@
 % Please edit documentation in R/pubchem.R
 \name{get_cid}
 \alias{get_cid}
-\title{Retrieve Pubchem Id (CID)}
+\title{Retrieve Pubchem Compound ID (CID)}
 \usage{
 get_cid(
   query,
-  from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
+  from = "name",
   match = c("all", "first", "ask", "na"),
   verbose = TRUE,
-  search_substances = FALSE,
   arg = NULL,
   first = NULL,
   ...
 )
 }
 \arguments{
-\item{query}{character; search term.}
+\item{query}{character; search term, one or more compounds.}
 
 \item{from}{character; type of input, can be one of "name" (default), "cid",
-"sid", "aid", "smiles", "inchi", "inchikey"}
+"smiles", "inchi", "sdf", "inchikey", "formula", <structure search>, <xref>,
+<fast search>. See details for more information.}
 
-\item{match}{character; How should multiple hits be handled?, "all" all matches are returned, "best" the best matching is returned, "ask" enters an interactive mode and the user is asked for input, "na" returns NA if multiple hits are found.}
+\item{match}{character; How should multiple hits be handled?, "all" all
+matches are returned, "best" the best matching is returned, "ask" enters an
+interactive mode and the user is asked for input, "na" returns NA if multiple
+hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{search_substances}{logical; If TRUE also searches PubChem SIDs}
 
 \item{arg}{character; optinal arguments like "name_type=word" to match
 individual words.}
@@ -38,8 +39,25 @@ individual words.}
 a tibble.
 }
 \description{
-Return CompoundID (CID) for a search query using PUG-REST,
-see \url{https://pubchem.ncbi.nlm.nih.gov/}.
+Retrieve compound IDs (CIDs) from PubChem.
+}
+\details{
+<structure search> is assembled as "{\code{substructure} |
+\code{superstructure} | \code{similarity} | \code{identity}} / {\code{smiles}
+ | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+ \code{from = "substructure/smiles"}.
+
+\code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID} |
+\code{RN} | \code{PubMedID} | \code{MMDBID} | \code{ProteinGI},
+\code{NucleotideGI} | \code{TaxonomyID} | \code{MIMID} | \code{GeneID} |
+\code{ProbeID} | \code{PatentID}\}", e.g. \code{from = "xref/RN"} will query
+by CAS RN.
+
+<fast search> is either \code{fastformula} or it is assembled as
+"{\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
+\code{fastsubstructure} | \code{fastsuperstructure}}/{\code{smiles} |
+\code{smarts} | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+\code{from = "fastidentity/smiles"}.
 }
 \note{
 Please respect the Terms and Conditions of the National Library of
@@ -55,6 +73,10 @@ get_cid("Triclosan")
 get_cid("Triclosan", arg = "name_type=word")
 get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")
 get_cid("CCCC", from = "smiles")
+get_cid("C26H52NO6P", from = "formula")
+get_cid("56-40-6", from = "xref/rn")
+get_cid(5564, from = "similarity/cid")
+get_cid("CCO", from = "similarity/smiles")
 
 # multiple inputs
 comp <- c("Triclosan", "Aspirin")

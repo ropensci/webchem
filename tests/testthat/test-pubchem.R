@@ -16,6 +16,11 @@ test_that("get_cid()", {
   expect_true(is.na(get_cid(NA)$cid[1]))
   expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid[1],
                "12345")
+  # issue 206, some queries first return a listkey.
+  expect_equal(get_cid(5564, from="fastsimilarity_2d/cid")[,1], 5564)
+  expect_equal(get_cid("C26H52NO6P", from = "formula")[,1], 10864091)
+  expect_equal(capture_messages(get_cid("balloon")),
+               "Querying balloon. Not Found (HTTP 404). \n")
 })
 
 test_that("get_sid()", {
