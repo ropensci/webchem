@@ -111,7 +111,10 @@ get_cid <-
     from <- match.arg(from, choices = from_choices)
     match <- match.arg(match)
     foo <- function(query, from, match, verbose, arg, ...) {
-      if (is.na(query)) return(NA)
+      if (is.na(query)) {
+        if (verbose) message(paste0(query, " is invalid. Returning NA."))
+        return(NA)
+      }
       if (from %in% structure_search) {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound",
                       from, query, "json", sep = "/")
@@ -215,6 +218,7 @@ get_cid <-
 #' @importFrom httr POST content
 #' @importFrom jsonlite fromJSON
 #' @importFrom tibble as_tibble
+#' @export
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
@@ -237,7 +241,10 @@ get_sid <- function(query,
   }
   match <- match.arg(match)
   foo <- function(query, from, match, verbose, ...) {
-    if (is.na(query)) return(NA)
+    if (is.na(query)) {
+      if (verbose) message(paste0(query, " is invalid. Returning NA."))
+      return(NA)
+    }
     qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug/substance/",
                   from, query, "sids", "json", sep = "/")
     if (verbose) {
@@ -269,7 +276,7 @@ get_sid <- function(query,
     cont <- httr::content(res, type = "text", encoding = "UTF-8")
     cont <- jsonlite::fromJSON(cont)$IdentifierList$SID
     out <- unique(unlist(cont))
-    out <- matcher(x = out, match = match, verbose = verbose)
+    out <- matcher(x = out, query = query, match = match, verbose = verbose)
     out <- as.character(out)
     names(out) <- NULL
     return(out)

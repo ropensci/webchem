@@ -17,10 +17,10 @@ test_that("get_cid()", {
   expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid[1],
                "12345")
   # issue 206, some queries first return a listkey.
-  expect_equal(get_cid(5564, from="fastsimilarity_2d/cid")[,1], 5564)
-  expect_equal(get_cid("C26H52NO6P", from = "formula")[,1], 10864091)
+  expect_equal(get_cid(5564, from="fastsimilarity_2d/cid")$cid[1], "5564")
+  expect_equal(get_cid("C26H52NO6P", from = "formula")$cid[1], "10864091")
   expect_equal(capture_messages(get_cid("balloon")),
-               "Querying balloon. Not Found (HTTP 404). \n")
+               c("Querying balloon. ", "Not Found (HTTP 404).", "\n"))
 })
 
 test_that("get_sid()", {
@@ -33,9 +33,9 @@ test_that("get_sid()", {
 
   expect_true("tbl" %in% class(a))
   expect_true(87798 %in% a$sid)
-  expect_equal(is.na(a2[1:2, 2], c(TRUE, TRUE)))
+  expect_equal(is.na(a2$sid[1:2]), c(TRUE, TRUE))
   expect_true(4681 %in% b$sid)
-  expect_equal(c$sid, c(385515341, 385515340))
+  expect_equal(c$sid, c("385515341", "385515340"))
 })
 
 test_that("pc_prop", {
