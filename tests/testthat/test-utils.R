@@ -1,5 +1,22 @@
 context("utils")
 
+test_that("examples in the article are unchanged" {
+  a <- is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN")
+  a2 <- capture_messages(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN"))
+
+  expect_false(a)
+  expect_equal(a2, "Hyphens not at position 15 and 26.\n")
+
+  b <- is.cas("64-17-6")
+  b2 <- capture_messages(is.cas("64-17-6"))
+
+  expect_false(b)
+  expect_equal(b2, "Checksum is not correct! 5 vs. 6\n")
+
+  c <- is.inchikey("BQJCRHHNABKAKU-KBQPJGBKSA-5", type = "chemspider")
+
+  expect_false(c)
+})
 
 test_that("is.cas() returns correct results", {
   skip_on_cran()

@@ -1,5 +1,19 @@
 context("pubchem")
 
+test_that("examples in the article are unchanged", {
+  #values come from test-etox
+  cas <- c("105-67-9", "1570-64-5", NA, "1912-24-9", "71-43-2", "6190-65-4")
+  cids <- get_cid(cas)
+  pc_data <- pc_prop(cids, properties = "CanonicalSMILES")
+  #values go to test-chemspider
+  pc_smiles <- smiles(pc_data)
+
+  expect_equal(cids, c(7771, 14855, NA, 2256, 241, 22563))
+  expect_equal(pc_smiles, c("CC1=CC(=C(C=C1)O)C", "CC1=C(C=CC(=C1)Cl)O", NA,
+                            "CCNC1=NC(=NC(=N1)Cl)NC(C)C", "C1=CC=CC=C1",
+                            "CC(C)NC1=NC(=NC(=N1)N)Cl"))
+})
+
 test_that("get_cid()", {
   skip_on_cran()
 

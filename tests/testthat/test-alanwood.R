@@ -1,5 +1,18 @@
 context("alanwood")
 
+test_that("examples in the article are unchanged", {
+  skip_on_cran()
+
+  data("lc50", package = "webchem")
+  aw_data <- aw_query(lc50$cas[1:3], type = "cas")
+  igroup <- sapply(aw_data, function(y) y$subactivity[1])
+
+  expect_is(igroup, "character")
+  expect_equal(names(igroup), c("50-29-3", "52-68-6", "55-38-9"))
+  expect_equal(unname(igroup), c("organochlorine insecticides",
+                                 "phosphonate insecticides",
+                                 "phenyl organothiophosphate insecticides"))
+})
 
 test_that("alanwood, commonname", {
   skip_on_cran()
@@ -20,23 +33,15 @@ test_that("alanwood, commonname", {
 })
 
 
-test_that("alanwood, cas", {
+test_that("alanwood, invalid input", {
   skip_on_cran()
 
-  comps <- c("79622-59-6", "87392-12-9", "balloon", NA)
-  o1 <- aw_query(comps, type = "cas")
+  comps <- c("balloon", NA)
+  o1 <- aw_query(comps)
 
   expect_is(o1, "list")
-  expect_equal(length(o1), 4)
-  expect_is(o1[[1]], "list")
-  expect_is(o1[[2]], "list")
-  expect_equal(o1[[3]], NA)
-  expect_equal(o1[[4]], NA)
-  expect_equal(o1[[1]]$cas, "79622-59-6")
-  expect_equal(length(o1[[2]]$inchikey), 2)
-  expect_equal(length(o1[[2]]$inchi), 2)
-  expect_equal(length(o1[[1]]), 11)
-  expect_true(is.na(aw_query("12071-83-9", type = "cas")[[1]]$inchi))
+  expect_equal(o1[[1]], NA)
+  expect_equal(o1[[2]], NA)
 })
 
 test_that("alanwood, build_index", {

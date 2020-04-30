@@ -1,5 +1,22 @@
 context("chemspider")
 
+test_that("examples in the article are unchanged", {
+  skip_on_cran()
+
+  #values come from test-pubchem
+  smiles <- c("CC1=CC(=C(C=C1)O)C", "CC1=C(C=CC(=C1)Cl)O", NA,
+              "CCNC1=NC(=NC(=N1)Cl)NC(C)C", "C1=CC=CC=C1",
+              "CC(C)NC1=NC(=NC(=N1)N)Cl")
+  csids <- get_csid(smiles, from = "smiles")
+  inchikeys <- cs_convert(csids$csid, from = "csid", to = "inchikey")
+
+  expect_equal(csids, c(13839123, 14165, NA, 2169, 236, 21157))
+  expect_equal(inchikeys,
+               c("KUFFULVDNCHOFZ-UHFFFAOYAC", "RHPUJHQBPORFGV-UHFFFAOYAB",NA,
+                 "MXWJVTOOROXGIU-UHFFFAOYAJ", "UHOVQNZJYSORNB-UHFFFAOYAH",
+                 "DFWFIQKMSFGDCQ-UHFFFAOYAI"))
+})
+
 test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_cran()
   expect_type(cs_check_key(), "character")
@@ -137,8 +154,9 @@ test_that("cs_convert()", {
   a_rev <- cs_convert(a, "inchi", "csid")
   a2 <- cs_convert(c(171, 172), "csid", "inchi")
   a2_rev <- cs_convert(a2, "inchi", "csid")
-  b <- cs_convert(171, "csid", "inchikey")
-  b_rev <- cs_convert(b, "inchikey", "csid")
+  #b <- cs_convert(171, "csid", "inchikey")
+  b_rev <- cs_convert(b, "QTBSBXVTEAMEQO-UHFFFAOYAR", "csid")
+  ##itt tartok.
   b2 <- cs_convert(c(171, 172), "csid", "inchikey")
   b2_rev <- cs_convert(b2, "inchikey", "csid")
   c <- cs_convert(171, "csid", "smiles")
