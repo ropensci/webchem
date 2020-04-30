@@ -10,7 +10,7 @@ test_that("examples in the article are unchanged", {
   csids <- get_csid(smiles, from = "smiles")
   inchikeys <- cs_convert(csids$csid, from = "csid", to = "inchikey")
 
-  expect_equal(csids, c(13839123, 14165, NA, 2169, 236, 21157))
+  expect_equal(csids$csid, c(13839123, 14165, NA, 2169, 236, 21157))
   expect_equal(inchikeys,
                c("KUFFULVDNCHOFZ-UHFFFAOYAC", "RHPUJHQBPORFGV-UHFFFAOYAB",NA,
                  "MXWJVTOOROXGIU-UHFFFAOYAJ", "UHOVQNZJYSORNB-UHFFFAOYAH",
@@ -79,8 +79,7 @@ test_that("get_csid()", {
   c9 <- get_csid("Oxygen", order_direction = "descending")
   f <- get_csid("C47H93N2O6P", from = "formula",
                 order_by = "dataSourceCount",
-                order_direction = "descending"
-  )
+                order_direction = "descending")
 
   expect_is(a, "data.frame")
   expect_equal(a$csid, 5363)
@@ -178,7 +177,9 @@ test_that("cs_convert()", {
   g2 <- cs_convert(a2, "inchi", "mol")
   h <- cs_convert("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
   h_rev <- cs_convert(h, "mol", "inchikey")
-  h2 <- cs_convert(b2, "inchikey", "mol")
+  h2 <- cs_convert(
+    c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYSA-N"),
+    "inchikey", "mol")
   h2_rev <- cs_convert(h2, "mol", "inchikey")
 
   expect_equal(a, "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
