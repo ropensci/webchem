@@ -1,21 +1,13 @@
 context("utils")
 
-test_that("examples in the article are unchanged" {
-  a <- is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN")
-  a2 <- capture_messages(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN"))
-
-  expect_false(a)
-  expect_equal(a2, "Hyphens not at position 15 and 26.\n")
-
-  b <- is.cas("64-17-6")
-  b2 <- capture_messages(is.cas("64-17-6"))
-
-  expect_false(b)
-  expect_equal(b2, "Checksum is not correct! 5 vs. 6\n")
-
-  c <- is.inchikey("BQJCRHHNABKAKU-KBQPJGBKSA-5", type = "chemspider")
-
-  expect_false(c)
+test_that("examples in the article are unchanged", {
+  expect_false(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN"))
+  expect_equal(capture_messages(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN")),
+               "Hyphens not at position 15 and 26.\n")
+  expect_false(is.cas('64-17-6'))
+  expect_equal(
+    capture_messages(is.cas("64-17-6")), "Checksum is not correct! 5 vs. 6\n")
+  expect_false(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKSA-5", type = "chemspider"))
 })
 
 test_that("is.cas() returns correct results", {
@@ -26,7 +18,6 @@ test_that("is.cas() returns correct results", {
   expect_false(is.cas('4-17-5'))
   expect_false(is.cas('64-177-6'))
   expect_false(is.cas('64-17-55'))
-  expect_false(is.cas('64-17-6'))
   expect_error(is.cas(c('64-17-5', '64-17-5')))
 })
 

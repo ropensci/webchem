@@ -10,7 +10,6 @@ test_that("examples in the article are unchanged", {
   #values go to test-pubchem
   etox_cas <- cas(etox_data)
   eqs <- etox_targets(c("8397", "7240", "8836", "7442", "7571", "8756"))
-  # might not work.
   macs <- suppressWarnings(sapply(eqs, function(y) {
     if (length(y) == 1 && is.na(y)) {
       return(NA)
@@ -41,7 +40,7 @@ test_that("examples in the article are unchanged", {
                                   "71-43-2", "6190-65-4"))
   expect_equal(macs, c(2.000, 50.000, 0.016, 1.000, 4.000, 0.034),
                tolerance = 10^-4)
-  })
+})
 
 test_that("get_etoxid returns correct results", {
   skip_on_cran()

@@ -8,6 +8,7 @@ test_that("examples in the article are unchanged", {
   #values go to test-chemspider
   pc_smiles <- smiles(pc_data)
 
+  #fails because get_cid() no longer returns a character vector
   expect_equal(cids, c(7771, 14855, NA, 2256, 241, 22563))
   expect_equal(pc_smiles, c("CC1=CC(=C(C=C1)O)C", "CC1=C(C=CC(=C1)Cl)O", NA,
                             "CCNC1=NC(=NC(=N1)Cl)NC(C)C", "C1=CC=CC=C1",
@@ -36,13 +37,10 @@ test_that("get_cid()", {
 test_that("pc_prop", {
   skip_on_cran()
 
-  a <- pc_prop("5564", properties = "CanonicalSmiles", verbose = FALSE)
   b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles", verbose = FALSE))
   c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"),
                verbose = FALSE)
-  expect_equal(a$CanonicalSMILES, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
   expect_true(is.na(b))
-  expect_is(a, "data.frame")
   expect_equal(ncol(c), 3)
 })
 

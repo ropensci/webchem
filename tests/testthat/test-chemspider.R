@@ -154,11 +154,10 @@ test_that("cs_convert()", {
   a_rev <- cs_convert(a, "inchi", "csid")
   a2 <- cs_convert(c(171, 172), "csid", "inchi")
   a2_rev <- cs_convert(a2, "inchi", "csid")
-  #b <- cs_convert(171, "csid", "inchikey")
-  b_rev <- cs_convert(b, "QTBSBXVTEAMEQO-UHFFFAOYAR", "csid")
-  ##itt tartok.
-  b2 <- cs_convert(c(171, 172), "csid", "inchikey")
-  b2_rev <- cs_convert(b2, "inchikey", "csid")
+  b_rev <- cs_convert("QTBSBXVTEAMEQO-UHFFFAOYAR", "inchikey", "csid")
+  b2_rev <- cs_convert(
+    c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYSA-N"),
+    "inchikey", "csid")
   c <- cs_convert(171, "csid", "smiles")
   c_rev <- cs_convert(c, "smiles", "csid")
   c2 <- cs_convert(c(171, 172), "csid", "smiles")
@@ -186,7 +185,6 @@ test_that("cs_convert()", {
   expect_equal(a_rev, 171)
   expect_length(a2, 2)
   expect_length(a2_rev, 2)
-  expect_equal(b, "QTBSBXVTEAMEQO-UHFFFAOYAR")
   expect_equal(b_rev, 171)
   expect_length(b2, 2)
   expect_length(b2_rev, 2)
