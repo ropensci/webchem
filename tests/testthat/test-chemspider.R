@@ -186,7 +186,6 @@ test_that("cs_convert()", {
   expect_length(a2, 2)
   expect_length(a2_rev, 2)
   expect_equal(b_rev, 171)
-  expect_length(b2, 2)
   expect_length(b2_rev, 2)
   expect_length(c2, 2)
   expect_length(c2_rev, 2)
