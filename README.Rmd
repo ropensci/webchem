@@ -27,8 +27,6 @@ knitr::opts_chunk$set(
 [![](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![CRAN status](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem) 
 [![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem) 
-
-[![Codecov test coverage](https://codecov.io/gh/ropensci/webchem/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/webchem?branch=master)
 <!-- badges: end -->
 
 `webchem` is a R package to retrieve chemical information from  the web. 
