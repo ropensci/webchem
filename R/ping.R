@@ -29,6 +29,25 @@ ping_pubchem <- function(...) {
   res$status_code == 200
 }
 
+# pubchem PUG-VIEW-----------------------------------------------------------------
+#' @import httr
+#' @rdname ping
+#' @return TRUE if pubchem PUG-VIEW is reachable
+#' @export
+#' @examples
+#' \dontrun{
+#'  # might fail if API is not available
+#'  ping_pubchem_pw()
+#'  }
+ping_pubchem_pw <- function(...) {
+  qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data",
+               "compound/176/JSON?heading=pka", sep = "/")
+  res <- POST(qurl,
+              user_agent("webchem (https://github.com/ropensci/webchem)"))
+  res$status_code == 200
+}
+
+
 
 # ChemSpider webpage -----------------------------------------------------------
 #' @import httr

@@ -51,3 +51,61 @@ test_that("cid integration tests", {
   expect_true(is.na(suppressWarnings(pc_prop(NA, properties = "CanonicalSmiles",
                             verbose = FALSE))))
 })
+
+test_that("pc_page()", {
+  a <- pc_page(c(311, 176, 1118, "balloon", NA), "pKa")
+
+  expect_is(a, "list")
+  expect_length(a, 5)
+  expect_is(a[[1]], c("Node", "R6"))
+  expect_is(a[[2]], c("Node", "R6"))
+  expect_equal(a[[3]], NA)
+  expect_equal(a[[4]], NA)
+  expect_equal(a[[5]], NA)
+})
+
+test_that("pc_extract() chemical and physical properties", {
+  s <- pc_page(c(NA, 176, 311, "balloon"), "chemical and physical properties")
+  mw <- pc_extract(s, "molecular weight") # example for a computed property
+  pd <- pc_extract(s, "physical description") # textual description
+  bp <- pc_extract(s, "boiling point")
+  mp <- pc_extract(s, "melting point")
+  fp <- pc_extract(s, "flash point")
+  so <- pc_extract(s, "solubility") # data with headers
+  ow <- pc_extract(s, "octanol/water partition coefficient") #negative numbers
+  logs <- pc_extract(s, "logs")
+  logkoa <- pc_extract(s, "logkoa")
+})
+
+test_that("pc_sect()", {
+  a <- pc_sect(c(311, 176, 1118, "balloon", NA), "pKa")
+  expect_is(a, c("tbl_df", "tbl", "data.frame"))
+  expect_equal(names(a), c("CID", "Name", "Result", "SourceName", "SourceID"))
+  expect_equal(a$CID, c("311", "176", "1118", "balloon", NA))
+  expect_equal(a$Name, c("Citric acid", "Acetic acid", NA, NA, NA))
+  expect_equal(a$Result, c("2.79", "4.76 (at 25 °C)", NA, NA, NA))
+  expect_equal(a$SourceName, c("DrugBank", "DrugBank", NA, NA, NA))
+  expect_equal(a$SourceID, c("DB04272", "DB03166", NA, NA, NA))
+
+  b <- pc_sect(2231, "depositor-supplied synonyms", "substance")
+  expect_is(b, c("tbl_df", "tbl", "data.frame"))
+  expect_equal(names(b), c("SID", "Name", "Result", "SourceName", "SourceID"))
+  expect_equal(b$Result, c("cholesterol", "57-88-5", "5-cholestene-3beta-ol"))
+
+  c <- pc_sect(780286, "modify date", "assay")
+  expect_is(c, c("tbl_df", "tbl", "data.frame"))
+  expect_equal(names(c), c("AID", "Name", "Result", "SourceName", "SourceID"))
+  expect_equal(c$Result, c("2014-05-03", "2018-09-28"))
+
+  d <- pc_sect("1ZHY_A", "Sequence", "protein")
+  expect_is(d, c("tbl_df", "tbl", "data.frame"))
+  expect_equal(names(d), c("pdbID", "Name", "Result", "SourceName", "SourceID"))
+  expect_equal(d$Result[1], ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)")
+
+  e <- pc_sect("US2013040379", "Patent Identifier Synonyms", "patent")
+  expect_is(e, c("tbl_df", "tbl", "data.frame"))
+  expect_equal(names(e), c("PatentID", "Name", "Result", "SourceName",
+                           "SourceID"))
+  expect_equal(e$Result, c("US20130040379", "US20130040379A1",
+                           "US2013040379A1"))
+})

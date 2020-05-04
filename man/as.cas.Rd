@@ -7,7 +7,8 @@
 as.cas(x)
 }
 \arguments{
-\item{x}{numeric vector, or character vector of CAS numbers missing the hyphens}
+\item{x}{numeric vector, or character vector of CAS numbers missing the
+hyphens}
 }
 \value{
 character vector of valid CAS numbers

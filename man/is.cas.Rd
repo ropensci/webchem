@@ -17,11 +17,12 @@ a logical
 \description{
 This function checks if a string is a valid CAS registry number.
 A valid CAS is 1) separated by two hyphes into three parts; 2) the first part
-consists from two up to seven digits; 3) the second of two digits; 4) the third
-of one digit (check digit); 5) the check digits corresponds the checksum.
-The checksum is found by taking the last digit (excluding the check digit) multiplyingit with 1,
-the second last multiplied with 2, the third-last multiplied with 3 etc.
-The modulo 10 of the sum of these is the checksum.
+consists from two up to seven digits; 3) the second of two digits; 4) the
+third of one digit (check digit); 5) the check digits corresponds the
+checksum. The checksum is found by taking the last digit (excluding the check
+digit) multiplyingit with 1, the second last multiplied with 2, the
+third-last multiplied with 3 etc. The modulo 10 of the sum of these is the
+checksum.
 }
 \note{
 This function can only handle one CAS string
