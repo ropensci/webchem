@@ -6,11 +6,12 @@
 \usage{
 get_cid(
   query,
-  from = "name",
-  first = FALSE,
-  search_substances = FALSE,
+  from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
+  match = c("all", "first", "ask", "na"),
   verbose = TRUE,
+  search_substances = FALSE,
   arg = NULL,
+  first = NULL,
   ...
 )
 }
@@ -20,19 +21,21 @@ get_cid(
 \item{from}{character; type of input, can be one of "name" (default), "cid",
 "sid", "aid", "smiles", "inchi", "inchikey"}
 
-\item{first}{logical; If TRUE return only first result.}
-
-\item{search_substances}{logical; If TRUE also searches PubChem SIDs}
+\item{match}{character; How should multiple hits be handled?, "all" all matches are returned, "best" the best matching is returned, "ask" enters an interactive mode and the user is asked for input, "na" returns NA if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{search_substances}{logical; If TRUE also searches PubChem SIDs}
 
 \item{arg}{character; optinal arguments like "name_type=word" to match
 individual words.}
 
-\item{...}{optional arguments}
+\item{first}{deprecated. Use `match` instead.}
+
+\item{...}{currently unused.}
 }
 \value{
-a list of cids. If first = TRUE a vector.
+a tibble.
 }
 \description{
 Return CompoundID (CID) for a search query using PUG-REST,

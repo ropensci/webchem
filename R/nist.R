@@ -8,8 +8,6 @@
 #' @noRd
 #' @import rvest
 #' @import xml2
-#' @import polite
-#' @importFrom rlang list2 :=
 #' @return an xml nodeset
 #'
 get_ri_xml <-
@@ -27,27 +25,22 @@ get_ri_xml <-
       "cas" = "ID"
     ))
 
-    # Open session
-    #TODO: remove `suppressMessages()` once polite is updated on CRAN to fix
-    #bow() printing a message about UTF-8 encoding
-    session <-
-      suppressMessages(
-        polite::bow("https://webbook.nist.gov/cgi/cbook.cgi")
-        )
-    polite::set_scrape_delay(rgamma(1, shape = 15, scale = 1/10))
+    baseurl <- "https://webbook.nist.gov/cgi/cbook.cgi"
 
     #handle NAs
     if (is.na(query)) {
       return(NA)
     } else {
-
       if (from == "cas") {
         ID <- paste0("C", gsub("-", "", query))
       } else {
-        page <-
-          polite::scrape(session,
-                 query = rlang::list2(!!from_str := query,
-                               Units = "SI"))
+        qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
+        Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+        page <- httr::with_config(
+          user_agent('webchem (https://github.com/ropensci/webchem)'),
+          xml2::read_html(qurl)
+        )
+
         #Warnings
         result <- page %>%
           html_node("main h1") %>%
@@ -82,17 +75,16 @@ get_ri_xml <-
         }
       }
       #scrape RI table
-      type_str <-
-        toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
+      type_str <- toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
 
-      page <- polite::scrape(session,
-                     query = list(
-                       ID = ID,
-                       Units = "SI",
-                       Mask = "2000",
-                       Type = type_str
-                     ))
+      qurl <- paste0(baseurl, "?ID=", ID, "&Units-SI&Mask=2000&Type=", type_str)
 
+      Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+      page <-
+        httr::with_config(
+          user_agent('webchem (https://github.com/ropensci/webchem)'),
+          xml2::read_html(qurl)
+        )
       ri_xml.all <- html_nodes(page, ".data")
 
       #Warn if table doesn't exist at URL
@@ -248,7 +240,9 @@ tidy_ritable <- function(ri_xml) {
 #' @param from character; type of search term. can be one of \code{"name"},
 #'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
 #'   preferred to \code{"name"} since \code{NA} is returned in the event of
-#'   multiple matches to a query.
+#'   multiple matches to a query. Using an identifier other than a CAS number
+#'   will cause this function to run slower as CAS numbers are used as internal
+#'   identifiers by NIST.
 #' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
 #'   \code{"alkane"}, or \code{"lee"}. See details for more.
 #' @param polarity Column polarity. One of \code{"polar"} or \code{"non-polar"}

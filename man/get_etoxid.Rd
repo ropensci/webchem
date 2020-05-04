@@ -22,7 +22,7 @@ by the Registry of Toxic Effects of Chemical Substances database).}
 \item{match}{character; How should multiple hits be handeled? "all" returns
 all matched IDs, "first" only the first match, "best" the best matching (by
 name) ID, "ask" is a interactive mode and the user is asked for input, "na"
-returns NA if multiple hits are found.}
+returns \code{NA} if multiple hits are found.}
 
 \item{verbose}{logical; print message during processing to console?}
 }

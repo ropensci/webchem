@@ -43,8 +43,8 @@ pc_prop(5564)
 ###
 # multiple CIDS
 comp <- c("Triclosan", "Aspirin")
-cids <- unlist(get_cid(comp))
-pc_prop(cids, properties = c("MolecularFormula", "MolecularWeight",
+cids <- get_cid(comp)
+pc_prop(cids$cid, properties = c("MolecularFormula", "MolecularWeight",
 "CanonicalSMILES"))
 }
 }

@@ -51,19 +51,19 @@ test_that("get_csid()", {
   b <- get_csid("Naproxene")
   ab <- get_csid(c("Triclosan", "Naproxene"))
   abcd <- get_csid(c("ethanol", "balloon", NA, "acetic acid"))
-  c1 <- get_csid("Oxygen", control = cs_control(order_by = "recordId"))
+  c1 <- get_csid("Oxygen", order_by = "recordId")
   #c2 <- get_csid("Oxygen", control = cs_control(order_by = "massDefect"))
-  c3 <- get_csid("Oxygen", control = cs_control(order_by = "molecularWeight"))
-  c4 <- get_csid("Oxygen", control = cs_control(order_by = "referenceCount"))
-  c5 <- get_csid("Oxygen", control = cs_control(order_by = "dataSourceCount"))
-  c6 <- get_csid("Oxygen", control = cs_control(order_by = "pubMedCount"))
-  c7 <- get_csid("Oxygen", control = cs_control(order_by = "rscCount"))
-  c8 <- get_csid("Oxygen", control = cs_control(order_direction = "ascending"))
-  c9 <- get_csid("Oxygen", control = cs_control(order_direction = "descending"))
-  f <- get_csid("C47H93N2O6P", from = "formula", control = cs_control(
-    order_by = "dataSourceCount",
-    order_direction = "descending"
-  ))
+  c3 <- get_csid("Oxygen", order_by = "molecularWeight")
+  c4 <- get_csid("Oxygen", order_by = "referenceCount")
+  c5 <- get_csid("Oxygen", order_by = "dataSourceCount")
+  c6 <- get_csid("Oxygen", order_by = "pubMedCount")
+  c7 <- get_csid("Oxygen", order_by = "rscCount")
+  c8 <- get_csid("Oxygen", order_direction = "ascending")
+  c9 <- get_csid("Oxygen", order_direction = "descending")
+  f <- get_csid("C47H93N2O6P", from = "formula",
+                order_by = "dataSourceCount",
+                order_direction = "descending"
+  )
 
   expect_is(a, "data.frame")
   expect_equal(a$csid, 5363)
@@ -216,24 +216,24 @@ test_that("cs_compinfo()", {
   expect_equal(dim(b), c(2, 18))
 })
 
-test_that("cs_extcompinfo()", {
-  skip_on_cran()
-
-  comps <- c("2157", "5363")
-  o1 <- cs_extcompinfo(comps)
-  expect_is(o1, "data.frame")
-  expect_equal(dim(o1), c(2, 14))
-  expect_equal(o1$csid[1], "2157")
-  expect_true(all(is.na(cs_extcompinfo(c(2157, NA))[2, 1:5])))
-})
+# test_that("cs_extcompinfo()", {
+#   skip_on_cran()
+#
+#   comps <- c("2157", "5363")
+#   # o1 <- cs_extcompinfo(comps)
+#   expect_is(o1, "data.frame")
+#   expect_equal(dim(o1), c(2, 14))
+#   expect_equal(o1$csid[1], "2157")
+#   expect_true(all(is.na(cs_extcompinfo(c(2157, NA))[2, 1:5])))
+# })
 
 # integration tests
-test_that("csid_extcompinfo(get_cid())", {
-  skip_on_cran()
-
-  tt <- get_csid("Triclosan")
-  tt2 <- cs_extcompinfo(tt, verbose = FALSE)
-  expect_equal(tt2[["average_mass"]],
-               "289.5418")
-  expect_equal(ncol(tt2), 14)
-})
+# test_that("csid_extcompinfo(get_cid())", {
+#   skip_on_cran()
+#
+#   tt <- get_csid("Triclosan")
+#   tt2 <- cs_extcompinfo(tt, verbose = FALSE)
+#   expect_equal(tt2[["average_mass"]],
+#                "289.5418")
+#   expect_equal(ncol(tt2), 14)
+# })
