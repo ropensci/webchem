@@ -840,6 +840,11 @@ cs_image <- function(csid, apikey = NULL, verbose = TRUE) {
       headers <- c("Content-Type" = "", "apikey" = apikey)
       res <- httr::GET(url, httr::add_headers(.headers = headers))
     }
+    if (res$status_code < 300) {
+      if (verbose == TRUE) message(httr::message_for_status(res))
+      #image...
+      cont <- httr::content(res, type = "text", encoding = "UTF-8")
+    }
 
   }
 }

@@ -24,7 +24,7 @@
 #' out <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
 #' out
 #' # extract subactivity from object
-#' sapply(out, function(y) y$subactivity[1])
+#' if (is.na(out) == FALSE) sapply(out, function(y) y$subactivity[1])
 #'
 #' # use CAS-numbers
 #' aw_query("79622-59-6", type = 'cas')
@@ -32,7 +32,7 @@
 #' @seealso \code{\link{build_aw_idx}}
 aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
                      force_build = FALSE) {
-  aw_idx <- build_aw_idx(verbose, force_build)
+  aw_idx <- build_aw_idx(verbose = FALSE, force_build)
   foo <- function(query, type = c("commonname", "cas"), verbose) {
     type <- match.arg(type)
   # search links in indexes
