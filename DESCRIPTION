@@ -33,10 +33,9 @@ Imports:
     methods,
     dplyr,
     purrr,
-    polite,
-    rlang,
     tibble
 Suggests:
     testthat,
-    rcdk
+    rcdk,
+    robotstxt
 RoxygenNote: 7.1.0

@@ -9,7 +9,10 @@ NEW FEATURES
 
 MINOR IMPROVEMENTS
 
+* all `get_*()` functions now output tibbles with a column for the query and a column for the retrieved ID
+* changes to arguments in `get_*()` functions to make them more consistent
 * aw_idx.rda is no longer included in the package as a data set. Instead, it is built by build_aw_idx() to tempdir().
+
 
 BUG FIXES
 

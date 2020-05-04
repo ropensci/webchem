@@ -156,7 +156,7 @@ get_chebiid <- function(query,
                 stars = stars,
                 verbose = verbose)
   out <- setNames(out, query)
-  out <- bind_rows(out)
+  out <- as_tibble(bind_rows(out))
   return(out)
 }
 
@@ -304,7 +304,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
   }
   out <- lapply(chebiid, foo, verbose = verbose)
   out <- setNames(out, chebiid)
-  class(out) <- c("chebi_comp_entity","list")
+  class(out) <- c("chebi_comp_entity", "list")
   return(out)
 }
 

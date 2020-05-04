@@ -409,3 +409,77 @@ chooser <- function(x, choices){
   }
   return(out)
 }
+
+#' matcher utility
+#'
+#' @param x a vector
+#' @param query what the query was, only used if match = "best"
+#' @param result what the result of the query was, only used if match = "best
+#' @param match haracter; How should multiple hits be handeled? "all" returns
+#' all matched IDs, "first" only the first match, "best" the best matching (by
+#' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
+#' @param verbose print messages?
+#'
+#' @return
+#' @noRd
+#'
+#' @examples
+#' testids <- c("123", "456", "789")
+#' results <- c("apple", "banana", "orange")
+#' matcher(testids, query = "bananananan", result = results, match = "best")
+matcher <-
+  function(x,
+           query = NULL,
+           result = NULL,
+           match = c("all", "best", "first", "ask", "na"),
+           verbose = FALSE) {
+
+    match <- match.arg(match)
+    names(x) <- result
+
+    if(length(x) == 1) {
+      return(x)
+    } else {
+      if(verbose) {
+        message("More then one Link found for '", query, "'. \n")
+      }
+
+      if(match == "all") {
+        if(verbose) {
+          message("Returning all matches. \n")
+        }
+        return(x)
+
+      } else if (match == "best") {
+        #check that x and result are same length
+        if(length(x) != length(result))
+          stop("Can't use match = 'best' without query matches for each output")
+        if (verbose) {
+          message("Returning best match. \n")
+        }
+        dd <- adist(query, result) / nchar(result)
+        return(x[which.min(dd)])
+      } else if (match == "first") {
+        if (verbose)
+          message("Returning first match. \n")
+        return(x[1])
+
+      } else if (match == "ask" & interactive()) {
+        if (!is.null(result)) {
+          choices <- paste0(result, ": ", x)
+        } else {
+          choices <- x
+        }
+        pick <- menu(choices, graphics = FALSE, "Select one:")
+        return(x[pick])
+
+      } else if (match == "na") {
+        if (verbose) {
+          message("Returning NA. \n")
+        }
+        x <- NA
+        names(x)<-NA
+        return(x)
+      }
+    }
+  }
