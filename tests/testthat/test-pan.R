@@ -1,16 +1,14 @@
-context("pan")
-skip_if_not(ping_pan())
-
 test_that("pan_query()", {
   skip_on_cran()
+  skip_if_not(ping_pan(), "PAN service is down, skipping tests")
 
   a <- pan_query(c('Triclosan','Chlorpyrifos', 'xxxx', NA), match = 'best', verbose = FALSE)
   b <- pan_query(c('Triclosan','Chlorpyrifos', 'xxxx', NA), match = 'all', verbose = FALSE)
   c <- pan_query(c('Triclosan','Chlorpyrifos', 'xxxx', NA), match = 'first', verbose = FALSE)
 
-  expect_is(a, 'list')
-  expect_is(b, 'list')
-  expect_is(c, 'list')
+  expect_s3_class(a, 'list')
+  expect_s3_class(b, 'list')
+  expect_s3_class(c, 'list')
   expect_equal(length(a), 4)
   expect_equal(length(b), 4)
   expect_equal(length(c), 4)

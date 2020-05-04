@@ -6,6 +6,6 @@ library('webchem')
 # Because we use travis CI we will hear about any test failures as soon as they
 # happen. So, let's skip all tests on CRAN:
 #
-# if (identical(Sys.getenv("NOT_CRAN"), "true")) {
-#   test_check("webchem")
-# }
+if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+  test_check("webchem")
+}

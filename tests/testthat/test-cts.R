@@ -1,5 +1,3 @@
-context("cts")
-
 require(RCurl)
 chk_cts <- function(){
   qurl <- 'http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N'

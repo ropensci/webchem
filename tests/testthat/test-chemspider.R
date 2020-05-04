@@ -1,12 +1,15 @@
-context("chemspider")
-
 test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   expect_type(cs_check_key(), "character")
 })
 
 test_that("cs_datasources()", {
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   a <- cs_datasources()
 
   expect_is(a, "character")
@@ -46,7 +49,10 @@ test_that("cs_control()", {
 })
 
 test_that("get_csid()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   a <- get_csid("Triclosan")
   b <- get_csid("Naproxene")
   ab <- get_csid(c("Triclosan", "Naproxene"))
@@ -84,7 +90,10 @@ test_that("get_csid()", {
 })
 
 test_that("cs_smiles_csid()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   a <- cs_smiles_csid("CC(O)=O")
 
   expect_is(a, "integer")
@@ -92,7 +101,10 @@ test_that("cs_smiles_csid()", {
 })
 
 test_that("cs_inchi_csid()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
 
   expect_is(a, "integer")
@@ -100,7 +112,10 @@ test_that("cs_inchi_csid()", {
 })
 
 test_that("cs_inchikey_csid()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N")
 
   expect_is(a, "integer")
@@ -108,7 +123,10 @@ test_that("cs_inchikey_csid()", {
 })
 
 test_that("cs_convert_multiple()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi")
   a_rev <- cs_convert_multiple(a, "inchi", "smiles")
   b <- cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
@@ -132,7 +150,10 @@ test_that("cs_convert_multiple()", {
 })
 
 test_that("cs_convert()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   a <- cs_convert(171, "csid", "inchi")
   a_rev <- cs_convert(a, "inchi", "csid")
   a2 <- cs_convert(c(171, 172), "csid", "inchi")
@@ -197,7 +218,10 @@ test_that("cs_convert()", {
 })
 
 test_that("cs_compinfo()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
   a <- cs_compinfo(171, c("SMILES", "Formula", "InChI", "InChIKey", "StdInChI",
                           "StdInChIKey", "AverageMass", "MolecularWeight",
                           "MonoisotopicMass", "NominalMass", "CommonName",

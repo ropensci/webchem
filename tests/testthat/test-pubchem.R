@@ -1,6 +1,5 @@
-context("pubchem")
-
 test_that("get_cid()", {
+  skip_if_not(ping_pubchem(), "PubChem service is down, skipping tests")
   skip_on_cran()
 
   expect_equal(get_cid("Triclosan")$cid[1], "5564")
@@ -20,6 +19,7 @@ test_that("get_cid()", {
 
 
 test_that("pc_prop", {
+  skip_if_not(ping_pubchem(), "PubChem service is down, skipping tests")
   skip_on_cran()
 
   a <- pc_prop("5564", properties = "CanonicalSmiles", verbose = FALSE)
@@ -28,11 +28,12 @@ test_that("pc_prop", {
                verbose = FALSE)
   expect_equal(a$CanonicalSMILES, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
   expect_true(is.na(b))
-  expect_is(a, "data.frame")
+  expect_s3_class(a, "data.frame")
   expect_equal(ncol(c), 3)
 })
 
 test_that("pc_synonyms", {
+  skip_if_not(ping_pubchem(), "PubChem service is down, skipping tests")
   skip_on_cran()
 
   expect_equal(pc_synonyms("Triclosan")[[1]][1], "5564")
@@ -43,6 +44,7 @@ test_that("pc_synonyms", {
 })
 
 test_that("cid integration tests", {
+  skip_if_not(ping_pubchem(), "PubChem service is down, skipping tests")
   skip_on_cran()
 
   expect_equal(pc_prop(get_cid("Triclosan")$cid[1],

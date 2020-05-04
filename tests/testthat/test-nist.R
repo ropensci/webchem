@@ -1,5 +1,3 @@
-context("nist")
-
 test_that("nist_ri() warns when no results", {
   skip_on_cran()
   expect_warning(nist_ri(

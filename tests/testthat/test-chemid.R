@@ -1,6 +1,3 @@
-context("chemid")
-
-
 test_that("chemid returns correct results", {
   skip_on_cran()
 

@@ -1,9 +1,4 @@
-context('extractors')
 
-# ChemSpider
-token <- '37bf5e57-9091-42f5-9274-650a64398aaf'
-out_cs_compinfo <- cs_compinfo('5363', token = token)
-out_cs_extcompinfo <- cs_extcompinfo('5363', token = token)
 
 # CTS
 inchikeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
@@ -36,7 +31,6 @@ out_pan_query <- pan_query(c('2,4-dichlorophenol', 'Atrazin'), match = 'best')
 test_that("cas is working", {
   skip_on_cran()
 
-  expect_error(cas(out_cs_extcompinfo))
   expect_equivalent(cas(out_etox_basic), "50-00-0")
   expect_error(cas(out_opsin_query))
   expect_equivalent(cas(out_aw_query), c("79622-59-6", "40843-25-2"))
@@ -49,8 +43,6 @@ test_that("cas is working", {
 test_that("inchikey is working", {
   skip_on_cran()
 
-  expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
-  expect_equivalent(inchikey(out_cs_extcompinfo), "XEFQLINVKFYRCS-UHFFFAOYAS")
   expect_equivalent(inchikey(out_cts_compinfo), c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N" ))
   expect_error(inchikey(out_etox_basic))
   expect_equivalent(inchikey(out_opsin_query), c("LVZWSLJZHVFIQJ-UHFFFAOYSA-N", "TVMXDCGIABBOFY-UHFFFAOYSA-N"))
@@ -60,13 +52,16 @@ test_that("inchikey is working", {
   expect_error(inchikey(out_pc_prop2))
   expect_error(inchikey(out_pan_query))
   expect_equivalent(inchikey(out_ci_query), c("BSYNRYMUTXBXSQ-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-N"))
+
+  skip_on_appveyor()
+  skip_on_travis()
+  out_cs_compinfo <- cs_compinfo('5363')
+  expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
 })
 
 test_that("smiles is working", {
   skip_on_cran()
 
-  expect_equivalent(smiles(out_cs_compinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
-  expect_equivalent(smiles(out_cs_extcompinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
   expect_error(smiles(out_cts_compinfo))
   expect_error(smiles(out_etox_basic))
   expect_equivalent(smiles(out_opsin_query), c("C1CC1", "CCCCCCCC"))
@@ -76,4 +71,9 @@ test_that("smiles is working", {
   expect_error(smiles(out_pc_prop2))
   expect_error(smiles(out_pan_query))
   expect_equivalent(smiles(out_ci_query), c("CC(=O)", "c1(Oc2c(cc(Cl)"))
+
+  skip_on_appveyor()
+  skip_on_travis()
+  out_cs_compinfo <- cs_compinfo('5363')
+  expect_equivalent(smiles(out_cs_compinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
 })

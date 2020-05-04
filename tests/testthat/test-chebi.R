@@ -1,5 +1,3 @@
-context("chebi")
-
 test_that("chebi returns correct results", {
   skip_on_cran()
   a <- get_chebiid("Glyphosate", from = "ALL")

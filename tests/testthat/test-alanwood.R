@@ -1,6 +1,3 @@
-context("alanwood")
-
-
 test_that("alanwood, commonname", {
   skip_on_cran()
 
