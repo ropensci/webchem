@@ -1,6 +1,6 @@
 environment:
     R_BUILD_ARGS: --no-manual
-    R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran --no-multiarch
+    R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran --no-multiarch --no-dont_test
     R_INSTALL_ARGS: --no-multiarch
     PKGTYPE: binary
 
