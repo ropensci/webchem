@@ -158,7 +158,7 @@ get_cid <-
 #'
 #' @return a data.frame
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @seealso \code{\link{get_cid}} to retrieve Pubchem IDs.
+#' @seealso \code{\link{get_cid}}, \code{\link{pc_sect}}
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
 #' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37:
@@ -365,7 +365,11 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' \code{"substance"}, \code{"assay"}, \code{"gene"}, \code{"protein"} or
 #' \code{"patent"}.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @return Returns a tibble of query results.
+#' @return Returns a tibble of query results. In the returned tibble,
+#' \code{SourceName} is the name of the depositor, and \code{SourceID} is the
+#' ID of the search term within the depositor's database. You can browse
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/} for more information about
+#' the depositors.
 #' @details \code{section} is not case sensitive but it is sensitive to typing
 #' errors and it requires the full name of the section as it is printed on the
 #' content page. The PubChem Table of Contents Tree can also be found at
@@ -381,6 +385,7 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @seealso \code{\link{get_cid}}, \code{\link{pc_prop}}
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
@@ -459,7 +464,11 @@ pc_page <- function(id,
       return(NA)
     }
     Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
-    res <- httr::POST(qurl, user_agent("webchem"), handle = handle(""))
+    res <- httr::POST(
+      qurl,
+      user_agent("webchem (https://github.com/ropensci/webchem)"),
+      handle = handle("")
+      )
     if (res$status_code < 300) {
       if (verbose == TRUE) message(httr::message_for_status(res))
       cont <- httr::content(res, type = "text", encoding = "UTF-8")
@@ -522,46 +531,33 @@ pc_extract <- function(page, section) {
   ids <- names(page)
   foo <- function(i, section) {
     tree <- page[[i]]
-    if (length(tree) == 1 && is.na(tree)) {
-      return(data.frame(ID = ids[i], stringsAsFactors = FALSE))
-    }
+    if (length(tree) == 1 && is.na(tree)) return(tibble(ID = ids[i]))
     node <- FindNode(tree, "information")
-    if (is.null(node)) return(data.frame(
-      ID = ids[i],
-      Name = tree$record$RecordTitle,
-      stringsAsFactors = FALSE))
+    if (is.null(node)) return(tibble(ID = ids[i],
+                                     Name = tree$record$RecordTitle))
     info <- lapply(node, function(y) {
       lownode <- data.tree::FindNode(data.tree::as.Node(y), "stringwithmarkup")
       if (is.null(lownode)) {
-        info <- data.frame(String = paste(y$value, collapse = " "),
-                          ReferenceNumber = y$ReferenceNumber,
-                          stringsAsFactors = FALSE)
+        info <- tibble(Result = paste(y$value, collapse = " "),
+                       ReferenceNumber = y$ReferenceNumber)
         return(info)
       }
       else{
         string <- sapply(lownode, function(z) z$String)
-        info <- data.frame(String =  string,
-                           ReferenceNumber = y$ReferenceNumber,
-                           stringsAsFactors = FALSE)
+        info <- tibble(Result =  string,
+                       ReferenceNumber = y$ReferenceNumber)
       }
     })
     info <- dplyr::bind_rows(info)
-    info <- data.frame(ID = ids[i],
-                       Name = tree$record$RecordTitle,
-                       info,
-                       stringsAsFactors = FALSE)
+    info <- tibble(ID = ids[i],
+                   Name = tree$record$RecordTitle,
+                   info)
     node <- FindNode(tree, "reference")
-    if (is.null(node)) return(data.frame(
-      info,
-      SourceName = NA,
-      SourceID = NA))
+    if (is.null(node)) return(tibble(info, SourceName = NA, SourceID = NA))
     ref <- lapply(node, function(y) {
-      ref <- data.frame(
-        ReferenceNumber = y$ReferenceNumber,
-        SourceName = y$SourceName,
-        SourceID = y$SourceID,
-        stringsAsFactors = FALSE
-      )
+      ref <- tibble(ReferenceNumber = y$ReferenceNumber,
+                    SourceName = y$SourceName,
+                    SourceID = y$SourceID)
       return(ref)
     })
     ref <- dplyr::bind_rows(ref)
@@ -574,7 +570,7 @@ pc_extract <- function(page, section) {
     return(info)
   }
   info <- lapply(seq_along(page), function(x) foo(x, section))
-  info <- tibble::as_tibble(dplyr::bind_rows(info))
+  info <- dplyr::bind_rows(info)
   info <- info[, -which(names(info) == "ReferenceNumber")]
   names(info)[1] <- attr(page, "id")
   return(info)

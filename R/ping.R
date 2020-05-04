@@ -42,7 +42,8 @@ ping_pubchem <- function(...) {
 ping_pubchem_pw <- function(...) {
   qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data",
                "compound/176/JSON?heading=pka", sep = "/")
-  res <- POST(qurl, user_agent("webchem"), timeout(10))
+  res <- POST(qurl,
+              user_agent("webchem (https://github.com/ropensci/webchem)"))
   res$status_code == 200
 }
 

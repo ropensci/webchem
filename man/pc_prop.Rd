@@ -63,7 +63,7 @@ PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 information in PubChem. Nucleic acids research, gkv396.
 }
 \seealso{
-\code{\link{get_cid}} to retrieve Pubchem IDs.
+\code{\link{get_cid}}, \code{\link{pc_sect}}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

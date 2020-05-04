@@ -24,7 +24,11 @@ for.}
 \item{verbose}{logical; should a verbose output be printed on the console?}
 }
 \value{
-Returns a tibble of query results.
+Returns a tibble of query results. In the returned tibble,
+\code{SourceName} is the name of the depositor, and \code{SourceID} is the
+ID of the search term within the depositor's database. You can browse
+\url{https://pubchem.ncbi.nlm.nih.gov/sources/} for more information about
+the depositors.
 }
 \description{
 When you search for an entity at \url{https://pubchem.ncbi.nlm.nih.gov/},
@@ -66,6 +70,9 @@ pc_sect("US2013040379", "Patent Identifier Synonyms", "patent")
 Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 (2019). https://doi.org/10.1186/s13321-019-0375-2.
+}
+\seealso{
+\code{\link{get_cid}}, \code{\link{pc_prop}}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}
