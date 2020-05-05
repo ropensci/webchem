@@ -28,7 +28,7 @@ on_failure:
 notifications:
   - provider: Email
     to:
-      - stirling.tamas@gmail.com
+      - scottericr@gmail.com
     on_build_success: false
     on_build_failure: true
     on_build_status_changed: true
