@@ -5,7 +5,7 @@
 #' @import xml2
 #' @importFrom stats rgamma
 #'
-#' @param  query character; search string
+#' @param query character; search string
 #' @param type character; type of input ('cas' or 'commonname')
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index? See
