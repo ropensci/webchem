@@ -16,8 +16,7 @@ test_that("cs_datasources()", {
 })
 
 test_that("cs_control()", {
-  skip_on_cran()
-  expect_is(cs_control(), "list")
+  expect_type(cs_control(), "list")
   expect_true("datasources" %in% names(cs_control()))
   expect_true("order_by" %in% names(cs_control()))
   expect_true("order_direction" %in% names(cs_control()))
@@ -48,7 +47,7 @@ test_that("cs_control()", {
   expect_true(cs_control(isotopic = "unlabeled")$isotopic == "unlabeled")
 })
 
-test_that("get_csid()", {
+test_that("get_csid() works with defaults", {
   skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
@@ -57,36 +56,43 @@ test_that("get_csid()", {
   b <- get_csid("Naproxene")
   ab <- get_csid(c("Triclosan", "Naproxene"))
   abcd <- get_csid(c("ethanol", "balloon", NA, "acetic acid"))
-  c1 <- get_csid("Oxygen", order_by = "recordId")
-  #c2 <- get_csid("Oxygen", control = cs_control(order_by = "massDefect"))
-  c3 <- get_csid("Oxygen", order_by = "molecularWeight")
-  c4 <- get_csid("Oxygen", order_by = "referenceCount")
-  c5 <- get_csid("Oxygen", order_by = "dataSourceCount")
-  c6 <- get_csid("Oxygen", order_by = "pubMedCount")
-  c7 <- get_csid("Oxygen", order_by = "rscCount")
-  c8 <- get_csid("Oxygen", order_direction = "ascending")
-  c9 <- get_csid("Oxygen", order_direction = "descending")
-  f <- get_csid("C47H93N2O6P", from = "formula",
-                order_by = "dataSourceCount",
-                order_direction = "descending"
-  )
 
   expect_is(a, "data.frame")
   expect_equal(a$csid, 5363)
   expect_equal(b$csid, 137720)
   expect_equal(ab$csid, c(5363, 137720))
-  expect_equal(c1$csid, c(952, 140526))
-  #expect_equal(c2$Oxygen,c(952,140526)) does not work.
-  #seems to be an API error.
-  expect_equal(c3$csid, c(140526, 952))
-  expect_equal(c4$csid, c(952, 140526))
-  expect_equal(c5$csid, c(140526, 952))
-  expect_equal(c6$csid, c(952, 140526))
-  expect_equal(c7$csid, c(952, 140526))
-  expect_equal(c8$csid, c(952, 140526))
-  expect_equal(c9$csid, c(140526, 952))
   expect_equal(abcd$csid, c(682, NA, NA, 171))
-  expect_equal(f$csid, c(24846874, 59696525, 68025876, 71044200, 24608396))
+})
+
+test_that("get_csid() works with arguments passed to cs_control()", {
+  c1 <- head(get_csid("iron oxide", from = "name", order_by = "recordId"))
+  expect_equal(c1$csid, c(14147, 14237, 55474, 82623, 392353, 396260))
+
+  # c2 <- head(get_csid("C6H12O6", from = "formula", order_by = "massDefect"))
+  # not a column in the web interface, so not sure what to expect
+
+  c3 <- head(get_csid("iron oxide", from = "name", order_by = "molecularWeight"))
+  expect_equal(c3$csid, c(14237, 396260, 392353, 82623, 14147, 452497))
+
+  c4 <- head(get_csid("C6H12O6", from = "formula", order_by = "referenceCount",
+                      order_direction = "descending"))
+  expect_equal(c4$csid, c(23139, 1070, 868, 388747, 161434, 96749))
+
+  c5 <- head(get_csid("C6H12O6", from = "formula", order_by = "dataSourceCount",
+                      order_direction = "descending"))
+  expect_equal(c5$csid, c(5764, 10239179, 83142, 96749, 58238, 71358))
+
+  c6 <- head(get_csid("C6H12O6", from = "formula", order_by = "pubMedCount",
+                      order_direction = "descending"))
+  expect_equal(c6$csid, c(96749, 5589, 71358, 58238, 9484839, 9312824))
+
+  c7 <- head(get_csid("C6H12O6", from = "formula", order_by = "rscCount",
+                      order_direction = "descending"))
+  expect_equal(c7$csid, c(96749, 5589, 71358, 58238, 9312824, 9484839))
+
+  c8 <- head(get_csid("iron oxide", from = "name", order_by = "molecularWeight",
+                      order_direction = "descending"))
+  expect_equal(c8$csid, c(4937312, 55474, 452497, 14147, 82623, 392353))
 })
 
 test_that("cs_smiles_csid()", {
