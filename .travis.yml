@@ -13,7 +13,6 @@ r_check_args: "--no-build-vignettes --no-manual --timings --as-cran --no-example
 r_check_revdep: false
 warnings_are_errors: false
 
-
 apt_packages:
   - libssl-dev
   - libcurl4-openssl-dev

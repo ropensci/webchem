@@ -9,7 +9,8 @@ is.inchikey(x, type = c("format", "chemspider"), verbose = TRUE)
 \arguments{
 \item{x}{character; input InChIKey}
 
-\item{type}{character; How should be checked? Either, by format (see above) ('format') or by ChemSpider ('chemspider').}
+\item{type}{character; How should be checked? Either, by format (see above)
+('format') or by ChemSpider ('chemspider').}
 
 \item{verbose}{logical; print messages during processing to console?}
 }
@@ -38,7 +39,8 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 }
 \references{
-Heller, Stephen R., et al. "InChI, the IUPAC International Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
+Heller, Stephen R., et al. "InChI, the IUPAC International
+Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}

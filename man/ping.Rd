@@ -3,11 +3,14 @@
 \name{ping}
 \alias{ping}
 \alias{ping_pubchem}
+\alias{ping_pubchem_pw}
 \alias{ping_cs}
 \alias{ping_pan}
 \title{Ping an API used in webchem to see if it's working.}
 \usage{
 ping_pubchem(...)
+
+ping_pubchem_pw(...)
 
 ping_cs(...)
 
@@ -21,6 +24,8 @@ A logical, TRUE or FALSE
 
 TRUE if pubchem is reachable
 
+TRUE if pubchem PUG-VIEW is reachable
+
 TRUE if ChemSpider is reachable
 
 TRUE if PAN is reachable
@@ -32,6 +37,10 @@ Ping an API used in webchem to see if it's working.
 \dontrun{
  # might fail if API is not available
  ping_pubchem()
+ }
+\dontrun{
+ # might fail if API is not available
+ ping_pubchem_pw()
  }
 \dontrun{
  # might fail if API is not available
