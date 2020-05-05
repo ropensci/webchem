@@ -19,7 +19,6 @@ apt_packages:
   - libxml2-dev
   - default-jre
   - default-jdk
-  - r-cran-rjava
 
 r_packages:
   - devtools

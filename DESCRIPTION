@@ -37,6 +37,7 @@ Imports:
     tibble
 Suggests:
     testthat,
+    rcdk,
     covr,
     robotstxt
 RoxygenNote: 7.1.0
