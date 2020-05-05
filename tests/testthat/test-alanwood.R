@@ -31,10 +31,10 @@ test_that("alanwood, cas", {
   comps <- c("79622-59-6", "87392-12-9", "balloon", NA)
   o1 <- aw_query(comps, type = "cas")
 
-  expect_s3_class(o1, "list")
+  expect_type(o1, "list")
   expect_equal(length(o1), 4)
-  expect_s3_class(o1[[1]], "list")
-  expect_s3_class(o1[[2]], "list")
+  expect_type(o1[[1]], "list")
+  expect_type(o1[[2]], "list")
   expect_equal(o1[[3]], NA)
   expect_equal(o1[[4]], NA)
   expect_equal(o1[[1]]$cas, "79622-59-6")

@@ -5,7 +5,6 @@ cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
 down <- inherits(cont, 'try-error')
 
 test_that("get_etoxid returns correct results", {
-
   skip_on_cran()
   skip_if(down, "ETOX service is down")
 
@@ -65,6 +64,7 @@ test_that("examples from webchem article run", {
 test_that("etox_basic returns correct results", {
   skip_on_cran()
   skip_if(down, "Etox service is down")
+
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_basic(ids)
 
@@ -107,7 +107,6 @@ test_that("etox_tests returns correct results", {
   expect_s3_class(o1[['20179']]$res, 'data.frame')
   expect_true(is.na(o1[[3]]))
   expect_true(is.na(o1[[4]]))
-  expect_
 })
 
 
@@ -140,7 +139,7 @@ test_that("etox integration tests", {
   expect_equal(length(int2), 3)
   expect_equal(int2[['20179']]$res$Substance[1], "Triclosan")
   expect_equal(ncol(int2[['20179']]$res), 33)
-  expect_is(int2[['20179']]$res, 'data.frame')
+  expect_s3_class(int2[['20179']]$res, 'data.frame')
   expect_true(is.na(int2[[3]]))
 
   expect_s3_class(int3, 'list')

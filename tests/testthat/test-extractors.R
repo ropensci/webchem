@@ -110,7 +110,7 @@ test_that("extractors work with ChemSpider", {
   skip_on_appveyor()
   skip_if_not(ping_cs(), "ChemSpider service is down")
 
-  out_cs_compinfo <- cs_compinfo('5363')
+  out_cs_compinfo <- cs_compinfo(5363, fields = c("SMILES", "InChIKey") )
   expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
   expect_equivalent(smiles(out_cs_compinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
 })
