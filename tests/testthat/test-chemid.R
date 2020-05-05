@@ -1,8 +1,12 @@
+require(RCurl)
+qurl <- 'http://chem.sis.nlm.nih.gov/chemidplus'
+cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+            silent = TRUE)
+down <- inherits(cont, 'try-error')
+
 test_that("chemid returns correct results", {
-
-
   skip_on_cran()
-  skip("just skip for now")
+  skip_if(down, "CHEMID service is down")
 
   o1 <- ci_query(c('xxxxx', NA, 'Aspirin', 'Triclosan'), type = 'name', match = 'best')
   o2 <- ci_query('50-00-0', type = 'rn')

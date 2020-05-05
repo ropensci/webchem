@@ -62,7 +62,7 @@ test_that("cts_convert()", {
 
 test_that("fromto", {
   skip_on_cran()
-
+  skip_if(down, "CTS service down")
   to <- cts_to()
   from <- cts_from()
 
