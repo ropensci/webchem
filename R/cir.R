@@ -115,7 +115,7 @@
 cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
                       first = FALSE, choices = NULL, verbose = TRUE, ...){
   if (first == TRUE) {
-    "`first` is deprecated.  Using `choices = 1` instead."
+    message("`first` is deprecated.  Using `choices = 1` instead.")
     choices = 1
   }
   foo <- function(identifier, representation, resolver, first, verbose) {
