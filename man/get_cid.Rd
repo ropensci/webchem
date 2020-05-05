@@ -61,10 +61,12 @@ by CAS RN.
 }
 \note{
 Please respect the Terms and Conditions of the National Library of
-Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 usage policies of National Center for Biotechnology Information,
 \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+usage policies of the indicidual data sources
+\url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 }
 \examples{
 \donttest{
