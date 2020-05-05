@@ -1,12 +1,9 @@
 require(RCurl)
-chk_cts <- function(){
-  qurl <- 'http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N'
-  Sys.sleep(0.5)
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  if (inherits(cont, 'try-error'))
-    skip("Server is down!")
-}
+qurl <- 'http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N'
+cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
+            silent = TRUE)
+down <- inherits(cont, 'try-error')
+
 
 # chk_cir <- function(){
 #   qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
@@ -21,12 +18,13 @@ chk_cts <- function(){
 test_that("cts_compinfo()", {
   skip_on_cran()
 
-  chk_cts()
+  skip_if(down, "CTS service down")
+
   expect_error(cts_compinfo('xxx'))
 
-  o1 <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE)
-  o2 <- cts_compinfo(c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-X"), verbose = FALSE)
-  expect_equal(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE)[[1]], NA)
+  o1 <- suppressWarnings(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE))
+  o2 <- suppressWarnings(cts_compinfo(c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-X"), verbose = FALSE))
+  expect_equal(suppressWarnings(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE))[[1]], NA)
   expect_warning(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE))
   expect_equal(length(o1[[1]]), 10)
   expect_equal(round(o1[[1]][["molweight"]], 3), 289.542)
@@ -38,14 +36,15 @@ test_that("cts_compinfo()", {
 test_that("cts_convert()", {
   skip_on_cran()
 
-  chk_cts()
+  skip_if(down, "CTS service down")
+
   comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
   expect_error(cts_convert(comp, c('Chemical Name', 'CAS'), 'CAS'))
   expect_error(cts_convert('Triclosan', 'CAS'))
-  o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', first = TRUE, verbose = FALSE)
+  o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', choices = 1, verbose = FALSE)
   expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
   expect_equal(length(o1), 2)
-  expect_true(is.na(cts_convert('xxxx', 'inchikey', 'Chemical Name')[[1]]))
+  expect_true(is.na(suppressWarnings(cts_convert('xxxx', 'inchikey', 'Chemical Name'))[[1]]))
 
   # cts_convert('acetic acid', 'Chemical Name', 'CAS', first = TRUE)
 })
@@ -67,6 +66,6 @@ test_that("fromto", {
   to <- cts_to()
   from <- cts_from()
 
-  expect_true(is.character(to))
-  expect_true(is.character(from))
+  expect_type(to, "character")
+  expect_type(from, "character")
 })
