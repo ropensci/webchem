@@ -1,4 +1,5 @@
 environment:
+    R_ARCH: x64
     R_BUILD_ARGS: --no-manual
     R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran --no-multiarch --no-examples
     R_INSTALL_ARGS: --no-multiarch
