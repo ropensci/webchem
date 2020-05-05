@@ -1,3 +1,4 @@
+library(rcdk)
 test_that("is.cas() returns correct results", {
 
   expect_true(is.cas('64-17-5'))
@@ -29,6 +30,7 @@ test_that("is.inchikey() returns correct results", {
   skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_travis()
   skip_on_appveyor()
+  skip("API allowance used up, skip for now")
   g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
   b <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA', type = 'chemspider')
 
