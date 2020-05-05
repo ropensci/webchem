@@ -3,6 +3,8 @@ environment:
     R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran --no-multiarch --no-examples
     R_INSTALL_ARGS: --no-multiarch
     PKGTYPE: binary
+    global:
+      NOT_CRAN: true
 
 init:
   ps: |
