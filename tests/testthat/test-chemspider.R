@@ -65,6 +65,11 @@ test_that("get_csid() works with defaults", {
 })
 
 test_that("get_csid() works with arguments passed to cs_control()", {
+  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
+  skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
+
   c1 <- head(get_csid("iron oxide", from = "name", order_by = "recordId"))
   expect_equal(c1$csid, c(14147, 14237, 55474, 82623, 392353, 396260))
 
