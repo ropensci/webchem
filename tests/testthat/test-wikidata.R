@@ -1,12 +1,6 @@
-require(RCurl)
-qurl <- 'https://www.wikidata.org/w/api.php'
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
-
 test_that("get_wdid returns correct results", {
   skip_on_cran()
-  skip_if(down, "Wikidata service is down")
+  skip_if_not(ping_wd(), "Wikidata service is down")
   # test general
   comps <- c('DDT', 'Aspirin', 'xdewrwdcadsr4w', 'acetic acid')
   o1 <- get_wdid(comps, match = 'best')
@@ -26,7 +20,7 @@ test_that("get_wdid returns correct results", {
 
 test_that("get_wdid() handles NAs", {
   skip_on_cran()
-  skip_if(down, "Wikidata service is down")
+  skip_if_not(ping_wd(), "Wikidata service is down")
 
   expect_s3_class(get_wdid(NA), "data.frame")
   expect_s3_class(get_wdid(c("Triclosan", "Glyphosate", NA)), "data.frame")
@@ -34,7 +28,7 @@ test_that("get_wdid() handles NAs", {
 
 test_that("wd_ident returns correct results", {
   skip_on_cran()
-  skip_if(down, "Wikidata service is down")
+  skip_if_not(ping_wd(), "Wikidata service is down")
 
   id <- c( "Q163648", "Q18216", "asndalsr", NA)
   o1 <- wd_ident(id)
@@ -50,7 +44,7 @@ test_that("wd_ident returns correct results", {
 
 test_that("wd integration test", {
   skip_on_cran()
-  skip_if(down, "Wikidata service is down")
+  skip_if_not(ping_wd(), "Wikidata service is down")
 
   d <- wd_ident(get_wdid('hexane', language = 'en', match = 'best')$wdid)
   f <- wd_ident(get_wdid('xxxxxxxAX', language = 'en', match = 'best')$wdid)

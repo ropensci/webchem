@@ -1,12 +1,7 @@
-require(RCurl)
-qurl <- 'http://www.alanwood.net/pesticides'
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
 
 test_that("alanwood, commonname", {
   skip_on_cran()
-  skip_if(down, "Alanwood service is down")
+  skip_if_not(ping_aw(), "Alanwood service is down")
 
   comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA)
   o1 <- aw_query(comps, type = "commonname")
@@ -26,7 +21,7 @@ test_that("alanwood, commonname", {
 
 test_that("alanwood, cas", {
   skip_on_cran()
-  skip_if(down, "Alanwood service is down")
+  skip_if_not(ping_aw(), "Alanwood service is down")
 
   comps <- c("79622-59-6", "87392-12-9", "balloon", NA)
   o1 <- aw_query(comps, type = "cas")
@@ -46,7 +41,7 @@ test_that("alanwood, cas", {
 
 test_that("alanwood, build_index", {
   skip_on_cran()
-  skip_if(down, "Alanwood service is down")
+  skip_if_not(ping_aw(), "Alanwood service is down")
 
   idx <- suppressWarnings(build_aw_idx(verbose = FALSE, force_build = TRUE))
   expect_s3_class(idx, "data.frame")

@@ -1,12 +1,6 @@
-require(RCurl)
-qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
-
 test_that("cir_query()", {
   skip_on_cran()
-  skip_if(down, "Server is down")
+  skip_if_not(ping_cir(), "CIR server is down")
 
   expect_equal(cir_query('Triclosan', 'mw', verbose = FALSE)[[1]], 289.5451)
   expect_equal(cir_query('xxxxxxx', 'mw', verbose = FALSE)[[1]], NA)
@@ -22,7 +16,7 @@ test_that("cir_query()", {
 
 test_that("cir_query() doesn't mistake NA for sodium", {
   skip_on_cran()
-  skip_if(down, "Server is down")
+  skip_if_not(ping_cir(), "CIR server is down")
 
   expect_true(is.na(cir_query(as.character(NA), 'cas')))
 })

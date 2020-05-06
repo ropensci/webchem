@@ -1,13 +1,6 @@
-require(RCurl)
-
-qurl <- "http://opsin.ch.cam.ac.uk/opsin/"
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
-
 test_that("opsin_query()", {
   skip_on_cran()
-  skip_if(down, "OPSIN service is down")
+  skip_if_not(ping_opsin(), "OPSIN service is down")
 
   o1 <- opsin_query(c('Cyclopropane', 'Octane'))
   o2 <- suppressWarnings(opsin_query(c('xxxx')))

@@ -1,24 +1,7 @@
-require(RCurl)
-qurl <- 'http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N'
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
-
-
-# chk_cir <- function(){
-#   qurl <- 'http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml'
-#   Sys.sleep(0.5)
-#   cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-#               silent = TRUE)
-#   if (inherits(cont, 'try-error'))
-#     skip("Server is down!")
-# }
-
-
 test_that("cts_compinfo()", {
   skip_on_cran()
 
-  skip_if(down, "CTS service down")
+  skip_if_not(ping_cts(), "CTS service down")
 
   expect_error(cts_compinfo('xxx'))
 
@@ -35,8 +18,7 @@ test_that("cts_compinfo()", {
 
 test_that("cts_convert()", {
   skip_on_cran()
-
-  skip_if(down, "CTS service down")
+  skip_if_not(ping_cts(), "CTS service down")
 
   comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
   expect_error(cts_convert(comp, c('Chemical Name', 'CAS'), 'CAS'))
@@ -62,7 +44,7 @@ test_that("cts_convert()", {
 
 test_that("fromto", {
   skip_on_cran()
-  skip_if(down, "CTS service down")
+  skip_if_not(ping_cts(), "CTS service down")
   to <- cts_to()
   from <- cts_from()
 

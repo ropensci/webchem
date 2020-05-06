@@ -1,19 +1,6 @@
-require(RCurl)
-is.down <- function(qurl){
-  cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-              silent = TRUE)
-  return(inherits(cont, 'try-error'))
-}
-down_cts <- is.down('http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N')
-down_etox <- is.down('https://webetox.uba.de/webETOX/public/search/stoff.do')
-down_ci <- is.down("http://chem.sis.nlm.nih.gov/chemidplus")
-down_opsin <- is.down("http://opsin.ch.cam.ac.uk/opsin/")
-down_aw <- is.down("http://www.alanwood.net/pesticides")
-down_wd <- is.down("https://www.wikidata.org/w/api.php")
-
 test_that("extractors work with cts", {
   skip_on_cran()
-  skip_if(down_cts, "CTS service is down")
+  skip_if_not(ping_cts(), "CTS service is down")
 
   inchikeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
   out_cts_compinfo <- cts_compinfo(inchikeys)
@@ -24,7 +11,7 @@ test_that("extractors work with cts", {
 
 test_that("extractors work with etox", {
   skip_on_cran()
-  skip_if(down_etox, "ETOX service is down")
+  skip_if_not(ping_etox(), "ETOX service is down")
 
   out_etox_basic <- etox_basic(8252)
   expect_equivalent(cas(out_etox_basic), "50-00-0")
@@ -34,7 +21,7 @@ test_that("extractors work with etox", {
 
 test_that("extractors work with chemid", {
   skip_on_cran()
-  skip_if(down_ci, "CHEMID service is down")
+  skip_if_not(ping_ci(), "CHEMID service is down")
 
   out_ci_query <- ci_query(c('Aspirin', 'Triclosan'), type = 'name')
   expect_equivalent(cas(out_ci_query),  c("50-78-2", "3380-34-5"))
@@ -45,7 +32,7 @@ test_that("extractors work with chemid", {
 
 test_that("extractors work with opsin", {
   skip_on_cran()
-  skip_if(down_opsin, "OPSIN service is down")
+  skip_if_not(ping_opsin(), "OPSIN service is down")
 
   out_opsin_query <- opsin_query(c('Cyclopropane', 'Octane'))
   expect_error(cas(out_opsin_query))
@@ -56,7 +43,7 @@ test_that("extractors work with opsin", {
 
 test_that("extractors work with Alanwood", {
   skip_on_cran()
-  skip_if(down_aw, "Alanwood database not reachable")
+  skip_if_not(ping_aw(), "Alanwood database not reachable")
 
   out_aw_query <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
   expect_equivalent(cas(out_aw_query), c("79622-59-6", "40843-25-2"))
@@ -68,7 +55,7 @@ test_that("extractors work with Alanwood", {
 
 test_that("extractors work with Wikidata", {
   skip_on_cran()
-  skip_if(down_wd, "Wikidata service is down")
+  skip_if_not(ping_wd(), "Wikidata service is down")
 
   id <- c("Q408646", "Q18216")
   out_wd_ident <- wd_ident(id)

@@ -1,12 +1,6 @@
-require(RCurl)
-qurl <- 'https://webetox.uba.de/webETOX/public/search/stoff.do'
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
-
 test_that("get_etoxid returns correct results", {
   skip_on_cran()
-  skip_if(down, "ETOX service is down")
+  skip_if_not(ping_etox(), "ETOX service is down")
 
   # test general
   comps <- c("Triclosan", "Glyphosate")
@@ -34,7 +28,7 @@ test_that("get_etoxid returns correct results", {
 
 test_that("examples from webchem article run", {
   skip_on_cran()
-  skip_if(down, "ETOX service is down")
+  skip_if_not(ping_etox(), "ETOX service is down")
 
   # tests for the article
   data("jagst")
@@ -63,7 +57,7 @@ test_that("examples from webchem article run", {
 
 test_that("etox_basic returns correct results", {
   skip_on_cran()
-  skip_if(down, "Etox service is down")
+  skip_if_not(ping_etox(), "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_basic(ids)
@@ -79,7 +73,7 @@ test_that("etox_basic returns correct results", {
 
 test_that("etox_targets returns correct results", {
   skip_on_cran()
-  skip_if(down, "Etox service is down")
+  skip_if_not(ping_etox(), "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_targets(ids)
@@ -95,7 +89,7 @@ test_that("etox_targets returns correct results", {
 
 test_that("etox_tests returns correct results", {
   skip_on_cran()
-  skip_if(down, "Etox service is down")
+  skip_if_not(ping_etox(), "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_tests(ids)
@@ -112,7 +106,7 @@ test_that("etox_tests returns correct results", {
 
 test_that("etox integration tests", {
   skip_on_cran()
-  skip_if(down, "Etox service is down")
+  skip_if_not(ping_etox(), "ETOX service is down")
 
   comps <- c('Triclosan', 'Glyphosate', 'xxxx')
   ids_b <- get_etoxid(comps, match = 'best')
@@ -122,7 +116,6 @@ test_that("etox integration tests", {
   expect_error(etox_basic(ids_a))
   expect_error(etox_targets(ids_a))
   expect_error(etox_tests(ids_a))
-
 
   int1 <- etox_basic(ids_b$etoxid)
   int2 <- etox_targets(ids_b$etoxid)

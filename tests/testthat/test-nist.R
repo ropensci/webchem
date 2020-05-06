@@ -1,15 +1,8 @@
 library(robotstxt)
-require(RCurl)
-
-qurl <- 'https://webbook.nist.gov/cgi/cbook.cgi'
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
-
 
 test_that("NIST webbook is still OK with being scraped", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
   expect_true(
     paths_allowed("https://webbook.nist.gov/cgi/cbook.cgi",
                   user_agent = 'webchem (https://github.com/ropensci/webchem)')
@@ -18,7 +11,7 @@ test_that("NIST webbook is still OK with being scraped", {
 
 test_that("nist_ri() warns when no results", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   expect_warning(nist_ri(
     "78-70-6",
@@ -31,7 +24,7 @@ test_that("nist_ri() warns when no results", {
 
 test_that("nist_ri() works when only one row of data", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   testdf <- nist_ri("78-70-6")
   expect_s3_class(testdf, "data.frame")
@@ -50,7 +43,7 @@ test_that("nist_ri() works when only one row of data", {
 
 test_that("nist_ri() returns results", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   out <- nist_ri("78-70-6", type = "linear", temp_prog = "custom")
   expect_s3_class(out, "data.frame")
@@ -59,7 +52,7 @@ test_that("nist_ri() returns results", {
 
 test_that("nist_ri() works with inchikey query", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   testdf <- nist_ri(
     "UHEPJGULSIKKTP-UHFFFAOYSA-N",
@@ -74,7 +67,7 @@ test_that("nist_ri() works with inchikey query", {
 
 test_that("nist_ri() works with inchi query", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   testdf <- nist_ri(
     "1S/C8H14O/c1-7(2)5-4-6-8(3)9/h5H,4,6H2,1-3H3",
@@ -89,7 +82,7 @@ test_that("nist_ri() works with inchi query", {
 
 test_that("nist_ri() works with name query", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   testdf <- nist_ri(
     "myrcene",
@@ -104,7 +97,7 @@ test_that("nist_ri() works with name query", {
 
 test_that("nist_ri() works with multiple queries", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   myRIs <-
     nist_ri(
@@ -119,7 +112,7 @@ test_that("nist_ri() works with multiple queries", {
 
 test_that("nist_ri() warns when multiple results", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   expect_warning(
     nist_ri("Longipinene", from = "name"),
@@ -128,7 +121,7 @@ test_that("nist_ri() warns when multiple results", {
 
 test_that("nist_ri() warns when no chromatography data", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   expect_warning(
     nist_ri("methane", from = "name"),
@@ -138,7 +131,7 @@ test_that("nist_ri() warns when no chromatography data", {
 
 test_that("cas =  is deprecated gently", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   expect_warning(
     nist_ri(cas = "78-70-6"),
@@ -149,7 +142,7 @@ test_that("cas =  is deprecated gently", {
 
 test_that("nist_ri works with NAs", {
   skip_on_cran()
-  skip_if(down, "NIST Web Book is down")
+  skip_if_not(ping_nist(), "NIST Web Book is down")
 
   test <- nist_ri("107-86-8",
                   from = "cas",

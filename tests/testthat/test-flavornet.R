@@ -1,12 +1,6 @@
-require(RCurl)
-qurl <- 'http://www.flavornet.org'
-cont <- try(getURL(qurl, .encoding = 'UTF-8', .opts = list(timeout = 3)),
-            silent = TRUE)
-down <- inherits(cont, 'try-error')
-
 test_that("fn_percept()", {
   skip_on_cran()
-  skip_if(down, "Flavornet is unreachable")
+  skip_if_not(down, "Flavornet is unreachable")
 
   a <- fn_percept("123-32-0")
   b <- fn_percept(c("75-07-0", "123-32-0"))
