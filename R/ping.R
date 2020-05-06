@@ -222,7 +222,7 @@ ping_fn <- function(...) {
 #'  ping_nist()
 #'  }
 ping_nist <- function(...) {
-  qurl <- 'https://webbook.nist.gov/cgi/cbook.cgi'
+  qurl <- "https://webbook.nist.gov/chemistry/cas-ser/"
   res <- try(GET(qurl, timeout = 3))
   if (inherits(res, 'try-error'))
     return(FALSE)

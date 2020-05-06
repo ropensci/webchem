@@ -1,6 +1,7 @@
+up <- ping_etox()
 test_that("get_etoxid returns correct results", {
   skip_on_cran()
-  skip_if_not(ping_etox(), "ETOX service is down")
+  skip_if_not(up, "ETOX service is down")
 
   # test general
   comps <- c("Triclosan", "Glyphosate")
@@ -28,7 +29,7 @@ test_that("get_etoxid returns correct results", {
 
 test_that("examples from webchem article run", {
   skip_on_cran()
-  skip_if_not(ping_etox(), "ETOX service is down")
+  skip_if_not(up, "ETOX service is down")
 
   # tests for the article
   data("jagst")
@@ -57,7 +58,7 @@ test_that("examples from webchem article run", {
 
 test_that("etox_basic returns correct results", {
   skip_on_cran()
-  skip_if_not(ping_etox(), "ETOX service is down")
+  skip_if_not(up, "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_basic(ids)
@@ -73,7 +74,7 @@ test_that("etox_basic returns correct results", {
 
 test_that("etox_targets returns correct results", {
   skip_on_cran()
-  skip_if_not(ping_etox(), "ETOX service is down")
+  skip_if_not(up, "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_targets(ids)
@@ -89,7 +90,7 @@ test_that("etox_targets returns correct results", {
 
 test_that("etox_tests returns correct results", {
   skip_on_cran()
-  skip_if_not(ping_etox(), "ETOX service is down")
+  skip_if_not(up, "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_tests(ids)
@@ -106,7 +107,7 @@ test_that("etox_tests returns correct results", {
 
 test_that("etox integration tests", {
   skip_on_cran()
-  skip_if_not(ping_etox(), "ETOX service is down")
+  skip_if_not(up, "ETOX service is down")
 
   comps <- c('Triclosan', 'Glyphosate', 'xxxx')
   ids_b <- get_etoxid(comps, match = 'best')

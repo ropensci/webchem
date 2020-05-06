@@ -1,6 +1,7 @@
+up <- ping_opsin()
 test_that("opsin_query()", {
   skip_on_cran()
-  skip_if_not(ping_opsin(), "OPSIN service is down")
+  skip_if_not(up, "OPSIN service is down")
 
   o1 <- opsin_query(c('Cyclopropane', 'Octane'))
   o2 <- suppressWarnings(opsin_query(c('xxxx')))

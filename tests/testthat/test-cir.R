@@ -1,6 +1,7 @@
+up <- ping_cir()
 test_that("cir_query()", {
   skip_on_cran()
-  skip_if_not(ping_cir(), "CIR server is down")
+  skip_if_not(up, "CIR server is down")
 
   expect_equal(cir_query('Triclosan', 'mw', verbose = FALSE)[[1]], 289.5451)
   expect_equal(cir_query('xxxxxxx', 'mw', verbose = FALSE)[[1]], NA)

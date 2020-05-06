@@ -1,6 +1,7 @@
+up <- ping_fn()
 test_that("fn_percept()", {
   skip_on_cran()
-  skip_if_not(down, "Flavornet is unreachable")
+  skip_if_not(up, "Flavornet is unreachable")
 
   a <- fn_percept("123-32-0")
   b <- fn_percept(c("75-07-0", "123-32-0"))

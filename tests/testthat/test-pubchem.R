@@ -1,6 +1,7 @@
+up <- ping_pubchem() & ping_pubchem_pw()
 test_that("get_cid()", {
   skip_on_cran()
-  skip_if_not(ping_pubchem(), "PubChem service is down")
+  skip_if_not(up, "PubChem service is down")
 
 
   expect_equal(get_cid("Triclosan")$cid[1], "5564")
@@ -21,7 +22,7 @@ test_that("get_cid()", {
 
 test_that("pc_prop", {
   skip_on_cran()
-  skip_if_not(ping_pubchem(), "PubChem service is down")
+  skip_if_not(up, "PubChem service is down")
 
   a <- pc_prop("5564", properties = "CanonicalSmiles", verbose = FALSE)
   b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles", verbose = FALSE))
@@ -35,7 +36,7 @@ test_that("pc_prop", {
 
 test_that("pc_synonyms", {
   skip_on_cran()
-  skip_if_not(ping_pubchem(), "PubChem service is down")
+  skip_if_not(up, "PubChem service is down")
 
   expect_equal(pc_synonyms("Triclosan")[[1]][1], "5564")
   expect_equal(length(pc_synonyms(c("Triclosan", "Aspirin"))), 2)
@@ -57,7 +58,7 @@ test_that("cid integration tests", {
 
 test_that("pc_page()", {
   skip_on_cran()
-  skip_if_not(ping_pubchem(), "PubChem service is down")
+  skip_if_not(up, "PubChem service is down")
 
   a <- pc_page(c(311, 176, 1118, "balloon", NA), "pKa")
 
@@ -72,7 +73,7 @@ test_that("pc_page()", {
 
 test_that("pc_extract() chemical and physical properties", {
   skip_on_cran()
-  skip_if_not(ping_pubchem(), "PubChem service is down")
+  skip_if_not(up, "PubChem service is down")
 
   s <- pc_page(c(NA, 176, 311, "balloon"), "chemical and physical properties")
   mw <- pc_extract(s, "molecular weight") # example for a computed property
@@ -88,7 +89,7 @@ test_that("pc_extract() chemical and physical properties", {
 
 test_that("pc_sect()", {
   skip_on_cran()
-  skip_if_not(ping_pubchem(), "PubChem service is down")
+  skip_if_not(up, "PubChem service is down")
 
   a <- pc_sect(c(311, 176, 1118, "balloon", NA), "pKa")
   expect_s3_class(a, c("tbl_df", "tbl", "data.frame"))

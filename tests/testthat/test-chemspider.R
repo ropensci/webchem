@@ -1,3 +1,4 @@
+up <- ping_cs()
 test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_cran()
   skip_on_appveyor()
@@ -9,7 +10,7 @@ test_that("cs_datasources()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
   a <- cs_datasources()
 
   expect_is(a, "character")
@@ -48,10 +49,11 @@ test_that("cs_control()", {
 })
 
 test_that("get_csid() works with defaults", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
   a <- get_csid("Triclosan")
   b <- get_csid("Naproxene")
   ab <- get_csid(c("Triclosan", "Naproxene"))
@@ -65,10 +67,10 @@ test_that("get_csid() works with defaults", {
 })
 
 test_that("get_csid() works with arguments passed to cs_control()", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   c1 <- head(get_csid("iron oxide", from = "name", order_by = "recordId"))
   expect_equal(c1$csid, c(14147, 14237, 55474, 82623, 392353, 396260))
@@ -101,10 +103,11 @@ test_that("get_csid() works with arguments passed to cs_control()", {
 })
 
 test_that("cs_smiles_csid()", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
   a <- cs_smiles_csid("CC(O)=O")
 
   expect_is(a, "integer")
@@ -112,10 +115,11 @@ test_that("cs_smiles_csid()", {
 })
 
 test_that("cs_inchi_csid()", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
   a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
 
   expect_is(a, "integer")
@@ -123,10 +127,11 @@ test_that("cs_inchi_csid()", {
 })
 
 test_that("cs_inchikey_csid()", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
   a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N")
 
   expect_is(a, "integer")
@@ -134,10 +139,11 @@ test_that("cs_inchikey_csid()", {
 })
 
 test_that("cs_convert_multiple()", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
   a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi")
   a_rev <- cs_convert_multiple(a, "inchi", "smiles")
   b <- cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
@@ -161,10 +167,11 @@ test_that("cs_convert_multiple()", {
 })
 
 test_that("cs_convert()", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
   a <- cs_convert(171, "csid", "inchi")
   a_rev <- cs_convert(a, "inchi", "csid")
   a2 <- cs_convert(c(171, 172), "csid", "inchi")
@@ -229,10 +236,11 @@ test_that("cs_convert()", {
 })
 
 test_that("cs_compinfo()", {
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
   a <- cs_compinfo(171, c("SMILES", "Formula", "InChI", "InChIKey", "StdInChI",
                           "StdInChIKey", "AverageMass", "MolecularWeight",
                           "MonoisotopicMass", "NominalMass", "CommonName",

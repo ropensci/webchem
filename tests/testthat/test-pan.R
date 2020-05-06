@@ -1,6 +1,7 @@
+up <- ping_pan()
 test_that("pan_query()", {
   skip_on_cran()
-  skip_if_not(ping_pan(), "PAN service is down, skipping tests")
+  skip_if_not(up, "PAN service is down, skipping tests")
 
   a <- pan_query(c('Triclosan','Chlorpyrifos', 'xxxx', NA), match = 'best', verbose = FALSE)
   b <- pan_query(c('Triclosan','Chlorpyrifos', 'xxxx', NA), match = 'all', verbose = FALSE)

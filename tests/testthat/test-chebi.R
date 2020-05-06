@@ -1,6 +1,7 @@
+up <- ping_chebi()
 test_that("chebi returns correct results", {
   skip_on_cran()
-  skip_if_not(ping_chebi(), "CHEBI service is down")
+  skip_if_not(up, "CHEBI service is down")
   a <- get_chebiid("Glyphosate", from = "ALL")
   b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
   A <- chebi_comp_entity("CHEBI:27744")
