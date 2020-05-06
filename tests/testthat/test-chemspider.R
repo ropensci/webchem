@@ -97,7 +97,7 @@ test_that("get_csid() works with arguments passed to cs_control()", {
 
   c8 <- head(get_csid("iron oxide", from = "name", order_by = "molecularWeight",
                       order_direction = "descending"))
-  expect_equal(c8$csid, c(4937312, 55474, 452497, 14147, 82623, 392353))
+  expect_equal(c8$csid, c(4937312, 55474, 14147, 452497, 82623, 392353))
 })
 
 test_that("cs_smiles_csid()", {
