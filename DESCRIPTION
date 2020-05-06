@@ -33,6 +33,7 @@ Imports:
     methods,
     dplyr,
     purrr,
+    data.tree,
     tibble
 Suggests:
     testthat,

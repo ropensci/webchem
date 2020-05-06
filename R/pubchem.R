@@ -27,10 +27,12 @@
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
 #' @note Please respect the Terms and Conditions of the National Library of
-#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @import httr
 #' @importFrom purrr map map2
@@ -156,7 +158,7 @@ get_cid <-
 #'
 #' @return a data.frame
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @seealso \code{\link{get_cid}} to retrieve Pubchem IDs.
+#' @seealso \code{\link{get_cid}}, \code{\link{pc_sect}}
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
 #' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37:
@@ -170,10 +172,12 @@ get_cid <-
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
 #' @note Please respect the Terms and Conditions of the National Library of
-#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @export
 #' @examples
 #' \donttest{
@@ -255,7 +259,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
   return(out)
 }
 
-
 #' Search synonyms in pubchem
 #'
 #' Search synonyms using PUG-REST,
@@ -289,10 +292,12 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
 #' @note Please respect the Terms and Conditions of the National Library of
-#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the indicidual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -342,4 +347,231 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   if (!is.null(choices)) #if only one choice is returned, convert list to vector
     out <- unlist(out)
   return(out)
+}
+
+#' Retrieve data from PubChem content pages
+#'
+#' When you search for an entity at \url{https://pubchem.ncbi.nlm.nih.gov/},
+#' e.g. a compound or a substance, and select the record you are interested in,
+#' you will be forwarded to a PubChem content page. When you look at a PubChem
+#' content page, you can see that chemical information is organised into
+#' sections, subsections, etc. The chemical data live at the lowest levels of
+#' these sections. Use this function to retrieve the lowest level information
+#' from PubChem content pages.
+#' @param id numeric or character; a vector of PubChem identifiers to search
+#' for.
+#' @param section character; the section of the content page to be imported.
+#' @param domain character; the query domain. Can be one of \code{"compound"},
+#' \code{"substance"}, \code{"assay"}, \code{"gene"}, \code{"protein"} or
+#' \code{"patent"}.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @return Returns a tibble of query results. In the returned tibble,
+#' \code{SourceName} is the name of the depositor, and \code{SourceID} is the
+#' ID of the search term within the depositor's database. You can browse
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/} for more information about
+#' the depositors.
+#' @details \code{section} is not case sensitive but it is sensitive to typing
+#' errors and it requires the full name of the section as it is printed on the
+#' content page. The PubChem Table of Contents Tree can also be found at
+#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
+#' @note Please respect the Terms and Conditions of the National Library of
+#' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
+#' usage policies of National Center for Biotechnology Information,
+#' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' usage policies of the individual data sources
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
+#' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
+#' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
+#' (2019). https://doi.org/10.1186/s13321-019-0375-2.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @seealso \code{\link{get_cid}}, \code{\link{pc_prop}}
+#' @examples
+#' # might fail if API is not available
+#' \donttest{
+#' pc_sect(176, "pka")
+#' pc_sect(c(176, 311), "density")
+#' pc_sect(2231, "depositor-supplied synonyms", "substance")
+#' pc_sect(780286, "modify date", "assay")
+#' pc_sect(9023, "Ensembl ID", "gene")
+#' pc_sect("1ZHY_A", "Sequence", "protein")
+#' pc_sect("US2013040379", "Patent Identifier Synonyms", "patent")
+#' }
+#' @export
+pc_sect <- function(id,
+                    section,
+                    domain = c("compound", "substance", "assay", "gene",
+                                "protein", "patent"),
+                    verbose = TRUE) {
+  domain <- match.arg(domain)
+  section <- tolower(gsub(" +", "+", section))
+  if (section %in% c("standard non-polar",
+                     "Semi-standard non-polar",
+                     "Standard polar")) {
+    stop("use nist_ri() to obtain more information on this.")
+  }
+  res <- pc_page(id, section, domain, verbose)
+  out <- pc_extract(res, section)
+  return(out)
+}
+
+#' Import PubChem content pages
+#'
+#' @importFrom jsonlite fromJSON
+#' @importFrom data.tree as.Node Do
+#' @importFrom stats rexp
+#' @param id numeric or character; a vector of identifiers to search for.
+#' @param section character; the section of the content page to be imported.
+#' @param domain character; the query domain. Can be one of \code{"compound"},
+#' \code{"substance"}, \code{"assay"}, \code{"gene"}, \code{"protein"} or
+#' \code{"patent"}.
+#' @return A named list of content pages where each element is either a
+#' data.tree or NA.
+#' @details \code{section} can be any section of a PubChem content page, e.g.
+#' \code{section = "solubility"} will import the section on solubility, or
+#' \code{section = "experimental properties"} will import all experimental
+#' properties. The \code{section} argument is not case sensitive but it
+#' is sensitive to typing errors and it requires the full name of the section as
+#' it is printed on the content page. The PubChem Table of Contents Tree can
+#' also be found at
+#' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
+#' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
+#' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
+#' (2019). https://doi.org/10.1186/s13321-019-0375-2.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @examples
+#' # might fail if API is not available
+#' \donttest{
+#' pc_page(c(176, 311), "pka")
+#' pc_page(49854366, "external id", domain = "substance")
+#' }
+#' @noRd
+pc_page <- function(id,
+                    section,
+                    domain = c("compound", "substance", "assay", "gene",
+                               "protein", "patent"),
+                    verbose = TRUE) {
+  domain <- match.arg(domain)
+  section <- tolower(gsub(" +", "+", section))
+  foo <- function(id, section, domain) {
+    qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
+                   domain, "/", id, "/JSON?heading=", section)
+    if (verbose == TRUE) message("Searching ", id, ". ", appendLF = FALSE)
+    if (is.na(id)) {
+      if (verbose == TRUE) {
+        message("Invalid input. Returning NA.")
+      }
+      return(NA)
+    }
+    Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
+    res <- httr::POST(
+      qurl,
+      user_agent("webchem (https://github.com/ropensci/webchem)"),
+      handle = handle("")
+      )
+    if (res$status_code < 300) {
+      if (verbose == TRUE) message(httr::message_for_status(res))
+      cont <- httr::content(res, type = "text", encoding = "UTF-8")
+      cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
+      tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
+      tree$Do(function(node) node$name <- tolower(node$name))
+      return(tree)
+    }
+    else {
+      if (verbose == TRUE) {
+        message(paste0(httr::message_for_status(res), " Returning NA."))
+      }
+      return(NA)
+    }
+  }
+  cont <- lapply(id, function(x) foo(x, section, domain))
+  names(cont) <- id
+  attr(cont, "domain") <- domain
+  attr(cont, "id") <- switch(domain, compound = "CID", substance = "SID",
+                             assay = "AID", gene = "GeneID", protein = "pdbID",
+                             patent = "PatentID")
+  return(cont)
+}
+
+#' Extract data from PubChem content pages
+#'
+#' This function takes a list of PubChem content pages, and extracts the
+#' required information from them.
+#' @importFrom data.tree FindNode
+#' @importFrom dplyr bind_rows
+#' @importFrom tibble as_tibble
+#' @param pages list; a list of PubChem content pages.
+#' @param section character; the lowest level section of the data to be
+#' accessed.
+#' @return A tibble of chemical information with references.
+#' @details When you look at a PubChem content page, you can see that chemical
+#' information is organised into sections, subsections, etc. The chemical data
+#' live at the lowest levels of these sections. Use this function to extract the
+#' lowest level information from PubChem content pages, e.g. IUPAC Name, Boiling
+#' Point, Lower Explosive Limit (LEL).
+#' @details The \code{section} argument is not case sensitive, but it is
+#' sensitive to typing errors, and requires the full name of the section as it
+#' is printed on the content page. The PubChem Table of Contents Tree can also
+#' be found at \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
+#' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
+#' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
+#' (2019). https://doi.org/10.1186/s13321-019-0375-2.
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @examples
+#' # might fail if API is not available
+#' \donttest{
+#' comps <- pc_page(c(176, 311), "pka")
+#' pc_extract(comps, "pka")
+#' subs <- pc_page(49854366, "external id", domain = "substance")
+#' pc_extract(subs, "external id")
+#' }
+#' @noRd
+pc_extract <- function(page, section) {
+  section <- tolower(section)
+  ids <- names(page)
+  foo <- function(i, section) {
+    tree <- page[[i]]
+    if (length(tree) == 1 && is.na(tree)) return(tibble(ID = ids[i]))
+    node <- FindNode(tree, "information")
+    if (is.null(node)) return(tibble(ID = ids[i],
+                                     Name = tree$record$RecordTitle))
+    info <- lapply(node, function(y) {
+      lownode <- data.tree::FindNode(data.tree::as.Node(y), "stringwithmarkup")
+      if (is.null(lownode)) {
+        info <- tibble(Result = paste(y$value, collapse = " "),
+                       ReferenceNumber = y$ReferenceNumber)
+        return(info)
+      }
+      else{
+        string <- sapply(lownode, function(z) z$String)
+        info <- tibble(Result =  string,
+                       ReferenceNumber = y$ReferenceNumber)
+      }
+    })
+    info <- dplyr::bind_rows(info)
+    info <- tibble(ID = ids[i],
+                   Name = tree$record$RecordTitle,
+                   info)
+    node <- FindNode(tree, "reference")
+    if (is.null(node)) return(tibble(info, SourceName = NA, SourceID = NA))
+    ref <- lapply(node, function(y) {
+      ref <- tibble(ReferenceNumber = y$ReferenceNumber,
+                    SourceName = y$SourceName,
+                    SourceID = y$SourceID)
+      return(ref)
+    })
+    ref <- dplyr::bind_rows(ref)
+    info$SourceName <- sapply(info$ReferenceNumber, function(x) {
+      ref$SourceName[ref$ReferenceNumber == x]
+    })
+    info$SourceID <- sapply(info$ReferenceNumber, function(x) {
+      ref$SourceID[ref$ReferenceNumber == x]
+    })
+    return(info)
+  }
+  info <- lapply(seq_along(page), function(x) foo(x, section))
+  info <- dplyr::bind_rows(info)
+  info <- info[, -which(names(info) == "ReferenceNumber")]
+  names(info)[1] <- attr(page, "id")
+  return(info)
 }

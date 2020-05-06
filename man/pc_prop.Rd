@@ -28,10 +28,12 @@ Retrieve compound information from pubchem CID, see
 }
 \note{
 Please respect the Terms and Conditions of the National Library of
-Medicine, \url{https://www.nlm.nih.gov/databases/download.html} and the data
+Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 usage policies of National Center for Biotechnology Information,
 \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}.
+\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+usage policies of the indicidual data sources
+\url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 }
 \examples{
 \donttest{
@@ -61,7 +63,7 @@ PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 information in PubChem. Nucleic acids research, gkv396.
 }
 \seealso{
-\code{\link{get_cid}} to retrieve Pubchem IDs.
+\code{\link{get_cid}}, \code{\link{pc_sect}}
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
