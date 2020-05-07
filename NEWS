@@ -1,8 +1,9 @@
-webchem 0.5.0.9005
+webchem 0.5.0.9006
 ======================
 
 NEW FEATURES
 
+* Retrieve data from webTEST, a Web-Services Program to Estimate Toxicity from Molecular Structure with webtest_query() [PR #251, added by @andschar]
 * Retrieve chemical data from PubChem content pages with pc_sect().
 * get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #241, added by @andschar]
 * nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
