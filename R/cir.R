@@ -179,7 +179,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
 #' @param height integer; Height of the image.
 #' @param linewidth integer; Width of lines.
 #' @param symbolfontsize integer; Fontsize of atoms in the image.
-#' @param bgcolor character; E.g. transparent, white, %23AADDEE
+#' @param bgcolor character; E.g. transparent, white, \%23AADDEE
 #' @param antialiasing
 #' @param atomcolor character; Color of the atoms in the image.
 #' @param bondcolor character; Color of the atom bond lines.
@@ -395,7 +395,6 @@ cir_img <- function(query,
                 verbose = verbose)
   dplyr::bind_rows(out)
 }
-
 
 
 
