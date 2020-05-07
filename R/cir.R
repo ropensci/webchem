@@ -201,7 +201,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
 #' or 1.
 #' @param ... currently not used.
 #'
-#' @return an image written to disk
+#' @return data.frame and image written to disk
 #' @details
 #'  CIR can resolve can be of the following \code{identifier}: Chemical Names,
 #'  IUPAC names,
@@ -360,63 +360,45 @@ cir_img <- function(query,
     if (verbose)
       message("Querying: ", query, "\n", qurl)
     Sys.sleep(1.5)
-    fl <- file.path(dir, paste0(query, ".", sub('format=', '', format)))
-    message("Image saved under: ", fl)
-    h <- try(GET(qurl,
-                 timeout(5),
-                 write_disk(fl, overwrite = TRUE)))
+    path <- file.path(dir, paste0(query, ".", sub('format=', '', format)))
+    message("Image saved under: ", path)
+    # return image
+    h <- try(
+      GET(qurl,
+          timeout(5),
+          write_disk(path, overwrite = TRUE))
+    )
     if (inherits(h, "try-error")) {
       warning("Problem with web service encountered... Returning NA.")
       return(NA)
     }
+    # return paths data.frame
+    data.frame(query = query,
+               path = path,
+               url = qurl,
+               stringsAsFactors = FALSE)
   }
-  silent <- lapply(query,
-                   foo,
-                   dir = dir,
-                   format = format,
-                   width = width,
-                   height = height,
-                   linewidth = linewidth,
-                   symbolfontsize = symbolfontsize,
-                   bgcolor = bgcolor,
-                   antialiasing = antialiasing,
-                   atomcolor = atomcolor,
-                   bondcolor = bondcolor,
-                   csymbol = csymbol,
-                   hsymbol = hsymbol,
-                   hcolor = hcolor,
-                   header = header,
-                   footer = footer,
-                   frame = frame,
-                   verbose = verbose)
+  out <- lapply(query,
+                foo,
+                dir = dir,
+                format = format,
+                width = width,
+                height = height,
+                linewidth = linewidth,
+                symbolfontsize = symbolfontsize,
+                bgcolor = bgcolor,
+                antialiasing = antialiasing,
+                atomcolor = atomcolor,
+                bondcolor = bondcolor,
+                csymbol = csymbol,
+                hsymbol = hsymbol,
+                hcolor = hcolor,
+                header = header,
+                footer = footer,
+                frame = frame,
+                verbose = verbose)
+  dplyr::bind_rows(out)
 }
-
-require(httr)
-cir_img("CCO") # SMILES
-
-# multiple parameters
-id = c("Glyphosate", "Isoproturon", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N")
-cir_img(id, bgcolor = "transparent", antialising = 0)
-
-# all parameters
-id  = "Triclosan"
-cir_img(id,
-        format = "gif",
-        width = 600,
-        height = 600,
-        linewidth = 5,
-        symbolfontsize = 30,
-        bgcolor = "red",
-        antialising = 0,
-        atomcolor = "green",
-        bondcolor = "yellow",
-        csymbol = "all",
-        hsymbol = "all",
-        hcolor = "purple",
-        header = "My funky chemical structure..",
-        footer = "..is just so awesome!",
-        frame = 1)
-
 
 
 
