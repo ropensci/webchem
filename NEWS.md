@@ -2,6 +2,7 @@
 
 ## NEW FEATURES
 
+* Retrieve data from webTEST, a Web-Services Program to Estimate Toxicity from Molecular Structure with webtest_query() [PR #251, added by @andschar]
 * Download images of substances from ChemSpider with `cs_img()`
 * `find_db()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
 
