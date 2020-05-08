@@ -60,7 +60,7 @@
 #'
 #' # multiple inputs
 #' comp <- c('Iron', 'Aspirin', 'BPGDAMSIGCZZLK-UHFFFAOYSA-N')
-#' if(is.na(comp) == FALSE) get_chebiid(comp)
+#' get_chebiid(comp)
 #'
 #' }
 get_chebiid <- function(query,

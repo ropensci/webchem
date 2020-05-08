@@ -24,7 +24,7 @@
 #' out <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
 #' out
 #' # extract subactivity from object
-#' if (is.na(out) == FALSE) sapply(out, function(y) y$subactivity[1])
+#' sapply(out, function(y) y$subactivity[1])
 #'
 #' # use CAS-numbers
 #' aw_query("79622-59-6", type = 'cas')
