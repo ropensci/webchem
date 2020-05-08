@@ -34,7 +34,8 @@ Imports:
     dplyr,
     purrr,
     data.tree,
-    tibble
+    tibble,
+    base64enc
 Suggests:
     testthat,
     rcdk,
