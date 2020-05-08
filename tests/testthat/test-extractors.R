@@ -1,6 +1,6 @@
 test_that("extractors work with cts", {
   skip_on_cran()
-  skip_if_not(ping_cts(), "CTS service is down")
+  skip_if_not(ping_service("cts"), "CTS service is down")
 
   inchikeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
   out_cts_compinfo <- cts_compinfo(inchikeys)
@@ -11,7 +11,7 @@ test_that("extractors work with cts", {
 
 test_that("extractors work with etox", {
   skip_on_cran()
-  skip_if_not(ping_etox(), "ETOX service is down")
+  skip_if_not(ping_service("etox"), "ETOX service is down")
 
   out_etox_basic <- etox_basic(8252)
   expect_equivalent(cas(out_etox_basic), "50-00-0")
@@ -21,7 +21,7 @@ test_that("extractors work with etox", {
 
 test_that("extractors work with chemid", {
   skip_on_cran()
-  skip_if_not(ping_ci(), "CHEMID service is down")
+  skip_if_not(ping_service("ci"), "CHEMID service is down")
 
   out_ci_query <- ci_query(c('Aspirin', 'Triclosan'), type = 'name')
   expect_equivalent(cas(out_ci_query),  c("50-78-2", "3380-34-5"))
@@ -32,7 +32,7 @@ test_that("extractors work with chemid", {
 
 test_that("extractors work with opsin", {
   skip_on_cran()
-  skip_if_not(ping_opsin(), "OPSIN service is down")
+  skip_if_not(ping_service("opsin"), "OPSIN service is down")
 
   out_opsin_query <- opsin_query(c('Cyclopropane', 'Octane'))
   expect_error(cas(out_opsin_query))
@@ -43,7 +43,7 @@ test_that("extractors work with opsin", {
 
 test_that("extractors work with Alanwood", {
   skip_on_cran()
-  skip_if_not(ping_aw(), "Alanwood database not reachable")
+  skip_if_not(ping_service("aw"), "Alanwood database not reachable")
 
   out_aw_query <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
   expect_equivalent(cas(out_aw_query), c("79622-59-6", "40843-25-2"))
@@ -55,7 +55,7 @@ test_that("extractors work with Alanwood", {
 
 test_that("extractors work with Wikidata", {
   skip_on_cran()
-  skip_if_not(ping_wd(), "Wikidata service is down")
+  skip_if_not(ping_service("wd"), "Wikidata service is down")
 
   id <- c("Q408646", "Q18216")
   out_wd_ident <- wd_ident(id)
@@ -68,7 +68,7 @@ test_that("extractors work with Wikidata", {
 
 test_that("extractors work with pubchem", {
   skip_on_cran()
-  skip_if_not(ping_pubchem(), "Pubchem service is down")
+  skip_if_not(ping_service("pc"), "Pubchem service is down")
 
   out_pc_prop <- pc_prop(c(5564, 2244))
   out_pc_prop2 <- pc_prop(5564, properties = c('MolecularFormula', 'MolecularWeight'))
@@ -83,7 +83,7 @@ test_that("extractors work with pubchem", {
 
 test_that("extractors work with PAN", {
   skip_on_cran()
-  skip_if_not(ping_pan(), "PAN service is down")
+  skip_if_not(ping_service("pan"), "PAN service is down")
 
   out_pan_query <- pan_query(c('2,4-dichlorophenol', 'Atrazin'), match = 'best')
   expect_equivalent(cas(out_pan_query),  c("120-83-2", "1912-24-9"))
@@ -95,7 +95,7 @@ test_that("extractors work with ChemSpider", {
   skip_on_cran()
   skip_on_travis()
   skip_on_appveyor()
-  skip_if_not(ping_cs(), "ChemSpider service is down")
+  skip_if_not(ping_service("cs"), "ChemSpider service is down")
 
   out_cs_compinfo <- cs_compinfo(5363, fields = c("SMILES", "InChIKey") )
 

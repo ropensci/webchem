@@ -1,4 +1,4 @@
-up <- ping_aw()
+up <- ping_service("aw")
 test_that("alanwood, commonname", {
   skip_on_cran()
   skip_if_not(up, "Alanwood service is down")

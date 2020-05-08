@@ -1,4 +1,4 @@
-up <- ping_cir()
+up <- ping_service("cir")
 test_that("cir_query()", {
   skip_on_cran()
   skip_if_not(up, "CIR server is down")

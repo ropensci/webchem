@@ -1,4 +1,4 @@
-up <- ping_chebi()
+up <- ping_service("chebi")
 test_that("chebi returns correct results", {
   skip_on_cran()
   skip_if_not(up, "CHEBI service is down")

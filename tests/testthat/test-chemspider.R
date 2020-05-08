@@ -1,4 +1,4 @@
-up <- ping_cs()
+up <- ping_service("cs_web") #test might still fail if website is up by API service is down.
 test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_cran()
   skip_on_appveyor()

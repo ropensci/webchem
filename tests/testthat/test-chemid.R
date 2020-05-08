@@ -1,4 +1,4 @@
-up <- ping_ci()
+up <- ping_service("ci")
 test_that("chemid returns correct results", {
   skip_on_cran()
   skip_if_not(up, "CHEMID service is down")

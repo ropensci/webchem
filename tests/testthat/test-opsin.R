@@ -1,4 +1,4 @@
-up <- ping_opsin()
+up <- ping_service("opsin")
 test_that("opsin_query()", {
   skip_on_cran()
   skip_if_not(up, "OPSIN service is down")

@@ -1,4 +1,4 @@
-up <- ping_pan()
+up <- ping_service("pan")
 test_that("pan_query()", {
   skip_on_cran()
   skip_if_not(up, "PAN service is down, skipping tests")

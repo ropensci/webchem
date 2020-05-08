@@ -28,9 +28,10 @@ test_that("is.inchikey() returns correct results", {
                              'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
 
   skip_on_cran()
-  skip_if_not(ping_cs(), "ChemSpider service is down, skipping tests")
   skip_on_travis()
   skip_on_appveyor()
+  skip_if_not(ping_service("cs"), "ChemSpider service is down, skipping tests")
+
   g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
   b <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA', type = 'chemspider')
 

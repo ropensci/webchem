@@ -1,5 +1,5 @@
 library(robotstxt)
-up <- ping_nist()
+up <- ping_service("nist")
 test_that("NIST webbook is still OK with being scraped", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")

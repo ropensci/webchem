@@ -1,4 +1,4 @@
-up <- ping_etox()
+up <- ping_service("etox")
 test_that("get_etoxid returns correct results", {
   skip_on_cran()
   skip_if_not(up, "ETOX service is down")

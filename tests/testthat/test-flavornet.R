@@ -1,4 +1,4 @@
-up <- ping_fn()
+up <- ping_service("fn")
 test_that("fn_percept()", {
   skip_on_cran()
   skip_if_not(up, "Flavornet is unreachable")

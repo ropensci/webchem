@@ -1,4 +1,4 @@
-up <- ping_pubchem() & ping_pubchem_pw()
+up <- ping_service("pc")
 test_that("get_cid()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")

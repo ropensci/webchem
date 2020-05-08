@@ -1,4 +1,4 @@
-up <- ping_wd()
+up <- ping_service("wd")
 test_that("get_wdid returns correct results", {
   skip_on_cran()
   skip_if_not(up, "Wikidata service is down")
