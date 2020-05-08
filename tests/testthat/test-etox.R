@@ -79,7 +79,7 @@ test_that("etox_targets returns correct results", {
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_targets(ids)
 
-  expect_s3_class(o1, 'list')
+  expect_type(o1, 'list')
   expect_equal(length(o1), 4)
   expect_equal(o1[['20179']]$res$Substance[1], "Triclosan")
   expect_equal(ncol(o1[['20179']]$res), 33)
@@ -95,7 +95,7 @@ test_that("etox_tests returns correct results", {
   ids <- c("20179", "9051", "xxxxx", NA)
   o1 <- etox_tests(ids)
 
-  expect_s3_class(o1, 'list')
+  expect_type(o1, 'list')
   expect_equal(length(o1), 4)
   expect_equal(o1[['20179']]$res$Substance[1], "Triclosan")
   expect_equal(ncol(o1[['20179']]$res), 41)
@@ -122,21 +122,21 @@ test_that("etox integration tests", {
   int2 <- etox_targets(ids_b$etoxid)
   int3 <- etox_tests(ids_b$etoxid)
 
-  expect_s3_class(int1, 'list')
+  expect_type(int1, 'list')
   expect_equal(length(int1), 3)
   expect_equal(int1[['20179']]$cas, "3380-34-5")
   expect_equal(length(int1[['20179']]), 5)
   expect_s3_class(int1[['20179']]$synonyms, 'data.frame')
   expect_true(is.na(int1[[3]]))
 
-  expect_s3_class(int2, 'list')
+  expect_type(int2, 'list')
   expect_equal(length(int2), 3)
   expect_equal(int2[['20179']]$res$Substance[1], "Triclosan")
   expect_equal(ncol(int2[['20179']]$res), 33)
   expect_s3_class(int2[['20179']]$res, 'data.frame')
   expect_true(is.na(int2[[3]]))
 
-  expect_s3_class(int3, 'list')
+  expect_type(int3, 'list')
   expect_equal(length(int3), 3)
   expect_equal(int3[['20179']]$res$Substance[1], "Triclosan")
   expect_equal(ncol(int3[['20179']]$res), 41)

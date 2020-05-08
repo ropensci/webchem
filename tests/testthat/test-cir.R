@@ -19,7 +19,7 @@ test_that("cir_query()", {
 
 test_that("cir_query() doesn't mistake NA for sodium", {
   skip_on_cran()
-  skip_if_not(ping_cir(), "CIR server is down")
+  skip_if_not(up, "CIR server is down")
 
   expect_true(is.na(cir_query(as.character(NA), 'cas')))
 })
