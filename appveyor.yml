@@ -1,8 +1,12 @@
+platform: x64
+
 environment:
-    R_BUILD_ARGS: --no-manual
-    R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran --no-multiarch
-    R_INSTALL_ARGS: --no-multiarch
-    PKGTYPE: binary
+  R_ARCH: x64
+  R_BUILD_ARGS: --no-manual
+  R_CHECK_ARGS: --no-build-vignettes --no-manual --timings --as-cran --no-multiarch --no-examples
+  R_INSTALL_ARGS: --no-multiarch
+  PKGTYPE: binary
+  NOT_CRAN: true
 
 init:
   ps: |
@@ -14,9 +18,9 @@ install:
   ps: Bootstrap
 
 build_script:
-  - set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0\jre
-  - set PATH=C:\Program Files (x86)\Java\jdk1.8.0\bin;C:\Program Files (x86)\Java\jdk1.8.0\jre\bin\server;%PATH%
-  - ls "C:\Program Files (x86)\Java\jdk1.8.0\jre"
+#  - set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0\jre
+#  - set PATH=C:\Program Files (x86)\Java\jdk1.8.0\bin;C:\Program Files (x86)\Java\jdk1.8.0\jre\bin\server;%PATH%
+#  - ls "C:\Program Files (x86)\Java\jdk1.8.0\jre"
   - travis-tool.sh install_deps
 
 test_script:
@@ -24,11 +28,13 @@ test_script:
 
 on_failure:
   - travis-tool.sh dump_logs
+  - 7z a failure.zip *.Rcheck\*
+  - appveyor PushArtifact failure.zip
 
 notifications:
   - provider: Email
     to:
-      - eduardszoecs@gmail.com
+      - stirling.tamas@gmail.com
     on_build_success: false
     on_build_failure: true
     on_build_status_changed: true

@@ -1,7 +1,7 @@
-context("chebi")
-
+up <- ping_service("chebi")
 test_that("examples in the article are unchanged", {
   skip_on_cran()
+  skip_if_not(up, "CHEBI service is down")
 
   data("lc50", package = "webchem")
   cas_rns <- lc50[order(lc50$value)[1:3], "cas"]
@@ -27,6 +27,7 @@ test_that("examples in the article are unchanged", {
 
 test_that("chebi returns correct results", {
   skip_on_cran()
+  skip_if_not(up, "CHEBI service is down")
   a <- get_chebiid("Glyphosate", from = "ALL")
   b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
   A <- chebi_comp_entity("CHEBI:27744")

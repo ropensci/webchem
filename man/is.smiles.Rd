@@ -15,8 +15,9 @@ is.smiles(x, verbose = TRUE)
 a logical
 }
 \description{
-This function checks if a string is a valid SMILES by checking if (R)CDK can parse it.
-If it cannot be parsed by rcdk FALSE is returned, else TRUE.
+This function checks if a string is a valid SMILES by checking
+if (R)CDK can parse it. If it cannot be parsed by rcdk FALSE is returned,
+else TRUE.
 }
 \note{
 This function can handle only one SMILES string.
@@ -29,7 +30,8 @@ is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 }
 }
 \references{
-Egon Willighagen (2015). How to test SMILES strings in Supplementary Information.
+Egon Willighagen (2015). How to test SMILES strings in
+Supplementary Information.
 \url{https://chem-bla-ics.blogspot.nl/2015/10/how-to-test-smiles-strings-in.html}
 }
 \author{

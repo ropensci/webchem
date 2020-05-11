@@ -8,10 +8,10 @@ cache: packages
 env:
   global:
     - _R_CRAN_CHECK_INCOMING_=false
-r_check_args: "--no-build-vignettes --no-manual --timings --as-cran"
+    - NOT_CRAN=true
+r_check_args: "--no-build-vignettes --no-manual --timings --as-cran --no-examples"
 r_check_revdep: false
 warnings_are_errors: false
-
 
 apt_packages:
   - libssl-dev
@@ -30,13 +30,13 @@ r_github_packages:
 
 # report to codecov
 after_success:
-  - Rscript -e 'covr::codecov(line_exclusions = list("R/ppdb.R"), quiet = FALSE)'
+  - Rscript -e 'covr::codecov()'
 
 # report to maintainer
 notifications:
   email:
     recipients:
-    - eduardszoecs@gmail.com
+    - stirling.tamas@gmail.com
     on_success: change
     on_failure: change
 
