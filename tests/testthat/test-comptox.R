@@ -2,7 +2,7 @@ context("comptox")
 
 test_that("webtest_query()", {
   skip_on_cran()
-  expect_is(webtest_query("test"), "data.frame")
+  expect_s3_class(webtest_query("test"), "data.frame")
   expect_equal(webtest_query("CCO")$endpoint,
                "Fathead minnow LC50 (96 hr)")
   expect_equal(webtest_query("CCO", endpoint = "BCF")$endpoint,
