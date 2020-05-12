@@ -370,13 +370,14 @@ cir_img <- function(query,
     )
     if (inherits(h, "try-error")) {
       warning("Problem with web service encountered... Returning NA.")
-      return(NA)
+      return(data.frame(query = query, stringsAsFactors = FALSE))
+    } else {
+      # return paths data.frame
+      data.frame(query = query,
+                 path = path,
+                 url = qurl,
+                 stringsAsFactors = FALSE)
     }
-    # return paths data.frame
-    data.frame(query = query,
-               path = path,
-               url = qurl,
-               stringsAsFactors = FALSE)
   }
   out <- lapply(query,
                 foo,

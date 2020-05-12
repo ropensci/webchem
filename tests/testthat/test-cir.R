@@ -23,3 +23,14 @@ test_that("cir_query() doesn't mistake NA for sodium", {
 
   expect_true(is.na(cir_query(as.character(NA), 'cas')))
 })
+
+test_that("cir_img()", {
+  skip_on_cran()
+
+  Sys.sleep(5)
+
+
+
+
+})
+
