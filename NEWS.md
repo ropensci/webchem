@@ -1,20 +1,19 @@
-webchem 0.5.0.9005
-======================
+# webchem 0.5.0.9005
 
-NEW FEATURES
+## NEW FEATURES
 
 * Retrieve chemical data from PubChem content pages with pc_sect().
 * get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #241, added by @andschar]
 * nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
 * all `get_*()` functions now output tibbles with a column for the query and a column for the retrieved ID
 * changes to arguments in `get_*()` functions to make them more consistent
 * aw_idx.rda is no longer included in the package as a data set. Instead, it is built by build_aw_idx() to tempdir().
 
 
-BUG FIXES
+## BUG FIXES
 
 * nist_ri() returned malformed tables or errored if there was only one entry for a query
 * get_csid() now returns all csids when queried from formula
@@ -23,14 +22,14 @@ BUG FIXES
 * get_cid() returned the PubChem ID of sodium when the query was NA [PR #223, fixed by stitam]
 * aw_query() returned a list for successful queries, NA for unsuccessful queries [PR #222, fixed by stitam]
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
-webchem 0.5.0
-======================
+# webchem 0.5.0
 
-NEW FEATURES
+
+## NEW FEATURES
 
 * Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_chebiid() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andschar].
 * Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
@@ -38,12 +37,12 @@ NEW FEATURES
 * "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
 * ChemSpider functions now look for an API token stored in .Renviron or .Rprofile by default so you can keep them hidden more easily.
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
 * as.cas() added.
 * removed documentation files for non-exported functions that were only used internally.
 
-BUG FIXES
+## BUG FIXES
 
 * cs_prop() failed with duplicated return values [issue #148, reported and fixed by @stanstrup]
 * pp_query() failed when compound present, but no properties [issue #151, reported and fixed by @stanstrup]
@@ -54,24 +53,23 @@ BUG FIXES
 * fixed functions that communicate with the ChemSpider API [issue #149, issue #160, fixed by @stitam]
 * get_etoxid() printed incorrect results for certain match types [issue #201, fixed by @stitam]
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
 * cs_extcompinfo() cannot be fixed as there is no equivalent in the new ChemSpider API yet.
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 * ppdb_parse() has been removed. webchem no longer offers any support for PPDB.
 * pp_query() has been removed. Physprop API is no longer active.
 * cs_prop() has been removed.
 
-webchem 0.4.0
-======================
+# webchem 0.4.0
 
-NEW FEATURES
+## NEW FEATURES
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
-BUG FIXES
+## BUG FIXES
 
 * extr_num() did not work properly with decimal numbers [issue #136, reported and fixed by @stanstrup]
 * cs_prop() failed when epi-suite data was not available [issue #139, reported and fixed by @stanstrup]
@@ -82,98 +80,98 @@ BUG FIXES
 * cir_query() failed with identifiers containing spaces (e.g. 'acetic acid') [issue #146, reported by Lars Nielsen]
 * several other functions failed with identifiers containing spaces & returned wrong distance.
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 
-webchem 0.3.0
-======================
+# webchem 0.3.0
 
-NEW FEATURES
 
-MINOR IMPROVEMENTS
+## NEW FEATURES
+
+## MINOR IMPROVEMENTS
 
 * cs_prop() now also return experimental data for Boiling and Melting Points.
 * pc_synonyms gained an argument 'interactive' to enter an interactive mode for
   selecting synonyms [issue #129, requested by @Aariq]
 * cts_convert now returns NA if no matches are found.
 
-BUG FIXES
+## BUG FIXES
 
 * cs_prop() failed with some CSIDs [isse #127, reported by @Aariq]
 * wd_ident() failed if multiple entries where found. Now returns the first hit only.
 * ci_query() did not return fully cleaned smiles and inchi
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 
-webchem 0.2.0
-======================
+# webchem 0.2.0
 
-NEW FEATURES
+
+## NEW FEATURES
 
 * fn_percept() extracts flavor percepts using CAS numbers from www.flavornet.org. Flavornet is a database of 738 compounds with human-detectible odors. [contributed by @Aariq]
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
-BUG FIXES
+## BUG FIXES
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 
 
-webchem 0.1.1
-======================
+# webchem 0.1.1
 
-NEW FEATURES
+
+## NEW FEATURES
 * added ping_pubchem() to check whether pubchem is up & running
 * added cs_web_ping () to check whether the chemspider webpage is functional
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 * updated allan wood index
 
-BUG FIXES
+## BUG FIXES
 * pc_prop() returned to many rows if last cid supplied was NA
 * Switched to https for NCBI, chemspider & chemid (Issue #120, reported by @jranke)
 * get_wdid() failed if non-ascii characters where returned by wikipedia
 * rcdk:parse.smiles() now returns NA if a SMILES string could not be parsed.
    => broke is.smiles
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 
 
-webchem 0.1.0
-======================
+# webchem 0.1.0
 
-NEW FEATURES
+
+## NEW FEATURES
 * added cts_to() and cts_from() to retrieve possible ids that can be queried.
 * cts_*(), pp_query(), cir_query(), get_cid(), get_etoxid(), etox_*(), pan_query() get_wdid(), aw_query(), get_csid(), cs_prop(), cs_compinfo() and ci_query() can handle multiple inputs.
 * pc_prop() queries properties and pc_synonmy() synonyms from PUG-REST.
 * added extractors for webchem objects: cas(), inchikey() and smiles().
 
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 * rewrite of pubchem functions using PUG-REST
 * chemspider: better use of NA in input (=return NA)
 * more robust matching in get_etoxid
 
-BUG FIXES
+## BUG FIXES
 
 * pan_query() did not return numeric values
 * get_cid() failed with multiple results
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 * ppdb_query() has been removed due to copyright issues.
 The new ppdb_parse() parses only a html, but does not interact with the database
@@ -186,10 +184,9 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 
 
-webchem 0.0.5
-======================
+# webchem 0.0.5
 
-NEW FEATURES
+## NEW FEATURES
 
 * is.smiles() checks SMILES strings, by parsing via (R)CDK.
 * get_wdid() and wd_indent() to retrieve information from wikidata.
@@ -197,7 +194,7 @@ NEW FEATURES
 * ci_query() can handle multi inputs (interactive mode, best match, first match and NA).
 * cs_prop() queries predcitions (ACD and EPiSuite) from ChemSpider
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
 * webchem uses exclusively xml2 (instead of XML).
 * All function return source_url for (micro-)attribution of sources
@@ -211,7 +208,7 @@ MINOR IMPROVEMENTS
 * aw_query() returns multiple inchikey if found.
 * pan() now returns chemical name and matched synonym.
 
-BUG FIXES
+## BUG FIXES
 
 * utility functions are not vectorized and throw an error.
 * chemid() did mot work with inchikey as input.
@@ -221,7 +218,7 @@ BUG FIXES
 * ci_query() failed if multi hits were found. Now returns first hit.
 * aw_fuery() failed if inchikey was not found.
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
 * pan_query() replaces pan()
 * aw_query() replaces alanwood()
@@ -230,7 +227,7 @@ DEPRECATED FUNCTIONS
 * ci_query() replaces chemid()
 * pp_query() replaces physprop()
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 * csid_compinfo()
 * csid_extcompinfo()
@@ -238,10 +235,10 @@ DEFUNCT FUNCTIONS
 
 
 
-webchem 0.0.4
-======================
+# webchem 0.0.4
 
-NEW FEATURES
+
+## NEW FEATURES
 
 * chemid() to query ChemIDplus http://chem.sis.nlm.nih.gov/chemidplus/.
 * is.inchikey() and is.cas() to check if a string is valid inchikey or CAS registry number.
@@ -261,7 +258,7 @@ NEW FEATURES
 * webchem has now a zenodo doi, please cite if you use it.
 
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
 * cts_compinfo() checks if input is a inchikey (via exported function is.inchikey()).
 * cts_compinfo() is now more robust and verbose, if problems are encountered
@@ -270,14 +267,14 @@ MINOR IMPROVEMENTS
 * physprop() also returns boiling and melting points. Moreover, values are now numeric.
 
 
-BUG FIXES
+## BUG FIXES
 
 * alanwood() returns only results for first match in case of multiple links found
 * physprop() stopped working after change of SRC to https, fixed now.
 * changed etox_* functions to https
 
 
-DEPRECATED FUNCTIONS
+## DEPRECATED FUNCTIONS
 
 * ppdb() replaces ppdb_query() and accepts individual index as created by ppdb_buildidx().
 * cir() replaces cir_query().
@@ -285,43 +282,43 @@ DEPRECATED FUNCTIONS
 * cs_extcompinfo() replaces csid_extcompinfo()
 
 
-DEFUNCT FUNCTIONS
+## DEFUNCT FUNCTIONS
 
 * allanwood()
 
 
 
 
-webchem 0.0.3
-======================
+# webchem 0.0.3
 
-NEW FEATURES
+
+## NEW FEATURES
 
 * Query SRC PHYSPROP Database with physprop().
 * Query the ETOX ID with get_etoxid(); query basic information with etox_basic();
   quality targets with etox_targets() and test results with etox_tests().
 * Query PPDB with ppdb_query()
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
 * added exceptions/checks to tests
 * improved robustness of cir_query()
 
-BUG FIXES
+## BUG FIXES
 
 * Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribution of @jranke]
 
 
 
-webchem 0.0.2
-======================
+# webchem 0.0.2
 
-NEW FEATURES
+
+## NEW FEATURES
 
 * Query the PAN Pesticides Database with pan().
 * Query Allan Woods Compendium of Pesticide Common Names with allanwood().
 
-MINOR IMPROVEMENTS
+## MINOR IMPROVEMENTS
 
 * Added checks for user input.
 * Fixed documentation, added example for bulk processing.
@@ -330,7 +327,7 @@ MINOR IMPROVEMENTS
 * Added unit tests.
 * All functions return silently NA, if API is not reachable.
 
-BUG FIXES
+## BUG FIXES
 
 * cts_convert() does not ignore 'first' argument.
 * get_csid() did not return NA, if there was a problem with the API.
