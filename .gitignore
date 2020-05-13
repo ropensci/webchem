@@ -11,3 +11,4 @@ README.html
 .github/*.html
 README_cache*
 docs
+inst/doc
