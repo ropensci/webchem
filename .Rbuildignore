@@ -27,3 +27,5 @@ README_cache
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+
+.Rmd.orig
