@@ -24,3 +24,6 @@ README_cache
 
 .vscode
 ^codecov\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
