@@ -9,6 +9,8 @@ test_that("examples in the article are unchanged", {
   #values go to test-chemspider
   pc_smiles <- smiles(pc_data)
 
+  expect_s3_class(pc_data, "data.frame")
+
   #fails because get_cid() no longer returns a character vector
   expect_equal(cids, c(7771, 14855, NA, 2256, 241, 22563))
   expect_equal(pc_smiles, c("CC1=CC(=C(C=C1)O)C", "CC1=C(C=CC(=C1)Cl)O", NA,
@@ -45,7 +47,6 @@ test_that("pc_prop", {
   c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"),
                verbose = FALSE)
   expect_true(is.na(b))
-  expect_s3_class(a, "data.frame")
   expect_equal(ncol(c), 3)
 })
 
