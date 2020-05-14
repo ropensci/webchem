@@ -28,9 +28,9 @@ test_that("cts_convert()", {
   o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', choices = 1, verbose = FALSE)
   expect_length(o1, 2)
 
-  skip("failing test below")
   expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
   # cts_convert('acetic acid', 'Chemical Name', 'CAS', choices = 1)
+  expect_equivalent(cts_convert(NA, from = "Chemical Name", to = "inchikey"), NA)
 })
 
 

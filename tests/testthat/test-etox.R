@@ -185,3 +185,10 @@ test_that("etox integration tests", {
   expect_s3_class(int3[['20179']]$res, 'data.frame')
   expect_true(is.na(int3[[3]]))
 })
+<<<<<<< HEAD
+=======
+
+test_that("etox functions handle NAs", {
+  expect_equal(is.na(get_etoxid(NA)$match), TRUE)
+})
+>>>>>>> fixing bugs related to NAs.  May have fixed some other bugs by accident.
