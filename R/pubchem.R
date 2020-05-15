@@ -43,9 +43,7 @@
 #' \code{from = "sourceid/<source id>"}, the query is the ID of the substance in
 #' the depositor's database.
 #' @details If \code{from = "sourceall"} the query is one or more valid Pubchem
-#' depositor names. Depositor names are not case sensitive, but are sensitive to
-#' spaces, and special characters may need to be escaped, such as "&" should be
-#' replaced by "\%26".
+#' depositor names. Depositor names are not case sensitive.
 #' @details Depositor names and Data Source IDs can be found at
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @details \code{<assay target>} is assembled as "\code{target}/\{\code{gi} |
@@ -171,6 +169,10 @@ get_cid <-
         if (verbose) message(paste0(query, " is invalid. Returning NA."))
         return(NA)
       }
+      if (verbose) {
+        message(paste0("Querying ", query, ". "), appendLF = FALSE)
+      }
+      if (is.character(query)) query <- URLencode(query)
       if (from %in% structure_search) {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
                       domain, from, query, "json", sep = "/")
@@ -180,9 +182,6 @@ get_cid <-
                       domain, from, query, "cids", "json", sep = "/")
       }
       if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
-      if (verbose) {
-        message(paste0("Querying ", query, ". "), appendLF = FALSE)
-      }
       Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
       if (from == "inchi") {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",

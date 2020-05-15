@@ -77,9 +77,7 @@ by CAS RN.
 the depositor's database.
 
 If \code{from = "sourceall"} the query is one or more valid Pubchem
-depositor names. Depositor names are not case sensitive, but are sensitive to
-spaces, and special characters may need to be escaped, such as "&" should be
-replaced by "\%26".
+depositor names. Depositor names are not case sensitive.
 
 Depositor names and Data Source IDs can be found at
 \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.

@@ -47,7 +47,6 @@ test_that("get_cid()", {
   expect_true(is.na(suppressWarnings(get_cid("xxxx", verbose = FALSE))$cid[1]))
   expect_equal(capture_messages(get_cid("balloon")),
                c("Querying balloon. ", "Not Found (HTTP 404).", "\n"))
-  skip("This test passes locally, but fails on AppVeyor and Travis")
   # sourceall
   expect_equal(get_cid("Optopharma Ltd", from = "sourceall",
                        domain = "substance")$cid[1], "102361739")
