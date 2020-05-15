@@ -53,6 +53,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
   type <- match.arg(type)
   match <- match.arg(match)
   foo <- function(query, type, match, verbose){
+    on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(query)) {
       message('query is NA! Returning NA.\n')
       return(NA)
