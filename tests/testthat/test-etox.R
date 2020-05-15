@@ -21,14 +21,13 @@ test_that("examples in the article are unchanged", {
   }))
 
   expect_is(ids, "data.frame")
-  expect_equal(names(ids), c("etoxid", "match", "distance", "query"))
+  expect_equal(names(ids), c("query", "match", "etoxid"))
   expect_equal(ids$etoxid,
                c("8668", "8494", NA, "8397", "7240", "7331"))
   expect_equal(
     ids$match,
     c("2,4-Xylenol ( 8668 )", "4-Chlor-2-methylphenol ( 8494 )", NA,
       "Atrazin ( 8397 )", "Benzol ( 7240 )", "Desethylatrazin ( 7331 )"))
-  expect_equal(ids$distance, c(0, 0, NA, 0, 0, 0))
   expect_equal(ids$query,
                c("2,4-Dimethylphenol", "4-Chlor-2-methylphenol",
                  "4-para-nonylphenol", "Atrazin", "Benzol", "Desethylatrazin"))
@@ -38,7 +37,7 @@ test_that("examples in the article are unchanged", {
                c("8668", "8494", NA, "8397", "7240", "7331"))
   expect_equal(unname(etox_cas),c("105-67-9", "1570-64-5", NA, "1912-24-9",
                                   "71-43-2", "6190-65-4"))
-  expect_equal(macs, c(2.000, 50.000, 0.016, 1.000, 4.000, 0.034),
+  expect_equal(unname(macs), c(2.000, 50.000, 0.016, 1.000, 4.000, 0.034),
                tolerance = 10^-4)
 })
 
