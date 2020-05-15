@@ -27,7 +27,7 @@
 fn_percept <- function(CAS, verbose = TRUE, ...)
 {
   foo <- function (CAS, verbose){
-    qurl = paste0("http://www.flavornet.org/info/",CAS,".html")
+    qurl <- paste0("http://www.flavornet.org/info/",CAS,".html")
     if (verbose)
       message(qurl)
     Sys.sleep(rgamma(1, shape = 10, scale = 1/10))
@@ -43,5 +43,6 @@ fn_percept <- function(CAS, verbose = TRUE, ...)
   }
   percepts <- sapply(CAS, foo, verbose = verbose)
   percepts <- setNames(percepts, CAS)
+  suppressWarnings(closeAllConnections())
   return(percepts)
 }

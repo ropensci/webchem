@@ -3,29 +3,62 @@ test_that("get_cid()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
-
+  #from name
   expect_equal(get_cid("Triclosan")$cid[1], "5564")
-  expect_true(nrow(get_cid("Triclosan", arg = "name_type=word")) > 1)
-  expect_true(nrow(get_cid("Triclosan", arg = "name_type=word",
-                             match = "first")) == 1)
-  expect_true(nrow(get_cid(c("Triclosan", "Aspirin"))) == 2)
-  expect_true(is.na(suppressWarnings(get_cid("xxxx", verbose = FALSE))$cid[1]))
-  expect_warning(
-    get_cid("xxxx", verbose = FALSE),
-    "No CID found that matches the given name. Returning NA."
-  )
-  expect_true(is.na(get_cid(NA)$cid[1]))
+  expect_equal(get_cid("Triclosan", domain = "substance")$cid[1], "5564")
+  #from smiles
+  expect_equal(get_cid("CCCC", from = "smiles")$cid, "7843")
+  #from inchi
+  expect_equal(get_cid("InChI=1S/CH5N/c1-2/h2H2,1H3", from = "inchi")$cid,
+               "6329")
+  #from inchikey
   expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid[1],
                "12345")
+  #from formula, issue 206, some queries first return a listkey.
+  expect_equal(get_cid("C26H52NO6P", from = "formula")$cid[1], "10864091")
+  # from CAS RN
+  expect_equal(get_cid("56-40-6", from = "xref/rn")$cid[1], "750")
+  expect_equal(get_cid("56-40-6", from = "xref/rn",
+                       domain = "substance")$cid[1], "5257127")
+  #from cid, similarity
+  expect_equal(get_cid(5564, from = "similarity/cid")$cid[1], "5564")
+  #from smiles, similarity
+  expect_equal(get_cid("CCO", from = "similarity/smiles")$cid[1], "702")
+  #from SID
+  expect_equal(get_cid("126534046", from = "sid", domain = "substance")$cid,
+               "24971898")
+  # sourceid
+  expect_equal(get_cid("VCC957895", from = "sourceid/23706",
+                       domain = "substance")$cid, "19689584")
+  #from aid
+  expect_equal(get_cid(170004, from = "aid", domain = "assay")$cid, "68352")
+  #from GeneID
+  expect_equal(get_cid(25086, from = "target/geneid", domain = "assay")$cid[1],
+               "11580958")
+  #arg
+  expect_true(nrow(get_cid("Triclosan", arg = "name_type=word")) > 1)
+  #match
+  expect_true(nrow(get_cid("Triclosan", arg = "name_type=word",
+                           match = "first")) == 1)
+  #multiple compounds
+  expect_true(nrow(get_cid(c("Triclosan", "Aspirin"))) == 2)
+  #invalid input
+  expect_true(is.na(get_cid(NA)$cid[1]))
+  expect_true(is.na(suppressWarnings(get_cid("xxxx", verbose = FALSE))$cid[1]))
+  expect_equal(capture_messages(get_cid("balloon")),
+               c("Querying balloon. ", "Not Found (HTTP 404).", "\n"))
+  # sourceall
+  expect_equal(get_cid("Optopharma Ltd", from = "sourceall",
+                       domain = "substance")$cid[1], "102361739")
 })
-
 
 test_that("pc_prop", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
   a <- pc_prop("5564", properties = "CanonicalSmiles", verbose = FALSE)
-  b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles", verbose = FALSE))
+  b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles",
+                                verbose = FALSE))
   c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"),
                verbose = FALSE)
   expect_equal(a$CanonicalSMILES, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
@@ -103,7 +136,8 @@ test_that("pc_sect()", {
   b <- pc_sect(2231, "depositor-supplied synonyms", "substance")
   expect_s3_class(b, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(b), c("SID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equivalent(b$Result, c("cholesterol", "57-88-5", "5-cholestene-3beta-ol"))
+  expect_equivalent(b$Result, c("cholesterol", "57-88-5",
+                                "5-cholestene-3beta-ol"))
 
   c <- pc_sect(780286, "modify date", "assay")
   expect_s3_class(c, c("tbl_df", "tbl", "data.frame"))
@@ -113,7 +147,8 @@ test_that("pc_sect()", {
   d <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_s3_class(d, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(d), c("pdbID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equivalent(d$Result[1], ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)")
+  expect_equivalent(d$Result[1],
+                    ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)")
 
   e <- pc_sect("US2013040379", "Patent Identifier Synonyms", "patent")
   expect_s3_class(e, c("tbl_df", "tbl", "data.frame"))
