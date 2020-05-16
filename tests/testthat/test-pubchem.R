@@ -22,37 +22,38 @@ test_that("get_cid()", {
   skip_if_not(up, "PubChem service is down")
 
   #from name
-  expect_equal(get_cid("Triclosan")$cid[1], "5564")
-  expect_equal(get_cid("Triclosan", domain = "substance")$cid[1], "5564")
+  expect_true("5564" %in% get_cid("Triclosan")$cid)
+  expect_true("5564" %in% get_cid("Triclosan", domain = "substance")$cid)
   #from smiles
   expect_equal(get_cid("CCCC", from = "smiles")$cid, "7843")
   #from inchi
   expect_equal(get_cid("InChI=1S/CH5N/c1-2/h2H2,1H3", from = "inchi")$cid,
                "6329")
   #from inchikey
-  expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid[1],
+  expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid,
                "12345")
   #from formula, issue 206, some queries first return a listkey.
-  expect_equal(get_cid("C26H52NO6P", from = "formula")$cid[1], "10864091")
+  expect_true("10864091" %in% get_cid("C26H52NO6P", from = "formula")$cid)
   # from CAS RN
-  expect_equal(get_cid("56-40-6", from = "xref/rn")$cid[1], "750")
-  expect_equal(get_cid("56-40-6", from = "xref/rn",
-                       domain = "substance")$cid[1], "5257127")
+  expect_true("750" %in% get_cid("56-40-6", from = "xref/rn")$cid)
+  expect_true("5257127" %in%
+                get_cid("56-40-6", from = "xref/rn", domain = "substance")$cid)
   #from cid, similarity
-  expect_equal(get_cid(5564, from = "similarity/cid")$cid[1], "5564")
+  expect_true("5564" %in% get_cid(5564, from = "similarity/cid")$cid)
   #from smiles, similarity
-  expect_equal(get_cid("CCO", from = "similarity/smiles")$cid[1], "702")
+  expect_true("702" %in% get_cid("CCO", from = "similarity/smiles")$cid)
   #from SID
   expect_equal(get_cid("126534046", from = "sid", domain = "substance")$cid,
                "24971898")
   # sourceid
-  expect_equal(get_cid("VCC957895", from = "sourceid/23706",
-                       domain = "substance")$cid, "19689584")
+  expect_true(
+    "19689584" %in%
+      get_cid("VCC957895", from = "sourceid/23706", domain = "substance")$cid)
   #from aid
   expect_equal(get_cid(170004, from = "aid", domain = "assay")$cid, "68352")
   #from GeneID
-  expect_equal(get_cid(25086, from = "target/geneid", domain = "assay")$cid[1],
-               "11580958")
+  expect_true("11580958" %in%
+                get_cid(25086, from = "target/geneid", domain = "assay")$cid)
   #arg
   expect_true(nrow(get_cid("Triclosan", arg = "name_type=word")) > 1)
   #match
