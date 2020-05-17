@@ -25,5 +25,3 @@ test_that("opsin_query()", {
   skip("failing test below")
   expect_equal(ncol(o1), ncol(o2))
 })
-
-

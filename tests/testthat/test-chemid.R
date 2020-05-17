@@ -38,6 +38,3 @@ test_that("chemid returns correct results", {
   expect_equal(m2[[1]]$cas, "60-54-8")
   expect_equal(m3[[1]], NA)
 })
-
-
-
