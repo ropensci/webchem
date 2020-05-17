@@ -38,10 +38,10 @@ test_that("get_cid()", {
   expect_true("750" %in% get_cid("56-40-6", from = "xref/rn")$cid)
   expect_true("5257127" %in%
                 get_cid("56-40-6", from = "xref/rn", domain = "substance")$cid)
-  #from cid, similarity - test might take a long time, let's skip for now
-  #expect_true("5564" %in% get_cid(5564, from = "similarity/cid")$cid)
-  #from smiles, similarity - test might take a long time, let's skip for now
-  #expect_true("702" %in% get_cid("CCO", from = "similarity/smiles")$cid)
+  #from cid, similarity
+  expect_true("5564" %in% get_cid(5564, from = "similarity/cid")$cid)
+  #from smiles, similarity
+  expect_true("702" %in% get_cid("CCO", from = "similarity/smiles")$cid)
   #from SID
   expect_equal(get_cid("126534046", from = "sid", domain = "substance")$cid,
                "24971898")

@@ -187,11 +187,10 @@ get_cid <-
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
                       domain, from, "cids", "json", sep = "/")
         res <- httr::POST(qurl, body = paste0("inchi=", query),
-                          user_agent("webchem"), handle = handle(""))
+                          user_agent("webchem"))
       }
       else {
-        res <- httr::POST(qurl, user_agent("webchem"),
-                          handle = handle(""))
+        res <- httr::POST(qurl, user_agent("webchem"))
       }
       if (res$status_code != 200) {
         if (res$status_code == 202) {
@@ -201,7 +200,7 @@ get_cid <-
                         "listkey", listkey, "cids", "json", sep = "/")
           while (res$status_code == 202) {
             Sys.sleep(5 + rgamma(1, shape = 15, scale = 1 / 10))
-            res <- httr::POST(qurl, user_agent("webchem"), handle = handle(""))
+            res <- httr::POST(qurl, user_agent("webchem"))
           }
           if (res$status_code != 200) {
             if (verbose) message(httr::message_for_status(res))
@@ -565,9 +564,7 @@ pc_page <- function(id,
     Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
     res <- httr::POST(
       qurl,
-      user_agent("webchem (https://github.com/ropensci/webchem)"),
-      handle = handle("")
-      )
+      user_agent("webchem (https://github.com/ropensci/webchem)"))
     if (res$status_code < 300) {
       if (verbose == TRUE) message(httr::message_for_status(res))
       cont <- httr::content(res, type = "text", encoding = "UTF-8")
