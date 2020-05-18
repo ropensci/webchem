@@ -33,8 +33,7 @@ test_that("get_cid()", {
   #from aid
   expect_equal(get_cid(170004, from = "aid", domain = "assay")$cid, "68352")
   #from GeneID
-  expect_equal(get_cid(25086, from = "target/geneid", domain = "assay")$cid[1],
-               "11580958")
+  expect_true("11580958" %in% get_cid(25086, from = "target/geneid", domain = "assay")$cid)
   #arg
   expect_true(nrow(get_cid("Triclosan", arg = "name_type=word")) > 1)
   #match
