@@ -31,7 +31,7 @@ reference:
   - cts_compinfo
   - etox_targets
   - etox_tests
-  - fn_percepts
+  - fn_percept
   - nist_ri
   - pan_query
   - pc_prop
@@ -48,7 +48,9 @@ reference:
   - cs_check_key
   - cs_control
   - extractors
-  - ping
+  - ping_service
+  - cs_datasources
+  - parse_mol
 - title: Deprecated and defunct
 - contents:
   - webchem-defunct
