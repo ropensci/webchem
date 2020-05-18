@@ -30,6 +30,17 @@ retrieve database identifiers which follow the format of
 `get_identifier`. e.g.`cs_compinfo` uses ChemSpider to retrieve compound
 informations and `get_csid()` retrieves ChemSpider IDs.
 
+## Fill out the survey\!
+
+Do you use chemical information databases in your work? Help us help you
+by filling out our short survey at
+<https://forms.gle/V7dfGGn73dkesn5L6>.
+
+The `webchem` survey allows us to learn which databases you use and how
+you interact with chemical data. This is extremely valuable information
+for us and guides our development efforts. The survey takes about 5
+minutes to fill out.
+
 ## Chemical databases currently accessed by webchem
 
 At least some of the data in the following sources is accesible through
@@ -87,14 +98,6 @@ remember to acknowledge these data resources in your work using
 `webchem`.
 
 ### Related Projects
-
-  - [UniprotR](https://cran.r-project.org/web/packages/UniprotR/index.html)
-    for retrieving information on proteins from Uniprot
-  - [chemspiderapi](https://github.com/RaoulWolf/chemspiderapi) provides
-    a more bare-bones but comprehensive interface to the ChemSpider API
-  - [rcdk](https://cran.r-project.org/web/packages/rcdk/index.html)
-    allows the user to access functionality in the ‘CDK’, a Java
-    framework for chemoinformatics.
 
 If you’re more familiar with Python you should check out [Matt
 Swains](https://github.com/mcs07) repositories:
