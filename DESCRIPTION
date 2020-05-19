@@ -39,5 +39,8 @@ Suggests:
     testthat,
     rcdk,
     covr,
-    robotstxt
+    robotstxt,
+    knitr,
+    rmarkdown
 RoxygenNote: 7.1.0
+VignetteBuilder: knitr

@@ -1,0 +1,147 @@
+---
+title: "Getting started with webchem"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with webchem}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<!-- Only edit webchem.Rmd.orig and compile using the script in vignettes/precompile.R -->
+
+
+
+
+```r
+library(webchem)
+library(dplyr)
+```
+
+The `lc50` dataset provided with `webchem` contains acute ecotoxicity of 124 insecticides.  We'll work with a subset of these to obtain chemical names and octanal/water partitioning coefficients from PubChem, and gas chromatography retention indices from the NIST Web Book.
+
+
+```r
+head(lc50)
+#>        cas        value
+#> 4  50-29-3    12.415277
+#> 12 52-68-6     1.282980
+#> 15 55-38-9    12.168138
+#> 18 56-23-5 35000.000000
+#> 21 56-38-2     1.539119
+#> 36 57-74-9    98.400000
+
+lc50_sub <- lc50[1:15, ]
+```
+
+## Getting Identifiers
+
+Usually a `webchem` workflow starts with translating and retrieving chemical identifiers since most chemical information databases use their own internal identifiers.
+
+First, we will covert CAS numbers to InChIKey identifiers using the Chemical Translation Service.  Then, we'll use these InChiKeys to get Pubchem CompoundID numbers, to use for retrieving chemical properties from PubChem.
+
+
+```r
+lc50_sub$inchikey <- cts_convert(lc50_sub$cas, from = "CAS", to = "InChIKey", choices = 1, verbose = FALSE)
+head(lc50_sub)
+#>        cas        value                    inchikey
+#> 4  50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N
+#> 12 52-68-6     1.282980 NFACJZMKEDPNKN-UHFFFAOYSA-N
+#> 15 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N
+#> 18 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N
+#> 21 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N
+#> 36 57-74-9    98.400000 BIWJNBZANLAXMG-YQELWRJZSA-N
+any(is.na(lc50_sub$inchikey))
+#> [1] FALSE
+```
+
+Great, now we can retrieve PubChem CIDs.  All `get_*()` functions return a data frame containing the query and the retrieved identifier.  We can merge this with our dataset with `dplyr::full_join()`
+
+
+```r
+x <- get_cid(lc50_sub$inchikey, from = "inchikey", match = "first", verbose = FALSE)
+library(dplyr)
+lc50_sub2 <- full_join(lc50_sub, x, by = c("inchikey" = "query"))
+head(lc50_sub2)
+#>       cas        value                    inchikey      cid
+#> 1 50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N     3036
+#> 2 52-68-6     1.282980 NFACJZMKEDPNKN-UHFFFAOYSA-N     5853
+#> 3 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N     3346
+#> 4 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N     5943
+#> 5 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N      991
+#> 6 57-74-9    98.400000 BIWJNBZANLAXMG-YQELWRJZSA-N 11954021
+```
+
+## Retrieving Chemical Properties
+
+Functions that query chemical information databases begin with a prefix that matches the database.  For example, functions to query PubChem begin with `pc_` and functions to query ChemSpider begin with `cs_`. In this example, we'll get the names and log octanal/water partitioning coefficients for each compound using PubChem, and the WHO acute toxicity rating from the PAN Pesticide database.
+
+
+```r
+y <- pc_prop(lc50_sub2$cid, properties = c("IUPACName", "XLogP"))
+#> https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/property/IUPACName,XLogP/JSON
+y$CID <- as.character(y$CID)
+lc50_sub3 <- full_join(lc50_sub2, y, by = c("cid" = "CID"))
+head(lc50_sub3)
+#>       cas        value                    inchikey      cid
+#> 1 50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N     3036
+#> 2 52-68-6     1.282980 NFACJZMKEDPNKN-UHFFFAOYSA-N     5853
+#> 3 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N     3346
+#> 4 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N     5943
+#> 5 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N      991
+#> 6 57-74-9    98.400000 BIWJNBZANLAXMG-YQELWRJZSA-N 11954021
+#>                                                                      IUPACName XLogP
+#> 1                  1-chloro-4-[2,2,2-trichloro-1-(4-chlorophenyl)ethyl]benzene   6.9
+#> 2                                 2,2,2-trichloro-1-dimethoxyphosphorylethanol   0.5
+#> 3 dimethoxy-(3-methyl-4-methylsulfanylphenoxy)-sulfanylidene-lambda5-phosphane   4.1
+#> 4                                                           tetrachloromethane   2.8
+#> 5                    diethoxy-(4-nitrophenoxy)-sulfanylidene-lambda5-phosphane   3.8
+#> 6            (1R,7S)-1,3,4,7,8,9,10,10-octachlorotricyclo[5.2.1.02,6]dec-8-ene   4.9
+```
+
+The IUPAC names are long and unwieldy, and one could use `pc_synonyms()` to choose better names. Several other functions return synonyms as well, even though they are not explicitly translator type functions.  We'll see an example of that next.
+
+Many of the chemical databases `webchem` can query contain vast amounts of information in a variety of structures.  Therefore, some `webchem` functions return nested lists rather than data frames.  `pan_query()` is one such function.
+
+
+```r
+out <- pan_query(lc50_sub3$cas, verbose = FALSE)
+#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+
+#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+
+#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+
+#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+
+#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+
+#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+
+#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+```
+
+`out` is a nested list which you can inspect with `View()`.  It has an element for each query, and within each query, many elements corresponding to different properties in the database.  To extract a single property from all queries, we need to use a mapping function such as `sapply()` or one of the `map_*()` functions from the `purrr` package.
+
+
+```r
+lc50_sub3$who_tox <- sapply(out, function(y) y$`WHO Acute Toxicity`)
+lc50_sub3$common_name <- sapply(out, function(y) y$`Chemical name`)
+
+# #equivalent with purrr package:
+# lc50_sub3$who_tox <- map_chr(out, pluck, "WHO Acute Toxicity")
+# lc50_sub3$common_name <- map_chr(out, pluck, "Chemical name")
+```
+
+
+```r
+#tidy up columns
+lc50_done <- dplyr::select(lc50_sub3, common_name, cas, inchikey, XLogP, who_tox)
+head(lc50_done)
+#>            common_name     cas                    inchikey XLogP                  who_tox
+#> 1            DDT, p,p' 50-29-3 YVGGHNCTFXOJCH-UHFFFAOYSA-N   6.9 II, Moderately Hazardous
+#> 2          Trichlorfon 52-68-6 NFACJZMKEDPNKN-UHFFFAOYSA-N   0.5 II, Moderately Hazardous
+#> 3             Fenthion 55-38-9 PNVJTZOFSHSLTO-UHFFFAOYSA-N   4.1 II, Moderately Hazardous
+#> 4 Carbon tetrachloride 56-23-5 VZGDMQKNWNREIO-UHFFFAOYSA-N   2.8               Not Listed
+#> 5            Parathion 56-38-2 LCCNCVORNKJIRZ-UHFFFAOYSA-N   3.8  Ia, Extremely Hazardous
+#> 6            Chlordane 57-74-9 BIWJNBZANLAXMG-YQELWRJZSA-N   4.9 II, Moderately Hazardous
+```
+

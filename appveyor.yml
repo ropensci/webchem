@@ -7,6 +7,7 @@ environment:
   R_INSTALL_ARGS: --no-multiarch
   PKGTYPE: binary
   NOT_CRAN: true
+  CURL_SSL_BACKEND: openssl
 
 init:
   ps: |
