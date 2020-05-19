@@ -55,3 +55,6 @@ reference:
 - contents:
   - webchem-defunct
   - webchem-deprecated
+- title: Package
+- contents:
+  - webchem
