@@ -56,6 +56,7 @@ get_etoxid <- function(query,
   from <- match.arg(from)
   match <- match.arg(match)
   foo <- function(query, from, match, verbose) {
+    on.exit(suppressWarnings(closeAllConnections()))
     if (verbose)
       message("Searching ", query)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
@@ -188,6 +189,7 @@ etox_basic <- function(id, verbose = TRUE) {
   }
   # id <- c("20179", "9051")
   foo <- function(id, verbose) {
+    on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(id)) {
       message('ID is NA! Returning NA.\n')
       return(NA)
@@ -295,6 +297,7 @@ etox_targets <- function(id, verbose = TRUE) {
     stop("id must be a vector!")
   }
   foo <- function(id, verbose) {
+    on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(id)) {
       message('ID is NA! Returning NA.\n')
       return(NA)
@@ -382,6 +385,7 @@ etox_tests <- function(id, verbose = TRUE) {
     stop("id must be a vector!")
   }
   foo <- function(id, verbose){
+    on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(id)) {
       message('ID is NA! Returning NA.\n')
       return(NA)

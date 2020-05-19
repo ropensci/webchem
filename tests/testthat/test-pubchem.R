@@ -1,39 +1,59 @@
 up <- ping_service("pc")
+test_that("examples in the article are unchanged", {
+  skip_on_cran()
+  skip_if_not(up, "PubChem service is down")
+  #values come from test-etox
+  cas <- c("105-67-9", "1570-64-5", NA, "1912-24-9", "71-43-2", "6190-65-4")
+  cids <- get_cid(cas, from = "xref/rn", match = "first")
+  pc_data <- pc_prop(cids$cid, properties = "CanonicalSMILES")
+  #values go to test-chemspider
+  pc_smiles <- smiles(pc_data)
+
+  expect_s3_class(pc_data, "data.frame")
+
+  expect_equal(cids$cid, c("7771", "14855", NA, "2256", "241", "22563"))
+  expect_equal(pc_smiles, c("CC1=CC(=C(C=C1)O)C", "CC1=C(C=CC(=C1)Cl)O", NA,
+                            "CCNC1=NC(=NC(=N1)Cl)NC(C)C", "C1=CC=CC=C1",
+                            "CC(C)NC1=NC(=NC(=N1)N)Cl"))
+})
+
 test_that("get_cid()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
   #from name
-  expect_equal(get_cid("Triclosan")$cid[1], "5564")
-  expect_equal(get_cid("Triclosan", domain = "substance")$cid[1], "5564")
+  expect_true("5564" %in% get_cid("Triclosan")$cid)
+  expect_true("5564" %in% get_cid("Triclosan", domain = "substance")$cid)
   #from smiles
   expect_equal(get_cid("CCCC", from = "smiles")$cid, "7843")
   #from inchi
   expect_equal(get_cid("InChI=1S/CH5N/c1-2/h2H2,1H3", from = "inchi")$cid,
                "6329")
   #from inchikey
-  expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid[1],
+  expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid,
                "12345")
   #from formula, issue 206, some queries first return a listkey.
-  expect_equal(get_cid("C26H52NO6P", from = "formula")$cid[1], "10864091")
+  expect_true("10864091" %in% get_cid("C26H52NO6P", from = "formula")$cid)
   # from CAS RN
-  expect_equal(get_cid("56-40-6", from = "xref/rn")$cid[1], "750")
-  expect_equal(get_cid("56-40-6", from = "xref/rn",
-                       domain = "substance")$cid[1], "5257127")
+  expect_true("750" %in% get_cid("56-40-6", from = "xref/rn")$cid)
+  expect_true("5257127" %in%
+                get_cid("56-40-6", from = "xref/rn", domain = "substance")$cid)
   #from cid, similarity
-  expect_equal(get_cid(5564, from = "similarity/cid")$cid[1], "5564")
+  expect_true("5564" %in% get_cid(5564, from = "similarity/cid")$cid)
   #from smiles, similarity
-  expect_equal(get_cid("CCO", from = "similarity/smiles")$cid[1], "702")
+  expect_true("702" %in% get_cid("CCO", from = "similarity/smiles")$cid)
   #from SID
   expect_equal(get_cid("126534046", from = "sid", domain = "substance")$cid,
                "24971898")
   # sourceid
-  expect_equal(get_cid("VCC957895", from = "sourceid/23706",
-                       domain = "substance")$cid, "19689584")
+  expect_true(
+    "19689584" %in%
+      get_cid("VCC957895", from = "sourceid/23706", domain = "substance")$cid)
   #from aid
   expect_equal(get_cid(170004, from = "aid", domain = "assay")$cid, "68352")
   #from GeneID
-  expect_true("11580958" %in% get_cid(25086, from = "target/geneid", domain = "assay")$cid)
+  expect_true("11580958" %in%
+                get_cid(25086, from = "target/geneid", domain = "assay")$cid)
   #arg
   expect_true(nrow(get_cid("Triclosan", arg = "name_type=word")) > 1)
   #match
@@ -55,14 +75,11 @@ test_that("pc_prop", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
-  a <- pc_prop("5564", properties = "CanonicalSmiles", verbose = FALSE)
   b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles",
                                 verbose = FALSE))
   c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"),
                verbose = FALSE)
-  expect_equal(a$CanonicalSMILES, "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
   expect_true(is.na(b))
-  expect_s3_class(a, "data.frame")
   expect_equal(ncol(c), 3)
 })
 

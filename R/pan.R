@@ -70,6 +70,7 @@
 pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, ...){
   match <- match.arg(match)
   foo <- function(query, match, verbose) {
+    on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(query)) {
       warning('Identifier is NA... Returning NA.')
       return(NA)

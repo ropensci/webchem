@@ -24,6 +24,7 @@
 opsin_query <- function(query, verbose = TRUE, ...){
   # query <- 'cyclopropane'
   foo <- function(query, verbose){
+    on.exit(suppressWarnings(closeAllConnections()))
     query <- URLencode(query)
     baseurl <- "http://opsin.ch.cam.ac.uk/opsin/"
     out <- 'json'

@@ -1,4 +1,46 @@
 up <- ping_service("etox")
+test_that("examples in the article are unchanged", {
+  skip_on_cran()
+  skip_if_not(up, "ETOX service is down")
+
+  data("jagst", package = "webchem")
+  subs <- head(unique(jagst$substance))
+  ids <- get_etoxid(subs, match = "best")
+  etox_data <- etox_basic(ids$etoxid)
+  #values go to test-pubchem
+  etox_cas <- cas(etox_data)
+  eqs <- etox_targets(c("8397", "7240", "8836", "7442", "7571", "8756"))
+  macs <- suppressWarnings(sapply(eqs, function(y) {
+    if (length(y) == 1 && is.na(y)) {
+      return(NA)
+    } else {
+      res <- y$res
+      min(res[res$Country_or_Region == "EEC / EU" &
+                res$Designation == "MAC-EQS", "Value_Target_LR"])
+    }
+  }))
+
+  expect_is(ids, "data.frame")
+  expect_equal(names(ids), c("query", "match", "etoxid"))
+  expect_equal(ids$etoxid,
+               c("8668", "8494", NA, "8397", "7240", "7331"))
+  expect_equal(
+    ids$match,
+    c("2,4-Xylenol ( 8668 )", "4-Chlor-2-methylphenol ( 8494 )", NA,
+      "Atrazin ( 8397 )", "Benzol ( 7240 )", "Desethylatrazin ( 7331 )"))
+  expect_equal(ids$query,
+               c("2,4-Dimethylphenol", "4-Chlor-2-methylphenol",
+                 "4-para-nonylphenol", "Atrazin", "Benzol", "Desethylatrazin"))
+
+  expect_is(etox_cas, "character")
+  expect_equal(names(etox_cas),
+               c("8668", "8494", NA, "8397", "7240", "7331"))
+  expect_equal(unname(etox_cas),c("105-67-9", "1570-64-5", NA, "1912-24-9",
+                                  "71-43-2", "6190-65-4"))
+  expect_equal(unname(macs), c(2.000, 50.000, 0.016, 1.000, 4.000, 0.034),
+               tolerance = 10^-4)
+})
+
 test_that("get_etoxid returns correct results", {
   skip_on_cran()
   skip_if_not(up, "ETOX service is down")

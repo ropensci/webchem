@@ -27,6 +27,7 @@
 fn_percept <- function(CAS, verbose = TRUE, ...)
 {
   foo <- function (CAS, verbose){
+    on.exit(suppressWarnings(closeAllConnections()))
     qurl <- paste0("http://www.flavornet.org/info/",CAS,".html")
     if (verbose)
       message(qurl)
@@ -43,6 +44,5 @@ fn_percept <- function(CAS, verbose = TRUE, ...)
   }
   percepts <- sapply(CAS, foo, verbose = verbose)
   percepts <- setNames(percepts, CAS)
-  suppressWarnings(closeAllConnections())
   return(percepts)
 }

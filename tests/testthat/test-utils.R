@@ -1,4 +1,17 @@
 library(rcdk)
+
+up <- ping_service("cs_web")
+test_that("examples in the article are unchanged", {
+  expect_false(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN"))
+  expect_equal(capture_messages(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN")),
+               "Hyphens not at position 15 and 26.\n")
+  expect_false(is.cas('64-17-6'))
+  expect_equal(
+    capture_messages(is.cas("64-17-6")), "Checksum is not correct! 5 vs. 6\n")
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+  expect_false(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKSA-5", type = "chemspider"))
+})
+
 test_that("is.cas() returns correct results", {
 
   expect_true(is.cas('64-17-5'))
@@ -6,7 +19,6 @@ test_that("is.cas() returns correct results", {
   expect_false(is.cas('4-17-5'))
   expect_false(is.cas('64-177-6'))
   expect_false(is.cas('64-17-55'))
-  expect_false(is.cas('64-17-6'))
   expect_error(is.cas(c('64-17-5', '64-17-5')))
 })
 
@@ -30,7 +42,7 @@ test_that("is.inchikey() returns correct results", {
   skip_on_cran()
   skip_on_travis()
   skip_on_appveyor()
-  skip_if_not(ping_service("cs"), "ChemSpider service is down, skipping tests")
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
   b <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA', type = 'chemspider')
