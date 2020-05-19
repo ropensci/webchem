@@ -99,6 +99,9 @@ remember to acknowledge these data resources in your work using
 
 ### Related Projects
 
+You can find some related packages in the [ChemPhys CRAN Task
+View](https://cran.r-project.org/web/views/ChemPhys.html)
+
 If you’re more familiar with Python you should check out [Matt
 Swains](https://github.com/mcs07) repositories:
 [ChemSpiPy](https://github.com/mcs07/ChemSpiPy),
