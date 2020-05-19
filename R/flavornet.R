@@ -15,7 +15,7 @@
 #' @author Eric Scott, \email{eric.scott@@tufts.edu}
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if website is not available
 #' fn_percept("123-32-0")
 #'
