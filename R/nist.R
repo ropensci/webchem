@@ -16,6 +16,7 @@ get_ri_xml <-
            type,
            polarity,
            temp_prog) {
+    on.exit(suppressWarnings(closeAllConnections()))
 
     from_str <- (switch(
       from,

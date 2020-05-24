@@ -21,7 +21,7 @@ Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a da
 perceptible to humans detected using gas chromatography ofactometry (GCO).
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if website is not available
 fn_percept("123-32-0")
 

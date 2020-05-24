@@ -21,13 +21,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 
 [![Build Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem) 
-[![Build status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem) 
-[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=tests)](https://codecov.io/gh/ropensci/webchem/branch/tests) 
+[![Build status](https://ci.appveyor.com/api/projects/status/8m7wpfnxn41kqjnl?svg=true)](https://ci.appveyor.com/project/ropensci/webchem)
+[![Coverage Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/webchem/branch/master) 
 [![Open Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues) 
 [![](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![CRAN status](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem) 
 [![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem) 
-
 <!-- badges: end -->
 
 `webchem` is a R package to retrieve chemical information from  the web. 
@@ -36,26 +35,30 @@ This package interacts with a suite of web APIs to retrieve chemical information
 The functions in the package that hit a specific API have a prefix and suffix separated by an underscore (`prefix_suffix()`).
 They follow the format of `source_functionality`, with the exception of functions that retrieve database identifiers which follow the format of `get_identifier`. e.g.`cs_compinfo` uses ChemSpider to retrieve compound informations and `get_csid()` retrieves ChemSpider IDs.
 
+## Fill out the survey!
 
-## Currently implemented in `webchem`
+Do you use chemical information databases in your work?  Help us help you by filling out our short survey at https://forms.gle/V7dfGGn73dkesn5L6. 
 
-Source | Function(s) | API Docs | API key
------- | --------- | -------- | --------
-[Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure) | `cir_query()` | [link](http://cactus.nci.nih.gov/chemical/structure_documentation) | none
-[ChemSpider](http://www.chemspider.com/) | `cs_datasources()`,`get_csid()`, `cs_element_csid()`, `cs_convert()`, `cs_compinfo()`, `cs_extcompinfo()`, `cs_prop()`| [link](https://developer.rsc.org/compounds-v1/apis) | required [(link)](https://developer.rsc.org/)
-[PubChem](https://pubchem.ncbi.nlm.nih.gov/) | `get_cid()`, `pc_prop()`, `pc_synonyms()` | [link](https://pubchem.ncbi.nlm.nih.gov/) | none
-[Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | `cts_convert()`, `cts_compinfo()` | none | none
-[PAN Pesticide Database](http://www.pesticideinfo.org/) | `pan_query()` | none | none
-[Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/) | `aw_query()` | none | none
-[ETOX](http://webetox.uba.de/webETOX/index.do) | `get_etoxid()`, `etox_basic()`. `etox_targets()`, `etox_tests()` | none | none
-[ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) | `ci_query()` | none | none
-[Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | `get_wdid()`, `wd_ident()` | [link](https://www.mediawiki.org/wiki/API:Main_page) | none
-[OPSIN](http://opsin.ch.cam.ac.uk/instructions.html) | `opsin_query()` | [link](http://opsin.ch.cam.ac.uk/instructions.html) | none
-[Flavornet](http://www.flavornet.org) | `fn_percept()` | none | none
-[NIST](https://webbook.nist.gov) | `nist_ri()` | none | none
-[ChEBI](https://www.ebi.ac.uk/chebi/) | `get_chebiid()`, `chebi_comp_entity()` | [link](https://www.ebi.ac.uk/chebi/webServices.do) | none
+The `webchem` survey allows us to learn which databases you use and how you interact with chemical data. This is extremely valuable information for us and guides our development efforts. The survey takes about 5 minutes to fill out.
 
-Moreover, there are some functions to check indentifiers: `is.inchikey()`, `is.cas()` and `is.smiles()`.
+## Chemical databases currently accessed by webchem
+
+At least some of the data in the following sources is accesible through `webchem` functions.  To learn more about what is available, browse the documentation [here](https://docs.ropensci.org/webchem/reference/index.html).
+
+- [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure)
+- [ChemSpider](http://www.chemspider.com/) (requires an [API token]((https://developer.rsc.org/)))
+- [PubChem](https://pubchem.ncbi.nlm.nih.gov/) 
+- [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
+- [PAN Pesticide Database](http://www.pesticideinfo.org/)
+- [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/)
+- [ETOX](http://webetox.uba.de/webETOX/index.do)
+- [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) 
+- [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)
+- [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)
+- [Flavornet](http://www.flavornet.org) 
+- [NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only)
+- [ChEBI](https://www.ebi.ac.uk/chebi/)
+- [U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
 
 #### API keys
 
@@ -71,6 +74,7 @@ install.packages("webchem")
 
 
 #### Install from Github (development version)
+
 ```{r install_github, eval=FALSE}
 install.packages("devtools")
 library("devtools")
@@ -78,325 +82,14 @@ install_github("ropensci/webchem")
 ```
 
 
-## Quickstart
-```{r load}
-library("webchem")
-```
-
-#### Chemical Identifier Resolver (CIR)
-
-CAS numbers and molecular weight for [Triclosan](http://en.wikipedia.org/wiki/Triclosan).
-Use `choices = 1` to return only the first hit.
-```{r cir_query1}
-cir_query('Triclosan', 'cas')
-cir_query('Triclosan', 'cas', choices = 1)
-cir_query('Triclosan', 'mw')
-```
-
-Query SMILES and InChIKey from CAS (Triclosan).
-Inputs might by ambiguous and we can specify where to search using `resolver=`.
-```{r cir_query2}
-cir_query('3380-34-5', 'smiles')
-cir_query('3380-34-5', 'stdinchikey', resolver = 'cas_number')
-```
-
-Query the number of rings using the InChiKey (Triclosan) 
-```{r cir_query3}
-cir_query('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'ring_count')
-```
-
-
-#### ChemSpider
-Retrieve the ChemSpider ID of Triclosan
-
-```{r get_csid}
-(id <- get_csid('Triclosan'))
-```
-
-Use this ID to query information from ChemSpider
-
-
-```{r cs_extcompinfo}
-# cs_compinfo(id, fields = c("Formula", "MolecularWeight"))
-```
-
-Note that the URL of the source if also returned (`source_url`) and can be used for (micro-)attribution.
-
-Or to convert to a Mol-Object
-
-
-```{r cs_csid_mol}
-# mol <- cs_convert(id, from = 'csid', to = 'mol')
-# head(parse_mol(mol$ab))
-```
-Note that the Molfile is parsed into a R object (via `parse_mol()`) and that an API-key is needed
-
-
-`cs_convert()` handles a lot of input / output formats:
-
-```{r cs_inchikey_csid}
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'csid')
-cs_convert('XEFQLINVKFYRCS-UHFFFAOYAS', from = 'inchikey', to = 'inchi')
-cs_convert('c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl', from = 'smiles', to = 'inchi')
-```
-
-And get EPISuit predictions from ChemSpider
-
-```{r cs_prop, eval=FALSE}
-cs_prop('5363')[['5363']]$epi[ , c(1:4)]
-```
-
-#### PubChem
-
-Retrieve PubChem CID
-```{r get_cid}
-get_cid(c('Triclosan', 'Aspirin'))
-get_cid('3380-34-5')
-```
-
-Use this CID to retrieve some chemical properties:
-```{r pc_prop}
-pc_prop(c(5564,2244), properties = c('InChIKey', 'MolecularFormula', 'MolecularWeight'))
-```
-
-and synonyms
-
-```{r pc_synonyms}
-pc_synonyms(5564, from = 'cid')[[1]][1:5]
-pc_synonyms('Triclosan', from = 'name')[[1]][1:5]
-```
-
-
-
-#### Chemical Translation Service (CTS)
-
-CTS allows to convert from nearly every possible identifier to nearly every possible identifier:
-```{r cts_convert}
-cts_convert(query = '3380-34-5', from = 'CAS', to = 'ChemSpider')
-(inchk <- cts_convert(query = '50-00-0', from = 'CAS', to = 'inchikey'))
-```
-
-Moreover, we can a lot of information stored in the CTS database using InChIkey
-```{r cts_compinfo}
-info <- cts_compinfo(inchikey = inchk[[1]])
-info[[1]][1:5]
-```
-
-
-#### PAN Pesticide Database
-`pan_query()` returns a list of 75 entries, here I extract only 4 of those:
-```{r pan}
-pan_list <- pan_query('lambda-Cyhalothrin', match = 'best')
-pan_list[[1]][c("CAS Number", "Chemical Class", "Water Solubility (Avg, mg/L)", "Adsorption Coefficient (Koc)" )]
-```
-
-
-
-#### Alan Wood's Compendium of Pesticide Common Names
-
-`aw_query()` returns a list of 9 entries and can query common names and cas numbers:
-```{r alanwood}
-aw_query('Fluazinam', type = 'commonname')
-aw_query('79622-59-6', type = 'cas')[[1]]$cname
-```
-
-#### ETOX
-ETOX: Information System Ecotoxicology and Environmental Quality Targets is a database run by the Federal Environment Agency of Germany and provides data on synonyms, identifiers, Quality Targest and Effects.
-
-First we need to query a substance ID:
-
-```{r get_etoxid}
-ids <- get_etoxid('Triclosan', match = 'best')
-ids
-```
-`get_etoxid` tries to find the best match for you (check the matched and distance attributes), if multiple hits are found.
-Other options are `match = 'ask'` to enter a interactive mode, `'na'` to return `NA`, `'all'` to return all hits and `'first'` to return the first hit.
-
-```{r}
-get_etoxid('Triclosan', match = 'all')
-```
-
-
-
-With this substance ID we can query further information from ETOX, e.g.:
-
-```{r etox_basic}
-etox_basic(ids$etoxid)[[1]]
-```
-
-Which returns CAS, EC and GSBL numbers, as well as a synonym list.
-
-We can also retrieve Quality Targets:
-
-```{r etox_targets}
-targets <- etox_targets(ids$etoxid)[[1]]
-targets$res[ , c('Substance', 'Country_or_Region', 'Designation', 'Value_Target_LR', 'Unit')]
-```
-
-and results of ecotox tests:
-```{r etox_tests}
-tests <- etox_tests(ids$etoxid)[[1]]
-tests$res[ , c('Organism', 'Effect', 'Duration', 'Time_Unit','Endpoint', 'Value', 'Unit')]
-```
-
-
-
-
-
-
-
-
-#### ChemIDplus
-
-```{r chemid}
-out <- ci_query(query = 'Triclosan', type = 'name', match = 'best')
-out[['Triclosan']]$physprop
-```
-
-
-
-#### Wikidata
-```{r wikidata}
-ids <- get_wdid(query = 'Triclosan')
-ids
-
-# query identifiers from Wikidata
-wd_ident(ids$id)[1:5]
-```
-
-
-#### OPSIN
-```{r opsin}
-opsin_query(c('Cyclopropane', 'Octane'))
-```
-
-
-
-#### Flavornet
-
-```{r flavornet}
-fn_percept(CAS = c("75-07-0", "123-32-0"))
-```
-
-#### NIST
-
-Identification of gas chromatography peaks is often aided by retention idices. NIST provides tables of retention indices reported in the literature organized by retention index type (Kovats, linear, normal alkane, and Lee), column polarity, and temperature program.
-
-
-```{r nist}
-RIs <-
-  nist_ri(
-    query = "78-70-6",
-    from = "cas",
-    type = "kovats",
-    polarity = "non-polar",
-    temp_prog = "ramp"
-  )
-head(RIs)
-```
-
-#### ChEBI
-
-Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds. `get_chebiid()` returns a list of data.frames which matching query results. The data.frames contain the __chebiid__, the __chebiiasciiname__, a __searchscore__ and __entity stars__ (either 2 or 3, depending on whether the entity was checked thoroughly).
-
-```{r chebi-lite}
-ids <- get_chebiid(c('Isoproturon', 'RZVAJINKPMORJF-UHFFFAOYSA-N'), verbose = FALSE)
-ids
-```
-
-The __chebiid__ can then be used to query the complete ChEBI entity using `chebi_comp_entity()`. The complete entity contains several different data structures which are returned in a list. The data structures are explained in greater detail at the [ChEBI website](https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:6049). Here, the list elements are showcased:
-
-```{r chebi-comp}
-# ecample entities
-isoproturon <- chebi_comp_entity(ids$Isoproturon$chebiid[1])
-paracetamol <- chebi_comp_entity(ids$`RZVAJINKPMORJF-UHFFFAOYSA-N`$chebiid[1])
-
-# properties: a data.frame with general properties
-lapply(isoproturon, '[[', 'properties')
-# chem_structure: a list of chemical structure formats (e.g. mol)
-lapply(isoproturon, '[[', 'chem_structure')
-# synonyms: a data.frame of synonyms (collected from different sources)
-lapply(isoproturon, '[[', 'synonyms')
-# iupacnames: a data.frame of IUPAC names (collected from different sources)
-lapply(isoproturon, '[[', 'iupacnames')
-# formulae: a data.frame of chemical formulae (collected from different sources)
-lapply(isoproturon, '[[', 'formulae')
-# regnumbers: a data.frame of registry numbers (e.g. CAS, Beilstein, Reaxys) (collected from different sources)
-lapply(isoproturon, '[[', 'regnumbers')
-# chebiid_snd: a data.frame with secondary ChEBI ids
-lapply(paracetamol, '[[', 'chebiid_snd')
-# citations: Publications which cite the entity along with hyperlinks to the PubMed entry via Europe PMC
-head(lapply(paracetamol, '[[', 'citations')[[1]])
-# parents: parent ontologies of the entity
-lapply(paracetamol, '[[', 'parents')
-# children: child ontologies of the entity
-lapply(paracetamol, '[[', 'children')
-# dblinks: Links to other data bases
-lapply(paracetamol, '[[', 'dblinks')
-# comments: General comment(s)
-lapply(paracetamol, '[[', 'comments')
-# Metabolites of Species
-head(lapply(paracetamol, '[[', 'origins')[[1]])
-```
-
-#### Extractor functions
-
-The sources provide a lot of informations that can be retrieved using the functions described above. Often only specific inforamtion is needed. 
-Therefore, we added extractor functions for common identifiers.
-
-```{r extractors, error=TRUE}
-wi <- wd_ident("Q408646")
-wi
-cas(wi)
-inchikey(wi)
-smiles(wi)
-
-# smiles(etox_basic(5564))
-```
-
-
-
-#### Misc functions
-
-##### Check if a string is a valid CAS registry number
-
-```{r is.cas}
-is.cas('64-17-5')
-is.cas('64-17-6')
-```
-
-
-##### Check if a string is a valid InChIKey
-
-Using a pure R implementation:
-```{r is.inchikey}
-is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
-is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
-```
-
-Using the ChemSpider API
-```{r is.inchikey_cs}
-is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
-is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N', type = 'chemspider')
-```
-
-##### Check if a string is a valid SMILES
-
-```{r is.smiles, eval=FALSE}
-is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
-# 'J' is not found in the periodic table
-is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
-```
-
-
-
-
 ### Acknowledgements
-Without the fantastic web services `webchem` wouldn't be here.
-Therefore, kudos to the web service providers and developers!
+Without the fantastic web services `webchem` wouldn't be here. Therefore, kudos to the web service providers and developers! Please remember to acknowledge these data resources in your work using `webchem`.
 
 
 ### Related Projects
+
+You can find some related packages in the [ChemPhys CRAN Task View](https://cran.r-project.org/web/views/ChemPhys.html)
+
 If you're more familiar with Python you should check out [Matt Swains](https://github.com/mcs07) repositories: [ChemSpiPy](https://github.com/mcs07/ChemSpiPy), [PubChemPy](https://github.com/mcs07/PubChemPy) and [CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as `webchem`.
 
 ### Want to contribute?
@@ -407,7 +100,7 @@ Check out our [contribution guide here](https://github.com/ropensci/webchem/blob
 
 - Please [report any issues, bugs or feature requests](https://github.com/ropensci/webchem/issues).
 - License: MIT
-- Get citation information for `webchem` in R doing `citation("webchem")`
+- Get citation information for `webchem` in R with `citation("webchem")`
   
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

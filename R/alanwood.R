@@ -34,6 +34,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
                      force_build = FALSE) {
   aw_idx <- build_aw_idx(verbose = FALSE, force_build)
   foo <- function(query, type = c("commonname", "cas"), verbose) {
+    on.exit(suppressWarnings(closeAllConnections()))
     type <- match.arg(type)
   # search links in indexes
     if (type == "commonname") {
@@ -147,6 +148,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
 #' @source \url{http://www.alanwood.net/pesticides}
 #' @export
 build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
+  on.exit(suppressWarnings(closeAllConnections()))
   message(msg = "build_aw_idx() will not be exported in future releases.")
   suppressWarnings(try(load(paste0(tempdir(), "/data/aw_idx.rda")),
                        silent = TRUE))

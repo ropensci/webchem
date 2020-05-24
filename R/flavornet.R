@@ -15,7 +15,7 @@
 #' @author Eric Scott, \email{eric.scott@@tufts.edu}
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if website is not available
 #' fn_percept("123-32-0")
 #'
@@ -27,7 +27,8 @@
 fn_percept <- function(CAS, verbose = TRUE, ...)
 {
   foo <- function (CAS, verbose){
-    qurl = paste0("http://www.flavornet.org/info/",CAS,".html")
+    on.exit(suppressWarnings(closeAllConnections()))
+    qurl <- paste0("http://www.flavornet.org/info/",CAS,".html")
     if (verbose)
       message(qurl)
     Sys.sleep(rgamma(1, shape = 10, scale = 1/10))

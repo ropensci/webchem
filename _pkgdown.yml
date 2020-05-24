@@ -1,0 +1,60 @@
+#To preview pkgdown website locally...
+# #Install the rOpenSci theme
+# remotes::install_github("ropensci/rotemplate")
+
+# #Run in your package directory to build the site:
+# template <- list(package = "rotemplate")
+# pkgdown::build_site(override = list(template = template))
+
+url: https://docs.ropensci.org/webchem
+
+reference:
+- title: Retrieve and translate chemical identifiers
+- contents:
+  - starts_with("get")
+  - cts_convert
+  - cs_convert
+  - cts_from
+  - cts_to
+  - wd_ident
+  - pc_synonyms
+  - opsin_query
+  - etox_basic
+- title: Retrieve chemical properties
+- contents:
+  - aw_query
+  - ci_query
+  - cir_query
+  - chebi_comp_entity
+  - cs_compinfo
+  - cs_extcompinfo
+  - cts_compinfo
+  - etox_targets
+  - etox_tests
+  - fn_percept
+  - nist_ri
+  - pan_query
+  - pc_prop
+  - pc_sect
+  - srs_query
+- title: Data
+- contents:
+  - has_keyword("datasets")
+- title: Utility functions
+- contents:
+  - as.cas
+  - starts_with("is.")
+  - build_aw_idx
+  - cs_check_key
+  - cs_control
+  - extractors
+  - ping_service
+  - cs_datasources
+  - parse_mol
+- title: Deprecated and defunct
+- contents:
+  - webchem-defunct
+  - webchem-deprecated
+- title: Package
+- contents:
+  - webchem

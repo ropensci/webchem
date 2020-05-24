@@ -1,19 +1,54 @@
-#' Retrieve Pubchem Id (CID)
+#' Retrieve Pubchem Compound ID (CID)
 #'
-#' Return CompoundID (CID) for a search query using PUG-REST,
-#' see \url{https://pubchem.ncbi.nlm.nih.gov/}.
-#' @param query character; search term.
-#' @param from character; type of input, can be one of "name" (default), "cid",
-#' "sid", "aid", "smiles", "inchi", "inchikey"
-#' @param match character; How should multiple hits be handled?, "all" all matches are returned, "best" the best matching is returned, "ask" enters an interactive mode and the user is asked for input, "na" returns NA if multiple hits are found.
-#' @param search_substances logical; If TRUE also searches PubChem SIDs
+#' Retrieve compound IDs (CIDs) from PubChem.
+#' @param query character; search term, one or more compounds.
+#' @param from character; type of input. See details for more information.
+#' @param domain character; query domain, can be one of \code{"compound"},
+#' \code{"substance"}, \code{"assay"}.
+#' @param match character; How should multiple hits be handled?, \code{"all"}
+#' all matches are returned, \code{"best"} the best matching is returned,
+#' \code{"ask"} enters an interactive mode and the user is asked for input,
+#' \code{"na"} returns NA if multiple hits are found.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param arg character; optinal arguments like "name_type=word" to match
 #' individual words.
 #' @param first deprecated. Use `match` instead.
 #' @param ... currently unused.
 #' @return a tibble.
-#'
+#' @details Valid values for the \code{from} argument depend on the
+#' \code{domain}:
+#' \itemize{
+#' \item{\code{compound}: \code{"name"}, \code{"smiles"}, \code{"inchi"},
+#' \code{"inchikey"}, \code{"formula"}, \code{"sdf"}, <xref>,
+#' <structure search>, <fast search>.}
+#' \item{\code{substance}: \code{"name"}, \code{"sid"},
+#' \code{<xref>}, \code{"sourceid/<source id>"} or \code{"sourceall"}.}
+#' \item{\code{assay}: \code{"aid"}, \code{<assay target>}.}
+#' }
+#' @details <structure search> is assembled as "{\code{substructure} |
+#' \code{superstructure} | \code{similarity} | \code{identity}} / {\code{smiles}
+#'  | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+#'  \code{from = "substructure/smiles"}.
+#' @details \code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID} |
+#' \code{RN} | \code{PubMedID} | \code{MMDBID} | \code{ProteinGI},
+#' \code{NucleotideGI} | \code{TaxonomyID} | \code{MIMID} | \code{GeneID} |
+#' \code{ProbeID} | \code{PatentID}\}", e.g. \code{from = "xref/RN"} will query
+#' by CAS RN.
+#' @details <fast search> is either \code{fastformula} or it is assembled as
+#' "{\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
+#' \code{fastsubstructure} | \code{fastsuperstructure}}/{\code{smiles} |
+#' \code{smarts} | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+#' \code{from = "fastidentity/smiles"}.
+#' @details \code{<source id>} is any valid PubChem Data Source ID. When
+#' \code{from = "sourceid/<source id>"}, the query is the ID of the substance in
+#' the depositor's database.
+#' @details If \code{from = "sourceall"} the query is one or more valid Pubchem
+#' depositor names. Depositor names are not case sensitive.
+#' @details Depositor names and Data Source IDs can be found at
+#' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
+#' @details \code{<assay target>} is assembled as "\code{target}/\{\code{gi} |
+#' \code{proteinname} | \code{geneid} | \code{genesymbol} | \code{accession}\}",
+#' e.g. \code{from = "target/geneid"} will query by GeneID.
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
 #' Analyzing Bioactivities of Small Molecules. Nucleic Acids Research 37:
@@ -34,6 +69,7 @@
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @import httr
 #' @importFrom purrr map map2
 #' @importFrom jsonlite fromJSON
@@ -45,101 +81,163 @@
 #' # might fail if API is not available
 #' get_cid("Triclosan")
 #' get_cid("Triclosan", arg = "name_type=word")
-#' get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")
+#' # from SMILES
 #' get_cid("CCCC", from = "smiles")
+#' # from InChI
+#' get_cid("InChI=1S/CH5N/c1-2/h2H2,1H3", from = "inchi")
+#' # from InChIKey
+#' get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")
+#' # from formula
+#' get_cid("C26H52NO6P", from = "formula")
+#' # from CAS RN
+#' get_cid("56-40-6", from = "xref/rn")
+#' # similarity
+#' get_cid(5564, from = "similarity/cid")
+#' get_cid("CCO", from = "similarity/smiles")
+#' # from SID
+#' get_cid("126534046", from = "sid", domain = "substance")
+#' # sourceid
+#' get_cid("VCC957895", from = "sourceid/23706", domain = "substance")
+#' # sourceall
+#' get_cid("Optopharma Ltd", from = "sourceall", domain = "substance")
+#' # from AID (CIDs of substances tested in the assay)
+#' get_cid(170004, from = "aid", domain = "assay")
+#' # from GeneID (CIDs of substances tested on the gene)
+#' get_cid(25086, from = "target/geneid", domain = "assay")
 #'
 #' # multiple inputs
-#' comp <- c("Triclosan", "Aspirin")
-#' get_cid(comp)
+#' get_cid(c("Triclosan", "Aspirin"))
 #'
 #' }
 get_cid <-
   function(query,
-           from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
+           from = "name",
+           domain = c("compound", "substance", "assay"),
            match = c("all", "first", "ask", "na"),
            verbose = TRUE,
-           search_substances = FALSE,
            arg = NULL,
            first = NULL,
            ...) {
-
-  # from can be cid | name | smiles | inchi | sdf | inchikey | formula
-  # query <- c("Aspirin")
-  # from = "name"
-
   #deprecate `first`
   if (!is.null(first) && first == TRUE) {
     message("`first = TRUE` is deprecated. Use `match = 'first'` instead")
     match <- "first"
-  } else if (!is.null(first) && first==FALSE) {
+  } else if (!is.null(first) && first == FALSE) {
     message("`first = FALSE` is deprecated. Use `match = 'all'` instead")
     match <- "all"
   }
-
-    from <- match.arg(from)
+    #input validation
+    from <- tolower(from)
+    domain <- match.arg(domain)
+    xref <- paste(
+      "xref",
+      c("registryid", "rn", "pubmedid", "mmdbid", "proteingi", "nucleotidegi",
+        "taxonomyid", "mimid", "geneid", "probeid", "patentid"),
+      sep = "/"
+    )
+    structure_search <- expand.grid(
+      c("substructure", "superstructure", "similarity", "identity"),
+      c("smiles", "inchi", "sdf", "cid")
+    )
+    structure_search <- paste(structure_search$Var1, structure_search$Var2,
+                              sep = "/")
+    fast_search <- expand.grid(
+      c("fastidentity", "fastsimilarity_2d", "fastsimilarity_3d",
+        "fastsubstructure", "fastsuperstructure"),
+      c("smiles", "smarts", "inchi", "sdf", "cid")
+    )
+    fast_search <- c(with(fast_search, paste(Var1, Var2, sep = "/")),
+                     "fastformula")
+    targets <- paste("target", c("gi", "proteinname", "geneid", "genesymbol",
+                                 "accession"), sep = "/")
+    if (domain == "compound") {
+      from_choices <- c("cid", "name", "smiles", "inchi", "sdf", "inchikey",
+                        "formula", structure_search, xref, fast_search)
+      from <- match.arg(from, choices = from_choices)
+    }
+    if (domain == "substance") {
+      if (grepl("^sourceid/", from) == FALSE) {
+        from <- match.arg(from, choices = c("sid", "name", xref, "sourceall"))
+      }
+    }
+    if (domain == "assay") {
+      from <- match.arg(from, choices = c("aid", targets))
+    }
     match <- match.arg(match)
-
-    foo <- function(query, from, match, scope = "compound",
-                    verbose, arg, ...) {
-      if (is.na(query))
-        return(NA)
-      prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
-      input <- paste0("/", scope, "/", from)
-      output <- "/cids/JSON"
-      if (!is.null(arg))
-        arg <- paste0("?", arg)
-      qurl <- paste0(prolog, input, output, arg)
-      if (verbose)
-        message(qurl)
-      Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-      cont <- try(
-        content(
-          POST(qurl,
-               body = paste0(from, "=", query)),
-          type = "text", encoding = "UTF-8"),
-        silent = TRUE
-        )
-      if (inherits(cont, "try-error")) {
-        warning("Problem with web service encountered... Returning NA.")
+    foo <- function(query, from, domain, match, verbose, arg, ...) {
+      if (is.na(query)) {
+        if (verbose) message(paste0(query, " is invalid. Returning NA."))
         return(NA)
       }
-      cont <- jsonlite::fromJSON(cont)
-      if (names(cont) == "Fault") {
-        warning(cont$Fault$Details, ". Returning NA.")
-        return(NA)
+      if (verbose) {
+        message(paste0("Querying ", query, ". "), appendLF = FALSE)
       }
-      if (scope == "substance") {
-        cont <- cont$InformationList$Information$CID
+      if (is.character(query)) query <- URLencode(query)
+      if (from %in% structure_search) {
+        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                      domain, from, query, "json", sep = "/")
+      }
+      else {
+        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                      domain, from, query, "cids", "json", sep = "/")
+      }
+      if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
+      Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
+      if (from == "inchi") {
+        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                      domain, from, "cids", "json", sep = "/")
+        res <- httr::POST(qurl, body = paste0("inchi=", query),
+                          user_agent("webchem"))
+      }
+      else {
+        res <- httr::POST(qurl, user_agent("webchem"))
+      }
+      if (res$status_code != 200) {
+        if (res$status_code == 202) {
+          cont <- httr::content(res, type = "text", encoding = "UTF-8")
+          listkey <- jsonlite::fromJSON(cont)$Waiting$ListKey
+          qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug/", domain,
+                        "listkey", listkey, "cids", "json", sep = "/")
+          while (res$status_code == 202) {
+            Sys.sleep(5 + rgamma(1, shape = 15, scale = 1 / 10))
+            res <- httr::POST(qurl, user_agent("webchem"))
+          }
+          if (res$status_code != 200) {
+            if (verbose) message(httr::message_for_status(res))
+            return(NA)
+          }
+        }
+        else{
+          if (verbose) message(httr::message_for_status(res))
+          return(NA)
+        }
+      }
+      if (verbose) message(httr::message_for_status(res))
+      cont <- httr::content(res, type = "text", encoding = "UTF-8")
+      if (domain == "compound") {
+        cont <- jsonlite::fromJSON(cont)$IdentifierList$CID
+      }
+      if (domain == "substance") {
+        cont <- jsonlite::fromJSON(cont)$InformationList$Information$CID
+      }
+      if (domain == "assay") {
+        cont <- jsonlite::fromJSON(cont)$InformationList$Information$CID
       }
       out <- unique(unlist(cont))
-      out <- matcher(x = out, match = match, verbose = verbose)
+      out <- matcher(x = out, query = query, match = match, verbose = verbose)
       out <- as.character(out)
       names(out) <- NULL
       return(out)
     }
-
-  out <- map(query,
-             ~foo(query = .x, from = from, match = match,
+    out <- map(query,
+             ~foo(query = .x, from = from, domain = domain, match = match,
                   verbose = verbose, arg = arg))
-  out <- setNames(out, query)
-
-  if (search_substances) {
-  out2 <- map(query,
-              ~foo(query = .x, from = from, match = match, scope = "substance",
-                   verbose = verbose, arg = arg))
-  out2 <- setNames(out2, query)
-
-  out <- map2(out, out2, c)
-  out <- map(out, unique)
-  }
-
-  out <-
+    out <- setNames(out, query)
+    out <-
     lapply(out, enframe, name = NULL, value = "cid") %>%
     bind_rows(.id = "query")
-  return(out)
+    return(out)
 }
-
-
 
 #' Retrieve compound properties from a pubchem CID
 #'
@@ -466,9 +564,7 @@ pc_page <- function(id,
     Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
     res <- httr::POST(
       qurl,
-      user_agent("webchem (https://github.com/ropensci/webchem)"),
-      handle = handle("")
-      )
+      user_agent("webchem (https://github.com/ropensci/webchem)"))
     if (res$status_code < 300) {
       if (verbose == TRUE) message(httr::message_for_status(res))
       cont <- httr::content(res, type = "text", encoding = "UTF-8")

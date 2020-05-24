@@ -2,30 +2,33 @@
 % Please edit documentation in R/pubchem.R
 \name{get_cid}
 \alias{get_cid}
-\title{Retrieve Pubchem Id (CID)}
+\title{Retrieve Pubchem Compound ID (CID)}
 \usage{
 get_cid(
   query,
-  from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
+  from = "name",
+  domain = c("compound", "substance", "assay"),
   match = c("all", "first", "ask", "na"),
   verbose = TRUE,
-  search_substances = FALSE,
   arg = NULL,
   first = NULL,
   ...
 )
 }
 \arguments{
-\item{query}{character; search term.}
+\item{query}{character; search term, one or more compounds.}
 
-\item{from}{character; type of input, can be one of "name" (default), "cid",
-"sid", "aid", "smiles", "inchi", "inchikey"}
+\item{from}{character; type of input. See details for more information.}
 
-\item{match}{character; How should multiple hits be handled?, "all" all matches are returned, "best" the best matching is returned, "ask" enters an interactive mode and the user is asked for input, "na" returns NA if multiple hits are found.}
+\item{domain}{character; query domain, can be one of \code{"compound"},
+\code{"substance"}, \code{"assay"}.}
+
+\item{match}{character; How should multiple hits be handled?, \code{"all"}
+all matches are returned, \code{"best"} the best matching is returned,
+\code{"ask"} enters an interactive mode and the user is asked for input,
+\code{"na"} returns NA if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{search_substances}{logical; If TRUE also searches PubChem SIDs}
 
 \item{arg}{character; optinal arguments like "name_type=word" to match
 individual words.}
@@ -38,8 +41,50 @@ individual words.}
 a tibble.
 }
 \description{
-Return CompoundID (CID) for a search query using PUG-REST,
-see \url{https://pubchem.ncbi.nlm.nih.gov/}.
+Retrieve compound IDs (CIDs) from PubChem.
+}
+\details{
+Valid values for the \code{from} argument depend on the
+\code{domain}:
+\itemize{
+\item{\code{compound}: \code{"name"}, \code{"smiles"}, \code{"inchi"},
+\code{"inchikey"}, \code{"formula"}, \code{"sdf"}, <xref>,
+<structure search>, <fast search>.}
+\item{\code{substance}: \code{"name"}, \code{"sid"},
+\code{<xref>}, \code{"sourceid/<source id>"} or \code{"sourceall"}.}
+\item{\code{assay}: \code{"aid"}, \code{<assay target>}.}
+}
+
+<structure search> is assembled as "{\code{substructure} |
+\code{superstructure} | \code{similarity} | \code{identity}} / {\code{smiles}
+ | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+ \code{from = "substructure/smiles"}.
+
+\code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID} |
+\code{RN} | \code{PubMedID} | \code{MMDBID} | \code{ProteinGI},
+\code{NucleotideGI} | \code{TaxonomyID} | \code{MIMID} | \code{GeneID} |
+\code{ProbeID} | \code{PatentID}\}", e.g. \code{from = "xref/RN"} will query
+by CAS RN.
+
+<fast search> is either \code{fastformula} or it is assembled as
+"{\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
+\code{fastsubstructure} | \code{fastsuperstructure}}/{\code{smiles} |
+\code{smarts} | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+\code{from = "fastidentity/smiles"}.
+
+\code{<source id>} is any valid PubChem Data Source ID. When
+\code{from = "sourceid/<source id>"}, the query is the ID of the substance in
+the depositor's database.
+
+If \code{from = "sourceall"} the query is one or more valid Pubchem
+depositor names. Depositor names are not case sensitive.
+
+Depositor names and Data Source IDs can be found at
+\url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
+
+\code{<assay target>} is assembled as "\code{target}/\{\code{gi} |
+\code{proteinname} | \code{geneid} | \code{genesymbol} | \code{accession}\}",
+e.g. \code{from = "target/geneid"} will query by GeneID.
 }
 \note{
 Please respect the Terms and Conditions of the National Library of
@@ -55,12 +100,32 @@ usage policies of the indicidual data sources
 # might fail if API is not available
 get_cid("Triclosan")
 get_cid("Triclosan", arg = "name_type=word")
-get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")
+# from SMILES
 get_cid("CCCC", from = "smiles")
+# from InChI
+get_cid("InChI=1S/CH5N/c1-2/h2H2,1H3", from = "inchi")
+# from InChIKey
+get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")
+# from formula
+get_cid("C26H52NO6P", from = "formula")
+# from CAS RN
+get_cid("56-40-6", from = "xref/rn")
+# similarity
+get_cid(5564, from = "similarity/cid")
+get_cid("CCO", from = "similarity/smiles")
+# from SID
+get_cid("126534046", from = "sid", domain = "substance")
+# sourceid
+get_cid("VCC957895", from = "sourceid/23706", domain = "substance")
+# sourceall
+get_cid("Optopharma Ltd", from = "sourceall", domain = "substance")
+# from AID (CIDs of substances tested in the assay)
+get_cid(170004, from = "aid", domain = "assay")
+# from GeneID (CIDs of substances tested on the gene)
+get_cid(25086, from = "target/geneid", domain = "assay")
 
 # multiple inputs
-comp <- c("Triclosan", "Aspirin")
-get_cid(comp)
+get_cid(c("Triclosan", "Aspirin"))
 
 }
 }
@@ -80,4 +145,6 @@ information in PubChem. Nucleic acids research, gkv396.
 }
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
+
+Tamás Stirling, \email{stirling.tamas@gmail.com}
 }

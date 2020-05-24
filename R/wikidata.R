@@ -114,6 +114,7 @@ get_wdid <-
 #' Retrieve Indentifiers from Wikidata
 #'
 #' @import jsonlite
+#' @import httr
 #' @importFrom stats rgamma
 #'
 #' @param id character; identifier, as returned by \code{\link{get_wdid}}
@@ -169,7 +170,8 @@ wd_ident <- function(id, verbose = TRUE){
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     if (verbose)
       message('Querying ', qurl)
-    tmp <- fromJSON(qurl)
+    res <- GET(qurl)
+    tmp <- fromJSON(content(res, as = "text"))
 
     vars_out <- tmp$head$vars
     out <- tmp$results$bindings

@@ -1,0 +1,87 @@
+---
+title: "Getting started with webchem"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with webchem}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<!-- Only edit webchem.Rmd.orig and compile using the script in vignettes/precompile.R -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(webchem)
+library(dplyr)
+```
+
+The `lc50` dataset provided with `webchem` contains acute ecotoxicity of 124 insecticides.  We'll work with a subset of these to obtain chemical names and octanal/water partitioning coefficients from PubChem, and gas chromatography retention indices from the NIST Web Book.
+
+```{r}
+head(lc50)
+
+lc50_sub <- lc50[1:15, ]
+```
+
+## Getting Identifiers
+
+Usually a `webchem` workflow starts with translating and retrieving chemical identifiers since most chemical information databases use their own internal identifiers.
+
+First, we will covert CAS numbers to InChIKey identifiers using the Chemical Translation Service.  Then, we'll use these InChiKeys to get Pubchem CompoundID numbers, to use for retrieving chemical properties from PubChem.
+
+```{r}
+lc50_sub$inchikey <- cts_convert(lc50_sub$cas, from = "CAS", to = "InChIKey", choices = 1, verbose = FALSE)
+head(lc50_sub)
+any(is.na(lc50_sub$inchikey))
+```
+
+Great, now we can retrieve PubChem CIDs.  All `get_*()` functions return a data frame containing the query and the retrieved identifier.  We can merge this with our dataset with `dplyr::full_join()`
+
+```{r}
+x <- get_cid(lc50_sub$inchikey, from = "inchikey", match = "first", verbose = FALSE)
+library(dplyr)
+lc50_sub2 <- full_join(lc50_sub, x, by = c("inchikey" = "query"))
+head(lc50_sub2)
+```
+
+## Retrieving Chemical Properties
+
+Functions that query chemical information databases begin with a prefix that matches the database.  For example, functions to query PubChem begin with `pc_` and functions to query ChemSpider begin with `cs_`. In this example, we'll get the names and log octanal/water partitioning coefficients for each compound using PubChem, and the WHO acute toxicity rating from the PAN Pesticide database.
+
+```{r}
+y <- pc_prop(lc50_sub2$cid, properties = c("IUPACName", "XLogP"))
+y$CID <- as.character(y$CID)
+lc50_sub3 <- full_join(lc50_sub2, y, by = c("cid" = "CID"))
+head(lc50_sub3)
+```
+
+The IUPAC names are long and unwieldy, and one could use `pc_synonyms()` to choose better names. Several other functions return synonyms as well, even though they are not explicitly translator type functions.  We'll see an example of that next.
+
+Many of the chemical databases `webchem` can query contain vast amounts of information in a variety of structures.  Therefore, some `webchem` functions return nested lists rather than data frames.  `pan_query()` is one such function.
+
+```{r message=FALSE}
+out <- pan_query(lc50_sub3$cas, verbose = FALSE)
+```
+
+`out` is a nested list which you can inspect with `View()`.  It has an element for each query, and within each query, many elements corresponding to different properties in the database.  To extract a single property from all queries, we need to use a mapping function such as `sapply()` or one of the `map_*()` functions from the `purrr` package.
+
+```{r}
+lc50_sub3$who_tox <- sapply(out, function(y) y$`WHO Acute Toxicity`)
+lc50_sub3$common_name <- sapply(out, function(y) y$`Chemical name`)
+
+# #equivalent with purrr package:
+# lc50_sub3$who_tox <- map_chr(out, pluck, "WHO Acute Toxicity")
+# lc50_sub3$common_name <- map_chr(out, pluck, "Chemical name")
+```
+
+```{r}
+#tidy up columns
+lc50_done <- dplyr::select(lc50_sub3, common_name, cas, inchikey, XLogP, who_tox)
+head(lc50_done)
+```
+
