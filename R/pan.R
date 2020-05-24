@@ -130,11 +130,6 @@ pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, 
     # xmlview::xml_view(nd, add_filter = TRUE)
     source_url <- xml_attr(xml_find_all(nd, ".//a[contains(., 'Details')]"), 'href')
     out[['source_url']] <- paste0('http://www.pesticideinfo.org/', source_url)
-
-    # convert to numeric
-    tonum <- c(6, 46:72)
-    out[tonum] <- lapply(out[tonum], as.numeric)
-
     if (match == 'first')
       out <- lapply(out, '[', 1)
       attr(out, "match distance") <- 'first match'
