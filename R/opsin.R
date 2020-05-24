@@ -62,5 +62,6 @@ opsin_query <- function(query, verbose = TRUE, ...){
   }
   out <- purrr::map_dfr(query, ~foo(.x, verbose = verbose))
   out <- dplyr::select(out, query, everything())
+  class(out) <- c("opsin_query", class(out))
   return(out)
 }
