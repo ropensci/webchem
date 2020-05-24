@@ -5,7 +5,7 @@ test_that("fn_percept()", {
 
   a <- fn_percept("123-32-0")
   b <- fn_percept(c("75-07-0", "123-32-0"))
-  c <- fn_percept(c("75-07-0", "123-32-0", "50-00-0"))
+  c <- suppressWarnings(fn_percept(c("75-07-0", "123-32-0", "50-00-0")))
 
   expect_type(a, 'character')
   expect_type(b, 'character')
