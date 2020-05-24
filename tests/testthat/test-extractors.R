@@ -1,15 +1,3 @@
-test_that("extractors work with cts", {
-  skip_on_cran()
-  skip_if_not(ping_service("cts"), "CTS service is down")
-
-  inchikeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
-  out_cts_compinfo <- cts_compinfo(inchikeys)
-  expect_equivalent(inchikey(out_cts_compinfo),
-                    c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N" ))
-  expect_error(cas(out_cts_compinfo), "CAS is not returned by this data source")
-  expect_error(smiles(out_cts_compinfo), "SMILES is not returned by this datasource!")
-})
-
 
 test_that("extractors work with etox", {
   skip_on_cran()
