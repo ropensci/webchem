@@ -59,10 +59,11 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
       return(NA)
     }
     query <- URLencode(query)
-    baseurl <- switch(type,
-           rn = 'https://chem.sis.nlm.nih.gov/chemidplus/rn/',
-           name = 'https://chem.sis.nlm.nih.gov/chemidplus/name/startswith/',
-           inchikey = 'https://chem.sis.nlm.nih.gov/chemidplus/inchikey/')
+    baseurl <- switch(
+      type,
+      rn = 'https://chem.nlm.nih.gov/chemidplus/rn/startswith/',
+      name = "https://chem.nlm.nih.gov/chemidplus/name/startswith/",
+      inchikey = "https://chem.nlm.nih.gov/chemidplus/inchikey/startswith/")
     # return max 50 hits
     qurl <- paste0(baseurl, query, '?DT_START_ROW=0&DT_ROWS_PER_PAGE=50')
     if (verbose)
@@ -139,7 +140,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
       }
 
       # retry with CAS-API
-      qurl <- paste0('http://chem.sis.nlm.nih.gov/chemidplus/rn/', hit_cas)
+      qurl <- paste0('https://chem.nlm.nih.gov/chemidplus/rn/', hit_cas)
       if (verbose)
         message(qurl)
       Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
