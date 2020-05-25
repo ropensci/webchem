@@ -155,10 +155,10 @@ test_that("etox integration tests", {
   ids_b <- get_etoxid(comps, match = 'best')
   ids_a <- get_etoxid(comps, match = 'all')
 
-  # etox_*() can handle only vector inputs (so using match = 'all' does not work)
-  expect_error(etox_basic(ids_a))
-  expect_error(etox_targets(ids_a))
-  expect_error(etox_tests(ids_a))
+  # etox_*() can handle only vector inputs
+  expect_error(etox_basic(ids_b))
+  expect_error(etox_targets(ids_b))
+  expect_error(etox_tests(ids_b))
 
   int1 <- etox_basic(ids_b$etoxid)
   int2 <- etox_targets(ids_b$etoxid)
@@ -184,4 +184,9 @@ test_that("etox integration tests", {
   expect_equal(ncol(int3[['20179']]$res), 41)
   expect_s3_class(int3[['20179']]$res, 'data.frame')
   expect_true(is.na(int3[[3]]))
+})
+
+
+test_that("etox functions handle NAs", {
+  expect_equal(is.na(get_etoxid(NA)$match), TRUE)
 })

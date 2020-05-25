@@ -27,8 +27,7 @@ returns \code{NA} if multiple hits are found.}
 \item{verbose}{logical; print message during processing to console?}
 }
 \value{
-a dataframe with 4 columns: etoxID, matched substance, string
-distance to match and the queried string
+a tibble with 3 columns: the query, the match, and the etoxID
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality

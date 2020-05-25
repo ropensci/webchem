@@ -31,7 +31,7 @@ cts_convert(
 \item{...}{currently not used.}
 }
 \value{
-a list of characters. If first = TRUE a vector.
+a list of character vectors or if \code{choices} is used, then a single named vector.
 }
 \description{
 Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
@@ -43,11 +43,11 @@ for possible values of from and to.
 \examples{
 \donttest{
 # might fail if API is not available
-cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
+cts_convert("triclosan", "Chemical Name", "inchikey")
 
 ### multiple inputs
-comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
-cts_convert(comp, 'inchikey', 'Chemical Name')
+comp <- c("triclosan", "hexane")
+cts_convert(comp, "Chemical Name", "cas")
 }
 }
 \references{

@@ -14,14 +14,13 @@ test_that("opsin_query()", {
 
   expect_equal(
     colnames(o1),
-    c("inchi", "stdinchi", "stdinchikey", "smiles", "message", "status", "query")
+    c("query", "inchi", "stdinchi", "stdinchikey", "smiles", "message", "status")
   )
 
   expect_equal(nrow(o1), 2)
   expect_equal(nrow(o2), 1)
   expect_equal(o1$query, c('Cyclopropane', 'Octane'))
   expect_equal(o2$query, c('xxxx'))
-
-  skip("failing test below")
+  expect_equal(is.na(opsin_query(NA)$smiles), TRUE)
   expect_equal(ncol(o1), ncol(o2))
 })

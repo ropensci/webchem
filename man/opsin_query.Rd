@@ -14,7 +14,7 @@ opsin_query(query, verbose = TRUE, ...)
 \item{...}{currently not used.}
 }
 \value{
-a data.frame with five columnns: "inchi", "stdinchi", "stdinchikey", "smiles", "message"
+a tibble with six columnns: "query", inchi", "stdinchi", "stdinchikey", "smiles", "message", and "status"
 }
 \description{
 Query the OPSIN  (Open Parser for Systematic IUPAC nomenclature) web service
