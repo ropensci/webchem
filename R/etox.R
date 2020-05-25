@@ -23,6 +23,10 @@
 #' @seealso \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and
 #' \code{\link{etox_tests}} for test results.
+#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
@@ -172,7 +176,10 @@ get_etoxid <- function(query,
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
 #'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
 #'   for quality targets and \code{\link{etox_tests}} for test results
-#'
+#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
@@ -285,7 +292,10 @@ etox_basic <- function(id, verbose = TRUE) {
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
 #'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
 #'   for quality targets and \code{\link{etox_tests}} for test results
-#'
+#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples

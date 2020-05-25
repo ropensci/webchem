@@ -61,6 +61,10 @@
 #' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
+#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
@@ -269,6 +273,10 @@ get_cid <-
 #' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
+#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,

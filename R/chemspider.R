@@ -157,6 +157,10 @@ cs_control <- function(datasources = vector(),
 #'   an API key. Please respect the Terms & conditions:
 #'   \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @importFrom httr POST add_headers http_status
@@ -608,6 +612,10 @@ cs_convert_multiple <- function(input, from, to, apikey = NULL) {
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @export

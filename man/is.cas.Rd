@@ -35,6 +35,12 @@ is.cas('64-177-6')
 is.cas('64-17-55')
 is.cas('64-17-6')
 }
+\references{
+Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
+Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+Information from the Web. Journal of Statistical Software, 93(13).
+<doi:10.18637/jss.v093.i13>.
+}
 \author{
 Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }
