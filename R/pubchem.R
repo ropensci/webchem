@@ -375,7 +375,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' @param arg character; optinal arguments like "name_type=word" to match
 #' individual words.
 #' @param ... optional arguments
-#' @return a character vector.
+#' @return a list of character vectors (one per query). If \code{choices} is used, a single named vector is returned instead.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -413,6 +413,7 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   if (!missing("interactive"))
     stop("'interactive' is deprecated. Use 'choices' instead.")
   foo <- function(query, from, verbose, ...) {
+    if (is.na(query)) return(NA)
     prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
     input <- paste0("/compound/", from)
     output <- "/synonyms/JSON"

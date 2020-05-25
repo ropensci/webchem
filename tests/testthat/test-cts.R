@@ -21,16 +21,16 @@ test_that("cts_convert()", {
   skip_on_cran()
   skip_if_not(up, "CTS service down")
 
-  comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
+  comp <- c('Triclosan', 'Hexane')
   expect_error(cts_convert(comp, c('Chemical Name', 'CAS'), 'CAS'))
   expect_error(cts_convert('Triclosan', 'CAS'))
-  expect_true(is.na(suppressWarnings(cts_convert('xxxx', 'inchikey', 'Chemical Name'))[[1]]))
+  expect_true(is.na(suppressWarnings(cts_convert('xxxx', 'Chemical Name', 'inchikey'))[[1]]))
   o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', choices = 1, verbose = FALSE)
   expect_length(o1, 2)
 
-  skip("failing test below")
   expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
   # cts_convert('acetic acid', 'Chemical Name', 'CAS', choices = 1)
+  expect_equivalent(cts_convert(NA, from = "Chemical Name", to = "inchikey"), NA)
 })
 
 

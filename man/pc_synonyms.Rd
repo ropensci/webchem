@@ -34,7 +34,7 @@ individual words.}
 \item{...}{optional arguments}
 }
 \value{
-a character vector.
+a list of character vectors (one per query). If \code{choices} is used, a single named vector is returned instead.
 }
 \description{
 Search synonyms using PUG-REST,

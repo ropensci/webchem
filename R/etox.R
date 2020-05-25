@@ -6,6 +6,7 @@
 #' @import xml2 httr
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
+#' @importFrom tibble tibble
 #' @param query character; The searchterm
 #' @param from character; Type of input, can be one of "name" (chemical name),
 #' "cas" (CAS Number), "ec" (European Community number for regulatory purposes),
@@ -16,8 +17,7 @@
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
 #' returns \code{NA} if multiple hits are found.
 #' @param verbose logical; print message during processing to console?
-#' @return a dataframe with 4 columns: etoxID, matched substance, string
-#' distance to match and the queried string
+#' @return a tibble with 3 columns: the query, the match, and the etoxID
 #' @note Before using this function, please read the disclaimer
 #' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #' @seealso \code{\link{etox_basic}} for basic information,
@@ -57,6 +57,11 @@ get_etoxid <- function(query,
   match <- match.arg(match)
   foo <- function(query, from, match, verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
+
+    if (is.na(query)) {
+      empty <- list(query = NA, match = NA, etoxid = NA)
+      return(empty)
+    }
     if (verbose)
       message("Searching ", query)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"

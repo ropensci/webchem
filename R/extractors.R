@@ -12,11 +12,7 @@ cas <- function(x, ...){
 # CAS ---------------------------------------------------------------------
 #' @export
 cas.default <- function(x, ...) {
-  sapply(x, function(y) {
-    if (length(y) == 1 && is.na(y))
-      return(NA)
-    y$cas
-    })
+  stop(paste("No cas method for class", class(x)))
 }
 #' @export
 cas.chebi_comp_entity <- function(x, ...) {
@@ -27,13 +23,40 @@ cas.chebi_comp_entity <- function(x, ...) {
 }
 
 #' @export
+cas.opsin_query <- function(x, ...) {
+  stop("CAS is not returned by this datasource!")
+}
+
+#' @export
 cas.pan_query <- function(x, ...) {
   sapply(x, function(y) y$`CAS Number`)
 }
+
+#' @export
+cas.aw_query <- function(x, ...) {
+  sapply(x, function(y) y$cas)
+}
+
 #' @export
 cas.wd_ident <- function(x, ...) {
   x$cas
 }
+
+
+#' @export
+cas.cts_compinfo <- function(x, ...) {
+  stop("CAS is not returned by this data source")
+}
+
+#' @export
+cas.etox_basic <- function(x, ...) {
+  sapply(x, function(y) {
+    if (length(y) == 1 && is.na(y))
+      return(NA)
+    unique(y$cas)
+  })
+}
+
 
 # InChIKey ----------------------------------------------------------------
 #' @rdname extractors
@@ -44,7 +67,7 @@ inchikey <- function(x, ...){
 
 #' @export
 inchikey.default <- function(x, ...) {
-  sapply(x, function(y) y$inchikey)
+  stop(paste("No inchikey method for class", class(x)))
 }
 
 #' @export
@@ -63,14 +86,7 @@ inchikey.chebi_comp_entity <- function(x, ...) {
   })
 }
 
-#' @export
-inchikey.cs_compinfo <- function(x, ...) {
-  x$inchikey
-}
-#' @export
-inchikey.cs_extcompinfo <- function(x, ...) {
-  x$inchikey
-}
+
 #' @export
 inchikey.etox_basic <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
@@ -96,6 +112,11 @@ inchikey.wd_ident <- function(x, ...) {
   x$inchikey
 }
 
+#' @export
+inchikey.cts_compinfo <- function(x, ...) {
+  sapply(x, function(x) x$inchikey)
+}
+
 # SMILES ------------------------------------------------------------------
 #' @rdname extractors
 #' @export
@@ -105,7 +126,7 @@ smiles <- function(x, ...){
 
 #' @export
 smiles.default <- function(x, ...) {
-  sapply(x, function(y) y$smiles)
+  stop(paste("no smiles method for class", class(x)))
 }
 #' @export
 smiles.chebi_comp_entity <- function(x, ...) {
@@ -115,14 +136,7 @@ smiles.chebi_comp_entity <- function(x, ...) {
   })
 }
 
-#' @export
-smiles.cs_compinfo <- function(x, ...) {
-  x$smiles
-}
-#' @export
-smiles.cs_extcompinfo <- function(x, ...) {
-  x$smiles
-}
+
 #' @export
 smiles.cts_compinfo <- function(x, ...) {
   stop("SMILES is not returned by this datasource!")
