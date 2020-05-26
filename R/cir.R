@@ -175,7 +175,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
 #'
 #' @param query character; Search term. Can be any common chemical identifier
 #' (e.g. CAS, INCHI(KEY), SMILES etc.)
-#' @param dir character; Directory to store the image.
+#' @param dir character; Directory to save the image.
 #' @param format character; Format of the stored image. Can be on of TODO
 #' @param format character; Output format of the image. Can be one of "png",
 #' "gif".
@@ -184,7 +184,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
 #' @param linewidth integer; Width of lines.
 #' @param symbolfontsize integer; Fontsize of atoms in the image.
 #' @param bgcolor character; E.g. transparent, white, \%23AADDEE
-#' @param antialiasing
+#' @param antialiasing logical; Should antialiasing be used?
 #' @param atomcolor character; Color of the atoms in the image.
 #' @param bondcolor character; Color of the atom bond lines.
 #' @param csymbol character; Can be one of "special" (default - i.e. only
@@ -233,12 +233,12 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
 #' cir_img("CCO") # SMILES
 #'
 #' # multiple query strings and different formats
-#' id = c("Glyphosate", "Isoproturon", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N")
-#' cir_img(id, bgcolor = "transparent", antialising = 0)
+#' query = c("Glyphosate", "Isoproturon", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N")
+#' cir_img(query, bgcolor = "transparent", antialising = 0)
 #'
 #' # all parameters
-#' id  = "Triclosan"
-#' cir_img(id,
+#' query  = "Triclosan"
+#' cir_img(query,
 #'         format = "gif",
 #'         width = 600,
 #'         height = 600,
@@ -265,7 +265,7 @@ cir_img <- function(query,
                     linewidth = 2,
                     symbolfontsize = 16,
                     bgcolor = NULL,
-                    antialiasing = NULL,
+                    antialiasing = TRUE,
                     atomcolor = NULL,
                     bondcolor = NULL,
                     csymbol = c("special", "all"),
@@ -318,7 +318,7 @@ cir_img <- function(query,
     if (!is.null(bgcolor))
       bgcolor <- paste0("bgcolor=", bgcolor)
     if (!is.null(antialiasing))
-      antialiasing <- paste0("antialiasing=", antialiasing)
+      antialiasing <- paste0("antialiasing=", as.numeric(antialiasing))
     if (!is.null(atomcolor))
       atomcolor <- paste0("atomcolor=", atomcolor)
     if (!is.null(bondcolor))
@@ -354,10 +354,6 @@ cir_img <- function(query,
     opts <- paste0("?", opts)
     # url
     qurl <- URLencode(paste0(qurl, opts))
-    # dir
-    if (is.null(dir)) {
-      dir <- tempdir()
-    }
     # query
     if (verbose)
       message("Querying: ", query, "\n", qurl)
