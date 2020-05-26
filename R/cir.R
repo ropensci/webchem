@@ -230,22 +230,23 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' cir_img("CCO") # SMILES
+#' cir_img("CCO", dir = tempdir()) # SMILES
 #'
 #' # multiple query strings and different formats
 #' query = c("Glyphosate", "Isoproturon", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N")
-#' cir_img(query, bgcolor = "transparent", antialising = 0)
+#' cir_img(query, dir = tempdir(), bgcolor = "transparent", antialising = 0)
 #'
 #' # all parameters
 #' query  = "Triclosan"
 #' cir_img(query,
+#'         dir = tempdir(),
 #'         format = "gif",
 #'         width = 600,
 #'         height = 600,
 #'         linewidth = 5,
 #'         symbolfontsize = 30,
 #'         bgcolor = "red",
-#'         antialising = 0,
+#'         antialising = FALSE,
 #'         atomcolor = "green",
 #'         bondcolor = "yellow",
 #'         csymbol = "all",
