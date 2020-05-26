@@ -20,7 +20,7 @@ test_that("chemid returns correct results", {
   expect_length(o1[[3]], 9)
   expect_s3_class(o1[[3]]$physprop, "data.frame")
 
-  b1 <- ci_query('Tetracyclin', type = 'name')  # BUG: Failed because of multiple matches
+  b1 <- ci_query('Tetracyclin', type = 'name')
   expect_equal(b1[[1]]$name[1], "Tetracycline")
   b2 <- ci_query('Edetic acid', type = 'name', match = 'best')
   expect_equal(b2[[1]]$name[1], "Edetic acid")

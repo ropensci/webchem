@@ -1,15 +1,24 @@
-citHeader("To cite webchem in publications use:")
+bibentry(bibtype = "Article",
+  title        = "{webchem}: An {R} Package to Retrieve Chemical Information from the {W}eb",
+  author       = c(person(given = "Eduard",
+                          family = "Sz\\\"ocs"),
+                   person(given = "Tam\\'as",
+                          family = "Stirling",
+                          email = "stirling.tamas@gmail.com"),
+                   person(given = c("Eric", "R."),
+                          family = "Scott"),
+                   person(given = "Andreas",
+                          family = "Scharm\\\"uller"),
+                   person(given = c("Ralf", "B."),
+                          family = "Sch\\\"afer")),
+  journal      = "Journal of Statistical Software",
+  year         = "2020",
+  volume       = "93",
+  number       = "13",
+  pages        = "1--17",
+  doi          = "10.18637/jss.v093.i13",
 
-citEntry(entry = "Manual",
-  title        = "{webchem}:  retrieve chemical information from the web",
-  author       = personList(as.person("Eduard Szöcs")),
-  journal      = "Zenodo",
-  year         = "2015",
-  url          = "http://dx.doi.org/10.5281/zenodo.33823",
+  header       = "To cite webchem in publications use:",
 
-  textVersion  =
-  paste("Eduard Szöcs et al. (2015). webchem: zenodo release. ",
-        "Zenodo. 10.5281/zenodo.33823")
+  footer       = "In addition to citing webchem in publications, please check attribution guidelines for any data sources you accessed.  Links to documentation can be found in help files for webchem functions."
 )
-
-citFooter("In addition to citing webchem in publications, please check attribution guidelines for any data sources you accessed.  Links to documentation can be found in help files for webchem functions")

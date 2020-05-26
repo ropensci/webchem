@@ -50,15 +50,21 @@ get_etoxid("133483", from = "gsbl") # 3-Butin-1-ol
 get_etoxid("203-157-5", from = "ec") # Paracetamol
 }
 }
+\references{
+Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+Information from the Web. Journal of Statistical Software, 93(13).
+<doi:10.18637/jss.v093.i13>.
+}
 \seealso{
 \code{\link{etox_basic}} for basic information,
 \code{\link{etox_targets}} for quality targets and
 \code{\link{etox_tests}} for test results.
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 
-Tamas Stirling, \email{stirling.tamas@gmail.com}
+Tamás Stirling, \email{stirling.tamas@gmail.com}
 
-Andreas Scharmueller, \email{andschar@protonmail.com}
+Andreas Scharmüller, \email{andschar@protonmail.com}
 }

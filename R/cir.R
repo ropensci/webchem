@@ -95,7 +95,7 @@
 #' \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
 #' \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
 #'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @examples
 #' \donttest{
