@@ -1,7 +1,7 @@
 Package: webchem
 Title: Chemical Information from the Web
 Description: Chemical information from around the web. This package interacts 
-    with a suite of web services for chemical information. Source include: Alan
+    with a suite of web services for chemical information. Sources include: Alan
     Wood's Compendium of Pesticide Common Names, Chemical Identifier Resolver,
     ChEBI, Chemical Translation Service, ChemIDplus, ChemSpider, ETOX,
     Flavornet, NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem,
