@@ -277,6 +277,8 @@ cir_img <- function(query,
                     verbose = TRUE,
                     ...) {
   # check
+  if (is.null(dir))
+    stop('Please provide a directory (dir =) to save the images.')
   format <- match.arg(format)
   csymbol <- match.arg(csymbol, c("special", "all"))
   hsymbol <- match.arg(hsymbol, c("special", "all"))
