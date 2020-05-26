@@ -30,9 +30,10 @@ test_that("cir_img()", {
   skip_on_cran()
 
   Sys.sleep(5)
-
-
-
-
+  expect_error(cir_img('Glyphosate', dir = NULL))
+  Sys.sleep(5)
+  expect_s3_class(cir_img('Isoproturon', dir = tempdir()), 'data.frame')
+  Sys.sleep(5)
+  expect_equal(nrow(cir_img(c('Metamitron', 'Diclofenac'), dir = tempdir())), 2)
 })
 
