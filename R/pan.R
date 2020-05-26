@@ -147,5 +147,3 @@ pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, 
   class(out) <- c('pan_query', 'list')
   return(out)
 }
-
-

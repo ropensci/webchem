@@ -17,7 +17,7 @@
 #'
 #' @note Only matches in labels are returned.
 #'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @import jsonlite httr
 #' @importFrom stats rgamma
@@ -134,7 +134,7 @@ get_wdid <-
 #' Mitraka, Elvira, Andra Waagmeester, Sebastian Burgstaller-Muehlbacher, et al. 2015
 #' Wikidata: A Platform for Data Integration and Dissemination for the Life Sciences and beyond. bioRxiv: 031971.
 #'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -209,4 +209,3 @@ wd_ident <- function(id, verbose = TRUE){
   class(out) <- c('wd_ident', 'data.frame')
   return(out)
 }
-

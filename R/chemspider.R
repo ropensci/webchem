@@ -44,7 +44,7 @@ cs_check_key <- function() {
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -101,7 +101,7 @@ cs_datasources <- function(apikey = NULL) {
 #' The controls that are available for a given function are indicated within the
 #' documentation of the function.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{get_csid}}
 #' @export
 #' @examples
@@ -157,12 +157,12 @@ cs_control <- function(datasources = vector(),
 #'   an API key. Please respect the Terms & conditions:
 #'   \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
-#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @importFrom httr POST add_headers http_status
 #' @importFrom jsonlite toJSON
 #' @importFrom tibble enframe
@@ -241,7 +241,7 @@ get_csid <- function(query,
 #' for an API key.
 #' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @noRd
 cs_query_csid <- function(postres, headers) {
   query_id <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
@@ -313,7 +313,7 @@ cs_query_csid <- function(postres, headers) {
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
 #' @references https://developer.rsc.org/compounds-v1/apis
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
 #' \dontrun{
@@ -362,7 +362,7 @@ cs_name_csid <- function(name, apikey = NULL, control = cs_control()) {
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
 #' \dontrun{
@@ -407,7 +407,7 @@ cs_formula_csid <- function(formula, apikey = NULL, control = cs_control()) {
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
 #' \dontrun{
@@ -449,7 +449,7 @@ cs_smiles_csid <- function(smiles, apikey = NULL) {
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
 #' \dontrun{
@@ -493,7 +493,7 @@ cs_inchi_csid <- function(inchi, apikey = NULL) {
 #' for an API key. Please respect the Terms & conditions
 #' \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @note This is a low level function and is not exported.
 #' @examples
 #' \dontrun{
@@ -548,7 +548,7 @@ cs_inchikey_csid <- function(inchikey, apikey = NULL) {
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso This is a low level function and is not exported. See
 #' \code{\link{cs_convert}} for the top level function.
 #' @seealso \code{\link{parse_mol}}
@@ -612,12 +612,12 @@ cs_convert_multiple <- function(input, from, to, apikey = NULL) {
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
-#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -708,7 +708,7 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -770,7 +770,7 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
 #' for a security token.
 #' Please respect the Terms & conditions
 #' \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
 #' \code{\link{cs_compinfo}} for extended compound information.
 #' @note use \code{\link{cs_compinfo}} to retrieve standard inchikey.

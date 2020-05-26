@@ -8,7 +8,7 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a list of lists (for each supplied inchikey):
 #' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
 #' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
@@ -70,7 +70,7 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of character vectors or if \code{choices} is used, then a single named vector.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #' for possible values of from and to.
 #'
@@ -134,7 +134,7 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
 #' @import jsonlite
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 #'
 #' @seealso \code{\link{cts_convert}}

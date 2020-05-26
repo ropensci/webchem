@@ -49,11 +49,11 @@
 #'   McNaught, A., Alcántara, R., Darsow, M., Guedj, M. and Ashburner, M. (2008)
 #'   ChEBI: a database and ontology for chemical entities of biological
 #'   interest. Nucleic Acids Res. 36, D344–D350.
-#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
-#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -205,11 +205,11 @@ get_chebiid <- function(query,
 #'   McNaught, A., Alcántara, R., Darsow, M., Guedj, M. and Ashburner, M. (2008)
 #'   ChEBI: a database and ontology for chemical entities of biological
 #'   interest. Nucleic Acids Res. 36, D344–D350.
-#' @references Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
-#' Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -321,7 +321,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 #' @param x list; a list to bind into a data.frame
 #' @return a data.frame
 #' @seealso \code{\link{chebi_comp_entity}}
-#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @noRd
 #'
 l2df <- function(x) {
@@ -340,7 +340,7 @@ l2df <- function(x) {
 #' https://stackoverflow.com/questions/17308551/do-callrbind-list-for-uneven-number-of-column
 #' @param x list; a list to bind into a data.frame
 #' @seealso \code{\link{l2df}}
-#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @noRd
 #'
 rbind_named_fill <- function(x) {
