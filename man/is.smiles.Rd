@@ -35,5 +35,5 @@ Supplementary Information.
 \url{https://chem-bla-ics.blogspot.nl/2015/10/how-to-test-smiles-strings-in.html}
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

@@ -59,11 +59,11 @@ Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
   ChEBI: a database and ontology for chemical entities of biological
   interest. Nucleic Acids Res. 36, D344–D350.
 
-Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
-Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 Information from the Web. Journal of Statistical Software, 93(13).
 <doi:10.18637/jss.v093.i13>.
 }
 \author{
-Andreas Scharmueller, \email{andschar@protonmail.com}
+Andreas Scharmüller, \email{andschar@protonmail.com}
 }

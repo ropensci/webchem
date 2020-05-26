@@ -39,5 +39,5 @@ is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 \code{\link{is.inchikey}} for a pure-R implementation.
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

@@ -48,8 +48,8 @@ aw_query("79622-59-6", type = 'cas')
 }
 }
 \references{
-Eduard Szocs, Tamas Stirling, Eric R. Scott, Andreas Scharmuller,
-Ralf B. Schafer (2020). webchem: An R Package to Retrieve Chemical
+Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 Information from the Web. Journal of Statistical Software, 93(13).
 <doi:10.18637/jss.v093.i13>.
 }
@@ -57,5 +57,5 @@ Information from the Web. Journal of Statistical Software, 93(13).
 \code{\link{build_aw_idx}}
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

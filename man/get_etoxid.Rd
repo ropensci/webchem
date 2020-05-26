@@ -62,9 +62,9 @@ Information from the Web. Journal of Statistical Software, 93(13).
 \code{\link{etox_tests}} for test results.
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 
-Tamas Stirling, \email{stirling.tamas@gmail.com}
+Tamás Stirling, \email{stirling.tamas@gmail.com}
 
-Andreas Scharmueller, \email{andschar@protonmail.com}
+Andreas Scharmüller, \email{andschar@protonmail.com}
 }
