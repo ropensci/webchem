@@ -1,7 +1,7 @@
 #' Retrieve information from ChemIDPlus
 #'
 #' Retrieve information from ChemIDPlus
-#' \url{http://chem.sis.nlm.nih.gov/chemidplus}
+#' \url{https://chem.nlm.nih.gov/chemidplus}
 #'
 #' @import xml2
 #' @importFrom rvest html_table
