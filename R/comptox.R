@@ -69,7 +69,7 @@ webtest_query <- function(query,
                           verbose = TRUE) {
   # checks
   from <- match.arg(from)
-  endpoint <- match.arg(endpoint)
+  endpoint <- match.arg(endpoint, several.ok = TRUE)
   method <- match.arg(method)
   # vecorize
   foo <- function(query, from, endpoint, method, verbose) {
@@ -85,23 +85,25 @@ webtest_query <- function(query,
     if (verbose)
       message("Querying: ", query)
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-    res <- httr::GET(qurl)
+    res <- try(
+      httr::RETRY("GET", qurl), silent = TRUE
+    )
+    if (inherits(res, "try-error")) {
+      message("No result found. Returning empty entry.")
+      return(data.frame(query = query, stringsAsFactors = FALSE))
+    }
     if (httr::status_code(res) != 200) {
-      message('No result found. Returning empty entry.')
+      message("No result found. Returning empty entry.")
       return(data.frame(query = query, stringsAsFactors = FALSE))
     }
-    cont <- try(httr::content(res))
-    if (inherits(cont, "try-error")) {
-      message('No result found. Returning empty entry.')
-      return(data.frame(query = query, stringsAsFactors = FALSE))
-    }
+    cont <- httr::content(res)
     if (!is.null(cont$predictions[[1]]$error)) { # NB for non-parseable results
-      message('No result found. Returning empty entry.')
+      message("No result found. Returning empty entry.")
       return(data.frame(query = query, stringsAsFactors = FALSE))
     }
     # prepare
-    dat_meta <- dplyr::bind_rows(cont[ names(cont) != 'predictions' ])
-    dat_pred <- dplyr::bind_rows(cont[ names(cont) == 'predictions' ][[1]])
+    dat_meta <- dplyr::bind_rows(cont[ names(cont) != "predictions" ])
+    dat_pred <- dplyr::bind_rows(cont[ names(cont) == "predictions" ][[1]])
     # return
     out <- dplyr::bind_cols(dat_meta, dat_pred)
     out$query <- query
