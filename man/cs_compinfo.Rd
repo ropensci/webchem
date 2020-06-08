@@ -45,5 +45,5 @@ cs_compinfo(171:182, "SMILES")
 \url{https://developer.rsc.org/compounds-v1/apis}
 }
 \author{
-Tamas Stirling, \email{stirling.tamas@gmail.com}
+Tamás Stirling, \email{stirling.tamas@gmail.com}
 }

@@ -16,7 +16,11 @@
 #' @note for type = 'cas' only the first matched link is returned.
 #' Please respect Copyright, Terms and Conditions
 #' \url{http://www.alanwood.net/pesticides/legal.html}!
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -144,7 +148,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
 #' @param force_build logical; force building a new index?
 #' @return a data.frame
 #' @seealso \code{\link{aw_query}}, \code{\link{tempdir}}
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @source \url{http://www.alanwood.net/pesticides}
 #' @export
 build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {

@@ -8,7 +8,7 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a list of lists (for each supplied inchikey):
 #' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
 #' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
@@ -69,8 +69,8 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @param choices to return only the first result, use 'choices = 1'.  To choose a result from an interative menu, provide a number of choices to choose from or "all".
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a list of characters. If first = TRUE a vector.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @return a list of character vectors or if \code{choices} is used, then a single named vector.
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #' for possible values of from and to.
 #'
@@ -83,19 +83,21 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' cts_convert('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'inchikey', 'Chemical Name')
+#' cts_convert("triclosan", "Chemical Name", "inchikey")
 #'
 #' ### multiple inputs
-#' comp <- c('XEFQLINVKFYRCS-UHFFFAOYSA-N', 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N')
-#' cts_convert(comp, 'inchikey', 'Chemical Name')
+#' comp <- c("triclosan", "hexane")
+#' cts_convert(comp, "Chemical Name", "cas")
 #' }
 cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose = TRUE, ...){
   if(!missing("first"))
     stop('"first" is deprecated.  Use "choices = 1" instead.')
   if (length(from) > 1 | length(to) > 1) {
-    stop('Cannot handle multiple input strings.')
+    stop('Cannot handle multiple input or output types.  Please provide only one argument for `from` and `to`.')
   }
+
   foo <- function(query, from, to , first, verbose){
+    if (is.na(query)) return(NA)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
     qurl <- URLencode(qurl)
@@ -132,7 +134,7 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
 #' @import jsonlite
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 #'
 #' @seealso \code{\link{cts_convert}}

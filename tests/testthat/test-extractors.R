@@ -1,19 +1,8 @@
-test_that("extractors work with cts", {
-  skip_on_cran()
-  skip_if_not(ping_service("cts"), "CTS service is down")
-
-  inchikeys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N","BSYNRYMUTXBXSQ-UHFFFAOYSA-N" )
-  out_cts_compinfo <- cts_compinfo(inchikeys)
-  expect_equivalent(inchikey(out_cts_compinfo),
-                    c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N" ))
-})
-
 
 test_that("extractors work with etox", {
   skip_on_cran()
   skip_if_not(ping_service("etox"), "ETOX service is down")
 
-  skip("failing tests below")
   out_etox_basic <- etox_basic(8252)
   expect_equivalent(cas(out_etox_basic), "50-00-0")
   expect_error(inchikey(out_etox_basic))
@@ -24,7 +13,7 @@ test_that("extractors work with chemid", {
   skip_on_cran()
   skip_if_not(ping_service("ci"), "CHEMID service is down")
 
-  skip("failing tests below")
+  skip("ci_query isn't working right now")
   out_ci_query <- ci_query(c('Aspirin', 'Triclosan'), type = 'name')
   expect_equivalent(cas(out_ci_query),  c("50-78-2", "3380-34-5"))
   expect_equivalent(inchikey(out_ci_query),
@@ -37,7 +26,7 @@ test_that("extractors work with opsin", {
   skip_if_not(ping_service("opsin"), "OPSIN service is down")
 
   out_opsin_query <- opsin_query(c('Cyclopropane', 'Octane'))
-  expect_error(cas(out_opsin_query))
+  expect_error(cas(out_opsin_query), "CAS is not returned by this datasource!")
   expect_equivalent(inchikey(out_opsin_query),
                     c("LVZWSLJZHVFIQJ-UHFFFAOYSA-N", "TVMXDCGIABBOFY-UHFFFAOYSA-N"))
   expect_equivalent(smiles(out_opsin_query), c("C1CC1", "CCCCCCCC"))
@@ -51,7 +40,7 @@ test_that("extractors work with Alanwood", {
   expect_equivalent(cas(out_aw_query), c("79622-59-6", "40843-25-2"))
   expect_equivalent(inchikey(out_aw_query),
                     c("UZCGKGPEKUCDTF-UHFFFAOYSA-N", "OOLBCHYXZDXLDS-UHFFFAOYSA-N"))
-  expect_error(smiles(out_aw_query))
+  expect_error(smiles(out_aw_query), "SMILES is not returned by this datasource!")
 
 })
 
@@ -91,17 +80,4 @@ test_that("extractors work with PAN", {
   expect_equivalent(cas(out_pan_query),  c("120-83-2", "1912-24-9"))
   expect_error(inchikey(out_pan_query))
   expect_error(smiles(out_pan_query))
-})
-
-test_that("extractors work with ChemSpider", {
-  skip_on_cran()
-  skip_on_travis()
-  skip_on_appveyor()
-  skip_if_not(ping_service("cs"), "ChemSpider service is down")
-
-  out_cs_compinfo <- cs_compinfo(5363, fields = c("SMILES", "InChIKey") )
-
-  skip("failing tests below")
-  expect_equivalent(inchikey(out_cs_compinfo), "XEFQLINVKFYRCS-UHFFFAOYSA-N")
-  expect_equivalent(smiles(out_cs_compinfo), "c1cc(c(cc1Cl)O)Oc2ccc(cc2Cl)Cl")
 })

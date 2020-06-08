@@ -41,7 +41,12 @@ is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 \references{
 Heller, Stephen R., et al. "InChI, the IUPAC International
 Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
+
+Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+Information from the Web. Journal of Statistical Software, 93(13).
+<doi:10.18637/jss.v093.i13>.
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

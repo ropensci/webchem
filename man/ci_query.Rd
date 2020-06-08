@@ -31,7 +31,7 @@ physprop (data.frame) and source_url.
 }
 \description{
 Retrieve information from ChemIDPlus
-\url{http://chem.sis.nlm.nih.gov/chemidplus}
+\url{https://chem.nlm.nih.gov/chemidplus}
 }
 \note{
 Please respect the Terms and Conditions of the National Library of

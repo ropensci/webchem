@@ -39,5 +39,5 @@ Wikidata: A Platform for Data Integration and Dissemination for the Life Science
 \code{\link{get_wdid}}
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

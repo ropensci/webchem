@@ -27,5 +27,5 @@ This function builds an index of Alan Woods Compendium of Pesticides
 \code{\link{aw_query}}, \code{\link{tempdir}}
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

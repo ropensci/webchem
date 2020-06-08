@@ -34,7 +34,7 @@ individual words.}
 \item{...}{optional arguments}
 }
 \value{
-a character vector.
+a list of character vectors (one per query). If \code{choices} is used, a single named vector is returned instead.
 }
 \description{
 Search synonyms using PUG-REST,
@@ -72,5 +72,5 @@ PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 information in PubChem. Nucleic acids research, gkv396.
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

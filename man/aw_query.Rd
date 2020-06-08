@@ -47,9 +47,15 @@ sapply(out, function(y) y$subactivity[1])
 aw_query("79622-59-6", type = 'cas')
 }
 }
+\references{
+Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+Information from the Web. Journal of Statistical Software, 93(13).
+<doi:10.18637/jss.v093.i13>.
+}
 \seealso{
 \code{\link{build_aw_idx}}
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

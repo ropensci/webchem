@@ -6,6 +6,7 @@
 #' @import xml2 httr
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
+#' @importFrom tibble tibble
 #' @param query character; The searchterm
 #' @param from character; Type of input, can be one of "name" (chemical name),
 #' "cas" (CAS Number), "ec" (European Community number for regulatory purposes),
@@ -16,16 +17,19 @@
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
 #' returns \code{NA} if multiple hits are found.
 #' @param verbose logical; print message during processing to console?
-#' @return a dataframe with 4 columns: etoxID, matched substance, string
-#' distance to match and the queried string
+#' @return a tibble with 3 columns: the query, the match, and the etoxID
 #' @note Before using this function, please read the disclaimer
 #' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
 #' @seealso \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and
 #' \code{\link{etox_tests}} for test results.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -57,6 +61,11 @@ get_etoxid <- function(query,
   match <- match.arg(match)
   foo <- function(query, from, match, verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
+
+    if (is.na(query)) {
+      empty <- list(query = NA, match = NA, etoxid = NA)
+      return(empty)
+    }
     if (verbose)
       message("Searching ", query)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
@@ -167,8 +176,11 @@ get_etoxid <- function(query,
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
 #'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
 #'   for quality targets and \code{\link{etox_tests}} for test results
-#'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -280,8 +292,11 @@ etox_basic <- function(id, verbose = TRUE) {
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
 #'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
 #'   for quality targets and \code{\link{etox_tests}} for test results
-#'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -370,7 +385,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
 #'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{

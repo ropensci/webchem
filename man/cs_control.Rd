@@ -71,5 +71,5 @@ cs_control(order_direction = "descending")
 \code{\link{get_csid}}
 }
 \author{
-Tamas Stirling, \email{stirling.tamas@gmail.com}
+Tamás Stirling, \email{stirling.tamas@gmail.com}
 }

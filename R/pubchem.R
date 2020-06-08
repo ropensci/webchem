@@ -61,6 +61,10 @@
 #' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
@@ -68,7 +72,7 @@
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @import httr
 #' @importFrom purrr map map2
@@ -255,7 +259,7 @@ get_cid <-
 #' @param ... currently not used.
 #'
 #' @return a data.frame
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_sect}}
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -269,6 +273,10 @@ get_cid <-
 #' Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 #' PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 #' information in PubChem. Nucleic acids research, gkv396.
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
@@ -375,7 +383,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' @param arg character; optinal arguments like "name_type=word" to match
 #' individual words.
 #' @param ... optional arguments
-#' @return a character vector.
+#' @return a list of character vectors (one per query). If \code{choices} is used, a single named vector is returned instead.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -396,7 +404,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -413,6 +421,7 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
   if (!missing("interactive"))
     stop("'interactive' is deprecated. Use 'choices' instead.")
   foo <- function(query, from, verbose, ...) {
+    if (is.na(query)) return(NA)
     prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
     input <- paste0("/compound/", from)
     output <- "/synonyms/JSON"
@@ -482,7 +491,7 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_prop}}
 #' @examples
 #' # might fail if API is not available
@@ -536,7 +545,7 @@ pc_sect <- function(id,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
@@ -612,7 +621,7 @@ pc_page <- function(id,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @examples
 #' # might fail if API is not available
 #' \donttest{

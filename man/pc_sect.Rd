@@ -75,5 +75,5 @@ access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 \code{\link{get_cid}}, \code{\link{pc_prop}}
 }
 \author{
-Tamas Stirling, \email{stirling.tamas@gmail.com}
+Tamás Stirling, \email{stirling.tamas@gmail.com}
 }

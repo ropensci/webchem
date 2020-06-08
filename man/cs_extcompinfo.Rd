@@ -48,5 +48,5 @@ cs_compinfo(csids)
 \code{\link{cs_compinfo}} for extended compound information.
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

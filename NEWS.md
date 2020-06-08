@@ -1,4 +1,4 @@
-# webchem 0.5.0.9010
+# webchem 1.0.0
 
 ## NEW FEATURES
 

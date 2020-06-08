@@ -36,5 +36,5 @@ etox_tests( c("20179", "9051"))
 \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
 }
 \author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
+Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

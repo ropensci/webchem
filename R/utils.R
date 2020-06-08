@@ -18,8 +18,11 @@
 #'
 #' @references Heller, Stephen R., et al. "InChI, the IUPAC International
 #' Chemical Identifier." Journal of Cheminformatics 7.1 (2015): 23.
-#'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
@@ -50,7 +53,7 @@ is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
 #' @return a logical
 #'
 #' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -98,7 +101,7 @@ is.inchikey_cs <- function(x, verbose = TRUE){
 #' @return a logical
 #'
 #' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -170,7 +173,11 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #' @note This function can only handle one CAS string
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
+#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#' Information from the Web. Journal of Statistical Software, 93(13).
+#' <doi:10.18637/jss.v093.i13>.
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @export
 #' @examples
@@ -249,7 +256,7 @@ is.cas <-  function(x, verbose = TRUE) {
 #'
 #' @note This function can handle only one SMILES string.
 #'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @references Egon Willighagen (2015). How to test SMILES strings in
 #' Supplementary Information.
@@ -313,7 +320,7 @@ extr_num <- function(x) {
 #' 1 = first atom, 2 = second atom, t = bond type, s = stereo type, x = not
 #' used, r = bond typology, c = reacting center status.
 #'
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
+#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 #' a toolset for transforming SD/Molfile structure information into R objects.
 #' Source Code for Biology and Medicine, 7, 12.
