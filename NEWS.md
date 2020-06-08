@@ -1,8 +1,13 @@
-# webchem 1.0.0
+# webchem 1.0.0.9001
 
 ## NEW FEATURES
 
 * Download images of substances from ChemSpider with cs_img()
+
+# webchem 1.0.0
+
+## NEW FEATURES
+
 * get_cid() now can search by registry IDs (e.g. CAS RN), and can handle more complex requests like searching for similar compounds.
 * Retrieve chemical data from PubChem content pages with pc_sect().
 * get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #241, added by @andschar]
