@@ -13,7 +13,7 @@ fn_percept(query, from = "cas", verbose = TRUE, CAS, ...)
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{...}{not currently used}
+\item{...}{currently unused}
 }
 \value{
 A named character vector containing flavor percepts or NA's in the case of CAS numbers that are not found

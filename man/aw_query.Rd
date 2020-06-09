@@ -9,7 +9,8 @@ aw_query(
   from = c("name", "cas"),
   verbose = TRUE,
   force_build = FALSE,
-  type
+  type,
+  ...
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ aw_query(
 
 \item{force_build}{logical; force building a new index? See
 \code{\link{build_aw_idx}} for more details.}
+
+\item{...}{currently unused.}
 }
 \value{
 A list of eight entries: common-name, status, preferred IUPAC Name,
