@@ -85,9 +85,8 @@ get_chebiid <- function(query,
   stars <- toupper(match.arg(stars))
 
   foo <- function(query, from, match, max_res, stars, verbose, ...) {
-    if (is.na(query)) return(data.frame(chebiid = NA_character_,
-                                        query = NA_character_,
-                                        stringsAsFactors = FALSE))
+    if (is.na(query)) return(tibble(query = NA_character_,
+                                    chebiid = NA_character_))
 
     # query
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
@@ -122,9 +121,8 @@ get_chebiid <- function(query,
       out <- setNames(out, tolower(names(out)))
       if (nrow(out) == 0) {
         message('No result found. \n')
-        return(data.frame(chebiid = NA_character_,
-                          query = query,
-                          stringsAsFactors = FALSE))
+        return(tibble(query = query,
+                      chebiid = NA_character_))
       }
       if (nrow(out) > 0) out$query <- query
       if (nrow(out) == 1) return(out)
@@ -142,17 +140,16 @@ get_chebiid <- function(query,
         return(out[out$chebiid == matched, ])
       }
       if (match == 'na') {
-        return(data.frame(chebiid = NA_character_,
-                          query = query,
-                          stringsAsFactors = FALSE))
+        return(tibble(query = query,
+                      chebiid = NA_character_))
       }
       if (match == "first") {
         return(out[1, ])
       }
     } else {
-      out <- data.frame(chebiid = NA_character_,
-                        query = query,
-                        stringsAsFactors = FALSE)
+      out <- tibble(query = query,
+                    chebiid = NA_character_,
+      )
       message('Returning NA (', http_status(res)$message, '). \n')
 
       return(out)
@@ -166,8 +163,8 @@ get_chebiid <- function(query,
                 stars = stars,
                 verbose = verbose)
   out <- setNames(out, query)
-  out <- as_tibble(bind_rows(out))
-  return(out)
+  out <- bind_rows(out)
+  return(dplyr::select(out, query, chebiid, everything()))
 }
 
 
