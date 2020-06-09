@@ -837,40 +837,32 @@ use 'cs_commpinfo()' instead.")
 #' in PNG format.
 #' @param csid numeric; the ChemSpider ID (CSID) of the substance. This will
 #' also be the name of the image file.
-#' @param dir character; the download directory. If \code{NULL}, the function
-#' will save images to \code{\link{tempdir}}. \code{dir} accepts both absolute
-#' and relative paths.
+#' @param dir character; the download directory. \code{dir} accepts both
+#' absolute and relative paths.
 #' @param overwrite logical; should existing files in the directory with the
 #' same name be overwritten?
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @return a tibble of queries and file paths.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
-#' @seealso \code{\link{get_csid}}, \code{\link{cs_check_key}},
-#' \code{\link{tempdir}}
+#' @seealso \code{\link{get_csid}}, \code{\link{cs_check_key}}
 #' @importFrom httr GET add_headers message_for_status content
 #' @importFrom jsonlite fromJSON
 #' @importFrom base64enc base64decode
-#' @importFrom tibble tibble
-#' @importFrom dplyr bind_rows
 #' @export
 #' @examples
 #' \dontrun{
 #' cs_img(c(582, 682))
 #' }
 cs_img <- function(csid,
-                   dir = NULL,
+                   dir,
                    overwrite = TRUE,
                    apikey = NULL,
                    verbose = TRUE) {
-  if (is.null(dir)) {
-    dir <- tempdir()
-  }
   overwrite <- match.arg(as.character(overwrite), choices = c(TRUE, FALSE))
   if (is.null(apikey)) {
     apikey <- cs_check_key()
@@ -881,7 +873,7 @@ cs_img <- function(csid,
     if (verbose == TRUE) message("Searching ", csid, ". ", appendLF = FALSE)
     if (is.na(csid)) {
       if (verbose == TRUE) {
-        message("Invalid input. Returning NA.")
+        message("Invalid input.")
       }
       return(tibble(query = csid, path = NA))
     }
@@ -901,14 +893,8 @@ cs_img <- function(csid,
         else {
           if (file.exists(path) == FALSE) writeBin(cont, path)
         }
-        return(tibble::tibble(query = csid, path = path))
-      }
-      else {
-        return(tibble::tibble(query = csid, path = NA))
       }
     }
   }
   out <- lapply(csid, function(x) foo(x, dir, overwrite, apikey, verbose))
-  out <- dplyr::bind_rows(out)
-  return(out)
 }

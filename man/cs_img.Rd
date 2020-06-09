@@ -4,15 +4,14 @@
 \alias{cs_img}
 \title{Download images from ChemSpider}
 \usage{
-cs_img(csid, dir = NULL, overwrite = TRUE, apikey = NULL, verbose = TRUE)
+cs_img(csid, dir, overwrite = TRUE, apikey = NULL, verbose = TRUE)
 }
 \arguments{
 \item{csid}{numeric; the ChemSpider ID (CSID) of the substance. This will
 also be the name of the image file.}
 
-\item{dir}{character; the download directory. If \code{NULL}, the function
-will save images to \code{\link{tempdir}}. \code{dir} accepts both absolute
-and relative paths.}
+\item{dir}{character; the download directory. \code{dir} accepts both
+absolute and relative paths.}
 
 \item{overwrite}{logical; should existing files in the directory with the
 same name be overwritten?}
@@ -21,9 +20,6 @@ same name be overwritten?}
 \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
-}
-\value{
-a tibble of queries and file paths.
 }
 \description{
 Retrieve images of substances from ChemSpider and export them
@@ -43,8 +39,7 @@ cs_img(c(582, 682))
 \url{https://developer.rsc.org/compounds-v1/apis}
 }
 \seealso{
-\code{\link{get_csid}}, \code{\link{cs_check_key}},
-\code{\link{tempdir}}
+\code{\link{get_csid}}, \code{\link{cs_check_key}}
 }
 \author{
 Tamas Stirling, \email{stirling.tamas@gmail.com}

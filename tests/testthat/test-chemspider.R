@@ -285,12 +285,10 @@ test_that("cs_img()", {
   skip_on_travis()
   skip_on_appveyor()
 
-  imgs <- cs_img(c(682, 5363, "balloon", NA))
+  imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
 
-  expect_s3_class(imgs, c("tbl_df", "tbl", "data.frame"))
-  expect_is(names(imgs), c("query", "path"))
-  expect_true(file.exists(imgs$path[1]))
-  expect_true(file.exists(imgs$path[2]))
+  expect_true(file.exists(paste0(tempdir(), "/","682.png")))
+  expect_true(file.exists(paste0(tempdir(), "/","5383.png")))
 })
 
 # test_that("cs_extcompinfo()", {
