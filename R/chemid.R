@@ -10,8 +10,12 @@
 #'
 #' @param query character; query string
 #' @param from character; type of query string. \code{"rn"} for registry number
-#' or \code{"name"} for common name or \code{"inchikey"} for inchikey as input.
-#' @param match character; How should multiple hits be handeled? \code{"first"}
+#'   (see
+#'   \href{https://chem.nlm.nih.gov/chemidplus/jsp/chemidheavy/help.jsp#LiteSearchDataFields}{documentation}
+#'   for more details), \code{"name"} for common name, or \code{"inchikey"} for
+#'   inchikey as input. \code{"cas"} is a synonym for \code{"rn"} and provided
+#'   for consistency across functions.
+#' @param match character; How should multiple hits be handled? \code{"first"}
 #' returns only the first match, \code{"best"} the best matching (by name) ID,
 #' \code{"ask"} enters an interactive mode and the user is asked for input,
 #' \code{"na"} returns NA if multiple hits are found.
@@ -47,7 +51,7 @@
 #'  y$physprop$Value[y$physprop$`Physical Property` == 'log P (octanol-water)']
 #'  })
 #' }
-ci_query <- function(query, from = c('name', 'rn', 'inchikey'),
+ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
                      match = c('best', 'first', 'ask', 'na'),
                      verbose = TRUE, type){
   if(!missing(type)) {
@@ -82,7 +86,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey'),
 
     tit <- xml_text(xml_find_all(ttt, "//head/title"))
     no <- xml_text(xml_find_all(ttt, "//h3"))
-    if (length(no) != 0 && no == 'The following query produced no records:') {
+    if (length(no) != 0 && 'The following query produced no records:' %in% no) {
       message('Not found! Returning NA.\n')
       return(NA)
     }
