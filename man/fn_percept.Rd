@@ -4,10 +4,12 @@
 \alias{fn_percept}
 \title{Retrieve flavor percepts from www.flavornet.org}
 \usage{
-fn_percept(CAS, verbose = TRUE, ...)
+fn_percept(query, from = "cas", verbose = TRUE, CAS, ...)
 }
 \arguments{
-\item{CAS}{character; CAS number to search by. See \code{\link{is.cas}} for correct formatting}
+\item{query}{character; CAS number to search by. See \code{\link{is.cas}} for correct formatting}
+
+\item{from}{character; currently only CAS numbers are accepted.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

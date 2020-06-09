@@ -6,18 +6,23 @@
 \usage{
 ci_query(
   query,
-  type = c("name", "rn", "inchikey"),
+  from = c("name", "rn", "inchikey", "cas"),
   match = c("best", "first", "ask", "na"),
-  verbose = TRUE
+  verbose = TRUE,
+  type
 )
 }
 \arguments{
 \item{query}{character; query string}
 
-\item{type}{character; type of query string. \code{"rn"} for registry number
-or \code{"name"} for common name or \code{"inchikey"} for inchikey as input.}
+\item{from}{character; type of query string. \code{"rn"} for registry number
+(see
+\href{https://chem.nlm.nih.gov/chemidplus/jsp/chemidheavy/help.jsp#LiteSearchDataFields}{documentation}
+for more details), \code{"name"} for common name, or \code{"inchikey"} for
+inchikey as input. \code{"cas"} is a synonym for \code{"rn"} and provided
+for consistency across functions.}
 
-\item{match}{character; How should multiple hits be handeled? \code{"first"}
+\item{match}{character; How should multiple hits be handled? \code{"first"}
 returns only the first match, \code{"best"} the best matching (by name) ID,
 \code{"ask"} enters an interactive mode and the user is asked for input,
 \code{"na"} returns NA if multiple hits are found.}
@@ -41,17 +46,17 @@ Medicine, \url{https://www.nlm.nih.gov/databases/download.html}.
 \dontrun{
 # might fail if API is not available
 # query common name
-y1 <- ci_query(c('Formaldehyde', 'Triclosan'), type = 'name')
+y1 <- ci_query(c('Formaldehyde', 'Triclosan'), from = 'name')
 names(y1)
 str(y1[['Triclosan']]) # lots of information inside
 y1[['Triclosan']]$inchikey
 
 # Query by CAS
-y2 <- ci_query('50-00-0', type = 'rn', match = 'first')
+y2 <- ci_query('50-00-0', from = 'rn', match = 'first')
 y2[['50-00-0']]$inchikey
 
 # query by inchikey
-y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
+y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', from = 'inchikey')
 y3[[1]]$name
 
 # extract lop-P

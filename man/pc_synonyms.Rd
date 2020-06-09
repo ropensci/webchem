@@ -6,7 +6,7 @@
 \usage{
 pc_synonyms(
   query,
-  from = "name",
+  from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
   choices = NULL,
   verbose = TRUE,
   arg = NULL,

@@ -6,15 +6,16 @@
 \usage{
 aw_query(
   query,
-  type = c("commonname", "cas"),
+  from = c("name", "cas"),
   verbose = TRUE,
-  force_build = FALSE
+  force_build = FALSE,
+  type
 )
 }
 \arguments{
 \item{query}{character; search string}
 
-\item{type}{character; type of input ('cas' or 'commonname')}
+\item{from}{character; type of input ('cas' or 'name')}
 
 \item{verbose}{logical; print message during processing to console?}
 
@@ -31,20 +32,20 @@ Query Alan Woods Compendium of Pesticide Common Names
 \url{http://www.alanwood.net/pesticides}
 }
 \note{
-for type = 'cas' only the first matched link is returned.
+for from = 'cas' only the first matched link is returned.
 Please respect Copyright, Terms and Conditions
 \url{http://www.alanwood.net/pesticides/legal.html}!
 }
 \examples{
 \dontrun{
-aw_query('Fluazinam', type = 'commonname')
-out <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
+aw_query('Fluazinam', from = 'name')
+out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'com')
 out
 # extract subactivity from object
 sapply(out, function(y) y$subactivity[1])
 
 # use CAS-numbers
-aw_query("79622-59-6", type = 'cas')
+aw_query("79622-59-6", from = 'cas')
 }
 }
 \references{

@@ -24,7 +24,7 @@ cts_convert(
 
 \item{first}{deprecated.  Use choices = 1 instead.}
 
-\item{choices}{to return only the first result, use 'choices = 1'.  To choose a result from an interative menu, provide a number of choices to choose from or "all".}
+\item{choices}{to return only the first result, use 'choices = 1'.  To choose a result from an interactive menu, provide a number of choices to choose from or "all".}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

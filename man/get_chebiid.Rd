@@ -6,10 +6,12 @@
 \usage{
 get_chebiid(
   query,
-  from = "ALL",
-  match = c("all", "best", "ask", "na"),
+  from = c("all", "chebi id", "chebi name", "definition", "name", "iupac name",
+    "citations", "registry numbers", "manual xrefs", "automatic xrefs", "formula",
+    "mass", "monoisotopic mass", "charge", "inchi", "inchikey", "smiles", "species"),
+  match = c("all", "best", "first", "ask", "na"),
   max_res = 200,
-  stars = "ALL",
+  stars = c("all", "two only", "three only"),
   verbose = TRUE,
   ...
 )
@@ -17,10 +19,8 @@ get_chebiid(
 \arguments{
 \item{query}{character; search term.}
 
-\item{from}{character; type of input, can be one of 'ALL', 'CHEBI ID',
-'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS',
-'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS',
-'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.}
+\item{from}{character; type of input.  \code{"all"} searches all types and
+\code{"name"} searches all names.}
 
 \item{match}{character; How should multiple hits be handled?,
 \code{"all"} all matches are returned,
@@ -31,17 +31,16 @@ get_chebiid(
 \item{max_res}{integer; maximum number of results to be retrieved from the
 web service}
 
-\item{stars}{character; type of input can be one of 'ALL', 'TWO ONLY',
-'THREE ONLY'.}
+\item{stars}{character;}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{...}{optional arguments}
+\item{...}{currently unused}
 }
 \value{
 returns a list of data.frames containing a chebiid, a chebiasciiname,
-a searchscore and stars if matches were found.
-If not, data.frame(NA) is returned
+  a searchscore and stars if matches were found. If not, data.frame(NA) is
+  returned
 }
 \description{
 Returns a data.frame with a ChEBI entity ID (chebiid),
