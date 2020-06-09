@@ -540,3 +540,43 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
     f(query = new_query, from = new_from, ...)
   }
 }
+
+
+#' Check data source coverage of compounds
+#'
+#' Checks if entries are found in (most) data sources included in webchem
+#'
+#' @param query character; the search term
+#' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
+#' @param sources character; which data sources to check.  Data sources are identified by the prefix associated with webchem functions that query those databases.  If not specified, all data sources listed will be checked.
+#'
+#' @return a tibble of logical values where \code{TRUE} indicates that a data source contains a record for the query
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' check_coverage("hexane", from = "name")
+#' }
+check_coverage <- function(query, from,
+                           sources = c("etox", "pc", "chebi", "cs",
+                                       "aw", "fn", "pan", "srs")) {
+  sources <- match.arg(sources, several.ok = TRUE)
+  sources <- sapply(sources, switch,
+                    "etox" = "get_etoxid",
+                    "pc" = "get_cid",
+                    "chebi" = "get_chebiid",
+                    "cs" = "get_csid",
+                    "aw" = "aw_query",
+                    "fn" = "fn_percept",
+                    "pan" = "pan_query",
+                    "srs" = "srs_query")
+
+  out <- map(sources, ~{
+    x <- autotranslate(query, from = "name", .f = .x, match = "first")
+    if (inherits(x, "data.frame")) {
+      x <- x[[ncol(x)]]
+    }
+    !is.na(x)
+  }) %>% set_names(names(sources))
+  return(bind_cols(query = query, out))
+}
