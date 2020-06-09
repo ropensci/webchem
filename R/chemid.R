@@ -9,7 +9,7 @@
 #' @importFrom utils URLencode URLdecode
 #'
 #' @param query character; query string
-#' @param type character; type of query string. \code{"rn"} for registry number
+#' @param from character; type of query string. \code{"rn"} for registry number
 #' or \code{"name"} for common name or \code{"inchikey"} for inchikey as input.
 #' @param match character; How should multiple hits be handeled? \code{"first"}
 #' returns only the first match, \code{"best"} the best matching (by name) ID,
@@ -27,17 +27,17 @@
 #' \dontrun{
 #' # might fail if API is not available
 #' # query common name
-#' y1 <- ci_query(c('Formaldehyde', 'Triclosan'), type = 'name')
+#' y1 <- ci_query(c('Formaldehyde', 'Triclosan'), from = 'name')
 #' names(y1)
 #' str(y1[['Triclosan']]) # lots of information inside
 #' y1[['Triclosan']]$inchikey
 #'
 #' # Query by CAS
-#' y2 <- ci_query('50-00-0', type = 'rn', match = 'first')
+#' y2 <- ci_query('50-00-0', from = 'rn', match = 'first')
 #' y2[['50-00-0']]$inchikey
 #'
 #' # query by inchikey
-#' y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
+#' y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', from = 'inchikey')
 #' y3[[1]]$name
 #'
 #' # extract lop-P
@@ -47,12 +47,17 @@
 #'  y$physprop$Value[y$physprop$`Physical Property` == 'log P (octanol-water)']
 #'  })
 #' }
-ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
+ci_query <- function(query, from = c('name', 'rn', 'inchikey'),
                      match = c('best', 'first', 'ask', 'na'),
-                     verbose = TRUE){
-  type <- match.arg(type)
+                     verbose = TRUE, type){
+  if(!missing(type)) {
+    warning('"type" is deprecated. Please use "from" instead. ')
+    from <- type
+  }
+
+  from <- match.arg(from)
   match <- match.arg(match)
-  foo <- function(query, type, match, verbose){
+  foo <- function(query, from, match, verbose){
     on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(query)) {
       message('query is NA! Returning NA.\n')
@@ -60,7 +65,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
     }
     query <- URLencode(query)
     baseurl <- switch(
-      type,
+      from,
       rn = 'https://chem.nlm.nih.gov/chemidplus/rn/startswith/',
       name = "https://chem.nlm.nih.gov/chemidplus/name/startswith/",
       inchikey = "https://chem.nlm.nih.gov/chemidplus/inchikey/startswith/")
@@ -217,7 +222,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
     class(out) <- 'chemid'
     return(out)
   }
-  out <- lapply(query, foo, type = type, match = match, verbose = verbose)
+  out <- lapply(query, foo, from = from, match = match, verbose = verbose)
   out <- setNames(out, query)
   class(out) <- c('ci_query', 'list')
   return(out)
