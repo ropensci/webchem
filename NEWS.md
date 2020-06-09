@@ -4,6 +4,13 @@
 
 * Download images of substances from ChemSpider with cs_img()
 
+## Minor Improvements
+
+* The `"type"` argument in `ci_query()` and `aw_query()` has been changed to `"from"` for consistency with other functions
+* `fn_percept()` and `cts_compinfo()` now have `"query"` and `"from"` arguments for consistency with other functions
+* Possible values for `"from"` have been made more consistent across functions
+
+
 # webchem 1.0.0
 
 ## NEW FEATURES
