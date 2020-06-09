@@ -6,7 +6,7 @@
 #' @importFrom stats rgamma
 #'
 #' @param  query character; search string
-#' @param from character; type of input ('cas' or 'commonname')
+#' @param from character; type of input ('cas' or 'name')
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index? See
 #' \code{\link{build_aw_idx}} for more details.
@@ -24,7 +24,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' aw_query('Fluazinam', from = 'commonname')
+#' aw_query('Fluazinam', from = 'name')
 #' out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'com')
 #' out
 #' # extract subactivity from object
@@ -35,18 +35,25 @@
 #' }
 #' @seealso \code{\link{build_aw_idx}}
 
-aw_query <- function(query, from = c("commonname", "cas"), verbose = TRUE,
+aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
                      force_build = FALSE, type) {
-  if(!missing(type)) {
+  if (!missing(type)) {
     warning('"type" is deprecated. Please use "from" instead. ')
     from <- type
   }
+
+  if ("commonname" %in% from) {
+    warning('To search by compound name use "name" instead of "commonname"')
+    from <- "name"
+  }
+  from <- match.arg(from)
   aw_idx <- build_aw_idx(verbose, force_build)
-  foo <- function(query, from = c("commonname", "cas"), verbose) {
+
+  foo <- function(query, from, verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
-    from <- match.arg(from)
+
   # search links in indexes
-    if (from == "commonname") {
+    if (from == "name") {
       links <- aw_idx$links[aw_idx$source == "cn"]
       names <- aw_idx$linknames[aw_idx$source == "cn"]
       cname <-  query

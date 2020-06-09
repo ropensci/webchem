@@ -9,10 +9,8 @@
 #' @importFrom stats setNames
 #'
 #' @param query character; search term.
-#' @param from character; type of input, can be one of 'ALL', 'CHEBI ID',
-#' 'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS',
-#' 'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS',
-#' 'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.
+#' @param from character; type of input.  \code{"all"} searches all types and
+#'   \code{"name"} searches all names.
 #' @param match character; How should multiple hits be handled?,
 #' \code{"all"} all matches are returned,
 #' \code{"best"} the best matching (by the ChEBI searchscore) is returned,
@@ -20,13 +18,12 @@
 #' \code{"na"} returns NA if multiple hits are found.
 #' @param max_res integer; maximum number of results to be retrieved from the
 #' web service
-#' @param stars character; type of input can be one of 'ALL', 'TWO ONLY',
-#' 'THREE ONLY'.
+#' @param stars character;
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param ... optional arguments
+#' @param ... currently unused
 #' @return returns a list of data.frames containing a chebiid, a chebiasciiname,
-#' a searchscore and stars if matches were found.
-#' If not, data.frame(NA) is returned
+#'   a searchscore and stars if matches were found. If not, data.frame(NA) is
+#'   returned
 #'
 #' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
 #'   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
@@ -67,24 +64,31 @@
 #'
 #' }
 get_chebiid <- function(query,
-                        from = 'ALL',
+                        from = c('all', 'chebi id', 'chebi name', 'definition', 'name',
+                                'iupac name', 'citations', 'registry numbers', 'manual xrefs',
+                                'automatic xrefs', 'formula', 'mass', 'monoisotopic mass',
+                                'charge', 'inchi', 'inchikey', 'smiles', 'species'),
                         match = c("all", "best", "ask", "na"),
                         max_res = 200,
-                        stars = 'ALL',
+                        stars =  c('all', 'two only', 'three only'),
                         verbose = TRUE,
                         ...) {
   match <- match.arg(match)
-  foo <- function(query, match, from, max_res, stars, verbose, ...) {
+  from <- casefold(match.arg(from), upper = TRUE)
+  if (from == "NAME") {
+    from <- "ALL NAMES"
+  }
+  if (from == "inchi" | from == "inchikey") {
+    from <- "INCHI/INCHI KEY"
+  }
+
+  stars <- casefold(match.arg(stars), upper = TRUE)
+
+  foo <- function(query, from, match, max_res, stars, verbose, ...) {
     if (is.na(query)) return(data.frame(chebiid = NA_character_,
                                         query = NA_character_,
                                         stringsAsFactors = FALSE))
-    from_all <- c('ALL', 'CHEBI ID', 'CHEBI NAME', 'DEFINITION', 'ALL NAMES',
-                  'IUPAC NAME', 'CITATIONS', 'REGISTRY NUMBERS', 'MANUAL XREFS',
-                  'AUTOMATIC XREFS', 'FORMULA', 'MASS', 'MONOISOTOPIC MASS',
-                  'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES')
-    from <- match.arg(from, from_all)
-    stars_all <- c('ALL', 'TWO ONLY', 'THREE ONLY')
-    stars <- match.arg(stars, stars_all)
+
     # query
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
     headers <- c(Accept = 'text/xml',
@@ -153,8 +157,8 @@ get_chebiid <- function(query,
   }
   out <- lapply(query,
                 foo,
-                match = match,
                 from = from,
+                match = match,
                 max_res = max_res,
                 stars = stars,
                 verbose = verbose)
