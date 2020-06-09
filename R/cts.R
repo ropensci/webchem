@@ -71,7 +71,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
 #' @param to character; type to convert to.
 #' @param first deprecated.  Use choices = 1 instead.
-#' @param choices to return only the first result, use 'choices = 1'.  To choose a result from an interative menu, provide a number of choices to choose from or "all".
+#' @param choices to return only the first result, use 'choices = 1'.  To choose a result from an interactive menu, provide a number of choices to choose from or "all".
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of character vectors or if \code{choices} is used, then a single named vector.
@@ -101,6 +101,17 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
     stop('Cannot handle multiple input or output types.  Please provide only one argument for `from` and `to`.')
   }
 
+  from <-  match.arg(tolower(from), c(tolower(cts_from()), "name"))
+  to <-  match.arg(tolower(to), c(tolower(cts_to()), "name"))
+
+  if (from == "name") {
+    from <- "chemical name"
+  }
+
+  if (to == "name") {
+    to <- "chemical name"
+  }
+
   foo <- function(query, from, to , first, verbose){
     if (is.na(query)) return(NA)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
@@ -119,14 +130,11 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
         return(NA)
     }
     out <- out$result[[1]]
-    # if (first)
-    #   out <- out[1]
     out <- chooser(out, choices)
     return(out)
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
-  # if (first)
   if(!is.null(choices))
     out <- unlist(out)
   return(out)
