@@ -101,8 +101,8 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
     stop('Cannot handle multiple input or output types.  Please provide only one argument for `from` and `to`.')
   }
 
-  from <-  match.arg(tolower(from), c(tolower(cts_from()), "name"))
-  to <-  match.arg(tolower(to), c(tolower(cts_to()), "name"))
+  from <-  match.arg(tolower(from), c(cts_from(), "name"))
+  to <-  match.arg(tolower(to), c(cts_to(), "name"))
 
   if (from == "name") {
     from <- "chemical name"
@@ -160,7 +160,7 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
 #' cts_from()
 #' }
 cts_from <- function(verbose = TRUE){
-  fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues')
+  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues'))
 }
 
 
@@ -183,5 +183,5 @@ cts_from <- function(verbose = TRUE){
 #' cts_from()
 #' }
 cts_to <- function(verbose = TRUE){
-  fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues')
+  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues'))
 }

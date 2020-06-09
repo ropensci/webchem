@@ -68,13 +68,13 @@ get_chebiid <- function(query,
                                 'iupac name', 'citations', 'registry numbers', 'manual xrefs',
                                 'automatic xrefs', 'formula', 'mass', 'monoisotopic mass',
                                 'charge', 'inchi', 'inchikey', 'smiles', 'species'),
-                        match = c("all", "best", "ask", "na"),
+                        match = c("all", "best", "first", "ask", "na"),
                         max_res = 200,
                         stars =  c('all', 'two only', 'three only'),
                         verbose = TRUE,
                         ...) {
   match <- match.arg(match)
-  from <- casefold(match.arg(from), upper = TRUE)
+  from <- toupper(match.arg(from))
   if (from == "NAME") {
     from <- "ALL NAMES"
   }
@@ -82,7 +82,7 @@ get_chebiid <- function(query,
     from <- "INCHI/INCHI KEY"
   }
 
-  stars <- casefold(match.arg(stars), upper = TRUE)
+  stars <- toupper(match.arg(stars))
 
   foo <- function(query, from, match, max_res, stars, verbose, ...) {
     if (is.na(query)) return(data.frame(chebiid = NA_character_,
@@ -145,6 +145,9 @@ get_chebiid <- function(query,
         return(data.frame(chebiid = NA_character_,
                           query = query,
                           stringsAsFactors = FALSE))
+      }
+      if (match == "first") {
+        return(out[1, ])
       }
     } else {
       out <- data.frame(chebiid = NA_character_,
