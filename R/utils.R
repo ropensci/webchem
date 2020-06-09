@@ -505,3 +505,38 @@ matcher <-
       }
     }
   }
+
+
+
+#' Auto-translate identifiers and search databases
+#'
+#' Supply a query of any type (e.g. SMILES, CAS, name, InChI, etc.) along with any webchem function that has \code{query} and \code{from} arguments.  If the function doesn't accpet the type of query you've supplied, this will try to automatically translate it using CTS and run the query.
+#'
+#' @param query character; the search term
+#' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
+#' @param .f character; the (quoted) name of a webchem function
+#' @param .verbose logical; print a message when translating query?
+#' @param ... other arguments passed to the function specified with \code{.f}
+#'
+#' @return returns results from \code{.f}
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' autotranslate("XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
+#' }
+autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
+  f <- rlang::as_function(.f)
+  pos_froms <- eval(rlang::fn_fmls(f)$from)
+  if (from %in% pos_froms) {
+    f(query = query, from = from, ...)
+  } else {
+    pos_froms <- pos_froms[pos_froms != "name"] #cts name conversion broken
+    new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
+    if(.verbose){
+      message(glue::glue("{.f} doesn't accept {from}. Attempting to translate to {new_from} with CTS and re-running query "))
+    }
+    new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
+    f(query = new_query, from = new_from, ...)
+  }
+}
