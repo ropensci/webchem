@@ -4,7 +4,8 @@
 #' @import jsonlite
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
-#' @param inchikey character; InChIkey.
+#' @param query character; InChIkey.
+#' @param from character; currently only accepts "inchikey".
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a list of lists (for each supplied inchikey):
 #' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
@@ -29,14 +30,18 @@
 #' # extract molecular weight
 #' sapply(out2, function(y) y$molweight)
 #' }
-cts_compinfo <- function(inchikey, verbose = TRUE){
-  # inchikey <- 'XEFQLINVKFYRCS-UHFFFAOYSA-N'
-  foo <- function(inchikey, verbose) {
-    if (!is.inchikey(inchikey)) {
+cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
+  if (!missing(inchikey)) {
+    warning('"inchikey" is deprecated.  Please use "query" instead.')
+    query <- inchikey
+  }
+  match.arg(from)
+  foo <- function(query, verbose) {
+    if (!is.inchikey(query)) {
       stop('Input is not a valid inchikey!')
     }
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
-    qurl <- paste0(baseurl, '/', inchikey)
+    qurl <- paste0(baseurl, '/', query)
     if (verbose)
       message(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
@@ -47,8 +52,8 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
     }
     return(out)
   }
-  out <- lapply(inchikey, foo, verbose = verbose)
-  out <- setNames(out, inchikey)
+  out <- lapply(query, foo, verbose = verbose)
+  out <- setNames(out, query)
   class(out) <- c('cts_compinfo','list')
   return(out)
 }
