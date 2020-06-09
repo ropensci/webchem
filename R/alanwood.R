@@ -10,6 +10,7 @@
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index? See
 #' \code{\link{build_aw_idx}} for more details.
+#' @param ... currently unused.
 #' @return A list of eight entries: common-name, status, preferred IUPAC Name,
 #' IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source
 #' url.
@@ -36,7 +37,7 @@
 #' @seealso \code{\link{build_aw_idx}}
 
 aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
-                     force_build = FALSE, type) {
+                     force_build = FALSE, type, ...) {
   if (!missing(type)) {
     warning('"type" is deprecated. Please use "from" instead. ')
     from <- type

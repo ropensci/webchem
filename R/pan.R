@@ -67,8 +67,9 @@
 #'  # extract Hydrolysis Half-life (Avg, Days)
 #'  sapply(out, function(y) y$`Hydrolysis Half-life (Avg, Days)`)
 #' }
-pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, ...){
+pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', 'first'), verbose = TRUE, ...){
   match <- match.arg(match)
+  match.arg(from) #not actually needed for this function to work
   foo <- function(query, match, verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(query)) {

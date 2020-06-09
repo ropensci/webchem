@@ -9,7 +9,7 @@
 #' @param query character; CAS number to search by. See \code{\link{is.cas}} for correct formatting
 #' @param from character; currently only CAS numbers are accepted.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param ... not currently used
+#' @param ... currently unused
 #'
 #' @return A named character vector containing flavor percepts or NA's in the case of CAS numbers that are not found
 #'
