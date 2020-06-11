@@ -20,20 +20,18 @@
 autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
   f <- rlang::as_function(.f)
   pos_froms <- eval(rlang::fn_fmls(f)$from)
-  if (from %in% pos_froms) {
-    f(query = query, from = from, ...)
-  } else {
+  if (!from %in% pos_froms) {
     pos_froms <- pos_froms[pos_froms != "name"] #cts name conversion broken
     new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
     if(.verbose){
       message(
-        paste0(.f, " doesn't accept ", from, ".\n", "Attempting to translte to ", new_from, " with CTS. ")
+        paste0(.f, " doesn't accept ", from, ".\n", "Attempting to translate to ", new_from, " with CTS. ")
       )
     }
     new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
     #would like to try a again if cts fails the first time (as it often does).
-    f(query = new_query, from = new_from, ...)
   }
+  f(query = new_query, from = new_from, match = "best", ...)
 }
 
 
@@ -83,7 +81,7 @@ check_coverage <- function(query, from,
 
   out <- lapply(sources, foo, query = query, from = from)
   out <- setNames(out, names(sources))
-  out <- bind_cols(query = query, out)
+  out <- dplyr::bind_cols(query = query, out)
 
   if (plot) {
     requireNamespace("ggplot2", quietly = TRUE)

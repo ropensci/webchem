@@ -408,8 +408,11 @@ as.cas <- function(x){
 #' chooser(test, "all")
 #' chooser(test, 3)
 chooser <- function(x, choices){
-  if(interactive() & !is.null(choices)){
+  if(choices == 1) {
+    out <- x[1]
+  }
     #only in an interactive R session when number of choices is specified
+  if(interactive()) {
     if(is.numeric(choices) & choices > length(x)) {
       choices = "all"
       warning('Number of choices excedes length of x, using all choices instead',
@@ -419,19 +422,16 @@ chooser <- function(x, choices){
       pick <- menu(x, graphics = FALSE, 'Select one:')
       out <- x[pick]
     }
-    if(choices == 1) {
-      out <- x[1]
-    }
+
     if(is.numeric(choices) & choices > 1){
       pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
       out <- x[pick]
-    }
-  } else {
+    } else {
     out <- x
+    }
   }
   return(out)
 }
-
 #' matcher utility
 #'
 #' @param x a vector

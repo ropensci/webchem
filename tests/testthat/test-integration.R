@@ -12,8 +12,8 @@ test_that("autotranslate works when no translation needed", {
 etox_up <- ping_service("etox")
 test_that("autotranslate translates", {
   skip_if_not(etox_up, "ETOX down!")
-  x <- autotranslate("XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
-  y <- get_etoxid("1071-83-6", from = "cas")
+  x <- autotranslate(query = "XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
+  y <- get_etoxid(query = "1071-83-6", from = "cas")
   expect_equal(x, y)
 })
 
@@ -29,4 +29,3 @@ test_that("coverge function works", {
                fn = c(FALSE, FALSE, FALSE))
   expect_equivalent(out, df)
 })
-
