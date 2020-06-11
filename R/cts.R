@@ -7,6 +7,7 @@
 #' @param query character; InChIkey.
 #' @param from character; currently only accepts "inchikey".
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param inchikey deprecated
 #' @return a list of lists (for each supplied inchikey):
 #' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
 #' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}

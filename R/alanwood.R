@@ -11,6 +11,7 @@
 #' @param force_build logical; force building a new index? See
 #' \code{\link{build_aw_idx}} for more details.
 #' @param ... currently unused.
+#' @param type deprecated
 #' @return A list of eight entries: common-name, status, preferred IUPAC Name,
 #' IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source
 #' url.

@@ -15,6 +15,8 @@ pan_query(
 \arguments{
 \item{query}{character; searchterm, e.g. chemical name or CAS.}
 
+\item{from}{character; one of "name" or "cas".}
+
 \item{match}{character; \code{match="all"} returns all matches,
 \code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
  Levenshtein distance between query and matching synonym.}

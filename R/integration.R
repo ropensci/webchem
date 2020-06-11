@@ -20,6 +20,7 @@
 autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
   f <- rlang::as_function(.f)
   pos_froms <- eval(rlang::fn_fmls(f)$from)
+
   if (!from %in% pos_froms) {
     pos_froms <- pos_froms[pos_froms != "name"] #cts name conversion broken
     new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
@@ -30,8 +31,10 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
     }
     new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
     #would like to try a again if cts fails the first time (as it often does).
+    from <- new_from
+    query <- new_query
   }
-  f(query = new_query, from = new_from, match = "best", ...)
+  f(query = query, from = from, ...)
 }
 
 

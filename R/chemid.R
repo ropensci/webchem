@@ -20,6 +20,7 @@
 #' \code{"ask"} enters an interactive mode and the user is asked for input,
 #' \code{"na"} returns NA if multiple hits are found.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param type deprecated
 #' @return A list of 8 entries: name (vector), synonyms (vector), cas (vector),
 #' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
 #' physprop (data.frame) and source_url.

@@ -28,6 +28,8 @@ returns only the first match, \code{"best"} the best matching (by name) ID,
 \code{"na"} returns NA if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{type}{deprecated}
 }
 \value{
 A list of 8 entries: name (vector), synonyms (vector), cas (vector),

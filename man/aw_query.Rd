@@ -23,6 +23,8 @@ aw_query(
 \item{force_build}{logical; force building a new index? See
 \code{\link{build_aw_idx}} for more details.}
 
+\item{type}{deprecated}
+
 \item{...}{currently unused.}
 }
 \value{

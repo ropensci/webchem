@@ -6,6 +6,7 @@
 #' @importFrom rvest html_table
 #' @importFrom stats rgamma
 #' @param query character; searchterm, e.g. chemical name or CAS.
+#' @param from character; one of "name" or "cas".
 #' @param match character; \code{match="all"} returns all matches,
 #'   \code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
 #'    Levenshtein distance between query and matching synonym.

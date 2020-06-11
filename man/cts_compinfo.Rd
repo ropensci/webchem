@@ -12,6 +12,8 @@ cts_compinfo(query, from = "inchikey", verbose = TRUE, inchikey)
 \item{from}{character; currently only accepts "inchikey".}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{inchikey}{deprecated}
 }
 \value{
 a list of lists (for each supplied inchikey):

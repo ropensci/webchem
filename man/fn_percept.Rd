@@ -13,6 +13,8 @@ fn_percept(query, from = "cas", verbose = TRUE, CAS, ...)
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
+\item{CAS}{deprecated}
+
 \item{...}{currently unused}
 }
 \value{
