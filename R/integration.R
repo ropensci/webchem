@@ -1,0 +1,109 @@
+
+#' Auto-translate identifiers and search databases
+#'
+#' Supply a query of any type (e.g. SMILES, CAS, name, InChI, etc.) along with any webchem function that has \code{query} and \code{from} arguments.  If the function doesn't accpet the type of query you've supplied, this will try to automatically translate it using CTS and run the query.
+#'
+#' @param query character; the search term
+#' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
+#' @param .f character; the (quoted) name of a webchem function
+#' @param .verbose logical; print a message when translating query?
+#' @param ... other arguments passed to the function specified with \code{.f}
+#'
+#' @return returns results from \code{.f}
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' autotranslate("XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
+#' }
+autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
+  f <- rlang::as_function(.f)
+  pos_froms <- eval(rlang::fn_fmls(f)$from)
+  if (from %in% pos_froms) {
+    f(query = query, from = from, ...)
+  } else {
+    pos_froms <- pos_froms[pos_froms != "name"] #cts name conversion broken
+    new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
+    if(.verbose){
+      message(
+        glue::glue("{.f} doesn't accept {from}.
+                     Attempting to translate to {new_from} with CTS. "))
+    }
+    new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
+    #would like to try a again if cts fails the first time (as it often does).
+    f(query = new_query, from = new_from, ...)
+  }
+}
+
+
+
+#' Check data source coverage of compounds
+#'
+#' Checks if entries are found in (most) data sources included in webchem
+#'
+#' @param query character; the search term
+#' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
+#' @param sources character; which data sources to check.  Data sources are identified by the prefix associated with webchem functions that query those databases.  If not specified, all data sources listed will be checked.
+#'
+#' @return a tibble of logical values where \code{TRUE} indicates that a data source contains a record for the query
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' check_coverage("hexane", from = "name")
+#' }
+check_coverage <- function(query, from,
+                           sources = c("etox", "pc", "chebi", "cs",
+                                       "aw", "fn", "pan", "srs"),
+                           plot = FALSE) {
+  sources <- match.arg(sources, several.ok = TRUE)
+  sources <- sapply(sources, switch,
+                    "etox" = "get_etoxid",
+                    "pc" = "get_cid",
+                    "chebi" = "get_chebiid",
+                    "cs" = "get_csid",
+                    "aw" = "aw_query",
+                    "fn" = "fn_percept",
+                    "pan" = "pan_query",
+                    "srs" = "srs_query")
+
+  foo <- function(.f, query, from) {
+    # if a function errors (e.g. API is down) then return NA
+    x <- try(autotranslate(query = query, from = from, .f = .f, match = "first"))
+    if (inherits(x, "try-error")) {
+      return(NA)
+    }
+    if (inherits(x, "data.frame")) {
+      x <- x[[ncol(x)]]
+    }
+    return(!is.na(x))
+  }
+
+  out <- lapply(sources, foo, query = query, from = from)
+  out <- setNames(out, names(sources))
+  out <- bind_cols(query = query, out)
+
+  if (plot) {
+    df <- out %>%
+      pivot_longer(-query, names_to = "source", values_to = "covered") %>%
+      group_by(source) %>%
+      mutate(num = sum(covered)) %>%
+      ungroup() %>%
+      arrange(desc(num), source) %>%
+      mutate(source = fct_inorder(source))
+
+    p <-
+      ggplot(df, aes(x = source, y = query, fill = covered)) +
+      geom_tile(color = "grey30") +
+      coord_fixed(expand = 0) +
+      scale_fill_manual("Covered:",
+                        values = c("TRUE" = "#3BC03B", "FALSE" = "#C7010B"),
+                        na.value = "grey70") +
+      scale_x_discrete(position = "top") +
+      theme(axis.title = element_blank(),
+            axis.ticks = element_blank())
+
+    print(p)
+  }
+  return(out)
+}
