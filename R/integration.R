@@ -50,7 +50,6 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
 #' @return a tibble of logical values where \code{TRUE} indicates that a data source contains a record for the query
 #' @export
 #' @import dplyr
-#' @import ggplot2
 #' @examples
 #' \dontrun{
 #' check_coverage("hexane", from = "name")
@@ -88,13 +87,16 @@ check_coverage <- function(query, from,
 
   if (plot) {
     requireNamespace("ggplot2", quietly = TRUE)
+    requireNamespace("tidyr", quietly = TRUE)
+    requireNamespace("forcats", quietly = TRUE)
+
     df <- out %>%
-      pivot_longer(-query, names_to = "source", values_to = "covered") %>%
+      tidyr::pivot_longer(-query, names_to = "source", values_to = "covered") %>%
       group_by(source) %>%
       mutate(num = sum(covered)) %>%
       ungroup() %>%
       arrange(desc(num), source) %>%
-      mutate(source = fct_inorder(source))
+      mutate(source = forcats::fct_inorder(source))
 
     p <-
       ggplot(df, aes(x = source, y = query, fill = covered)) +

@@ -39,7 +39,8 @@ Imports:
     purrr,
     data.tree,
     tibble,
-    base64enc
+    base64enc,
+    rlang
 Suggests:
     testthat,
     rcdk,
@@ -47,6 +48,8 @@ Suggests:
     robotstxt,
     knitr,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    tidyr,
+    forcats
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

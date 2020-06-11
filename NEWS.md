@@ -4,6 +4,11 @@
 
 * Download images of substances from ChemSpider with cs_img()
 
+## New Features
+
+* `autotranslate()` is a wrapper that accepts any type of query and any webchem function with a `from` argument and will use CTS to translate the query if needed.
+* `check_coverage()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
+
 ## Minor Improvements
 
 * The `"type"` argument in `ci_query()` and `aw_query()` has been changed to `"from"` for consistency with other functions
