@@ -46,6 +46,7 @@ Suggests:
     covr,
     robotstxt,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggplot2
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

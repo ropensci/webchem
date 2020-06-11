@@ -38,7 +38,7 @@ test_that("chebi returns correct results", {
   expect_is(A, "list")
   expect_is(B, "list")
 
-  expect_equal(names(a)[1], "chebiid")
+  expect_equal(names(a)[2], "chebiid")
   expect_length(names(a), 5)
   expect_length(names(b), 5)
   expect_equal(A$`CHEBI:27744`$regnumbers$data[1], "1071-83-6")

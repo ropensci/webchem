@@ -1,7 +1,7 @@
 
 #' Auto-translate identifiers and search databases
 #'
-#' Supply a query of any type (e.g. SMILES, CAS, name, InChI, etc.) along with any webchem function that has \code{query} and \code{from} arguments.  If the function doesn't accpet the type of query you've supplied, this will try to automatically translate it using CTS and run the query.
+#' Supply a query of any type (e.g. SMILES, CAS, name, InChI, etc.) along with any webchem function that has \code{query} and \code{from} arguments.  If the function doesn't accept the type of query you've supplied, this will try to automatically translate it using CTS and run the query.
 #'
 #' @param query character; the search term
 #' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
@@ -10,6 +10,7 @@
 #' @param ... other arguments passed to the function specified with \code{.f}
 #'
 #' @return returns results from \code{.f}
+#' @importFrom rlang as_function fn_fmls
 #' @export
 #'
 #' @examples
@@ -26,8 +27,8 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
     new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
     if(.verbose){
       message(
-        glue::glue("{.f} doesn't accept {from}.
-                     Attempting to translate to {new_from} with CTS. "))
+        paste0(.f, " doesn't accept ", from, ".\n", "Attempting to translte to ", new_from, " with CTS. ")
+      )
     }
     new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
     #would like to try a again if cts fails the first time (as it often does).
@@ -44,10 +45,12 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
 #' @param query character; the search term
 #' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
 #' @param sources character; which data sources to check.  Data sources are identified by the prefix associated with webchem functions that query those databases.  If not specified, all data sources listed will be checked.
+#' @param plot logical; plot a graphical representation of results.
 #'
 #' @return a tibble of logical values where \code{TRUE} indicates that a data source contains a record for the query
 #' @export
-#'
+#' @import dplyr
+#' @import ggplot2
 #' @examples
 #' \dontrun{
 #' check_coverage("hexane", from = "name")
@@ -84,6 +87,7 @@ check_coverage <- function(query, from,
   out <- bind_cols(query = query, out)
 
   if (plot) {
+    requireNamespace("ggplot2", quietly = TRUE)
     df <- out %>%
       pivot_longer(-query, names_to = "source", values_to = "covered") %>%
       group_by(source) %>%
