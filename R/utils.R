@@ -408,27 +408,26 @@ as.cas <- function(x){
 #' chooser(test, "all")
 #' chooser(test, 3)
 chooser <- function(x, choices){
-  if(choices == 1) {
-    out <- x[1]
-  }
-    #only in an interactive R session when number of choices is specified
-  if(interactive()) {
+  if (is.null(choices)) {
+    out <- x
+  } else if (choices == 1) {
+      out <- x[1]
+  } else if (interactive()) {
     if(is.numeric(choices) & choices > length(x)) {
-      choices = "all"
+      choices <- "all"
       warning('Number of choices excedes length of x, using all choices instead',
               immediate. = TRUE)
     }
-    if(choices == "all") { #then give all of x as possible choices
+    if (choices == "all") { #then give all of x as possible choices
       pick <- menu(x, graphics = FALSE, 'Select one:')
       out <- x[pick]
     }
-
-    if(is.numeric(choices) & choices > 1){
+    if (is.numeric(choices) & choices > 1){
       pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
       out <- x[pick]
-    } else {
-    out <- x
     }
+  } else {
+    stop('Can only use "choices" in interactive mode.')
   }
   return(out)
 }
