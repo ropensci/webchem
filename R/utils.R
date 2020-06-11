@@ -559,7 +559,8 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
 #' }
 check_coverage <- function(query, from,
                            sources = c("etox", "pc", "chebi", "cs",
-                                       "aw", "fn", "pan", "srs")) {
+                                       "aw", "fn", "pan", "srs"),
+                           plot = FALSE) {
   sources <- match.arg(sources, several.ok = TRUE)
   sources <- sapply(sources, switch,
                     "etox" = "get_etoxid",
@@ -571,12 +572,37 @@ check_coverage <- function(query, from,
                     "pan" = "pan_query",
                     "srs" = "srs_query")
 
-  out <- map(sources, ~{
-    x <- autotranslate(query, from = "name", .f = .x, match = "first")
+  foo <- function(.f, query, from) {
+    x <- autotranslate(query = query, from = from, .f = .f, match = "first")
     if (inherits(x, "data.frame")) {
       x <- x[[ncol(x)]]
     }
-    !is.na(x)
-  }) %>% set_names(names(sources))
-  return(bind_cols(query = query, out))
+    return(!is.na(x))
+  }
+
+  out <- lapply(sources, foo, query = query, from = from)
+  out <- setNames(out, names(sources))
+  out <- bind_cols(query = query, out)
+  if (plot) {
+    df <- out %>%
+      pivot_longer(-query, names_to = "source", values_to = "covered") %>%
+      group_by(source) %>%
+      mutate(num = sum(covered)) %>%
+      ungroup() %>%
+      arrange(desc(num), source) %>%
+      mutate(source = fct_inorder(source))
+
+    p <-
+      ggplot(df, aes(x = source, y = query, fill = covered)) +
+      geom_tile(color = "grey30") +
+      coord_fixed(expand = 0) +
+      scale_fill_manual(values = c("TRUE" = "#3BC03B", "FALSE" = "grey80")) +
+      scale_x_discrete(position = "top") +
+      theme(legend.position = "none",
+            axis.title = element_blank(),
+            axis.ticks = element_blank())
+
+    print(p)
+  }
+  return(out)
 }
