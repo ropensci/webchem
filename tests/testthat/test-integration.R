@@ -4,7 +4,7 @@ fn_up <- ping_service("fn")
 test_that("autotranslate works when no translation needed", {
   skip_if_not(fn_up, "Flavornet down!")
   CASs <- c("75-07-0",  "64-17-5")
-  a <- autotranslate(query = CASs, from = "cas", .f = "fn_percept", .verbose = FALSE)
+  a <- autotranslate(query = CASs, from = "cas", .f = "fn_percept", .verbose = TRUE)
   b <- fn_percept(CASs)
   expect_equal(a, b)
 })
