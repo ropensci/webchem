@@ -531,12 +531,36 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
   if (from %in% pos_froms) {
     f(query = query, from = from, ...)
   } else {
-    pos_froms <- pos_froms[pos_froms != "name"] #cts name conversion broken
-    new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
-    if(.verbose){
-      message(glue::glue("{.f} doesn't accept {from}. Attempting to translate to {new_from} with CTS and re-running query "))
+
+    #see if OPSIN can be used first because it is most reliable
+    opsin_output <- c("inchi", "stdinchi", "stdinchikey", "smiles")
+    if (from == "name" & any(pos_froms %in% opsin_output)) {
+      new_from <- pos_froms[which(pos_froms %in% opsin_output)[1]]
+      if(.verbose){
+        message(
+          glue::glue("{.f} doesn't accept {from}.
+                     Attempting to translate to {new_from} with OPSIN. "))
+      }
+      new_query <- opsin_query(query)[[as_name(new_from)]]
+
+    } else if (from == "inchi" & any(pos_froms %in% c("inchikey", "smiles"))){
+      new_from <- pos_froms[which(pos_froms %in% c("inchikey", "smiles"))]
+      if(.verbose){
+        message(
+          glue::glue("{.f} doesn't accept {from}.
+                     Attempting to translate to {new_from} with ChemSpider. "))
+      }
+      new_query <- cs_convert_multiple(query, from = from, to = new_from)
+    } else { #otherwise use CTS
+      pos_froms <- pos_froms[pos_froms != "name"] #cts name conversion broken
+      new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
+      if(.verbose){
+        message(
+          glue::glue("{.f} doesn't accept {from}.
+                     Attempting to translate to {new_from} with CTS. "))
+      }
+      new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
     }
-    new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
     f(query = new_query, from = new_from, ...)
   }
 }
