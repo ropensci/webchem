@@ -32,7 +32,7 @@ can be found at \url{https://developer.rsc.org/terms}.
 }
 \examples{
 \dontrun{
-cs_img(c(582, 682))
+cs_img(c(582, 682), dir = tempdir())
 }
 }
 \references{

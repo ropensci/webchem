@@ -856,7 +856,7 @@ use 'cs_commpinfo()' instead.")
 #' @export
 #' @examples
 #' \dontrun{
-#' cs_img(c(582, 682))
+#' cs_img(c(582, 682), dir = tempdir())
 #' }
 cs_img <- function(csid,
                    dir,
