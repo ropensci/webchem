@@ -830,3 +830,71 @@ use 'cs_commpinfo()' instead.")
   class(out) <- c('cs_extcompinfo', 'data.frame')
   return(out)
 }
+
+#' Download images from ChemSpider
+#'
+#' @description Retrieve images of substances from ChemSpider and export them
+#' in PNG format.
+#' @param csid numeric; the ChemSpider ID (CSID) of the substance. This will
+#' also be the name of the image file.
+#' @param dir character; the download directory. \code{dir} accepts both
+#' absolute and relative paths.
+#' @param overwrite logical; should existing files in the directory with the
+#' same name be overwritten?
+#' @param apikey character; your API key. If NULL (default),
+#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @note An API key is needed. Register at \url{https://developer.rsc.org/}
+#' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
+#' can be found at \url{https://developer.rsc.org/terms}.
+#' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
+#' @seealso \code{\link{get_csid}}, \code{\link{cs_check_key}}
+#' @importFrom httr GET add_headers message_for_status content
+#' @importFrom jsonlite fromJSON
+#' @importFrom base64enc base64decode
+#' @export
+#' @examples
+#' \dontrun{
+#' cs_img(c(582, 682), dir = tempdir())
+#' }
+cs_img <- function(csid,
+                   dir,
+                   overwrite = TRUE,
+                   apikey = NULL,
+                   verbose = TRUE) {
+  overwrite <- match.arg(as.character(overwrite), choices = c(TRUE, FALSE))
+  if (is.null(apikey)) {
+    apikey <- cs_check_key()
+  }
+  verbose <- match.arg(as.character(verbose), choices = c(TRUE, FALSE))
+  foo <- function(csid, dir = dir, overwrite = overwrite, apikey = apikey,
+                  verbose = verbose) {
+    if (verbose == TRUE) message("Searching ", csid, ". ", appendLF = FALSE)
+    if (is.na(csid)) {
+      if (verbose == TRUE) {
+        message("Invalid input.")
+      }
+      return(tibble(query = csid, path = NA))
+    }
+    else {
+      path <- paste0(dir, "/", csid, ".png")
+      url <- paste0("https://api.rsc.org/compounds/v1/records/", csid, "/image")
+      headers <- c("Content-Type" = "", "apikey" = apikey)
+      res <- httr::GET(url, httr::add_headers(.headers = headers))
+      if (verbose == TRUE) message(httr::message_for_status(res))
+      if (res$status_code < 300) {
+        cont <- httr::content(res, type = "image", encoding = "base64")
+        cont <- unlist(jsonlite::fromJSON(rawToChar(cont)))
+        cont <- base64enc::base64decode(cont)
+        if (overwrite == TRUE) {
+          writeBin(cont, path)
+        }
+        else {
+          if (file.exists(path) == FALSE) writeBin(cont, path)
+        }
+      }
+    }
+  }
+  out <- lapply(csid, function(x) foo(x, dir, overwrite, apikey, verbose))
+}

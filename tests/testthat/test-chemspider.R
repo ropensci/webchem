@@ -280,6 +280,17 @@ test_that("cs_compinfo()", {
   expect_equal(dim(b), c(2, 18))
 })
 
+test_that("cs_img()", {
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_appveyor()
+
+  imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
+
+  expect_true(file.exists(paste0(tempdir(), "/","682.png")))
+  expect_true(file.exists(paste0(tempdir(), "/","5383.png")))
+})
+
 # test_that("cs_extcompinfo()", {
 #   skip_on_cran()
 #

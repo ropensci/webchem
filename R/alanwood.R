@@ -36,7 +36,7 @@
 #' @seealso \code{\link{build_aw_idx}}
 aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
                      force_build = FALSE) {
-  aw_idx <- build_aw_idx(verbose, force_build)
+  aw_idx <- build_aw_idx(verbose = FALSE, force_build)
   foo <- function(query, type = c("commonname", "cas"), verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
     type <- match.arg(type)

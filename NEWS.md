@@ -1,3 +1,9 @@
+# webchem 1.0.0.9001
+
+## NEW FEATURES
+
+* Download images of substances from ChemSpider with cs_img()
+
 # webchem 1.0.0
 
 ## NEW FEATURES
