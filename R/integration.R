@@ -87,30 +87,32 @@ has_entry <- function(query, from,
   out <- dplyr::bind_cols(query = query, out)
 
   if (plot) {
-    requireNamespace("ggplot2", quietly = TRUE)
-    requireNamespace("tidyr", quietly = TRUE)
-    requireNamespace("forcats", quietly = TRUE)
-
-    df <- out %>%
-      tidyr::pivot_longer(-query, names_to = "source", values_to = "covered") %>%
-      group_by(source) %>%
-      mutate(num = sum(covered)) %>%
-      ungroup() %>%
-      arrange(desc(num), source) %>%
-      mutate(source = forcats::fct_inorder(source))
-
-    p <-
-      ggplot(df, aes(x = source, y = query, fill = covered)) +
-      geom_tile(color = "grey30") +
-      coord_fixed(expand = 0) +
-      scale_fill_manual("Covered:",
-                        values = c("TRUE" = "#3BC03B", "FALSE" = "#C7010B"),
-                        na.value = "grey70") +
-      scale_x_discrete(position = "top") +
-      theme(axis.title = element_blank(),
-            axis.ticks = element_blank())
-
-    print(p)
+    if (!requireNamespace("plot.matrix", quietly = TRUE)) {
+      warning("The plot.matrix package is required for plotting results")
+    } else {
+      out <- filter(out, !is.na(query))
+      colorder <- select(out, -query) %>%
+        colSums(., na.rm = TRUE) %>%
+        sort(decreasing = TRUE) %>%
+        names()
+      pmat <- out %>%
+        select(all_of(colorder)) %>%
+        as.matrix()
+      opar <- par(no.readonly = TRUE)
+      par(mar=c(5.1, 7.1, 4.1, 4.1)) # adapt margins
+      plot.matrix:::plot.matrix(
+        pmat,
+        col = c("#C7010B", "#3BC03B"),
+        breaks = c(FALSE, TRUE),
+        na.col = "grey70",
+        axis.col = list(side = 3),
+        axis.row = list(las = 2, labels = out$query),
+        xlab = NA,
+        ylab = NA,
+        main = NA
+      )
+      par(opar)
+    }
   }
   return(out)
 }

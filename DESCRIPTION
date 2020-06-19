@@ -48,8 +48,6 @@ Suggests:
     robotstxt,
     knitr,
     rmarkdown,
-    ggplot2,
-    tidyr,
-    forcats
+    plot.matrix
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

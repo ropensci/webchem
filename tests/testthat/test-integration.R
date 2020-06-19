@@ -18,7 +18,7 @@ test_that("autotranslate translates", {
 })
 
 
-test_that("coverge function works", {
+test_that("has_entry() function works", {
   skip_if_not(fn_up)
   skip_if_not(etox_up)
   out <- has_entry(c("triclosan", NA, "balloon"),
@@ -29,3 +29,4 @@ test_that("coverge function works", {
                fn = c(FALSE, FALSE, FALSE))
   expect_equivalent(out, df)
 })
+
