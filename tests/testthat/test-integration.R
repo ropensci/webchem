@@ -21,7 +21,7 @@ test_that("autotranslate translates", {
 test_that("coverge function works", {
   skip_if_not(fn_up)
   skip_if_not(etox_up)
-  out <- check_coverage(c("triclosan", NA, "balloon"),
+  out <- has_entry(c("triclosan", NA, "balloon"),
                         from = "name",
                         sources = c("etox", "fn"))
   df <- tibble(query = c("triclosan", NA, "balloon"),

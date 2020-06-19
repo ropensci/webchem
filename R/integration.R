@@ -53,9 +53,9 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
 #' @import dplyr
 #' @examples
 #' \dontrun{
-#' check_coverage("hexane", from = "name")
+#' has_entry("hexane", from = "name")
 #' }
-check_coverage <- function(query, from,
+has_entry <- function(query, from,
                            sources = c("etox", "pc", "chebi", "cs",
                                        "aw", "fn", "pan", "srs"),
                            plot = FALSE) {

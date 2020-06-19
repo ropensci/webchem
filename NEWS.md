@@ -4,7 +4,7 @@
 
 * Download images of substances from ChemSpider with `cs_img()`
 * `autotranslate()` is a wrapper that accepts any type of query and any webchem function with a `from` argument and will use CTS to translate the query if needed.
-* `check_coverage()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
+* `has_entry()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
 
 ## Minor Improvements
 
