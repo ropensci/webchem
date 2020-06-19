@@ -32,9 +32,9 @@ fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
     warning('"CAS" is now deprecated. Please use "query" instead. ')
     query <- CAS
   }
-  if (is.na(query)) return(NA)
   match.arg(from)
   foo <- function (query, verbose){
+    if (is.na(query)) return(NA)
     on.exit(suppressWarnings(closeAllConnections()))
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
     if (verbose)

@@ -98,9 +98,9 @@ has_entry <- function(query, from,
       pmat <- out %>%
         select(all_of(colorder)) %>%
         as.matrix()
-      opar <- par(no.readonly = TRUE)
-      par(mar=c(5.1, 7.1, 4.1, 4.1)) # adapt margins
-      plot.matrix:::plot.matrix(
+      opar <- graphics::par(no.readonly = TRUE)
+      graphics::par(mar=c(5.1, 7.1, 4.1, 4.1)) # adapt margins
+      plot(
         pmat,
         col = c("#C7010B", "#3BC03B"),
         breaks = c(FALSE, TRUE),
@@ -111,7 +111,7 @@ has_entry <- function(query, from,
         ylab = NA,
         main = NA
       )
-      par(opar)
+      graphics::par(opar)
     }
   }
   return(out)
