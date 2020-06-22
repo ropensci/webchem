@@ -436,7 +436,7 @@ chooser <- function(x, choices){
 #' @param x a vector
 #' @param query what the query was, only used if match = "best"
 #' @param result what the result of the query was, only used if match = "best
-#' @param match haracter; How should multiple hits be handeled? "all" returns
+#' @param match character; How should multiple hits be handled? "all" returns
 #' all matched IDs, "first" only the first match, "best" the best matching (by
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
 #' @param verbose print messages?

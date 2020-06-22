@@ -11,6 +11,7 @@
 * The `"type"` argument in `ci_query()` and `aw_query()` has been changed to `"from"` for consistency with other functions
 * `fn_percept()` and `cts_compinfo()` now have `"query"` and `"from"` arguments for consistency with other functions
 * Possible values for `"from"` have been made more consistent across functions
+* `pc_synonyms()` and `cir_query()` have been changed to use the `match` argument instead of `choices` for consistency with other functions
 
 # webchem 1.0.0
 

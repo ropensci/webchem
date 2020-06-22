@@ -12,13 +12,14 @@
 #' @param resolver character; what resolver should be used? If NULL (default)
 #'  the identifier type is detected and the different resolvers are used in turn.
 #'  See details for possible resolvers.
-#' @param first deprecated, use choices = 1 to return only the first result
-#' @param choices if \code{choices = 1}, returns only the first result. To get a
-#' number of results to choose from in an interactive menu, provide the number
-#' of choices you want or "all" to choose from all synonyms.
+#' @param match character; How should multiple hits be handled? \code{"all"}
+#' returns all matches, \code{"first"} returns only the first result,
+#' \code{"ask"} enters an interactive mode and the user is asked for input,
+#' \code{"na"} returns \code{NA} if multiple hits are found.
+#' @param choices deprecated.  Use the \code{match} argument instead.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return A list of character vectors. If first = TRUE a vector.
+#' @return A list of character vectors.
 #' @details
 #'  CIR can resolve can be of the following \code{identifier}: Chemical Names,
 #'  IUPAC names,
@@ -61,14 +62,14 @@
 #'      \item \code{'protonable_group_count'} (Number of protonable groups).
 #'  }
 #'
-#'  CIR first tries to determine the indetifier type submitted and then
+#'  CIR first tries to determine the identifier type submitted and then
 #'  uses 'resolvers' to look up the data.
 #'  If no \code{resolver} is supplied, CIR tries different resolvers in
 #'  turn till a hit is found.
 #'  E.g. for names CIR tries first to look up in OPSIN and if this fails
 #'  the local name index of CIR.
 #'  However, it can be also specified which resolvers to use
-#'  (if you know e.g. know your indentifier type)
+#'  (if you know e.g. know your identifier type)
 #'  Possible \code{resolvers} are:
 #'  \itemize{
 #'    \item \code{'name_by_cir'} (Lookup in name index of CIR),
@@ -100,24 +101,29 @@
 #' @examples
 #' \donttest{
 #' # might fail if API is not available
-#' cir_query('Triclosan', 'cas')
-#' cir_query("3380-34-5", 'cas', first = TRUE)
-#' cir_query("3380-34-5", 'cas', resolver = 'cas_number')
-#' cir_query("3380-34-5", 'smiles')
-#' cir_query('Triclosan', 'mw')
+#' cir_query("Triclosan", "cas")
+#' cir_query("3380-34-5", "cas", match = "first")
+#' cir_query("3380-34-5", "cas", resolver = "cas_number")
+#' cir_query("3380-34-5", "smiles")
+#' cir_query("Triclosan", "mw")
 #'
 #' # multiple inputs
-#' comp <- c('Triclosan', 'Aspirin')
-#' cir_query(comp, 'cas', first = TRUE)
+#' comp <- c("Triclosan", "Aspirin")
+#' cir_query(comp, "cas", match = "first")
 #'
 #'}
 #' @export
-cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
-                      first = FALSE, choices = NULL, verbose = TRUE, ...){
-  if (first == TRUE) {
-    message("`first` is deprecated.  Using `choices = 1` instead.")
-    choices = 1
+cir_query <- function(identifier, representation = "smiles",
+                      resolver = NULL,
+                      first = FALSE,
+                      match = c("all", "first", "ask", "na"),
+                      verbose = TRUE,
+                      choices = NULL,
+                      ...){
+  if (!missing("choices")) {
+    stop("`choices` is deprecated.  Use `match` instead.")
   }
+  match <- match.arg(match)
   foo <- function(identifier, representation, resolver, first, verbose) {
     if (is.na(identifier)) {
       return(NA)
@@ -144,9 +150,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
         message('No representation found... Returning NA.')
         return(NA)
       }
-      # if (first)
-      #   out <- out[1]
-      out <- chooser(out, choices)
+      out <- matcher(out, query = identifier, match = match, verbose = verbose)
       # convert to numeric
       if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
                                 'h_bond_acceptor_count', 'h_bond_center_count',
@@ -162,8 +166,5 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
   out <- lapply(identifier, foo, representation = representation,
                 resolver = resolver, first = first, verbose = verbose)
   out <- setNames(out, identifier)
-  # if (first)
-  if(!is.null(choices))
-    out <- unlist(out)
   return(out)
 }

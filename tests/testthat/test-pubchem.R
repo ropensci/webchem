@@ -87,10 +87,10 @@ test_that("pc_synonyms", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
   expect_equivalent(pc_synonyms(NA), NA)
-  expect_equal(pc_synonyms("Triclosan")[[1]][1], "5564")
+  expect_equal(pc_synonyms("Acetyl Salicylic Acid")[[1]][1], "aspirin")
   expect_equal(length(pc_synonyms(c("Triclosan", "Aspirin"))), 2)
   expect_equal(pc_synonyms("BPGDAMSIGCZZLK-UHFFFAOYSA-N",
-                           from = "inchikey")[[1]][1], "12345")
+                           from = "inchikey")[[1]][1], "Methylene diacetate")
   expect_true(is.na(suppressWarnings(pc_synonyms("xxxx"))[[1]]))
 })
 

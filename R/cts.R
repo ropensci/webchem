@@ -71,8 +71,11 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
 #'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
 #' @param to character; type to convert to.
-#' @param first deprecated.  Use choices = 1 instead.
-#' @param choices to return only the first result, use 'choices = 1'.  To choose a result from an interactive menu, provide a number of choices to choose from or "all".
+#' @param match character; How should multiple hits be handled? \code{"all"}
+#' returns all matches, \code{"first"} returns only the first result,
+#' \code{"ask"} enters an interactive mode and the user is asked for input,
+#' \code{"na"} returns \code{NA} if multiple hits are found.
+#' @param choices deprecated.  Use the \code{match} argument instead.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of character vectors or if \code{choices} is used, then a single named vector.
@@ -95,15 +98,22 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #' comp <- c("triclosan", "hexane")
 #' cts_convert(comp, "Chemical Name", "cas")
 #' }
-cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose = TRUE, ...){
-  if(!missing("first"))
-    stop('"first" is deprecated.  Use "choices = 1" instead.')
+cts_convert <- function(query,
+                        from,
+                        to,
+                        match = c("all", "first", "ask", "na"),
+                        verbose = TRUE,
+                        choices = NULL,
+                        ...){
+  if(!missing("choices"))
+    stop('"choices" is deprecated.  Use "match" instead.')
   if (length(from) > 1 | length(to) > 1) {
     stop('Cannot handle multiple input or output types.  Please provide only one argument for `from` and `to`.')
   }
 
   from <-  match.arg(tolower(from), c(cts_from(), "name"))
   to <-  match.arg(tolower(to), c(cts_to(), "name"))
+  match <- match.arg(match)
 
   if (from == "name") {
     from <- "chemical name"
@@ -113,7 +123,7 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
     to <- "chemical name"
   }
 
-  foo <- function(query, from, to , first, verbose){
+  foo <- function(query, from, to, first, verbose){
     if (is.na(query)) return(NA)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
@@ -131,13 +141,12 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
         return(NA)
     }
     out <- out$result[[1]]
-    out <- chooser(out, choices)
+    out <- matcher(out, match = match, query = query, verbose = verbose)
     return(out)
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
-  if(!is.null(choices))
-    out <- unlist(out)
+
   return(out)
 }
 
