@@ -29,7 +29,7 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
         paste0(.f, " doesn't accept ", from, ".\n", "Attempting to translate to ", new_from, " with CTS. ")
       )
     }
-    new_query <- cts_convert(query, from = from, to = new_from, choices = 1)
+    new_query <- cts_convert(query, from = from, to = new_from, match = "first")
     #would like to try a again if cts fails the first time (as it often does).
     from <- new_from
     query <- new_query

@@ -22,7 +22,7 @@ test_that("examples in the article are unchanged", {
 
   expect_is(ids, "data.frame")
   expect_equal(names(ids), c("query", "match", "etoxid"))
-  expect_equal(ids$etoxid,
+  expect_equivalent(ids$etoxid,
                c("8668", "8494", NA, "8397", "7240", "7331"))
   expect_equal(
     ids$match,
