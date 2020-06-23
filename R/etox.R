@@ -45,7 +45,7 @@
 #' }
 get_etoxid <- function(query,
                        from = c("name", "cas", "ec", "gsbl", "rtecs"),
-                       match = c("best", "all", "first", "ask", "na"),
+                       match = c("all", "best", "first", "ask", "na"),
                        verbose = TRUE) {
   clean_char <- function(x) {
     # rm \n \t
