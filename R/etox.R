@@ -59,6 +59,9 @@ get_etoxid <- function(query,
   # checks
   from <- match.arg(from)
   match <- match.arg(match)
+  if (from != "name" & match == "best") {
+    warning("match = 'best' only makes sense when querying chemical names. ")
+  }
   foo <- function(query, from, match, verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
 
@@ -93,61 +96,24 @@ get_etoxid <- function(query,
     if (length(subs) == 0) {
       if (verbose)
         message("Substance not found! Returning NA.")
-      id <- NA
-      matched_sub <- NA
-      d <- NA
-    }
-    if (length(subs) > 0) {
+      hit <- tibble("query" = query,
+                    "match" = NA,
+                    "etoxid" = NA)
+      return(hit)
+    } else {
       links <- xml_attr(xml_find_all(
         tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
-    }
-    if (length(subs) == 1) {
+
+      subs_names <- gsub(" \\(.*\\)", "", subs)
       id <- gsub("^.*\\?id=(.*)", "\\1", links)
-      d <- ifelse(match == "best", 0, as.character(0))
-      matched_sub <- subs[1]
+
+      out <- matcher(id, query = query, result = subs_names, match = match)
+
+      hit <- tibble("query" = query,
+                    "match" = names(out),
+                    "etoxid" = out)
+      return(hit)
     }
-    # multiple hits
-    if (length(subs) > 1) {
-      if (verbose)
-        message("More then one Link found. \n")
-      if (match == "na") {
-        if (verbose)
-          message("Returning NA. \n")
-        id <- NA
-        matched_sub <- NA
-      }
-      if (match == "all") {
-        if (verbose)
-          message("Returning all matches. \n")
-        id <- gsub("^.*\\?id=(.*)", "\\1", links)
-        matched_sub <- subs[sapply(id, function(x) grep(x, subs)[1])]
-      }
-      if (match == "first") {
-        if (verbose)
-          message("Returning first match. \n")
-        id <- gsub("^.*\\?id=(.*)", "\\1", links[1])
-        matched_sub <- subs[grep(id[1], subs)[1]]
-      }
-      if (match == "best") {
-        if (verbose)
-          message("Returning best match. \n")
-        msubs <- gsub(" \\(.*\\)", "", subs)
-        dd <- adist(query, msubs) / nchar(msubs)
-        id <- gsub("^.*\\?id=(.*)", "\\1", links[which.min(dd)])
-        matched_sub <- subs[which.min(dd)]
-      }
-      if (match == "ask") {
-        matched_sub <- chooser(subs, "all")
-        id <- gsub("^.*\\?id=(.*)", "\\1", links[which(subs == matched_sub)])
-      }
-    }
-    # return object
-    hit <- tibble::tibble(
-      "query" = query,
-      "match" = matched_sub,
-      "etoxid" = id
-    )
-    return(hit)
   }
   out <- lapply(query, foo, from = from, match = match, verbose = verbose)
   out <- dplyr::bind_rows(out)
