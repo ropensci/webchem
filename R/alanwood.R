@@ -27,7 +27,7 @@
 #' @examples
 #' \dontrun{
 #' aw_query('Fluazinam', from = 'name')
-#' out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'com')
+#' out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'name')
 #' out
 #' # extract subactivity from object
 #' sapply(out, function(y) y$subactivity[1])
@@ -40,7 +40,7 @@
 aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
                      force_build = FALSE, type, ...) {
   if (!missing(type)) {
-    warning('"type" is deprecated. Please use "from" instead. ')
+    message('"type" is deprecated. Please use "from" instead. ')
     from <- type
   }
 

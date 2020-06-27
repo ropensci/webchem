@@ -191,7 +191,7 @@ get_csid <- function(query,
   match <- match.arg(match)
 
   foo <- function(x, from, match, verbose, apikey, ...) {
-    if (is.na(x)) return(as.integer(NA))
+    if (is.na(x)) return(NA_integer_)
     res <- switch(from,
                   name = cs_name_csid(x, apikey = apikey,
                                       control = cs_control(...)),
@@ -203,7 +203,7 @@ get_csid <- function(query,
     if(length(res) > 1) {
       res <- matcher(res, query = x, match = match, verbose = verbose)
     }
-    if (length(res) == 0) res <- as.integer(NA)
+    if (length(res) == 0) res <- NA_integer_
     return(res)
   }
   out <-

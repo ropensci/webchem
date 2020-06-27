@@ -10,15 +10,20 @@
 #'
 #' @param query character; search term.
 #' @param from character; type of input.  \code{"all"} searches all types and
-#'   \code{"name"} searches all names.
-#' @param match character; How should multiple hits be handled?,
-#' \code{"all"} all matches are returned,
-#' \code{"best"} the best matching (by the ChEBI searchscore) is returned,
-#' \code{"ask"} enters an interactive mode and the user is asked for input,
-#' \code{"na"} returns NA if multiple hits are found.
+#'   \code{"name"} searches all names. Other options include \code{'chebi id'},
+#'   \code{'chebi name'}, \code{'definition'}, \code{'iupac name'},
+#'   \code{'citations'}, \code{'registry numbers'}, \code{'manual xrefs'},
+#'   \code{'automatic xrefs'}, \code{'formula'}, \code{'mass'},
+#'   \code{'monoisotopic mass'},\code{'charge'}, \code{'inchi'},
+#'   \code{'inchikey'}, \code{'smiles'}, and \code{'species'}
+#' @param match character; How should multiple hits be handled?, \code{"all"}
+#'   all matches are returned, \code{"best"} the best matching (by the ChEBI
+#'   searchscore) is returned, \code{"ask"} enters an interactive mode and the
+#'   user is asked for input, \code{"na"} returns NA if multiple hits are found.
 #' @param max_res integer; maximum number of results to be retrieved from the
-#' web service
-#' @param stars character;
+#'   web service
+#' @param stars character; "three only" restricts results to those manualy
+#'   annotated by the ChEBI team.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently unused
 #' @return returns a list of data.frames containing a chebiid, a chebiasciiname,
@@ -47,9 +52,9 @@
 #'   ChEBI: a database and ontology for chemical entities of biological
 #'   interest. Nucleic Acids Res. 36, D344–D350.
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
-#' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
-#' Information from the Web. Journal of Statistical Software, 93(13).
-#' <doi:10.18637/jss.v093.i13>.
+#'   Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+#'   Information from the Web. Journal of Statistical Software, 93(13).
+#'   <doi:10.18637/jss.v093.i13>.
 #' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
@@ -118,7 +123,7 @@ get_chebiid <- function(query,
       cont <- try(content(res, type = 'text/xml', encoding = 'utf-8'),
                   silent = TRUE)
       out <- l2df(as_list(xml_children(xml_find_first(cont, '//d1:return'))))
-      out <- setNames(out, tolower(names(out)))
+      out <- as_tibble(setNames(out, tolower(names(out))))
       if (nrow(out) == 0) {
         message('No result found. \n')
         return(tibble(query = query,
@@ -136,10 +141,17 @@ get_chebiid <- function(query,
         return(out[which.max(out$searchscore), ])
       }
       if (match == "ask") {
-        matched <- chooser(out$chebiid, 'all')
+        matched <-
+          matcher(
+            out$chebiid,
+            query = query,
+            result = out$chebiasciiname,
+            match = "ask",
+            verbose = verbose
+          )
         return(out[out$chebiid == matched, ])
       }
-      if (match == 'na') {
+      if (match == "na") {
         return(tibble(query = query,
                       chebiid = NA_character_))
       }
@@ -148,10 +160,8 @@ get_chebiid <- function(query,
       }
     } else {
       out <- tibble(query = query,
-                    chebiid = NA_character_,
-      )
+                    chebiid = NA_character_)
       message('Returning NA (', http_status(res)$message, '). \n')
-
       return(out)
     }
   }

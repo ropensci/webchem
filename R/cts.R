@@ -105,8 +105,21 @@ cts_convert <- function(query,
                         verbose = TRUE,
                         choices = NULL,
                         ...){
-  if(!missing("choices"))
-    stop('"choices" is deprecated.  Use "match" instead.')
+  if(!missing("choices")) {
+    if (is.null(choices)) {
+      message('"choices" is deprecated.  Using match = "all" instead.')
+      match <- "all"
+    } else if(choices == 1) {
+      message('"choices" is deprecated.  Using match= "first" instead.')
+      match <- "first"
+    } else if ((is.numeric(choices) & choices > 1) | choices == "all") {
+      message('"choices" is deprecated.  Using match = "ask" instead.')
+      match <- "ask"
+    } else {
+      message('"choices" is deprecated.  Using match = "all" instead.')
+      match <- "all"
+    }
+  }
   if (length(from) > 1 | length(to) > 1) {
     stop('Cannot handle multiple input or output types.  Please provide only one argument for `from` and `to`.')
   }

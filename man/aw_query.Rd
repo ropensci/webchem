@@ -44,7 +44,7 @@ Please respect Copyright, Terms and Conditions
 \examples{
 \dontrun{
 aw_query('Fluazinam', from = 'name')
-out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'com')
+out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'name')
 out
 # extract subactivity from object
 sapply(out, function(y) y$subactivity[1])

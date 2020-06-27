@@ -20,18 +20,23 @@ get_chebiid(
 \item{query}{character; search term.}
 
 \item{from}{character; type of input.  \code{"all"} searches all types and
-\code{"name"} searches all names.}
+\code{"name"} searches all names. Other options include \code{'chebi id'},
+\code{'chebi name'}, \code{'definition'}, \code{'iupac name'},
+\code{'citations'}, \code{'registry numbers'}, \code{'manual xrefs'},
+\code{'automatic xrefs'}, \code{'formula'}, \code{'mass'},
+\code{'monoisotopic mass'},\code{'charge'}, \code{'inchi'},
+\code{'inchikey'}, \code{'smiles'}, and \code{'species'}}
 
-\item{match}{character; How should multiple hits be handled?,
-\code{"all"} all matches are returned,
-\code{"best"} the best matching (by the ChEBI searchscore) is returned,
-\code{"ask"} enters an interactive mode and the user is asked for input,
-\code{"na"} returns NA if multiple hits are found.}
+\item{match}{character; How should multiple hits be handled?, \code{"all"}
+all matches are returned, \code{"best"} the best matching (by the ChEBI
+searchscore) is returned, \code{"ask"} enters an interactive mode and the
+user is asked for input, \code{"na"} returns NA if multiple hits are found.}
 
 \item{max_res}{integer; maximum number of results to be retrieved from the
 web service}
 
-\item{stars}{character;}
+\item{stars}{character; "three only" restricts results to those manualy
+annotated by the ChEBI team.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -84,9 +89,9 @@ Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
   interest. Nucleic Acids Res. 36, D344–D350.
 
 Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
-Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
-Information from the Web. Journal of Statistical Software, 93(13).
-<doi:10.18637/jss.v093.i13>.
+  Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+  Information from the Web. Journal of Statistical Software, 93(13).
+  <doi:10.18637/jss.v093.i13>.
 }
 \author{
 Andreas Scharmüller, \email{andschar@protonmail.com}

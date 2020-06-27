@@ -14,7 +14,7 @@ test_that("examples in the article are unchanged", {
                                  "phenyl organothiophosphate insecticides"))
 })
 
-test_that("alanwood, commonname", {
+test_that("alanwood, name", {
   skip_on_cran()
   skip_if_not(up, "Alanwood service is down")
 
