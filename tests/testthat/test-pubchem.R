@@ -158,7 +158,7 @@ test_that("pc_sect()", {
   c <- pc_sect(780286, "modify date", "assay")
   expect_s3_class(c, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(c), c("AID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equal(c$Result, c("2014-05-03", "2018-09-28"))
+  expect_equal(c$Result, c("2014-05-03", "2018-09-28", "2020-06-30"))
 
   d <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_s3_class(d, c("tbl_df", "tbl", "data.frame"))

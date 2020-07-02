@@ -62,11 +62,11 @@
 #'  # return only best hit
 #'  pan_query('2,4-dichlorophenol', match = 'best')[[1]][c(1, 2, 5, 74)]
 #'
-#'  out <- pan_query(c('Triclosan', 'Aspirin'), 'best')
+#'  out <- pan_query(c('Glyphosate', 'Rotenone'), from = "name", match = 'best')
 #'  out
 #'
-#'  # extract Hydrolysis Half-life (Avg, Days)
-#'  sapply(out, function(y) y$`Hydrolysis Half-life (Avg, Days)`)
+#'  # extract Acute Toxicity Summary
+#'  sapply(out, function(y) y$`Acute Toxicity Summary`)
 #' }
 pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', 'first'), verbose = TRUE, ...){
   match <- match.arg(match)
