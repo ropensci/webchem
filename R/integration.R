@@ -1,14 +1,20 @@
 
 #' Auto-translate identifiers and search databases
 #'
-#' Supply a query of any type (e.g. SMILES, CAS, name, InChI, etc.) along with any webchem function that has \code{query} and \code{from} arguments.  If the function doesn't accept the type of query you've supplied, this will try to automatically translate it using CTS and run the query.
+#' Supply a query of any type (e.g. SMILES, CAS, name, InChI, etc.) along with
+#' any webchem function that has \code{query} and \code{from} arguments.  If the
+#' function doesn't accept the type of query you've supplied, this will try to
+#' automatically translate it using CTS and run the query.
 #'
 #' @param query character; the search term
-#' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
+#' @param from character; the format or type of query.  Commonly accepted values
+#'   are "name", "cas", "inchi", and "inchikey"
 #' @param .f character; the (quoted) name of a webchem function
 #' @param .verbose logical; print a message when translating query?
 #' @param ... other arguments passed to the function specified with \code{.f}
-#'
+#' @note During the translation step, only the first hit from CTS is used.
+#'   Therefore, using this function to translate on the fly is not foolproof and
+#'   care should be taken to verify the results.
 #' @return returns results from \code{.f}
 #' @importFrom rlang as_function fn_fmls
 #' @export
@@ -24,9 +30,15 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
   if (!from %in% pos_froms) {
     pos_froms <- pos_froms[pos_froms != "name"] #cts name conversion broken
     new_from <- pos_froms[which(pos_froms %in% cts_to())[1]]
-    if(.verbose){
+    if (.verbose) {
       message(
-        paste0(.f, " doesn't accept ", from, ".\n", "Attempting to translate to ", new_from, " with CTS. ")
+        paste0(.f,
+               " doesn't accept ",
+               from,
+               ".\n",
+               "Attempting to translate to ",
+               new_from,
+               " with CTS. ")
       )
     }
     new_query <- cts_convert(query, from = from, to = new_from, match = "first")
@@ -44,11 +56,15 @@ autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
 #' Checks if entries are found in (most) data sources included in webchem
 #'
 #' @param query character; the search term
-#' @param from character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"
-#' @param sources character; which data sources to check.  Data sources are identified by the prefix associated with webchem functions that query those databases.  If not specified, all data sources listed will be checked.
+#' @param from character; the format or type of query.  Commonly accepted values
+#'   are "name", "cas", "inchi", and "inchikey"
+#' @param sources character; which data sources to check.  Data sources are
+#'   identified by the prefix associated with webchem functions that query those
+#'   databases.  If not specified, all data sources listed will be checked.
 #' @param plot logical; plot a graphical representation of results.
 #'
-#' @return a tibble of logical values where \code{TRUE} indicates that a data source contains a record for the query
+#' @return a tibble of logical values where \code{TRUE} indicates that a data
+#'   source contains a record for the query
 #' @export
 #' @import dplyr
 #' @examples
@@ -72,7 +88,13 @@ has_entry <- function(query, from,
 
   foo <- function(.f, query, from) {
     # if a function errors (e.g. API is down) then return NA
-    x <- try(autotranslate(query = query, from = from, .f = .f, match = "first"))
+    x <-
+      try(autotranslate(
+        query = query,
+        from = from,
+        .f = .f,
+        match = "first"
+      ))
     if (inherits(x, "try-error")) {
       return(NA)
     }
@@ -99,7 +121,7 @@ has_entry <- function(query, from,
         select(all_of(colorder)) %>%
         as.matrix()
       opar <- graphics::par(no.readonly = TRUE)
-      graphics::par(mar=c(5.1, 7.1, 4.1, 4.1)) # adapt margins
+      graphics::par(mar = c(5.1, 7.1, 4.1, 4.1)) # adapt margins
       plot(
         pmat,
         col = c("#C7010B", "#3BC03B"),
