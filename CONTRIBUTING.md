@@ -60,6 +60,8 @@ Some consistency guidelines:
 
 11. Make sure `NA` is not confused with sodium.
 
+12. Functions that retrieve images should follow the naming convention `*_img`, e.g. the function that retrieves images from ChemSpider is called `cs_img()`. These functions should take a vector of arguments and download images into a user defined directory. They should not keep images in memory, should not implement image processing functionality, and should not return anything to the console. Functions should include arguments `dir`, `overwrite = TRUE` and `verbose = TRUE`. `dir` should not have a default value.
+
 ### Data Sources
 
 You might think all webscraping is perfectly legal but it is unfortunately not that simple.
