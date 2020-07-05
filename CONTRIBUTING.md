@@ -46,7 +46,7 @@ We are happy to help at any point in your work.
 
 5. Use utilities in `webchem::utils.R` when possible to keep function style consistent across the package.
 
-6. Be nice to the resources! Minimise interaction with the servers. Use appropriate timeouts. For web scraping, we recommend the use of the [`polite`](https://cran.r-project.org/web/packages/polite/index.html) package.
+6. Be nice to the resources! Minimise interaction with the servers. Use appropriate timeouts.
 
 7. Tests go into a separate tests branch and not in the master branch.
 
