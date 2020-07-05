@@ -48,7 +48,7 @@ We are happy to help at any point in your work.
 
 6. Be nice to the resources! Minimise interaction with the servers. Use appropriate timeouts.
 
-7. Tests go into a separate tests branch and not in the master branch.
+7. Within test files always include a check whether the webservice is running and skip all tests when it is not. See `R/ping.R` for more details.  
 
 Some consistency guidelines:
 
