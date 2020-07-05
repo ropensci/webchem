@@ -118,5 +118,9 @@ here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
   - License: MIT
   - Get citation information for `webchem` in R with
     `citation("webchem")`
+  - Please note that this package is released with a [Contributor Code
+    of Conduct](https://ropensci.org/code-of-conduct/). By contributing
+    to this project, you agree to abide by its
+terms.
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
