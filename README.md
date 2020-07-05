@@ -5,18 +5,15 @@
 
 <!-- badges: start -->
 
-[![Build
-Status](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
-[![Build
-status](https://ci.appveyor.com/api/projects/status/e3sa6e918jlemv46/branch/master)](https://ci.appveyor.com/project/EDiLD/webchem)
-[![Coverage
-Status](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/webchem/branch/master)
-[![Open
-Issues](https://img.shields.io/github/issues/ropensci/webchem.svg)](https://github.com/ropensci/webchem/issues)
-[![](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
+[![CRAN](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
+[![Travis](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/8m7wpfnxn41kqjnl?svg=true)](https://ci.appveyor.com/project/ropensci/webchem)
+[![Coverage](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/webchem/branch/master)
+[![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
+[![Total
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
 [![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
+
 <!-- badges: end -->
 
 `webchem` is a R package to retrieve chemical information from the web.
@@ -48,26 +45,26 @@ At least some of the data in the following sources is accesible through
 documentation
 [here](https://docs.ropensci.org/webchem/reference/index.html).
 
-  - [Chemical Identifier Resolver
-    (CIR)](http://cactus.nci.nih.gov/chemical/structure)
-  - [ChemSpider](http://www.chemspider.com/) (requires an [API
-    token](\(https://developer.rsc.org/\)))
-  - [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
-  - [Chemical Translation Service
-    (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-  - [PAN Pesticide Database](http://www.pesticideinfo.org/)
   - [Alan Wood’s Compendium of Pesticide Common
     Names](http://www.alanwood.net/pesticides/)
-  - [ETOX](http://webetox.uba.de/webETOX/index.do)
+  - [ChEBI](https://www.ebi.ac.uk/chebi/)
+  - [Chemical Identifier Resolver
+    (CIR)](http://cactus.nci.nih.gov/chemical/structure)
+  - [Chemical Translation Service
+    (CTS)](http://cts.fiehnlab.ucdavis.edu/)
   - [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/)
-  - [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)
-  - [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)
+  - [ChemSpider](http://www.chemspider.com/) (requires an [API
+    token](\(https://developer.rsc.org/\)))
+  - [ETOX](http://webetox.uba.de/webETOX/index.do)
   - [Flavornet](http://www.flavornet.org)
   - [NIST](https://webbook.nist.gov) (currently gas chromatography
     retention indices only)
-  - [ChEBI](https://www.ebi.ac.uk/chebi/)
+  - [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)
+  - [PAN Pesticide Database](http://www.pesticideinfo.org/)
+  - [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
   - [U.S. EPA Substance Registry Service
     (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
+  - [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)
 
 #### API keys
 
