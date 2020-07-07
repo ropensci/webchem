@@ -17,13 +17,12 @@
 #'   care should be taken to verify the results.
 #' @return returns results from \code{.f}
 #' @importFrom rlang as_function fn_fmls
-#' @export
 #'
 #' @examples
 #' \dontrun{
-#' autotranslate("XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
+#' with_cts("XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
 #' }
-autotranslate <- function(query, from, .f, .verbose = TRUE, ...) {
+with_cts <- function(query, from, .f, .verbose = TRUE, ...) {
   f <- rlang::as_function(.f)
   pos_froms <- eval(rlang::fn_fmls(f)$from)
 
@@ -89,7 +88,7 @@ has_entry <- function(query, from,
   foo <- function(.f, query, from) {
     # if a function errors (e.g. API is down) then return NA
     x <-
-      try(autotranslate(
+      try(with_cts(
         query = query,
         from = from,
         .f = .f,

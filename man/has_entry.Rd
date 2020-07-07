@@ -14,14 +14,18 @@ has_entry(
 \arguments{
 \item{query}{character; the search term}
 
-\item{from}{character; the format or type of query.  Commonly accepted values are "name", "cas", "inchi", and "inchikey"}
+\item{from}{character; the format or type of query.  Commonly accepted values
+are "name", "cas", "inchi", and "inchikey"}
 
-\item{sources}{character; which data sources to check.  Data sources are identified by the prefix associated with webchem functions that query those databases.  If not specified, all data sources listed will be checked.}
+\item{sources}{character; which data sources to check.  Data sources are
+identified by the prefix associated with webchem functions that query those
+databases.  If not specified, all data sources listed will be checked.}
 
 \item{plot}{logical; plot a graphical representation of results.}
 }
 \value{
-a tibble of logical values where \code{TRUE} indicates that a data source contains a record for the query
+a tibble of logical values where \code{TRUE} indicates that a data
+  source contains a record for the query
 }
 \description{
 Checks if entries are found in (most) data sources included in webchem
