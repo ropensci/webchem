@@ -122,7 +122,7 @@ cir_query <- function(identifier, representation = 'smiles', resolver = NULL,
     if (is.na(identifier)) {
       return(NA)
     } else {
-      identifier <- URLencode(identifier)
+      identifier <- URLencode(identifier, reserved = TRUE)
       baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
       qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
 
