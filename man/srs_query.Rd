@@ -4,13 +4,15 @@
 \alias{srs_query}
 \title{Get record details from U.S. EPA Substance Registry Servives (SRS)}
 \usage{
-srs_query(query, from = c("itn", "cas", "epaid", "tsn", "name"))
+srs_query(query, from = c("itn", "cas", "epaid", "tsn", "name"), ...)
 }
 \arguments{
 \item{query}{character; query ID.}
 
 \item{from}{character; type of query ID, e.g. \code{'itn'} , \code{'cas'},
 \code{'epaid'}, \code{'tsn'}, \code{'name'}.}
+
+\item{...}{not currently used.}
 }
 \value{
 a list of lists (for each supplied query): a list of 22. subsKey,

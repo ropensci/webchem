@@ -28,7 +28,7 @@ test_that("examples in the article are unchanged", {
 test_that("chebi returns correct results", {
   skip_on_cran()
   skip_if_not(up, "CHEBI service is down")
-  a <- get_chebiid("Glyphosate", from = "ALL")
+  a <- get_chebiid("Glyphosate", from = "all")
   b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
   A <- chebi_comp_entity("CHEBI:27744")
   B <- chebi_comp_entity("27732")
@@ -38,7 +38,7 @@ test_that("chebi returns correct results", {
   expect_is(A, "list")
   expect_is(B, "list")
 
-  expect_equal(names(a)[1], "chebiid")
+  expect_equal(names(a)[2], "chebiid")
   expect_length(names(a), 5)
   expect_length(names(b), 5)
   expect_equal(A$`CHEBI:27744`$regnumbers$data[1], "1071-83-6")

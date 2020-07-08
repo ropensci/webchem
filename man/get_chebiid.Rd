@@ -6,10 +6,12 @@
 \usage{
 get_chebiid(
   query,
-  from = "ALL",
-  match = c("all", "best", "ask", "na"),
+  from = c("all", "chebi id", "chebi name", "definition", "name", "iupac name",
+    "citations", "registry numbers", "manual xrefs", "automatic xrefs", "formula",
+    "mass", "monoisotopic mass", "charge", "inchi", "inchikey", "smiles", "species"),
+  match = c("all", "best", "first", "ask", "na"),
   max_res = 200,
-  stars = "ALL",
+  stars = c("all", "two only", "three only"),
   verbose = TRUE,
   ...
 )
@@ -17,31 +19,33 @@ get_chebiid(
 \arguments{
 \item{query}{character; search term.}
 
-\item{from}{character; type of input, can be one of 'ALL', 'CHEBI ID',
-'CHEBI NAME', 'DEFINITION', 'ALL NAMES', 'IUPAC NAME', 'CITATIONS',
-'REGISTRY NUMBERS', 'MANUAL XREFS', 'AUTOMATIC XREFS', 'FORMULA', 'MASS',
-'MONOISOTOPIC MASS', 'CHARGE', 'INCHI/INCHI KEY', 'SMILES', 'SPECIES'.}
+\item{from}{character; type of input.  \code{"all"} searches all types and
+\code{"name"} searches all names. Other options include \code{'chebi id'},
+\code{'chebi name'}, \code{'definition'}, \code{'iupac name'},
+\code{'citations'}, \code{'registry numbers'}, \code{'manual xrefs'},
+\code{'automatic xrefs'}, \code{'formula'}, \code{'mass'},
+\code{'monoisotopic mass'},\code{'charge'}, \code{'inchi'},
+\code{'inchikey'}, \code{'smiles'}, and \code{'species'}}
 
-\item{match}{character; How should multiple hits be handled?,
-\code{"all"} all matches are returned,
-\code{"best"} the best matching (by the ChEBI searchscore) is returned,
-\code{"ask"} enters an interactive mode and the user is asked for input,
-\code{"na"} returns NA if multiple hits are found.}
+\item{match}{character; How should multiple hits be handled?, \code{"all"}
+all matches are returned, \code{"best"} the best matching (by the ChEBI
+searchscore) is returned, \code{"ask"} enters an interactive mode and the
+user is asked for input, \code{"na"} returns NA if multiple hits are found.}
 
 \item{max_res}{integer; maximum number of results to be retrieved from the
 web service}
 
-\item{stars}{character; type of input can be one of 'ALL', 'TWO ONLY',
-'THREE ONLY'.}
+\item{stars}{character; "three only" restricts results to those manualy
+annotated by the ChEBI team.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{...}{optional arguments}
+\item{...}{currently unused}
 }
 \value{
 returns a list of data.frames containing a chebiid, a chebiasciiname,
-a searchscore and stars if matches were found.
-If not, data.frame(NA) is returned
+  a searchscore and stars if matches were found. If not, data.frame(NA) is
+  returned
 }
 \description{
 Returns a data.frame with a ChEBI entity ID (chebiid),
@@ -85,9 +89,9 @@ Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
   interest. Nucleic Acids Res. 36, D344–D350.
 
 Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
-Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
-Information from the Web. Journal of Statistical Software, 93(13).
-<doi:10.18637/jss.v093.i13>.
+  Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
+  Information from the Web. Journal of Statistical Software, 93(13).
+  <doi:10.18637/jss.v093.i13>.
 }
 \author{
 Andreas Scharmüller, \email{andschar@protonmail.com}

@@ -87,10 +87,10 @@ test_that("pc_synonyms", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
   expect_equivalent(pc_synonyms(NA), NA)
-  expect_equal(pc_synonyms("Triclosan")[[1]][1], "5564")
+  expect_equal(pc_synonyms("Acetyl Salicylic Acid")[[1]][1], "aspirin")
   expect_equal(length(pc_synonyms(c("Triclosan", "Aspirin"))), 2)
   expect_equal(pc_synonyms("BPGDAMSIGCZZLK-UHFFFAOYSA-N",
-                           from = "inchikey")[[1]][1], "12345")
+                           from = "inchikey")[[1]][1], "Methylene diacetate")
   expect_true(is.na(suppressWarnings(pc_synonyms("xxxx"))[[1]]))
 })
 
@@ -158,7 +158,7 @@ test_that("pc_sect()", {
   c <- pc_sect(780286, "modify date", "assay")
   expect_s3_class(c, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(c), c("AID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equal(c$Result, c("2014-05-03", "2018-09-28"))
+  expect_equal(c$Result, c("2014-05-03", "2018-09-28", "2020-06-30"))
 
   d <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_s3_class(d, c("tbl_df", "tbl", "data.frame"))

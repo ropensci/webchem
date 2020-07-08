@@ -375,15 +375,16 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' @param query character; search term.
 #' @param from character; type of input, can be one of "name" (default), "cid",
 #'     "sid", "aid", "smiles", "inchi", "inchikey"
-#' @param interactive deprecated.  Use the \code{choices} argument instead
-#' @param choices to get only the first synonym, use \code{choices = 1}, to get
-#' a number of synonyms to choose from in an interactive menu, provide the
-#' number of choices you want or "all" to choose from all synonyms.
+#' @param match character; How should multiple hits be handled? \code{"all"}
+#' returns all matches, \code{"first"} returns only the first result,
+#' \code{"ask"} enters an interactive mode and the user is asked for input,
+#' \code{"na"} returns \code{NA} if multiple hits are found.
+#' @param choices deprecated.  Use the \code{match} argument instead.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param arg character; optinal arguments like "name_type=word" to match
+#' @param arg character; optional arguments like "name_type=word" to match
 #' individual words.
-#' @param ... optional arguments
-#' @return a list of character vectors (one per query). If \code{choices} is used, a single named vector is returned instead.
+#' @param ... currently unused
+#' @return a named list.
 #'
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -411,15 +412,20 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' pc_synonyms("Aspirin")
 #' pc_synonyms(c("Aspirin", "Triclosan"))
 #' pc_synonyms(5564, from = "cid")
-#' pc_synonyms(c("Aspirin", "Triclosan"), choices = 10)
+#' pc_synonyms(c("Aspirin", "Triclosan"), match = "ask")
 #' }
-pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
-                        arg = NULL, interactive = 0, ...) {
+pc_synonyms <- function(query,
+                        from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
+                        match = c("all", "first", "ask", "na"),
+                        verbose = TRUE,
+                        arg = NULL, choices = NULL, ...) {
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c("Aspirin")
   # from = "name"
-  if (!missing("interactive"))
-    stop("'interactive' is deprecated. Use 'choices' instead.")
+  from <- match.arg(from)
+  match <- match.arg(match)
+  if (!missing("choices"))
+    stop("'choices' is deprecated. Use 'match' instead.")
   foo <- function(query, from, verbose, ...) {
     if (is.na(query)) return(NA)
     prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
@@ -443,10 +449,10 @@ pc_synonyms <- function(query, from = "name", choices = NULL, verbose = TRUE,
       warning(cont$Fault$Details, ". Returning NA.")
       return(NA)
     }
-    out <- unlist(cont)
+    out <- unlist(cont)[-1] #first result is always an ID number
     names(out) <- NULL
 
-    out <- chooser(out, choices)
+    out <- matcher(out, query = query, match = match, verbose = verbose)
 
   }
   out <- lapply(query, foo, from = from, verbose = verbose)

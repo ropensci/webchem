@@ -8,9 +8,9 @@ cir_query(
   identifier,
   representation = "smiles",
   resolver = NULL,
-  first = FALSE,
-  choices = NULL,
+  match = c("all", "first", "ask", "na"),
   verbose = TRUE,
+  choices = NULL,
   ...
 )
 }
@@ -24,18 +24,19 @@ be returned. See details for possible representations.}
 the identifier type is detected and the different resolvers are used in turn.
 See details for possible resolvers.}
 
-\item{first}{deprecated, use choices = 1 to return only the first result}
-
-\item{choices}{if \code{choices = 1}, returns only the first result. To get a
-number of results to choose from in an interactive menu, provide the number
-of choices you want or "all" to choose from all synonyms.}
+\item{match}{character; How should multiple hits be handled? \code{"all"}
+returns all matches, \code{"first"} returns only the first result,
+\code{"ask"} enters an interactive mode and the user is asked for input,
+\code{"na"} returns \code{NA} if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{choices}{deprecated.  Use the \code{match} argument instead.}
 
 \item{...}{currently not used.}
 }
 \value{
-A list of character vectors. If first = TRUE a vector.
+A list of character vectors.
 }
 \description{
 A interface to the Chemical Identifier Resolver (CIR).
@@ -83,14 +84,14 @@ CIR can resolve can be of the following \code{identifier}: Chemical Names,
      \item \code{'protonable_group_count'} (Number of protonable groups).
  }
 
- CIR first tries to determine the indetifier type submitted and then
+ CIR first tries to determine the identifier type submitted and then
  uses 'resolvers' to look up the data.
  If no \code{resolver} is supplied, CIR tries different resolvers in
  turn till a hit is found.
  E.g. for names CIR tries first to look up in OPSIN and if this fails
  the local name index of CIR.
  However, it can be also specified which resolvers to use
- (if you know e.g. know your indentifier type)
+ (if you know e.g. know your identifier type)
  Possible \code{resolvers} are:
  \itemize{
    \item \code{'name_by_cir'} (Lookup in name index of CIR),
@@ -113,15 +114,15 @@ You can only make 1 request per second (this is a hard-coded feature).
 \examples{
 \donttest{
 # might fail if API is not available
-cir_query('Triclosan', 'cas')
-cir_query("3380-34-5", 'cas', first = TRUE)
-cir_query("3380-34-5", 'cas', resolver = 'cas_number')
-cir_query("3380-34-5", 'smiles')
-cir_query('Triclosan', 'mw')
+cir_query("Triclosan", "cas")
+cir_query("3380-34-5", "cas", match = "first")
+cir_query("3380-34-5", "cas", resolver = "cas_number")
+cir_query("3380-34-5", "smiles")
+cir_query("Triclosan", "mw")
 
 # multiple inputs
-comp <- c('Triclosan', 'Aspirin')
-cir_query(comp, 'cas', first = TRUE)
+comp <- c("Triclosan", "Aspirin")
+cir_query(comp, "cas", match = "first")
 
 }
 }

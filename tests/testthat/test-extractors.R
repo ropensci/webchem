@@ -13,12 +13,11 @@ test_that("extractors work with chemid", {
   skip_on_cran()
   skip_if_not(ping_service("ci"), "CHEMID service is down")
 
-  skip("ci_query isn't working right now")
-  out_ci_query <- ci_query(c('Aspirin', 'Triclosan'), type = 'name')
+  out_ci_query <- ci_query(c('Aspirin', 'Triclosan'), from = 'name')
   expect_equivalent(cas(out_ci_query),  c("50-78-2", "3380-34-5"))
   expect_equivalent(inchikey(out_ci_query),
                     c("BSYNRYMUTXBXSQ-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-N"))
-  expect_equivalent(smiles(out_ci_query), c("CC(=O)", "c1(Oc2c(cc(Cl)"))
+  expect_equivalent(smiles(out_ci_query), c("CC(=O)", "Oc1cc(Cl)"))
 })
 
 test_that("extractors work with opsin", {
@@ -36,7 +35,7 @@ test_that("extractors work with Alanwood", {
   skip_on_cran()
   skip_if_not(ping_service("aw"), "Alanwood database not reachable")
 
-  out_aw_query <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
+  out_aw_query <- aw_query(c('Fluazinam', 'Diclofop'), from = 'name')
   expect_equivalent(cas(out_aw_query), c("79622-59-6", "40843-25-2"))
   expect_equivalent(inchikey(out_aw_query),
                     c("UZCGKGPEKUCDTF-UHFFFAOYSA-N", "OOLBCHYXZDXLDS-UHFFFAOYSA-N"))
