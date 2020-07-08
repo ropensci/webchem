@@ -90,8 +90,8 @@ get_chebiid <- function(query,
   stars <- toupper(match.arg(stars))
 
   foo <- function(query, from, match, max_res, stars, verbose, ...) {
-    if (is.na(query)) return(tibble(query = NA_character_,
-                                    chebiid = NA_character_))
+    if (is.na(query)) return(tibble("query" = NA_character_,
+                                    "chebiid" = NA_character_))
 
     # query
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
@@ -126,8 +126,8 @@ get_chebiid <- function(query,
       out <- as_tibble(setNames(out, tolower(names(out))))
       if (nrow(out) == 0) {
         message('No result found. \n')
-        return(tibble(query = query,
-                      chebiid = NA_character_))
+        return(tibble("query" = query,
+                      "chebiid" = NA_character_))
       }
       if (nrow(out) > 0) out$query <- query
       if (nrow(out) == 1) return(out)
@@ -152,15 +152,15 @@ get_chebiid <- function(query,
         return(out[out$chebiid == matched, ])
       }
       if (match == "na") {
-        return(tibble(query = query,
-                      chebiid = NA_character_))
+        return(tibble("query" = query,
+                      "chebiid" = NA_character_))
       }
       if (match == "first") {
         return(out[1, ])
       }
     } else {
-      out <- tibble(query = query,
-                    chebiid = NA_character_)
+      out <- tibble("query" = query,
+                    "chebiid" = NA_character_)
       message('Returning NA (', http_status(res)$message, '). \n')
       return(out)
     }
@@ -174,7 +174,7 @@ get_chebiid <- function(query,
                 verbose = verbose)
   out <- setNames(out, query)
   out <- bind_rows(out)
-  return(dplyr::select(out, query, chebiid, everything()))
+  return(dplyr::select(out, "query", "chebiid", everything()))
 }
 
 

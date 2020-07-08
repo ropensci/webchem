@@ -3,7 +3,7 @@
 ## NEW FEATURES
 
 * Download images of substances from ChemSpider with `cs_img()`
-* `has_entry()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
+* `find_db()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
 
 ## MINOR IMPROVEMENTS
 

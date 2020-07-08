@@ -34,13 +34,13 @@ test_that("with_cts() translates", {
 })
 
 
-test_that("has_entry() function works", {
+test_that("find_db() function works", {
   skip_on_cran()
   skip_if_not(fn_up)
   skip_if_not(etox_up)
   skip_if_not(up, "CTS service down")
 
-  out <- has_entry(c("triclosan", NA, "balloon"),
+  out <- find_db(c("triclosan", NA, "balloon"),
                         from = "name",
                         sources = c("etox", "fn"))
   df <- tibble(query = c("triclosan", NA, "balloon"),

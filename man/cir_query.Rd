@@ -8,7 +8,6 @@ cir_query(
   identifier,
   representation = "smiles",
   resolver = NULL,
-  first = FALSE,
   match = c("all", "first", "ask", "na"),
   verbose = TRUE,
   choices = NULL,

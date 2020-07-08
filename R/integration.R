@@ -68,9 +68,9 @@ with_cts <- function(query, from, .f, .verbose = TRUE, ...) {
 #' @import dplyr
 #' @examples
 #' \dontrun{
-#' has_entry("hexane", from = "name")
+#' find_db("hexane", from = "name")
 #' }
-has_entry <- function(query, from,
+find_db <- function(query, from,
                            sources = c("etox", "pc", "chebi", "cs",
                                        "aw", "fn", "pan", "srs"),
                            plot = FALSE) {
