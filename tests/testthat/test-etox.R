@@ -22,12 +22,12 @@ test_that("examples in the article are unchanged", {
 
   expect_is(ids, "data.frame")
   expect_equal(names(ids), c("query", "match", "etoxid"))
-  expect_equal(ids$etoxid,
+  expect_equivalent(ids$etoxid,
                c("8668", "8494", NA, "8397", "7240", "7331"))
   expect_equal(
     ids$match,
-    c("2,4-Xylenol ( 8668 )", "4-Chlor-2-methylphenol ( 8494 )", NA,
-      "Atrazin ( 8397 )", "Benzol ( 7240 )", "Desethylatrazin ( 7331 )"))
+    c("2,4-Xylenol", "4-Chlor-2-methylphenol", NA,
+      "Atrazin", "Benzol", "Desethylatrazin"))
   expect_equal(ids$query,
                c("2,4-Dimethylphenol", "4-Chlor-2-methylphenol",
                  "4-para-nonylphenol", "Atrazin", "Benzol", "Desethylatrazin"))
@@ -51,7 +51,7 @@ test_that("get_etoxid returns correct results", {
   o2 <- suppressWarnings(get_etoxid(comps, match = "all"))
   o3 <- get_etoxid("Triclosan", match = "first")
   o4 <- get_etoxid("Triclosan", match = "na")
-  o5 <- get_etoxid("1071-83-6", from = 'cas', match = 'best')
+  o5 <- get_etoxid("1071-83-6", from = 'cas', match = 'first')
   o6 <- get_etoxid("133483", from = "gsbl")
   o7 <- get_etoxid("203-157-5", from = "ec")
   do2 <- get_etoxid("Thiamethoxam")
@@ -65,8 +65,8 @@ test_that("get_etoxid returns correct results", {
   expect_s3_class(o7, "data.frame")
   expect_s3_class(do2, "data.frame")
 
-  expect_equal(o1$etoxid, c("20179", "9051"))
-  expect_equal(o2$etoxid, c("89236", "20179", "9051"))
+  expect_equivalent(o1$etoxid, c("20179", "9051"))
+  expect_equivalent(o2$etoxid, c("89236", "20179", "9051"))
 })
 
 test_that("examples from webchem article run", {
@@ -78,16 +78,16 @@ test_that("examples from webchem article run", {
   ids <- get_etoxid(head(unique(jagst$substance),6), match = "best")
 
   expect_s3_class(ids, "data.frame")
-  expect_equal(ids$etoxid, c("8668","8494",NA,"8397","7240","7331"))
-  expect_equal(ids$match, c(
-    "2,4-Xylenol ( 8668 )",
-    "4-Chlor-2-methylphenol ( 8494 )",
+  expect_equivalent(ids$etoxid, c("8668","8494",NA,"8397","7240","7331"))
+  expect_equivalent(ids$match, c(
+    "2,4-Xylenol",
+    "4-Chlor-2-methylphenol",
     NA,
-    "Atrazin ( 8397 )",
-    "Benzol ( 7240 )",
-    "Desethylatrazin ( 7331 )"
+    "Atrazin",
+    "Benzol",
+    "Desethylatrazin"
   ))
-  expect_equal(ids$query, c(
+  expect_equivalent(ids$query, c(
     "2,4-Dimethylphenol",
     "4-Chlor-2-methylphenol",
     "4-para-nonylphenol",

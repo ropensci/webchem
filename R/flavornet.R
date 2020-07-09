@@ -6,9 +6,11 @@
 #' @import xml2
 #' @importFrom stats rgamma
 #'
-#' @param CAS character; CAS number to search by. See \code{\link{is.cas}} for correct formatting
+#' @param query character; CAS number to search by. See \code{\link{is.cas}} for correct formatting
+#' @param from character; currently only CAS numbers are accepted.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param ... not currently used
+#' @param CAS deprecated
+#' @param ... currently unused
 #'
 #' @return A named character vector containing flavor percepts or NA's in the case of CAS numbers that are not found
 #'
@@ -24,11 +26,17 @@
 #' }
 #' @export
 
-fn_percept <- function(CAS, verbose = TRUE, ...)
+fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
 {
-  foo <- function (CAS, verbose){
+  if (!missing(CAS)) {
+    warning('"CAS" is now deprecated. Please use "query" instead. ')
+    query <- CAS
+  }
+  match.arg(from)
+  foo <- function (query, verbose){
+    if (is.na(query)) return(NA)
     on.exit(suppressWarnings(closeAllConnections()))
-    qurl <- paste0("http://www.flavornet.org/info/",CAS,".html")
+    qurl <- paste0("http://www.flavornet.org/info/",query,".html")
     if (verbose)
       message(qurl)
     Sys.sleep(rgamma(1, shape = 10, scale = 1/10))
@@ -42,7 +50,7 @@ fn_percept <- function(CAS, verbose = TRUE, ...)
     percept <- gsub(pattern, "", doc.text)
     return(percept)
   }
-  percepts <- sapply(CAS, foo, verbose = verbose)
-  percepts <- setNames(percepts, CAS)
+  percepts <- sapply(query, foo, verbose = verbose)
+  percepts <- setNames(percepts, query)
   return(percepts)
 }

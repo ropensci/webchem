@@ -9,13 +9,18 @@
 #' @importFrom utils URLencode URLdecode
 #'
 #' @param query character; query string
-#' @param type character; type of query string. \code{"rn"} for registry number
-#' or \code{"name"} for common name or \code{"inchikey"} for inchikey as input.
-#' @param match character; How should multiple hits be handeled? \code{"first"}
+#' @param from character; type of query string. \code{"rn"} for registry number
+#'   (see
+#'   \href{https://chem.nlm.nih.gov/chemidplus/jsp/chemidheavy/help.jsp#LiteSearchDataFields}{documentation}
+#'   for more details), \code{"name"} for common name, or \code{"inchikey"} for
+#'   inchikey as input. \code{"cas"} is a synonym for \code{"rn"} and provided
+#'   for consistency across functions.
+#' @param match character; How should multiple hits be handled? \code{"first"}
 #' returns only the first match, \code{"best"} the best matching (by name) ID,
 #' \code{"ask"} enters an interactive mode and the user is asked for input,
 #' \code{"na"} returns NA if multiple hits are found.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param type deprecated
 #' @return A list of 8 entries: name (vector), synonyms (vector), cas (vector),
 #' inchi (vector), inchikey (vector), smiles(vector), toxicity (data.frame),
 #' physprop (data.frame) and source_url.
@@ -27,17 +32,17 @@
 #' \dontrun{
 #' # might fail if API is not available
 #' # query common name
-#' y1 <- ci_query(c('Formaldehyde', 'Triclosan'), type = 'name')
+#' y1 <- ci_query(c('Formaldehyde', 'Triclosan'), from = 'name')
 #' names(y1)
 #' str(y1[['Triclosan']]) # lots of information inside
 #' y1[['Triclosan']]$inchikey
 #'
 #' # Query by CAS
-#' y2 <- ci_query('50-00-0', type = 'rn', match = 'first')
+#' y2 <- ci_query('50-00-0', from = 'rn', match = 'first')
 #' y2[['50-00-0']]$inchikey
 #'
 #' # query by inchikey
-#' y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
+#' y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', from = 'inchikey')
 #' y3[[1]]$name
 #'
 #' # extract lop-P
@@ -47,12 +52,17 @@
 #'  y$physprop$Value[y$physprop$`Physical Property` == 'log P (octanol-water)']
 #'  })
 #' }
-ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
+ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
                      match = c('best', 'first', 'ask', 'na'),
-                     verbose = TRUE){
-  type <- match.arg(type)
+                     verbose = TRUE, type){
+  if(!missing(type)) {
+    warning('"type" is deprecated. Please use "from" instead. ')
+    from <- type
+  }
+
+  from <- match.arg(from)
   match <- match.arg(match)
-  foo <- function(query, type, match, verbose){
+  foo <- function(query, from, match, verbose){
     on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(query)) {
       message('query is NA! Returning NA.\n')
@@ -60,7 +70,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
     }
     query <- URLencode(query, reserved = TRUE)
     baseurl <- switch(
-      type,
+      from,
       rn = 'https://chem.nlm.nih.gov/chemidplus/rn/startswith/',
       name = "https://chem.nlm.nih.gov/chemidplus/name/startswith/",
       inchikey = "https://chem.nlm.nih.gov/chemidplus/inchikey/startswith/")
@@ -77,7 +87,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
 
     tit <- xml_text(xml_find_all(ttt, "//head/title"))
     no <- xml_text(xml_find_all(ttt, "//h3"))
-    if (length(no) != 0 && no == 'The following query produced no records:') {
+    if (length(no) != 0 && 'The following query produced no records:' %in% no) {
       message('Not found! Returning NA.\n')
       return(NA)
     }
@@ -217,7 +227,7 @@ ci_query <- function(query, type = c('name', 'rn', 'inchikey'),
     class(out) <- 'chemid'
     return(out)
   }
-  out <- lapply(query, foo, type = type, match = match, verbose = verbose)
+  out <- lapply(query, foo, from = from, match = match, verbose = verbose)
   out <- setNames(out, query)
   class(out) <- c('ci_query', 'list')
   return(out)

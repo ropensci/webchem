@@ -8,9 +8,9 @@ cts_convert(
   query,
   from,
   to,
-  first = FALSE,
-  choices = NULL,
+  match = c("all", "first", "ask", "na"),
   verbose = TRUE,
+  choices = NULL,
   ...
 )
 }
@@ -22,11 +22,14 @@ cts_convert(
 
 \item{to}{character; type to convert to.}
 
-\item{first}{deprecated.  Use choices = 1 instead.}
-
-\item{choices}{to return only the first result, use 'choices = 1'.  To choose a result from an interative menu, provide a number of choices to choose from or "all".}
+\item{match}{character; How should multiple hits be handled? \code{"all"}
+returns all matches, \code{"first"} returns only the first result,
+\code{"ask"} enters an interactive mode and the user is asked for input,
+\code{"na"} returns \code{NA} if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{choices}{deprecated.  Use the \code{match} argument instead.}
 
 \item{...}{currently not used.}
 }

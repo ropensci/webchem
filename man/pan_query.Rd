@@ -4,10 +4,18 @@
 \alias{pan_query}
 \title{Query the PAN Pesticide database}
 \usage{
-pan_query(query, match = c("best", "all", "first"), verbose = TRUE, ...)
+pan_query(
+  query,
+  from = c("name", "cas"),
+  match = c("best", "all", "first"),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{character; searchterm, e.g. chemical name or CAS.}
+
+\item{from}{character; one of "name" or "cas".}
 
 \item{match}{character; \code{match="all"} returns all matches,
 \code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
@@ -69,11 +77,11 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
  # return only best hit
  pan_query('2,4-dichlorophenol', match = 'best')[[1]][c(1, 2, 5, 74)]
 
- out <- pan_query(c('Triclosan', 'Aspirin'), 'best')
+ out <- pan_query(c('Glyphosate', 'Rotenone'), from = "name", match = 'best')
  out
 
- # extract Hydrolysis Half-life (Avg, Days)
- sapply(out, function(y) y$`Hydrolysis Half-life (Avg, Days)`)
+ # extract Acute Toxicity Summary
+ sapply(out, function(y) y$`Acute Toxicity Summary`)
 }
 }
 \author{

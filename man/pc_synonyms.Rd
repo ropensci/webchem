@@ -6,11 +6,11 @@
 \usage{
 pc_synonyms(
   query,
-  from = "name",
-  choices = NULL,
+  from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
+  match = c("all", "first", "ask", "na"),
   verbose = TRUE,
   arg = NULL,
-  interactive = 0,
+  choices = NULL,
   ...
 )
 }
@@ -20,21 +20,22 @@ pc_synonyms(
 \item{from}{character; type of input, can be one of "name" (default), "cid",
 "sid", "aid", "smiles", "inchi", "inchikey"}
 
-\item{choices}{to get only the first synonym, use \code{choices = 1}, to get
-a number of synonyms to choose from in an interactive menu, provide the
-number of choices you want or "all" to choose from all synonyms.}
+\item{match}{character; How should multiple hits be handled? \code{"all"}
+returns all matches, \code{"first"} returns only the first result,
+\code{"ask"} enters an interactive mode and the user is asked for input,
+\code{"na"} returns \code{NA} if multiple hits are found.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{arg}{character; optinal arguments like "name_type=word" to match
+\item{arg}{character; optional arguments like "name_type=word" to match
 individual words.}
 
-\item{interactive}{deprecated.  Use the \code{choices} argument instead}
+\item{choices}{deprecated.  Use the \code{match} argument instead.}
 
-\item{...}{optional arguments}
+\item{...}{currently unused}
 }
 \value{
-a list of character vectors (one per query). If \code{choices} is used, a single named vector is returned instead.
+a named list.
 }
 \description{
 Search synonyms using PUG-REST,
@@ -54,7 +55,7 @@ usage policies of the indicidual data sources
 pc_synonyms("Aspirin")
 pc_synonyms(c("Aspirin", "Triclosan"))
 pc_synonyms(5564, from = "cid")
-pc_synonyms(c("Aspirin", "Triclosan"), choices = 10)
+pc_synonyms(c("Aspirin", "Triclosan"), match = "ask")
 }
 }
 \references{

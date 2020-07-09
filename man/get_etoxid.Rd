@@ -7,7 +7,7 @@
 get_etoxid(
   query,
   from = c("name", "cas", "ec", "gsbl", "rtecs"),
-  match = c("best", "all", "first", "ask", "na"),
+  match = c("all", "best", "first", "ask", "na"),
   verbose = TRUE
 )
 }
