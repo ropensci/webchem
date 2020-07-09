@@ -25,23 +25,12 @@ test_that("cts_convert()", {
   expect_error(cts_convert(comp, c('Chemical Name', 'CAS'), 'CAS'))
   expect_error(cts_convert('Triclosan', 'CAS'))
   expect_true(is.na(suppressWarnings(cts_convert('xxxx', 'Chemical Name', 'inchikey'))[[1]]))
-  o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', choices = 1, verbose = FALSE)
+  o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', match = "first", verbose = FALSE)
   expect_length(o1, 2)
 
   expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
-  # cts_convert('acetic acid', 'Chemical Name', 'CAS', choices = 1)
   expect_equivalent(cts_convert(NA, from = "Chemical Name", to = "inchikey"), NA)
 })
-
-
-# # integration tests
-# test_that("cts_compinfo(cir_query())", {
-#   chk_cts()
-#   chk_cir()
-#   inchikey <- cir_query('Triclosan', representation = 'stdinchikey', verbose = FALSE)
-#   inchikey <- gsub('InChIKey=', '', inchikey)
-#   expect_equal(round(cts_compinfo(inchikey, verbose = FALSE)[[1]][["molweight"]], 3), 289.542)
-# })
 
 
 test_that("fromto", {

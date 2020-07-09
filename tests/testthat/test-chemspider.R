@@ -288,7 +288,7 @@ test_that("cs_img()", {
   imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
 
   expect_true(file.exists(paste0(tempdir(), "/","682.png")))
-  expect_true(file.exists(paste0(tempdir(), "/","5383.png")))
+  expect_true(file.exists(paste0(tempdir(), "/","5363.png")))
 })
 
 # test_that("cs_extcompinfo()", {

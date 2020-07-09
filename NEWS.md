@@ -2,7 +2,16 @@
 
 ## NEW FEATURES
 
-* Download images of substances from ChemSpider with cs_img()
+* Download images of substances from ChemSpider with `cs_img()`
+* `find_db()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
+
+## MINOR IMPROVEMENTS
+
+* The `"type"` argument in `ci_query()` and `aw_query()` has been changed to `"from"` for consistency with other functions
+* `fn_percept()` and `cts_compinfo()` now have `"query"` and `"from"` arguments for consistency with other functions
+* Possible values for `"from"` have been made more consistent across functions
+* `pc_synonyms()`, `cts_convert()`, `cir_query()` have been changed to use the `match` argument instead of `choices` for consistency with other functions
+* `get_etoxid()` output changed slightly so that the matched chemical name string no longer includes the etoxid in parentheses.
 
 # webchem 1.0.0
 

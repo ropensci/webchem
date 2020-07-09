@@ -6,6 +6,7 @@
 #' @importFrom rvest html_table
 #' @importFrom stats rgamma
 #' @param query character; searchterm, e.g. chemical name or CAS.
+#' @param from character; one of "name" or "cas".
 #' @param match character; \code{match="all"} returns all matches,
 #'   \code{match="first"} the first one and \code{match="best"} (recommended) the hit with the lowest
 #'    Levenshtein distance between query and matching synonym.
@@ -61,14 +62,15 @@
 #'  # return only best hit
 #'  pan_query('2,4-dichlorophenol', match = 'best')[[1]][c(1, 2, 5, 74)]
 #'
-#'  out <- pan_query(c('Triclosan', 'Aspirin'), 'best')
+#'  out <- pan_query(c('Glyphosate', 'Rotenone'), from = "name", match = 'best')
 #'  out
 #'
-#'  # extract Hydrolysis Half-life (Avg, Days)
-#'  sapply(out, function(y) y$`Hydrolysis Half-life (Avg, Days)`)
+#'  # extract Acute Toxicity Summary
+#'  sapply(out, function(y) y$`Acute Toxicity Summary`)
 #' }
-pan_query <- function(query, match = c('best', 'all', 'first'), verbose = TRUE, ...){
+pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', 'first'), verbose = TRUE, ...){
   match <- match.arg(match)
+  match.arg(from) #not actually needed for this function to work
   foo <- function(query, match, verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(query)) {

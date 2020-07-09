@@ -5,7 +5,7 @@
 #'@param query character; query ID.
 #'@param from character; type of query ID, e.g. \code{'itn'} , \code{'cas'},
 #'  \code{'epaid'}, \code{'tsn'}, \code{'name'}.
-#'
+#'@param ... not currently used.
 #'@return a list of lists (for each supplied query): a list of 22. subsKey,
 #'  internalTrackingNumber, systematicName, epaIdentificationNumber,
 #'  currentCasNumber, currentTaxonomicSerialNumber, epaName, substanceType,
@@ -26,7 +26,7 @@
 #' }
 srs_query <-
   function(query,
-           from = c("itn", "cas", "epaid", "tsn", "name")) {
+           from = c("itn", "cas", "epaid", "tsn", "name"), ...) {
     entity_url <- "https://cdxnodengn.epa.gov/cdx-srs-rest/"
 
     rst <- lapply(query, function(x) {

@@ -6,14 +6,16 @@
 #' @importFrom stats rgamma
 #'
 #' @param  query character; search string
-#' @param type character; type of input ('cas' or 'commonname')
+#' @param from character; type of input ('cas' or 'name')
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index? See
 #' \code{\link{build_aw_idx}} for more details.
+#' @param ... currently unused.
+#' @param type deprecated
 #' @return A list of eight entries: common-name, status, preferred IUPAC Name,
 #' IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source
 #' url.
-#' @note for type = 'cas' only the first matched link is returned.
+#' @note for from = 'cas' only the first matched link is returned.
 #' Please respect Copyright, Terms and Conditions
 #' \url{http://www.alanwood.net/pesticides/legal.html}!
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
@@ -24,30 +26,42 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' aw_query('Fluazinam', type = 'commonname')
-#' out <- aw_query(c('Fluazinam', 'Diclofop'), type = 'com')
+#' aw_query('Fluazinam', from = 'name')
+#' out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'name')
 #' out
 #' # extract subactivity from object
 #' sapply(out, function(y) y$subactivity[1])
 #'
 #' # use CAS-numbers
-#' aw_query("79622-59-6", type = 'cas')
+#' aw_query("79622-59-6", from = 'cas')
 #' }
 #' @seealso \code{\link{build_aw_idx}}
-aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
-                     force_build = FALSE) {
-  aw_idx <- build_aw_idx(verbose = FALSE, force_build)
-  foo <- function(query, type = c("commonname", "cas"), verbose) {
+
+aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
+                     force_build = FALSE, type, ...) {
+  if (!missing(type)) {
+    message('"type" is deprecated. Please use "from" instead. ')
+    from <- type
+  }
+
+  if ("commonname" %in% from) {
+    warning('To search by compound name use "name" instead of "commonname"')
+    from <- "name"
+  }
+  from <- match.arg(from)
+  aw_idx <- build_aw_idx(verbose, force_build)
+
+  foo <- function(query, from, verbose) {
     on.exit(suppressWarnings(closeAllConnections()))
-    type <- match.arg(type)
+
   # search links in indexes
-    if (type == "commonname") {
+    if (from == "name") {
       links <- aw_idx$links[aw_idx$source == "cn"]
       names <- aw_idx$linknames[aw_idx$source == "cn"]
       cname <-  query
     }
 
-    if (type == "cas") {
+    if (from == "cas") {
       names <- aw_idx$names[aw_idx$source == "rn"]
       # select only first link
       links <- aw_idx$links[aw_idx$source == "rn"]
@@ -131,7 +145,7 @@ aw_query <- function(query, type = c("commonname", "cas"), verbose = TRUE,
                 source_url = source_url)
     return(out)
   }
-  out <- lapply(query, function(x) foo(x, type = type, verbose = verbose))
+  out <- lapply(query, function(x) foo(x, from = from, verbose = verbose))
   out <- setNames(out, query)
   class(out) <- c("aw_query", "list")
   return(out)

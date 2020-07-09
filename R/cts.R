@@ -4,8 +4,10 @@
 #' @import jsonlite
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
-#' @param inchikey character; InChIkey.
+#' @param query character; InChIkey.
+#' @param from character; currently only accepts "inchikey".
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param inchikey deprecated
 #' @return a list of lists (for each supplied inchikey):
 #' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
 #' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
@@ -29,14 +31,18 @@
 #' # extract molecular weight
 #' sapply(out2, function(y) y$molweight)
 #' }
-cts_compinfo <- function(inchikey, verbose = TRUE){
-  # inchikey <- 'XEFQLINVKFYRCS-UHFFFAOYSA-N'
-  foo <- function(inchikey, verbose) {
-    if (!is.inchikey(inchikey)) {
+cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
+  if (!missing(inchikey)) {
+    warning('"inchikey" is deprecated.  Please use "query" instead.')
+    query <- inchikey
+  }
+  match.arg(from)
+  foo <- function(query, verbose) {
+    if (!is.inchikey(query)) {
       stop('Input is not a valid inchikey!')
     }
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
-    qurl <- paste0(baseurl, '/', inchikey)
+    qurl <- paste0(baseurl, '/', query)
     if (verbose)
       message(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
@@ -47,8 +53,8 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
     }
     return(out)
   }
-  out <- lapply(inchikey, foo, verbose = verbose)
-  out <- setNames(out, inchikey)
+  out <- lapply(query, foo, verbose = verbose)
+  out <- setNames(out, query)
   class(out) <- c('cts_compinfo','list')
   return(out)
 }
@@ -65,8 +71,11 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
 #'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
 #' @param to character; type to convert to.
-#' @param first deprecated.  Use choices = 1 instead.
-#' @param choices to return only the first result, use 'choices = 1'.  To choose a result from an interative menu, provide a number of choices to choose from or "all".
+#' @param match character; How should multiple hits be handled? \code{"all"}
+#' returns all matches, \code{"first"} returns only the first result,
+#' \code{"ask"} enters an interactive mode and the user is asked for input,
+#' \code{"na"} returns \code{NA} if multiple hits are found.
+#' @param choices deprecated.  Use the \code{match} argument instead.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of character vectors or if \code{choices} is used, then a single named vector.
@@ -89,14 +98,45 @@ cts_compinfo <- function(inchikey, verbose = TRUE){
 #' comp <- c("triclosan", "hexane")
 #' cts_convert(comp, "Chemical Name", "cas")
 #' }
-cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose = TRUE, ...){
-  if(!missing("first"))
-    stop('"first" is deprecated.  Use "choices = 1" instead.')
+cts_convert <- function(query,
+                        from,
+                        to,
+                        match = c("all", "first", "ask", "na"),
+                        verbose = TRUE,
+                        choices = NULL,
+                        ...){
+  if(!missing("choices")) {
+    if (is.null(choices)) {
+      message('"choices" is deprecated.  Using match = "all" instead.')
+      match <- "all"
+    } else if(choices == 1) {
+      message('"choices" is deprecated.  Using match= "first" instead.')
+      match <- "first"
+    } else if ((is.numeric(choices) & choices > 1) | choices == "all") {
+      message('"choices" is deprecated.  Using match = "ask" instead.')
+      match <- "ask"
+    } else {
+      message('"choices" is deprecated.  Using match = "all" instead.')
+      match <- "all"
+    }
+  }
   if (length(from) > 1 | length(to) > 1) {
     stop('Cannot handle multiple input or output types.  Please provide only one argument for `from` and `to`.')
   }
 
-  foo <- function(query, from, to , first, verbose){
+  from <-  match.arg(tolower(from), c(cts_from(), "name"))
+  to <-  match.arg(tolower(to), c(cts_to(), "name"))
+  match <- match.arg(match)
+
+  if (from == "name") {
+    from <- "chemical name"
+  }
+
+  if (to == "name") {
+    to <- "chemical name"
+  }
+
+  foo <- function(query, from, to, first, verbose){
     if (is.na(query)) return(NA)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
@@ -114,16 +154,12 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
         return(NA)
     }
     out <- out$result[[1]]
-    # if (first)
-    #   out <- out[1]
-    out <- chooser(out, choices)
+    out <- matcher(out, match = match, query = query, verbose = verbose)
     return(out)
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
-  # if (first)
-  if(!is.null(choices))
-    out <- unlist(out)
+
   return(out)
 }
 
@@ -147,7 +183,7 @@ cts_convert <- function(query, from, to, first = FALSE, choices = NULL, verbose 
 #' cts_from()
 #' }
 cts_from <- function(verbose = TRUE){
-  fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues')
+  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues'))
 }
 
 
@@ -170,5 +206,5 @@ cts_from <- function(verbose = TRUE){
 #' cts_from()
 #' }
 cts_to <- function(verbose = TRUE){
-  fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues')
+  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues'))
 }

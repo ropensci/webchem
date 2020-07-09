@@ -4,7 +4,7 @@ test_that("examples in the article are unchanged", {
   skip_if_not(up, "Alanwood service is down")
 
   data("lc50", package = "webchem")
-  aw_data <- aw_query(lc50$cas[1:3], type = "cas")
+  aw_data <- aw_query(lc50$cas[1:3], from = "cas")
   igroup <- sapply(aw_data, function(y) y$subactivity[1])
 
   expect_is(igroup, "character")
@@ -14,12 +14,12 @@ test_that("examples in the article are unchanged", {
                                  "phenyl organothiophosphate insecticides"))
 })
 
-test_that("alanwood, commonname", {
+test_that("alanwood, name", {
   skip_on_cran()
   skip_if_not(up, "Alanwood service is down")
 
   comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA)
-  o1 <- aw_query(comps, type = "commonname")
+  o1 <- aw_query(comps, from = "name")
 
   expect_type(o1, "list")
   expect_equal(length(o1), 4)

@@ -2,14 +2,13 @@ up <- ping_service("ci")
 test_that("chemid returns correct results", {
   skip_on_cran()
   skip_if_not(up, "CHEMID service is down")
-  skip("failing tests below")
 
-  o2 <- ci_query('50-00-0', type = 'rn')
-  o3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', type = 'inchikey')
+  o2 <- ci_query('50-00-0', from = 'rn')
+  o3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', from = 'inchikey')
   expect_type(o2, 'list')
   expect_type(o3, 'list')
 
-  o1 <- ci_query(c('xxxxx', NA, 'Aspirin', 'Triclosan'), type = 'name', match = 'best')
+  o1 <- ci_query(c('xxxxx', NA, 'Aspirin', 'Triclosan'), from = 'name', match = 'best')
   expect_is(o1, 'list')
 
   expect_true(length(o1) == 4)
@@ -20,16 +19,16 @@ test_that("chemid returns correct results", {
   expect_length(o1[[3]], 9)
   expect_s3_class(o1[[3]]$physprop, "data.frame")
 
-  b1 <- ci_query('Tetracyclin', type = 'name')
+  b1 <- ci_query('Tetracyclin', from = 'name')
   expect_equal(b1[[1]]$name[1], "Tetracycline")
-  b2 <- ci_query('Edetic acid', type = 'name', match = 'best')
+  b2 <- ci_query('Edetic acid', from = 'name', match = 'best')
   expect_equal(b2[[1]]$name[1], "Edetic acid")
   expect_equal(attr(b2[[1]],'distance'), 0)
 
   # test multiple matches
-  m1 <- ci_query('Tetracyclin', type = 'name', match = 'first')
-  m2 <- ci_query('Tetracyclin', type = 'name', match = 'best')
-  m3 <- ci_query('Tetracyclin', type = 'name', match = 'na')
+  m1 <- ci_query('Tetracyclin', from = 'name', match = 'first')
+  m2 <- b1 #best is default
+  m3 <- ci_query('Tetracyclin', from = 'name', match = 'na')
 
   expect_type(m1, 'list')
   expect_type(m2, 'list')

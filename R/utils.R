@@ -408,36 +408,35 @@ as.cas <- function(x){
 #' chooser(test, "all")
 #' chooser(test, 3)
 chooser <- function(x, choices){
-  if(interactive() & !is.null(choices)){
-    #only in an interactive R session when number of choices is specified
+  if (is.null(choices)) {
+    out <- x
+  } else if (choices == 1) {
+      out <- x[1]
+  } else if (interactive()) {
     if(is.numeric(choices) & choices > length(x)) {
-      choices = "all"
+      choices <- "all"
       warning('Number of choices excedes length of x, using all choices instead',
               immediate. = TRUE)
     }
-    if(choices == "all") { #then give all of x as possible choices
+    if (choices == "all") { #then give all of x as possible choices
       pick <- menu(x, graphics = FALSE, 'Select one:')
       out <- x[pick]
     }
-    if(choices == 1) {
-      out <- x[1]
-    }
-    if(is.numeric(choices) & choices > 1){
+    if (is.numeric(choices) & choices > 1){
       pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
       out <- x[pick]
     }
   } else {
-    out <- x
+    stop('Can only use "choices" in interactive mode.')
   }
   return(out)
 }
-
 #' matcher utility
 #'
 #' @param x a vector
 #' @param query what the query was, only used if match = "best"
 #' @param result what the result of the query was, only used if match = "best
-#' @param match haracter; How should multiple hits be handeled? "all" returns
+#' @param match character; How should multiple hits be handled? "all" returns
 #' all matched IDs, "first" only the first match, "best" the best matching (by
 #' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
 #' @param verbose print messages?
