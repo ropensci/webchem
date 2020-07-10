@@ -4,7 +4,7 @@
 #' a ChEBI entity name (chebiasciiname), a search score (searchscore) and
 #' stars (stars) using the SOAP protocol:
 #' \url{https://www.ebi.ac.uk/chebi/webServices.do}
-#' @import httr xml2 RETRY add_headers
+#' @import httr xml2
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
 #'
@@ -190,7 +190,7 @@ get_chebiid <- function(query,
 #' as a list ("chem_structure") in the list.
 #' The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
 #'
-#' @import httr xml2 RETRY add_headers
+#' @import httr xml2
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
 #'
