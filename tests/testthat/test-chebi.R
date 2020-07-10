@@ -45,3 +45,10 @@ test_that("chebi returns correct results", {
   expect_equal(B$`27732`$properties$chebiasciiname, "caffeine")
   expect_equal(B$`27732`$properties$entitystar, "3")
 })
+
+test_that("get_chebiid() handles special characters in SMILES",{
+  skip_on_cran()
+  skip_if_not(up, "CHEBI service is down")
+
+  expect_equal(get_chebiid("C#C", from = "smiles")$chebiid, "CHEBI:27518")
+})

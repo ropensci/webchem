@@ -23,3 +23,11 @@ test_that("cir_query() doesn't mistake NA for sodium", {
 
   expect_true(is.na(cir_query(as.character(NA), 'cas')))
 })
+
+test_that("cir_query() handles special characters in SMILES", {
+  skip_on_cran()
+  skip_if_not(up, "CIR server is down")
+
+  expect_equal(cir_query("C#C", representation = "inchikey"),
+               "InChIKey=HSFWRNGVRCDJHI-UHFFFAOYNA-N")
+})
