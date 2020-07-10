@@ -4,7 +4,7 @@
 #' a ChEBI entity name (chebiasciiname), a search score (searchscore) and
 #' stars (stars) using the SOAP protocol:
 #' \url{https://www.ebi.ac.uk/chebi/webServices.do}
-#' @import httr xml2
+#' @import httr xml2 RETRY add_headers
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
 #'
@@ -116,9 +116,10 @@ get_chebiid <- function(query,
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
     if (verbose)
       message(query, ': ', url)
-    res <- POST(url,
-                add_headers(headers),
-                body = body)
+    res <- httr::RETRY("POST",
+                       url,
+                       httr::add_headers(headers),
+                       body = body)
     if (res$status_code == 200) {
       cont <- try(content(res, type = 'text/xml', encoding = 'utf-8'),
                   silent = TRUE)
@@ -188,7 +189,7 @@ get_chebiid <- function(query,
 #' as a list ("chem_structure") in the list.
 #' The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
 #'
-#' @import httr xml2
+#' @import httr xml2 RETRY add_headers
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
 #'
@@ -259,9 +260,10 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
     if (verbose)
       message(chebiid, ': ', url)
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-    res <- POST(url,
-                add_headers(headers),
-                body = body)
+    res <- httr::RETRY("POST",
+                       url,
+                       httr::add_headers(headers),
+                       body = body)
     if (res$status_code != 200) {
       warning(http_status(res)$message)
       return(NA)
