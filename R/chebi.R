@@ -119,7 +119,8 @@ get_chebiid <- function(query,
     res <- httr::RETRY("POST",
                        url,
                        httr::add_headers(headers),
-                       body = body)
+                       body = body,
+                       terminate_on = 404)
     if (res$status_code == 200) {
       cont <- try(content(res, type = 'text/xml', encoding = 'utf-8'),
                   silent = TRUE)
@@ -263,7 +264,8 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
     res <- httr::RETRY("POST",
                        url,
                        httr::add_headers(headers),
-                       body = body)
+                       body = body,
+                       terminate_on = 404)
     if (res$status_code != 200) {
       warning(http_status(res)$message)
       return(NA)
