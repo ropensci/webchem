@@ -65,7 +65,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
   match <- match.arg(match)
   foo <- function(query, from, match, verbose){
     if (is.na(query)) {
-      if (verbose) message('query is NA! Returning NA.\n')
+      if (verbose) message('Query is NA. Returning NA.')
       return(NA)
     }
     if (verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
