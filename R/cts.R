@@ -138,9 +138,11 @@ cts_convert <- function(query,
 
   foo <- function(query, from, to, first, verbose){
     if (is.na(query)) return(NA)
+    query <- URLencode(query, reserved = TRUE)
+    from <- URLencode(from, reserved = TRUE)
+    to <- URLencode(to, reserved = TRUE)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
-    qurl <- URLencode(qurl)
     if (verbose)
       message(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))

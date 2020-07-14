@@ -79,6 +79,7 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom stats rgamma
 #' @importFrom tibble enframe
+#' @importFrom utils URLencode
 #' @export
 #' @examples
 #' \donttest{
@@ -176,7 +177,7 @@ get_cid <-
       if (verbose) {
         message(paste0("Querying ", query, ". "), appendLF = FALSE)
       }
-      if (is.character(query)) query <- URLencode(query)
+      if (is.character(query)) query <- URLencode(query, reserved = TRUE)
       if (from %in% structure_search) {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
                       domain, from, query, "json", sep = "/")

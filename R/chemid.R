@@ -68,7 +68,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
       message('query is NA! Returning NA.\n')
       return(NA)
     }
-    query <- URLencode(query)
+    query <- URLencode(query, reserved = TRUE)
     baseurl <- switch(
       from,
       rn = 'https://chem.nlm.nih.gov/chemidplus/rn/startswith/',

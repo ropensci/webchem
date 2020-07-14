@@ -49,7 +49,7 @@ get_wdid <-
       id <- NA
       matched_sub <- NA
     } else {
-      query1 <- URLencode(query)
+      query1 <- URLencode(query, reserved = TRUE)
       limit <- 50
       qurl <-
         paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
