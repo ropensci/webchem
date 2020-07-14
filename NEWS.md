@@ -2,6 +2,7 @@
 
 ## NEW FEATURES
 
+* Download images of substances from Chemical Identifier Resolver (CIR) with `cir_img()` [contributed by @andschar].
 * Download images of substances from ChemSpider with `cs_img()`
 * `find_db()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
 
