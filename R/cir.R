@@ -306,53 +306,28 @@ cir_img <- function(query,
     baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
     qurl <- paste(baseurl, query, "image", sep = "/")
     # options
-    if (!is.null(format))
-      format <- paste0("format=", format)
-    if (!is.null(width))
-      width <- paste0("width=", width)
-    if (!is.null(height))
-      height <- paste0("height=", height)
-    if (!is.null(linewidth))
-      linewidth <- paste0("linewidth=", linewidth)
-    if (!is.null(symbolfontsize))
-      symbolfontsize <- paste0("symbolfontsize=", symbolfontsize)
-    if (!is.null(bgcolor))
-      bgcolor <- paste0("bgcolor=", bgcolor)
-    if (!is.null(antialiasing))
-      antialiasing <- paste0("antialiasing=", as.numeric(antialiasing))
-    if (!is.null(atomcolor))
-      atomcolor <- paste0("atomcolor=", atomcolor)
-    if (!is.null(bondcolor))
-      bondcolor <- paste0("bondcolor=", bondcolor)
-    if (!is.null(csymbol))
-      csymbol <- paste0("csymbol=", csymbol)
-    if (!is.null(hsymbol))
-      hsymbol <- paste0("hsymbol=", hsymbol)
-    if (!is.null(hcolor))
-      hcolor <- paste0("hcolor=", hcolor)
-    if (!is.null(header))
-      header <- paste0("header=\"", header, "\"")
-    if (!is.null(footer))
-      footer <- paste0("footer=\"", footer, "\"")
-    if (!is.null(frame))
-      frame <- paste0("frame=", frame)
-    opts <- c(format,
-              width,
-              height,
-              linewidth,
-              symbolfontsize,
-              bgcolor,
-              antialiasing,
-              atomcolor,
-              bondcolor,
-              csymbol,
-              hsymbol,
-              hcolor,
-              header,
-              footer,
-              frame)
-    opts <- paste0(opts, collapse = "&")
-    opts <- paste0("?", opts)
+    opts <-
+  c(
+    format = format,
+    width = width,
+    height = height,
+    linewidth = linewidth,
+    symbolfontsize = symbolfontsize,
+    bgcolor = bgcolor,
+    antialiasing = as.numeric(antialiasing),
+    atomcolor = atomcolor,
+    bondcolor = bondcolor,
+    csymbol = csymbol,
+    hsymbol = hsymbol,
+    hcolor = hcolor,
+    header = header,
+    footer = footer,
+    frame = frame
+  )
+
+opts <- paste0(names(opts), "=", opts)
+opts <- paste0(opts, collapse = "&")
+opts <- paste0("?", opts)
     # url
     qurl <- URLencode(paste0(qurl, opts))
     # query
