@@ -73,7 +73,7 @@ or 1.}
 \item{...}{currently not used.}
 }
 \value{
-data.frame and image written to disk
+image written to disk
 }
 \description{
 A interface to the Chemical Identifier Resolver (CIR).
@@ -111,7 +111,7 @@ cir_img(query,
         linewidth = 5,
         symbolfontsize = 30,
         bgcolor = "red",
-        antialising = FALSE,
+        antialiasing = FALSE,
         atomcolor = "green",
         bondcolor = "yellow",
         csymbol = "all",
@@ -119,7 +119,8 @@ cir_img(query,
         hcolor = "purple",
         header = "My funky chemical structure..",
         footer = "..is just so awesome!",
-        frame = 1)
+        frame = 1,
+        verbose = TRUE)
 }
 }
 \references{

@@ -31,3 +31,15 @@ test_that("cir_query() handles special characters in SMILES", {
   expect_equal(cir_query("C#C", representation = "inchikey")[[1]],
                "InChIKey=HSFWRNGVRCDJHI-UHFFFAOYNA-N")
 })
+
+test_that("cir_img()", {
+  skip_on_cran()
+  skip_if_not(up, "CIR server is down")
+
+  expect_true(is.null(cir_img('CCO', tempdir())[[1]]))
+  fl <- file.path(tempdir(), 'CCO.png')
+  expect_true(file.exists(fl))
+  fl2 <- file.path(tempdir(), 'abcdefghijk.png')
+  cir_img('abcdefghijk', tempdir())
+  expect_true(!file.exists(fl2))
+})

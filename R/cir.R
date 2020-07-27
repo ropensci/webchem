@@ -201,7 +201,7 @@ cir_query <- function(identifier, representation = "smiles",
 #' or 1.
 #' @param ... currently not used.
 #'
-#' @return data.frame and image written to disk
+#' @return image written to disk
 #' @details
 #'  CIR can resolve can be of the following \code{identifier}: Chemical Names,
 #'  IUPAC names,
@@ -246,7 +246,7 @@ cir_query <- function(identifier, representation = "smiles",
 #'         linewidth = 5,
 #'         symbolfontsize = 30,
 #'         bgcolor = "red",
-#'         antialising = FALSE,
+#'         antialiasing = FALSE,
 #'         atomcolor = "green",
 #'         bondcolor = "yellow",
 #'         csymbol = "all",
@@ -254,7 +254,8 @@ cir_query <- function(identifier, representation = "smiles",
 #'         hcolor = "purple",
 #'         header = "My funky chemical structure..",
 #'         footer = "..is just so awesome!",
-#'         frame = 1)
+#'         frame = 1,
+#'         verbose = TRUE)
 #'}
 #' @export
 #'
@@ -306,71 +307,93 @@ cir_img <- function(query,
     baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
     qurl <- paste(baseurl, query, "image", sep = "/")
     # options
-    opts <-
-  c(
-    format = format,
-    width = width,
-    height = height,
-    linewidth = linewidth,
-    symbolfontsize = symbolfontsize,
-    bgcolor = bgcolor,
-    antialiasing = as.numeric(antialiasing),
-    atomcolor = atomcolor,
-    bondcolor = bondcolor,
-    csymbol = csymbol,
-    hsymbol = hsymbol,
-    hcolor = hcolor,
-    header = header,
-    footer = footer,
-    frame = frame
-  )
-
-opts <- paste0(names(opts), "=", opts)
-opts <- paste0(opts, collapse = "&")
-opts <- paste0("?", opts)
+    if (!is.null(format))
+      format <- paste0("format=", format)
+    if (!is.null(width))
+      width <- paste0("width=", width)
+    if (!is.null(height))
+      height <- paste0("height=", height)
+    if (!is.null(linewidth))
+      linewidth <- paste0("linewidth=", linewidth)
+    if (!is.null(symbolfontsize))
+      symbolfontsize <- paste0("symbolfontsize=", symbolfontsize)
+    if (!is.null(bgcolor))
+      bgcolor <- paste0("bgcolor=", bgcolor)
+    if (!is.null(antialiasing))
+      antialiasing <- paste0("antialiasing=", as.numeric(antialiasing))
+    if (!is.null(atomcolor))
+      atomcolor <- paste0("atomcolor=", atomcolor)
+    if (!is.null(bondcolor))
+      bondcolor <- paste0("bondcolor=", bondcolor)
+    if (!is.null(csymbol))
+      csymbol <- paste0("csymbol=", csymbol)
+    if (!is.null(hsymbol))
+      hsymbol <- paste0("hsymbol=", hsymbol)
+    if (!is.null(hcolor))
+      hcolor <- paste0("hcolor=", hcolor)
+    if (!is.null(header))
+      header <- paste0("header=\"", header, "\"")
+    if (!is.null(footer))
+      footer <- paste0("footer=\"", footer, "\"")
+    if (!is.null(frame))
+      frame <- paste0("frame=", frame)
+    opts <- c(format,
+              width,
+              height,
+              linewidth,
+              symbolfontsize,
+              bgcolor,
+              antialiasing,
+              atomcolor,
+              bondcolor,
+              csymbol,
+              hsymbol,
+              hcolor,
+              header,
+              footer,
+              frame)
+    opts <- paste0(opts, collapse = "&")
+    opts <- paste0("?", opts)
     # url
     qurl <- URLencode(paste0(qurl, opts))
-    # query
-    if (verbose)
-      message("Querying: ", query, "\n", qurl)
-    Sys.sleep(1.5)
     path <- file.path(dir, paste0(query, ".", sub('format=', '', format)))
-    message("Image saved under: ", path)
-    # return image
-    h <- try(
-      RETRY("GET",
-            qurl,
-            write_disk(path, overwrite = TRUE))
-    )
-    if (inherits(h, "try-error")) {
-      warning("Problem with web service encountered... Returning NA.")
-      return(data.frame(query = query, stringsAsFactors = FALSE))
-    } else {
-      # return paths data.frame
-      data.frame(query = query,
-                 path = path,
-                 url = qurl,
-                 stringsAsFactors = FALSE)
+    # query
+    Sys.sleep(1)
+    if (verbose)
+      message(paste0("Querying ", query, ". "), appendLF = TRUE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       quiet = TRUE,
+                       terminate_on = 404,
+                       httr::write_disk(path, overwrite = TRUE))
+    if (verbose) {
+      message(httr::message_for_status(res))
+      if (httr::status_code(res) == 404) {
+        file.remove(path)
+      } else {
+        message("Image saved under: ", path)
+      }
     }
   }
-  out <- lapply(query,
-                foo,
-                dir = dir,
-                format = format,
-                width = width,
-                height = height,
-                linewidth = linewidth,
-                symbolfontsize = symbolfontsize,
-                bgcolor = bgcolor,
-                antialiasing = antialiasing,
-                atomcolor = atomcolor,
-                bondcolor = bondcolor,
-                csymbol = csymbol,
-                hsymbol = hsymbol,
-                hcolor = hcolor,
-                header = header,
-                footer = footer,
-                frame = frame,
-                verbose = verbose)
-  dplyr::bind_rows(out)
+  invisible(
+    lapply(query,
+           foo,
+           dir = dir,
+           format = format,
+           width = width,
+           height = height,
+           linewidth = linewidth,
+           symbolfontsize = symbolfontsize,
+           bgcolor = bgcolor,
+           antialiasing = antialiasing,
+           atomcolor = atomcolor,
+           bondcolor = bondcolor,
+           csymbol = csymbol,
+           hsymbol = hsymbol,
+           hcolor = hcolor,
+           header = header,
+           footer = footer,
+           frame = frame,
+           verbose = verbose)
+  )
 }
