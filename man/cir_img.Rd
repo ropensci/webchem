@@ -105,7 +105,7 @@ cir_img(query, dir = tempdir(), bgcolor = "transparent", antialising = 0)
 query  = "Triclosan"
 cir_img(query,
         dir = tempdir(),
-        format = "gif",
+        format = "png",
         width = 600,
         height = 600,
         linewidth = 5,

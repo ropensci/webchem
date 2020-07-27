@@ -240,7 +240,7 @@ cir_query <- function(identifier, representation = "smiles",
 #' query  = "Triclosan"
 #' cir_img(query,
 #'         dir = tempdir(),
-#'         format = "gif",
+#'         format = "png",
 #'         width = 600,
 #'         height = 600,
 #'         linewidth = 5,
@@ -280,7 +280,7 @@ cir_img <- function(query,
                     ...) {
   # check
   if (is.null(dir))
-    stop('Please provide a directory (dir =) to save the images.')
+    stop("Please provide a directory (dir =) to save the images.")
   format <- match.arg(format)
   csymbol <- match.arg(csymbol, c("special", "all"))
   hsymbol <- match.arg(hsymbol, c("special", "all"))
@@ -356,44 +356,44 @@ cir_img <- function(query,
     opts <- paste0("?", opts)
     # url
     qurl <- URLencode(paste0(qurl, opts))
-    path <- file.path(dir, paste0(query, ".", sub('format=', '', format)))
+    path <- file.path(dir, paste0(query, ".", sub("format=", "", format)))
     # query
     Sys.sleep(1)
     if (verbose)
-      message(paste0("Querying ", query, ". "), appendLF = TRUE)
+      message(paste0("Querying ", query, ". "), appendLF = FALSE)
     res <- httr::RETRY("GET",
                        qurl,
                        quiet = TRUE,
                        terminate_on = 404,
                        httr::write_disk(path, overwrite = TRUE))
     if (verbose) {
-      message(httr::message_for_status(res))
+      message(httr::message_for_status(res), " ", appendLF = FALSE)
       if (httr::status_code(res) == 404) {
         file.remove(path)
+        message("No image saved.")
       } else {
         message("Image saved under: ", path)
       }
     }
   }
-  invisible(
-    lapply(query,
-           foo,
-           dir = dir,
-           format = format,
-           width = width,
-           height = height,
-           linewidth = linewidth,
-           symbolfontsize = symbolfontsize,
-           bgcolor = bgcolor,
-           antialiasing = antialiasing,
-           atomcolor = atomcolor,
-           bondcolor = bondcolor,
-           csymbol = csymbol,
-           hsymbol = hsymbol,
-           hcolor = hcolor,
-           header = header,
-           footer = footer,
-           frame = frame,
-           verbose = verbose)
-  )
+  for (i in query) {
+    foo(query = i,
+        dir = dir,
+        format = format,
+        width = width,
+        height = height,
+        linewidth = linewidth,
+        symbolfontsize = symbolfontsize,
+        bgcolor = bgcolor,
+        antialiasing = antialiasing,
+        atomcolor = atomcolor,
+        bondcolor = bondcolor,
+        csymbol = csymbol,
+        hsymbol = hsymbol,
+        hcolor = hcolor,
+        header = header,
+        footer = footer,
+        frame = frame,
+        verbose = verbose)
+  }
 }
