@@ -368,7 +368,7 @@ cir_img <- function(query,
                        httr::write_disk(path, overwrite = TRUE))
     if (verbose) {
       message(httr::message_for_status(res), " ", appendLF = FALSE)
-      if (httr::status_code(res) == 404) {
+      if (httr::http_error(res) && file.exists(path)) {
         file.remove(path)
         message("No image saved.")
       } else {
