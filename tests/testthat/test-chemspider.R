@@ -78,7 +78,7 @@ test_that("get_csid() works with defaults", {
   a <- get_csid("Triclosan")
   b <- get_csid("Naproxene")
   ab <- get_csid(c("Triclosan", "Naproxene"))
-  abcd <- get_csid(c("ethanol", "balloon", NA, "acetic acid"))
+  abcd <- get_csid(c("ethanol", "balloon", NA, "acetic acid"), match = "first")
 
   expect_is(a, "data.frame")
   expect_equal(a$csid, 5363)
@@ -121,6 +121,15 @@ test_that("get_csid() works with arguments passed to cs_control()", {
   c8 <- head(get_csid("iron oxide", from = "name", order_by = "molecularWeight",
                       order_direction = "descending"))
   expect_equal(c8$csid, c(4937312, 55474, 14147, 452497, 82623, 392353))
+})
+
+test_that("get_csid() handles special characters in SMILES", {
+  skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
+  expect_equal(get_csid("C#C", from = "smiles")$csid, 6086)
 })
 
 test_that("cs_smiles_csid()", {
@@ -256,6 +265,17 @@ test_that("cs_convert()", {
   expect_length(h2_rev, 2)
 })
 
+test_that("cs_convert() handles special characters in SMILES", {
+  skip_on_cran()
+  skip_on_appveyor()
+  skip_on_travis()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
+
+  expect_equal(cs_convert("C#C", from = "smiles", to = "csid"), 6086)
+  expect_equal(cs_convert("C#C", from = "smiles", to = "inchi"),
+               "InChI=1/C2H2/c1-2/h1-2H")
+})
+
 test_that("cs_compinfo()", {
   skip_on_cran()
   skip_on_appveyor()
@@ -284,6 +304,7 @@ test_that("cs_img()", {
   skip_on_cran()
   skip_on_travis()
   skip_on_appveyor()
+  skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
 

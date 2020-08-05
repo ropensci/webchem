@@ -71,6 +71,13 @@ test_that("get_cid()", {
                        domain = "substance")$cid[1], "102361739")
 })
 
+test_that("get_cid() handles special characters in SMILES", {
+  skip_on_cran()
+  skip_if_not(up, "PubChem service is down")
+
+  expect_equal(get_cid("C#C", from = "smiles")$cid, "6326")
+})
+
 test_that("pc_prop", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
