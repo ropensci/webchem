@@ -4,6 +4,7 @@
 #'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
 #'
 #' @import xml2
+#' @importFrom httr RETRY message_for_status
 #' @importFrom utils URLencode
 #'
 #' @param identifier character; chemical identifier.
@@ -125,32 +126,30 @@ cir_query <- function(identifier, representation = "smiles",
   match <- match.arg(match)
   foo <- function(identifier, representation, resolver, first, verbose) {
     if (is.na(identifier)) {
+      if (verbose) message("Query is NA. Returning NA.")
       return(NA)
-    } else {
-      identifier <- URLencode(identifier, reserved = TRUE)
-      baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
-      qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
-
-      if (!is.null(resolver)) {
-        qurl <- paste0(qurl, '?resolver=', resolver)
-      }
-      if (verbose)
-        message(qurl)
-      Sys.sleep(1.5)
-      h <- try(GET(qurl, timeout(5)))
-      if (inherits(h, "try-error")) {
-        warning('Problem with web service encountered... Returning NA.')
-        return(NA)
-      } else {
-        tt <- read_xml(content(h, as = 'raw'))
-        out <- xml_text(xml_find_all(tt, '//item'))
-      }
+    }
+    if (verbose) {
+      message(paste0("Querying ", identifier, ". "), appendLF = FALSE)
+    }
+    identifier <- URLencode(identifier, reserved = TRUE)
+    baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
+    qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
+    if (!is.null(resolver)) {
+      qurl <- paste0(qurl, '?resolver=', resolver)
+    }
+    Sys.sleep(1.5)
+    h <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    if (h$status_code == 200){
+      tt <- read_xml(content(h, as = 'raw'))
+      out <- xml_text(xml_find_all(tt, '//item'))
       if (length(out) == 0) {
-        message('No representation found... Returning NA.')
+        if (verbose) message(paste0(httr::message_for_status(h),
+                                    " Not found. Returning NA."))
         return(NA)
       }
+      if (verbose) message(httr::message_for_status(h))
       out <- matcher(out, query = identifier, match = match, verbose = verbose)
-      # convert to numeric
       if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
                                 'h_bond_acceptor_count', 'h_bond_center_count',
                                 'rule_of_5_violation_count', 'rotor_count',
@@ -160,6 +159,10 @@ cir_query <- function(identifier, representation = "smiles",
                                 'protonable_group_count') )
         out <- as.numeric(out)
       return(out)
+    }
+    else {
+      if (verbose) message(httr::message_for_status(h))
+      return(NA)
     }
   }
   out <- lapply(identifier, foo, representation = representation,
