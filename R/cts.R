@@ -2,6 +2,7 @@
 #'
 #' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import jsonlite
+#' @importFrom httr RETRY message_for_status
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
 #' @param query character; InChIkey.
@@ -33,25 +34,33 @@
 #' }
 cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
   if (!missing(inchikey)) {
-    warning('"inchikey" is deprecated.  Please use "query" instead.')
+    message('"inchikey" is deprecated.  Please use "query" instead.')
     query <- inchikey
   }
   match.arg(from)
   foo <- function(query, verbose) {
-    if (!is.inchikey(query)) {
-      stop('Input is not a valid inchikey!')
+    if (is.na(query)) {
+      if (verbose) message("Query is NA. Returning NA.")
+      return(NA)
+    }
+    if(verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if (!is.inchikey(query, verbose = verbose)) {
+      if (verbose) message("Input is not a valid inchikey.")
+      return(NA)
     }
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
     qurl <- paste0(baseurl, '/', query)
-    if (verbose)
-      message(qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    out <- try(fromJSON(qurl), silent = TRUE)
-    if (inherits(out, "try-error")) {
-      warning('Not found... Returning NA.')
+    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    out <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    if (out$status_code == 200) {
+      if (verbose) message(httr::message_for_status(out))
+      out <- jsonlite::fromJSON(rawToChar(out$content))
+      return(out)
+    }
+    else {
+      if (verbose) message(httr::message_for_status(out))
       return(NA)
     }
-    return(out)
   }
   out <- lapply(query, foo, verbose = verbose)
   out <- setNames(out, query)
@@ -64,6 +73,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #'
 #' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import RCurl jsonlite
+#' @importFrom httr RETRY message_for_status
 #' @importFrom utils URLencode
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
@@ -137,31 +147,37 @@ cts_convert <- function(query,
   }
 
   foo <- function(query, from, to, first, verbose){
-    if (is.na(query)) return(NA)
+    if (is.na(query)) {
+      if (verbose) message("Query is NA. Returning NA.")
+      return(NA)
+    }
+    if(verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
     query <- URLencode(query, reserved = TRUE)
     from <- URLencode(from, reserved = TRUE)
     to <- URLencode(to, reserved = TRUE)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
-    if (verbose)
-      message(qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    out <- try(fromJSON(qurl), silent = TRUE)
-    if (inherits(out, "try-error")) {
-      warning('Not found... Returning NA.')
+    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    res <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    if (res$status_code == 200) {
+      out <- jsonlite::fromJSON(rawToChar(res$content))
+      if (length(out$result[[1]]) == 0) {
+        if (verbose) message(paste0(httr::message_for_status(res),
+                                    " Not found. Returning NA."))
+        return(NA)
+      }
+      if (verbose) message(httr::message_for_status(res))
+      out <- out$result[[1]]
+      out <- matcher(out, match = match, query = query, verbose = verbose)
+      return(out)
+    }
+    else {
+      if (verbose) message(httr::message_for_status(out))
       return(NA)
     }
-    if (length(out$result[[1]]) == 0) {
-        message("Not found. Returning NA.")
-        return(NA)
-    }
-    out <- out$result[[1]]
-    out <- matcher(out, match = match, query = query, verbose = verbose)
-    return(out)
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
-
   return(out)
 }
 
