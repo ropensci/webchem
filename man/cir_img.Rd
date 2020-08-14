@@ -6,7 +6,7 @@
 \usage{
 cir_img(
   query,
-  dir = NULL,
+  dir,
   format = c("png", "gif"),
   width = 500,
   height = 500,

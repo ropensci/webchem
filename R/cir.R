@@ -260,7 +260,7 @@ cir_query <- function(identifier, representation = "smiles",
 #' @export
 #'
 cir_img <- function(query,
-                    dir = NULL,
+                    dir,
                     format = c("png", "gif"),
                     width = 500,
                     height = 500,
@@ -279,8 +279,9 @@ cir_img <- function(query,
                     verbose = TRUE,
                     ...) {
   # check
-  if (is.null(dir))
-    stop("Please provide a directory (dir =) to save the images.")
+  if (anyNA(query) || any(query == '')) {
+    stop('NA or empty string provided.')
+  }
   format <- match.arg(format)
   csymbol <- match.arg(csymbol, c("special", "all"))
   hsymbol <- match.arg(hsymbol, c("special", "all"))
