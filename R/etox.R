@@ -4,6 +4,7 @@
 #' Targets \url{https://webetox.uba.de/webETOX/index.do} for their substance ID
 #'
 #' @import xml2 httr
+#' @importFrom httr RETRY message_for_status
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
 #' @importFrom tibble tibble
@@ -63,14 +64,11 @@ get_etoxid <- function(query,
     warning("match = 'best' only makes sense when querying chemical names. ")
   }
   foo <- function(query, from, match, verbose) {
-    on.exit(suppressWarnings(closeAllConnections()))
-
     if (is.na(query)) {
       empty <- list(query = NA, match = NA, etoxid = NA)
       return(empty)
     }
-    if (verbose)
-      message("Searching ", query)
+    if(verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
     if (from == 'name') {
       body <- list("stoffname.selection[0].name" = query,
@@ -86,33 +84,43 @@ get_etoxid <- function(query,
                    'stoffnummer.selection[0].type' = type,
                    event = "Search")
     }
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-    h <- POST(url = baseurl,
-              handle = handle(''),
-              body = body)
-    tt <- read_html(h)
-    subs <- clean_char(xml_text(xml_find_all(
-      tt, "//*/table[@class = 'listForm resultList']//a")))[-1]
-    if (length(subs) == 0) {
-      if (verbose)
-        message("Substance not found! Returning NA.")
-      hit <- tibble("query" = query,
-                    "match" = NA,
-                    "etoxid" = NA)
-      return(hit)
-    } else {
-      links <- xml_attr(xml_find_all(
-        tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
+    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    h <- httr::RETRY("POST",
+                    url = baseurl,
+                    handle = handle(''),
+                    body = body,
+                    terminate_on = 404,
+                    quiet = TRUE)
+    if (h$status_code == 200) {
+      tt <- read_html(h)
+      subs <- clean_char(xml_text(xml_find_all(
+        tt, "//*/table[@class = 'listForm resultList']//a")))[-1]
+      if (length(subs) == 0) {
+        if (verbose) message(paste0(httr::message_for_status(h),
+                                    " Not found. Returning NA."))
+        hit <- tibble("query" = query,
+                      "match" = NA,
+                      "etoxid" = NA)
+        return(hit)
+      } else {
+        if (verbose) message(httr::message_for_status(h))
+        links <- xml_attr(xml_find_all(
+          tt, "//*/table[@class = 'listForm resultList']//a"), "href")[-1]
 
-      subs_names <- gsub(" \\(.*\\)", "", subs)
-      id <- gsub("^.*\\?id=(.*)", "\\1", links)
+        subs_names <- gsub(" \\(.*\\)", "", subs)
+        id <- gsub("^.*\\?id=(.*)", "\\1", links)
 
-      out <- matcher(id, query = query, result = subs_names, match = match)
+        out <- matcher(id, query = query, result = subs_names, match = match)
 
-      hit <- tibble("query" = query,
-                    "match" = names(out),
-                    "etoxid" = out)
-      return(hit)
+        hit <- tibble("query" = query,
+                      "match" = names(out),
+                      "etoxid" = out)
+        return(hit)
+      }
+    }
+    else {
+      if (verbose) message(httr::message_for_status(h))
+      return(list(query = NA, match = NA, etoxid = NA))
     }
   }
   out <- lapply(query, foo, from = from, match = match, verbose = verbose)
