@@ -81,7 +81,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 
     qurl <- paste0("http://www.alanwood.net/pesticides/", takelink)
     Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
-    res <- httr::RETRY("GET", qurl, terminate_on = 404)
+    res <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
     if (res$status_code == 200){
       if (verbose) message(httr::message_for_status(res))
       ttt <- read_html(res)
@@ -180,7 +180,9 @@ build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
       message("Building index. ", appendLF = FALSE)
     }
     res <- httr::RETRY("GET",
-                       "http://www.alanwood.net/pesticides/index_rn.html")
+                       "http://www.alanwood.net/pesticides/index_rn.html",
+                       terminate_on = 404,
+                       quiet = TRUE)
     if (res$status_code == 200){
       idx1 <- read_html("http://www.alanwood.net/pesticides/index_rn.html")
       prep_idx <- function(y) {
