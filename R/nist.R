@@ -5,9 +5,11 @@
 #' @param type what kind of RI
 #' @param polarity polar or non-polar
 #' @param temp_prog what kind of temperature program
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @noRd
 #' @import rvest
 #' @import xml2
+#' @importFrom httr RETRY user_agent message_for_status
 #' @return an xml nodeset
 #'
 get_ri_xml <-
@@ -15,9 +17,8 @@ get_ri_xml <-
            from,
            type,
            polarity,
-           temp_prog) {
-    on.exit(suppressWarnings(closeAllConnections()))
-
+           temp_prog,
+           verbose) {
     from_str <- (switch(
       from,
       "name" = "Name",
@@ -30,6 +31,7 @@ get_ri_xml <-
 
     #handle NAs
     if (is.na(query)) {
+      if (verbose) message(webchem_string("na"))
       return(NA)
     } else {
       if (from == "cas") {
@@ -37,69 +39,86 @@ get_ri_xml <-
       } else {
         qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
         Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-        page <- httr::with_config(
-          user_agent('webchem (https://github.com/ropensci/webchem)'),
-          xml2::read_html(qurl)
-        )
+        if (verbose) message(webchem_string("query", query), appendLF = FALSE)
+        res <- httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_string("webchem")),
+                           terminate_on = 404,
+                           quiet = TRUE)
+        if (res$status_code == 200) {
+          if (verbose) message(httr::message_for_status(res), appendLF = FALSE)
+          page <- xml2::read_html(res)
 
-        #Warnings
-        result <- page %>%
-          html_node("main h1") %>%
-          html_text()
-        # if cquery not found
-        if (stringr::str_detect(result, "Not Found")) {
-          warning(paste0("'", query, "' not found. Returning NA."))
-          ri_xml <- tibble(query = query)
+          #Warnings
+          result <- page %>%
+            html_node("main h1") %>%
+            html_text()
+          # if cquery not found
+          if (stringr::str_detect(result, "Not Found")) {
+            if (verbose) message(webchem_string("not_found"), appendLF = FALSE)
+            ri_xml <- tibble(query = query)
+          }
+          # if more than one compound found
+          if (result == "Search Results") {
+            message(paste0(" More than one match for '", query,
+                           "'. Returning NA."))
+            return(NA)
+          }
+          links <-
+            page %>%
+            rvest::html_nodes("li li a") %>%
+            rvest::html_attr("href")
+
+          gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
+
+          if (length(gaschrom) == 0) {
+            if (verbose) message(webchem_string("not_available"))
+            return(NA)
+          } else {
+            if (verbose) message(" CAS found. ", appendLF = FALSE)
+            ID <- stringr::str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+          }
         }
-        # if more than one compound found
-        if (result == "Search Results") {
-          warning(paste0("More than one match for '", query,
-                         "'. Returning NA."))
+        else {
+          if (verbose) message(httr::message_for_status(res))
           return(NA)
-        }
-        links <-
-          page %>%
-          rvest::html_nodes("li li a") %>%
-          rvest::html_attr("href")
-
-        gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
-
-        if (length(gaschrom) == 0) {
-          warning(paste0(
-            "There are no chromatography data for '",
-            query,
-            "'. Returning NA."
-          ))
-          return(NA)
-        } else {
-          ID <- stringr::str_extract(gaschrom, "(?<=ID=).+?(?=&)")
         }
       }
       #scrape RI table
       type_str <- toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
 
       qurl <- paste0(baseurl, "?ID=", ID, "&Units-SI&Mask=2000&Type=", type_str)
-
       Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-      page <-
-        httr::with_config(
-          user_agent('webchem (https://github.com/ropensci/webchem)'),
-          xml2::read_html(qurl)
-        )
-      ri_xml.all <- html_nodes(page, ".data")
+      if (verbose) {
+        if (from == "cas") {
+          message(webchem_string("query", query), appendLF = FALSE)
+        }
+        else {
+          message(webchem_string("query", ID), appendLF = FALSE)
+        }
+      }
+      res2 <- httr::RETRY(
+        "GET",
+        qurl,
+        httr::user_agent(webchem_string("webchem")),
+        terminate_on = 404,
+        quiet = TRUE)
+      if (res2$status_code == 200) {
+        if (verbose) message(httr::message_for_status(res2), appendLF = FALSE)
+        page <- xml2::read_html(res2)
+        ri_xml.all <- html_nodes(page, ".data")
 
-      #Warn if table doesn't exist at URL
-      if (length(ri_xml.all) == 0) {
-        warning(paste0(
-          "There are no RIs for ",
-          query,
-          " of type ",
-          type_str,
-          ". Returning NA."
-        ))
+        #message if table doesn't exist at URL
+        if (length(ri_xml.all) == 0) {
+          if (verbose) message(webchem_string("not_available"))
+          return(NA)
+        } else {
+          ri_xml <- ri_xml.all
+        }
+      }
+      else {
+        if (verbose) message(httr::message_for_status(res))
         return(NA)
-      } else {
-        ri_xml <- ri_xml.all
       }
     }
     #set attributes to label what type of RI
@@ -107,6 +126,7 @@ get_ri_xml <-
     attr(ri_xml, "type") <- type
     attr(ri_xml, "polarity") <- polarity
     attr(ri_xml, "temp_prog") <- temp_prog
+    if (verbose) message("")
     return(ri_xml)
   }
 
@@ -251,6 +271,7 @@ tidy_ritable <- function(ri_xml) {
 #' @param temp_prog Temperature program. One of \code{"isothermal"},
 #'   \code{"ramp"}, or \code{"custom"}.
 #' @param cas deprecated.  Use \code{query} instead.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @details The types of retention indices included in NIST include Kovats
 #'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
 #'   (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
@@ -293,7 +314,8 @@ nist_ri <- function(query,
                     type = c("kovats", "linear", "alkane", "lee"),
                     polarity = c("polar", "non-polar"),
                     temp_prog = c("isothermal", "ramp", "custom"),
-                    cas = NULL) {
+                    cas = NULL,
+                    verbose = TRUE) {
 
   if (!is.null(cas)) {
     warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
@@ -314,7 +336,8 @@ nist_ri <- function(query,
         from = from,
         type = type,
         polarity = polarity,
-        temp_prog = temp_prog
+        temp_prog = temp_prog,
+        verbose = verbose
       )
     )
 
@@ -324,6 +347,5 @@ nist_ri <- function(query,
 
   ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
     dplyr::mutate(query = na_if(query, ".NA"))
-
   return(ri_tables)
 }

@@ -4,7 +4,7 @@
 #' Targets \url{https://webetox.uba.de/webETOX/index.do} for their substance ID
 #'
 #' @import xml2 httr
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
 #' @importFrom tibble tibble
@@ -87,6 +87,7 @@ get_etoxid <- function(query,
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     h <- httr::RETRY("POST",
                     url = baseurl,
+                    httr::user_agent(webchem_string("webchem")),
                     handle = handle(''),
                     body = body,
                     terminate_on = 404,
@@ -137,7 +138,7 @@ get_etoxid <- function(query,
 #' @import xml2
 #' @importFrom rvest html_table
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
@@ -180,7 +181,11 @@ etox_basic <- function(id, verbose = TRUE) {
     qurl <- paste0(baseurl, id)
     if(verbose) message(paste0("Querying ", id, ". "), appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1 / 10))
-    res <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       httr::user_agent(webchem_string("webchem")),
+                       terminate_on = 404,
+                       quiet = TRUE)
     if (res$status_code == 200) {
       if (verbose) message(httr::message_for_status(res), appendLF = FALSE)
       tt <- try(read_html(res), silent = TRUE)
@@ -258,7 +263,7 @@ etox_basic <- function(id, verbose = TRUE) {
 #' @import xml2 RCurl
 #' @importFrom utils read.table
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
@@ -295,7 +300,11 @@ etox_targets <- function(id, verbose = TRUE) {
     qurl <- paste0(baseurl, id)
     if(verbose) message(paste0("Querying ", id, ". "), appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       httr::user_agent(webchem_string("webchem")),
+                       terminate_on = 404,
+                       quiet = TRUE)
     if(res$status_code == 200){
       if (verbose) message(httr::message_for_status(res), appendLF = FALSE)
       tt <- try(read_html(res), silent = TRUE)
@@ -355,7 +364,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' @import xml2 RCurl
 #' @importFrom utils read.table
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'

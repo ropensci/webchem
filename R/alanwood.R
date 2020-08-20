@@ -4,7 +4,7 @@
 #' \url{http://www.alanwood.net/pesticides}
 #' @import xml2
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #'
 #' @param  query character; search string
 #' @param from character; type of input ('cas' or 'name')
@@ -81,7 +81,11 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 
     qurl <- paste0("http://www.alanwood.net/pesticides/", takelink)
     Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
-    res <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       httr::user_agent(webchem_string("webchem")),
+                       terminate_on = 404,
+                       quiet = TRUE)
     if (res$status_code == 200){
       if (verbose) message(httr::message_for_status(res))
       ttt <- read_html(res)
@@ -159,7 +163,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 #' \url{http://www.alanwood.net/pesticides} and saves it to
 #' \code{\link{tempdir}}.
 #' @import xml2
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index?
 #' @return a data.frame
@@ -181,6 +185,7 @@ build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
     }
     res <- httr::RETRY("GET",
                        "http://www.alanwood.net/pesticides/index_rn.html",
+                       httr::user_agent(webchem_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200){

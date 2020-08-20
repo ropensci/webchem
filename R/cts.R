@@ -2,7 +2,7 @@
 #'
 #' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import jsonlite
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
 #' @param query character; InChIkey.
@@ -51,7 +51,11 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
     qurl <- paste0(baseurl, '/', query)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    out <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    out <- httr::RETRY("GET",
+                       qurl,
+                       httr::user_agent(webchem_string("webchem")),
+                       terminate_on = 404,
+                       quiet = TRUE)
     if (out$status_code == 200) {
       if (verbose) message(httr::message_for_status(out))
       out <- jsonlite::fromJSON(rawToChar(out$content))
@@ -73,7 +77,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #'
 #' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import RCurl jsonlite
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom utils URLencode
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
@@ -158,7 +162,11 @@ cts_convert <- function(query,
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       httr::user_agent(webchem_string("webchem")),
+                       terminate_on = 404,
+                       quiet = TRUE)
     if (res$status_code == 200) {
       out <- jsonlite::fromJSON(rawToChar(res$content))
       if (length(out$result[[1]]) == 0) {

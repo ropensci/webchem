@@ -504,3 +504,14 @@ matcher <-
       }
     }
   }
+
+#' webchem messages
+#'
+webchem_string <- function(action = c("na", "query", "not_found"), ...) {
+  switch(action,
+         na = "Query is NA. Returning NA.",
+         query = paste0("Querying ", ..., ". "),
+         not_found = " Not found. Returning NA.",
+         not_available = " Not available. Returning NA.",
+         webchem = "https://cran.r-project.org/web/packages/webchem/index.html")
+}

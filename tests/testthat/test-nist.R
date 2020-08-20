@@ -9,19 +9,6 @@ test_that("NIST webbook is still OK with being scraped", {
     )
 })
 
-test_that("nist_ri() warns when no results", {
-  skip_on_cran()
-  skip_if_not(up, "NIST Web Book is down")
-
-  expect_warning(nist_ri(
-    "78-70-6",
-    from = "cas",
-    type = "linear",
-    polarity = "non-polar"
-  ),
-  regexp = "There are no RIs for 78-70-6")
-})
-
 test_that("nist_ri() works when only one row of data", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
@@ -108,25 +95,6 @@ test_that("nist_ri() works with multiple queries", {
       temp_prog = "ramp"
     )
   expect_equivalent(unique(myRIs$query), c("78-70-6", "13474-59-4"))
-})
-
-test_that("nist_ri() warns when multiple results", {
-  skip_on_cran()
-  skip_if_not(up, "NIST Web Book is down")
-
-  expect_warning(
-    nist_ri("Longipinene", from = "name"),
-    "More than one match for 'Longipinene'. Returning NA.")
-})
-
-test_that("nist_ri() warns when no chromatography data", {
-  skip_on_cran()
-  skip_if_not(up, "NIST Web Book is down")
-
-  expect_warning(
-    nist_ri("methane", from = "name"),
-    "There are no chromatography data for 'methane'. Returning NA."
-  )
 })
 
 test_that("cas =  is deprecated gently", {

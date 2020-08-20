@@ -4,7 +4,7 @@
 #'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
 #'
 #' @import xml2
-#' @importFrom httr RETRY message_for_status
+#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom utils URLencode
 #'
 #' @param identifier character; chemical identifier.
@@ -139,7 +139,11 @@ cir_query <- function(identifier, representation = "smiles",
       qurl <- paste0(qurl, '?resolver=', resolver)
     }
     Sys.sleep(1.5)
-    h <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    h <- httr::RETRY("GET",
+                     qurl,
+                     httr::user_agent(webchem_string("webchem")),
+                     terminate_on = 404,
+                     quiet = TRUE)
     if (h$status_code == 200){
       tt <- read_xml(content(h, as = 'raw'))
       out <- xml_text(xml_find_all(tt, '//item'))
