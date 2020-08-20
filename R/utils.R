@@ -507,7 +507,12 @@ matcher <-
 
 #' webchem messages
 #'
-webchem_string <- function(action = c("na", "query", "not_found"), ...) {
+webchem_string <- function(action = c("na",
+                                      "query",
+                                      "not_found",
+                                      "not_available",
+                                      "webchem"),
+                           ...) {
   switch(action,
          na = "Query is NA. Returning NA.",
          query = paste0("Querying ", ..., ". "),
