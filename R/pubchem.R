@@ -171,12 +171,10 @@ get_cid <-
     match <- match.arg(match)
     foo <- function(query, from, domain, match, verbose, arg, ...) {
       if (is.na(query)) {
-        if (verbose) message(paste0(query, " is invalid. Returning NA."))
+        if (verbose) message(webchem_string("na"))
         return(NA)
       }
-      if (verbose) {
-        message(paste0("Querying ", query, ". "), appendLF = FALSE)
-      }
+      if (verbose) message(webchem_string("query", query), appendLF = FALSE)
       if (is.character(query)) query <- URLencode(query, reserved = TRUE)
       if (from %in% structure_search) {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
@@ -191,11 +189,19 @@ get_cid <-
       if (from == "inchi") {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
                       domain, from, "cids", "json", sep = "/")
-        res <- httr::POST(qurl, body = paste0("inchi=", query),
-                          user_agent("webchem"))
+        res <- httr::RETRY("POST",
+                           qurl,
+                           user_agent(webchem_string("webchem")),
+                           body = paste0("inchi=", query),
+                           terminate_on = 404,
+                           quiet = TRUE)
       }
       else {
-        res <- httr::POST(qurl, user_agent("webchem"))
+        res <- httr::RETRY("POST",
+                           qurl,
+                           user_agent(webchem_string("webchem")),
+                           terminate_on = c(202, 404),
+                           quiet = TRUE)
       }
       if (res$status_code != 200) {
         if (res$status_code == 202) {
@@ -205,7 +211,11 @@ get_cid <-
                         "listkey", listkey, "cids", "json", sep = "/")
           while (res$status_code == 202) {
             Sys.sleep(5 + rgamma(1, shape = 15, scale = 1 / 10))
-            res <- httr::POST(qurl, user_agent("webchem"))
+            res <- httr::RETRY("POST",
+                               qurl,
+                               user_agent(webchem_string("webchem")),
+                               terminate_on = 404,
+                               quiet = TRUE)
           }
           if (res$status_code != 200) {
             if (verbose) message(httr::message_for_status(res))
@@ -299,7 +309,10 @@ get_cid <-
 #' "CanonicalSMILES"))
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
-  # cid <- c("5564", "7843")
+  if (mean(is.na(cid)) == 1) {
+    if (verbose) message(webchem_string("na"))
+    return(NA)
+  }
   napos <- which(is.na(cid))
   cid_o <- cid
   cid <- cid[!is.na(cid)]
@@ -326,44 +339,49 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
   output <- paste0("/property/", properties, "/JSON")
 
   qurl <- paste0(prolog, input, output)
-  if (verbose)
-    message(qurl)
+  if (verbose) message(webchem_string("query_all"), appendLF = FALSE)
   Sys.sleep(0.2)
-  cont <- try(content(POST(qurl,
-                           body = list("cid" = paste(cid, collapse = ",")
-                                       )),
-                      type = "text", encoding = "UTF-8"),
-              silent = TRUE
-  )
-  if (inherits(cont, "try-error")) {
-    warning("Problem with web service encountered... Returning NA.")
-    return(NA)
-  }
-  cont <- fromJSON(cont)
-  if (names(cont) == "Fault") {
-    warning(cont$Fault$Message, ". ", cont$Fault$Details, ". Returning NA.")
-    return(NA)
-  }
-  out <- cont$PropertyTable[[1]]
-  # insert NA rows
-  narow <- rep(NA, ncol(out))
-  for (i in seq_along(napos)) {
-    #capture NAs at beginning
-    firstnna <- min(which(!is.na(cid_o)))
-    if (napos[i] <  firstnna) {
-      out <- rbind(narow, out)
-    } else {
-      # capture NAs at end
-      if (napos[i] > nrow(out)) {
-        # print(napos[i])
-        out <- rbind(out, narow)
-      } else {
-        out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
+  res <- httr::RETRY("POST",
+                     qurl,
+                     httr::user_agent(webchem_string("webchem")),
+                     body = list("cid" = paste(cid, collapse = ",")),
+                     terminate_on = 404,
+                     quiet = TRUE)
+  if (res$status_code == 200) {
+    if (verbose) httr::message_for_status(res)
+    cont <- jsonlite::fromJSON(rawToChar(res$content))
+    if (names(cont) == "Fault") {
+      if (verbose) {
+        message(cont$Fault$Message, ". ", cont$Fault$Details, ". Returning NA.")
       }
-    }}
-  rownames(out) <- NULL
-  class(out) <- c("pc_prop", "data.frame")
-  return(out)
+      return(NA)
+    }
+    out <- cont$PropertyTable[[1]]
+    # insert NA rows
+    narow <- rep(NA, ncol(out))
+    for (i in seq_along(napos)) {
+      #capture NAs at beginning
+      firstnna <- min(which(!is.na(cid_o)))
+      if (napos[i] <  firstnna) {
+        out <- rbind(narow, out)
+      } else {
+        # capture NAs at end
+        if (napos[i] > nrow(out)) {
+          # print(napos[i])
+          out <- rbind(out, narow)
+        } else {
+          out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
+        }
+      }}
+    rownames(out) <- NULL
+    class(out) <- c("pc_prop", "data.frame")
+    if (verbose) message("")
+    return(out)
+  }
+  else {
+    if (verbose) message(httr::message_for_status(res))
+    return(NA)
+  }
 }
 
 #' Search synonyms in pubchem
@@ -428,33 +446,40 @@ pc_synonyms <- function(query,
   if (!missing("choices"))
     stop("'choices' is deprecated. Use 'match' instead.")
   foo <- function(query, from, verbose, ...) {
-    if (is.na(query)) return(NA)
+    if (is.na(query)) {
+      if (verbose) message(webchem_string("na"))
+      return(NA)
+    }
     prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
     input <- paste0("/compound/", from)
     output <- "/synonyms/JSON"
     if (!is.null(arg))
       arg <- paste0("?", arg)
     qurl <- paste0(prolog, input, output, arg)
-    if (verbose)
-      message(qurl)
+    if (verbose) message(webchem_string("query", query), appendLF = FALSE)
     Sys.sleep(0.2)
-    cont <- try(content(POST(qurl,
-                             body = paste0(from, "=", query)
-    )), silent = TRUE
-    )
-    if (inherits(cont, "try-error")) {
-      warning("Problem with web service encountered... Returning NA.")
+    res <- httr::RETRY("POST",
+                       qurl,
+                       httr::user_agent(webchem_string("webchem")),
+                       body = paste0(from, "=", query),
+                       terminate_on = 404,
+                       quiet = TRUE)
+    if (res$status_code == 200){
+      if (verbose) message(httr::message_for_status(res))
+      cont <- httr::content(res)
+      if (names(cont) == "Fault") {
+        warning(cont$Fault$Details, ". Returning NA.")
+        return(NA)
+      }
+      out <- unlist(cont)[-1] #first result is always an ID number
+      names(out) <- NULL
+
+      out <- matcher(out, query = query, match = match, verbose = verbose)
+    }
+    else {
+      if (verbose) message(httr::message_for_status(res))
       return(NA)
     }
-    if (names(cont) == "Fault") {
-      warning(cont$Fault$Details, ". Returning NA.")
-      return(NA)
-    }
-    out <- unlist(cont)[-1] #first result is always an ID number
-    names(out) <- NULL
-
-    out <- matcher(out, query = query, match = match, verbose = verbose)
-
   }
   out <- lapply(query, foo, from = from, verbose = verbose)
   out <- setNames(out, query)
@@ -568,21 +593,21 @@ pc_page <- function(id,
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))
   foo <- function(id, section, domain) {
-    qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
-                   domain, "/", id, "/JSON?heading=", section)
-    if (verbose == TRUE) message("Searching ", id, ". ", appendLF = FALSE)
     if (is.na(id)) {
-      if (verbose == TRUE) {
-        message("Invalid input. Returning NA.")
-      }
+      if (verbose) message(webchem_string("na"))
       return(NA)
     }
+    qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
+                   domain, "/", id, "/JSON?heading=", section)
+    if (verbose) message(webchem_string("query", id), appendLF = FALSE)
     Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
-    res <- httr::POST(
-      qurl,
-      user_agent("webchem (https://github.com/ropensci/webchem)"))
-    if (res$status_code < 300) {
-      if (verbose == TRUE) message(httr::message_for_status(res))
+    res <- httr::RETRY("POST",
+                       qurl,
+                       user_agent(webchem_string("webchem")),
+                       terminate_on = 404,
+                       quiet = TRUE)
+    if (res$status_code == 200) {
+      if (verbose) message(httr::message_for_status(res))
       cont <- httr::content(res, type = "text", encoding = "UTF-8")
       cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
       tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
@@ -590,9 +615,7 @@ pc_page <- function(id,
       return(tree)
     }
     else {
-      if (verbose == TRUE) {
-        message(paste0(httr::message_for_status(res), " Returning NA."))
-      }
+      if (verbose) message(httr::message_for_status(res))
       return(NA)
     }
   }

@@ -461,28 +461,22 @@ matcher <-
     if(length(x) == 1) {
       return(x)
     } else {
-      if(verbose) {
-        message("More then one Link found for '", query, "'. \n")
-      }
+      if(verbose) message(" Multiple found. ", appendLF = FALSE)
 
       if(match == "all") {
-        if(verbose) {
-          message("Returning all matches. \n")
-        }
+        if(verbose) message("Returning all.")
         return(x)
+      }
 
-      } else if (match == "best") {
+      else if (match == "best") {
         #check that x and result are same length
         if(length(x) != length(result))
           stop("Can't use match = 'best' without query matches for each output")
-        if (verbose) {
-          message("Returning best match. \n")
-        }
+        if (verbose) message("Returning best.")
         dd <- adist(query, result) / nchar(result)
         return(x[which.min(dd)])
       } else if (match == "first") {
-        if (verbose)
-          message("Returning first match. \n")
+        if (verbose) message("Returning first.")
         return(x[1])
 
       } else if (match == "ask" & interactive()) {
@@ -495,9 +489,7 @@ matcher <-
         return(x[pick])
 
       } else if (match == "na") {
-        if (verbose) {
-          message("Returning NA. \n")
-        }
+        if (verbose) message("Returning NA.")
         x <- NA
         names(x)<-NA
         return(x)
@@ -509,6 +501,7 @@ matcher <-
 #'
 webchem_string <- function(action = c("na",
                                       "query",
+                                      "query_all",
                                       "not_found",
                                       "not_available",
                                       "webchem"),
@@ -516,6 +509,7 @@ webchem_string <- function(action = c("na",
   switch(action,
          na = "Query is NA. Returning NA.",
          query = paste0("Querying ", ..., ". "),
+         query_all = "Querying. ",
          not_found = " Not found. Returning NA.",
          not_available = " Not available. Returning NA.",
          webchem = "https://cran.r-project.org/web/packages/webchem/index.html")
