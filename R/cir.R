@@ -174,3 +174,238 @@ cir_query <- function(identifier, representation = "smiles",
   out <- setNames(out, identifier)
   return(out)
 }
+
+#' Query Chemical Identifier Resolver Images
+#'
+#' A interface to the Chemical Identifier Resolver (CIR).
+#'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
+#'
+#' @param query character; Search term. Can be any common chemical identifier
+#' (e.g. CAS, INCHI(KEY), SMILES etc.)
+#' @param dir character; Directory to save the image.
+#' @param format character; Format of the stored image. Can be on of TODO
+#' @param format character; Output format of the image. Can be one of "png",
+#' "gif".
+#' @param width integer; Width of the image.
+#' @param height integer; Height of the image.
+#' @param linewidth integer; Width of lines.
+#' @param symbolfontsize integer; Fontsize of atoms in the image.
+#' @param bgcolor character; E.g. transparent, white, \%23AADDEE
+#' @param antialiasing logical; Should antialiasing be used?
+#' @param atomcolor character; Color of the atoms in the image.
+#' @param bondcolor character; Color of the atom bond lines.
+#' @param csymbol character; Can be one of "special" (default - i.e. only
+#' hydrogen atoms in functional groups or defining stereochemistry) or "all".
+#' @param hsymbol character; Can be one of "special" (default - i.e. none are
+#' shown) or "all" (all are printed).
+#' @param hcolor character; Color of the hydrogen atoms.
+#' @param header character; Should a header text be added to the image? Can be
+#' any string.
+#' @param footer character; Should a footer text be added to the image? Can be
+#' any string.
+#' @param verbose logical; Should a verbose output be printed on the console?
+#' @param frame integer; Should a frame be plotted? Can be on of NULL (default)
+#' or 1.
+#' @param ... currently not used.
+#'
+#' @return image written to disk
+#' @details
+#'  CIR can resolve can be of the following \code{identifier}: Chemical Names,
+#'  IUPAC names,
+#'  CAS Numbers, SMILES strings, IUPAC InChI/InChIKeys, NCI/CADD Identifiers,
+#'  CACTVS HASHISY, NSC number, PubChem SID, ZINC Code, ChemSpider ID,
+#'  ChemNavigator SID, eMolecule VID.
+#'
+#'  For an image with transparent background use ‘transparent’ as color name and
+#'  switch off antialiasing (i.e. antialiasing = 0).
+#'
+# followed this blog post
+# https://cactus.nci.nih.gov/blog/?p=136
+#'
+#' @note You can only make 1 request per second (this is a hard-coded feature).
+#'
+#' @references
+#' \code{cir} relies on the great CIR web service created by the CADD
+#' Group at NCI/NIH! \cr
+#' \url{http://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
+#' \url{http://cactus.nci.nih.gov/blog/?cat=10}, \cr
+#' \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
+#' \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
+#'
+#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
+#'
+#' @examples
+#' \donttest{
+#' # might fail if API is not available
+#' cir_img("CCO", dir = tempdir()) # SMILES
+#'
+#' # multiple query strings and different formats
+#' query = c("Glyphosate", "Isoproturon", "BSYNRYMUTXBXSQ-UHFFFAOYSA-N")
+#' cir_img(query, dir = tempdir(), bgcolor = "transparent", antialising = 0)
+#'
+#' # all parameters
+#' query  = "Triclosan"
+#' cir_img(query,
+#'         dir = tempdir(),
+#'         format = "png",
+#'         width = 600,
+#'         height = 600,
+#'         linewidth = 5,
+#'         symbolfontsize = 30,
+#'         bgcolor = "red",
+#'         antialiasing = FALSE,
+#'         atomcolor = "green",
+#'         bondcolor = "yellow",
+#'         csymbol = "all",
+#'         hsymbol = "all",
+#'         hcolor = "purple",
+#'         header = "My funky chemical structure..",
+#'         footer = "..is just so awesome!",
+#'         frame = 1,
+#'         verbose = TRUE)
+#'}
+#' @export
+#'
+cir_img <- function(query,
+                    dir,
+                    format = c("png", "gif"),
+                    width = 500,
+                    height = 500,
+                    linewidth = 2,
+                    symbolfontsize = 16,
+                    bgcolor = NULL,
+                    antialiasing = TRUE,
+                    atomcolor = NULL,
+                    bondcolor = NULL,
+                    csymbol = c("special", "all"),
+                    hsymbol = c("special", "all"),
+                    hcolor = NULL,
+                    header = NULL,
+                    footer = NULL,
+                    frame = NULL,
+                    verbose = TRUE,
+                    ...) {
+  if (is.na(dir) || !dir.exists(dir)) {
+    stop('Directory does not exist.')
+  }
+  format <- match.arg(format)
+  csymbol <- match.arg(csymbol, c("special", "all"))
+  hsymbol <- match.arg(hsymbol, c("special", "all"))
+  foo <- function(query,
+                  dir,
+                  format,
+                  width,
+                  height,
+                  linewidth,
+                  symbolfontsize,
+                  bgcolor,
+                  antialiasing,
+                  atomcolor,
+                  bondcolor,
+                  csymbol,
+                  hsymbol,
+                  hcolor,
+                  header,
+                  footer,
+                  frame,
+                  verbose,
+                  ...) {
+    # check
+    if (is.na(query) || query == '') {
+      message('NA or empty string provided. Query skipped.')
+      return(NULL)
+    }
+    # prolog
+    baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
+    qurl <- paste(baseurl, query, "image", sep = "/")
+    # options
+    if (!is.null(format))
+      format <- paste0("format=", format)
+    if (!is.null(width))
+      width <- paste0("width=", width)
+    if (!is.null(height))
+      height <- paste0("height=", height)
+    if (!is.null(linewidth))
+      linewidth <- paste0("linewidth=", linewidth)
+    if (!is.null(symbolfontsize))
+      symbolfontsize <- paste0("symbolfontsize=", symbolfontsize)
+    if (!is.null(bgcolor))
+      bgcolor <- paste0("bgcolor=", bgcolor)
+    if (!is.null(antialiasing))
+      antialiasing <- paste0("antialiasing=", as.numeric(antialiasing))
+    if (!is.null(atomcolor))
+      atomcolor <- paste0("atomcolor=", atomcolor)
+    if (!is.null(bondcolor))
+      bondcolor <- paste0("bondcolor=", bondcolor)
+    if (!is.null(csymbol))
+      csymbol <- paste0("csymbol=", csymbol)
+    if (!is.null(hsymbol))
+      hsymbol <- paste0("hsymbol=", hsymbol)
+    if (!is.null(hcolor))
+      hcolor <- paste0("hcolor=", hcolor)
+    if (!is.null(header))
+      header <- paste0("header=\"", header, "\"")
+    if (!is.null(footer))
+      footer <- paste0("footer=\"", footer, "\"")
+    if (!is.null(frame))
+      frame <- paste0("frame=", frame)
+    opts <- c(format,
+              width,
+              height,
+              linewidth,
+              symbolfontsize,
+              bgcolor,
+              antialiasing,
+              atomcolor,
+              bondcolor,
+              csymbol,
+              hsymbol,
+              hcolor,
+              header,
+              footer,
+              frame)
+    opts <- paste0(opts, collapse = "&")
+    opts <- paste0("?", opts)
+    # url
+    qurl <- URLencode(paste0(qurl, opts))
+    path <- file.path(dir, paste0(query, ".", sub("format=", "", format)))
+    # query
+    Sys.sleep(1)
+    if (verbose)
+      message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       quiet = TRUE,
+                       terminate_on = 404,
+                       httr::write_disk(path, overwrite = TRUE))
+    if (verbose) {
+      message(httr::message_for_status(res), " ", appendLF = FALSE)
+      if (httr::http_error(res) && file.exists(path)) {
+        file.remove(path)
+        message("No image saved.")
+      } else {
+        message("Image saved under: ", path)
+      }
+    }
+  }
+  for (i in query) {
+    foo(query = i,
+        dir = dir,
+        format = format,
+        width = width,
+        height = height,
+        linewidth = linewidth,
+        symbolfontsize = symbolfontsize,
+        bgcolor = bgcolor,
+        antialiasing = antialiasing,
+        atomcolor = atomcolor,
+        bondcolor = bondcolor,
+        csymbol = csymbol,
+        hsymbol = hsymbol,
+        hcolor = hcolor,
+        header = header,
+        footer = footer,
+        frame = frame,
+        verbose = verbose)
+  }
+}
