@@ -278,9 +278,8 @@ cir_img <- function(query,
                     frame = NULL,
                     verbose = TRUE,
                     ...) {
-  # check
-  if (anyNA(query) || any(query == '')) {
-    stop('NA or empty string provided.')
+  if (is.na(dir) || !dir.exists(dir)) {
+    stop('Directory does not exist.')
   }
   format <- match.arg(format)
   csymbol <- match.arg(csymbol, c("special", "all"))
@@ -304,6 +303,11 @@ cir_img <- function(query,
                   frame,
                   verbose,
                   ...) {
+    # check
+    if (is.na(query) || query == '') {
+      message('NA or empty string provided. Query skipped.')
+      return(NULL)
+    }
     # prolog
     baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
     qurl <- paste(baseurl, query, "image", sep = "/")
