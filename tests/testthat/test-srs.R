@@ -14,14 +14,14 @@ test_that("SRS returns correct results", {
   e <- srs_query(c("50-00-0", "balloon", NA), from = "cas")
 
   #newline to be fixed
-  #expect_true(webchem_string("na") %in% a_messages)
+  #expect_true(standard_string("na") %in% a_messages)
   expect_true(is.na(a))
 
-  expect_true(webchem_string("query", "balloon") %in% b_messages)
+  expect_true(standard_string("query", "balloon") %in% b_messages)
   expect_true("Internal Server Error (HTTP 500)." %in% b_messages)
   expect_true(is.na(b))
 
-  expect_true(webchem_string("query", "50-00-0") %in% c_messages)
+  expect_true(standard_string("query", "50-00-0") %in% c_messages)
   expect_true("OK (HTTP 200)." %in% c_messages)
   expect_is(c, "list")
   expect_is(c$`50-00-0`, "data.frame")

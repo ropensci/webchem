@@ -73,7 +73,7 @@ pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', '
   match.arg(from) #not actually needed for this function to work
   foo <- function(query, match, verbose) {
     if (is.na(query)) {
-      if (verbose) message(webchem_string("na"))
+      if (verbose) message(standard_string("na"))
       return(NA)
     }
     baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
@@ -96,11 +96,11 @@ pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', '
                     'dEPAOrganoleptic=y&dCanAquaFWConc=y&dCanAquaMarineConc=y&',
                     'dIrrigConc=y&dLivestockConc=y&')
     qurl = paste0(baseurl, baseq, 'ChemName=', query)
-    if (verbose) message(webchem_string("query", query), appendLF = FALSE)
+    if (verbose) message(standard_string("query", query), appendLF = FALSE)
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       user_agent(webchem_string("webchem")),
+                       user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200) {
@@ -108,7 +108,7 @@ pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', '
       h <- xml2::read_html(res)
       nd <- xml_find_all(h, "//table[contains(.,'Detailed Info')]")
       if (length(nd) == 0) {
-        message(webchem_string("not_found"))
+        message(standard_string("not_found"))
         return(NA)
       }
       ttt <- html_table(nd)[[1]]

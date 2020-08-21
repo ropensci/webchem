@@ -33,21 +33,21 @@ srs_query <-
 
     rst <- lapply(query, function(x) {
       if (is.na(x)){
-        if (verbose) message(webchem_string("na"))
+        if (verbose) message(standard_string("na"))
         return(NA)
       }
       entity_query <- paste0(entity_url, "/substance/", from, "/", x)
-      if (verbose) message(webchem_string("query", x), appendLF = FALSE)
+      if (verbose) message(standard_string("query", x), appendLF = FALSE)
       response <- httr::RETRY("GET",
                               entity_query,
-                              httr::user_agent(webchem_string("webchem")),
+                              httr::user_agent(standard_string("webchem")),
                               terminate_on = 404,
                               quiet = TRUE)
       if (response$status_code == 200) {
         if (verbose) message(httr::message_for_status(response))
         text_content <- httr::content(response, "text")
         if (text_content == "[]") {
-          if (verbose) message(webchem_string("not_available"))
+          if (verbose) message(standard_string("not_available"))
           return(NA)
         } else {
           jsonlite::fromJSON(text_content)

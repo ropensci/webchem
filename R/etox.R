@@ -87,7 +87,7 @@ get_etoxid <- function(query,
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     h <- httr::RETRY("POST",
                     url = baseurl,
-                    httr::user_agent(webchem_string("webchem")),
+                    httr::user_agent(standard_string("webchem")),
                     handle = handle(''),
                     body = body,
                     terminate_on = 404,
@@ -183,7 +183,7 @@ etox_basic <- function(id, verbose = TRUE) {
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1 / 10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200) {
@@ -302,7 +302,7 @@ etox_targets <- function(id, verbose = TRUE) {
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if(res$status_code == 200){

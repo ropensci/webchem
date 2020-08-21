@@ -118,7 +118,7 @@ get_chebiid <- function(query,
       message(query, ': ', url)
     res <- httr::RETRY("POST",
                        url,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        httr::add_headers(headers),
                        body = body,
                        terminate_on = 404)
@@ -264,7 +264,7 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
     res <- httr::RETRY("POST",
                        url,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        httr::add_headers(headers),
                        body = body,
                        terminate_on = 404)

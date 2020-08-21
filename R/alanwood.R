@@ -83,7 +83,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
     Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200){
@@ -185,7 +185,7 @@ build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
     }
     res <- httr::RETRY("GET",
                        "http://www.alanwood.net/pesticides/index_rn.html",
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200){

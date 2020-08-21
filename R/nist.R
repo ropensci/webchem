@@ -31,7 +31,7 @@ get_ri_xml <-
 
     #handle NAs
     if (is.na(query)) {
-      if (verbose) message(webchem_string("na"))
+      if (verbose) message(standard_string("na"))
       return(NA)
     } else {
       if (from == "cas") {
@@ -39,10 +39,10 @@ get_ri_xml <-
       } else {
         qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
         Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-        if (verbose) message(webchem_string("query", query), appendLF = FALSE)
+        if (verbose) message(standard_string("query", query), appendLF = FALSE)
         res <- httr::RETRY("GET",
                            qurl,
-                           httr::user_agent(webchem_string("webchem")),
+                           httr::user_agent(standard_string("webchem")),
                            terminate_on = 404,
                            quiet = TRUE)
         if (res$status_code == 200) {
@@ -55,7 +55,7 @@ get_ri_xml <-
             html_text()
           # if cquery not found
           if (stringr::str_detect(result, "Not Found")) {
-            if (verbose) message(webchem_string("not_found"), appendLF = FALSE)
+            if (verbose) message(standard_string("not_found"), appendLF = FALSE)
             ri_xml <- tibble(query = query)
           }
           # if more than one compound found
@@ -72,7 +72,7 @@ get_ri_xml <-
           gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
 
           if (length(gaschrom) == 0) {
-            if (verbose) message(webchem_string("not_available"))
+            if (verbose) message(standard_string("not_available"))
             return(NA)
           } else {
             if (verbose) message(" CAS found. ", appendLF = FALSE)
@@ -91,16 +91,16 @@ get_ri_xml <-
       Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
       if (verbose) {
         if (from == "cas") {
-          message(webchem_string("query", query), appendLF = FALSE)
+          message(standard_string("query", query), appendLF = FALSE)
         }
         else {
-          message(webchem_string("query", ID), appendLF = FALSE)
+          message(standard_string("query", ID), appendLF = FALSE)
         }
       }
       res2 <- httr::RETRY(
         "GET",
         qurl,
-        httr::user_agent(webchem_string("webchem")),
+        httr::user_agent(standard_string("webchem")),
         terminate_on = 404,
         quiet = TRUE)
       if (res2$status_code == 200) {
@@ -110,7 +110,7 @@ get_ri_xml <-
 
         #message if table doesn't exist at URL
         if (length(ri_xml.all) == 0) {
-          if (verbose) message(webchem_string("not_available"))
+          if (verbose) message(standard_string("not_available"))
           return(NA)
         } else {
           ri_xml <- ri_xml.all

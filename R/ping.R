@@ -58,7 +58,7 @@ ping_service <-
       Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
       res <- httr::RETRY("GET",
                          ping_url,
-                         httr::user_agent(webchem_string("webchem")),
+                         httr::user_agent(standard_string("webchem")),
                          terminate_on = 404,
                          quiet = TRUE)
       out <- res$status_code == 200
@@ -87,7 +87,7 @@ ping_etox <- function(...) {
                      url = baseurl,
                      handle = handle(''),
                      body = body,
-                     httr::user_agent(webchem_string("webchem")),
+                     httr::user_agent(standard_string("webchem")),
                      terminate_on = 404,
                      quiet = TRUE)
   return(res$status_code == 200)
@@ -111,7 +111,7 @@ ping_cs <- function(...) {
                      "https://api.rsc.org/compounds/v1/filter/name",
                      add_headers(headers),
                      body = body,
-                     httr::user_agent(webchem_string("webchem")),
+                     httr::user_agent(standard_string("webchem")),
                      terminate_on = 404,
                      quiet = TRUE)
   return(res$status_code == 200)
@@ -153,7 +153,7 @@ ping_chebi <- function(...) {
                      baseurl,
                      add_headers(headers),
                      body = body,
-                     httr::user_agent(webchem_string("webchem")),
+                     httr::user_agent(standard_string("webchem")),
                      terminate_on = 400,
                      quiet = TRUE)
   return(res$status_code == 200)
@@ -179,7 +179,7 @@ ping_pubchem <- function(...) {
   res <- httr::RETRY("POST",
                      qurl,
                      body = paste0(from, '=', query),
-                     httr::user_agent(webchem_string("webchem")),
+                     httr::user_agent(standard_string("webchem")),
                      terminate_on = 404,
                      quiet = TRUE,
                      ...)
@@ -200,7 +200,7 @@ ping_pubchem_pw <- function(...) {
                "compound/176/JSON?heading=pka", sep = "/")
   res <- httr::RETRY("POST",
                      qurl,
-                     httr::user_agent(webchem_string("webchem")),
+                     httr::user_agent(standard_string("webchem")),
                      terminate_on = 404,
                      quiet = TRUE)
   return(res$status_code == 200)

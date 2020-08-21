@@ -141,7 +141,7 @@ cir_query <- function(identifier, representation = "smiles",
     Sys.sleep(1.5)
     h <- httr::RETRY("GET",
                      qurl,
-                     httr::user_agent(webchem_string("webchem")),
+                     httr::user_agent(standard_string("webchem")),
                      terminate_on = 404,
                      quiet = TRUE)
     if (h$status_code == 200){

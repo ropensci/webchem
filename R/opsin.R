@@ -33,18 +33,18 @@ opsin_query <- function(query, verbose = TRUE, ...){
     names(empty) <- c("query", "inchi", "stdinchi", "stdinchikey", "smiles", "message", "status")
     empty <- as_tibble(t(empty))
     if (is.na(query)) {
-      if (verbose) message(webchem_string("na"))
+      if (verbose) message(standard_string("na"))
       return(empty)
     }
     query_u <- URLencode(query, reserved = TRUE)
     baseurl <- "http://opsin.ch.cam.ac.uk/opsin/"
     out <- 'json'
     qurl <- paste0(baseurl, query_u, '.', out)
-    if (verbose) message(webchem_string("query", query), appendLF = FALSE)
+    if (verbose) message(standard_string("query", query), appendLF = FALSE)
     Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       user_agent(webchem_string("webchem")),
+                       user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200) {

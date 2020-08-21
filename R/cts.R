@@ -53,7 +53,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     out <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (out$status_code == 200) {
@@ -164,7 +164,7 @@ cts_convert <- function(query,
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200) {

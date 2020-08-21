@@ -80,7 +80,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200){
@@ -162,7 +162,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
         res <- httr::RETRY("GET",
                            qurl,
-                           httr::user_agent(webchem_string("webchem")),
+                           httr::user_agent(standard_string("webchem")),
                            terminate_on = 404,
                            quiet = TRUE)
         if (res$status_code == 200) {

@@ -171,10 +171,10 @@ get_cid <-
     match <- match.arg(match)
     foo <- function(query, from, domain, match, verbose, arg, ...) {
       if (is.na(query)) {
-        if (verbose) message(webchem_string("na"))
+        if (verbose) message(standard_string("na"))
         return(NA)
       }
-      if (verbose) message(webchem_string("query", query), appendLF = FALSE)
+      if (verbose) message(standard_string("query", query), appendLF = FALSE)
       if (is.character(query)) query <- URLencode(query, reserved = TRUE)
       if (from %in% structure_search) {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
@@ -191,7 +191,7 @@ get_cid <-
                       domain, from, "cids", "json", sep = "/")
         res <- httr::RETRY("POST",
                            qurl,
-                           user_agent(webchem_string("webchem")),
+                           user_agent(standard_string("webchem")),
                            body = paste0("inchi=", query),
                            terminate_on = 404,
                            quiet = TRUE)
@@ -199,7 +199,7 @@ get_cid <-
       else {
         res <- httr::RETRY("POST",
                            qurl,
-                           user_agent(webchem_string("webchem")),
+                           user_agent(standard_string("webchem")),
                            terminate_on = c(202, 404),
                            quiet = TRUE)
       }
@@ -213,7 +213,7 @@ get_cid <-
             Sys.sleep(5 + rgamma(1, shape = 15, scale = 1 / 10))
             res <- httr::RETRY("POST",
                                qurl,
-                               user_agent(webchem_string("webchem")),
+                               user_agent(standard_string("webchem")),
                                terminate_on = 404,
                                quiet = TRUE)
           }
@@ -310,7 +310,7 @@ get_cid <-
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
   if (mean(is.na(cid)) == 1) {
-    if (verbose) message(webchem_string("na"))
+    if (verbose) message(standard_string("na"))
     return(NA)
   }
   napos <- which(is.na(cid))
@@ -339,11 +339,11 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
   output <- paste0("/property/", properties, "/JSON")
 
   qurl <- paste0(prolog, input, output)
-  if (verbose) message(webchem_string("query_all"), appendLF = FALSE)
+  if (verbose) message(standard_string("query_all"), appendLF = FALSE)
   Sys.sleep(0.2)
   res <- httr::RETRY("POST",
                      qurl,
-                     httr::user_agent(webchem_string("webchem")),
+                     httr::user_agent(standard_string("webchem")),
                      body = list("cid" = paste(cid, collapse = ",")),
                      terminate_on = 404,
                      quiet = TRUE)
@@ -447,7 +447,7 @@ pc_synonyms <- function(query,
     stop("'choices' is deprecated. Use 'match' instead.")
   foo <- function(query, from, verbose, ...) {
     if (is.na(query)) {
-      if (verbose) message(webchem_string("na"))
+      if (verbose) message(standard_string("na"))
       return(NA)
     }
     prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
@@ -456,11 +456,11 @@ pc_synonyms <- function(query,
     if (!is.null(arg))
       arg <- paste0("?", arg)
     qurl <- paste0(prolog, input, output, arg)
-    if (verbose) message(webchem_string("query", query), appendLF = FALSE)
+    if (verbose) message(standard_string("query", query), appendLF = FALSE)
     Sys.sleep(0.2)
     res <- httr::RETRY("POST",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        body = paste0(from, "=", query),
                        terminate_on = 404,
                        quiet = TRUE)
@@ -594,16 +594,16 @@ pc_page <- function(id,
   section <- tolower(gsub(" +", "+", section))
   foo <- function(id, section, domain) {
     if (is.na(id)) {
-      if (verbose) message(webchem_string("na"))
+      if (verbose) message(standard_string("na"))
       return(NA)
     }
     qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                    domain, "/", id, "/JSON?heading=", section)
-    if (verbose) message(webchem_string("query", id), appendLF = FALSE)
+    if (verbose) message(standard_string("query", id), appendLF = FALSE)
     Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
     res <- httr::RETRY("POST",
                        qurl,
-                       user_agent(webchem_string("webchem")),
+                       user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200) {

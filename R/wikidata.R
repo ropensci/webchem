@@ -46,7 +46,7 @@ get_wdid <-
   match <- match.arg(match)
   foo <- function(query, language, match, verbose){
     if (is.na(query)){
-      if (verbose) message(webchem_string("na"))
+      if (verbose) message(standard_string("na"))
       id <- NA
       matched_sub <- NA
     } else {
@@ -55,11 +55,11 @@ get_wdid <-
       qurl <-
         paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
       qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query1)
-      if (verbose) message(webchem_string("query", query), appendLF = FALSE)
+      if (verbose) message(standard_string("query", query), appendLF = FALSE)
       Sys.sleep(0.3)
       res <- httr::RETRY("GET",
                          qurl,
-                         httr::user_agent(webchem_string("webchem")),
+                         httr::user_agent(standard_string("webchem")),
                          terminate_on = 404,
                          quiet = TRUE)
       if (res$status_code == 200) {
@@ -69,7 +69,7 @@ get_wdid <-
                                                  encoding = "utf-8"))
         search <- cont$search
         if (length(search) == 0) {
-          if (verbose) message(webchem_string("not_found"))
+          if (verbose) message(standard_string("not_found"))
           id <- NA
           matched_sub <- NA
         } else {
@@ -156,7 +156,7 @@ wd_ident <- function(id, verbose = TRUE){
   # id <- 'Q408646'
   foo <- function(id, verbose){
     if (is.na(id)) {
-      if (verbose) message(webchem_string("na"))
+      if (verbose) message(standard_string("na"))
       out <- as.list(rep(NA, 13))
       names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
                       "drugbank", "zvg", "chebi", "chembl", "unii", "source_url")
@@ -177,10 +177,10 @@ wd_ident <- function(id, verbose = TRUE){
     qurl <- paste0(baseurl, sparql)
     qurl <- URLencode(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    if (verbose) message(webchem_string("query", id), appendLF = FALSE)
+    if (verbose) message(standard_string("query", id), appendLF = FALSE)
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(webchem_string("webchem")),
+                       httr::user_agent(standard_string("webchem")),
                        terminate_on = 404,
                        quiet = TRUE)
     if (res$status_code == 200) {
@@ -191,7 +191,7 @@ wd_ident <- function(id, verbose = TRUE){
       out <- tmp$results$bindings
 
       if (length(out) == 0) {
-        if (verbose) message(webchem_string("not_found"))
+        if (verbose) message(standard_string("not_found"))
         out <- as.list(rep(NA, 13))
         names(out) <- c(vars_out, 'source_url')
         return(out)
