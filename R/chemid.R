@@ -4,7 +4,6 @@
 #' \url{https://chem.nlm.nih.gov/chemidplus}
 #'
 #' @import xml2
-#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom rvest html_table
 #' @importFrom stats rgamma
 #' @importFrom utils URLencode URLdecode

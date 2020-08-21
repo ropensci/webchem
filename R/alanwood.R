@@ -4,7 +4,6 @@
 #' \url{http://www.alanwood.net/pesticides}
 #' @import xml2
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY user_agent message_for_status
 #'
 #' @param  query character; search string
 #' @param from character; type of input ('cas' or 'name')
@@ -163,7 +162,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 #' \url{http://www.alanwood.net/pesticides} and saves it to
 #' \code{\link{tempdir}}.
 #' @import xml2
-#' @importFrom httr RETRY user_agent message_for_status
+#'
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index?
 #' @return a data.frame

@@ -4,7 +4,6 @@
 #' Targets \url{https://webetox.uba.de/webETOX/index.do} for their substance ID
 #'
 #' @import xml2 httr
-#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom stats rgamma
 #' @importFrom dplyr bind_rows
 #' @importFrom tibble tibble
@@ -138,7 +137,6 @@ get_etoxid <- function(query,
 #' @import xml2
 #' @importFrom rvest html_table
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY user_agent message_for_status
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
@@ -263,7 +261,6 @@ etox_basic <- function(id, verbose = TRUE) {
 #' @import xml2 RCurl
 #' @importFrom utils read.table
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY user_agent message_for_status
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'
@@ -364,7 +361,6 @@ etox_targets <- function(id, verbose = TRUE) {
 #' @import xml2 RCurl
 #' @importFrom utils read.table
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY user_agent message_for_status
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
 #'

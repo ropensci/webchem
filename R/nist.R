@@ -9,7 +9,6 @@
 #' @noRd
 #' @import rvest
 #' @import xml2
-#' @importFrom httr RETRY user_agent message_for_status
 #' @return an xml nodeset
 #'
 get_ri_xml <-

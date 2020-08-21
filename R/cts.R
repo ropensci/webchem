@@ -2,7 +2,6 @@
 #'
 #' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import jsonlite
-#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
 #' @param query character; InChIkey.
@@ -77,7 +76,6 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #'
 #' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import RCurl jsonlite
-#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom utils URLencode
 #' @importFrom stats rgamma
 #' @importFrom stats setNames

@@ -4,7 +4,6 @@
 #'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
 #'
 #' @import xml2
-#' @importFrom httr RETRY user_agent message_for_status
 #' @importFrom utils URLencode
 #'
 #' @param identifier character; chemical identifier.
@@ -377,7 +376,8 @@ cir_img <- function(query,
                        qurl,
                        quiet = TRUE,
                        terminate_on = 404,
-                       httr::write_disk(path, overwrite = TRUE))
+                       httr::write_disk(path, overwrite = TRUE),
+                       httr::user_agent(standard_string("webchem")))
     if (verbose) {
       message(httr::message_for_status(res), " ", appendLF = FALSE)
       if (httr::http_error(res) && file.exists(path)) {

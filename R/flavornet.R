@@ -5,7 +5,6 @@
 #'
 #' @import xml2
 #' @importFrom stats rgamma
-#' @importFrom httr RETRY message_for_status
 #' @param query character; CAS number to search by. See \code{\link{is.cas}} for correct formatting
 #' @param from character; currently only CAS numbers are accepted.
 #' @param verbose logical; should a verbose output be printed on the console?

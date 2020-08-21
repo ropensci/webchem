@@ -8,7 +8,6 @@
 #' @importFrom dplyr select everything
 #' @importFrom purrr map_dfr
 #' @importFrom utils URLencode URLdecode
-#' @importFrom httr RETRY user_agent message_for_status content
 #' @param query character;  chemical name that should be queryed.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
