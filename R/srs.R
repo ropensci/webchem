@@ -26,22 +26,35 @@
 #' }
 srs_query <-
   function(query,
-           from = c("itn", "cas", "epaid", "tsn", "name"), ...) {
+           from = c("itn", "cas", "epaid", "tsn", "name"),
+           verbose = TRUE, ...) {
+    from <- match.arg(from)
     entity_url <- "https://cdxnodengn.epa.gov/cdx-srs-rest/"
 
     rst <- lapply(query, function(x) {
+      if (is.na(x)){
+        if (verbose) message(webchem_string("na"))
+        return(NA)
+      }
       entity_query <- paste0(entity_url, "/substance/", from, "/", x)
-      response <- httr::GET(entity_query)
-
+      if (verbose) message(webchem_string("query", x), appendLF = FALSE)
+      response <- httr::RETRY("GET",
+                              entity_query,
+                              httr::user_agent(webchem_string("webchem")),
+                              terminate_on = 404,
+                              quiet = TRUE)
       if (response$status_code == 200) {
+        if (verbose) message(httr::message_for_status(response))
         text_content <- httr::content(response, "text")
         if (text_content == "[]") {
+          if (verbose) message(webchem_string("not_available"))
           return(NA)
         } else {
           jsonlite::fromJSON(text_content)
         }
       } else {
-        stop(httr::http_status(response)$message)
+        if (verbose) message(httr::message_for_status(response))
+        return(NA)
       }
     })
     names(rst) <- query
