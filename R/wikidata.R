@@ -46,6 +46,7 @@ get_wdid <-
   match <- match.arg(match)
   foo <- function(query, language, match, verbose){
     if (is.na(query)){
+      if (verbose) message(webchem_string("na"))
       id <- NA
       matched_sub <- NA
     } else {
@@ -54,43 +55,52 @@ get_wdid <-
       qurl <-
         paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
       qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query1)
-      if (verbose)
-        message('Querying ', qurl)
+      if (verbose) message(webchem_string("query", query), appendLF = FALSE)
       Sys.sleep(0.3)
-      cont <-
-        fromJSON(content(GET(
-          qurl,
-          user_agent('webchem (https://github.com/ropensci/webchem)')
-        ), 'text'))
-      search <- cont$search
-      if (length(search) == 0) {
-        if (verbose)
-          message('Substance not found! Returing NA. \n')
+      res <- httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_string("webchem")),
+                         terminate_on = 404,
+                         quiet = TRUE)
+      if (res$status_code == 200) {
+        if (verbose) message(httr::message_for_status(res))
+        cont <- jsonlite::fromJSON(httr::content(res,
+                                                 type = "text",
+                                                 encoding = "utf-8"))
+        search <- cont$search
+        if (length(search) == 0) {
+          if (verbose) message(webchem_string("not_found"))
+          id <- NA
+          matched_sub <- NA
+        } else {
+          # use only matches on label
+          search <- search[search$match$type %in% c('label', 'alias'), ]
+          # # check matches
+          search <- search[tolower(iconv(search$match$text,
+                                         "latin1",
+                                         "ASCII",
+                                         sub = "")) == tolower(query), ]
+
+          if (nrow(search) > 1) {
+            id <-
+              matcher(
+                search$id,
+                query = query,
+                result = search$label,
+                match = match,
+                verbose = verbose
+              )
+            matched_sub <- names(id)
+          } else {
+            id <- search$id
+            matched_sub <- search$label
+          }
+        }
+      }
+      else {
+        if (verbose) message(httr::message_for_status(res))
         id <- NA
         matched_sub <- NA
-      } else {
-        # use only matches on label
-        search <- search[search$match$type %in% c('label', 'alias'), ]
-        # # check matches
-        search <- search[tolower(iconv(search$match$text,
-                                       "latin1",
-                                       "ASCII",
-                                       sub = "")) == tolower(query), ]
-
-        if (nrow(search) > 1) {
-          id <-
-            matcher(
-              search$id,
-              query = query,
-              result = search$label,
-              match = match,
-              verbose = verbose
-            )
-          matched_sub <- names(id)
-        } else {
-          id <- search$id
-          matched_sub <- search$label
-        }
       }
     }
     out <- tibble(query = query, match = matched_sub, wdid = id)
@@ -146,8 +156,7 @@ wd_ident <- function(id, verbose = TRUE){
   # id <- 'Q408646'
   foo <- function(id, verbose){
     if (is.na(id)) {
-      if (verbose)
-        message('NA as input! Returing NA. \n')
+      if (verbose) message(webchem_string("na"))
       out <- as.list(rep(NA, 13))
       names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
                       "drugbank", "zvg", "chebi", "chembl", "unii", "source_url")
@@ -168,38 +177,50 @@ wd_ident <- function(id, verbose = TRUE){
     qurl <- paste0(baseurl, sparql)
     qurl <- URLencode(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    if (verbose)
-      message('Querying ', qurl)
-    res <- GET(qurl)
-    tmp <- fromJSON(content(res, as = "text"))
+    if (verbose) message(webchem_string("query", id), appendLF = FALSE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       httr::user_agent(webchem_string("webchem")),
+                       terminate_on = 404,
+                       quiet = TRUE)
+    if (res$status_code == 200) {
+      if (verbose) message(httr::message_for_status(res))
+      tmp <- fromJSON(content(res, as = "text"))
 
-    vars_out <- tmp$head$vars
-    out <- tmp$results$bindings
+      vars_out <- tmp$head$vars
+      out <- tmp$results$bindings
 
-    if (length(out) == 0) {
-      if (verbose)
-        message('Not found! Returing NA. \n')
-      out <- as.list(rep(NA, 13))
-      names(out) <- c(vars_out, 'source_url')
+      if (length(out) == 0) {
+        if (verbose) message(webchem_string("not_found"))
+        out <- as.list(rep(NA, 13))
+        names(out) <- c(vars_out, 'source_url')
+        return(out)
+      }
+
+      if (nrow(out) > 1) {
+        message("More then one unique entry found! Returning first.")
+        out <- out[1, ]
+      }
+
+      out <- lapply(out, '[[', 'value')
+
+      # check for missing entries and add to out-list
+      miss <- names[!names %in% names(out)]
+      for (i in miss) {
+        out[[i]] <- NA
+      }
+      out <- out[names]
+      out[['source_url']] <- paste0('https://www.wikidata.org/wiki/', id)
+      out <- unlist(out)
       return(out)
     }
-
-    if (nrow(out) > 1) {
-      warning("More then one unique entry found! Returning first.")
-      out <- out[1, ]
+    else {
+      if (verbose) message(httr::message_for_status(res))
+      out <- as.list(rep(NA, 13))
+      names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
+                      "drugbank", "zvg", "chebi", "chembl", "unii", "source_url")
+      return(out)
     }
-
-    out <- lapply(out, '[[', 'value')
-
-    # check for missing entries and add to out-list
-    miss <- names[!names %in% names(out)]
-    for (i in miss) {
-      out[[i]] <- NA
-    }
-    out <- out[names]
-    out[['source_url']] <- paste0('https://www.wikidata.org/wiki/', id)
-    out <- unlist(out)
-    return(out)
   }
   # ugly fixing to return data.frame
   out <- data.frame(t(sapply(id, foo,verbose = verbose)), stringsAsFactors = FALSE, row.names = seq_along(id))
