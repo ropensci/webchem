@@ -67,21 +67,32 @@ is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 #' }
 is.inchikey_cs <- function(x, verbose = TRUE){
-  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
+  }
+  if (is.na(x)) {
+    if (verbose) message(standard_string("na"))
+    return(NA)
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
   qurl <- paste0(baseurl, 'inchi_key=', x)
   Sys.sleep(0.1)
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with webservice... Returning NA.')
-    out <- NA
-  } else {
+  if (verbose) message(standard_string("query", x), appendLF = FALSE)
+  res <- httr::RETRY("GET",
+                   qurl,
+                   httr::user_agent(standard_string("webchem")),
+                   terminate_on = 404,
+                   quiet = TRUE)
+  if (res$status_code == 200){
+    if (verbose) message(httr::message_for_status(res))
+    h <- xml2::read_xml(res)
     out <- as.logical(xml_text(h))
+    return(out)
+    }
+  else {
+    if (verbose) message(httr::message_for_status(res))
+    return(NA)
   }
-  return(out)
 }
 
 
@@ -497,9 +508,11 @@ matcher <-
     }
   }
 
-#' webchem messages
+#' Standard strings
 #'
-webchem_string <- function(action = c("na",
+#' Standard strings to be used in verbose messages and user agent strings.
+#' @noRd
+standard_string <- function(action = c("na",
                                       "query",
                                       "query_all",
                                       "not_found",
