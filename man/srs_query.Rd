@@ -4,7 +4,12 @@
 \alias{srs_query}
 \title{Get record details from U.S. EPA Substance Registry Servives (SRS)}
 \usage{
-srs_query(query, from = c("itn", "cas", "epaid", "tsn", "name"), ...)
+srs_query(
+  query,
+  from = c("itn", "cas", "epaid", "tsn", "name"),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{character; query ID.}
