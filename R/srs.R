@@ -5,6 +5,7 @@
 #'@param query character; query ID.
 #'@param from character; type of query ID, e.g. \code{'itn'} , \code{'cas'},
 #'  \code{'epaid'}, \code{'tsn'}, \code{'name'}.
+#'@param verbose logical; should a verbose output be printed on the console?
 #'@param ... not currently used.
 #'@return a list of lists (for each supplied query): a list of 22. subsKey,
 #'  internalTrackingNumber, systematicName, epaIdentificationNumber,
@@ -33,27 +34,26 @@ srs_query <-
 
     rst <- lapply(query, function(x) {
       if (is.na(x)){
-        if (verbose) message(standard_string("na"))
+        if (verbose) webchem_message("na")
         return(NA)
       }
       entity_query <- paste0(entity_url, "/substance/", from, "/", x)
-      if (verbose) message(standard_string("query", x), appendLF = FALSE)
+      if (verbose) webchem_message("query", x, appendLF = FALSE)
       response <- httr::RETRY("GET",
                               entity_query,
-                              httr::user_agent(standard_string("webchem")),
+                              httr::user_agent(webchem_url()),
                               terminate_on = 404,
                               quiet = TRUE)
+      if (verbose) message(httr::message_for_status(response))
       if (response$status_code == 200) {
-        if (verbose) message(httr::message_for_status(response))
         text_content <- httr::content(response, "text")
         if (text_content == "[]") {
-          if (verbose) message(standard_string("not_available"))
+          if (verbose) webchem_message("not_available")
           return(NA)
         } else {
           jsonlite::fromJSON(text_content)
         }
       } else {
-        if (verbose) message(httr::message_for_status(response))
         return(NA)
       }
     })

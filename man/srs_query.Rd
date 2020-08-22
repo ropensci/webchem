@@ -17,6 +17,8 @@ srs_query(
 \item{from}{character; type of query ID, e.g. \code{'itn'} , \code{'cas'},
 \code{'epaid'}, \code{'tsn'}, \code{'name'}.}
 
+\item{verbose}{logical; should a verbose output be printed on the console?}
+
 \item{...}{not currently used.}
 }
 \value{

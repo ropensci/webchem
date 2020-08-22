@@ -56,7 +56,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
                      match = c('best', 'first', 'ask', 'na'),
                      verbose = TRUE, type){
   if(!missing(type)) {
-    warning('"type" is deprecated. Please use "from" instead. ')
+    message('"type" is deprecated. Please use "from" instead. ')
     from <- type
   }
 
@@ -64,10 +64,10 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
   match <- match.arg(match)
   foo <- function(query, from, match, verbose){
     if (is.na(query)) {
-      if (verbose) message('query is NA! Returning NA.\n')
+      if (verbose) webchem_message("na")
       return(NA)
     }
-    if (verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     query <- URLencode(query, reserved = TRUE)
     baseurl <- switch(
       from,
@@ -79,23 +79,23 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
-      if (verbose) message(httr::message_for_status(res))
       ttt <- read_html(res)
       tit <- xml_text(xml_find_all(ttt, "//head/title"))
       no <- xml_text(xml_find_all(ttt, "//h3"))
       if (length(no) != 0 && 'The following query produced no records:' %in% no) {
-        message('Not found! Returning NA.\n')
+        webchem_message("not_found")
         return(NA)
       }
 
       # handle multiple inputs
       if (grepl('^ChemIDplus Results - Chemical information', x = tit)) {
         if (verbose)
-          message("More then one Link found. ", appendLF = FALSE)
+          message(" More then one Link found. ", appendLF = FALSE)
         hit_names <- xml_text(
           xml_find_all(ttt, "//a[@title='Open record details']"))
         hit_cas <- xml_text(
@@ -155,18 +155,16 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
 
         # retry with CAS-API
         qurl <- paste0('https://chem.nlm.nih.gov/chemidplus/rn/', hit_cas)
-        if (verbose) {
-          message(paste0("Querying ", hit_cas, ". "), appendLF = FALSE)
-        }
+        if (verbose) webchem_message("query", hit_cas, appendLF = FALSE)
         Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
         res <- httr::RETRY("GET",
                            qurl,
-                           httr::user_agent(standard_string("webchem")),
+                           httr::user_agent(webchem_url()),
                            terminate_on = 404,
                            quiet = TRUE)
+        if (verbose) message(httr::message_for_status(res))
         if (res$status_code == 200) {
-          if (verbose) message(httr::message_for_status(res))
-          ttt <- read_html(qurl)
+          ttt <- read_html(res)
           source_url <- qurl
         }
 
@@ -247,7 +245,6 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
 
     }
     else {
-      if (verbose) message(httr::message_for_status(res))
       return(NA)
     }
   }

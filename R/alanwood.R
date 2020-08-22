@@ -41,14 +41,18 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
   }
 
   if ("commonname" %in% from) {
-    warning('To search by compound name use "name" instead of "commonname"')
+    message('To search by compound name use "name" instead of "commonname"')
     from <- "name"
   }
   from <- match.arg(from)
   aw_idx <- build_aw_idx(verbose, ...)
 
   foo <- function(query, from, verbose) {
-    if (verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if (is.na(query)) {
+      if (verbose) webchem_message("na")
+      return(NA)
+    }
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
   # search links in indexes
     if (from == "name") {
       links <- aw_idx$links[aw_idx$source == "cn"]
@@ -67,7 +71,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
     takelink <- links[tolower(names) == tolower(query)]
     if (is.na(query)) takelink <- vector()
     if (length(takelink) == 0) {
-      message("Not found. Returning NA.")
+      if (verbose) webchem_message("not_found")
       return(NA)
     }
     if (length(takelink) > 1) {
@@ -82,11 +86,11 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
     Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
-      if (verbose) message(httr::message_for_status(res))
       ttt <- read_html(res)
       status <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r1']/following-sibling::td"))
@@ -146,7 +150,6 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
       return(out)
     }
     else {
-      if (verbose) message(httr::message_for_status(res))
       return(NA)
     }
   }
@@ -179,14 +182,13 @@ build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
     if (!dir.exists(paste0(tempdir(), "/data"))) {
       dir.create(paste0(tempdir(), "/data"))
     }
-    if (verbose == TRUE) {
-      message("Building index. ", appendLF = FALSE)
-    }
+    if (verbose) message("Building index. ", appendLF = FALSE)
     res <- httr::RETRY("GET",
                        "http://www.alanwood.net/pesticides/index_rn.html",
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
       idx1 <- read_html("http://www.alanwood.net/pesticides/index_rn.html")
       prep_idx <- function(y) {
@@ -216,11 +218,7 @@ build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
       ln <- iconv(ln, from = "latin1", to = "ASCII", sub = "")
       aw_idx$linknames <- ln
       attr(aw_idx, "date") <- Sys.Date()
-      if (verbose == TRUE) message("Done.")
       save(aw_idx, file = paste0(tempdir(), "/data/aw_idx.rda"))
-    }
-    else {
-      if (verbose == TRUE) message("Failed.")
     }
   }
   return(aw_idx)

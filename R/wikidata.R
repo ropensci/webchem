@@ -46,7 +46,7 @@ get_wdid <-
   match <- match.arg(match)
   foo <- function(query, language, match, verbose){
     if (is.na(query)){
-      if (verbose) message(standard_string("na"))
+      if (verbose) webchem_message("na")
       id <- NA
       matched_sub <- NA
     } else {
@@ -55,21 +55,21 @@ get_wdid <-
       qurl <-
         paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
       qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query1)
-      if (verbose) message(standard_string("query", query), appendLF = FALSE)
+      if (verbose) webchem_message("query", query, appendLF = FALSE)
       Sys.sleep(0.3)
       res <- httr::RETRY("GET",
                          qurl,
-                         httr::user_agent(standard_string("webchem")),
+                         httr::user_agent(webchem_url()),
                          terminate_on = 404,
                          quiet = TRUE)
+      if (verbose) message(httr::message_for_status(res))
       if (res$status_code == 200) {
-        if (verbose) message(httr::message_for_status(res))
         cont <- jsonlite::fromJSON(httr::content(res,
                                                  type = "text",
                                                  encoding = "utf-8"))
         search <- cont$search
         if (length(search) == 0) {
-          if (verbose) message(standard_string("not_found"))
+          if (verbose) webchem_message("not_found")
           id <- NA
           matched_sub <- NA
         } else {
@@ -98,7 +98,6 @@ get_wdid <-
         }
       }
       else {
-        if (verbose) message(httr::message_for_status(res))
         id <- NA
         matched_sub <- NA
       }
@@ -156,7 +155,7 @@ wd_ident <- function(id, verbose = TRUE){
   # id <- 'Q408646'
   foo <- function(id, verbose){
     if (is.na(id)) {
-      if (verbose) message(standard_string("na"))
+      if (verbose) webchem_message("na")
       out <- as.list(rep(NA, 13))
       names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
                       "drugbank", "zvg", "chebi", "chembl", "unii", "source_url")
@@ -177,21 +176,21 @@ wd_ident <- function(id, verbose = TRUE){
     qurl <- paste0(baseurl, sparql)
     qurl <- URLencode(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    if (verbose) message(standard_string("query", id), appendLF = FALSE)
+    if (verbose) webchem_message("query", id, appendLF = FALSE)
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
-      if (verbose) message(httr::message_for_status(res))
       tmp <- fromJSON(content(res, as = "text"))
 
       vars_out <- tmp$head$vars
       out <- tmp$results$bindings
 
       if (length(out) == 0) {
-        if (verbose) message(standard_string("not_found"))
+        if (verbose) webchem_message("not_found")
         out <- as.list(rep(NA, 13))
         names(out) <- c(vars_out, 'source_url')
         return(out)
@@ -215,7 +214,6 @@ wd_ident <- function(id, verbose = TRUE){
       return(out)
     }
     else {
-      if (verbose) message(httr::message_for_status(res))
       out <- as.list(rep(NA, 13))
       names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
                       "drugbank", "zvg", "chebi", "chembl", "unii", "source_url")

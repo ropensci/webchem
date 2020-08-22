@@ -64,10 +64,10 @@ get_etoxid <- function(query,
   }
   foo <- function(query, from, match, verbose) {
     if (is.na(query)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(tibble("query" = query, "match" = NA, "etoxid" = NA))
     }
-    if(verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if(verbose) webchem_message("query", query, appendLF = FALSE)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
     if (from == 'name') {
       body <- list("stoffname.selection[0].name" = query,
@@ -86,18 +86,18 @@ get_etoxid <- function(query,
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     h <- httr::RETRY("POST",
                     url = baseurl,
-                    httr::user_agent(standard_string("webchem")),
+                    httr::user_agent(webchem_url()),
                     handle = handle(''),
                     body = body,
                     terminate_on = 404,
                     quiet = TRUE)
+    if (verbose) message(httr::message_for_status(h))
     if (h$status_code == 200) {
-      if (verbose) message(httr::message_for_status(h), appendLF = FALSE)
       tt <- read_html(h)
       subs <- clean_char(xml_text(xml_find_all(
         tt, "//*/table[@class = 'listForm resultList']//a")))[-1]
       if (length(subs) == 0) {
-        if (verbose) message(" Not found. Returning NA.")
+        if (verbose) webchem_message("not_found")
         hit <- tibble("query" = query,
                       "match" = NA,
                       "etoxid" = NA)
@@ -115,12 +115,10 @@ get_etoxid <- function(query,
         hit <- tibble("query" = query,
                       "match" = names(out),
                       "etoxid" = out)
-        if (verbose) message("")
         return(hit)
       }
     }
     else {
-      if (verbose) message(httr::message_for_status(h))
       return(list(query = NA, match = NA, etoxid = NA))
     }
   }
@@ -172,28 +170,28 @@ get_etoxid <- function(query,
 etox_basic <- function(id, verbose = TRUE) {
   foo <- function(id, verbose) {
     if (is.na(id)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
     baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
     qurl <- paste0(baseurl, id)
-    if(verbose) message(paste0("Querying ", id, ". "), appendLF = FALSE)
+    if(verbose) webchem_message("query", id, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1 / 10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
-      if (verbose) message(httr::message_for_status(res), appendLF = FALSE)
       tt <- try(read_html(res), silent = TRUE)
       if (inherits(tt, 'try-error')) {
-        message(" Not found. Returning NA.")
+        webchem_message("not_found")
         return(NA)
       }
       tabs <- try(suppressWarnings(html_table(tt, fill = TRUE)), silent = TRUE)
       if (inherits(tabs, 'try-error')) {
-        message(" Not found. Returning NA.")
+        webchem_message("not_found")
         return(NA)
       }
       binf <- tabs[[length(tabs)]]
@@ -210,7 +208,6 @@ etox_basic <- function(id, verbose = TRUE) {
 
       out <- list(cas = cas, ec = ec, gsbl = gsbl, synonyms = syns,
                   source_url = qurl)
-      if (verbose) message("")
       return(out)
 
       # CODE FOR A POSSIBLE FUTURE RELEASE
@@ -242,7 +239,6 @@ etox_basic <- function(id, verbose = TRUE) {
       ### END
     }
     else {
-      if (verbose) message(httr::message_for_status(res))
       return(NA)
     }
     }
@@ -290,23 +286,23 @@ etox_basic <- function(id, verbose = TRUE) {
 etox_targets <- function(id, verbose = TRUE) {
   foo <- function(id, verbose) {
     if (is.na(id)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
     baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
     qurl <- paste0(baseurl, id)
-    if(verbose) message(paste0("Querying ", id, ". "), appendLF = FALSE)
+    if(verbose) webchem_message("query", id, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if(res$status_code == 200){
-      if (verbose) message(httr::message_for_status(res), appendLF = FALSE)
       tt <- try(read_html(res), silent = TRUE)
       if (inherits(tt, 'try-error')) {
-        if (verbose) message(" Not found. Returning NA.")
+        if (verbose) webchem_message("not_found")
         return(NA)
       }
       link2 <-
@@ -325,7 +321,7 @@ etox_targets <- function(id, verbose = TRUE) {
         )
       if (length(mssg) > 0) {
         if (grepl('no result', mssg)) {
-          if (verbose) message(" Not found. Returning NA.")
+          if (verbose) webchem_message("not_found")
           return(NA)
         } else {
           if (verbose) message(paste0(" Problem found. Message: ", mssg))
@@ -339,11 +335,9 @@ etox_targets <- function(id, verbose = TRUE) {
       source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
       source_url <- gsub('^(.*ziel\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
       out <- list(res = res, source_url = source_url)
-      if (verbose) message("")
       return(out)
     }
     else {
-      if (verbose) message(httr::message_for_status(res))
       return(NA)
     }
   }
@@ -384,19 +378,23 @@ etox_targets <- function(id, verbose = TRUE) {
 etox_tests <- function(id, verbose = TRUE) {
   foo <- function(id, verbose){
     if (is.na(id)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
     baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
     qurl <- paste0(baseurl, id)
-    if(verbose) message(paste0("Querying ", id, ". "), appendLF = FALSE)
+    if(verbose) webchem_message("query", id, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
+    res <- httr::RETRY("GET",
+                       qurl,
+                       httr::user_agent(webchem_url()),
+                       terminate_on = 404,
+                       quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
-      if (verbose) message(httr::message_for_status(res), appendLF = FALSE)
       tt <- try(read_html(res), silent = TRUE)
       if (inherits(tt, 'try-error')) {
-        message(" Not found. Returning NA.")
+        webchem_message("not_found")
         return(NA)
       }
       link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Tests') and contains(@href,'stoff')]"), 'href')
@@ -424,11 +422,9 @@ etox_tests <- function(id, verbose = TRUE) {
       source_url <- paste0('https://webetox.uba.de', link2, '&language=en')
       source_url <- gsub('^(.*test\\.do)(.*)(\\?stoff=.*)$', '\\1\\3', source_url)
       out <- list(res = res2, source_url = source_url)
-      if (verbose) message("")
       return(out)
     }
     else {
-      if (verbose) message(httr::message_for_status(res))
       return(NA)
     }
   }

@@ -32,22 +32,22 @@ opsin_query <- function(query, verbose = TRUE, ...){
     names(empty) <- c("query", "inchi", "stdinchi", "stdinchikey", "smiles", "message", "status")
     empty <- as_tibble(t(empty))
     if (is.na(query)) {
-      if (verbose) message(standard_string("na"))
+      if (verbose) webchem_message("na")
       return(empty)
     }
     query_u <- URLencode(query, reserved = TRUE)
     baseurl <- "http://opsin.ch.cam.ac.uk/opsin/"
     out <- 'json'
     qurl <- paste0(baseurl, query_u, '.', out)
-    if (verbose) message(standard_string("query", query), appendLF = FALSE)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       user_agent(standard_string("webchem")),
+                       user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
-      if (verbose) message(httr::message_for_status(res), appendLF = FALSE)
       cont <- content(res, as = 'text')
       if (substr(cont, 1, 14) == '<!DOCTYPE html') {
         cont <- read_html(cont)
@@ -59,11 +59,9 @@ opsin_query <- function(query, verbose = TRUE, ...){
       cont[['cml']] <- NULL
       cont <- c(query = query, unlist(cont))
       cont <- tibble::as_tibble(t(cont))
-      if (verbose) message("")
       return(cont)
     }
     else {
-      if (verbose) message(httr::message_for_status(res))
       return(empty)
     }
   }

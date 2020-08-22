@@ -71,26 +71,25 @@ is.inchikey_cs <- function(x, verbose = TRUE){
     stop('Cannot handle multiple input strings.')
   }
   if (is.na(x)) {
-    if (verbose) message(standard_string("na"))
+    if (verbose) webchem_message("na")
     return(NA)
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
   qurl <- paste0(baseurl, 'inchi_key=', x)
   Sys.sleep(0.1)
-  if (verbose) message(standard_string("query", x), appendLF = FALSE)
+  if (verbose) webchem_message("query", x, appendLF = FALSE)
   res <- httr::RETRY("GET",
                    qurl,
-                   httr::user_agent(standard_string("webchem")),
+                   httr::user_agent(webchem_url()),
                    terminate_on = 404,
                    quiet = TRUE)
+  if (verbose) message(httr::message_for_status(res))
   if (res$status_code == 200){
-    if (verbose) message(httr::message_for_status(res))
     h <- xml2::read_xml(res)
     out <- as.logical(xml_text(h))
     return(out)
     }
   else {
-    if (verbose) message(httr::message_for_status(res))
     return(NA)
   }
 }
@@ -508,22 +507,34 @@ matcher <-
     }
   }
 
-#' Standard strings
+#' Webchem messages
 #'
-#' Standard strings to be used in verbose messages and user agent strings.
+#' Webchem spacific messages to be used in verbose messages.
 #' @noRd
-standard_string <- function(action = c("na",
-                                      "query",
-                                      "query_all",
-                                      "not_found",
-                                      "not_available",
-                                      "webchem"),
-                           ...) {
-  switch(action,
-         na = "Query is NA. Returning NA.",
+webchem_message <- function(action = c("na",
+                                       "query",
+                                       "query_all",
+                                       "not_found",
+                                       "not_available"),
+                            appendLF = TRUE,
+                            ...) {
+  action <- match.arg(action)
+  string <- switch(
+    action,
+    na = "Query is NA. Returning NA.",
          query = paste0("Querying ", ..., ". "),
          query_all = "Querying. ",
          not_found = " Not found. Returning NA.",
-         not_available = " Not available. Returning NA.",
-         webchem = "https://cran.r-project.org/web/packages/webchem/index.html")
+         not_available = " Not available. Returning NA.")
+  message(string, appendLF = FALSE)
+  if (appendLF) message("")
+}
+
+#' Webchem URL
+#'
+#' URL of the webchem package to be used in httr::user_agent()
+#' @noRd
+webchem_url <- function() {
+  url <- "https://cran.r-project.org/web/packages/webchem/index.html"
+  return(url)
 }

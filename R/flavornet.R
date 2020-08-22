@@ -28,29 +28,32 @@
 fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
 {
   if (!missing(CAS)) {
-    warning('"CAS" is now deprecated. Please use "query" instead. ')
+    message('"CAS" is now deprecated. Please use "query" instead. ')
     query <- CAS
   }
   match.arg(from)
   foo <- function (query, verbose){
     if (is.na(query)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
-    if(verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if(verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 10, scale = 1/10))
-    h <- httr::RETRY("GET", qurl, terminate_on = 404, quiet = TRUE)
-    if (h$status_code == 200){
-      if (verbose) message(httr::message_for_status(h))
-      h <- read_html(qurl)
+    res <- httr::RETRY("GET",
+                     qurl,
+                     httr::user_agent(webchem_url()),
+                     terminate_on = 404,
+                     quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
+    if (res$status_code == 200){
+      h <- read_html(res)
       doc.text = xml_text(xml_find_all(h, "/html/body/p[3]"))
       pattern = "Percepts: "
       percept <- gsub(pattern, "", doc.text)
       return(percept)
     }
     else {
-      if (verbose) message(httr::message_for_status(h))
       return(NA)
     }
   }

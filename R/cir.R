@@ -125,12 +125,10 @@ cir_query <- function(identifier, representation = "smiles",
   match <- match.arg(match)
   foo <- function(identifier, representation, resolver, first, verbose) {
     if (is.na(identifier)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
-    if (verbose) {
-      message(paste0("Querying ", identifier, ". "), appendLF = FALSE)
-    }
+    if (verbose) webchem_message("query", identifier, appendLF = FALSE)
     identifier <- URLencode(identifier, reserved = TRUE)
     baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
     qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
@@ -140,18 +138,17 @@ cir_query <- function(identifier, representation = "smiles",
     Sys.sleep(1.5)
     h <- httr::RETRY("GET",
                      qurl,
-                     httr::user_agent(standard_string("webchem")),
+                     httr::user_agent(webchem_url()),
                      terminate_on = 404,
                      quiet = TRUE)
+    if (verbose) message(httr::message_for_status(h))
     if (h$status_code == 200){
       tt <- read_xml(content(h, as = 'raw'))
       out <- xml_text(xml_find_all(tt, '//item'))
       if (length(out) == 0) {
-        if (verbose) message(paste0(httr::message_for_status(h),
-                                    " Not found. Returning NA."))
+        if (verbose) webchem_message("not_found")
         return(NA)
       }
-      if (verbose) message(httr::message_for_status(h))
       out <- matcher(out, query = identifier, match = match, verbose = verbose)
       if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
                                 'h_bond_acceptor_count', 'h_bond_center_count',
@@ -164,7 +161,6 @@ cir_query <- function(identifier, representation = "smiles",
       return(out)
     }
     else {
-      if (verbose) message(httr::message_for_status(h))
       return(NA)
     }
   }
@@ -370,22 +366,18 @@ cir_img <- function(query,
     path <- file.path(dir, paste0(query, ".", sub("format=", "", format)))
     # query
     Sys.sleep(1)
-    if (verbose)
-      message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     res <- httr::RETRY("GET",
                        qurl,
                        quiet = TRUE,
                        terminate_on = 404,
                        httr::write_disk(path, overwrite = TRUE),
-                       httr::user_agent(standard_string("webchem")))
-    if (verbose) {
-      message(httr::message_for_status(res), " ", appendLF = FALSE)
-      if (httr::http_error(res) && file.exists(path)) {
-        file.remove(path)
-        message("No image saved.")
-      } else {
-        message("Image saved under: ", path)
-      }
+                       httr::user_agent(webchem_url()))
+    if (verbose) message(httr::message_for_status(res))
+    if (httr::http_error(res) && file.exists(path)) {
+      file.remove(path)
+    } else {
+      if (verbose) message(" Image saved under: ", path)
     }
   }
   for (i in query) {

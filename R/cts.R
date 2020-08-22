@@ -39,10 +39,10 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
   match.arg(from)
   foo <- function(query, verbose) {
     if (is.na(query)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
-    if(verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if(verbose) webchem_message("query", query, appendLF = FALSE)
     if (!is.inchikey(query, verbose = verbose)) {
       if (verbose) message("Input is not a valid inchikey.")
       return(NA)
@@ -52,16 +52,15 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     out <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(out))
     if (out$status_code == 200) {
-      if (verbose) message(httr::message_for_status(out))
       out <- jsonlite::fromJSON(rawToChar(out$content))
       return(out)
     }
     else {
-      if (verbose) message(httr::message_for_status(out))
       return(NA)
     }
   }
@@ -150,10 +149,10 @@ cts_convert <- function(query,
 
   foo <- function(query, from, to, first, verbose){
     if (is.na(query)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
-    if(verbose) message(paste0("Querying ", query, ". "), appendLF = FALSE)
+    if(verbose) webchem_message("query", query, appendLF = FALSE)
     query <- URLencode(query, reserved = TRUE)
     from <- URLencode(from, reserved = TRUE)
     to <- URLencode(to, reserved = TRUE)
@@ -162,23 +161,21 @@ cts_convert <- function(query,
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
     res <- httr::RETRY("GET",
                        qurl,
-                       httr::user_agent(standard_string("webchem")),
+                       httr::user_agent(webchem_url()),
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       out <- jsonlite::fromJSON(rawToChar(res$content))
       if (length(out$result[[1]]) == 0) {
-        if (verbose) message(paste0(httr::message_for_status(res),
-                                    " Not found. Returning NA."))
+        if (verbose) webchem_message("not_found")
         return(NA)
       }
-      if (verbose) message(httr::message_for_status(res))
       out <- out$result[[1]]
       out <- matcher(out, match = match, query = query, verbose = verbose)
       return(out)
     }
     else {
-      if (verbose) message(httr::message_for_status(out))
       return(NA)
     }
   }
@@ -207,7 +204,14 @@ cts_convert <- function(query,
 #' cts_from()
 #' }
 cts_from <- function(verbose = TRUE){
-  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues'))
+  qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues"
+  res <- httr::RETRY("GET",
+                     qurl,
+                     httr::user_agent(webchem_url()),
+                     terminate_on = 404,
+                     quiet = TRUE)
+  out <- tolower(jsonlite::fromJSON(rawToChar(res$content)))
+  return(out)
 }
 
 
@@ -230,5 +234,12 @@ cts_from <- function(verbose = TRUE){
 #' cts_from()
 #' }
 cts_to <- function(verbose = TRUE){
-  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues'))
+  qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues"
+  res <- httr::RETRY("GET",
+                     qurl,
+                     httr::user_agent(webchem_url()),
+                     terminate_on = 404,
+                     quiet = TRUE)
+  out <- tolower(jsonlite::fromJSON(rawToChar(res$content)))
+  return(out)
 }
