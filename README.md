@@ -87,6 +87,28 @@ library("devtools")
 install_github("ropensci/webchem")
 ```
 
+### Use Cases
+
+Have you used `webchem` in your work? Please let us know by opening an
+issue or making a pull request to edit this section\!
+
+  - Allaway RJ, La Rosa S, Guinney J, Gosline SJC (2018) Probing the
+    chemical–biological relationship space with the Drug Target
+    Explorer. Journal of Cheminformatics 10:41.
+    <https://doi.org/10.1186/s13321-018-0297-4>
+  - Bergmann AJ, Points GL, Scott RP, et al (2018) Development of
+    quantitative screen for 1550 chemicals with GC-MS. Anal Bioanal Chem
+    410:3101–3110. <https://doi.org/10.1007/s00216-018-0997-7>
+  - Brokl M, Morales V, Bishop L, et al (2019) Comparison of Mainstream
+    Smoke Composition from CR20 Resin Filter and Empty-Cavity Filter
+    Cigarettes by Headspace SPME Coupled with GC×GC TOFMS and
+    Chemometric Analysis. Beiträge zur Tabakforschung
+    International/Contributions to Tobacco Research 28:231–249.
+    <https://doi.org/10.2478/cttr-2019-0004>
+  - Münch D, Galizia CG (2016) DoOR 2.0 - Comprehensive Mapping of
+    Drosophila melanogaster Odorant Responses. Scientific Reports
+    6:21841. <https://doi.org/10.1038/srep21841>
+
 ### Acknowledgements
 
 Without the fantastic web services `webchem` wouldn’t be here.
@@ -120,7 +142,6 @@ here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
     `citation("webchem")`
   - Please note that this package is released with a [Contributor Code
     of Conduct](https://ropensci.org/code-of-conduct/). By contributing
-    to this project, you agree to abide by its
-terms.
+    to this project, you agree to abide by its terms.
 
 [![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
