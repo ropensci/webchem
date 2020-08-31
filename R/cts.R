@@ -43,7 +43,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
       return(NA)
     }
     if(verbose) webchem_message("query", query, appendLF = FALSE)
-    if (!is.inchikey(query, verbose = verbose)) {
+    if (!is.inchikey(query, verbose = FALSE)) {
       if (verbose) message("Input is not a valid inchikey.")
       return(NA)
     }

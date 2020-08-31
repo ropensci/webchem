@@ -123,8 +123,8 @@ get_chebiid <- function(query,
                        body = body,
                        terminate_on = 404,
                        quiet = TRUE)
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
-      if (verbose) message(httr::message_for_status(res))
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')
       out <- l2df(as_list(xml_children(xml_find_first(cont, '//d1:return'))))
       out <- as_tibble(setNames(out, tolower(names(out))))
@@ -165,7 +165,6 @@ get_chebiid <- function(query,
     } else {
       out <- tibble("query" = query,
                     "chebiid" = NA_character_)
-      message(httr::message_for_status(res))
       return(out)
     }
   }

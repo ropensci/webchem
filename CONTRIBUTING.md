@@ -64,6 +64,8 @@ Some consistency guidelines:
 
 13. SMILES strings may use special characters like "#". `URLencode()` does not encode this as "%23" by default, so use `URLencode(query, reserved = TRUE)` instead. It's important to note that it's the query that has to be encoded like this, not the full url.
 
+14. Print verbose messages. Use `htts::message_for_status()` and `webchem_message()` functions to generate standard messages when possible.
+
 ### Data Sources
 
 You might think all webscraping is perfectly legal but it is unfortunately not that simple.

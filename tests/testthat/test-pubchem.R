@@ -171,11 +171,4 @@ test_that("pc_sect()", {
   expect_equal(names(d), c("pdbID", "Name", "Result", "SourceName", "SourceID"))
   expect_equivalent(d$Result[1],
                     ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)")
-
-  e <- pc_sect("US2013040379", "Patent Identifier Synonyms", "patent")
-  expect_s3_class(e, c("tbl_df", "tbl", "data.frame"))
-  expect_equal(names(e), c("PatentID", "Name", "Result", "SourceName",
-                           "SourceID"))
-  expect_equivalent(e$Result, c("US20130040379", "US20130040379A1",
-                           "US2013040379A1"))
-})
+ })

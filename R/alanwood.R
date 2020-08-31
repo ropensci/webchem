@@ -69,9 +69,8 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
     }
 
     takelink <- links[tolower(names) == tolower(query)]
-    if (is.na(query)) takelink <- vector()
     if (length(takelink) == 0) {
-      if (verbose) webchem_message("not_found")
+      if (verbose) message("Not found.")
       return(NA)
     }
     if (length(takelink) > 1) {
