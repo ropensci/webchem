@@ -17,8 +17,8 @@ apt_packages:
   - libssl-dev
   - libcurl4-openssl-dev
   - libxml2-dev
-  - default-jre
-  - default-jdk
+  - openjdk-8-jdk
+  - openjdk-8-jre
 
 r_packages:
   - devtools
