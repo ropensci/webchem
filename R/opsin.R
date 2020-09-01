@@ -41,11 +41,15 @@ opsin_query <- function(query, verbose = TRUE, ...){
     qurl <- paste0(baseurl, query_u, '.', out)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       cont <- content(res, as = 'text')

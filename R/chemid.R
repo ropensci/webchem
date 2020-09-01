@@ -77,11 +77,15 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
     # return max 50 hits
     qurl <- paste0(baseurl, query, '?DT_START_ROW=0&DT_ROWS_PER_PAGE=50')
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
       ttt <- read_html(res)
@@ -157,11 +161,15 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         qurl <- paste0('https://chem.nlm.nih.gov/chemidplus/rn/', hit_cas)
         if (verbose) webchem_message("query", hit_cas, appendLF = FALSE)
         Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-        res <- httr::RETRY("GET",
-                           qurl,
-                           httr::user_agent(webchem_url()),
-                           terminate_on = 404,
-                           quiet = TRUE)
+        res <- try(httr::RETRY("GET",
+                               qurl,
+                               httr::user_agent(webchem_url()),
+                               terminate_on = 404,
+                               quiet = TRUE), silent = TRUE)
+        if (inherits(res, "try-error")) {
+          if (verbose) webchem_message("service_down")
+          return(NA)
+        }
         if (verbose) message(httr::message_for_status(res))
         if (res$status_code == 200) {
           ttt <- read_html(res)

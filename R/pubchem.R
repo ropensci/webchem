@@ -189,19 +189,23 @@ get_cid <-
       if (from == "inchi") {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
                       domain, from, "cids", "json", sep = "/")
-        res <- httr::RETRY("POST",
-                           qurl,
-                           user_agent(webchem_url()),
-                           body = paste0("inchi=", query),
-                           terminate_on = 404,
-                           quiet = TRUE)
+        res <- try(httr::RETRY("POST",
+                               qurl,
+                               user_agent(webchem_url()),
+                               body = paste0("inchi=", query),
+                               terminate_on = 404,
+                               quiet = TRUE), silent = TRUE)
       }
       else {
-        res <- httr::RETRY("POST",
-                           qurl,
-                           user_agent(webchem_url()),
-                           terminate_on = c(202, 404),
-                           quiet = TRUE)
+        res <- try(httr::RETRY("POST",
+                               qurl,
+                               user_agent(webchem_url()),
+                               terminate_on = c(202, 404),
+                               quiet = TRUE), silent = TRUE)
+      }
+      if (inherits(res, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(NA)
       }
       if (res$status_code != 200) {
         if (res$status_code == 202) {
@@ -211,11 +215,15 @@ get_cid <-
                         "listkey", listkey, "cids", "json", sep = "/")
           while (res$status_code == 202) {
             Sys.sleep(5 + rgamma(1, shape = 15, scale = 1 / 10))
-            res <- httr::RETRY("POST",
-                               qurl,
-                               user_agent(webchem_url()),
-                               terminate_on = 404,
-                               quiet = TRUE)
+            res <- try(httr::RETRY("POST",
+                                   qurl,
+                                   user_agent(webchem_url()),
+                                   terminate_on = 404,
+                                   quiet = TRUE), silent = TRUE)
+            if (inherits(res, "try-error")) {
+              if (verbose) webchem_message("service_down")
+              return(NA)
+            }
           }
           if (res$status_code != 200) {
             if (verbose) message(httr::message_for_status(res))
@@ -341,12 +349,16 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
   qurl <- paste0(prolog, input, output)
   if (verbose) webchem_message("query_all", appendLF = FALSE)
   Sys.sleep(0.2)
-  res <- httr::RETRY("POST",
-                     qurl,
-                     httr::user_agent(webchem_url()),
-                     body = list("cid" = paste(cid, collapse = ",")),
-                     terminate_on = 404,
-                     quiet = TRUE)
+  res <- try(httr::RETRY("POST",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         body = list("cid" = paste(cid, collapse = ",")),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   if (verbose) message(httr::message_for_status(res))
   if (res$status_code == 200) {
     cont <- jsonlite::fromJSON(rawToChar(res$content))
@@ -456,12 +468,16 @@ pc_synonyms <- function(query,
     qurl <- paste0(prolog, input, output, arg)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep(0.2)
-    res <- httr::RETRY("POST",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       body = paste0(from, "=", query),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("POST",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           body = paste0(from, "=", query),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
       cont <- httr::content(res)
@@ -597,11 +613,15 @@ pc_page <- function(id,
                    domain, "/", id, "/JSON?heading=", section)
     if (verbose) webchem_message("query", id, appendLF = FALSE)
     Sys.sleep(0.3 + stats::rexp(1, rate = 10 / 0.3))
-    res <- httr::RETRY("POST",
-                       qurl,
-                       user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("POST",
+                           qurl,
+                           user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       cont <- httr::content(res, type = "text", encoding = "UTF-8")

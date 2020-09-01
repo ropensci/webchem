@@ -57,11 +57,15 @@ get_wdid <-
       qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query1)
       if (verbose) webchem_message("query", query, appendLF = FALSE)
       Sys.sleep(0.3)
-      res <- httr::RETRY("GET",
-                         qurl,
-                         httr::user_agent(webchem_url()),
-                         terminate_on = 404,
-                         quiet = TRUE)
+      res <- try(httr::RETRY("GET",
+                             qurl,
+                             httr::user_agent(webchem_url()),
+                             terminate_on = 404,
+                             quiet = TRUE), silent = TRUE)
+      if (inherits(res, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(NA)
+      }
       if (verbose) message(httr::message_for_status(res))
       if (res$status_code == 200) {
         cont <- jsonlite::fromJSON(httr::content(res,
@@ -177,11 +181,15 @@ wd_ident <- function(id, verbose = TRUE){
     qurl <- URLencode(qurl)
     Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
     if (verbose) webchem_message("query", id, appendLF = FALSE)
-    res <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       tmp <- fromJSON(content(res, as = "text"))

@@ -40,11 +40,15 @@ fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
     if(verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 10, scale = 1/10))
-    res <- httr::RETRY("GET",
-                     qurl,
-                     httr::user_agent(webchem_url()),
-                     terminate_on = 404,
-                     quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
       h <- read_html(res)

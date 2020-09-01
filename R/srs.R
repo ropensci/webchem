@@ -39,11 +39,15 @@ srs_query <-
       }
       entity_query <- paste0(entity_url, "/substance/", from, "/", x)
       if (verbose) webchem_message("query", x, appendLF = FALSE)
-      response <- httr::RETRY("GET",
-                              entity_query,
-                              httr::user_agent(webchem_url()),
-                              terminate_on = 404,
-                              quiet = TRUE)
+      response <- try(httr::RETRY("GET",
+                                  entity_query,
+                                  httr::user_agent(webchem_url()),
+                                  terminate_on = 404,
+                                  quiet = TRUE), silent = TRUE)
+      if (inherits(response, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(NA)
+      }
       if (verbose) message(httr::message_for_status(response))
       if (response$status_code == 200) {
         text_content <- httr::content(response, "text")

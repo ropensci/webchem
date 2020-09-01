@@ -78,11 +78,15 @@ is.inchikey_cs <- function(x, verbose = TRUE){
   qurl <- paste0(baseurl, 'inchi_key=', x)
   Sys.sleep(0.1)
   if (verbose) webchem_message("query", x, appendLF = FALSE)
-  res <- httr::RETRY("GET",
-                   qurl,
-                   httr::user_agent(webchem_url()),
-                   terminate_on = 404,
-                   quiet = TRUE)
+  res <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   if (verbose) message(httr::message_for_status(res))
   if (res$status_code == 200){
     h <- xml2::read_xml(res)
@@ -515,17 +519,20 @@ webchem_message <- function(action = c("na",
                                        "query",
                                        "query_all",
                                        "not_found",
-                                       "not_available"),
+                                       "not_available",
+                                       "service_down"),
                             appendLF = TRUE,
                             ...) {
   action <- match.arg(action)
   string <- switch(
     action,
     na = "Query is NA. Returning NA.",
-         query = paste0("Querying ", ..., ". "),
-         query_all = "Querying. ",
-         not_found = " Not found. Returning NA.",
-         not_available = " Not available. Returning NA.")
+    query = paste0("Querying ", ..., ". "),
+    query_all = "Querying. ",
+    not_found = " Not found. Returning NA.",
+    not_available = " Not available. Returning NA.",
+    service_down = " Service Not available. Returning NA."
+    )
   message(string, appendLF = FALSE)
   if (appendLF) message("")
 }

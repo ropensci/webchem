@@ -116,13 +116,17 @@ get_chebiid <- function(query,
      </soapenv:Envelope>')
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    res <- httr::RETRY("POST",
-                       url,
-                       httr::user_agent(webchem_url()),
-                       httr::add_headers(headers),
-                       body = body,
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("POST",
+                           url,
+                           httr::user_agent(webchem_url()),
+                           httr::add_headers(headers),
+                           body = body,
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')
@@ -264,13 +268,17 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
      </soapenv:Envelope>')
     if (verbose) webchem_message("query", chebiid, appendLF = FALSE)
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-    res <- httr::RETRY("POST",
-                       url,
-                       httr::user_agent(webchem_url()),
-                       httr::add_headers(headers),
-                       body = body,
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("POST",
+                           url,
+                           httr::user_agent(webchem_url()),
+                           httr::add_headers(headers),
+                           body = body,
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code != 200) {
       return(NA)

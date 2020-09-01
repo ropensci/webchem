@@ -84,13 +84,17 @@ get_etoxid <- function(query,
                    event = "Search")
     }
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    h <- httr::RETRY("POST",
-                    url = baseurl,
-                    httr::user_agent(webchem_url()),
-                    handle = handle(''),
-                    body = body,
-                    terminate_on = 404,
-                    quiet = TRUE)
+    h <- try(httr::RETRY("POST",
+                         url = baseurl,
+                         httr::user_agent(webchem_url()),
+                         handle = handle(''),
+                         body = body,
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(h))
     if (h$status_code == 200) {
       tt <- read_html(h)
@@ -177,11 +181,15 @@ etox_basic <- function(id, verbose = TRUE) {
     qurl <- paste0(baseurl, id)
     if(verbose) webchem_message("query", id, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1 / 10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       tt <- try(read_html(res), silent = TRUE)
@@ -293,11 +301,15 @@ etox_targets <- function(id, verbose = TRUE) {
     qurl <- paste0(baseurl, id)
     if(verbose) webchem_message("query", id, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if(res$status_code == 200){
       tt <- try(read_html(res), silent = TRUE)
@@ -385,11 +397,15 @@ etox_tests <- function(id, verbose = TRUE) {
     qurl <- paste0(baseurl, id)
     if(verbose) webchem_message("query", id, appendLF = FALSE)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       tt <- try(read_html(res), silent = TRUE)

@@ -39,11 +39,15 @@ get_ri_xml <-
         qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
         Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
         if (verbose) webchem_message("query", query, appendLF = FALSE)
-        res <- httr::RETRY("GET",
-                           qurl,
-                           httr::user_agent(webchem_url()),
-                           terminate_on = 404,
-                           quiet = TRUE)
+        res <- try(httr::RETRY("GET",
+                               qurl,
+                               httr::user_agent(webchem_url()),
+                               terminate_on = 404,
+                               quiet = TRUE), silent = TRUE)
+        if (inherits(res, "try-error")) {
+          if (verbose) webchem_message("service_down")
+          return(NA)
+        }
         if (verbose) message(httr::message_for_status(res))
         if (res$status_code == 200) {
           page <- xml2::read_html(res)
@@ -95,11 +99,15 @@ get_ri_xml <-
           webchem_message("query", ID, appendLF = FALSE)
         }
       }
-      res2 <- httr::RETRY("GET",
-                          qurl,
-                          httr::user_agent(webchem_url()),
-                          terminate_on = 404,
-                          quiet = TRUE)
+      res2 <- try(httr::RETRY("GET",
+                              qurl,
+                              httr::user_agent(webchem_url()),
+                              terminate_on = 404,
+                              quiet = TRUE), silent = TRUE)
+      if (inherits(res2, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(NA)
+      }
       if (verbose) message(httr::message_for_status(res2))
       if (res2$status_code == 200) {
         page <- xml2::read_html(res2)

@@ -98,11 +98,15 @@ pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', '
     qurl = paste0(baseurl, baseq, 'ChemName=', query)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) httr::message_for_status(res)
     if (res$status_code == 200) {
       h <- xml2::read_html(res)

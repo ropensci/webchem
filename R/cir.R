@@ -136,11 +136,15 @@ cir_query <- function(identifier, representation = "smiles",
       qurl <- paste0(qurl, '?resolver=', resolver)
     }
     Sys.sleep(1.5)
-    h <- httr::RETRY("GET",
-                     qurl,
-                     httr::user_agent(webchem_url()),
-                     terminate_on = 404,
-                     quiet = TRUE)
+    h <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(h))
     if (h$status_code == 200){
       tt <- read_xml(content(h, as = 'raw'))
@@ -367,12 +371,16 @@ cir_img <- function(query,
     # query
     Sys.sleep(1)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    res <- httr::RETRY("GET",
-                       qurl,
-                       quiet = TRUE,
-                       terminate_on = 404,
-                       httr::write_disk(path, overwrite = TRUE),
-                       httr::user_agent(webchem_url()))
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           quiet = TRUE,
+                           terminate_on = 404,
+                           httr::write_disk(path, overwrite = TRUE),
+                           httr::user_agent(webchem_url())), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (httr::http_error(res) && file.exists(path)) {
       file.remove(path)

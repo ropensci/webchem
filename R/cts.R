@@ -50,11 +50,15 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
     qurl <- paste0(baseurl, '/', query)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    out <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    out <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(out))
     if (out$status_code == 200) {
       out <- jsonlite::fromJSON(rawToChar(out$content))
@@ -159,11 +163,15 @@ cts_convert <- function(query,
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
     Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       out <- jsonlite::fromJSON(rawToChar(res$content))
@@ -205,11 +213,15 @@ cts_convert <- function(query,
 #' }
 cts_from <- function(verbose = TRUE){
   qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues"
-  res <- httr::RETRY("GET",
-                     qurl,
-                     httr::user_agent(webchem_url()),
-                     terminate_on = 404,
-                     quiet = TRUE)
+  res <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   out <- tolower(jsonlite::fromJSON(rawToChar(res$content)))
   return(out)
 }
@@ -235,11 +247,15 @@ cts_from <- function(verbose = TRUE){
 #' }
 cts_to <- function(verbose = TRUE){
   qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues"
-  res <- httr::RETRY("GET",
-                     qurl,
-                     httr::user_agent(webchem_url()),
-                     terminate_on = 404,
-                     quiet = TRUE)
+  res <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   out <- tolower(jsonlite::fromJSON(rawToChar(res$content)))
   return(out)
 }

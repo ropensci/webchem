@@ -83,11 +83,15 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 
     qurl <- paste0("http://www.alanwood.net/pesticides/", takelink)
     Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
-    res <- httr::RETRY("GET",
-                       qurl,
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
       ttt <- read_html(res)
@@ -182,11 +186,15 @@ build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
       dir.create(paste0(tempdir(), "/data"))
     }
     if (verbose) message("Building index. ", appendLF = FALSE)
-    res <- httr::RETRY("GET",
-                       "http://www.alanwood.net/pesticides/index_rn.html",
-                       httr::user_agent(webchem_url()),
-                       terminate_on = 404,
-                       quiet = TRUE)
+    res <- try(httr::RETRY("GET",
+                           "http://www.alanwood.net/pesticides/index_rn.html",
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent= TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200){
       idx1 <- read_html("http://www.alanwood.net/pesticides/index_rn.html")
