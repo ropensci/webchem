@@ -2,7 +2,7 @@ language: r
 r:
   - devel
   - release
-dist: trusty
+dist: focal
 sudo: required
 cache: packages
 env:
@@ -17,8 +17,9 @@ apt_packages:
   - libssl-dev
   - libcurl4-openssl-dev
   - libxml2-dev
-  - default-jre
-  - default-jdk
+  - openjdk-11-jre
+  - openjdk-11-jdk
+  - r-cran-rjava
 
 r_packages:
   - devtools
