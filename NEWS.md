@@ -1,7 +1,8 @@
-# webchem 1.0.0.9001
+# webchem 1.0.0.9005
 
 ## NEW FEATURES
 
+* Download images of substances from Chemical Identifier Resolver (CIR) with `cir_img()` [contributed by @andschar].
 * Download images of substances from ChemSpider with `cs_img()`
 * `find_db()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
 
@@ -12,6 +13,10 @@
 * Possible values for `"from"` have been made more consistent across functions
 * `pc_synonyms()`, `cts_convert()`, `cir_query()` have been changed to use the `match` argument instead of `choices` for consistency with other functions
 * `get_etoxid()` output changed slightly so that the matched chemical name string no longer includes the etoxid in parentheses.
+
+## BUG FIXES
+
+* Fix URL encoding so SMILES queries don't fail on some special characters.
 
 # webchem 1.0.0
 

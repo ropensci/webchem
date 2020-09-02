@@ -36,7 +36,7 @@ opsin_query <- function(query, verbose = TRUE, ...){
     if (is.na(query)) {
       return(empty)
     }
-    query_u <- URLencode(query)
+    query_u <- URLencode(query, reserved = TRUE)
     baseurl <- "http://opsin.ch.cam.ac.uk/opsin/"
     out <- 'json'
     qurl <- paste0(baseurl, query_u, '.', out)
