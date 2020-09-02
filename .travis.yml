@@ -19,6 +19,7 @@ apt_packages:
   - libxml2-dev
   - openjdk-8-jdk
   - openjdk-8-jre
+  - r-cran-rjava
 
 r_packages:
   - devtools
