@@ -2,7 +2,7 @@ language: r
 r:
   - devel
   - release
-dist: xenial
+dist: focal
 sudo: required
 cache: packages
 env:
@@ -17,9 +17,8 @@ apt_packages:
   - libssl-dev
   - libcurl4-openssl-dev
   - libxml2-dev
-  - openjdk-8-jdk
-  - openjdk-8-jre
-  - r-cran-rjava
+  - default-jre
+  - default-jdk
 
 r_packages:
   - devtools
