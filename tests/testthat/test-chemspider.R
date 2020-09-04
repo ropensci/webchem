@@ -5,6 +5,7 @@ test_that("examples in the article are unchanged", {
   skip_on_appveyor()
   skip_on_travis()
   skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   #values come from test-pubchem
@@ -26,6 +27,7 @@ test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_appveyor()
   skip_on_travis()
   skip_on_ci()
+
   expect_type(cs_check_key(), "character")
 })
 
@@ -34,6 +36,7 @@ test_that("cs_datasources()", {
   skip_on_appveyor()
   skip_on_travis()
   skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
   a <- cs_datasources()
 
@@ -77,6 +80,7 @@ test_that("get_csid() works with defaults", {
   skip_on_appveyor()
   skip_on_travis()
   skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- get_csid("Triclosan")
@@ -95,7 +99,7 @@ test_that("get_csid() works with arguments passed to cs_control()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  skip_on_ci
+  skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
@@ -134,6 +138,7 @@ test_that("get_csid() handles special characters in SMILES", {
   skip_on_appveyor()
   skip_on_travis()
   skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   expect_equal(get_csid("C#C", from = "smiles")$csid, 6086)
