@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - pkgdown
   pull_request:
     branches:
       - master
