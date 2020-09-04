@@ -10,7 +10,7 @@ on:
 name: test-coverage
 
 jobs:
-  R-CMD-check:
+  test-coverage:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
