@@ -76,6 +76,7 @@ test_that("get_csid() works with defaults", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- get_csid("Triclosan")
@@ -94,6 +95,8 @@ test_that("get_csid() works with arguments passed to cs_control()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   c1 <- head(get_csid("iron oxide", from = "name", order_by = "recordId"))
@@ -130,6 +133,7 @@ test_that("get_csid() handles special characters in SMILES", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   expect_equal(get_csid("C#C", from = "smiles")$csid, 6086)
@@ -139,6 +143,8 @@ test_that("cs_smiles_csid()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_smiles_csid("CC(O)=O")
@@ -151,6 +157,8 @@ test_that("cs_inchi_csid()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
@@ -163,6 +171,8 @@ test_that("cs_inchikey_csid()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N")
@@ -175,6 +185,8 @@ test_that("cs_convert_multiple()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi")
@@ -203,6 +215,8 @@ test_that("cs_convert()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_convert(171, "csid", "inchi")
@@ -272,6 +286,8 @@ test_that("cs_convert() handles special characters in SMILES", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   expect_equal(cs_convert("C#C", from = "smiles", to = "csid"), 6086)
@@ -283,6 +299,8 @@ test_that("cs_compinfo()", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_compinfo(171, c("SMILES", "Formula", "InChI", "InChIKey", "StdInChI",
@@ -307,6 +325,8 @@ test_that("cs_img()", {
   skip_on_cran()
   skip_on_travis()
   skip_on_appveyor()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
