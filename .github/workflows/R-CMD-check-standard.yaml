@@ -28,6 +28,7 @@ jobs:
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      _R_CHECK_CRAN_INCOMING_: false
       RSPM: ${{ matrix.config.rspm }}
 
     steps:
@@ -69,9 +70,9 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        run: |
+          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran","--no-build-vignettes", "--timings", "--no-examples", "--as-cran"),
+          error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Show testthat output
