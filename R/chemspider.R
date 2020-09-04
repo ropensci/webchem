@@ -35,8 +35,6 @@ cs_check_key <- function() {
 #' Some ChemSpider functions allow you to restrict which sources are used to
 #' lookup the requested query. Restricting the sources makes these queries
 #' faster.
-#' @importFrom httr RETRY add_headers message_for_status
-#' @importFrom jsonlite fromJSON
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @param verbose should a verbose output be printed on the console?
@@ -56,12 +54,17 @@ cs_datasources <- function(apikey = NULL, verbose = TRUE) {
     apikey <- cs_check_key()
   }
   headers <- c("Content-Type" = "", "apikey" = apikey)
+  qurl <- "https://api.rsc.org/compounds/v1/lookups/datasources"
   if (verbose) message("Querying list of data sources. ", appendLF = FALSE)
-  res <- httr::RETRY(
-    "GET",
-    url = "https://api.rsc.org/compounds/v1/lookups/datasources",
-    httr::add_headers(.headers = headers)
-  )
+  res <- try(httr::RETRY("GET",
+                         url = qurl,
+                         httr::add_headers(.headers = headers),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   if (res$status_code == 200) {
     if (verbose) message(httr::message_for_status(res))
     out <- unlist(unname(jsonlite::fromJSON(rawToChar(res$content))))
@@ -194,7 +197,7 @@ get_csid <- function(query,
   match <- match.arg(match)
   foo <- function(x, from, match, verbose, apikey, ...) {
     if (is.na(x)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA_integer_)
     }
     headers <- c("Content-Type" = "", "apikey" = apikey)
@@ -221,34 +224,45 @@ get_csid <- function(query,
     if (from == "smiles") {
       body <- jsonlite::toJSON(list("smiles" = x), auto_unbox = TRUE)
     }
-    if (verbose) message(paste0("Querying ", x, ". "), appendLF = FALSE)
-    postres <- httr::RETRY(
-      "POST",
-      url = paste0("https://api.rsc.org/compounds/v1/filter/", from),
-      httr::add_headers(.headers = headers), body = body,
-      quiet = TRUE, terminate_on = 404
-    )
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    qurl <- paste0("https://api.rsc.org/compounds/v1/filter/", from)
+    postres <- try(httr::RETRY("POST",
+                               url = qurl,
+                               httr::add_headers(.headers = headers),
+                               body = body,
+                               terminate_on = 404,
+                               quiet = TRUE), silent = TRUE)
+    if (inherits(postres, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA_integer_)
+    }
     if (postres$status_code == 200) {
       query_id <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
-      getstatus <- httr::RETRY(
-        "GET",
-        url = paste0(
-          "https://api.rsc.org/compounds/v1/filter/",
-          query_id, "/status"
-        ),
-        httr::add_headers(.headers = headers),
-        quiet = TRUE, terminate_on = 404
-      )
+      qurl <- paste0("https://api.rsc.org/compounds/v1/filter/",
+                     query_id,
+                     "/status")
+      getstatus <- try(httr::RETRY("GET",
+                                   url = qurl,
+                                   httr::add_headers(.headers = headers),
+                                   terminate_on = 404,
+                                   quiet = TRUE), silent = TRUE)
+      if (inherits(getstatus, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(NA_integer_)
+      }
       if (getstatus$status_code == 200) {
-        getres <- httr::RETRY(
-          "GET",
-          url = paste0(
-            "https://api.rsc.org/compounds/v1/filter/",
-            query_id, "/results"
-          ),
-          httr::add_headers(.headers = headers),
-          quiet = TRUE, terminate_on = 404
-        )
+        qurl <- paste0("https://api.rsc.org/compounds/v1/filter/",
+                       query_id,
+                       "/results")
+        getres <- try(httr::RETRY("GET",
+                                  url = qurl,
+                                  httr::add_headers(.headers = headers),
+                                  terminate_on = 404,
+                                  quiet = TRUE), silent = TRUE)
+        if (inherits(getres, "try-error")) {
+          if (verbose) webchem_message("service_down")
+          return(NA_integer_)
+        }
         if (getres$status_code == 200) {
           if (verbose) message(httr::message_for_status(getres))
           res <- jsonlite::fromJSON(rawToChar(getres$content))$results
@@ -387,7 +401,7 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
   }
   foo <- function(x, from, to, verbose, apikey) {
     if (is.na(x)) {
-      if (verbose) message("Query is NA. Returning NA.")
+      if (verbose) webchem_message("na")
       return(NA)
     }
     headers <- c(`Content-Type` = "", `apikey` = apikey)
@@ -395,14 +409,19 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
       "input" = query, "inputFormat" = from,
       "outputFormat" = to
     )
-    if (verbose) message(paste0("Querying ", x, ". "), appendLF = FALSE)
+    if (verbose) webchem_message("query", x, appendLF = FALSE)
     body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-    postres <- httr::RETRY(
-      "POST",
-      url = "https://api.rsc.org/compounds/v1/tools/convert",
-      httr::add_headers(.headers = headers), body = body,
-      quiet = TRUE, terminate_on = 404
-    )
+    qurl <- "https://api.rsc.org/compounds/v1/tools/convert"
+    postres <- try(httr::RETRY("POST",
+                               url = qurl,
+                               httr::add_headers(.headers = headers),
+                               body = body,
+                               terminate_on = 404,
+                               quiet = TRUE), silent = TRUE)
+    if (inherits(postres, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
     if (postres$status_code == 200) {
       if (verbose) message(httr::message_for_status(postres))
       out <- jsonlite::fromJSON(rawToChar(postres$content))$output
@@ -426,9 +445,6 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
 #'
 #' Submit a ChemSpider ID (CSID) and the fields you are interested in, and
 #' retrieve the record details for your query.
-#' @importFrom jsonlite toJSON
-#' @importFrom httr RETRY add_headers message_for_status
-#' @importFrom dplyr left_join
 #' @param csid numeric; can be obtained using \code{\link{get_csid}}
 #' @param fields character; see details.
 #' @param apikey character; your API key. If NULL (default),
@@ -454,7 +470,7 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
 #' }
 cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
   if (mean(is.na(csid)) == 1) {
-    if (verbose) message("Query is NA. Returning NA.")
+    if (verbose) webchem_message("na")
     return(NA)
   }
   if (is.null(apikey)) {
@@ -476,17 +492,22 @@ cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
     "recordIds" = csid[!is.na(csid)], "fields" = fields
   )
   body <- jsonlite::toJSON(body)
-  if (verbose) message(paste0("Querying. "), appendLF = FALSE)
-  postres <- httr::RETRY(
-    "POST",
-    url = "https://api.rsc.org/compounds/v1/records/batch",
-    httr::add_headers(.headers = headers), body = body,
-    quiet = TRUE, terminate_on = 404
-  )
+  if (verbose) webchem_message("query_all", appendLF = FALSE)
+  qurl <- "https://api.rsc.org/compounds/v1/records/batch"
+  postres <- try(httr::RETRY("POST",
+                             url = qurl,
+                             httr::add_headers(.headers = headers),
+                             body = body,
+                             terminate_on = 404,
+                             quiet = TRUE), silent = TRUE)
+  if (inherits(postres, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   if (postres$status_code == 200) {
     res <- jsonlite::fromJSON(rawToChar(postres$content))$records
     if (length(res) == 0) {
-      if (verbose) message("Not found. Returning NA.")
+      if (verbose) webchem_message("not_found")
       return(NA)
     }
     if (verbose) message(httr::message_for_status(postres))
@@ -618,20 +639,25 @@ cs_img <- function(csid,
   verbose <- match.arg(as.character(verbose), choices = c(TRUE, FALSE))
   foo <- function(csid, dir = dir, overwrite = overwrite, apikey = apikey,
                   verbose = verbose) {
-    if (verbose == TRUE) message("Searching ", csid, ". ", appendLF = FALSE)
+    if (verbose) webchem_message("query", csid, appendLF = FALSE)
     if (is.na(csid)) {
-      if (verbose == TRUE) {
-        message("Invalid input.")
-      }
+      if (verbose) webchem_message("na")
       return(tibble(query = csid, path = NA))
     }
+    path <- paste0(dir, "/", csid, ".png")
+    url <- paste0("https://api.rsc.org/compounds/v1/records/", csid, "/image")
+    headers <- c("Content-Type" = "", "apikey" = apikey)
+    res <- try(httr::RETRY("GET",
+                           url,
+                           httr::add_headers(.headers = headers),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = FALSE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+    }
     else {
-      path <- paste0(dir, "/", csid, ".png")
-      url <- paste0("https://api.rsc.org/compounds/v1/records/", csid, "/image")
-      headers <- c("Content-Type" = "", "apikey" = apikey)
-      res <- httr::GET(url, httr::add_headers(.headers = headers))
-      if (verbose == TRUE) message(httr::message_for_status(res))
-      if (res$status_code < 300) {
+      if (verbose) message(httr::message_for_status(res))
+      if (res$status_code == 200) {
         cont <- httr::content(res, type = "image", encoding = "base64")
         cont <- unlist(jsonlite::fromJSON(rawToChar(cont)))
         cont <- base64enc::base64decode(cont)
