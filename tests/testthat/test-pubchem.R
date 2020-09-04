@@ -1,5 +1,6 @@
 up <- ping_service("pc")
 test_that("examples in the article are unchanged", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
   #values come from test-etox
@@ -18,6 +19,7 @@ test_that("examples in the article are unchanged", {
 })
 
 test_that("get_cid()", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
@@ -72,6 +74,7 @@ test_that("get_cid()", {
 })
 
 test_that("get_cid() handles special characters in SMILES", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
@@ -79,6 +82,7 @@ test_that("get_cid() handles special characters in SMILES", {
 })
 
 test_that("pc_prop", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
@@ -91,6 +95,7 @@ test_that("pc_prop", {
 })
 
 test_that("pc_synonyms", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
   expect_equivalent(pc_synonyms(NA), NA)
@@ -102,6 +107,7 @@ test_that("pc_synonyms", {
 })
 
 test_that("cid integration tests", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(ping_pubchem(), "PubChem service is down")
 
@@ -113,6 +119,7 @@ test_that("cid integration tests", {
 })
 
 test_that("pc_page()", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
@@ -128,6 +135,7 @@ test_that("pc_page()", {
 })
 
 test_that("pc_extract() chemical and physical properties", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
@@ -144,6 +152,7 @@ test_that("pc_extract() chemical and physical properties", {
 })
 
 test_that("pc_sect()", {
+  skip("for testing codecov")
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
