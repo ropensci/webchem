@@ -2,8 +2,6 @@
 up <- ping_service("cs_web")
 test_that("examples in the article are unchanged", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -24,8 +22,6 @@ test_that("examples in the article are unchanged", {
 
 test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   expect_type(cs_check_key(), "character")
@@ -33,8 +29,6 @@ test_that("cs_check_key() can find API key in my local .Renviron", {
 
 test_that("cs_datasources()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -77,8 +71,6 @@ test_that("cs_control()", {
 
 test_that("get_csid() works with defaults", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -97,8 +89,6 @@ test_that("get_csid() works with defaults", {
 
 test_that("get_csid() works with arguments passed to cs_control()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -135,8 +125,6 @@ test_that("get_csid() works with arguments passed to cs_control()", {
 
 test_that("get_csid() handles special characters in SMILES", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -146,8 +134,6 @@ test_that("get_csid() handles special characters in SMILES", {
 
 test_that("cs_smiles_csid()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -160,8 +146,6 @@ test_that("cs_smiles_csid()", {
 
 test_that("cs_inchi_csid()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -174,8 +158,6 @@ test_that("cs_inchi_csid()", {
 
 test_that("cs_inchikey_csid()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -188,8 +170,6 @@ test_that("cs_inchikey_csid()", {
 
 test_that("cs_convert_multiple()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -218,8 +198,6 @@ test_that("cs_convert_multiple()", {
 
 test_that("cs_convert()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -289,8 +267,6 @@ test_that("cs_convert()", {
 
 test_that("cs_convert() handles special characters in SMILES", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -302,8 +278,6 @@ test_that("cs_convert() handles special characters in SMILES", {
 
 test_that("cs_compinfo()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
@@ -328,8 +302,6 @@ test_that("cs_compinfo()", {
 
 test_that("cs_img()", {
   skip_on_cran()
-  skip_on_travis()
-  skip_on_appveyor()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
