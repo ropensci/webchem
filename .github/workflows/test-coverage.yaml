@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - master
-      - pkgdown #for testing
   pull_request:
     branches:
       - master

@@ -4,12 +4,11 @@ on:
   push:
     branches:
       - master
-      - pkgdown
   pull_request:
     branches:
       - master
 
-name: R-CMD-check-standard
+name: R-CMD-check
 
 jobs:
   R-CMD-check:
