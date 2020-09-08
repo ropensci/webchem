@@ -6,13 +6,6 @@
 .gitignore
 .github
 
-# Travis
-.travis.yml
-pkg-build.sh
-
-# appveyor
-^appveyor\.yml$
-travis-tool.sh.cmd
 
 # READMES
 README.html
@@ -30,3 +23,5 @@ README_cache
 
 .Rmd.orig
 ^\.github$
+
+codemeta.json
