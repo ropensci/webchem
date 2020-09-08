@@ -248,6 +248,7 @@ get_cid <-
       }
       out <- unique(unlist(cont))
       out <- matcher(x = out, query = query, match = match, verbose = verbose)
+      out <- as.character(out)
       return(tibble::tibble("query" = query, "cid" = out))
     }
     out <- map(query,
