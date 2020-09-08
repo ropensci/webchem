@@ -92,7 +92,7 @@ get_chebiid <- function(query,
   foo <- function(query, from, match, max_res, stars, verbose, ...) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
-      return(tibble("query" = NA_character_, "chebiid" = NA_character_))
+      return(tibble::tibble("query" = NA_character_, "chebiid" = NA_character_))
     }
     # query
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
@@ -125,7 +125,7 @@ get_chebiid <- function(query,
                            quiet = TRUE), silent = TRUE)
     if (inherits(res, "try-error")) {
       if (verbose) webchem_message("service_down")
-      return(NA)
+      return(tibble::tibble("query" = query, "chebiid" = NA_character_))
     }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
@@ -134,8 +134,7 @@ get_chebiid <- function(query,
       out <- as_tibble(setNames(out, tolower(names(out))))
       if (nrow(out) == 0) {
         webchem_message("not_found")
-        return(tibble("query" = query,
-                      "chebiid" = NA_character_))
+        return(tibble::tibble("query" = query, "chebiid" = NA_character_))
       }
       if (nrow(out) > 0) out$query <- query
       if (nrow(out) == 1) return(out)
@@ -160,17 +159,14 @@ get_chebiid <- function(query,
         return(out[out$chebiid == matched, ])
       }
       if (match == "na") {
-        return(tibble("query" = query,
-                      "chebiid" = NA_character_))
-      }
+        return(tibble::tibble("query" = query, "chebiid" = NA_character_))
+        }
       if (match == "first") {
         return(out[1, ])
       }
     } else {
-      out <- tibble("query" = query,
-                    "chebiid" = NA_character_)
-      return(out)
-    }
+      return(tibble::tibble("query" = query, "chebiid" = NA_character_))
+      }
   }
   out <- lapply(query,
                 foo,

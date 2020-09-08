@@ -172,7 +172,7 @@ get_cid <-
     foo <- function(query, from, domain, match, verbose, arg, ...) {
       if (is.na(query)) {
         if (verbose) webchem_message("na")
-        return(NA)
+        return(tibble::tibble("query" = NA, "cid" = NA))
       }
       if (verbose) webchem_message("query", query, appendLF = FALSE)
       if (is.character(query)) query <- URLencode(query, reserved = TRUE)
@@ -205,7 +205,7 @@ get_cid <-
       }
       if (inherits(res, "try-error")) {
         if (verbose) webchem_message("service_down")
-        return(NA)
+        return(tibble::tibble("query" = query, "cid" = NA))
       }
       if (res$status_code != 200) {
         if (res$status_code == 202) {
@@ -222,17 +222,17 @@ get_cid <-
                                    quiet = TRUE), silent = TRUE)
             if (inherits(res, "try-error")) {
               if (verbose) webchem_message("service_down")
-              return(NA)
+              return(tibble::tibble("query" = query, "cid" = NA))
             }
           }
           if (res$status_code != 200) {
             if (verbose) message(httr::message_for_status(res))
-            return(NA)
+            return(tibble::tibble("query" = query, "cid" = NA))
           }
         }
         else{
           if (verbose) message(httr::message_for_status(res))
-          return(NA)
+          return(tibble::tibble("query" = query, "cid" = NA))
         }
       }
       if (verbose) message(httr::message_for_status(res))
@@ -248,17 +248,12 @@ get_cid <-
       }
       out <- unique(unlist(cont))
       out <- matcher(x = out, query = query, match = match, verbose = verbose)
-      out <- as.character(out)
-      names(out) <- NULL
-      return(out)
+      return(tibble::tibble("query" = query, "cid" = out))
     }
     out <- map(query,
              ~foo(query = .x, from = from, domain = domain, match = match,
                   verbose = verbose, arg = arg))
-    out <- setNames(out, query)
-    out <-
-    lapply(out, enframe, name = NULL, value = "cid") %>%
-    bind_rows(.id = "query")
+    out <- dplyr::bind_rows(out)
     return(out)
 }
 

@@ -36,7 +36,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
     message('"inchikey" is deprecated.  Please use "query" instead.')
     query <- inchikey
   }
-  match.arg(from)
+  from <- match.arg(from)
   foo <- function(query, verbose) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")

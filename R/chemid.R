@@ -176,7 +176,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
           source_url <- qurl
         }
 
-      }else {
+      } else {
         d <- 'direct match'
         matched_sub <- xml_text(
           xml_find_all(
