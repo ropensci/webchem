@@ -120,7 +120,11 @@ find_db <- function(query, from,
         select(all_of(colorder)) %>%
         as.matrix()
       opar <- graphics::par(no.readonly = TRUE)
-      graphics::par(mar = c(5.1, 7.1, 4.1, 4.1)) # adapt margins
+
+      query_trunc <- str_trunc(query, 25)
+      leftmargin <- 0.5 * max(nchar(query_trunc))
+      graphics::par(mar = c(5.1, leftmargin, 4.1, 4.1))
+
       plot(
         pmat,
         col = c("#C7010B", "#3BC03B"),
