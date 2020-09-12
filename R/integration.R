@@ -131,7 +131,7 @@ find_db <- function(query, from,
         breaks = c(FALSE, TRUE),
         na.col = "grey70",
         axis.col = list(side = 3),
-        axis.row = list(las = 2, labels = out$query),
+        axis.row = list(las = 2, labels = query_trunc),
         xlab = NA,
         ylab = NA,
         main = NA
