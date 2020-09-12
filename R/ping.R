@@ -54,8 +54,6 @@ ping_service <-
                "srs" = "https://cdxnodengn.epa.gov/cdx-srs-rest/substance/name/triclosan",
                "wd" = "https://www.wikidata.org/w/api.php"
         )
-
-      Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
       res <- try(httr::RETRY("GET",
                              ping_url,
                              httr::user_agent(webchem_url()),
@@ -86,8 +84,6 @@ ping_etox <- function(...) {
   body <- list("stoffname.selection[0].name" = "triclosan",
                "stoffname.selection[0].type" = "",
                event = "Search")
-
-  Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
   res <- try(httr::RETRY("POST",
                          url = baseurl,
                          handle = handle(''),
@@ -114,7 +110,6 @@ ping_cs <- function(...) {
   headers <- c("Content-Type" = "", "apikey" = cs_check_key())
   body <- list("name" = "triclosan", "orderBy" = "recordId", "orderDirection" = "ascending")
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-  Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
   res <- try(httr::RETRY("POST",
                          "https://api.rsc.org/compounds/v1/filter/name",
                          add_headers(headers),
@@ -158,8 +153,6 @@ ping_chebi <- function(...) {
           </chebi:getLiteEntity>
         </soapenv:Body>
      </soapenv:Envelope>'
-
-  Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
   res <- try(httr::RETRY("POST",
                          baseurl,
                          add_headers(headers),
