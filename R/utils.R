@@ -67,21 +67,38 @@ is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 #' }
 is.inchikey_cs <- function(x, verbose = TRUE){
-  # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA'
+
+  if (ping_service("cs_web") == FALSE) stop(webchem_message("service_down"))
+
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
+  }
+  if (is.na(x)) {
+    if (verbose) webchem_message("na")
+    return(NA)
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
   qurl <- paste0(baseurl, 'inchi_key=', x)
   Sys.sleep(0.1)
-  h <- try(read_xml(qurl), silent = TRUE)
-  if (inherits(h, "try-error")) {
-    warning('Problem with webservice... Returning NA.')
-    out <- NA
-  } else {
-    out <- as.logical(xml_text(h))
+  if (verbose) webchem_message("query", x, appendLF = FALSE)
+  res <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
   }
-  return(out)
+  if (verbose) message(httr::message_for_status(res))
+  if (res$status_code == 200){
+    h <- xml2::read_xml(res)
+    out <- as.logical(xml_text(h))
+    return(out)
+    }
+  else {
+    return(NA)
+  }
 }
 
 
@@ -461,28 +478,22 @@ matcher <-
     if(length(x) == 1) {
       return(x)
     } else {
-      if(verbose) {
-        message("More then one Link found for '", query, "'. \n")
-      }
+      if(verbose) message(" Multiple found. ", appendLF = FALSE)
 
       if(match == "all") {
-        if(verbose) {
-          message("Returning all matches. \n")
-        }
+        if(verbose) message("Returning all.")
         return(x)
+      }
 
-      } else if (match == "best") {
+      else if (match == "best") {
         #check that x and result are same length
         if(length(x) != length(result))
           stop("Can't use match = 'best' without query matches for each output")
-        if (verbose) {
-          message("Returning best match. \n")
-        }
+        if (verbose) message("Returning best.")
         dd <- adist(query, result) / nchar(result)
         return(x[which.min(dd)])
       } else if (match == "first") {
-        if (verbose)
-          message("Returning first match. \n")
+        if (verbose) message("Returning first.")
         return(x[1])
 
       } else if (match == "ask" & interactive()) {
@@ -495,12 +506,45 @@ matcher <-
         return(x[pick])
 
       } else if (match == "na") {
-        if (verbose) {
-          message("Returning NA. \n")
-        }
+        if (verbose) message("Returning NA.")
         x <- NA
         names(x)<-NA
         return(x)
       }
     }
   }
+
+#' Webchem messages
+#'
+#' Webchem spacific messages to be used in verbose messages.
+#' @noRd
+webchem_message <- function(action = c("na",
+                                       "query",
+                                       "query_all",
+                                       "not_found",
+                                       "not_available",
+                                       "service_down"),
+                            appendLF = TRUE,
+                            ...) {
+  action <- match.arg(action)
+  string <- switch(
+    action,
+    na = "Query is NA. Returning NA.",
+    query = paste0("Querying ", ..., ". "),
+    query_all = "Querying. ",
+    not_found = " Not found. Returning NA.",
+    not_available = " Not available. Returning NA.",
+    service_down = " Service not available. Returning NA."
+    )
+  message(string, appendLF = FALSE)
+  if (appendLF) message("")
+}
+
+#' Webchem URL
+#'
+#' URL of the webchem package to be used in httr::user_agent()
+#' @noRd
+webchem_url <- function() {
+  url <- "https://cran.r-project.org/web/packages/webchem/index.html"
+  return(url)
+}

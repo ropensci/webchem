@@ -4,14 +4,7 @@
 \alias{aw_query}
 \title{Query http://www.alanwood.net/pesticides}
 \usage{
-aw_query(
-  query,
-  from = c("name", "cas"),
-  verbose = TRUE,
-  force_build = FALSE,
-  type,
-  ...
-)
+aw_query(query, from = c("name", "cas"), verbose = TRUE, type, ...)
 }
 \arguments{
 \item{query}{character; search string}
@@ -20,12 +13,9 @@ aw_query(
 
 \item{verbose}{logical; print message during processing to console?}
 
-\item{force_build}{logical; force building a new index? See
-\code{\link{build_aw_idx}} for more details.}
-
 \item{type}{deprecated}
 
-\item{...}{currently unused.}
+\item{...}{additional arguments to internal utility functions}
 }
 \value{
 A list of eight entries: common-name, status, preferred IUPAC Name,
@@ -58,9 +48,6 @@ Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 Information from the Web. Journal of Statistical Software, 93(13).
 <doi:10.18637/jss.v093.i13>.
-}
-\seealso{
-\code{\link{build_aw_idx}}
 }
 \author{
 Eduard Szöcs, \email{eduardszoecs@gmail.com}

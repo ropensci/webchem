@@ -32,26 +32,44 @@
 #' sapply(out2, function(y) y$molweight)
 #' }
 cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
+
+  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+
   if (!missing(inchikey)) {
-    warning('"inchikey" is deprecated.  Please use "query" instead.')
+    message('"inchikey" is deprecated.  Please use "query" instead.')
     query <- inchikey
   }
-  match.arg(from)
+  from <- match.arg(from)
   foo <- function(query, verbose) {
-    if (!is.inchikey(query)) {
-      stop('Input is not a valid inchikey!')
+    if (is.na(query)) {
+      if (verbose) webchem_message("na")
+      return(NA)
+    }
+    if(verbose) webchem_message("query", query, appendLF = FALSE)
+    if (!is.inchikey(query, verbose = FALSE)) {
+      if (verbose) message("Input is not a valid inchikey.")
+      return(NA)
     }
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
     qurl <- paste0(baseurl, '/', query)
-    if (verbose)
-      message(qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    out <- try(fromJSON(qurl), silent = TRUE)
+    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    out <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
     if (inherits(out, "try-error")) {
-      warning('Not found... Returning NA.')
+      if (verbose) webchem_message("service_down")
       return(NA)
     }
-    return(out)
+    if (verbose) message(httr::message_for_status(out))
+    if (out$status_code == 200) {
+      out <- jsonlite::fromJSON(rawToChar(out$content))
+      return(out)
+    }
+    else {
+      return(NA)
+    }
   }
   out <- lapply(query, foo, verbose = verbose)
   out <- setNames(out, query)
@@ -105,6 +123,9 @@ cts_convert <- function(query,
                         verbose = TRUE,
                         choices = NULL,
                         ...){
+
+  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+
   if(!missing("choices")) {
     if (is.null(choices)) {
       message('"choices" is deprecated.  Using match = "all" instead.')
@@ -137,31 +158,43 @@ cts_convert <- function(query,
   }
 
   foo <- function(query, from, to, first, verbose){
-    if (is.na(query)) return(NA)
+    if (is.na(query)) {
+      if (verbose) webchem_message("na")
+      return(NA)
+    }
+    if(verbose) webchem_message("query", query, appendLF = FALSE)
     query <- URLencode(query, reserved = TRUE)
     from <- URLencode(from, reserved = TRUE)
     to <- URLencode(to, reserved = TRUE)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
-    if (verbose)
-      message(qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
-    out <- try(fromJSON(qurl), silent = TRUE)
-    if (inherits(out, "try-error")) {
-      warning('Not found... Returning NA.')
+    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
       return(NA)
     }
-    if (length(out$result[[1]]) == 0) {
-        message("Not found. Returning NA.")
+    if (verbose) message(httr::message_for_status(res))
+    if (res$status_code == 200) {
+      out <- jsonlite::fromJSON(rawToChar(res$content))
+      if (length(out$result[[1]]) == 0) {
+        if (verbose) webchem_message("not_found")
         return(NA)
+      }
+      out <- out$result[[1]]
+      out <- matcher(out, match = match, query = query, verbose = verbose)
+      return(out)
     }
-    out <- out$result[[1]]
-    out <- matcher(out, match = match, query = query, verbose = verbose)
-    return(out)
+    else {
+      return(NA)
+    }
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
   out <- setNames(out, query)
-
   return(out)
 }
 
@@ -185,7 +218,21 @@ cts_convert <- function(query,
 #' cts_from()
 #' }
 cts_from <- function(verbose = TRUE){
-  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues'))
+
+  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+
+  qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues"
+  res <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
+  out <- tolower(jsonlite::fromJSON(rawToChar(res$content)))
+  return(out)
 }
 
 
@@ -208,5 +255,19 @@ cts_from <- function(verbose = TRUE){
 #' cts_from()
 #' }
 cts_to <- function(verbose = TRUE){
-  tolower(fromJSON('http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues'))
+
+  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+
+  qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues"
+  res <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
+  out <- tolower(jsonlite::fromJSON(rawToChar(res$content)))
+  return(out)
 }

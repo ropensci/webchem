@@ -119,38 +119,44 @@ cir_query <- function(identifier, representation = "smiles",
                       verbose = TRUE,
                       choices = NULL,
                       ...){
+
+  if (ping_service("cir") == FALSE) stop(webchem_message("service_down"))
+
   if (!missing("choices")) {
     stop("`choices` is deprecated.  Use `match` instead.")
   }
   match <- match.arg(match)
   foo <- function(identifier, representation, resolver, first, verbose) {
     if (is.na(identifier)) {
+      if (verbose) webchem_message("na")
       return(NA)
-    } else {
-      identifier <- URLencode(identifier, reserved = TRUE)
-      baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
-      qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
-
-      if (!is.null(resolver)) {
-        qurl <- paste0(qurl, '?resolver=', resolver)
-      }
-      if (verbose)
-        message(qurl)
-      Sys.sleep(1.5)
-      h <- try(RETRY("GET", qurl))
-      if (inherits(h, "try-error")) {
-        warning('Problem with web service encountered... Returning NA.')
-        return(NA)
-      } else {
-        tt <- read_xml(content(h, as = 'raw'))
-        out <- xml_text(xml_find_all(tt, '//item'))
-      }
+    }
+    if (verbose) webchem_message("query", identifier, appendLF = FALSE)
+    identifier <- URLencode(identifier, reserved = TRUE)
+    baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
+    qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
+    if (!is.null(resolver)) {
+      qurl <- paste0(qurl, '?resolver=', resolver)
+    }
+    Sys.sleep(1.5)
+    h <- try(httr::RETRY("GET",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+    if (inherits(h, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(h))
+    if (h$status_code == 200){
+      tt <- read_xml(content(h, as = 'raw'))
+      out <- xml_text(xml_find_all(tt, '//item'))
       if (length(out) == 0) {
-        message('No representation found... Returning NA.')
+        if (verbose) webchem_message("not_found")
         return(NA)
       }
       out <- matcher(out, query = identifier, match = match, verbose = verbose)
-      # convert to numeric
       if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
                                 'h_bond_acceptor_count', 'h_bond_center_count',
                                 'rule_of_5_violation_count', 'rotor_count',
@@ -160,6 +166,9 @@ cir_query <- function(identifier, representation = "smiles",
                                 'protonable_group_count') )
         out <- as.numeric(out)
       return(out)
+    }
+    else {
+      return(NA)
     }
   }
   out <- lapply(identifier, foo, representation = representation,
@@ -278,6 +287,9 @@ cir_img <- function(query,
                     frame = NULL,
                     verbose = TRUE,
                     ...) {
+
+  if (ping_service("cir") == FALSE) stop(webchem_message("service_down"))
+
   if (is.na(dir) || !dir.exists(dir)) {
     stop('Directory does not exist.')
   }
@@ -364,21 +376,22 @@ cir_img <- function(query,
     path <- file.path(dir, paste0(query, ".", sub("format=", "", format)))
     # query
     Sys.sleep(1)
-    if (verbose)
-      message(paste0("Querying ", query, ". "), appendLF = FALSE)
-    res <- httr::RETRY("GET",
-                       qurl,
-                       quiet = TRUE,
-                       terminate_on = 404,
-                       httr::write_disk(path, overwrite = TRUE))
-    if (verbose) {
-      message(httr::message_for_status(res), " ", appendLF = FALSE)
-      if (httr::http_error(res) && file.exists(path)) {
-        file.remove(path)
-        message("No image saved.")
-      } else {
-        message("Image saved under: ", path)
-      }
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           quiet = TRUE,
+                           terminate_on = 404,
+                           httr::write_disk(path, overwrite = TRUE),
+                           httr::user_agent(webchem_url())), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res))
+    if (httr::http_error(res) && file.exists(path)) {
+      file.remove(path)
+    } else {
+      if (verbose) message(" Image saved under: ", path)
     }
   }
   for (i in query) {

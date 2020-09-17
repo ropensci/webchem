@@ -5,7 +5,6 @@
 #'
 #' @import xml2
 #' @importFrom stats rgamma
-#'
 #' @param query character; CAS number to search by. See \code{\link{is.cas}} for correct formatting
 #' @param from character; currently only CAS numbers are accepted.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -28,27 +27,42 @@
 
 fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
 {
+
+  if (ping_service("fn") == FALSE) stop(webchem_message("service_down"))
+
   if (!missing(CAS)) {
-    warning('"CAS" is now deprecated. Please use "query" instead. ')
+    message('"CAS" is now deprecated. Please use "query" instead. ')
     query <- CAS
   }
   match.arg(from)
   foo <- function (query, verbose){
-    if (is.na(query)) return(NA)
-    on.exit(suppressWarnings(closeAllConnections()))
-    qurl <- paste0("http://www.flavornet.org/info/",query,".html")
-    if (verbose)
-      message(qurl)
-    Sys.sleep(rgamma(1, shape = 10, scale = 1/10))
-    h <- try(read_html(qurl), silent = TRUE)
-    if (inherits(h, "try-error")) {
-      warning("CAS not found... Returning NA.")
+    if (is.na(query)) {
+      if (verbose) webchem_message("na")
       return(NA)
     }
-    doc.text = xml_text(xml_find_all(h, "/html/body/p[3]"))
-    pattern = "Percepts: "
-    percept <- gsub(pattern, "", doc.text)
-    return(percept)
+    qurl <- paste0("http://www.flavornet.org/info/",query,".html")
+    if(verbose) webchem_message("query", query, appendLF = FALSE)
+    Sys.sleep(stats::rgamma(1, shape = 10, scale = 1/10))
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res))
+    if (res$status_code == 200){
+      h <- read_html(res)
+      doc.text = xml_text(xml_find_all(h, "/html/body/p[3]"))
+      pattern = "Percepts: "
+      percept <- gsub(pattern, "", doc.text)
+      return(percept)
+    }
+    else {
+      return(NA)
+    }
   }
   percepts <- sapply(query, foo, verbose = verbose)
   percepts <- setNames(percepts, query)

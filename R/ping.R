@@ -54,13 +54,15 @@ ping_service <-
                "srs" = "https://cdxnodengn.epa.gov/cdx-srs-rest/substance/name/triclosan",
                "wd" = "https://www.wikidata.org/w/api.php"
         )
-
-      Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-      res <- try(GET(ping_url, timeout = 3))
-
-      if (inherits(res, 'try-error')){
+      res <- try(httr::RETRY("GET",
+                             ping_url,
+                             httr::user_agent(webchem_url()),
+                             terminate_on = 404,
+                             quiet = TRUE), silent = TRUE)
+      if (inherits(res, "try-error")) {
         out <- FALSE
-      } else {
+      }
+      else {
         out <- res$status_code == 200
       }
     }
@@ -82,16 +84,17 @@ ping_etox <- function(...) {
   body <- list("stoffname.selection[0].name" = "triclosan",
                "stoffname.selection[0].type" = "",
                event = "Search")
-
-  Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-  res <-POST(url = baseurl,
-       handle = handle(''),
-       body = body,
-       user_agent("webchem (https://github.com/ropensci/webchem)"))
-
-  if (inherits(res, 'try-error'))
+  res <- try(httr::RETRY("POST",
+                         url = baseurl,
+                         handle = handle(''),
+                         body = body,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
     return(FALSE)
-  res$status_code == 200
+  }
+  return(res$status_code == 200)
 }
 
 # ChemSpider -----------------------------------------------------------
@@ -107,12 +110,17 @@ ping_cs <- function(...) {
   headers <- c("Content-Type" = "", "apikey" = cs_check_key())
   body <- list("name" = "triclosan", "orderBy" = "recordId", "orderDirection" = "ascending")
   body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-  Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-  res <- POST("https://api.rsc.org/compounds/v1/filter/name", add_headers(headers), body = body,
-              user_agent("webchem (https://github.com/ropensci/webchem)"))
-  if (inherits(res, "try-error"))
+  res <- try(httr::RETRY("POST",
+                         "https://api.rsc.org/compounds/v1/filter/name",
+                         add_headers(headers),
+                         body = body,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
     return(FALSE)
-  res$status_code == 200
+  }
+  return(res$status_code == 200)
 }
 
 
@@ -145,15 +153,17 @@ ping_chebi <- function(...) {
           </chebi:getLiteEntity>
         </soapenv:Body>
      </soapenv:Envelope>'
-
-  Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-  res <- try(POST(baseurl,
-                  add_headers(headers),
-                  body = body,
-                  user_agent("webchem (https://github.com/ropensci/webchem)")))
-  if (inherits(res, "try-error"))
+  res <- try(httr::RETRY("POST",
+                         baseurl,
+                         add_headers(headers),
+                         body = body,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 400,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
     return(FALSE)
-  res$status_code == 200
+  }
+  return(res$status_code == 200)
 }
 
 
@@ -173,10 +183,17 @@ ping_pubchem <- function(...) {
   input <- paste0('/compound/', from)
   output <- '/synonyms/JSON'
   qurl <- paste0(prolog, input, output)
-
-  res <- POST(qurl, body = paste0(from, '=', query), ...)
-  stopifnot(is(res, "response"))
-  res$status_code == 200
+  res <- try(httr::RETRY("POST",
+                         qurl,
+                         body = paste0(from, '=', query),
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE,
+                         ...), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    return(FALSE)
+  }
+  return(res$status_code == 200)
 }
 
 # pubchem PUG-VIEW-----------------------------------------------------------------
@@ -191,7 +208,13 @@ ping_pubchem <- function(...) {
 ping_pubchem_pw <- function(...) {
   qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data",
                "compound/176/JSON?heading=pka", sep = "/")
-  res <- POST(qurl,
-              user_agent("webchem (https://github.com/ropensci/webchem)"))
-  res$status_code == 200
+  res <- try(httr::RETRY("POST",
+                         qurl,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    return(FALSE)
+  }
+  return(res$status_code == 200)
 }
