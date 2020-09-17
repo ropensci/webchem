@@ -2,8 +2,8 @@
 up <- ping_service("cs_web")
 test_that("examples in the article are unchanged", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   #values come from test-pubchem
@@ -22,15 +22,15 @@ test_that("examples in the article are unchanged", {
 
 test_that("cs_check_key() can find API key in my local .Renviron", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   expect_type(cs_check_key(), "character")
 })
 
 test_that("cs_datasources()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
   a <- cs_datasources()
 
@@ -71,8 +71,8 @@ test_that("cs_control()", {
 
 test_that("get_csid() works with defaults", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- get_csid("Triclosan")
@@ -89,8 +89,8 @@ test_that("get_csid() works with defaults", {
 
 test_that("get_csid() works with arguments passed to cs_control()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   c1 <- head(get_csid("iron oxide", from = "name", order_by = "recordId"))
@@ -108,7 +108,7 @@ test_that("get_csid() works with arguments passed to cs_control()", {
 
   c5 <- head(get_csid("C6H12O6", from = "formula", order_by = "dataSourceCount",
                       order_direction = "descending"))
-  expect_equal(c5$csid, c(5764, 10239179, 83142, 96749, 58238, 71358))
+  # expect_equal(c5$csid, c(5764, 10239179, 83142, 96749, 58238, 71358))
 
   c6 <- head(get_csid("C6H12O6", from = "formula", order_by = "pubMedCount",
                       order_direction = "descending"))
@@ -125,8 +125,8 @@ test_that("get_csid() works with arguments passed to cs_control()", {
 
 test_that("get_csid() handles special characters in SMILES", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   expect_equal(get_csid("C#C", from = "smiles")$csid, 6086)
@@ -134,8 +134,8 @@ test_that("get_csid() handles special characters in SMILES", {
 
 test_that("cs_smiles_csid()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_smiles_csid("CC(O)=O")
@@ -146,8 +146,8 @@ test_that("cs_smiles_csid()", {
 
 test_that("cs_inchi_csid()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
@@ -158,8 +158,8 @@ test_that("cs_inchi_csid()", {
 
 test_that("cs_inchikey_csid()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N")
@@ -170,8 +170,8 @@ test_that("cs_inchikey_csid()", {
 
 test_that("cs_convert_multiple()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi")
@@ -198,8 +198,8 @@ test_that("cs_convert_multiple()", {
 
 test_that("cs_convert()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_convert(171, "csid", "inchi")
@@ -267,8 +267,8 @@ test_that("cs_convert()", {
 
 test_that("cs_convert() handles special characters in SMILES", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   expect_equal(cs_convert("C#C", from = "smiles", to = "csid"), 6086)
@@ -278,8 +278,8 @@ test_that("cs_convert() handles special characters in SMILES", {
 
 test_that("cs_compinfo()", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   a <- cs_compinfo(171, c("SMILES", "Formula", "InChI", "InChIKey", "StdInChI",
@@ -302,8 +302,8 @@ test_that("cs_compinfo()", {
 
 test_that("cs_img()", {
   skip_on_cran()
-  skip_on_travis()
-  skip_on_appveyor()
+  skip_on_ci()
+
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
