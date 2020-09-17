@@ -96,7 +96,7 @@ get_etoxid <- function(query,
                          quiet = TRUE), silent = TRUE)
     if (inherits(h, "try-error")) {
       if (verbose) webchem_message("service_down")
-      return(NA)
+      return(tibble::tibble("query" = query, "match" = NA, "etoxid" = NA))
     }
     if (verbose) message(httr::message_for_status(h))
     if (h$status_code == 200) {
@@ -171,7 +171,7 @@ get_etoxid <- function(query,
 #' out <- etox_basic(ids)
 #' out
 #'
-#' # extract ec numbers
+#' # extract cas numbers
 #' sapply(out, function(y) y$cas)
 #' }
 etox_basic <- function(id, verbose = TRUE) {

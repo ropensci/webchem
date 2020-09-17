@@ -66,7 +66,7 @@ get_wdid <-
                              quiet = TRUE), silent = TRUE)
       if (inherits(res, "try-error")) {
         if (verbose) webchem_message("service_down")
-        return(NA)
+        return(tibble::tibble(query = query, match = NA, wdid = NA))
       }
       if (verbose) message(httr::message_for_status(res))
       if (res$status_code == 200) {
@@ -163,12 +163,13 @@ wd_ident <- function(id, verbose = TRUE){
   # id <- c( "Q163648", "Q18216")
   # id <- 'Q408646'
   foo <- function(id, verbose){
+    empty <- as.list(rep(NA, 13))
+    names(empty) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi",
+                      "inchikey", "drugbank", "zvg", "chebi", "chembl", "unii",
+                      "source_url")
     if (is.na(id)) {
       if (verbose) webchem_message("na")
-      out <- as.list(rep(NA, 13))
-      names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
-                      "drugbank", "zvg", "chebi", "chembl", "unii", "source_url")
-      return(out)
+      return(empty)
     }
     baseurl <- 'https://query.wikidata.org/sparql?format=json&query='
     props <- c('P233', 'P231', 'P662', 'P232', 'P661', 'P234', 'P235', 'P715', 'P679',
@@ -193,7 +194,7 @@ wd_ident <- function(id, verbose = TRUE){
                            quiet = TRUE), silent = TRUE)
     if (inherits(res, "try-error")) {
       if (verbose) webchem_message("service_down")
-      return(NA)
+      return(empty)
     }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
@@ -227,10 +228,7 @@ wd_ident <- function(id, verbose = TRUE){
       return(out)
     }
     else {
-      out <- as.list(rep(NA, 13))
-      names(out) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi", "inchikey",
-                      "drugbank", "zvg", "chebi", "chembl", "unii", "source_url")
-      return(out)
+      return(empty)
     }
   }
   # ugly fixing to return data.frame

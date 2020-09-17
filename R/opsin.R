@@ -49,7 +49,7 @@ opsin_query <- function(query, verbose = TRUE, ...){
                            quiet = TRUE), silent = TRUE)
     if (inherits(res, "try-error")) {
       if (verbose) webchem_message("service_down")
-      return(NA)
+      return(empty)
     }
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
