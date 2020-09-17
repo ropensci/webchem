@@ -126,7 +126,7 @@ get_etoxid <- function(query,
       }
     }
     else {
-      return(list(query = NA, match = NA, etoxid = NA))
+      return(tibble::tibble(query = NA, match = NA, etoxid = NA))
     }
   }
   out <- lapply(query, foo, from = from, match = match, verbose = verbose)
