@@ -40,8 +40,7 @@ test_that("is.inchikey() returns correct results", {
                              'BQJCRHHNABKAKU-KBQPJGBKSA-N')))
 
   skip_on_cran()
-  skip_on_travis()
-  skip_on_appveyor()
+  skip_on_ci()
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
   g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
@@ -62,7 +61,6 @@ test_that("is.inchikey() returns correct results", {
 
 
 test_that("is.smiles() returns correct results", {
-
   expect_true(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl'))
   expect_false(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)ClWWX'))
   expect_error(is.smiles(c('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl',
