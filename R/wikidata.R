@@ -40,6 +40,8 @@ get_wdid <-
            verbose = TRUE,
            language = 'en') {
 
+    if (ping_service("wd") == FALSE) stop(webchem_message("service_down"))
+
   # language <-  'en'
   # query <- 'Triclosan'
 
@@ -155,6 +157,9 @@ get_wdid <-
 #'  wd_ident(id)
 #' }
 wd_ident <- function(id, verbose = TRUE){
+
+  if (ping_service("wd") == FALSE) stop(webchem_message("service_down"))
+
   # id <- c( "Q163648", "Q18216")
   # id <- 'Q408646'
   foo <- function(id, verbose){

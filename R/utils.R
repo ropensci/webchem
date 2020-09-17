@@ -67,6 +67,9 @@ is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 #' }
 is.inchikey_cs <- function(x, verbose = TRUE){
+
+  if (ping_service("cs_web") == FALSE) stop(webchem_message("service_down"))
+
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }

@@ -68,7 +68,11 @@
 #'  # extract Acute Toxicity Summary
 #'  sapply(out, function(y) y$`Acute Toxicity Summary`)
 #' }
-pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', 'first'), verbose = TRUE, ...){
+pan_query <- function(query, from = c("name", "cas"),
+                      match = c('best', 'all', 'first'), verbose = TRUE, ...){
+
+  if (ping_service("pan") == FALSE) stop(webchem_message("service_down"))
+
   match <- match.arg(match)
   match.arg(from) #not actually needed for this function to work
   foo <- function(query, match, verbose) {

@@ -25,7 +25,8 @@
 #' @export
 
 opsin_query <- function(query, verbose = TRUE, ...){
-  # query <- 'cyclopropane'
+
+  if (ping_service("opsin") == FALSE) stop(webchem_message("service_down"))
 
   foo <- function(query, verbose){
     empty <- c(query, rep(NA, 6))

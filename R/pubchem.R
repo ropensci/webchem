@@ -123,6 +123,9 @@ get_cid <-
            arg = NULL,
            first = NULL,
            ...) {
+
+    if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+
   #deprecate `first`
   if (!is.null(first) && first == TRUE) {
     message("`first = TRUE` is deprecated. Use `match = 'first'` instead")
@@ -313,6 +316,9 @@ get_cid <-
 #' "CanonicalSMILES"))
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
+
+  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+
   if (mean(is.na(cid)) == 1) {
     if (verbose) webchem_message("na")
     return(NA)
@@ -444,6 +450,9 @@ pc_synonyms <- function(query,
                         match = c("all", "first", "ask", "na"),
                         verbose = TRUE,
                         arg = NULL, choices = NULL, ...) {
+
+  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c("Aspirin")
   # from = "name"
@@ -598,6 +607,9 @@ pc_page <- function(id,
                     domain = c("compound", "substance", "assay", "gene",
                                "protein", "patent"),
                     verbose = TRUE) {
+
+  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))
   foo <- function(id, section, domain) {

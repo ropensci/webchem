@@ -18,6 +18,9 @@ get_ri_xml <-
            polarity,
            temp_prog,
            verbose) {
+
+    if (ping_service("nist") == FALSE) stop(webchem_message("service_down"))
+
     from_str <- (switch(
       from,
       "name" = "Name",

@@ -55,6 +55,9 @@
 ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
                      match = c('best', 'first', 'ask', 'na'),
                      verbose = TRUE, type){
+
+  if (ping_service("ci") == FALSE) stop(webchem_message("service_down"))
+
   if(!missing(type)) {
     message('"type" is deprecated. Please use "from" instead. ')
     from <- type
