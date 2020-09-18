@@ -34,7 +34,7 @@ ids <- c("20179", "9051")
 out <- etox_basic(ids)
 out
 
-# extract ec numbers
+# extract cas numbers
 sapply(out, function(y) y$cas)
 }
 }
