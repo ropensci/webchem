@@ -17,6 +17,7 @@
 * Possible values for `"from"` have been made more consistent across functions
 * `pc_synonyms()`, `cts_convert()`, `cir_query()` have been changed to use the `match` argument instead of `choices` for consistency with other functions
 * `get_etoxid()` output changed slightly so that the matched chemical name string no longer includes the etoxid in parentheses.
+* `is.cas()` is now vectorized.
 
 ## BUG FIXES
 
