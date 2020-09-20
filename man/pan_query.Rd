@@ -7,7 +7,7 @@
 pan_query(
   query,
   from = c("name", "cas"),
-  match = c("best", "all", "first"),
+  match = c("best", "all", "first", "na"),
   verbose = TRUE,
   ...
 )
