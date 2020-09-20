@@ -404,51 +404,8 @@ as.cas <- function(x){
 }
 
 
-#' Interactively choose a result from a menu
-#' @description In interactive sessions, prompts a user to choose an element of
-#' a vector from a menu. Use this for all functions that return multiple
-#' possible results such as multiple identifiers or synonyms.
-#' @param x a character vector
-#' @param choices If \code{choices = "all"} then the entire vector \code{x} is
-#' used for the menu.  If numeric > 1, only that number of elements from the
-#' start of \code{x} are shown. If \code{choices = 1}, then the first element of
-#' \code{x} is returned without prompting the user.  If \code{NULL} then
-#' \code{x} is returned unchanged.
-#'
-#' @importFrom utils menu
-#' @importFrom utils head
-#' @return a character vector of length 1
-#' @noRd
-#'
-#' @examples
-#' test <- c("apples", "bananas", "orange", "plum", "peach", "guava", "kumquat")
-#' chooser(test, "all")
-#' chooser(test, 3)
-chooser <- function(x, choices){
-  if (is.null(choices)) {
-    out <- x
-  } else if (choices == 1) {
-      out <- x[1]
-  } else if (interactive()) {
-    if(is.numeric(choices) & choices > length(x)) {
-      choices <- "all"
-      warning('Number of choices excedes length of x, using all choices instead',
-              immediate. = TRUE)
-    }
-    if (choices == "all") { #then give all of x as possible choices
-      pick <- menu(x, graphics = FALSE, 'Select one:')
-      out <- x[pick]
-    }
-    if (is.numeric(choices) & choices > 1){
-      pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
-      out <- x[pick]
-    }
-  } else {
-    stop('Can only use "choices" in interactive mode.')
-  }
-  return(out)
-}
-#' matcher utility
+
+#' Used internally to handle the `match` argument in most functions.
 #'
 #' @param x a vector
 #' @param query what the query was, only used if match = "best"
@@ -475,19 +432,19 @@ matcher <-
     match <- match.arg(match)
     names(x) <- result
 
-    if(length(x) == 1) {
+    if (length(x) == 1) {
       return(x)
     } else {
-      if(verbose) message(" Multiple found. ", appendLF = FALSE)
+      if (verbose) message(" Multiple found. ", appendLF = FALSE)
 
-      if(match == "all") {
-        if(verbose) message("Returning all.")
+      if (match == "all") {
+        if (verbose) message("Returning all.")
         return(x)
       }
 
       else if (match == "best") {
         #check that x and result are same length
-        if(length(x) != length(result))
+        if (length(x) != length(result))
           stop("Can't use match = 'best' without query matches for each output")
         if (verbose) message("Returning best.")
         dd <- adist(query, result) / nchar(result)
@@ -508,7 +465,7 @@ matcher <-
       } else if (match == "na") {
         if (verbose) message("Returning NA.")
         x <- NA
-        names(x)<-NA
+        names(x) <- NA
         return(x)
       }
     }
