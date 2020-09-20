@@ -58,7 +58,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
 
   if (ping_service("ci") == FALSE) stop(webchem_message("service_down"))
 
-  if(!missing(type)) {
+  if (!missing(type)) {
     message('"type" is deprecated. Please use "from" instead. ')
     from <- type
   }
@@ -90,7 +90,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
       return(NA)
     }
     if (verbose) message(httr::message_for_status(res))
-    if (res$status_code == 200){
+    if (res$status_code == 200) {
       ttt <- read_html(res)
       tit <- xml_text(xml_find_all(ttt, "//head/title"))
       no <- xml_text(xml_find_all(ttt, "//h3"))
@@ -99,7 +99,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         return(NA)
       }
 
-      # handle multiple inputs
+      # handle multiple outputs
       if (grepl('^ChemIDplus Results - Chemical information', x = tit)) {
         if (verbose)
           message(" More then one Link found. ", appendLF = FALSE)
@@ -109,49 +109,16 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
           xml_find_all(
             ttt,
             "//a[@title='Open record details']/following-sibling::text()[1]"))
+
         # exclude missing cas
-        trm <- nchar(hit_cas) < 5
-        hit_cas <- hit_cas[!trm]
-        hit_names <- hit_names[!trm]
+        keep <- is.cas(hit_cas, verbose = FALSE)
+        hit_cas <- hit_cas[keep]
 
-        if (match == 'first') {
-          if (verbose)
-            message("Returning first match.")
-          hit_cas <- hit_cas[1]
-          matched_sub <- hit_names[1]
-          d <- 'first'
-        }
+        hit_names <- hit_names[keep]
+        hit_names <- gsub(' \\[.*\\]', '', hit_names)
 
-        if (match == 'best') {
-          if (verbose)
-            message("Returning best match.")
-          hit_names <- gsub(' \\[.*\\]', '', hit_names)
-          dd <- adist(URLdecode(query), hit_names) / nchar(hit_names)
-          hit_cas <- hit_cas[which.min(dd)]
-          matched_sub <- hit_names[which.min(dd)]
-          d <- dd[which.min(dd)]
-        }
-
-        if (match == 'na') {
-          if (verbose)
-            message("Returning NA.")
-          return(NA)
-        }
-
-        if (match == 'ask') {
-          tochoose <- data.frame(name = hit_names, cas = hit_cas)
-          print(tochoose)
-          message("Enter rownumber of compounds (other inputs will return 'NA'): ")
-          take <- as.numeric(scan(n = 1, quiet = TRUE))
-          if (length(take) == 0) {
-            return(NA)
-          }
-          if (take %in% seq_len(nrow(tochoose))) {
-            hit_cas <- hit_cas[take]
-            matched_sub <- hit_names[take]
-            d <- 'interactive'
-          }
-        }
+        hit_cas <- matcher(hit_cas, query = URLdecode(query), result = hit_names, match = match)
+        matched_sub <- names(hit_cas)
 
         # check hit
         if (is.na(hit_cas)) {
@@ -180,7 +147,6 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         }
 
       } else {
-        d <- 'direct match'
         matched_sub <- xml_text(
           xml_find_all(
             ttt,
@@ -188,25 +154,27 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         source_url <- gsub('^(.*)\\?.*', '\\1', qurl)
       }
 
-      if(is.na(xml_find_first(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))){
+      # Extract data:
+
+      if (is.na(xml_find_first(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))) {
         name <- NA
-      }else{
+      } else {
         name <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Name of Substance')]/following-sibling::div[1]//li"))
       }
 
-      if(is.na(xml_find_first(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))){
+      if (is.na(xml_find_first(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))) {
         synonyms <- NA
-      }else{
+      } else {
         synonyms <- xml_text(xml_find_all(ttt, "//h3[contains(., 'Synonyms')]/following-sibling::div[1]//li"))
       }
 
-      if(is.na(xml_find_first(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))){
+      if (is.na(xml_find_first(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))) {
         cas <- NA
       } else {
         cas <- xml_text(xml_find_all(ttt, "//h3[contains(., 'CAS Registry')]/following-sibling::ul[1]//li"))
       }
 
-      if(is.na(xml_find_first(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]"))){
+      if (is.na(xml_find_first(ttt, "//h3[contains(., 'InChI')]/following-sibling::text()[1]"))) {
         inchi <- NA
       } else {
         inchi <- gsub('\\n|\\t', '',
@@ -214,7 +182,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         )
       }
 
-      if(is.na(xml_find_first(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]"))){
+      if (is.na(xml_find_first(ttt, "//h3[contains(., 'InChIKey')]/following-sibling::text()[1]"))) {
         inchikey <- NA
       } else {
         inchikey <- gsub('\\n|\\t|\\r', '',
@@ -222,7 +190,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         )
       }
 
-      if(is.na(xml_find_first(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]"))){
+      if (is.na(xml_find_first(ttt, "//h3[contains(., 'Smiles')]/following-sibling::text()[1]"))) {
         smiles <- NA
       } else {
         smiles <- gsub('\\n|\\t|\\r', '',
@@ -230,13 +198,13 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         )
       }
 
-      if(is.na(xml_find_first(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))){
+      if (is.na(xml_find_first(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))) {
         toxicity <- NA
       } else {
         toxicity <- html_table(xml_find_all(ttt, "//h2[contains(., 'Toxicity')]/following-sibling::div//table"))[[1]]
       }
 
-      if(is.na(xml_find_first(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))){
+      if (is.na(xml_find_first(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))) {
         physprop <- NA
       } else {
         physprop <- html_table(xml_find_all(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))[[1]]
@@ -244,18 +212,15 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         #= same as physprop
       }
 
-
       out <- list(name = name, synonyms = synonyms, cas = cas, inchi = inchi,
                   inchikey = inchikey, smiles = smiles, toxicity = toxicity,
                   physprop = physprop, source_url = source_url)
       attr(out, "matched") <- matched_sub
-      attr(out, "distance") <- d
       class(out) <- 'chemid'
       return(out)
 
 
-    }
-    else {
+    } else {
       return(NA)
     }
   }
