@@ -53,7 +53,7 @@
 #'  })
 #' }
 ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
-                     match = c('best', 'first', 'ask', 'na'),
+                     match = c('first', 'best', 'ask', 'na'),
                      verbose = TRUE, type){
 
   if (ping_service("ci") == FALSE) stop(webchem_message("service_down"))
@@ -62,9 +62,12 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
     message('"type" is deprecated. Please use "from" instead. ')
     from <- type
   }
-
   from <- match.arg(from)
   match <- match.arg(match)
+  if (from != "name" & match == "best") {
+    warning("match = 'best' only makes sense for chemical name queries.\n Returning first hit in the result of multiple results.")
+    from <- "first"
+  }
   foo <- function(query, from, match, verbose){
     if (is.na(query)) {
       if (verbose) webchem_message("na")
