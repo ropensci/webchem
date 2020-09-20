@@ -205,60 +205,62 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' is.cas('64-17-55')
 #' is.cas('64-17-6')
 is.cas <-  function(x, verbose = TRUE) {
-  # x <- '64-17-5'
-  if (length(x) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
 
-  # cas must not have any alpha characters
-  if(grepl(pattern = "[[:alpha:]]", x = x)){
-    if(isTRUE(verbose)){message("String contains alpha characters")}
-    return(FALSE)
-  }
+  foo <- function(x, verbose) {
+    # pass NA's through
+    if (is.na(x)) return(NA)
+    # cas must not have any alpha characters
+    if (grepl(pattern = "[[:alpha:]]", x = x)) {
+      if (isTRUE(verbose)) {
+        message(x,": String contains alpha characters")
+        }
+      return(FALSE)
+    }
 
-  # cas must have two hyphens
-  nsep <- str_count(x, '-')
-  if (nsep != 2) {
-    if (isTRUE(verbose))
-      message('Less than 2 hyphens in string.')
-    return(FALSE)
-  }
+    # cas must have two hyphens
+    nsep <- str_count(x, '-')
+    if (nsep != 2) {
+      if (isTRUE(verbose))
+        message(x, ': Less than 2 hyphens in string.')
+      return(FALSE)
+    }
 
-  # first part 2 to 7 digits
-  fi <- gsub('^(.*)-(.*)-(.*)$', '\\1', x)
-  if (nchar(fi) > 7 | nchar(fi) < 2) {
-    if (isTRUE(verbose))
-      message('First part with more than 7 digits!')
-    return(FALSE)
-  }
+    # first part 2 to 7 digits
+    fi <- gsub('^(.*)-(.*)-(.*)$', '\\1', x)
+    if (nchar(fi) > 7 | nchar(fi) < 2) {
+      if (isTRUE(verbose))
+        message(x, ': First part has more than 7 digits!')
+      return(FALSE)
+    }
 
-  # second part must be two digits
-  se <- gsub('^(.*)-(.*)-(.*)$', '\\2', x)
-  if (nchar(se) != 2) {
-    if (isTRUE(verbose))
-      message('Second part has not two digits!')
-    return(FALSE)
-  }
+    # second part must be two digits
+    se <- gsub('^(.*)-(.*)-(.*)$', '\\2', x)
+    if (nchar(se) != 2) {
+      if (isTRUE(verbose))
+        message(x, ': Second part should have two digits!')
+      return(FALSE)
+    }
 
-  # third part (checksum) must be 1 digit
-  th <- gsub('^(.*)-(.*)-(.*)$', '\\3', x)
-  if (nchar(th) != 1) {
-    if (isTRUE(verbose))
-      message('Third part has not 1 digit!')
-    return(FALSE)
-  }
+    # third part (checksum) must be 1 digit
+    th <- gsub('^(.*)-(.*)-(.*)$', '\\3', x)
+    if (nchar(th) != 1) {
+      if (isTRUE(verbose))
+        message(x, ': Third part should have 1 digit!')
+      return(FALSE)
+    }
 
-  # check checksum
-  di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x),
-                             split = '')[[1]])
-  checksum <- sum(rev(seq_along(di)) * di)
-  if (checksum %% 10 != as.numeric(th)) {
-    if (isTRUE(verbose))
-      message('Checksum is not correct! ', checksum %% 10, ' vs. ', th)
-    return(FALSE)
+    # check checksum
+    di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x),
+                               split = '')[[1]])
+    checksum <- sum(rev(seq_along(di)) * di)
+    if (checksum %% 10 != as.numeric(th)) {
+      if (isTRUE(verbose))
+        message(x, ': Checksum is not correct! ', checksum %% 10, ' vs. ', th)
+      return(FALSE)
+    }
+    return(TRUE)
   }
-
-  return(TRUE)
+  return(sapply(x, foo, verbose))
 }
 
 
@@ -407,12 +409,13 @@ as.cas <- function(x){
 
 #' Used internally to handle the `match` argument in most functions.
 #'
-#' @param x a vector
+#' @param x a vector of hits returned from a query
 #' @param query what the query was, only used if match = "best"
-#' @param result what the result of the query was, only used if match = "best
+#' @param result vector of results of the same type as `query` and same length
+#'   as `x`, only used if match = "best
 #' @param match character; How should multiple hits be handled? "all" returns
-#' all matched IDs, "first" only the first match, "best" the best matching (by
-#' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
+#'   all matched IDs, "first" only the first match, "best" the best matching (by
+#'   name) ID, "ask" is a interactive mode and the user is asked for input, "na"
 #' @param verbose print messages?
 #'
 #' @return
