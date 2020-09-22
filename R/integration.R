@@ -66,6 +66,7 @@ with_cts <- function(query, from, .f, .verbose = TRUE, ...) {
 #'   source contains a record for the query
 #' @export
 #' @import dplyr
+#' @importFrom stringr str_trunc
 #' @examples
 #' \dontrun{
 #' find_db("hexane", from = "name")
@@ -121,7 +122,7 @@ find_db <- function(query, from,
         as.matrix()
       opar <- graphics::par(no.readonly = TRUE)
 
-      query_trunc <- str_trunc(query, 25)
+      query_trunc <- stringr::str_trunc(query, 25)
       leftmargin <- 0.5 * max(nchar(query_trunc))
       graphics::par(mar = c(5.1, leftmargin, 4.1, 4.1))
 
