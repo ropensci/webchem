@@ -102,7 +102,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         return(NA)
       }
 
-      # handle multiple outputs
+      # handle multiple inputs
       if (grepl('^ChemIDplus Results - Chemical information', x = tit)) {
         if (verbose)
           message(" More then one Link found. ", appendLF = FALSE)
@@ -120,7 +120,14 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         hit_names <- hit_names[keep]
         hit_names <- gsub(' \\[.*\\]', '', hit_names)
 
-        hit_cas <- matcher(hit_cas, query = URLdecode(query), result = hit_names, match = match)
+        hit_cas <-
+          matcher(
+            hit_cas,
+            query = URLdecode(query),
+            result = hit_names,
+            match = match,
+            verbose = verbose
+          )
         matched_sub <- names(hit_cas)
 
         # check hit
