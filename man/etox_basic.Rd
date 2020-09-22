@@ -35,7 +35,7 @@ out <- etox_basic(ids)
 out
 
 # extract ec numbers
-sapply(out, function(y) y$ec)
+sapply(out, function(y) y$cas)
 }
 }
 \references{

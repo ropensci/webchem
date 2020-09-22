@@ -25,40 +25,50 @@
 #' @export
 
 opsin_query <- function(query, verbose = TRUE, ...){
-  # query <- 'cyclopropane'
+
+  if (ping_service("opsin") == FALSE) stop(webchem_message("service_down"))
 
   foo <- function(query, verbose){
-    on.exit(suppressWarnings(closeAllConnections()))
-
     empty <- c(query, rep(NA, 6))
     names(empty) <- c("query", "inchi", "stdinchi", "stdinchikey", "smiles", "message", "status")
     empty <- as_tibble(t(empty))
     if (is.na(query)) {
+      if (verbose) webchem_message("na")
       return(empty)
     }
     query_u <- URLencode(query, reserved = TRUE)
     baseurl <- "http://opsin.ch.cam.ac.uk/opsin/"
     out <- 'json'
     qurl <- paste0(baseurl, query_u, '.', out)
-    if (verbose)
-      message('Querying ', URLdecode(query_u))
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
-    h <- try(GET(qurl), silent = TRUE)
-    if (inherits(h, "try-error")) {
-      warning('Problem with web service encountered... Returning NA.')
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
       return(empty)
     }
-    cont <- content(h, as = 'text')
-    if (substr(cont, 1, 14) == '<!DOCTYPE html') {
-      cont <- read_html(cont)
-      warning(xml_text(xml_find_all(cont, '//h3')), "\nReturning NA.")
+    if (verbose) message(httr::message_for_status(res))
+    if (res$status_code == 200) {
+      cont <- content(res, as = 'text')
+      if (substr(cont, 1, 14) == '<!DOCTYPE html') {
+        cont <- read_html(cont)
+        if (verbose) message(xml_text(xml_find_all(cont, '//h3')),
+                             " Returning NA.")
+        return(empty)
+      }
+      cont <- fromJSON(cont)
+      cont[['cml']] <- NULL
+      cont <- c(query = query, unlist(cont))
+      cont <- tibble::as_tibble(t(cont))
+      return(cont)
+    }
+    else {
       return(empty)
     }
-    cont <- fromJSON(cont)
-    cont[['cml']] <- NULL
-    cont <- c(query = query, unlist(cont))
-    cont <- tibble::as_tibble(t(cont))
-    return(cont)
   }
   out <- purrr::map_dfr(query, ~foo(.x, verbose = verbose))
   out <- dplyr::select(out, query, everything())

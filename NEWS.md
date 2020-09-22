@@ -1,4 +1,4 @@
-# webchem 1.0.0.9005
+# webchem 1.0.0.9010
 
 ## NEW FEATURES
 
@@ -8,6 +8,8 @@
 
 ## MINOR IMPROVEMENTS
 
+* Most functions now use httr::RETRY() to access webservices.
+* Verbose messages are now harmonized.
 * The `"type"` argument in `ci_query()` and `aw_query()` has been changed to `"from"` for consistency with other functions
 * `fn_percept()` and `cts_compinfo()` now have `"query"` and `"from"` arguments for consistency with other functions
 * Possible values for `"from"` have been made more consistent across functions

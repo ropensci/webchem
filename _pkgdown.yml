@@ -8,6 +8,7 @@ reference:
   - cs_convert
   - cts_from
   - cts_to
+  - with_cts
   - wd_ident
   - pc_synonyms
   - opsin_query
@@ -29,6 +30,12 @@ reference:
   - pc_prop
   - pc_sect
   - srs_query
+- title: Molecular structure images
+- contents:
+  - ends_with("_img")
+- title: Cross-data-source functions
+- contents:
+  - find_db
 - title: Data
 - contents:
   - has_keyword("datasets")
@@ -50,3 +57,8 @@ reference:
 - title: Package
 - contents:
   - webchem
+
+# build locally with:
+# template <- list(package = "rotemplate")
+# pkgdown::build_site(devel = FALSE, override = list(template = template))
+

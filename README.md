@@ -6,8 +6,8 @@
 <!-- badges: start -->
 
 [![CRAN](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
-[![Travis](https://travis-ci.org/ropensci/webchem.png)](https://travis-ci.org/ropensci/webchem)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/8m7wpfnxn41kqjnl?svg=true)](https://ci.appveyor.com/project/ropensci/webchem)
+[![R build
+status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
 [![Coverage](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/webchem/branch/master)
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total

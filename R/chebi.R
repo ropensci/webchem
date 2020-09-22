@@ -78,6 +78,9 @@ get_chebiid <- function(query,
                         stars =  c('all', 'two only', 'three only'),
                         verbose = TRUE,
                         ...) {
+
+  if (ping_service("chebi") == FALSE) stop(webchem_message("service_down"))
+
   match <- match.arg(match)
   from <- toupper(match.arg(from))
   if (from == "NAME") {
@@ -90,9 +93,10 @@ get_chebiid <- function(query,
   stars <- toupper(match.arg(stars))
 
   foo <- function(query, from, match, max_res, stars, verbose, ...) {
-    if (is.na(query)) return(tibble("query" = NA_character_,
-                                    "chebiid" = NA_character_))
-
+    if (is.na(query)) {
+      if (verbose) webchem_message("na")
+      return(tibble::tibble("query" = NA_character_, "chebiid" = NA_character_))
+    }
     # query
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
     headers <- c(Accept = 'text/xml',
@@ -114,20 +118,26 @@ get_chebiid <- function(query,
         </soapenv:Body>
      </soapenv:Envelope>')
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-    if (verbose)
-      message(query, ': ', url)
-    res <- POST(url,
-                add_headers(headers),
-                body = body)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    res <- try(httr::RETRY("POST",
+                           url,
+                           httr::user_agent(webchem_url()),
+                           httr::add_headers(headers),
+                           body = body,
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(tibble::tibble("query" = query, "chebiid" = NA_character_))
+    }
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
-      cont <- try(content(res, type = 'text/xml', encoding = 'utf-8'),
-                  silent = TRUE)
+      cont <- content(res, type = 'text/xml', encoding = 'utf-8')
       out <- l2df(as_list(xml_children(xml_find_first(cont, '//d1:return'))))
       out <- as_tibble(setNames(out, tolower(names(out))))
       if (nrow(out) == 0) {
-        message('No result found. \n')
-        return(tibble("query" = query,
-                      "chebiid" = NA_character_))
+        webchem_message("not_found")
+        return(tibble::tibble("query" = query, "chebiid" = NA_character_))
       }
       if (nrow(out) > 0) out$query <- query
       if (nrow(out) == 1) return(out)
@@ -152,18 +162,14 @@ get_chebiid <- function(query,
         return(out[out$chebiid == matched, ])
       }
       if (match == "na") {
-        return(tibble("query" = query,
-                      "chebiid" = NA_character_))
-      }
+        return(tibble::tibble("query" = query, "chebiid" = NA_character_))
+        }
       if (match == "first") {
         return(out[1, ])
       }
     } else {
-      out <- tibble("query" = query,
-                    "chebiid" = NA_character_)
-      message('Returning NA (', http_status(res)$message, '). \n')
-      return(out)
-    }
+      return(tibble::tibble("query" = query, "chebiid" = NA_character_))
+      }
   }
   out <- lapply(query,
                 foo,
@@ -237,9 +243,14 @@ get_chebiid <- function(query,
 #' }
 chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 
+  if (ping_service("chebi") == FALSE) stop(webchem_message("service_down"))
+
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging
-    if (is.na(chebiid)) return(NA)
+    if (is.na(chebiid)) {
+      if (verbose) webchem_message("na")
+      return(NA)
+    }
     url <- 'http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice'
     headers <- c(Accept = 'text/xml',
                  Accept = 'multipart/*',
@@ -256,14 +267,21 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
           </chebi:getCompleteEntity>
         </soapenv:Body>
      </soapenv:Envelope>')
-    if (verbose)
-      message(chebiid, ': ', url)
+    if (verbose) webchem_message("query", chebiid, appendLF = FALSE)
     Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
-    res <- POST(url,
-                add_headers(headers),
-                body = body)
+    res <- try(httr::RETRY("POST",
+                           url,
+                           httr::user_agent(webchem_url()),
+                           httr::add_headers(headers),
+                           body = body,
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res))
     if (res$status_code != 200) {
-      warning(http_status(res)$message)
       return(NA)
     } else {
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')

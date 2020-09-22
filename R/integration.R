@@ -66,6 +66,7 @@ with_cts <- function(query, from, .f, .verbose = TRUE, ...) {
 #'   source contains a record for the query
 #' @export
 #' @import dplyr
+#' @importFrom stringr str_trunc
 #' @examples
 #' \dontrun{
 #' find_db("hexane", from = "name")
@@ -120,14 +121,18 @@ find_db <- function(query, from,
         select(all_of(colorder)) %>%
         as.matrix()
       opar <- graphics::par(no.readonly = TRUE)
-      graphics::par(mar = c(5.1, 7.1, 4.1, 4.1)) # adapt margins
+
+      query_trunc <- stringr::str_trunc(query, 25)
+      leftmargin <- 0.5 * max(nchar(query_trunc))
+      graphics::par(mar = c(5.1, leftmargin, 4.1, 4.1))
+
       plot(
         pmat,
         col = c("#C7010B", "#3BC03B"),
         breaks = c(FALSE, TRUE),
         na.col = "grey70",
         axis.col = list(side = 3),
-        axis.row = list(las = 2, labels = out$query),
+        axis.row = list(las = 2, labels = query_trunc),
         xlab = NA,
         ylab = NA,
         main = NA

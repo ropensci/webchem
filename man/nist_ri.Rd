@@ -10,7 +10,8 @@ nist_ri(
   type = c("kovats", "linear", "alkane", "lee"),
   polarity = c("polar", "non-polar"),
   temp_prog = c("isothermal", "ramp", "custom"),
-  cas = NULL
+  cas = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ to get RIs calculated for polar or non-polar columns.}
 \code{"ramp"}, or \code{"custom"}.}
 
 \item{cas}{deprecated.  Use \code{query} instead.}
+
+\item{verbose}{logical; should a verbose output be printed on the console?}
 }
 \value{
 returns a tibble of literature RIs with the following columns:

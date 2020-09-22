@@ -68,17 +68,18 @@
 #'  # extract Acute Toxicity Summary
 #'  sapply(out, function(y) y$`Acute Toxicity Summary`)
 #' }
-pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', 'first'), verbose = TRUE, ...){
+pan_query <- function(query, from = c("name", "cas"),
+                      match = c('best', 'all', 'first'), verbose = TRUE, ...){
+
+  if (ping_service("pan") == FALSE) stop(webchem_message("service_down"))
+
   match <- match.arg(match)
   match.arg(from) #not actually needed for this function to work
   foo <- function(query, match, verbose) {
-    on.exit(suppressWarnings(closeAllConnections()))
     if (is.na(query)) {
-      warning('Identifier is NA... Returning NA.')
+      if (verbose) webchem_message("na")
       return(NA)
     }
-    # query <- '94-75-7'
-    # query <- '2,4-D'
     baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
     baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',
                     'dDPR_Chem_Code=y&dUseList=y&dClassList=y&dMol_weight=y&',
@@ -99,50 +100,61 @@ pan_query <- function(query, from = c("name", "cas"), match = c('best', 'all', '
                     'dEPAOrganoleptic=y&dCanAquaFWConc=y&dCanAquaMarineConc=y&',
                     'dIrrigConc=y&dLivestockConc=y&')
     qurl = paste0(baseurl, baseq, 'ChemName=', query)
-    if (verbose)
-      message(paste0(baseurl, 'ChemName=', query), '\n')
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
-    h <- try(read_html(qurl), silent = TRUE)
-    if (inherits(h, "try-error")) {
-      warning('Problem with web service encountered... Returning NA.')
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
       return(NA)
     }
-    nd <- xml_find_all(h, "//table[contains(.,'Detailed Info')]")
-    if (length(nd) == 0) {
-      message('Not found... Returning NA.')
-      return(NA)
-    }
-    ttt <- html_table(nd)[[1]]
-    out <- as.list(ttt)
-    # clean
-    out$`Detailed Info` <- NULL
-    names(out) <- gsub('\\n', ' ', names(out))
-    out <- rapply(out, f = function(x){
-      ifelse(x %in% c('null', '-', ''), NA, x)
-    }, how = "replace" )
-    out <- c(out[1:46],
-             rapply(out[47:73], function(x) gsub(',', '', x), how = 'replace'))
+    if (verbose) httr::message_for_status(res)
+    if (res$status_code == 200) {
+      h <- xml2::read_html(res)
+      nd <- xml_find_all(h, "//table[contains(.,'Detailed Info')]")
+      if (length(nd) == 0) {
+        webchem_message("not_found")
+        return(NA)
+      }
+      ttt <- html_table(nd)[[1]]
+      out <- as.list(ttt)
+      # clean
+      out$`Detailed Info` <- NULL
+      names(out) <- gsub('\\n', ' ', names(out))
+      out <- rapply(out, f = function(x){
+        ifelse(x %in% c('null', '-', ''), NA, x)
+      }, how = "replace" )
+      out <- c(out[1:46],
+               rapply(out[47:73], function(x) gsub(',', '', x), how = 'replace'))
 
-    # split chemName and matching synonym
-    out[['matching synonym']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 2)
-    out[['Chemical name']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 1)
-    out[['Chemical Name and matching synonym']] <- NULL
+      # split chemName and matching synonym
+      out[['matching synonym']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 2)
+      out[['Chemical name']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 1)
+      out[['Chemical Name and matching synonym']] <- NULL
 
-    # return also source url
-    # xmlview::xml_view(nd, add_filter = TRUE)
-    source_url <- xml_attr(xml_find_all(nd, ".//a[contains(., 'Details')]"), 'href')
-    out[['source_url']] <- paste0('http://www.pesticideinfo.org/', source_url)
-    if (match == 'first')
-      out <- lapply(out, '[', 1)
+      # return also source url
+      # xmlview::xml_view(nd, add_filter = TRUE)
+      source_url <- xml_attr(xml_find_all(nd, ".//a[contains(., 'Details')]"), 'href')
+      out[['source_url']] <- paste0('http://www.pesticideinfo.org/', source_url)
+      if (match == 'first')
+        out <- lapply(out, '[', 1)
       attr(out, "match distance") <- 'first match'
-    if (match == 'best') {
-      hits <- out[['matching synonym']]
-      dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
-      take <- which.min(dists)
-      out <- lapply(out, '[', take)
-      attr(out, "match distance") <- dists[take]
+      if (match == 'best') {
+        hits <- out[['matching synonym']]
+        dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
+        take <- which.min(dists)
+        out <- lapply(out, '[', take)
+        attr(out, "match distance") <- dists[take]
+      }
+      return(out)
     }
-    return(out)
+    else {
+      if (verbose) httr::message_for_status(res)
+      return(NA)
+    }
   }
   out <- lapply(query, foo, match = match, verbose = verbose)
   out <- setNames(out, query)
