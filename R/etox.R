@@ -117,7 +117,7 @@ get_etoxid <- function(query,
         subs_names <- gsub(" \\(.*\\)", "", subs)
         id <- gsub("^.*\\?id=(.*)", "\\1", links)
 
-        out <- matcher(id, query = query, result = subs_names, match = match)
+        out <- matcher(id, query = query, result = subs_names, from = from, match = match)
 
         hit <- tibble("query" = query,
                       "match" = names(out),

@@ -186,7 +186,7 @@ cts_convert <- function(query,
         return(NA)
       }
       out <- out$result[[1]]
-      out <- matcher(out, match = match, query = query, verbose = verbose)
+      out <- matcher(out, match = match, query = query, from = from, verbose = verbose)
       return(out)
     }
     else {

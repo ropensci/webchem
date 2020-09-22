@@ -80,3 +80,13 @@ test_that("as.cas() returns correct reults", {
   expect_equivalent(as.cas(c(761659, 123456789, "hexenol")),
                    c("761-65-9", NA, NA))
 })
+
+test_that("matcher() warns when 'best' is used with chemical names", {
+  expect_warning(
+    matcher(x = c("formalin", "carbon monoxide"),
+          query = "WSFSSNUMVMOOMR-UHFFFAOYSA-N",
+          from = "inchikey",
+          result = c("WSFSSNUMVMOOMR-UHFFFAOYSA-N","UGFAIRIUMAVXCW-UHFFFAOYSA-N "),
+          match = "best"),
+    "match = 'best' only makes sense for chemical name queries.")
+})

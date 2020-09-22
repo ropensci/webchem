@@ -64,10 +64,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
   }
   from <- match.arg(from)
   match <- match.arg(match)
-  if (from != "name" & match == "best") {
-    warning("match = 'best' only makes sense for chemical name queries.\n Returning first hit in the result of multiple results.")
-    from <- "first"
-  }
+
   foo <- function(query, from, match, verbose){
     if (is.na(query)) {
       if (verbose) webchem_message("na")
@@ -126,6 +123,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
             query = URLdecode(query),
             result = hit_names,
             match = match,
+            from = from,
             verbose = verbose
           )
         matched_sub <- names(hit_cas)

@@ -157,6 +157,7 @@ get_chebiid <- function(query,
             query = query,
             result = out$chebiasciiname,
             match = "ask",
+            from = match.arg(from),
             verbose = verbose
           )
         return(out[out$chebiid == matched, ])

@@ -416,6 +416,7 @@ as.cas <- function(x){
 #' @param match character; How should multiple hits be handled? "all" returns
 #'   all matched IDs, "first" only the first match, "best" the best matching (by
 #'   name) ID, "ask" is a interactive mode and the user is asked for input, "na"
+#' @param from character; used only to check that match = "best" is used sensibly.
 #' @param verbose print messages?
 #'
 #' @return
@@ -430,6 +431,7 @@ matcher <-
            query = NULL,
            result = NULL,
            match = c("all", "best", "first", "ask", "na"),
+           from = NULL,
            verbose = FALSE) {
 
     match <- match.arg(match)
@@ -439,6 +441,13 @@ matcher <-
       return(x)
     } else {
       if (verbose) message(" Multiple found. ", appendLF = FALSE)
+
+      if (!is.null(from)) {
+        if (!str_detect(tolower(from), "name") & match == "best") {
+          warning("match = 'best' only makes sense for chemical name queries.\n Setting match = 'first'.")
+          match <- "first"
+        }
+      }
 
       if (match == "all") {
         if (verbose) message("Returning all.")

@@ -75,12 +75,8 @@ pan_query <- function(query, from = c("name", "cas"),
 
   match <- match.arg(match)
   from <- match.arg(from)
-  if (from != "name" & match == "best") {
-    warning("match = 'best' only makes sense for chemical name queries.\n Returning first hit in the result of multiple results.")
-    from <- "first"
-  }
-  match.arg(from) #not actually needed for this function to work
-  foo <- function(query, match, verbose) {
+
+  foo <- function(query, match, from, verbose) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -150,6 +146,7 @@ pan_query <- function(query, from = c("name", "cas"),
           query = query,
           result = out[["Chemical name"]],
           match = match,
+          from = from,
           verbose = verbose
         )
       out <- lapply(out, '[', ind)
@@ -161,7 +158,7 @@ pan_query <- function(query, from = c("name", "cas"),
       return(NA)
     }
   }
-  out <- lapply(query, foo, match = match, verbose = verbose)
+  out <- lapply(query, foo, match = match, from = from, verbose = verbose)
   out <- setNames(out, query)
   class(out) <- c('pan_query', 'list')
   return(out)
