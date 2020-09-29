@@ -36,7 +36,7 @@
 aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
                      type, ...) {
 
-  if (ping_service("aw") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("aw")) stop(webchem_message("service_down"))
 
   if (!missing(type)) {
     message('"type" is deprecated. Please use "from" instead. ')
@@ -180,11 +180,11 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 #' @source \url{http://www.alanwood.net/pesticides}
 #' @noRd
 build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
-  if (ping_service("aw") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("aw")) stop(webchem_message("service_down"))
   suppressWarnings(try(load(paste0(tempdir(), "/data/aw_idx.rda")),
                        silent = TRUE))
   if (!file.exists(paste0(tempdir(), "/data/aw_idx.rda")) |
-      force_build == TRUE |
+      force_build |
       try(Sys.Date() - attr(aw_idx, "date"), silent = TRUE) > 30) {
     if (!dir.exists(paste0(tempdir(), "/data"))) {
       dir.create(paste0(tempdir(), "/data"))

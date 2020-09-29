@@ -26,7 +26,7 @@
 
 opsin_query <- function(query, verbose = TRUE, ...){
 
-  if (ping_service("opsin") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("opsin")) stop(webchem_message("service_down"))
 
   foo <- function(query, verbose){
     empty <- c(query, rep(NA, 6))

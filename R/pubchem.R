@@ -124,13 +124,13 @@ get_cid <-
            first = NULL,
            ...) {
 
-    if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+    if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   #deprecate `first`
-  if (!is.null(first) && first == TRUE) {
+  if (!is.null(first) && first) {
     message("`first = TRUE` is deprecated. Use `match = 'first'` instead")
     match <- "first"
-  } else if (!is.null(first) && first == FALSE) {
+  } else if (!is.null(first) && !first) {
     message("`first = FALSE` is deprecated. Use `match = 'all'` instead")
     match <- "all"
   }
@@ -164,7 +164,7 @@ get_cid <-
       from <- match.arg(from, choices = from_choices)
     }
     if (domain == "substance") {
-      if (grepl("^sourceid/", from) == FALSE) {
+      if (!grepl("^sourceid/", from)) {
         from <- match.arg(from, choices = c("sid", "name", xref, "sourceall"))
       }
     }
@@ -317,7 +317,7 @@ get_cid <-
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   if (mean(is.na(cid)) == 1) {
     if (verbose) webchem_message("na")
@@ -451,7 +451,7 @@ pc_synonyms <- function(query,
                         verbose = TRUE,
                         arg = NULL, choices = NULL, ...) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c("Aspirin")
@@ -608,7 +608,7 @@ pc_page <- function(id,
                                "protein", "patent"),
                     verbose = TRUE) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))

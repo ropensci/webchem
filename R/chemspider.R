@@ -872,9 +872,9 @@ cs_img <- function(csid,
   verbose <- match.arg(as.character(verbose), choices = c(TRUE, FALSE))
   foo <- function(csid, dir = dir, overwrite = overwrite, apikey = apikey,
                   verbose = verbose) {
-    if (verbose == TRUE) message("Searching ", csid, ". ", appendLF = FALSE)
+    if (verbose) message("Searching ", csid, ". ", appendLF = FALSE)
     if (is.na(csid)) {
-      if (verbose == TRUE) {
+      if (verbose) {
         message("Invalid input.")
       }
       return(tibble(query = csid, path = NA))
@@ -884,16 +884,16 @@ cs_img <- function(csid,
       url <- paste0("https://api.rsc.org/compounds/v1/records/", csid, "/image")
       headers <- c("Content-Type" = "", "apikey" = apikey)
       res <- httr::GET(url, httr::add_headers(.headers = headers))
-      if (verbose == TRUE) message(httr::message_for_status(res))
+      if (verbose) message(httr::message_for_status(res))
       if (res$status_code < 300) {
         cont <- httr::content(res, type = "image", encoding = "base64")
         cont <- unlist(jsonlite::fromJSON(rawToChar(cont)))
         cont <- base64enc::base64decode(cont)
-        if (overwrite == TRUE) {
+        if (overwrite) {
           writeBin(cont, path)
         }
         else {
-          if (file.exists(path) == FALSE) writeBin(cont, path)
+          if (!file.exists(path)) writeBin(cont, path)
         }
       }
     }

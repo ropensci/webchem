@@ -33,7 +33,7 @@
 #' }
 cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   if (!missing(inchikey)) {
     message('"inchikey" is deprecated.  Please use "query" instead.')
@@ -124,7 +124,7 @@ cts_convert <- function(query,
                         choices = NULL,
                         ...){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   if(!missing("choices")) {
     if (is.null(choices)) {
@@ -219,7 +219,7 @@ cts_convert <- function(query,
 #' }
 cts_from <- function(verbose = TRUE){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues"
   res <- try(httr::RETRY("GET",
@@ -256,7 +256,7 @@ cts_from <- function(verbose = TRUE){
 #' }
 cts_to <- function(verbose = TRUE){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues"
   res <- try(httr::RETRY("GET",
