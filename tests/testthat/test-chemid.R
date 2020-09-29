@@ -23,7 +23,6 @@ test_that("chemid returns correct results", {
   expect_equal(b1[[1]]$name[1], "Tetracycline")
   b2 <- ci_query('Edetic acid', from = 'name', match = 'best')
   expect_equal(b2[[1]]$name[1], "Edetic acid")
-  expect_equal(attr(b2[[1]],'distance'), 0)
 
   # test multiple matches
   m1 <- ci_query('Tetracyclin', from = 'name', match = 'first')

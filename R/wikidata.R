@@ -86,21 +86,16 @@ get_wdid <-
                                          "latin1",
                                          "ASCII",
                                          sub = "")) == tolower(query), ]
-
-          if (nrow(search) > 1) {
-            id <-
-              matcher(
-                search$id,
-                query = query,
-                result = search$label,
-                match = match,
-                verbose = verbose
-              )
-            matched_sub <- names(id)
-          } else {
-            id <- search$id
-            matched_sub <- search$label
-          }
+          id <-
+            matcher(
+              search$id,
+              query = query,
+              result = search$label,
+              match = match,
+              # from = from,
+              verbose = verbose
+            )
+          matched_sub <- names(id)
         }
       }
       else {

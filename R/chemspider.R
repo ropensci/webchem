@@ -201,7 +201,7 @@ get_csid <- function(query,
                   inchikey = cs_inchikey_csid(x, apikey = apikey),
                   smiles = cs_smiles_csid(x, apikey = apikey))
     if(length(res) > 1) {
-      res <- matcher(res, query = x, match = match, verbose = verbose)
+      res <- matcher(res, query = x, match = match, from = from, verbose = verbose)
     }
     if (length(res) == 0) res <- NA_integer_
     return(res)

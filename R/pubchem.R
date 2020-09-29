@@ -250,7 +250,7 @@ get_cid <-
         cont <- jsonlite::fromJSON(cont)$InformationList$Information$CID
       }
       out <- unique(unlist(cont))
-      out <- matcher(x = out, query = query, match = match, verbose = verbose)
+      out <- matcher(x = out, query = query, match = match, from = from, verbose = verbose)
       out <- as.character(out)
       return(tibble::tibble("query" = query, "cid" = out))
     }
@@ -493,7 +493,7 @@ pc_synonyms <- function(query,
       out <- unlist(cont)[-1] #first result is always an ID number
       names(out) <- NULL
 
-      out <- matcher(out, query = query, match = match, verbose = verbose)
+      out <- matcher(out, query = query, match = match, from = from, verbose = verbose)
     }
     else {
       return(NA)

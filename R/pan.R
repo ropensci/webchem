@@ -69,13 +69,14 @@
 #'  sapply(out, function(y) y$`Acute Toxicity Summary`)
 #' }
 pan_query <- function(query, from = c("name", "cas"),
-                      match = c('best', 'all', 'first'), verbose = TRUE, ...){
+                      match = c('best', 'all', 'first', "na"), verbose = TRUE, ...){
 
   if (ping_service("pan") == FALSE) stop(webchem_message("service_down"))
 
   match <- match.arg(match)
-  match.arg(from) #not actually needed for this function to work
-  foo <- function(query, match, verbose) {
+  from <- match.arg(from)
+
+  foo <- function(query, match, from, verbose) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -99,7 +100,7 @@ pan_query <- function(query, from = c("name", "cas"),
                     'dSWCont=y&dSWMax=y&dHumConsOrgOnly=y&dHumConsWaterOrg=y&',
                     'dEPAOrganoleptic=y&dCanAquaFWConc=y&dCanAquaMarineConc=y&',
                     'dIrrigConc=y&dLivestockConc=y&')
-    qurl = paste0(baseurl, baseq, 'ChemName=', query)
+    qurl <- paste0(baseurl, baseq, 'ChemName=', query)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
     res <- try(httr::RETRY("GET",
@@ -120,7 +121,7 @@ pan_query <- function(query, from = c("name", "cas"),
         return(NA)
       }
       ttt <- html_table(nd)[[1]]
-      out <- as.list(ttt)
+      out <- as.list(ttt) #TODO: why not just keep it as a table???
       # clean
       out$`Detailed Info` <- NULL
       names(out) <- gsub('\\n', ' ', names(out))
@@ -134,21 +135,22 @@ pan_query <- function(query, from = c("name", "cas"),
       out[['matching synonym']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 2)
       out[['Chemical name']] <- sapply(strsplit(out[['Chemical Name and matching synonym']], '\\n'), '[', 1)
       out[['Chemical Name and matching synonym']] <- NULL
-
       # return also source url
       # xmlview::xml_view(nd, add_filter = TRUE)
       source_url <- xml_attr(xml_find_all(nd, ".//a[contains(., 'Details')]"), 'href')
       out[['source_url']] <- paste0('http://www.pesticideinfo.org/', source_url)
-      if (match == 'first')
-        out <- lapply(out, '[', 1)
-      attr(out, "match distance") <- 'first match'
-      if (match == 'best') {
-        hits <- out[['matching synonym']]
-        dists <- sapply(hits, function(x) min((adist(query, x) / nchar(x))[1 , ]))
-        take <- which.min(dists)
-        out <- lapply(out, '[', take)
-        attr(out, "match distance") <- dists[take]
-      }
+
+      ind <-
+        matcher(
+          x = 1:nrow(ttt),
+          query = query,
+          result = out[["Chemical name"]],
+          match = match,
+          from = from,
+          verbose = verbose
+        )
+      out <- lapply(out, '[', ind)
+
       return(out)
     }
     else {
@@ -156,7 +158,7 @@ pan_query <- function(query, from = c("name", "cas"),
       return(NA)
     }
   }
-  out <- lapply(query, foo, match = match, verbose = verbose)
+  out <- lapply(query, foo, match = match, from = from, verbose = verbose)
   out <- setNames(out, query)
   class(out) <- c('pan_query', 'list')
   return(out)
