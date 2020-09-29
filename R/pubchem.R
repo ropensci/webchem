@@ -178,14 +178,15 @@ get_cid <-
         return(tibble::tibble("query" = NA, "cid" = NA))
       }
       if (verbose) webchem_message("query", query, appendLF = FALSE)
-      if (is.character(query)) query <- URLencode(query, reserved = TRUE)
       if (from %in% structure_search) {
-        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain, from, query, "json", sep = "/")
+        qurl <- URLencode(paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                                domain, from, query, "json", sep = "/"),
+                          reserved = TRUE)
       }
       else {
-        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain, from, query, "cids", "json", sep = "/")
+        qurl <- URLencode(paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                                domain, from, query, "cids", "json", sep = "/"),
+                          reserved = TRUE)
       }
       if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
       Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
