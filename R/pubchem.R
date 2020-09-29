@@ -179,14 +179,20 @@ get_cid <-
       }
       if (verbose) webchem_message("query", query, appendLF = FALSE)
       if (from %in% structure_search) {
-        qurl <- URLencode(paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                                domain, from, query, "json", sep = "/"),
-                          reserved = TRUE)
-      }
-      else {
-        qurl <- URLencode(paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                                domain, from, query, "cids", "json", sep = "/"),
-                          reserved = TRUE)
+        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                      domain,
+                      from,
+                      URLencode(as.character(query), reserved = TRUE),
+                      "json",
+                      sep = "/")
+      } else {
+        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                      domain,
+                      from,
+                      URLencode(as.character(query), reserved = TRUE),
+                      "cids",
+                      "json",
+                      sep = "/")
       }
       if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
       Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
@@ -199,8 +205,7 @@ get_cid <-
                                body = paste0("inchi=", query),
                                terminate_on = 404,
                                quiet = TRUE), silent = TRUE)
-      }
-      else {
+      } else {
         res <- try(httr::RETRY("POST",
                                qurl,
                                user_agent(webchem_url()),
