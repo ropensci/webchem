@@ -77,6 +77,13 @@ myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
 "non-polar", "ramp")
 }
 }
+\references{
+NIST Mass Spectrometry Data Center, William E. Wallace, director,
+  "Retention Indices" in NIST Chemistry WebBook, NIST Standard Reference
+  Database Number 69, Eds. P.J. Linstrom and W.G. Mallard,
+  National Institute of Standards and Technology, Gaithersburg MD, 20899,
+  https://doi.org/10.18434/T4D303.
+}
 \seealso{
 \code{\link{is.cas}} \code{\link{as.cas}}
 }
