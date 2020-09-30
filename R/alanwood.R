@@ -20,7 +20,6 @@
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -176,7 +175,6 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 #' @param force_build logical; force building a new index?
 #' @return a data.frame
 #' @seealso \code{\link{aw_query}}, \code{\link{tempdir}}
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @source \url{http://www.alanwood.net/pesticides}
 #' @noRd
 build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {

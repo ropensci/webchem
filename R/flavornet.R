@@ -13,7 +13,6 @@
 #'
 #' @return A named character vector containing flavor percepts or NA's in the case of CAS numbers that are not found
 #'
-#' @author Eric Scott, \email{eric.scott@@tufts.edu}
 #'
 #' @examples
 #' \dontrun{

@@ -96,7 +96,6 @@
 #' \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
 #' \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @examples
 #' \donttest{
@@ -234,7 +233,6 @@ cir_query <- function(identifier, representation = "smiles",
 #' \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
 #' \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
 #'
-#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #'
 #' @examples
 #' \donttest{

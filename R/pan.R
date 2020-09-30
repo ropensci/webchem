@@ -49,7 +49,6 @@
 #' Fresh Water Guidelines (ug/L); Salt Water Guidelines (ug/L);
 #' Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L);
 #' Chemical Name; matching synonym; source URL
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
