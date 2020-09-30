@@ -124,13 +124,13 @@ get_cid <-
            first = NULL,
            ...) {
 
-    if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+    if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   #deprecate `first`
-  if (!is.null(first) && first == TRUE) {
+  if (!is.null(first) && first) {
     message("`first = TRUE` is deprecated. Use `match = 'first'` instead")
     match <- "first"
-  } else if (!is.null(first) && first == FALSE) {
+  } else if (!is.null(first) && !first) {
     message("`first = FALSE` is deprecated. Use `match = 'all'` instead")
     match <- "all"
   }
@@ -164,7 +164,7 @@ get_cid <-
       from <- match.arg(from, choices = from_choices)
     }
     if (domain == "substance") {
-      if (grepl("^sourceid/", from) == FALSE) {
+      if (!grepl("^sourceid/", from)) {
         from <- match.arg(from, choices = c("sid", "name", xref, "sourceall"))
       }
     }
@@ -178,14 +178,21 @@ get_cid <-
         return(tibble::tibble("query" = NA, "cid" = NA))
       }
       if (verbose) webchem_message("query", query, appendLF = FALSE)
-      if (is.character(query)) query <- URLencode(query, reserved = TRUE)
       if (from %in% structure_search) {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain, from, query, "json", sep = "/")
-      }
-      else {
+                      domain,
+                      from,
+                      URLencode(as.character(query), reserved = TRUE),
+                      "json",
+                      sep = "/")
+      } else {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain, from, query, "cids", "json", sep = "/")
+                      domain,
+                      from,
+                      URLencode(as.character(query), reserved = TRUE),
+                      "cids",
+                      "json",
+                      sep = "/")
       }
       if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
       Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
@@ -198,8 +205,7 @@ get_cid <-
                                body = paste0("inchi=", query),
                                terminate_on = 404,
                                quiet = TRUE), silent = TRUE)
-      }
-      else {
+      } else {
         res <- try(httr::RETRY("POST",
                                qurl,
                                user_agent(webchem_url()),
@@ -317,7 +323,7 @@ get_cid <-
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   if (mean(is.na(cid)) == 1) {
     if (verbose) webchem_message("na")
@@ -451,7 +457,7 @@ pc_synonyms <- function(query,
                         verbose = TRUE,
                         arg = NULL, choices = NULL, ...) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c("Aspirin")
@@ -608,7 +614,7 @@ pc_page <- function(id,
                                "protein", "patent"),
                     verbose = TRUE) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))

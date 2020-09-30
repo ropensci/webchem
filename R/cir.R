@@ -120,7 +120,7 @@ cir_query <- function(identifier, representation = "smiles",
                       choices = NULL,
                       ...){
 
-  if (ping_service("cir") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cir")) stop(webchem_message("service_down"))
 
   if (!missing("choices")) {
     stop("`choices` is deprecated.  Use `match` instead.")
@@ -288,7 +288,7 @@ cir_img <- function(query,
                     verbose = TRUE,
                     ...) {
 
-  if (ping_service("cir") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cir")) stop(webchem_message("service_down"))
 
   if (is.na(dir) || !dir.exists(dir)) {
     stop('Directory does not exist.')

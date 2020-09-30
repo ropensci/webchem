@@ -30,7 +30,7 @@ srs_query <-
            from = c("itn", "cas", "epaid", "tsn", "name"),
            verbose = TRUE, ...) {
 
-    if (ping_service("srs") == FALSE) stop(webchem_message("service_down"))
+    if (!ping_service("srs")) stop(webchem_message("service_down"))
 
     from <- match.arg(from)
     entity_url <- "https://cdxnodengn.epa.gov/cdx-srs-rest/"
