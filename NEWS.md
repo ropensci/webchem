@@ -1,10 +1,10 @@
 # webchem (development version)
 
-# webchem 1.0.0.9010
+# webchem 1.1.0.
 
 ## NEW FEATURES
 
-* Download images of substances from Chemical Identifier Resolver (CIR) with `cir_img()` [contributed by @andschar].
+* Download images of substances from Chemical Identifier Resolver (CIR) with `cir_img()`.
 * Download images of substances from ChemSpider with `cs_img()`
 * `find_db()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
 
@@ -29,7 +29,7 @@
 
 * get_cid() now can search by registry IDs (e.g. CAS RN), and can handle more complex requests like searching for similar compounds.
 * Retrieve chemical data from PubChem content pages with pc_sect().
-* get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #241, added by @andschar]
+* get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument.
 * nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
 
 ## MINOR IMPROVEMENTS
@@ -43,10 +43,10 @@
 
 * nist_ri() returned malformed tables or errored if there was only one entry for a query
 * get_csid() now returns all csids when queried from formula
-* get_csid() returned an error when query was NA [PR #226, fixed by stitam]
-* get_chebiid() and chebi_comp_entity() fixed for invalid queries [PR #225, fixed by stitam]
-* get_cid() returned the PubChem ID of sodium when the query was NA [PR #223, fixed by stitam]
-* aw_query() returned a list for successful queries, NA for unsuccessful queries [PR #222, fixed by stitam]
+* get_csid() returned an error when query was NA
+* get_chebiid() and chebi_comp_entity() fixed for invalid queries
+* get_cid() returned the PubChem ID of sodium when the query was NA
+* aw_query() returned a list for successful queries, NA for unsuccessful queries
 
 ## DEPRECATED FUNCTIONS
 
@@ -57,10 +57,10 @@
 
 ## NEW FEATURES
 
-* Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_chebiid() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andschar].
-* Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
-* Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
-* "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
+* Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_chebiid() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest.
+* Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri()
+* Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query()
+* "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return.
 * ChemSpider functions now look for an API token stored in .Renviron or .Rprofile by default so you can keep them hidden more easily.
 
 ## MINOR IMPROVEMENTS
@@ -70,14 +70,14 @@
 
 ## BUG FIXES
 
-* cs_prop() failed with duplicated return values [issue #148, reported and fixed by @stanstrup]
-* pp_query() failed when compound present, but no properties [issue #151, reported and fixed by @stanstrup]
-* ci_query() failed when missing table [issue #196, reported and fixed by @gjgetzinger]
-* get_csid() failed because of a major change in the ChemSpider API [issue #149, PR #165, contributed by @stitam]
-* multiple functions failed because of a major change in the ChemSpider API [issue #149, contributed by @stitam]
-* cir_query() mistook NA for sodium [issue #158, reported and fixed by @Aariq]
-* fixed functions that communicate with the ChemSpider API [issue #149, issue #160, fixed by @stitam]
-* get_etoxid() printed incorrect results for certain match types [issue #201, fixed by @stitam]
+* cs_prop() failed with duplicated return values
+* pp_query() failed when compound present, but no properties
+* ci_query() failed when missing table
+* get_csid() failed because of a major change in the ChemSpider API
+* multiple functions failed because of a major change in the ChemSpider API
+* cir_query() mistook NA for sodium
+* fixed functions that communicate with the ChemSpider API
+* get_etoxid() printed incorrect results for certain match types
 
 ## DEPRECATED FUNCTIONS
 
@@ -97,13 +97,13 @@
 
 ## BUG FIXES
 
-* extr_num() did not work properly with decimal numbers [issue #136, reported and fixed by @stanstrup]
-* cs_prop() failed when epi-suite data was not available [issue #139, reported and fixed by @stanstrup]
-* cs_prop() failed with invalid html [issue #138, reported and fixed by @stanstrup]
-* cs_prop() gave incorrect answer, if entries were not available [issue #142, reported and fixed by @stanstrup]
-* cs_prop() did not parse scientific number correctly [issue #143, reported by @stanstrup, fixed by @EDiLD]
-* is.smiles() failed because of changes in rcdk [PR #140, reported and fixed by @allaway]
-* cir_query() failed with identifiers containing spaces (e.g. 'acetic acid') [issue #146, reported by Lars Nielsen]
+* extr_num() did not work properly with decimal numbers
+* cs_prop() failed when epi-suite data was not available
+* cs_prop() failed with invalid html
+* cs_prop() gave incorrect answer, if entries were not available
+* cs_prop() did not parse scientific number correctly
+* is.smiles() failed because of changes in rcdk
+* cir_query() failed with identifiers containing spaces (e.g. 'acetic acid')
 * several other functions failed with identifiers containing spaces & returned wrong distance.
 
 ## DEPRECATED FUNCTIONS
@@ -119,13 +119,12 @@
 ## MINOR IMPROVEMENTS
 
 * cs_prop() now also return experimental data for Boiling and Melting Points.
-* pc_synonyms gained an argument 'interactive' to enter an interactive mode for
-  selecting synonyms [issue #129, requested by @Aariq]
+* pc_synonyms gained an argument 'interactive' to enter an interactive mode for selecting synonyms
 * cts_convert now returns NA if no matches are found.
 
 ## BUG FIXES
 
-* cs_prop() failed with some CSIDs [isse #127, reported by @Aariq]
+* cs_prop() failed with some CSIDs
 * wd_ident() failed if multiple entries where found. Now returns the first hit only.
 * ci_query() did not return fully cleaned smiles and inchi
 
@@ -139,7 +138,7 @@
 
 ## NEW FEATURES
 
-* fn_percept() extracts flavor percepts using CAS numbers from www.flavornet.org. Flavornet is a database of 738 compounds with human-detectible odors. [contributed by @Aariq]
+* fn_percept() extracts flavor percepts using CAS numbers from www.flavornet.org. Flavornet is a database of 738 compounds with human-detectible odors.
 
 ## MINOR IMPROVEMENTS
 
@@ -163,7 +162,7 @@
 
 ## BUG FIXES
 * pc_prop() returned to many rows if last cid supplied was NA
-* Switched to https for NCBI, chemspider & chemid (Issue #120, reported by @jranke)
+* Switched to https for NCBI, chemspider & chemid
 * get_wdid() failed if non-ascii characters where returned by wikipedia
 * rcdk:parse.smiles() now returns NA if a SMILES string could not be parsed.
    => broke is.smiles
@@ -332,7 +331,7 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 ## BUG FIXES
 
-* Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribution of @jranke]
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood()
 
 
 
