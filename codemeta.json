@@ -1,14 +1,20 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "webchem",
   "description": "Chemical information from around the web. This package interacts \n    with a suite of web services for chemical information. Sources include: Alan\n    Wood's Compendium of Pesticide Common Names, Chemical Identifier Resolver,\n    ChEBI, Chemical Translation Service, ChemIDplus, ChemSpider, ETOX,\n    Flavornet, NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem,\n    SRS, Wikidata.",
   "name": "webchem: Chemical Information from the Web",
   "codeRepository": "https://github.com/ropensci/webchem",
-  "relatedLink": ["https://docs.ropensci.org/webchem", "https://CRAN.R-project.org/package=webchem"],
+  "relatedLink": [
+    "https://docs.ropensci.org/webchem",
+    "https://CRAN.R-project.org/package=webchem"
+  ],
   "issueTracker": "https://github.com/ropensci/webchem/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.0.0",
+  "version": "1.0.0.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -153,6 +159,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "plot.matrix",
+      "name": "plot.matrix",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=plot.matrix"
     }
   ],
   "softwareRequirements": [
@@ -286,9 +304,94 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "base64enc",
+      "name": "base64enc",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=base64enc"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
     }
   ],
   "readme": "https://github.com/ropensci/webchem/blob/master/README.md",
-  "fileSize": "349.763KB",
-  "keywords": ["rstats", "ropensci", "chemical-information", "webscraping", "cas-number", "chemspider", "identifier", "r", "r-package"]
+  "fileSize": "0KB",
+  "keywords": [
+    "rstats",
+    "ropensci",
+    "chemical-information",
+    "webscraping",
+    "cas-number",
+    "chemspider",
+    "identifier",
+    "r",
+    "r-package"
+  ],
+  "releaseNotes": "https://github.com/ropensci/webchem/blob/master/NEWS.md",
+  "contIntegration": "https://codecov.io/gh/ropensci/webchem/branch/master",
+  "citation": [
+    {
+      "@type": "ScholarlyArticle",
+      "datePublished": "2020",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Eduard",
+          "familyName": "Sz\\\"ocs"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Tam\\'as",
+          "familyName": "Stirling",
+          "email": "stirling.tamas@gmail.com"
+        },
+        {
+          "@type": "Person",
+          "givenName": ["Eric", "R."],
+          "familyName": "Scott"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Andreas",
+          "familyName": "Scharm\\\"uller"
+        },
+        {
+          "@type": "Person",
+          "givenName": ["Ralf", "B."],
+          "familyName": "Sch\\\"afer"
+        }
+      ],
+      "name": "{webchem}: An {R} Package to Retrieve Chemical Information from the {W}eb",
+      "identifier": "10.18637/jss.v093.i13",
+      "pagination": "1--17",
+      "@id": "https://doi.org/10.18637/jss.v093.i13",
+      "sameAs": "https://doi.org/10.18637/jss.v093.i13",
+      "isPartOf": {
+        "@type": "PublicationIssue",
+        "issueNumber": "13",
+        "datePublished": "2020",
+        "isPartOf": {
+          "@type": ["PublicationVolume", "Periodical"],
+          "volumeNumber": "93",
+          "name": "Journal of Statistical Software"
+        }
+      }
+    }
+  ]
 }
