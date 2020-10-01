@@ -78,7 +78,7 @@ get_chebiid <- function(query,
                         verbose = TRUE,
                         ...) {
 
-  if (ping_service("chebi") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("chebi")) stop(webchem_message("service_down"))
 
   match <- match.arg(match)
   from <- toupper(match.arg(from))
@@ -240,9 +240,11 @@ get_chebiid <- function(query,
 #' chebi_comp_entity(comp)
 #'
 #' }
-chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
+chebi_comp_entity <- function(chebiid,
+                              verbose = TRUE,
+                              ...) {
 
-  if (ping_service("chebi") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("chebi")) stop(webchem_message("service_down"))
 
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging

@@ -27,7 +27,7 @@
 fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
 {
 
-  if (ping_service("fn") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("fn")) stop(webchem_message("service_down"))
 
   if (!missing(CAS)) {
     message('"CAS" is now deprecated. Please use "query" instead. ')

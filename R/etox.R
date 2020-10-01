@@ -45,7 +45,7 @@ get_etoxid <- function(query,
                        match = c("all", "best", "first", "ask", "na"),
                        verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   clean_char <- function(x) {
     # rm \n \t
@@ -172,7 +172,7 @@ get_etoxid <- function(query,
 #' }
 etox_basic <- function(id, verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   foo <- function(id, verbose) {
     if (is.na(id)) {
@@ -294,7 +294,7 @@ etox_basic <- function(id, verbose = TRUE) {
 #' }
 etox_targets <- function(id, verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   foo <- function(id, verbose) {
     if (is.na(id)) {
@@ -392,7 +392,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' }
 etox_tests <- function(id, verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   foo <- function(id, verbose){
     if (is.na(id)) {

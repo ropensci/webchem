@@ -70,7 +70,7 @@
 pan_query <- function(query, from = c("name", "cas"),
                       match = c('best', 'all', 'first', "na"), verbose = TRUE, ...){
 
-  if (ping_service("pan") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pan")) stop(webchem_message("service_down"))
 
   match <- match.arg(match)
   from <- match.arg(from)
