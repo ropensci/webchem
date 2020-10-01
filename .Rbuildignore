@@ -25,3 +25,4 @@ README_cache
 ^\.github$
 
 codemeta.json
+^codemeta\.json$

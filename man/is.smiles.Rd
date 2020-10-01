@@ -34,6 +34,3 @@ Egon Willighagen (2015). How to test SMILES strings in
 Supplementary Information.
 \url{https://chem-bla-ics.blogspot.nl/2015/10/how-to-test-smiles-strings-in.html}
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

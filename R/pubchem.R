@@ -72,8 +72,6 @@
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @import httr
 #' @importFrom purrr map map2
 #' @importFrom jsonlite fromJSON
@@ -283,7 +281,6 @@ get_cid <-
 #' @param ... currently not used.
 #'
 #' @return a data.frame
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_sect}}
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -442,7 +439,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -547,7 +543,6 @@ pc_synonyms <- function(query,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_prop}}
 #' @examples
 #' # might fail if API is not available
@@ -600,7 +595,6 @@ pc_sect <- function(id,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
@@ -680,7 +674,6 @@ pc_page <- function(id,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @examples
 #' # might fail if API is not available
 #' \donttest{

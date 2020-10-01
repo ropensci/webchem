@@ -17,8 +17,6 @@
 #'
 #' @note Only matches in labels are returned.
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
-#'
 #' @import jsonlite httr
 #' @importFrom stats rgamma
 #' @importFrom utils URLencode URLdecode
@@ -144,7 +142,6 @@ get_wdid <-
 #' Mitraka, Elvira, Andra Waagmeester, Sebastian Burgstaller-Muehlbacher, et al. 2015
 #' Wikidata: A Platform for Data Integration and Dissemination for the Life Sciences and beyond. bioRxiv: 031971.
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{

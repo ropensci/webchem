@@ -26,6 +26,3 @@ as.cas(x)
 \seealso{
 \code{\link{is.cas}}
 }
-\author{
-Eric Scott, \email{scottericr@gmail.com}
-}

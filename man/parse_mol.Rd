@@ -35,6 +35,3 @@ a toolset for transforming SD/Molfile structure information into R objects.
 Source Code for Biology and Medicine, 7, 12.
 \url{http://doi.org/10.1186/1751-0473-7-12}
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

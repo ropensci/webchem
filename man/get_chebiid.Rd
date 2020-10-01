@@ -93,6 +93,3 @@ Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
   Information from the Web. Journal of Statistical Software, 93(13).
   <doi:10.18637/jss.v093.i13>.
 }
-\author{
-Andreas Scharmüller, \email{andschar@protonmail.com}
-}

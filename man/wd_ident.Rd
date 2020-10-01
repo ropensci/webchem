@@ -38,6 +38,3 @@ Wikidata: A Platform for Data Integration and Dissemination for the Life Science
 \seealso{
 \code{\link{get_wdid}}
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

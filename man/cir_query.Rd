@@ -134,6 +134,3 @@ Group at NCI/NIH! \cr
 \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
 \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

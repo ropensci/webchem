@@ -22,7 +22,7 @@ A named character vector containing flavor percepts or NA's in the case of CAS n
 }
 \description{
 Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
-perceptible to humans detected using gas chromatography ofactometry (GCO).
+perceptible to humans detected using gas chromatography olfactometry (GCO).
 }
 \examples{
 \dontrun{
@@ -32,7 +32,4 @@ fn_percept("123-32-0")
 CASs <- c("75-07-0",  "64-17-5",  "109-66-0", "78-94-4",  "78-93-3")
 fn_percept(CASs)
 }
-}
-\author{
-Eric Scott, \email{eric.scott@tufts.edu}
 }

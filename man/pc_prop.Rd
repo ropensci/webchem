@@ -70,6 +70,3 @@ Information from the Web. Journal of Statistical Software, 93(13).
 \seealso{
 \code{\link{get_cid}}, \code{\link{pc_sect}}
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}
