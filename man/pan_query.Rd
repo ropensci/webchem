@@ -84,6 +84,3 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
  sapply(out, function(y) y$`Acute Toxicity Summary`)
 }
 }
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
-}

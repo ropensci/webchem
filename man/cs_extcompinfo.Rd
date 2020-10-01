@@ -47,6 +47,3 @@ cs_compinfo(csids)
 \code{\link{get_csid}} to retrieve ChemSpider IDs,
 \code{\link{cs_compinfo}} for extended compound information.
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

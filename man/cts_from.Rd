@@ -30,6 +30,3 @@ Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Che
 \seealso{
 \code{\link{cts_convert}}
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}
