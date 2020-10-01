@@ -257,7 +257,7 @@ cs_query_csid <- function(postres, headers) {
   apistatus <- jsonlite::fromJSON(rawToChar(getstatus$content))$status
   while (apistatus == "Processing") {
     message("Your request is being processed.")
-    Sys.sleep(5)
+    webchem_sleep(time = 5)
     getstatus <- httr::GET(
       url = paste0(
         "https://api.rsc.org/compounds/v1/filter/",
@@ -803,7 +803,7 @@ use 'cs_commpinfo()' instead.")
     qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
     if (verbose)
       message(qurl)
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/45))
+    webchem_sleep(type = 'API')
     h <- try(read_xml(qurl), silent = TRUE)
     if (inherits(h, "try-error")) {
       warning('CSID not found... Returning NA.')

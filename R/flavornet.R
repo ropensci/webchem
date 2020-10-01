@@ -42,7 +42,7 @@ fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
     }
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
     if(verbose) webchem_message("query", query, appendLF = FALSE)
-    Sys.sleep(stats::rgamma(1, shape = 10, scale = 1/10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),

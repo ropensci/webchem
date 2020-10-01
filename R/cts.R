@@ -52,7 +52,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
     }
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/compound"
     qurl <- paste0(baseurl, '/', query)
-    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'API')
     out <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),
@@ -168,7 +168,7 @@ cts_convert <- function(query,
     to <- URLencode(to, reserved = TRUE)
     baseurl <- "http://cts.fiehnlab.ucdavis.edu/service/convert"
     qurl <- paste0(baseurl, '/', from, '/', to, '/', query)
-    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'API')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),

@@ -86,7 +86,7 @@ get_etoxid <- function(query,
                    'stoffnummer.selection[0].type' = type,
                    event = "Search")
     }
-    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'scrape')
     h <- try(httr::RETRY("POST",
                          url = baseurl,
                          httr::user_agent(webchem_url()),
@@ -186,7 +186,7 @@ etox_basic <- function(id, verbose = TRUE) {
     baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
     qurl <- paste0(baseurl, id)
     if(verbose) webchem_message("query", id, appendLF = FALSE)
-    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1 / 10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),
@@ -309,7 +309,7 @@ etox_targets <- function(id, verbose = TRUE) {
     baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?language=en&id='
     qurl <- paste0(baseurl, id)
     if(verbose) webchem_message("query", id, appendLF = FALSE)
-    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),
@@ -408,7 +408,7 @@ etox_tests <- function(id, verbose = TRUE) {
     baseurl <- 'https://webetox.uba.de/webETOX/public/basics/stoff.do?id='
     qurl <- paste0(baseurl, id)
     if(verbose) webchem_message("query", id, appendLF = FALSE)
-    Sys.sleep(stats::rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),

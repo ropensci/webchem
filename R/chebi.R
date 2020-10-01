@@ -117,7 +117,7 @@ get_chebiid <- function(query,
           </chebi:getLiteEntity>
         </soapenv:Body>
      </soapenv:Envelope>')
-    Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
+    webchem_sleep(type = 'API')
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     res <- try(httr::RETRY("POST",
                            url,
@@ -271,7 +271,7 @@ chebi_comp_entity <- function(chebiid,
         </soapenv:Body>
      </soapenv:Envelope>')
     if (verbose) webchem_message("query", chebiid, appendLF = FALSE)
-    Sys.sleep(rgamma(1, shape = 5, scale = 1/10))
+    webchem_sleep(type = 'API')
     res <- try(httr::RETRY("POST",
                            url,
                            httr::user_agent(webchem_url()),

@@ -85,7 +85,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
     }
 
     qurl <- paste0("http://www.alanwood.net/pesticides/", takelink)
-    Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),
