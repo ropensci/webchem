@@ -49,6 +49,7 @@ Suggests:
     robotstxt,
     knitr,
     rmarkdown,
-    plot.matrix
+    plot.matrix,
+    usethis
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
