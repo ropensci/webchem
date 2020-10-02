@@ -2,7 +2,7 @@
 % Please edit documentation in R/alanwood.R
 \name{aw_query}
 \alias{aw_query}
-\title{Query http://www.alanwood.net/pesticides}
+\title{Query http://www.alanwood.net/pesticides/}
 \usage{
 aw_query(query, from = c("name", "cas"), verbose = TRUE, type, ...)
 }
@@ -24,7 +24,7 @@ url.
 }
 \description{
 Query Alan Woods Compendium of Pesticide Common Names
-\url{http://www.alanwood.net/pesticides}
+\url{http://www.alanwood.net/pesticides/}
 }
 \note{
 for from = 'cas' only the first matched link is returned.

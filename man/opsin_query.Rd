@@ -18,7 +18,7 @@ a tibble with six columnns: "query", inchi", "stdinchi", "stdinchikey", "smiles"
 }
 \description{
 Query the OPSIN  (Open Parser for Systematic IUPAC nomenclature) web service
-\url{http://opsin.ch.cam.ac.uk/instructions.html}.
+\url{https://opsin.ch.cam.ac.uk/instructions.html}.
 }
 \examples{
 \donttest{
@@ -30,5 +30,5 @@ opsin_query(c('Cyclopropane', 'Octane', 'xxxxx'))
 \references{
 Lowe, D. M., Corbett, P. T., Murray-Rust, P., & Glen, R. C. (2011).
 Chemical Name to Structure: OPSIN, an Open Source Solution. Journal of Chemical Information and Modeling,
-51(3), 739–753. \url{http://doi.org/10.1021/ci100384d}
+51(3), 739–753. \url{https://doi.org/10.1021/ci100384d}
 }

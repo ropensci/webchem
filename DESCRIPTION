@@ -10,7 +10,7 @@ Type: Package
 Version: 1.1.0
 Date: 2020-10-01
 License: MIT + file LICENSE
-URL: https://docs.ropensci.org/webchem, https://github.com/ropensci/webchem
+URL: https://docs.ropensci.org/webchem/, https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
 Authors@R: c(person("Eduard", "Szöcs", role = "aut"),
     person("Robert", "Allaway", role = "ctb"),    

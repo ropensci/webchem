@@ -1,7 +1,7 @@
-#' Query http://www.alanwood.net/pesticides
+#' Query http://www.alanwood.net/pesticides/
 #'
 #' Query Alan Woods Compendium of Pesticide Common Names
-#' \url{http://www.alanwood.net/pesticides}
+#' \url{http://www.alanwood.net/pesticides/}
 #' @import xml2
 #' @importFrom stats rgamma
 #'
@@ -167,7 +167,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 #' Function to build index
 #'
 #' This function builds an index of Alan Woods Compendium of Pesticides
-#' \url{http://www.alanwood.net/pesticides} and saves it to
+#' \url{http://www.alanwood.net/pesticides/} and saves it to
 #' \code{\link{tempdir}}.
 #' @import xml2
 #'
@@ -175,7 +175,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 #' @param force_build logical; force building a new index?
 #' @return a data.frame
 #' @seealso \code{\link{aw_query}}, \code{\link{tempdir}}
-#' @source \url{http://www.alanwood.net/pesticides}
+#' @source \url{http://www.alanwood.net/pesticides/}
 #' @noRd
 build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
   if (!ping_service("aw")) stop(webchem_message("service_down"))
