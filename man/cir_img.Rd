@@ -77,7 +77,7 @@ image written to disk
 }
 \description{
 A interface to the Chemical Identifier Resolver (CIR).
- (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
+ (\url{https://cactus.nci.nih.gov/chemical/structure_documentation}).
 }
 \details{
 CIR can resolve can be of the following \code{identifier}: Chemical Names,
@@ -126,8 +126,8 @@ cir_img(query,
 \references{
 \code{cir} relies on the great CIR web service created by the CADD
 Group at NCI/NIH! \cr
-\url{http://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
-\url{http://cactus.nci.nih.gov/blog/?cat=10}, \cr
-\url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
-\url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
+\url{https://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
+\url{https://cactus.nci.nih.gov/blog/?cat=10}, \cr
+\url{https://cactus.nci.nih.gov/blog/?p=1386}, \cr
+\url{https://cactus.nci.nih.gov/blog/?p=1456}, \cr
 }

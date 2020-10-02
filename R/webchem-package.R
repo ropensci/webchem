@@ -30,7 +30,7 @@ if (getRversion() >= "2.15.1")
 #'   \item{value}{concentration in ug/L}
 #'   \item{qual}{qualifier, indicating values < LOQ}
 #' }
-#' @source \url{http://jdkfg.lubw.baden-wuerttemberg.de/servlet/is/300/}
+#' @source \url{https://udo.lubw.baden-wuerttemberg.de/?highlightglobalid=gewaesserguetedaten}
 "jagst"
 
 

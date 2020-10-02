@@ -12,7 +12,7 @@ pc_prop(cid, properties = NULL, verbose = TRUE, ...)
 \item{properties}{character vector; properties to retrieve, e.g.
 c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 properties are retrieved. See
-\url{https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html#_Toc409516770}
+\url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
 for a list of all available properties.}
 
 \item{verbose}{logical; should a verbose output be printed to the console?}

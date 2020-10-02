@@ -40,7 +40,7 @@ A list of character vectors.
 }
 \description{
 A interface to the Chemical Identifier Resolver (CIR).
- (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
+ (\url{https://cactus.nci.nih.gov/chemical/structure_documentation}).
 }
 \details{
 CIR can resolve can be of the following \code{identifier}: Chemical Names,
@@ -97,12 +97,12 @@ CIR can resolve can be of the following \code{identifier}: Chemical Names,
    \item \code{'name_by_cir'} (Lookup in name index of CIR),
    \item \code{'name_by_opsin'} (Lookup in OPSIN),
    \item \code{'name_by_chemspider'} (Lookup in ChemSpider,
-   \url{http://cactus.nci.nih.gov/blog/?p=1386}),
+   \url{https://cactus.nci.nih.gov/blog/?p=1386}),
    \item \code{'smiles'} (Lookup SMILES),
    \item \code{'stdinchikey'}, \code{'stdinchi'} (InChI),
    \item \code{'cas_number'} (CAS Number),
    \item \code{'name_pattern'} (Google-like pattern search
-   (\url{http://cactus.nci.nih.gov/blog/?p=1456})
+   (\url{https://cactus.nci.nih.gov/blog/?p=1456})
    Note, that the pattern search can be combined with other resolvers,
    e.g. \code{resolver = 'name_by_chemspider,name_pattern'}.
 
@@ -129,8 +129,8 @@ cir_query(comp, "cas", match = "first")
 \references{
 \code{cir} relies on the great CIR web service created by the CADD
 Group at NCI/NIH! \cr
-\url{http://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
-\url{http://cactus.nci.nih.gov/blog/?cat=10}, \cr
-\url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
-\url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
+\url{https://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
+\url{https://cactus.nci.nih.gov/blog/?cat=10}, \cr
+\url{https://cactus.nci.nih.gov/blog/?p=1386}, \cr
+\url{https://cactus.nci.nih.gov/blog/?p=1456}, \cr
 }
