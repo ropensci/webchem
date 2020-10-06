@@ -191,6 +191,7 @@ get_csid <- function(query,
   }
   from <- match.arg(from)
   match <- match.arg(match)
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   foo <- function(x, from, match, verbose, apikey, ...) {
     if (is.na(x)) {
       if (verbose) webchem_message("na")
@@ -356,6 +357,7 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
   valid <- c("csid", "inchikey", "inchi", "smiles", "mol")
   from <- match.arg(from, choices = valid)
   to <- match.arg(to, choices = valid)
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   cs_compinfo_dict <- data.frame(
     "name" = c("inchi", "inchikey", "smiles", "mol"),
     "cs_compinfo" = c("InChI", "InChIKey", "SMILES", "Mol2D"),
@@ -553,6 +555,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...) {
   .Deprecated("cs_compinfo()", old = "cs_extcompinfo()",
               msg = "'cs_extcompinfo' is deprecated.
 use 'cs_commpinfo()' instead.")
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   foo <- function(csid, token, verbose) {
     if (is.na(csid)) {
       out <- as.list(rep(NA, 13))
@@ -629,6 +632,7 @@ cs_img <- function(csid,
     apikey <- cs_check_key()
   }
   verbose <- match.arg(as.character(verbose), choices = c(TRUE, FALSE))
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   foo <- function(csid, dir = dir, overwrite = overwrite, apikey = apikey,
                   verbose = verbose) {
     if (verbose) webchem_message("query", csid, appendLF = FALSE)
