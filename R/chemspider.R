@@ -167,9 +167,6 @@ cs_control <- function(datasources = vector(),
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
-#' @importFrom tibble enframe
 #'
 #' @export
 #' @examples
@@ -303,7 +300,7 @@ get_csid <- function(query,
     )
   names(out) <- query
   out <-
-    lapply(out, enframe, name = NULL, value = "csid") %>%
+    lapply(out, tibble::enframe, name = NULL, value = "csid") %>%
     bind_rows(.id = "query")
   return(out)
 }
@@ -617,9 +614,6 @@ use 'cs_commpinfo()' instead.")
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @seealso \code{\link{get_csid}}, \code{\link{cs_check_key}}
-#' @importFrom httr GET add_headers message_for_status content
-#' @importFrom jsonlite fromJSON
-#' @importFrom base64enc base64decode
 #' @export
 #' @examples
 #' \dontrun{
