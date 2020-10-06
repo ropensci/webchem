@@ -42,6 +42,3 @@ casrn <- c('50-00-0', '67-64-1')
 srs_query(query = casrn, from = 'cas')
 }
 }
-\author{
-Gordon Getzinger, \email{gjg3@duke.edu}
-}

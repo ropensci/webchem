@@ -46,6 +46,3 @@ comps <- c('Triclosan', 'Glyphosate')
 get_wdid(comps)
 }
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

@@ -43,7 +43,6 @@ cs_check_key <- function() {
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -109,7 +108,6 @@ cs_datasources <- function(apikey = NULL, verbose = TRUE) {
 #' The controls that are available for a given function are indicated within the
 #' documentation of the function.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{get_csid}}
 #' @export
 #' @examples
@@ -169,8 +167,9 @@ cs_control <- function(datasources = vector(),
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
+#' @importFrom httr POST add_headers http_status
+#' @importFrom jsonlite toJSON
+#' @importFrom tibble enframe
 #'
 #' @export
 #' @examples
@@ -267,7 +266,11 @@ get_csid <- function(query,
           if (verbose) message(httr::message_for_status(getres))
           res <- jsonlite::fromJSON(rawToChar(getres$content))$results
           if(length(res) > 1) {
-            res <- matcher(res, query = x, match = match, verbose = verbose)
+            res <- matcher(res,
+                           query = x,
+                           match = match,
+                           from = from,
+                           verbose = verbose)
           }
           if (length(res) == 0) res <- NA_integer_
           return(res)
@@ -335,8 +338,6 @@ get_csid <- function(query,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -461,7 +462,6 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -539,7 +539,6 @@ cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
 #' for a security token.
 #' Please respect the Terms & conditions
 #' \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
 #' \code{\link{cs_compinfo}} for extended compound information.
 #' @note use \code{\link{cs_compinfo}} to retrieve standard inchikey.
@@ -617,7 +616,6 @@ use 'cs_commpinfo()' instead.")
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @author Tamas Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{get_csid}}, \code{\link{cs_check_key}}
 #' @importFrom httr GET add_headers message_for_status content
 #' @importFrom jsonlite fromJSON
@@ -661,11 +659,11 @@ cs_img <- function(csid,
         cont <- httr::content(res, type = "image", encoding = "base64")
         cont <- unlist(jsonlite::fromJSON(rawToChar(cont)))
         cont <- base64enc::base64decode(cont)
-        if (overwrite == TRUE) {
+        if (overwrite) {
           writeBin(cont, path)
         }
         else {
-          if (file.exists(path) == FALSE) writeBin(cont, path)
+          if (!file.exists(path)) writeBin(cont, path)
         }
       }
     }

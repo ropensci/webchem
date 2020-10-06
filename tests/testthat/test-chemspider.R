@@ -59,8 +59,8 @@ test_that("cs_control()", {
                 "ascending")
   expect_true(cs_control(order_direction = "descending")$order_direction ==
                 "descending")
-  expect_true(cs_control(include_all = TRUE)$include_all == TRUE)
-  expect_true(cs_control(include_all = FALSE)$include_all == FALSE)
+  expect_true(cs_control(include_all = TRUE)$include_all)
+  expect_false(cs_control(include_all = FALSE)$include_all)
   expect_true(cs_control(complexity = "any")$complexity == "any")
   expect_true(cs_control(complexity = "single")$complexity == "single")
   expect_true(cs_control(complexity = "multiple")$complexity == "multiple")

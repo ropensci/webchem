@@ -7,7 +7,7 @@ test_that("examples in the article are unchanged", {
                "Hyphens not at position 15 and 26.\n")
   expect_false(is.cas('64-17-6'))
   expect_equal(
-    capture_messages(is.cas("64-17-6")), "Checksum is not correct! 5 vs. 6\n")
+    capture_messages(is.cas("64-17-6")), "64-17-6: Checksum is not correct! 5 vs. 6\n")
   skip_if_not(up, "ChemSpider service is down, skipping tests")
   expect_false(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKSA-5", type = "chemspider"))
 })
@@ -19,7 +19,6 @@ test_that("is.cas() returns correct results", {
   expect_false(is.cas('4-17-5'))
   expect_false(is.cas('64-177-6'))
   expect_false(is.cas('64-17-55'))
-  expect_error(is.cas(c('64-17-5', '64-17-5')))
 })
 
 test_that("as.cas() handles properly formatted CAS",{
@@ -76,8 +75,18 @@ test_that("extr_num() returns correct results", {
 
 test_that("as.cas() returns correct reults", {
 
-  expect_equal(as.cas(58082), "58-08-2")
-  expect_equal(as.cas(123456789), NA)
-  expect_identical(as.cas(c(761659, 123456789, "hexenol")),
+  expect_equivalent(as.cas(58082), "58-08-2")
+  expect_equivalent(as.cas(123456789), NA)
+  expect_equivalent(as.cas(c(761659, 123456789, "hexenol")),
                    c("761-65-9", NA, NA))
+})
+
+test_that("matcher() warns when 'best' is used with chemical names", {
+  expect_warning(
+    matcher(x = c("formalin", "carbon monoxide"),
+          query = "WSFSSNUMVMOOMR-UHFFFAOYSA-N",
+          from = "inchikey",
+          result = c("WSFSSNUMVMOOMR-UHFFFAOYSA-N","UGFAIRIUMAVXCW-UHFFFAOYSA-N "),
+          match = "best"),
+    "match = 'best' only makes sense for chemical name queries.")
 })

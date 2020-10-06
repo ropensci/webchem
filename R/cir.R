@@ -1,7 +1,7 @@
 #' Query Chemical Identifier Resolver
 #'
 #' A interface to the Chemical Identifier Resolver (CIR).
-#'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
+#'  (\url{https://cactus.nci.nih.gov/chemical/structure_documentation}).
 #'
 #' @import xml2
 #' @importFrom utils URLencode
@@ -75,12 +75,12 @@
 #'    \item \code{'name_by_cir'} (Lookup in name index of CIR),
 #'    \item \code{'name_by_opsin'} (Lookup in OPSIN),
 #'    \item \code{'name_by_chemspider'} (Lookup in ChemSpider,
-#'    \url{http://cactus.nci.nih.gov/blog/?p=1386}),
+#'    \url{https://cactus.nci.nih.gov/blog/?p=1386}),
 #'    \item \code{'smiles'} (Lookup SMILES),
 #'    \item \code{'stdinchikey'}, \code{'stdinchi'} (InChI),
 #'    \item \code{'cas_number'} (CAS Number),
 #'    \item \code{'name_pattern'} (Google-like pattern search
-#'    (\url{http://cactus.nci.nih.gov/blog/?p=1456})
+#'    (\url{https://cactus.nci.nih.gov/blog/?p=1456})
 #'    Note, that the pattern search can be combined with other resolvers,
 #'    e.g. \code{resolver = 'name_by_chemspider,name_pattern'}.
 #'
@@ -91,12 +91,11 @@
 #' @references
 #' \code{cir} relies on the great CIR web service created by the CADD
 #' Group at NCI/NIH! \cr
-#' \url{http://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
-#' \url{http://cactus.nci.nih.gov/blog/?cat=10}, \cr
-#' \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
-#' \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
+#' \url{https://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
+#' \url{https://cactus.nci.nih.gov/blog/?cat=10}, \cr
+#' \url{https://cactus.nci.nih.gov/blog/?p=1386}, \cr
+#' \url{https://cactus.nci.nih.gov/blog/?p=1456}, \cr
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @examples
 #' \donttest{
@@ -120,7 +119,7 @@ cir_query <- function(identifier, representation = "smiles",
                       choices = NULL,
                       ...){
 
-  if (ping_service("cir") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cir")) stop(webchem_message("service_down"))
 
   if (!missing("choices")) {
     stop("`choices` is deprecated.  Use `match` instead.")
@@ -180,7 +179,7 @@ cir_query <- function(identifier, representation = "smiles",
 #' Query Chemical Identifier Resolver Images
 #'
 #' A interface to the Chemical Identifier Resolver (CIR).
-#'  (\url{http://cactus.nci.nih.gov/chemical/structure_documentation}).
+#'  (\url{https://cactus.nci.nih.gov/chemical/structure_documentation}).
 #'
 #' @param query character; Search term. Can be any common chemical identifier
 #' (e.g. CAS, INCHI(KEY), SMILES etc.)
@@ -229,12 +228,11 @@ cir_query <- function(identifier, representation = "smiles",
 #' @references
 #' \code{cir} relies on the great CIR web service created by the CADD
 #' Group at NCI/NIH! \cr
-#' \url{http://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
-#' \url{http://cactus.nci.nih.gov/blog/?cat=10}, \cr
-#' \url{http://cactus.nci.nih.gov/blog/?p=1386}, \cr
-#' \url{http://cactus.nci.nih.gov/blog/?p=1456}, \cr
+#' \url{https://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
+#' \url{https://cactus.nci.nih.gov/blog/?cat=10}, \cr
+#' \url{https://cactus.nci.nih.gov/blog/?p=1386}, \cr
+#' \url{https://cactus.nci.nih.gov/blog/?p=1456}, \cr
 #'
-#' @author Andreas Scharmueller, \email{andschar@@protonmail.com}
 #'
 #' @examples
 #' \donttest{
@@ -288,7 +286,7 @@ cir_img <- function(query,
                     verbose = TRUE,
                     ...) {
 
-  if (ping_service("cir") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cir")) stop(webchem_message("service_down"))
 
   if (is.na(dir) || !dir.exists(dir)) {
     stop('Directory does not exist.')

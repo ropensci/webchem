@@ -38,6 +38,3 @@ is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 \seealso{
 \code{\link{is.inchikey}} for a pure-R implementation.
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

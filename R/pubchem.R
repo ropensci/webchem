@@ -72,8 +72,6 @@
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @import httr
 #' @importFrom purrr map map2
 #' @importFrom jsonlite fromJSON
@@ -124,13 +122,13 @@ get_cid <-
            first = NULL,
            ...) {
 
-    if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+    if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   #deprecate `first`
-  if (!is.null(first) && first == TRUE) {
+  if (!is.null(first) && first) {
     message("`first = TRUE` is deprecated. Use `match = 'first'` instead")
     match <- "first"
-  } else if (!is.null(first) && first == FALSE) {
+  } else if (!is.null(first) && !first) {
     message("`first = FALSE` is deprecated. Use `match = 'all'` instead")
     match <- "all"
   }
@@ -164,7 +162,7 @@ get_cid <-
       from <- match.arg(from, choices = from_choices)
     }
     if (domain == "substance") {
-      if (grepl("^sourceid/", from) == FALSE) {
+      if (!grepl("^sourceid/", from)) {
         from <- match.arg(from, choices = c("sid", "name", xref, "sourceall"))
       }
     }
@@ -178,14 +176,21 @@ get_cid <-
         return(tibble::tibble("query" = NA, "cid" = NA))
       }
       if (verbose) webchem_message("query", query, appendLF = FALSE)
-      if (is.character(query)) query <- URLencode(query, reserved = TRUE)
       if (from %in% structure_search) {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain, from, query, "json", sep = "/")
-      }
-      else {
+                      domain,
+                      from,
+                      URLencode(as.character(query), reserved = TRUE),
+                      "json",
+                      sep = "/")
+      } else {
         qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain, from, query, "cids", "json", sep = "/")
+                      domain,
+                      from,
+                      URLencode(as.character(query), reserved = TRUE),
+                      "cids",
+                      "json",
+                      sep = "/")
       }
       if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
       Sys.sleep(rgamma(1, shape = 15, scale = 1 / 10))
@@ -198,8 +203,7 @@ get_cid <-
                                body = paste0("inchi=", query),
                                terminate_on = 404,
                                quiet = TRUE), silent = TRUE)
-      }
-      else {
+      } else {
         res <- try(httr::RETRY("POST",
                                qurl,
                                user_agent(webchem_url()),
@@ -250,7 +254,7 @@ get_cid <-
         cont <- jsonlite::fromJSON(cont)$InformationList$Information$CID
       }
       out <- unique(unlist(cont))
-      out <- matcher(x = out, query = query, match = match, verbose = verbose)
+      out <- matcher(x = out, query = query, match = match, from = from, verbose = verbose)
       out <- as.character(out)
       return(tibble::tibble("query" = query, "cid" = out))
     }
@@ -271,13 +275,12 @@ get_cid <-
 #' @param properties character vector; properties to retrieve, e.g.
 #' c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 #' properties are retrieved. See
-#' \url{https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html#_Toc409516770}
+#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
 #' for a list of all available properties.
 #' @param verbose logical; should a verbose output be printed to the console?
 #' @param ... currently not used.
 #'
 #' @return a data.frame
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_sect}}
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -317,7 +320,7 @@ get_cid <-
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   if (mean(is.na(cid)) == 1) {
     if (verbose) webchem_message("na")
@@ -436,7 +439,6 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 #' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -451,7 +453,7 @@ pc_synonyms <- function(query,
                         verbose = TRUE,
                         arg = NULL, choices = NULL, ...) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   # from can be cid | name | smiles | inchi | sdf | inchikey | formula
   # query <- c("Aspirin")
@@ -493,7 +495,7 @@ pc_synonyms <- function(query,
       out <- unlist(cont)[-1] #first result is always an ID number
       names(out) <- NULL
 
-      out <- matcher(out, query = query, match = match, verbose = verbose)
+      out <- matcher(out, query = query, match = match, from = from, verbose = verbose)
     }
     else {
       return(NA)
@@ -541,7 +543,6 @@ pc_synonyms <- function(query,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_prop}}
 #' @examples
 #' # might fail if API is not available
@@ -594,7 +595,6 @@ pc_sect <- function(id,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
@@ -608,7 +608,7 @@ pc_page <- function(id,
                                "protein", "patent"),
                     verbose = TRUE) {
 
-  if (ping_service("pc") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))
@@ -674,7 +674,6 @@ pc_page <- function(id,
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
 #' (2019). https://doi.org/10.1186/s13321-019-0375-2.
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
 #' @examples
 #' # might fail if API is not available
 #' \donttest{

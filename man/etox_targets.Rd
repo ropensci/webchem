@@ -44,6 +44,3 @@ Information from the Web. Journal of Statistical Software, 93(13).
   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
   for quality targets and \code{\link{etox_tests}} for test results
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

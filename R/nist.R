@@ -19,7 +19,7 @@ get_ri_xml <-
            temp_prog,
            verbose) {
 
-    if (ping_service("nist") == FALSE) stop(webchem_message("service_down"))
+    if (!ping_service("nist")) stop(webchem_message("service_down"))
 
     from_str <- (switch(
       from,
@@ -304,6 +304,12 @@ tidy_ritable <- function(ri_xml) {
 #' \item{\code{comment}. I believe this denotes the database these data
 #'       were aggregated from}
 #'}
+#'
+#' @references NIST Mass Spectrometry Data Center, William E. Wallace, director,
+#'   "Retention Indices" in NIST Chemistry WebBook, NIST Standard Reference
+#'   Database Number 69, Eds. P.J. Linstrom and W.G. Mallard,
+#'   National Institute of Standards and Technology, Gaithersburg MD, 20899,
+#'   \url{https://doi.org/10.18434/T4D303}.
 #'
 #' @export
 #' @note Copyright for NIST Standard Reference Data is governed by the Standard

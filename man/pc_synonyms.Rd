@@ -72,6 +72,3 @@ Kim, S., Thiessen, P. A., Bolton, E. E., & Bryant, S. H. (2015).
 PUG-SOAP and PUG-REST: web services for programmatic access to chemical
 information in PubChem. Nucleic acids research, gkv396.
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

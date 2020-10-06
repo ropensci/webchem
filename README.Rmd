@@ -49,7 +49,7 @@ At least some of the data in the following sources is accesible through `webchem
 - [ChEBI](https://www.ebi.ac.uk/chebi/)
 - [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure)
 - [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-- [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/) 
+- [ChemIDplus](https://chem.nlm.nih.gov/chemidplus/) 
 - [ChemSpider](http://www.chemspider.com/) (requires an [API token]((https://developer.rsc.org/)))
 - [ETOX](http://webetox.uba.de/webETOX/index.do)
 - [Flavornet](http://www.flavornet.org) 

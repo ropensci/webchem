@@ -61,6 +61,3 @@ Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Che
 \code{\link{cts_from}} for possible values in the 'from' argument and
 \code{\link{cts_to}} for possible values in the 'to' argument.
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

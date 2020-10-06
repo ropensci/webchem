@@ -34,7 +34,7 @@ ids <- c("20179", "9051")
 out <- etox_basic(ids)
 out
 
-# extract ec numbers
+# extract cas numbers
 sapply(out, function(y) y$cas)
 }
 }
@@ -48,7 +48,4 @@ Information from the Web. Journal of Statistical Software, 93(13).
 \code{\link{get_etoxid}} to retrieve ETOX IDs,
   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
   for quality targets and \code{\link{etox_tests}} for test results
-}
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
 }

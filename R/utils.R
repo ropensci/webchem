@@ -22,7 +22,6 @@
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
@@ -53,7 +52,6 @@ is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
 #' @return a logical
 #'
 #' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -68,7 +66,7 @@ is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
 #' }
 is.inchikey_cs <- function(x, verbose = TRUE){
 
-  if (ping_service("cs_web") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cs_web")) stop(webchem_message("service_down"))
 
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -118,7 +116,6 @@ is.inchikey_cs <- function(x, verbose = TRUE){
 #' @return a logical
 #'
 #' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -194,7 +191,6 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @export
 #' @examples
@@ -205,60 +201,62 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' is.cas('64-17-55')
 #' is.cas('64-17-6')
 is.cas <-  function(x, verbose = TRUE) {
-  # x <- '64-17-5'
-  if (length(x) > 1) {
-    stop('Cannot handle multiple input strings.')
-  }
 
-  # cas must not have any alpha characters
-  if(grepl(pattern = "[[:alpha:]]", x = x)){
-    if(isTRUE(verbose)){message("String contains alpha characters")}
-    return(FALSE)
-  }
+  foo <- function(x, verbose) {
+    # pass NA's through
+    if (is.na(x)) return(NA)
+    # cas must not have any alpha characters
+    if (grepl(pattern = "[[:alpha:]]", x = x)) {
+      if (isTRUE(verbose)) {
+        message(x,": String contains alpha characters")
+        }
+      return(FALSE)
+    }
 
-  # cas must have two hyphens
-  nsep <- str_count(x, '-')
-  if (nsep != 2) {
-    if (isTRUE(verbose))
-      message('Less than 2 hyphens in string.')
-    return(FALSE)
-  }
+    # cas must have two hyphens
+    nsep <- str_count(x, '-')
+    if (nsep != 2) {
+      if (isTRUE(verbose))
+        message(x, ': Less than 2 hyphens in string.')
+      return(FALSE)
+    }
 
-  # first part 2 to 7 digits
-  fi <- gsub('^(.*)-(.*)-(.*)$', '\\1', x)
-  if (nchar(fi) > 7 | nchar(fi) < 2) {
-    if (isTRUE(verbose))
-      message('First part with more than 7 digits!')
-    return(FALSE)
-  }
+    # first part 2 to 7 digits
+    fi <- gsub('^(.*)-(.*)-(.*)$', '\\1', x)
+    if (nchar(fi) > 7 | nchar(fi) < 2) {
+      if (isTRUE(verbose))
+        message(x, ': First part has more than 7 digits!')
+      return(FALSE)
+    }
 
-  # second part must be two digits
-  se <- gsub('^(.*)-(.*)-(.*)$', '\\2', x)
-  if (nchar(se) != 2) {
-    if (isTRUE(verbose))
-      message('Second part has not two digits!')
-    return(FALSE)
-  }
+    # second part must be two digits
+    se <- gsub('^(.*)-(.*)-(.*)$', '\\2', x)
+    if (nchar(se) != 2) {
+      if (isTRUE(verbose))
+        message(x, ': Second part should have two digits!')
+      return(FALSE)
+    }
 
-  # third part (checksum) must be 1 digit
-  th <- gsub('^(.*)-(.*)-(.*)$', '\\3', x)
-  if (nchar(th) != 1) {
-    if (isTRUE(verbose))
-      message('Third part has not 1 digit!')
-    return(FALSE)
-  }
+    # third part (checksum) must be 1 digit
+    th <- gsub('^(.*)-(.*)-(.*)$', '\\3', x)
+    if (nchar(th) != 1) {
+      if (isTRUE(verbose))
+        message(x, ': Third part should have 1 digit!')
+      return(FALSE)
+    }
 
-  # check checksum
-  di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x),
-                             split = '')[[1]])
-  checksum <- sum(rev(seq_along(di)) * di)
-  if (checksum %% 10 != as.numeric(th)) {
-    if (isTRUE(verbose))
-      message('Checksum is not correct! ', checksum %% 10, ' vs. ', th)
-    return(FALSE)
+    # check checksum
+    di <-  as.numeric(strsplit(gsub('^(.*)-(.*)-(.*)$', '\\1\\2', x),
+                               split = '')[[1]])
+    checksum <- sum(rev(seq_along(di)) * di)
+    if (checksum %% 10 != as.numeric(th)) {
+      if (isTRUE(verbose))
+        message(x, ': Checksum is not correct! ', checksum %% 10, ' vs. ', th)
+      return(FALSE)
+    }
+    return(TRUE)
   }
-
-  return(TRUE)
+  return(sapply(x, foo, verbose))
 }
 
 
@@ -272,8 +270,6 @@ is.cas <-  function(x, verbose = TRUE) {
 #' @return a logical
 #'
 #' @note This function can handle only one SMILES string.
-#'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @references Egon Willighagen (2015). How to test SMILES strings in
 #' Supplementary Information.
@@ -337,11 +333,10 @@ extr_num <- function(x) {
 #' 1 = first atom, 2 = second atom, t = bond type, s = stereo type, x = not
 #' used, r = bond typology, c = reacting center status.
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 #' a toolset for transforming SD/Molfile structure information into R objects.
 #' Source Code for Biology and Medicine, 7, 12.
-#' \url{http://doi.org/10.1186/1751-0473-7-12}
+#' \url{https://doi.org/10.1186/1751-0473-7-12}
 #' @export
 
 parse_mol <- function(string) {
@@ -381,7 +376,6 @@ parse_mol <- function(string) {
 #' @return character vector of valid CAS numbers
 #' @seealso \code{\link{is.cas}}
 #' @export
-#' @author Eric Scott, \email{scottericr@@gmail.com}
 #' @examples
 #' x = c(58082, 123456, "hexenol")
 #' as.cas(x)
@@ -404,58 +398,17 @@ as.cas <- function(x){
 }
 
 
-#' Interactively choose a result from a menu
-#' @description In interactive sessions, prompts a user to choose an element of
-#' a vector from a menu. Use this for all functions that return multiple
-#' possible results such as multiple identifiers or synonyms.
-#' @param x a character vector
-#' @param choices If \code{choices = "all"} then the entire vector \code{x} is
-#' used for the menu.  If numeric > 1, only that number of elements from the
-#' start of \code{x} are shown. If \code{choices = 1}, then the first element of
-#' \code{x} is returned without prompting the user.  If \code{NULL} then
-#' \code{x} is returned unchanged.
+
+#' Used internally to handle the `match` argument in most functions.
 #'
-#' @importFrom utils menu
-#' @importFrom utils head
-#' @return a character vector of length 1
-#' @noRd
-#'
-#' @examples
-#' test <- c("apples", "bananas", "orange", "plum", "peach", "guava", "kumquat")
-#' chooser(test, "all")
-#' chooser(test, 3)
-chooser <- function(x, choices){
-  if (is.null(choices)) {
-    out <- x
-  } else if (choices == 1) {
-      out <- x[1]
-  } else if (interactive()) {
-    if(is.numeric(choices) & choices > length(x)) {
-      choices <- "all"
-      warning('Number of choices excedes length of x, using all choices instead',
-              immediate. = TRUE)
-    }
-    if (choices == "all") { #then give all of x as possible choices
-      pick <- menu(x, graphics = FALSE, 'Select one:')
-      out <- x[pick]
-    }
-    if (is.numeric(choices) & choices > 1){
-      pick <- menu(head(x, choices), graphics = FALSE, 'Select one:')
-      out <- x[pick]
-    }
-  } else {
-    stop('Can only use "choices" in interactive mode.')
-  }
-  return(out)
-}
-#' matcher utility
-#'
-#' @param x a vector
+#' @param x a vector of hits returned from a query
 #' @param query what the query was, only used if match = "best"
-#' @param result what the result of the query was, only used if match = "best
+#' @param result vector of results of the same type as `query` and same length
+#'   as `x`, only used if match = "best
 #' @param match character; How should multiple hits be handled? "all" returns
-#' all matched IDs, "first" only the first match, "best" the best matching (by
-#' name) ID, "ask" is a interactive mode and the user is asked for input, "na"
+#'   all matched IDs, "first" only the first match, "best" the best matching (by
+#'   name) ID, "ask" is a interactive mode and the user is asked for input, "na"
+#' @param from character; used only to check that match = "best" is used sensibly.
 #' @param verbose print messages?
 #'
 #' @return
@@ -470,24 +423,32 @@ matcher <-
            query = NULL,
            result = NULL,
            match = c("all", "best", "first", "ask", "na"),
+           from = NULL,
            verbose = FALSE) {
 
     match <- match.arg(match)
     names(x) <- result
 
-    if(length(x) == 1) {
+    if (length(x) == 1) {
       return(x)
     } else {
-      if(verbose) message(" Multiple found. ", appendLF = FALSE)
+      if (verbose) message(" Multiple found. ", appendLF = FALSE)
 
-      if(match == "all") {
-        if(verbose) message("Returning all.")
+      if (!is.null(from)) {
+        if (!str_detect(tolower(from), "name") & match == "best") {
+          warning("match = 'best' only makes sense for chemical name queries.\n Setting match = 'first'.")
+          match <- "first"
+        }
+      }
+
+      if (match == "all") {
+        if (verbose) message("Returning all.")
         return(x)
       }
 
       else if (match == "best") {
         #check that x and result are same length
-        if(length(x) != length(result))
+        if (length(x) != length(result))
           stop("Can't use match = 'best' without query matches for each output")
         if (verbose) message("Returning best.")
         dd <- adist(query, result) / nchar(result)
@@ -508,7 +469,7 @@ matcher <-
       } else if (match == "na") {
         if (verbose) message("Returning NA.")
         x <- NA
-        names(x)<-NA
+        names(x) <- NA
         return(x)
       }
     }

@@ -7,7 +7,7 @@
 pan_query(
   query,
   from = c("name", "cas"),
-  match = c("best", "all", "first"),
+  match = c("best", "all", "first", "na"),
   verbose = TRUE,
   ...
 )
@@ -83,7 +83,4 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
  # extract Acute Toxicity Summary
  sapply(out, function(y) y$`Acute Toxicity Summary`)
 }
-}
-\author{
-Eduard Szoecs, \email{eduardszoecs@gmail.com}
 }

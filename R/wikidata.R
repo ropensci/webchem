@@ -17,8 +17,6 @@
 #'
 #' @note Only matches in labels are returned.
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
-#'
 #' @import jsonlite httr
 #' @importFrom stats rgamma
 #' @importFrom utils URLencode URLdecode
@@ -40,7 +38,7 @@ get_wdid <-
            verbose = TRUE,
            language = 'en') {
 
-    if (ping_service("wd") == FALSE) stop(webchem_message("service_down"))
+    if (!ping_service("wd")) stop(webchem_message("service_down"))
 
   # language <-  'en'
   # query <- 'Triclosan'
@@ -86,21 +84,16 @@ get_wdid <-
                                          "latin1",
                                          "ASCII",
                                          sub = "")) == tolower(query), ]
-
-          if (nrow(search) > 1) {
-            id <-
-              matcher(
-                search$id,
-                query = query,
-                result = search$label,
-                match = match,
-                verbose = verbose
-              )
-            matched_sub <- names(id)
-          } else {
-            id <- search$id
-            matched_sub <- search$label
-          }
+          id <-
+            matcher(
+              search$id,
+              query = query,
+              result = search$label,
+              match = match,
+              # from = from,
+              verbose = verbose
+            )
+          matched_sub <- names(id)
         }
       }
       else {
@@ -149,7 +142,6 @@ get_wdid <-
 #' Mitraka, Elvira, Andra Waagmeester, Sebastian Burgstaller-Muehlbacher, et al. 2015
 #' Wikidata: A Platform for Data Integration and Dissemination for the Life Sciences and beyond. bioRxiv: 031971.
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -158,7 +150,7 @@ get_wdid <-
 #' }
 wd_ident <- function(id, verbose = TRUE){
 
-  if (ping_service("wd") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("wd")) stop(webchem_message("service_down"))
 
   # id <- c( "Q163648", "Q18216")
   # id <- 'Q408646'

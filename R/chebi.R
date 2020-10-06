@@ -55,7 +55,6 @@
 #'   Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #'   Information from the Web. Journal of Statistical Software, 93(13).
 #'   <doi:10.18637/jss.v093.i13>.
-#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -79,7 +78,7 @@ get_chebiid <- function(query,
                         verbose = TRUE,
                         ...) {
 
-  if (ping_service("chebi") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("chebi")) stop(webchem_message("service_down"))
 
   match <- match.arg(match)
   from <- toupper(match.arg(from))
@@ -157,6 +156,7 @@ get_chebiid <- function(query,
             query = query,
             result = out$chebiasciiname,
             match = "ask",
+            from = match.arg(from),
             verbose = verbose
           )
         return(out[out$chebiid == matched, ])
@@ -229,7 +229,6 @@ get_chebiid <- function(query,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \donttest{
@@ -241,9 +240,11 @@ get_chebiid <- function(query,
 #' chebi_comp_entity(comp)
 #'
 #' }
-chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
+chebi_comp_entity <- function(chebiid,
+                              verbose = TRUE,
+                              ...) {
 
-  if (ping_service("chebi") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("chebi")) stop(webchem_message("service_down"))
 
   foo <- function(chebiid, verbose, ...) {
     # chebiid = c('CHEBI:27744', 'CHEBI:17790'); verbose = TRUE # debuging
@@ -353,7 +354,6 @@ chebi_comp_entity <- function(chebiid, verbose = TRUE, ...) {
 #' @param x list; a list to bind into a data.frame
 #' @return a data.frame
 #' @seealso \code{\link{chebi_comp_entity}}
-#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @noRd
 #'
 l2df <- function(x) {
@@ -372,7 +372,6 @@ l2df <- function(x) {
 #' https://stackoverflow.com/questions/17308551/do-callrbind-list-for-uneven-number-of-column
 #' @param x list; a list to bind into a data.frame
 #' @seealso \code{\link{l2df}}
-#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @noRd
 #'
 rbind_named_fill <- function(x) {

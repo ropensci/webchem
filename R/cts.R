@@ -10,7 +10,6 @@
 #' @param inchikey deprecated
 #' @return a list of lists (for each supplied inchikey):
 #' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #'
 #' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
 #' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
@@ -33,7 +32,7 @@
 #' }
 cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   if (!missing(inchikey)) {
     message('"inchikey" is deprecated.  Please use "query" instead.')
@@ -97,7 +96,6 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a list of character vectors or if \code{choices} is used, then a single named vector.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #' for possible values of from and to.
 #'
@@ -124,7 +122,7 @@ cts_convert <- function(query,
                         choices = NULL,
                         ...){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   if(!missing("choices")) {
     if (is.null(choices)) {
@@ -186,7 +184,7 @@ cts_convert <- function(query,
         return(NA)
       }
       out <- out$result[[1]]
-      out <- matcher(out, match = match, query = query, verbose = verbose)
+      out <- matcher(out, match = match, query = query, from = from, verbose = verbose)
       return(out)
     }
     else {
@@ -205,7 +203,6 @@ cts_convert <- function(query,
 #' @import jsonlite
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 #'
 #' @seealso \code{\link{cts_convert}}
@@ -219,7 +216,7 @@ cts_convert <- function(query,
 #' }
 cts_from <- function(verbose = TRUE){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues"
   res <- try(httr::RETRY("GET",
@@ -242,7 +239,6 @@ cts_from <- function(verbose = TRUE){
 #' @import jsonlite
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
-#' @author Eduard Szoecs, \email{eduardszoecs@@gmail.com}
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 #'
 #' @seealso \code{\link{cts_convert}}
@@ -256,7 +252,7 @@ cts_from <- function(verbose = TRUE){
 #' }
 cts_to <- function(verbose = TRUE){
 
-  if (ping_service("cts") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("cts")) stop(webchem_message("service_down"))
 
   qurl <- "http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues"
   res <- try(httr::RETRY("GET",

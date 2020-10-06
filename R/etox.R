@@ -27,9 +27,6 @@
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
-#' @author Tamás Stirling, \email{stirling.tamas@@gmail.com}
-#' @author Andreas Scharmüller, \email{andschar@@protonmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -48,7 +45,7 @@ get_etoxid <- function(query,
                        match = c("all", "best", "first", "ask", "na"),
                        verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   clean_char <- function(x) {
     # rm \n \t
@@ -117,7 +114,7 @@ get_etoxid <- function(query,
         subs_names <- gsub(" \\(.*\\)", "", subs)
         id <- gsub("^.*\\?id=(.*)", "\\1", links)
 
-        out <- matcher(id, query = query, result = subs_names, match = match)
+        out <- matcher(id, query = query, result = subs_names, from = from, match = match)
 
         hit <- tibble("query" = query,
                       "match" = names(out),
@@ -159,7 +156,6 @@ get_etoxid <- function(query,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -176,7 +172,7 @@ get_etoxid <- function(query,
 #' }
 etox_basic <- function(id, verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   foo <- function(id, verbose) {
     if (is.na(id)) {
@@ -286,7 +282,6 @@ etox_basic <- function(id, verbose = TRUE) {
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -299,7 +294,7 @@ etox_basic <- function(id, verbose = TRUE) {
 #' }
 etox_targets <- function(id, verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   foo <- function(id, verbose) {
     if (is.na(id)) {
@@ -386,7 +381,6 @@ etox_targets <- function(id, verbose = TRUE) {
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results
 #'
-#' @author Eduard Szöcs, \email{eduardszoecs@@gmail.com}
 #' @export
 #' @examples
 #' \dontrun{
@@ -398,7 +392,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' }
 etox_tests <- function(id, verbose = TRUE) {
 
-  if (ping_service("etox") == FALSE) stop(webchem_message("service_down"))
+  if (!ping_service("etox")) stop(webchem_message("service_down"))
 
   foo <- function(id, verbose){
     if (is.na(id)) {
