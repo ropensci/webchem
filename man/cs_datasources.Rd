@@ -4,11 +4,13 @@
 \alias{cs_datasources}
 \title{Retrieve ChemSpider data sources}
 \usage{
-cs_datasources(apikey = NULL)
+cs_datasources(apikey = NULL, verbose = TRUE)
 }
 \arguments{
 \item{apikey}{character; your API key. If NULL (default),
 \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
+
+\item{verbose}{should a verbose output be printed on the console?}
 }
 \value{
 Returns a character vector.

@@ -4,7 +4,7 @@
 \alias{cs_compinfo}
 \title{Retrieve record details by ChemSpider ID}
 \usage{
-cs_compinfo(csid, fields, apikey = NULL)
+cs_compinfo(csid, fields, verbose = TRUE, apikey = NULL)
 }
 \arguments{
 \item{csid}{numeric; can be obtained using \code{\link{get_csid}}}

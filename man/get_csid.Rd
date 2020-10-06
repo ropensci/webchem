@@ -9,6 +9,7 @@ get_csid(
   from = c("name", "formula", "inchi", "inchikey", "smiles"),
   match = c("all", "first", "ask", "na"),
   verbose = TRUE,
+  control = cs_control(),
   apikey = NULL,
   ...
 )
