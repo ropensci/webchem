@@ -268,7 +268,10 @@ get_csid <- function(query,
                            from = from,
                            verbose = verbose)
           }
-          if (length(res) == 0) res <- NA_integer_
+          if (length(res) == 0) {
+            if (verbose) webchem_message("not_found")
+            res <- NA_integer_
+          }
           return(res)
         }
         else {
