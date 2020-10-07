@@ -261,7 +261,7 @@ get_csid <- function(query,
         if (getres$status_code == 200) {
           if (verbose) message(httr::message_for_status(getres))
           res <- jsonlite::fromJSON(rawToChar(getres$content))$results
-          if(length(res) > 1) {
+          if (length(res) > 1) {
             res <- matcher(res,
                            query = x,
                            match = match,
@@ -276,17 +276,17 @@ get_csid <- function(query,
         }
         else {
           if (verbose) message(httr::message_for_status(getres))
-          return (NA_integer_)
+          return(NA_integer_)
         }
       }
       else {
         if (verbose) message(httr::message_for_status(getstatus))
-        return (NA_integer_)
+        return(NA_integer_)
       }
     }
     else {
       if (verbose) message(httr::message_for_status(postres))
-      return (NA_integer_)
+      return(NA_integer_)
     }
   }
   out <-

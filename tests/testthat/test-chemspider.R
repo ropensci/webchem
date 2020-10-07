@@ -15,7 +15,7 @@ test_that("examples in the article are unchanged", {
 
   expect_equal(csids$csid, c(13839123, 14165, NA, 2169, 236, 21157))
   expect_equal(inchikeys,
-               c("KUFFULVDNCHOFZ-UHFFFAOYAC", "RHPUJHQBPORFGV-UHFFFAOYAB",NA,
+               c("KUFFULVDNCHOFZ-UHFFFAOYAC", "RHPUJHQBPORFGV-UHFFFAOYAB", NA,
                  "MXWJVTOOROXGIU-UHFFFAOYAJ", "UHOVQNZJYSORNB-UHFFFAOYAH",
                  "DFWFIQKMSFGDCQ-UHFFFAOYAI"))
 })
@@ -96,10 +96,8 @@ test_that("get_csid() works with arguments passed to cs_control()", {
   c1 <- head(get_csid("iron oxide", from = "name", order_by = "recordId"))
   expect_equal(c1$csid, c(14147, 14237, 55474, 82623, 392353, 396260))
 
-  # c2 <- head(get_csid("C6H12O6", from = "formula", order_by = "massDefect"))
-  # not a column in the web interface, so not sure what to expect
-
-  c3 <- head(get_csid("iron oxide", from = "name", order_by = "molecularWeight"))
+  c3 <- head(get_csid("iron oxide", from = "name",
+                      order_by = "molecularWeight"))
   expect_equal(c3$csid, c(14237, 396260, 392353, 82623, 14147, 452497))
 
   c4 <- head(get_csid("C6H12O6", from = "formula", order_by = "referenceCount",
@@ -280,8 +278,8 @@ test_that("cs_img()", {
 
   imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
 
-  expect_true(file.exists(paste0(tempdir(), "/","682.png")))
-  expect_true(file.exists(paste0(tempdir(), "/","5363.png")))
+  expect_true(file.exists(paste0(tempdir(), "/", "682.png")))
+  expect_true(file.exists(paste0(tempdir(), "/", "5363.png")))
 })
 
 # test_that("cs_extcompinfo()", {
