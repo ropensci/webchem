@@ -108,7 +108,7 @@ test_that("get_csid() works with arguments passed to cs_control()", {
 
   c5 <- head(get_csid("C6H12O6", from = "formula", order_by = "dataSourceCount",
                       order_direction = "descending"))
-  # expect_equal(c5$csid, c(5764, 10239179, 83142, 96749, 58238, 71358))
+  expect_equal(c5$csid, c(10239179, 5764, 83142, 96749, 58238, 71358))
 
   c6 <- head(get_csid("C6H12O6", from = "formula", order_by = "pubMedCount",
                       order_direction = "descending"))
@@ -132,68 +132,40 @@ test_that("get_csid() handles special characters in SMILES", {
   expect_equal(get_csid("C#C", from = "smiles")$csid, 6086)
 })
 
-test_that("cs_smiles_csid()", {
+test_that("get_csid() can query smiles", {
   skip_on_cran()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
-  a <- cs_smiles_csid("CC(O)=O")
+  a <- get_csid("CC(O)=O", from = "smiles")
 
-  expect_is(a, "integer")
-  expect_equal(a, 171)
+  expect_is(a$csid, "integer")
+  expect_equal(a$csid, 171)
 })
 
-test_that("cs_inchi_csid()", {
+test_that("get_csid() can query inchis", {
   skip_on_cran()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
-  a <- cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
+  a <- get_csid("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", from = "inchi")
 
-  expect_is(a, "integer")
-  expect_equal(a, 171)
+  expect_is(a$csid, "integer")
+  expect_equal(a$csid, 171)
 })
 
-test_that("cs_inchikey_csid()", {
+test_that("get_csid() can query inchikeys", {
   skip_on_cran()
   skip_on_ci()
 
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
-  a <- cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N")
+  a <- get_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", from = "inchikey")
 
-  expect_is(a, "integer")
-  expect_equal(a, 171)
-})
-
-test_that("cs_convert_multiple()", {
-  skip_on_cran()
-  skip_on_ci()
-
-  skip_if_not(up, "ChemSpider service is down, skipping tests")
-
-  a <- cs_convert_multiple("CC(=O)O", "smiles", "inchi")
-  a_rev <- cs_convert_multiple(a, "inchi", "smiles")
-  b <- cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
-                           "inchikey")
-  b_rev <- cs_convert_multiple(b, "inchikey", "inchi")
-  c <- cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
-  c_rev <- cs_convert_multiple(c, "mol", "inchikey")
-  d <- cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
-                           "mol")
-
-  expect_is(a, "character")
-  expect_equal(a, "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
-  expect_is(a_rev, "character")
-  expect_equal(a_rev, "CC(=O)O")
-  expect_is(b, "character")
-  expect_equal(b, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
-  expect_is(c, "character")
-  expect_is(c_rev, "character")
-  expect_equal(c_rev, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
-  expect_is(d, "character")
+  expect_is(a$csid, "integer")
+  expect_equal(a$csid, 171)
 })
 
 test_that("cs_convert()", {
@@ -215,7 +187,7 @@ test_that("cs_convert()", {
   c2 <- cs_convert(c(171, 172), "csid", "smiles")
   c2_rev <- cs_convert(c2, "smiles", "csid")
   d <- cs_convert(171, "csid", "mol")
-  expect_error(cs_convert(d, "mol", "csid"))
+  expect_equal(cs_convert(d, "mol", "csid"), NA_integer_)
   d2 <- cs_convert(c(171, 172), "csid", "mol")
   e <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "inchikey")
   e_rev <- cs_convert(e, "inchikey", "inchi")

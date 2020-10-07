@@ -82,11 +82,11 @@ cs_datasources <- function(apikey = NULL, verbose = TRUE) {
 #' @param datasources character; specifies the databases to query. Use
 #' \code{cs_datasources()} to retrieve available ChemSpider data sources.
 #' @param order_by character; specifies the sort order for the results.
-#' Valid values are \code{"recordId"}, \code{"massDefect"},
+#' Valid values are \code{"default"}, \code{"recordId"}, \code{"massDefect"},
 #' \code{"molecularWeight"}, \code{"referenceCount"}, \code{"dataSourceCount"},
 #' \code{"pubMedCount"}, \code{"rscCount"}.
 #' @param order_direction character; specifies the sort order for the results.
-#' Valid values are \code{"ascending"}, \code{"descending"}.
+#' Valid values are \code{"default"}, \code{"ascending"}, \code{"descending"}.
 #' @param include_all logical; see details.
 #' @param complexity character; see details.
 #' Valid values are \code{"any"} \code{"single"}, \code{"multiple"}.
@@ -114,17 +114,15 @@ cs_datasources <- function(apikey = NULL, verbose = TRUE) {
 #' cs_control()
 #' cs_control(order_direction = "descending")
 cs_control <- function(datasources = vector(),
-                       order_by = "recordId", order_direction = "ascending",
+                       order_by = "default", order_direction = "default",
                        include_all = FALSE, complexity = "any",
                        isotopic = "any") {
   order_by <- match.arg(order_by, choices = c(
-    "recordId", "massDefect",
-    "molecularWeight", "referenceCount",
-    "dataSourceCount", "pubMedCount",
-    "rscCount"
+    "default", "recordId", "massDefect", "molecularWeight", "referenceCount",
+    "dataSourceCount", "pubMedCount", "rscCount"
   ))
-  order_direction <- match.arg(order_direction, choices = c("ascending",
-                                                          "descending"))
+  order_direction <- match.arg(order_direction, choices = c(
+    "default", "ascending", "descending"))
   include_all <- match.arg(as.character(include_all), choices = c(TRUE, FALSE))
   complexity <- match.arg(complexity, choices = c("any", "single", "multiple"))
   isotopic <- match.arg(isotopic, choices = c("any", "labeled", "unlabeled"))
@@ -183,7 +181,6 @@ get_csid <- function(query,
                      from = c("name", "formula", "inchi", "inchikey", "smiles"),
                      match = c("all", "first", "ask", "na"),
                      verbose = TRUE,
-                     control = cs_control(),
                      apikey = NULL,
                      ...) {
   if (is.null(apikey)) {
@@ -200,17 +197,18 @@ get_csid <- function(query,
     headers <- c("Content-Type" = "", "apikey" = apikey)
     if (from == "name") {
       body <- list(
-        "name" = x, "orderBy" = control$order_by,
-        "orderDirection" = control$order_direction
+        "name" = x, "orderBy" = cs_control(...)$order_by,
+        "orderDirection" = cs_control(...)$order_direction
       )
       body <- jsonlite::toJSON(body, auto_unbox = TRUE)
     }
     if (from == "formula") {
       body <- jsonlite::toJSON(list(
         "formula" = unbox(x),
-        "dataSources" = control$datasources,
-        "orderBy" = unbox(control$order_by),
-        "orderDirection" = unbox(control$order_direction)), auto_unbox = FALSE)
+        "dataSources" = cs_control(...)$datasources,
+        "orderBy" = unbox(cs_control(...)$order_by),
+        "orderDirection" = unbox(cs_control(...)$order_direction)),
+        auto_unbox = FALSE)
     }
     if (from == "inchi") {
       body <- jsonlite::toJSON(list("inchi" = x), auto_unbox = TRUE)
@@ -295,7 +293,6 @@ get_csid <- function(query,
       from = from,
       match = match,
       verbose = verbose,
-      control = control,
       apikey = apikey,
       ...
     )
