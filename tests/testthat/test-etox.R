@@ -65,8 +65,8 @@ test_that("get_etoxid returns correct results", {
   expect_s3_class(o7, "data.frame")
   expect_s3_class(do2, "data.frame")
 
-  expect_equivalent(o1$etoxid, c("20179", "9051"))
-  expect_equivalent(o2$etoxid, c("89236", "20179", "9051"))
+  expect_equivalent(o1$etoxid, c("20179", "7419"))
+  expect_equivalent(o2$etoxid, c("89236", "20179", "7419", "9051"))
 })
 
 test_that("examples from webchem article run", {
