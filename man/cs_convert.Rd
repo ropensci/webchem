@@ -13,6 +13,8 @@ cs_convert(query, from, to, verbose = TRUE, apikey = NULL)
 
 \item{to}{character; type to convert to.}
 
+\item{verbose}{logical; should a verbose output be printed on the console?}
+
 \item{apikey}{character; your API key. If NULL (default),
 \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }

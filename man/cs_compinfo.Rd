@@ -11,6 +11,8 @@ cs_compinfo(csid, fields, verbose = TRUE, apikey = NULL)
 
 \item{fields}{character; see details.}
 
+\item{verbose}{logical; should a verbose output be printed on the console?}
+
 \item{apikey}{character; your API key. If NULL (default),
 \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 }

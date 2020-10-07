@@ -311,6 +311,7 @@ get_csid <- function(query,
 #' @param query character; query ID.
 #' @param from character; type of query ID.
 #' @param to character; type to convert to.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Not all conversions are supported. Allowed conversions:
@@ -444,6 +445,7 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
 #' retrieve the record details for your query.
 #' @param csid numeric; can be obtained using \code{\link{get_csid}}
 #' @param fields character; see details.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Valid values for \code{fields} are \code{"SMILES"},
