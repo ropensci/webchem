@@ -219,7 +219,7 @@ get_csid <- function(query,
     if (from == "smiles") {
       body <- jsonlite::toJSON(list("smiles" = x), auto_unbox = TRUE)
     }
-    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    if (verbose) webchem_message("query", x, appendLF = FALSE)
     qurl <- paste0("https://api.rsc.org/compounds/v1/filter/", from)
     postres <- try(httr::RETRY("POST",
                                url = qurl,
