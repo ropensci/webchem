@@ -6,7 +6,7 @@
 #' @param domain character; query domain, can be one of \code{"compound"},
 #' \code{"substance"}, \code{"assay"}.
 #' @param match character; How should multiple hits be handled?, \code{"all"}
-#' all matches are returned, \code{"best"} the best matching is returned,
+#' all matches are returned, \code{"first"} the first matching is returned,
 #' \code{"ask"} enters an interactive mode and the user is asked for input,
 #' \code{"na"} returns NA if multiple hits are found.
 #' @param verbose logical; should a verbose output be printed on the console?
