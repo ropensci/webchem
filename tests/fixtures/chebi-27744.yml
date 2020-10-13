@@ -1,0 +1,150 @@
+http_interactions:
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |-
+        <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>triclosan</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:04:23 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:164200</chebiId><chebiAsciiName>triclosan</chebiAsciiName><searchScore>0.85</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:89302</chebiId><chebiAsciiName>Triclosan
+        glucuronide</chebiAsciiName><searchScore>0.26</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:89301</chebiId><chebiAsciiName>Triclosan
+        sulfate</chebiAsciiName><searchScore>0.14</searchScore><entityStar>2</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:04:24 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getCompleteEntity>
+                    <chebi:chebiId>CHEBI:27744</chebi:chebiId>
+                  </chebi:getCompleteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:04:24 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: "<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><getCompleteEntityResponse
+        xmlns=\"https://www.ebi.ac.uk/webservices/chebi\"><return><chebiId>CHEBI:27744</chebiId><chebiAsciiName>glyphosate</chebiAsciiName><definition>A
+        phosphonic acid resulting from the formal oxidative coupling of the methyl
+        group of methylphosphonic acid with the amino group of glycine. It is one
+        of the most commonly used herbicdes worldwide, and the only one to target
+        the enzyme 5-enolpyruvyl-3-shikimate phosphate synthase (EPSPS).</definition><status>CHECKED</status><smiles>OC(=O)CNCP(O)(O)=O</smiles><inchi>InChI=1S/C3H8NO5P/c5-3(6)1-4-2-10(7,8)9/h4H,1-2H2,(H,5,6)(H2,7,8,9)</inchi><inchiKey>XDDAORKBJWWYJS-UHFFFAOYSA-N</inchiKey><charge>0</charge><mass>169.07310</mass><monoisotopicMass>169.01401</monoisotopicMass><entityStar>3</entityStar><SecondaryChEBIIds>CHEBI:5510</SecondaryChEBIIds><SecondaryChEBIIds>CHEBI:24423</SecondaryChEBIIds><SecondaryChEBIIds>CHEBI:43013</SecondaryChEBIIds><Synonyms><data>Glyphosate</data><type>SYNONYM</type><source>KEGG
+        COMPOUND</source></Synonyms><Synonyms><data>Roundup</data><type>BRAND NAME</type><source>KEGG
+        COMPOUND</source></Synonyms><IupacNames><data>N-(phosphonomethyl)glycine</data><type>IUPAC
+        NAME</type><source>IUPAC</source></IupacNames><Formulae><data>C3H8NO5P</data><source>ChEBI</source></Formulae><Formulae><data>C3H8NO5P</data><source>KEGG
+        COMPOUND</source></Formulae><RegistryNumbers><data>1071-83-6</data><type>CAS
+        Registry Number</type><source>KEGG COMPOUND</source></RegistryNumbers><RegistryNumbers><data>1071-83-6</data><type>CAS
+        Registry Number</type><source>Alan Wood's Pesticides</source></RegistryNumbers><RegistryNumbers><data>1071-83-6</data><type>CAS
+        Registry Number</type><source>ChemIDplus</source></RegistryNumbers><RegistryNumbers><data>2045054</data><type>Beilstein
+        Registry Number</type><source>Beilstein</source></RegistryNumbers><RegistryNumbers><data>279222</data><type>Gmelin
+        Registry Number</type><source>Gmelin</source></RegistryNumbers><Citations><data>27758090</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>28266132</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>28474816</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>28643882</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>28711546</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>30471482</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>30875550</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>31030151</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><ChemicalStructures><structure>\n
+        \ Marvin  01291313162D          \n\n 10  9  0  0  0  0            999 V2000\n
+        \  15.6197  -10.4907    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   15.6197
+        \ -11.8188    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   16.7788  -12.4874
+        \   0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   14.4609  -12.4874    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n   13.3112  -11.8188    0.0000 N   0
+        \ 0  0  0  0  0  0  0  0  0  0  0\n   12.1614  -12.4874    0.0000 C   0  0
+        \ 0  0  0  0  0  0  0  0  0  0\n   11.0026  -11.8188    0.0000 P   0  0  0
+        \ 0  0  0  0  0  0  0  0  0\n   11.0086  -10.4958    0.0000 O   0  0  0  0
+        \ 0  0  0  0  0  0  0  0\n    9.8548  -12.4988    0.0000 O   0  0  0  0  0
+        \ 0  0  0  0  0  0  0\n   10.6560  -13.1077    0.0000 O   0  0  0  0  0  0
+        \ 0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1
+        \ 0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0
+        \ 0  0\n  7  8  2  0  0  0  0\n  7  9  1  0  0  0  0\n  7 10  1  0  0  0  0\nM
+        \ END\n</structure><type>mol</type><dimension>2D</dimension><defaultStructure>true</defaultStructure></ChemicalStructures><ChemicalStructures><structure>ChEBI\n
+        \ Marvin  01291313172D          \n\n 10  9  0  0  0  0            999 V2000\n
+        \   9.1576   -5.8060    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    8.7451
+        \  -6.5204    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    9.1576   -7.2349
+        \   0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    7.9201   -6.5204    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.5076   -7.2349    0.0000 N   0
+        \ 0  0  0  0  0  0  0  0  0  0  0\n    6.6826   -7.2349    0.0000 C   0  0
+        \ 0  0  0  0  0  0  0  0  0  0\n    6.2701   -7.9493    0.0000 P   0  0  0
+        \ 0  0  0  0  0  0  0  0  0\n    6.9846   -8.3618    0.0000 O   0  0  0  0
+        \ 0  0  0  0  0  0  0  0\n    5.8576   -8.6639    0.0000 O   0  0  0  0  0
+        \ 0  0  0  0  0  0  0\n    5.5556   -7.5368    0.0000 O   0  0  0  0  0  0
+        \ 0  0  0  0  0  0\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1
+        \ 0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  1  0  0  0  0\n  6  7  1  0  0
+        \ 0  0\n  7  8  1  0  0  0  0\n  7  9  1  0  0  0  0\n  7 10  2  0  0  0  0\nM
+        \ END\n</structure><type>mol</type><dimension>2D</dimension><defaultStructure>false</defaultStructure></ChemicalStructures><DatabaseLinks><data>373</data><type>PPDB
+        accession</type></DatabaseLinks><DatabaseLinks><data>c0134</data><type>UM-BBD
+        compID</type></DatabaseLinks><DatabaseLinks><data>C01705</data><type>KEGG
+        COMPOUND accession</type></DatabaseLinks><DatabaseLinks><data>DB04539</data><type>DrugBank
+        accession</type></DatabaseLinks><DatabaseLinks><data>glyphosate</data><type>Pesticides
+        accession</type></DatabaseLinks><DatabaseLinks><data>Glyphosate</data><type>Wikipedia
+        accession</type></DatabaseLinks><DatabaseLinks><data>GPF</data><type>PDBeChem
+        accession</type></DatabaseLinks><DatabaseLinks><data>GPJ</data><type>PDBeChem
+        accession</type></DatabaseLinks><OntologyParents><chebiName>glyphosate(1-)</chebiName><chebiId>CHEBI:133673</chebiId><type>is
+        conjugate acid of</type><status>CHECKED</status><cyclicRelationship>true</cyclicRelationship></OntologyParents><OntologyParents><chebiName>agrochemical</chebiName><chebiId>CHEBI:33286</chebiId><type>has
+        role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>phosphonic
+        acid</chebiName><chebiId>CHEBI:44976</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>glycine
+        derivative</chebiName><chebiId>CHEBI:24373</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>glyphosate(2-)</chebiName><chebiId>CHEBI:67052</chebiId><type>is
+        conjugate acid of</type><status>CHECKED</status><cyclicRelationship>true</cyclicRelationship></OntologyParents><OntologyParents><chebiName>EC
+        2.5.1.19 (3-phosphoshikimate 1-carboxyvinyltransferase) inhibitor</chebiName><chebiId>CHEBI:20569</chebiId><type>has
+        role</type><status>OK</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>herbicide</chebiName><chebiId>CHEBI:24527</chebiId><type>has
+        role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyChildren><chebiName>glyphosate(1-)</chebiName><chebiId>CHEBI:133673</chebiId><type>is
+        conjugate base of</type><status>CHECKED</status><cyclicRelationship>true</cyclicRelationship></OntologyChildren><OntologyChildren><chebiName>glyphosate(2-)</chebiName><chebiId>CHEBI:67052</chebiId><type>is
+        conjugate base of</type><status>CHECKED</status><cyclicRelationship>true</cyclicRelationship></OntologyChildren></return></getCompleteEntityResponse></S:Body></S:Envelope>"
+  recorded_at: 2020-10-13 13:04:24 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
