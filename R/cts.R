@@ -80,7 +80,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #' Convert Ids using Chemical Translation Service (CTS)
 #'
 #' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
-#' @import RCurl jsonlite
+#' @import jsonlite
 #' @importFrom utils URLencode
 #' @importFrom stats rgamma
 #' @importFrom stats setNames
