@@ -4,7 +4,7 @@
 \alias{cs_convert}
 \title{Convert identifiers using ChemSpider}
 \usage{
-cs_convert(query, from, to, apikey = NULL)
+cs_convert(query, from, to, verbose = TRUE, apikey = NULL)
 }
 \arguments{
 \item{query}{character; query ID.}
@@ -12,6 +12,8 @@ cs_convert(query, from, to, apikey = NULL)
 \item{from}{character; type of query ID.}
 
 \item{to}{character; type to convert to.}
+
+\item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{apikey}{character; your API key. If NULL (default),
 \code{cs_check_key()} will look for it in .Renviron or .Rprofile.}

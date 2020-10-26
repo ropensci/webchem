@@ -1,4 +1,8 @@
-# webchem (development version)
+# webchem 1.1.0.9001
+
+## BUG FIXES
+
+* Fix get_csid() so it doesn't break when a query is invalid.
 
 # webchem 1.1.0.
 

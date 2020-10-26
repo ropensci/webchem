@@ -6,8 +6,8 @@
 \usage{
 cs_control(
   datasources = vector(),
-  order_by = "recordId",
-  order_direction = "ascending",
+  order_by = "default",
+  order_direction = "default",
   include_all = FALSE,
   complexity = "any",
   isotopic = "any"
@@ -18,12 +18,12 @@ cs_control(
 \code{cs_datasources()} to retrieve available ChemSpider data sources.}
 
 \item{order_by}{character; specifies the sort order for the results.
-Valid values are \code{"recordId"}, \code{"massDefect"},
+Valid values are \code{"default"}, \code{"recordId"}, \code{"massDefect"},
 \code{"molecularWeight"}, \code{"referenceCount"}, \code{"dataSourceCount"},
 \code{"pubMedCount"}, \code{"rscCount"}.}
 
 \item{order_direction}{character; specifies the sort order for the results.
-Valid values are \code{"ascending"}, \code{"descending"}.}
+Valid values are \code{"default"}, \code{"ascending"}, \code{"descending"}.}
 
 \item{include_all}{logical; see details.}
 
