@@ -32,6 +32,3 @@ is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 \seealso{
 \code{\link{is.inchikey}} for a pure-R implementation.
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-}

@@ -1,7 +1,7 @@
 #' Retrieve flavor percepts from www.flavornet.org
 #'
 #' Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
-#' perceptible to humans detected using gas chromatography ofactometry (GCO).
+#' perceptible to humans detected using gas chromatography olfactometry (GCO).
 #'
 #' @import xml2
 #' @importFrom stats rgamma
@@ -13,7 +13,6 @@
 #'
 #' @return A named character vector containing flavor percepts or NA's in the case of CAS numbers that are not found
 #'
-#' @author Eric Scott, \email{eric.scott@@tufts.edu}
 #'
 #' @examples
 #' \dontrun{

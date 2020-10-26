@@ -61,10 +61,3 @@ Information from the Web. Journal of Statistical Software, 93(13).
 \code{\link{etox_targets}} for quality targets and
 \code{\link{etox_tests}} for test results.
 }
-\author{
-Eduard Szöcs, \email{eduardszoecs@gmail.com}
-
-Tamás Stirling, \email{stirling.tamas@gmail.com}
-
-Andreas Scharmüller, \email{andschar@protonmail.com}
-}

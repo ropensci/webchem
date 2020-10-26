@@ -1,21 +1,25 @@
-# webchem (development version)
+# webchem 1.1.0.9001
 
-# webchem 1.0.0.9010
+## BUG FIXES
+
+* Fix get_csid() so it doesn't break when a query is invalid.
+
+# webchem 1.1.0.
 
 ## NEW FEATURES
 
-* Download images of substances from Chemical Identifier Resolver (CIR) with `cir_img()` [contributed by @andschar].
-* Download images of substances from ChemSpider with `cs_img()`
+* Download images of substances from Chemical Identifier Resolver (CIR) with `cir_img()`.
+* Download images of substances from ChemSpider with `cs_img()`.
 * `find_db()` checks if a query gets a hit in most databases integrated in webchem. Useful for deciding which of several databases to focus on given a set of chemicals.
 
 ## MINOR IMPROVEMENTS
 
 * Most functions now use httr::RETRY() to access webservices.
 * Verbose messages are now harmonized.
-* The `"type"` argument in `ci_query()` and `aw_query()` has been changed to `"from"` for consistency with other functions
-* `fn_percept()` and `cts_compinfo()` now have `"query"` and `"from"` arguments for consistency with other functions
-* Possible values for `"from"` have been made more consistent across functions
-* `pc_synonyms()`, `cts_convert()`, `cir_query()` have been changed to use the `match` argument instead of `choices` for consistency with other functions
+* The `"type"` argument in `ci_query()` and `aw_query()` has been changed to `"from"` for consistency with other functions.
+* `fn_percept()` and `cts_compinfo()` now have `"query"` and `"from"` arguments for consistency with other functions.
+* Possible values for `"from"` have been made more consistent across functions.
+* `pc_synonyms()`, `cts_convert()`, `cir_query()` have been changed to use the `match` argument instead of `choices` for consistency with other functions.
 * `get_etoxid()` output changed slightly so that the matched chemical name string no longer includes the etoxid in parentheses.
 * `is.cas()` is now vectorized.
 
@@ -29,24 +33,24 @@
 
 * get_cid() now can search by registry IDs (e.g. CAS RN), and can handle more complex requests like searching for similar compounds.
 * Retrieve chemical data from PubChem content pages with pc_sect().
-* get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument. [PR #241, added by @andschar]
-* nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`
+* get_etoxid() now can search by CAS, EC, GSBL and RTECS numbers. Added `from = ` argument.
+* nist_ri() now can search by name, InChI, InChIKey, or CAS.  The `cas` argument is deprecated.  Use `query` instead with `from = "cas"`.
 
 ## MINOR IMPROVEMENTS
 
-* all `get_*()` functions now output tibbles with a column for the query and a column for the retrieved ID
-* changes to arguments in `get_*()` functions to make them more consistent
+* all `get_*()` functions now output tibbles with a column for the query and a column for the retrieved ID.
+* changes to arguments in `get_*()` functions to make them more consistent.
 * aw_idx.rda is no longer included in the package as a data set. Instead, it is built by build_aw_idx() to tempdir().
 
 
 ## BUG FIXES
 
-* nist_ri() returned malformed tables or errored if there was only one entry for a query
-* get_csid() now returns all csids when queried from formula
-* get_csid() returned an error when query was NA [PR #226, fixed by stitam]
-* get_chebiid() and chebi_comp_entity() fixed for invalid queries [PR #225, fixed by stitam]
-* get_cid() returned the PubChem ID of sodium when the query was NA [PR #223, fixed by stitam]
-* aw_query() returned a list for successful queries, NA for unsuccessful queries [PR #222, fixed by stitam]
+* nist_ri() returned malformed tables or errored if there was only one entry for a query.
+* get_csid() now returns all csids when queried from formula.
+* get_csid() returned an error when query was NA.
+* get_chebiid() and chebi_comp_entity() fixed for invalid queries.
+* get_cid() returned the PubChem ID of sodium when the query was NA.
+* aw_query() returned a list for successful queries, NA for unsuccessful queries.
 
 ## DEPRECATED FUNCTIONS
 
@@ -57,10 +61,10 @@
 
 ## NEW FEATURES
 
-* Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_chebiid() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest [contributed by @andschar].
-* Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri() [PR #154, contributed by @Aariq]
-* Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query() [PR #179]
-* "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return. [contributed by @Aariq]
+* Retrieve data from ChEBI (https://www.ebi.ac.uk/chebi/) webservice with get_chebiid() and chebi_comp_entity(). ChEBI comprises a rich data base on chemicals with bilogical interest.
+* Retrieve retention indices from NIST (https://webbook.nist.gov) with nist_ri().
+* Get record details from US EPA Substance Registry Services (https://cdxnodengn.epa.gov/cdx-srs-rest/) with srs_query().
+* "first" argument in cts_convert() and cir_query() and "interactive" argument in pc_synonyms() deprecated.  Use "choices" instead to return either a list of all results, only the first result, or an interactive menu to choose a result to return.
 * ChemSpider functions now look for an API token stored in .Renviron or .Rprofile by default so you can keep them hidden more easily.
 
 ## MINOR IMPROVEMENTS
@@ -70,14 +74,14 @@
 
 ## BUG FIXES
 
-* cs_prop() failed with duplicated return values [issue #148, reported and fixed by @stanstrup]
-* pp_query() failed when compound present, but no properties [issue #151, reported and fixed by @stanstrup]
-* ci_query() failed when missing table [issue #196, reported and fixed by @gjgetzinger]
-* get_csid() failed because of a major change in the ChemSpider API [issue #149, PR #165, contributed by @stitam]
-* multiple functions failed because of a major change in the ChemSpider API [issue #149, contributed by @stitam]
-* cir_query() mistook NA for sodium [issue #158, reported and fixed by @Aariq]
-* fixed functions that communicate with the ChemSpider API [issue #149, issue #160, fixed by @stitam]
-* get_etoxid() printed incorrect results for certain match types [issue #201, fixed by @stitam]
+* cs_prop() failed with duplicated return values.
+* pp_query() failed when compound present, but no properties.
+* ci_query() failed when missing table.
+* get_csid() failed because of a major change in the ChemSpider API.
+* multiple functions failed because of a major change in the ChemSpider API.
+* cir_query() mistook NA for sodium.
+* fixed functions that communicate with the ChemSpider API.
+* get_etoxid() printed incorrect results for certain match types.
 
 ## DEPRECATED FUNCTIONS
 
@@ -97,13 +101,13 @@
 
 ## BUG FIXES
 
-* extr_num() did not work properly with decimal numbers [issue #136, reported and fixed by @stanstrup]
-* cs_prop() failed when epi-suite data was not available [issue #139, reported and fixed by @stanstrup]
-* cs_prop() failed with invalid html [issue #138, reported and fixed by @stanstrup]
-* cs_prop() gave incorrect answer, if entries were not available [issue #142, reported and fixed by @stanstrup]
-* cs_prop() did not parse scientific number correctly [issue #143, reported by @stanstrup, fixed by @EDiLD]
-* is.smiles() failed because of changes in rcdk [PR #140, reported and fixed by @allaway]
-* cir_query() failed with identifiers containing spaces (e.g. 'acetic acid') [issue #146, reported by Lars Nielsen]
+* extr_num() did not work properly with decimal numbers.
+* cs_prop() failed when epi-suite data was not available.
+* cs_prop() failed with invalid html.
+* cs_prop() gave incorrect answer, if entries were not available.
+* cs_prop() did not parse scientific number correctly.
+* is.smiles() failed because of changes in rcdk.
+* cir_query() failed with identifiers containing spaces (e.g. 'acetic acid').
 * several other functions failed with identifiers containing spaces & returned wrong distance.
 
 ## DEPRECATED FUNCTIONS
@@ -119,15 +123,14 @@
 ## MINOR IMPROVEMENTS
 
 * cs_prop() now also return experimental data for Boiling and Melting Points.
-* pc_synonyms gained an argument 'interactive' to enter an interactive mode for
-  selecting synonyms [issue #129, requested by @Aariq]
+* pc_synonyms gained an argument 'interactive' to enter an interactive mode for selecting synonyms.
 * cts_convert now returns NA if no matches are found.
 
 ## BUG FIXES
 
-* cs_prop() failed with some CSIDs [isse #127, reported by @Aariq]
+* cs_prop() failed with some CSIDs.
 * wd_ident() failed if multiple entries where found. Now returns the first hit only.
-* ci_query() did not return fully cleaned smiles and inchi
+* ci_query() did not return fully cleaned smiles and inchi.
 
 ## DEPRECATED FUNCTIONS
 
@@ -139,7 +142,7 @@
 
 ## NEW FEATURES
 
-* fn_percept() extracts flavor percepts using CAS numbers from www.flavornet.org. Flavornet is a database of 738 compounds with human-detectible odors. [contributed by @Aariq]
+* fn_percept() extracts flavor percepts using CAS numbers from www.flavornet.org. Flavornet is a database of 738 compounds with human-detectible odors.
 
 ## MINOR IMPROVEMENTS
 
@@ -155,16 +158,16 @@
 
 
 ## NEW FEATURES
-* added ping_pubchem() to check whether pubchem is up & running
-* added cs_web_ping () to check whether the chemspider webpage is functional
+* added ping_pubchem() to check whether pubchem is up & running.
+* added cs_web_ping () to check whether the chemspider webpage is functional.
 
 ## MINOR IMPROVEMENTS
-* updated allan wood index
+* updated allan wood index.
 
 ## BUG FIXES
-* pc_prop() returned to many rows if last cid supplied was NA
-* Switched to https for NCBI, chemspider & chemid (Issue #120, reported by @jranke)
-* get_wdid() failed if non-ascii characters where returned by wikipedia
+* pc_prop() returned to many rows if last cid supplied was NA.
+* Switched to https for NCBI, chemspider & chemid.
+* get_wdid() failed if non-ascii characters where returned by wikipedia.
 * rcdk:parse.smiles() now returns NA if a SMILES string could not be parsed.
    => broke is.smiles
 
@@ -185,14 +188,14 @@
 
 
 ## MINOR IMPROVEMENTS
-* rewrite of pubchem functions using PUG-REST
-* chemspider: better use of NA in input (=return NA)
-* more robust matching in get_etoxid
+* rewrite of pubchem functions using PUG-REST.
+* chemspider: better use of NA in input (=return NA).
+* more robust matching in get_etoxid.
 
 ## BUG FIXES
 
-* pan_query() did not return numeric values
-* get_cid() failed with multiple results
+* pan_query() did not return numeric values.
+* get_cid() failed with multiple results.
 
 ## DEPRECATED FUNCTIONS
 
@@ -200,7 +203,7 @@
 ## DEFUNCT FUNCTIONS
 
 * ppdb_query() has been removed due to copyright issues.
-The new ppdb_parse() parses only a html, but does not interact with the database
+The new ppdb_parse() parses only a html, but does not interact with the database.
 * pan()
 * alanwood()
 * get_cid()
@@ -218,16 +221,16 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 * get_wdid() and wd_indent() to retrieve information from wikidata.
 * get_etoxid() can handle multi inputs (interactive mode, best match, first match, NA and all matches).
 * ci_query() can handle multi inputs (interactive mode, best match, first match and NA).
-* cs_prop() queries predcitions (ACD and EPiSuite) from ChemSpider
+* cs_prop() queries predictions (ACD and EPiSuite) from ChemSpider.
 
 ## MINOR IMPROVEMENTS
 
 * webchem uses exclusively xml2 (instead of XML).
-* All function return source_url for (micro-)attribution of sources
+* All function return source_url for (micro-)attribution of sources.
 * cs_compinfo(): names of returned list changed.
 * cs_extcompinfo():
-  - names of returned list changed
-  - result is numeric where appropriate
+  - names of returned list changed.
+  - result is numeric where appropriate.
 * cir(): result is numeric where appropriate.
 * unified naming scheme of functions.
 * is.inchikey_cs() has been integrated into is.inchikey().
@@ -246,12 +249,12 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 ## DEPRECATED FUNCTIONS
 
-* pan_query() replaces pan()
-* aw_query() replaces alanwood()
-* get_pcid() replaces get_cid()
-* pc_compinfo() replaces cid_compinfo()
-* ci_query() replaces chemid()
-* pp_query() replaces physprop()
+* pan_query() replaces pan().
+* aw_query() replaces alanwood().
+* get_pcid() replaces get_cid().
+* pc_compinfo() replaces cid_compinfo().
+* ci_query() replaces chemid().
+* pp_query() replaces physprop().
 
 ## DEFUNCT FUNCTIONS
 
@@ -270,24 +273,24 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 * is.inchikey() and is.cas() to check if a string is valid inchikey or CAS registry number.
 * parse_mol(): A simple molfile parser.
 * Functions to work with ChemSpider InChI API:
-  + cs_csid_mol() : convert csid to mol
-  + cs_inchikey_csid() : convert inchikey to csid
-  + cs_inchikey_inchi() : convert inchikey to inchi
-  + cs_inchikey_mol() : convert inchikey to Molfile
-  + cs_inchi_csid() : convert inchi to csid
-  + cs_inchi_inchikey : convert inchi to inchikey
-  + cs_inchi_mol() : convert inchi to molfile
-  + cs_inchi_smiles() : convert inchi to smiles
-  + cs_smiles_inchi() : convert smiles to inchi
-  + These are all wrapped into cs_convert()
-  + is.inchikey_cs() : Check via ChemSpider if inchikey is valid
+  + cs_csid_mol() : convert csid to mol.
+  + cs_inchikey_csid() : convert inchikey to csid.
+  + cs_inchikey_inchi() : convert inchikey to inchi.
+  + cs_inchikey_mol() : convert inchikey to Molfile.
+  + cs_inchi_csid() : convert inchi to csid.
+  + cs_inchi_inchikey : convert inchi to inchikey.
+  + cs_inchi_mol() : convert inchi to molfile.
+  + cs_inchi_smiles() : convert inchi to smiles.
+  + cs_smiles_inchi() : convert smiles to inchi.
+  + These are all wrapped into cs_convert().
+  + is.inchikey_cs() : Check via ChemSpider if inchikey is valid.
 * webchem has now a zenodo doi, please cite if you use it.
 
 
 ## MINOR IMPROVEMENTS
 
 * cts_compinfo() checks if input is a inchikey (via exported function is.inchikey()).
-* cts_compinfo() is now more robust and verbose, if problems are encountered
+* cts_compinfo() is now more robust and verbose, if problems are encountered.
 * alanwood() returns separate inchi and ichikeys in case of isomers.
 * alanwood() returns also subactvity (e.g. $Fluazinam$activity [1] "fungicides" and $Fluazinam$subactivity [1] "pyridine fungicides").
 * physprop() also returns boiling and melting points. Moreover, values are now numeric.
@@ -295,17 +298,17 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 ## BUG FIXES
 
-* alanwood() returns only results for first match in case of multiple links found
+* alanwood() returns only results for first match in case of multiple links found.
 * physprop() stopped working after change of SRC to https, fixed now.
-* changed etox_* functions to https
+* changed etox_* functions to https.
 
 
 ## DEPRECATED FUNCTIONS
 
 * ppdb() replaces ppdb_query() and accepts individual index as created by ppdb_buildidx().
 * cir() replaces cir_query().
-* cs_compinfo() replaces csid_compinfo()
-* cs_extcompinfo() replaces csid_extcompinfo()
+* cs_compinfo() replaces csid_compinfo().
+* cs_extcompinfo() replaces csid_extcompinfo().
 
 
 ## DEFUNCT FUNCTIONS
@@ -323,16 +326,16 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 * Query SRC PHYSPROP Database with physprop().
 * Query the ETOX ID with get_etoxid(); query basic information with etox_basic();
   quality targets with etox_targets() and test results with etox_tests().
-* Query PPDB with ppdb_query()
+* Query PPDB with ppdb_query().
 
 ## MINOR IMPROVEMENTS
 
-* added exceptions/checks to tests
-* improved robustness of cir_query()
+* added exceptions/checks to tests.
+* improved robustness of cir_query().
 
 ## BUG FIXES
 
-* Correct the spelling of Alan Wood and rename function allanwood() to alanwood() [contribution of @jranke]
+* Correct the spelling of Alan Wood and rename function allanwood() to alanwood().
 
 
 

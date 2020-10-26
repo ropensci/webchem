@@ -305,6 +305,12 @@ tidy_ritable <- function(ri_xml) {
 #'       were aggregated from}
 #'}
 #'
+#' @references NIST Mass Spectrometry Data Center, William E. Wallace, director,
+#'   "Retention Indices" in NIST Chemistry WebBook, NIST Standard Reference
+#'   Database Number 69, Eds. P.J. Linstrom and W.G. Mallard,
+#'   National Institute of Standards and Technology, Gaithersburg MD, 20899,
+#'   \url{https://doi.org/10.18434/T4D303}.
+#'
 #' @export
 #' @note Copyright for NIST Standard Reference Data is governed by the Standard
 #' Reference Data Act, \url{https://www.nist.gov/srd/public-law}.

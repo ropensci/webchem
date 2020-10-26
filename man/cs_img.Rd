@@ -41,6 +41,3 @@ cs_img(c(582, 682), dir = tempdir())
 \seealso{
 \code{\link{get_csid}}, \code{\link{cs_check_key}}
 }
-\author{
-Tamas Stirling, \email{stirling.tamas@gmail.com}
-}

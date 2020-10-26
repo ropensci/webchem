@@ -7,10 +7,10 @@ Description: Chemical information from around the web. This package interacts
     Flavornet, NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem,
     SRS, Wikidata.
 Type: Package
-Version: 1.0.0.9001
-Date: 2020-05-27
+Version: 1.1.0
+Date: 2020-10-01
 License: MIT + file LICENSE
-URL: https://docs.ropensci.org/webchem, https://github.com/ropensci/webchem
+URL: https://docs.ropensci.org/webchem/, https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
 Authors@R: c(person("Eduard", "Szöcs", role = "aut"),
     person("Robert", "Allaway", role = "ctb"),    
@@ -19,6 +19,7 @@ Authors@R: c(person("Eduard", "Szöcs", role = "aut"),
     person("Andreas", "Scharmüller", role = "ctb"),        
     person("Eric R", "Scott", role = "ctb"),
     person("Jan", "Stanstrup", role = "ctb"),
+    person("João Vitor", "F Cavalcante", role = "ctb"),
     person("Gordon", "Getzinger", role = "ctb"),
     person("Tamás", "Stirling", email = "stirling.tamas@gmail.com", role = c("ctb", "cre")))
 Maintainer: Tamás Stirling <stirling.tamas@gmail.com>
@@ -48,6 +49,7 @@ Suggests:
     robotstxt,
     knitr,
     rmarkdown,
-    plot.matrix
+    plot.matrix,
+    usethis
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr

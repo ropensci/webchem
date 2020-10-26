@@ -13,7 +13,6 @@
 #'  categoryClass, kingdomCode, iupacName, pubChemId, molecularWeight,
 #'  molecularFormula, inchiNotation, smilesNotation, classifications,
 #'  characteristics, synonyms, casNumbers, taxonomicSerialNumbers, relationships
-#'@author Gordon Getzinger, \email{gjg3@@duke.edu}
 #'@export
 #'
 #' @examples

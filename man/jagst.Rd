@@ -14,7 +14,7 @@ A data frame with 442 rows and 4 variables:
 }
 }
 \source{
-\url{http://jdkfg.lubw.baden-wuerttemberg.de/servlet/is/300/}
+\url{https://udo.lubw.baden-wuerttemberg.de/?highlightglobalid=gewaesserguetedaten}
 }
 \usage{
 jagst
