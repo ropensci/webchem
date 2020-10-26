@@ -380,7 +380,7 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
   }
   if (to == "csid") {
     if (from == "mol") {
-      if (verbose) message("Conversion not supported. Returning NA.")
+      if (verbose) stop("Conversion not supported. Returning NA.")
       return(NA_integer_)
     }
     else {
@@ -389,15 +389,15 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
     }
   }
   if (from == "inchikey" & to == "smiles") {
-    if (verbose) message("Conversion not supported. Returning NA.")
+    if (verbose) stop("Conversion not supported. Returning NA.")
     return(NA)
   }
   if (from == "smiles" & to %in% c("inchikey", "mol")) {
-    if (verbose) message("Conversion not supported. Returning NA.")
+    if (verbose) stop("Conversion not supported. Returning NA.")
     return(NA)
   }
   if (from == "mol" & to %in% c("inchi", "smiles")) {
-    if (verbose) message("Conversion not supported. Returning NA.")
+    if (verbose) stop("Conversion not supported. Returning NA.")
     return(NA)
   }
   foo <- function(x, from, to, verbose, apikey) {
