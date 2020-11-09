@@ -3,6 +3,7 @@
 ## BUG FIXES
 
 * Fix get_csid() so it doesn't break when a query is invalid.
+* Typo fix in Wikidata.R
 
 # webchem 1.1.0.
 

@@ -119,7 +119,7 @@ get_wdid <-
 
 
 
-#' Retrieve Indentifiers from Wikidata
+#' Retrieve identifiers from Wikidata
 #'
 #' @import jsonlite
 #' @import httr
