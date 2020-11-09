@@ -42,6 +42,20 @@ test_that("wd_ident returns correct results", {
                            'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'source_url', 'query'))
 })
 
+test_that("wd_ident returns correct results", {
+  skip_on_cran()
+  skip_if_not(up, "Wikidata service is down")
+
+  id <- c( "Q27089367", "Q410888")
+  o1 <- wd_ident(id)
+  expect_s3_class(o1, 'data.frame')
+  expect_equal(nrow(o1), 2)
+  expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
+                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids', 'source_url', 'query'))
+  expect_equal(o1$swisslipids[1], 'SLM:000000510')
+  expect_equal(o1$lipidmaps[2], 'LMPR0102010003')
+})
+
 
 test_that("wd integration test", {
   skip_on_cran()

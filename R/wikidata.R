@@ -129,7 +129,7 @@ get_wdid <-
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A data.frame of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-#' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
+#' 'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids' and source_url.
 #'
 #' @note Only matches in labels are returned. If more than one unique hit is found,
 #' only the first is returned.
@@ -155,19 +155,19 @@ wd_ident <- function(id, verbose = TRUE){
   # id <- c( "Q163648", "Q18216")
   # id <- 'Q408646'
   foo <- function(id, verbose){
-    empty <- as.list(rep(NA, 13))
+    empty <- as.list(rep(NA, 15))
     names(empty) <- c("smiles", "cas", "cid", "einecs", "csid", "inchi",
                       "inchikey", "drugbank", "zvg", "chebi", "chembl", "unii",
-                      "source_url")
+                      'lipidmaps', 'swisslipids', "source_url")
     if (is.na(id)) {
       if (verbose) webchem_message("na")
       return(empty)
     }
     baseurl <- 'https://query.wikidata.org/sparql?format=json&query='
     props <- c('P233', 'P231', 'P662', 'P232', 'P661', 'P234', 'P235', 'P715', 'P679',
-               'P683', 'P592', 'P652')
+               'P683', 'P592', 'P652', 'P2063', 'P8691')
     names <- c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-               'drugbank', 'zvg', 'chebi', 'chembl', 'unii')
+               'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids')
 
     sparql_head <- paste('PREFIX wd: <http://www.wikidata.org/entity/>',
       'PREFIX wdt: <http://www.wikidata.org/prop/direct/>',
