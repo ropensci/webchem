@@ -39,7 +39,7 @@ test_that("wd_ident returns correct results", {
   expect_true(is.na(o1$smiles[4]))
   expect_equal(o1$cas[1], '50-29-3')
   expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'source_url', 'query'))
+                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids', 'source_url', 'query'))
 })
 
 test_that("wd_ident returns correct results", {
