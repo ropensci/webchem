@@ -42,7 +42,7 @@ test_that("wd_ident returns correct results", {
                            'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids', 'source_url', 'query'))
 })
 
-test_that("wd_ident returns correct results", {
+test_that("wd_ident returns correct results for two lipids", {
   skip_on_cran()
   skip_if_not(up, "Wikidata service is down")
 
