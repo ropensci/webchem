@@ -1,6 +1,6 @@
 up <- ping_service("pan")
 test_that("pan_query()", {
-  skip("PAN functions are currently broken due to a change in the webservice")
+  skip("PAN functions are currently broken due to a change in the web service.")
   skip_on_cran()
   skip_if_not(up, "PAN service is down, skipping tests")
 

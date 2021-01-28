@@ -64,7 +64,9 @@ Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L);
 Chemical Name; matching synonym; source URL
 }
 \description{
-Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
+Retrieve information from the PAN database
+(\url{http://www.pesticideinfo.org/}). The function is currently broken due
+to a change in the web service.
 }
 \examples{
 \dontrun{
@@ -81,6 +83,6 @@ Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
  out
 
  # extract Acute Toxicity Summary
- sapply(out, function(y) y$`Acute Toxicity Summary`)
+ # sapply(out, function(y) y$`Acute Toxicity Summary`)
 }
 }
