@@ -64,9 +64,8 @@ Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L);
 Chemical Name; matching synonym; source URL
 }
 \description{
-Retrieve information from the PAN database
-(\url{http://www.pesticideinfo.org/}). The function is currently broken due
-to a change in the web service.
+Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/}).
+This function is currently broken.
 }
 \examples{
 \dontrun{
