@@ -620,7 +620,7 @@ pc_page <- function(id,
     qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                    domain, "/", id, "/JSON?heading=", section)
     if (verbose) webchem_message("query", id, appendLF = FALSE)
-    webchem_sleep(time = 0.3 + stats::rexp(1, rate = 10 / 0.3))
+    webchem_sleep(type = 'API')
     res <- try(httr::RETRY("POST",
                            qurl,
                            user_agent(webchem_url()),

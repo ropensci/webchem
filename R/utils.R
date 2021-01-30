@@ -77,7 +77,7 @@ is.inchikey_cs <- function(x, verbose = TRUE){
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
   qurl <- paste0(baseurl, 'inchi_key=', x)
-  webchem_sleep(time = 0.1)
+  webchem_sleep(type = 'scrape')
   if (verbose) webchem_message("query", x, appendLF = FALSE)
   res <- try(httr::RETRY("GET",
                          qurl,
