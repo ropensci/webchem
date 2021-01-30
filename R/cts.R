@@ -2,7 +2,6 @@
 #'
 #' Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import jsonlite
-#' @importFrom stats setNames
 #' @param query character; InChIkey.
 #' @param from character; currently only accepts "inchikey".
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -70,7 +69,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
     }
   }
   out <- lapply(query, foo, verbose = verbose)
-  out <- setNames(out, query)
+  names(out) <- query
   class(out) <- c('cts_compinfo','list')
   return(out)
 }
@@ -81,7 +80,6 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import RCurl jsonlite
 #' @importFrom utils URLencode
-#' @importFrom stats setNames
 #' @param query character; query ID.
 #' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
 #'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
@@ -190,7 +188,7 @@ cts_convert <- function(query,
     }
   }
   out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
-  out <- setNames(out, query)
+  names(out) <- query
   return(out)
 }
 

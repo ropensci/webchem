@@ -5,7 +5,6 @@
 #' stars (stars) using the SOAP protocol:
 #' \url{https://www.ebi.ac.uk/chebi/webServices.do}
 #' @import httr xml2
-#' @importFrom stats setNames
 #'
 #' @param query character; search term.
 #' @param from character; type of input.  \code{"all"} searches all types and
@@ -132,7 +131,8 @@ get_chebiid <- function(query,
     if (res$status_code == 200) {
       cont <- content(res, type = 'text/xml', encoding = 'utf-8')
       out <- l2df(as_list(xml_children(xml_find_first(cont, '//d1:return'))))
-      out <- as_tibble(setNames(out, tolower(names(out))))
+      names(out) <- tolower(names(out))
+      out <- as_tibble(out)
       if (nrow(out) == 0) {
         webchem_message("not_found")
         return(tibble::tibble("query" = query, "chebiid" = NA_character_))
@@ -177,7 +177,7 @@ get_chebiid <- function(query,
                 max_res = max_res,
                 stars = stars,
                 verbose = verbose)
-  out <- setNames(out, query)
+  names(out) <- query
   out <- bind_rows(out)
   return(dplyr::select(out, "query", "chebiid", everything()))
 }
@@ -194,7 +194,6 @@ get_chebiid <- function(query,
 #' The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
 #'
 #' @import httr xml2
-#' @importFrom stats setNames
 #'
 #' @param chebiid character; search term (i.e. chebiid).
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -340,7 +339,7 @@ chebi_comp_entity <- function(chebiid,
     }
   }
   out <- lapply(chebiid, foo, verbose = verbose)
-  out <- setNames(out, chebiid)
+  names(out) <- chebiid
   class(out) <- c("chebi_comp_entity", "list")
   return(out)
 }
@@ -380,5 +379,7 @@ rbind_named_fill <- function(x) {
   for (i in seq_along(len)) {
     out[[i]] <- unname(x[[i]])[match(unam, nam[[i]])]
   }
-  setNames(as.data.frame(do.call(rbind, out), stringsAsFactors = FALSE), unam)
+  newout <- as.data.frame(do.call(rbind, out), stringsAsFactors = FALSE)
+  names(newout) <- unam
+  return(newout)
 }
