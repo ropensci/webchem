@@ -18,7 +18,6 @@
 #' @note Only matches in labels are returned.
 #'
 #' @import jsonlite httr
-#' @importFrom stats rgamma
 #' @importFrom utils URLencode URLdecode
 #' @importFrom purrr map_df
 #' @export
@@ -123,7 +122,6 @@ get_wdid <-
 #'
 #' @import jsonlite
 #' @import httr
-#' @importFrom stats rgamma
 #'
 #' @param id character; identifier, as returned by \code{\link{get_wdid}}
 #' @param verbose logical; print message during processing to console?

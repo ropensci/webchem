@@ -526,7 +526,6 @@ cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
 #'
 #' Get extended info from ChemSpider, see \url{https://www.chemspider.com/}
 #' @import xml2
-#' @importFrom stats rgamma
 #' @param csid character,  ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?

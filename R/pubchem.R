@@ -75,7 +75,6 @@
 #' @import httr
 #' @importFrom purrr map map2
 #' @importFrom jsonlite fromJSON
-#' @importFrom stats rgamma
 #' @importFrom tibble enframe
 #' @importFrom utils URLencode
 #' @export
@@ -576,7 +575,6 @@ pc_sect <- function(id,
 #'
 #' @importFrom jsonlite fromJSON
 #' @importFrom data.tree as.Node Do
-#' @importFrom stats rexp
 #' @param id numeric or character; a vector of identifiers to search for.
 #' @param section character; the section of the content page to be imported.
 #' @param domain character; the query domain. Can be one of \code{"compound"},

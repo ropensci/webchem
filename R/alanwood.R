@@ -3,7 +3,6 @@
 #' Query Alan Woods Compendium of Pesticide Common Names
 #' \url{http://www.alanwood.net/pesticides/}
 #' @import xml2
-#' @importFrom stats rgamma
 #'
 #' @param  query character; search string
 #' @param from character; type of input ('cas' or 'name')
