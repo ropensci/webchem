@@ -1,6 +1,7 @@
 #' Query the PAN Pesticide database
 #'
-#' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
+#' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/}).
+#' This function is currently broken.
 #' @import xml2
 #' @importFrom utils adist
 #' @importFrom rvest html_table
@@ -65,10 +66,14 @@
 #'  out
 #'
 #'  # extract Acute Toxicity Summary
-#'  sapply(out, function(y) y$`Acute Toxicity Summary`)
+#'  # sapply(out, function(y) y$`Acute Toxicity Summary`)
 #' }
 pan_query <- function(query, from = c("name", "cas"),
-                      match = c('best', 'all', 'first', "na"), verbose = TRUE, ...){
+                      match = c('best', 'all', 'first', "na"),
+                      verbose = TRUE,
+                      ...){
+
+  warning("This function is currently broken.")
 
   if (!ping_service("pan")) stop(webchem_message("service_down"))
 

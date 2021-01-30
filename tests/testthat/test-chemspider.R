@@ -106,7 +106,7 @@ test_that("get_csid() works with arguments passed to cs_control()", {
 
   c5 <- head(get_csid("C6H12O6", from = "formula", order_by = "dataSourceCount",
                       order_direction = "descending"))
-  expect_equal(c5$csid, c(10239179, 5764, 83142, 96749, 58238, 71358))
+  expect_equal(c5$csid, c(10239179, 5764, 58238, 71358, 83142, 96749))
 
   c6 <- head(get_csid("C6H12O6", from = "formula", order_by = "pubMedCount",
                       order_direction = "descending"))
@@ -185,7 +185,6 @@ test_that("cs_convert()", {
   c2 <- cs_convert(c(171, 172), "csid", "smiles")
   c2_rev <- cs_convert(c2, "smiles", "csid")
   d <- cs_convert(171, "csid", "mol")
-  expect_equal(cs_convert(d, "mol", "csid"), NA_integer_)
   d2 <- cs_convert(c(171, 172), "csid", "mol")
   e <- cs_convert("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi", "inchikey")
   e_rev <- cs_convert(e, "inchikey", "inchi")
