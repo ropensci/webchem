@@ -526,7 +526,6 @@ cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
 #'
 #' Get extended info from ChemSpider, see \url{https://www.chemspider.com/}
 #' @import xml2
-#' @importFrom stats rgamma
 #' @param csid character,  ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -571,7 +570,7 @@ use 'cs_commpinfo()' instead.")
     qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
     if (verbose)
       message(qurl)
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/45))
+    webchem_sleep(type = 'API')
     h <- try(read_xml(qurl), silent = TRUE)
     if (inherits(h, "try-error")) {
       warning('CSID not found... Returning NA.')

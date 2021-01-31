@@ -5,7 +5,6 @@
 #'
 #' @import xml2
 #' @importFrom rvest html_table
-#' @importFrom stats rgamma
 #' @importFrom utils URLencode URLdecode
 #'
 #' @param query character; query string
@@ -79,7 +78,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
       inchikey = "https://chem.nlm.nih.gov/chemidplus/inchikey/startswith/")
     # return max 50 hits
     qurl <- paste0(baseurl, query, '?DT_START_ROW=0&DT_ROWS_PER_PAGE=50')
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'API')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),
@@ -138,7 +137,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
         # retry with CAS-API
         qurl <- paste0('https://chem.nlm.nih.gov/chemidplus/rn/', hit_cas)
         if (verbose) webchem_message("query", hit_cas, appendLF = FALSE)
-        Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+        webchem_sleep(type = 'scrape')
         res <- try(httr::RETRY("GET",
                                qurl,
                                httr::user_agent(webchem_url()),

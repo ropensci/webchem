@@ -5,7 +5,6 @@
 #' @import xml2
 #' @importFrom utils adist
 #' @importFrom rvest html_table
-#' @importFrom stats rgamma
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param from character; one of "name" or "cas".
 #' @param match character; \code{match="all"} returns all matches,
@@ -106,7 +105,7 @@ pan_query <- function(query, from = c("name", "cas"),
                     'dIrrigConc=y&dLivestockConc=y&')
     qurl <- paste0(baseurl, baseq, 'ChemName=', query)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            user_agent(webchem_url()),

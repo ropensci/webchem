@@ -40,7 +40,7 @@ get_ri_xml <-
         ID <- paste0("C", gsub("-", "", query))
       } else {
         qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
-        Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+        webchem_sleep(type = 'scrape')
         if (verbose) webchem_message("query", query, appendLF = FALSE)
         res <- try(httr::RETRY("GET",
                                qurl,
@@ -93,7 +93,7 @@ get_ri_xml <-
       type_str <- toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
 
       qurl <- paste0(baseurl, "?ID=", ID, "&Units-SI&Mask=2000&Type=", type_str)
-      Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+      webchem_sleep(type = 'scrape')
       if (verbose) {
         if (from == "cas") {
           webchem_message("query", query, appendLF = FALSE)

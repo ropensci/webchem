@@ -77,7 +77,7 @@ is.inchikey_cs <- function(x, verbose = TRUE){
   }
   baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
   qurl <- paste0(baseurl, 'inchi_key=', x)
-  Sys.sleep(0.1)
+  webchem_sleep(type = 'scrape')
   if (verbose) webchem_message("query", x, appendLF = FALSE)
   res <- try(httr::RETRY("GET",
                          qurl,
@@ -509,3 +509,33 @@ webchem_url <- function() {
   url <- "https://cran.r-project.org/web/packages/webchem/index.html"
   return(url)
 }
+
+#' Function to wait between every web-service query
+#'
+#' @param time numeric; Wait time in seconds.
+#' @param type character; Will be an API queried or a website scraped?
+#' @noRd
+#'
+webchem_sleep <- function(time = NULL,
+                          type = c('API', 'scrape')) {
+  type <- match.arg(type)
+  if (is.null(time)) {
+    if (type == 'API') {
+      time <- 0.2
+    }
+    if (type == 'scrape') {
+      time <- 0.3
+    }
+  } else {
+    if (!is.numeric(time)) {
+      stop('Set time is not numeric.')
+    }
+  }
+
+  Sys.sleep(time)
+}
+
+
+
+
+

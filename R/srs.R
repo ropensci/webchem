@@ -41,6 +41,7 @@ srs_query <-
       }
       entity_query <- paste0(entity_url, "/substance/", from, "/", x)
       if (verbose) webchem_message("query", x, appendLF = FALSE)
+      webchem_sleep(type = 'API')
       response <- try(httr::RETRY("GET",
                                   entity_query,
                                   httr::user_agent(webchem_url()),

@@ -18,7 +18,6 @@
 #' @note Only matches in labels are returned.
 #'
 #' @import jsonlite httr
-#' @importFrom stats rgamma
 #' @importFrom utils URLencode URLdecode
 #' @importFrom purrr map_df
 #' @export
@@ -56,7 +55,7 @@ get_wdid <-
         paste0("wikidata.org/w/api.php?action=wbsearchentities&format=json&type=item")
       qurl <- paste0(qurl, "&language=", language, "&limit=", limit, "&search=", query1)
       if (verbose) webchem_message("query", query, appendLF = FALSE)
-      Sys.sleep(0.3)
+      webchem_sleep(type = 'API')
       res <- try(httr::RETRY("GET",
                              qurl,
                              httr::user_agent(webchem_url()),
@@ -123,7 +122,6 @@ get_wdid <-
 #'
 #' @import jsonlite
 #' @import httr
-#' @importFrom stats rgamma
 #'
 #' @param id character; identifier, as returned by \code{\link{get_wdid}}
 #' @param verbose logical; print message during processing to console?
@@ -177,7 +175,7 @@ wd_ident <- function(id, verbose = TRUE){
     sparql <- paste(sparql_head, sparql_body, '}')
     qurl <- paste0(baseurl, sparql)
     qurl <- URLencode(qurl)
-    Sys.sleep( rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'API')
     if (verbose) webchem_message("query", id, appendLF = FALSE)
     res <- try(httr::RETRY("GET",
                            qurl,
