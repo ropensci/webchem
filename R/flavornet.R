@@ -63,6 +63,6 @@ fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
     }
   }
   percepts <- sapply(query, foo, verbose = verbose)
-  percepts <- setNames(percepts, query)
+  names(percepts) <- query
   return(percepts)
 }

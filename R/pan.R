@@ -162,7 +162,7 @@ pan_query <- function(query, from = c("name", "cas"),
     }
   }
   out <- lapply(query, foo, match = match, from = from, verbose = verbose)
-  out <- setNames(out, query)
+  names(out) <- query
   class(out) <- c('pan_query', 'list')
   return(out)
 }
