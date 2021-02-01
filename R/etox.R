@@ -447,6 +447,6 @@ etox_tests <- function(id, verbose = TRUE) {
     }
   }
   out <- lapply(id, foo, verbose = verbose)
-  names(out <- id)
+  names(out) <- id
   return(out)
 }
