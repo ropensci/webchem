@@ -4,7 +4,6 @@
 #' perceptible to humans detected using gas chromatography olfactometry (GCO).
 #'
 #' @import xml2
-#' @importFrom stats rgamma
 #' @param query character; CAS number to search by. See \code{\link{is.cas}} for correct formatting
 #' @param from character; currently only CAS numbers are accepted.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -41,7 +40,7 @@ fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
     }
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
     if(verbose) webchem_message("query", query, appendLF = FALSE)
-    Sys.sleep(stats::rgamma(1, shape = 10, scale = 1/10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),

@@ -1,10 +1,10 @@
 #' Query the PAN Pesticide database
 #'
-#' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/})
+#' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/}).
+#' This function is currently broken.
 #' @import xml2
 #' @importFrom utils adist
 #' @importFrom rvest html_table
-#' @importFrom stats rgamma
 #' @param query character; searchterm, e.g. chemical name or CAS.
 #' @param from character; one of "name" or "cas".
 #' @param match character; \code{match="all"} returns all matches,
@@ -65,10 +65,14 @@
 #'  out
 #'
 #'  # extract Acute Toxicity Summary
-#'  sapply(out, function(y) y$`Acute Toxicity Summary`)
+#'  # sapply(out, function(y) y$`Acute Toxicity Summary`)
 #' }
 pan_query <- function(query, from = c("name", "cas"),
-                      match = c('best', 'all', 'first', "na"), verbose = TRUE, ...){
+                      match = c('best', 'all', 'first', "na"),
+                      verbose = TRUE,
+                      ...){
+
+  warning("This function is currently broken.")
 
   if (!ping_service("pan")) stop(webchem_message("service_down"))
 
@@ -101,7 +105,7 @@ pan_query <- function(query, from = c("name", "cas"),
                     'dIrrigConc=y&dLivestockConc=y&')
     qurl <- paste0(baseurl, baseq, 'ChemName=', query)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/10))
+    webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            user_agent(webchem_url()),

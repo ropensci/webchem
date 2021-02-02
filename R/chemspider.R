@@ -35,10 +35,9 @@ cs_check_key <- function() {
 #' Some ChemSpider functions allow you to restrict which sources are used to
 #' lookup the requested query. Restricting the sources makes these queries
 #' faster.
-#' @importFrom httr GET add_headers
-#' @importFrom jsonlite fromJSON
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
+#' @param verbose should a verbose output be printed on the console?
 #' @return Returns a character vector.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
@@ -49,21 +48,30 @@ cs_check_key <- function() {
 #' \dontrun{
 #' cs_datasources()
 #' }
-cs_datasources <- function(apikey = NULL) {
+cs_datasources <- function(apikey = NULL, verbose = TRUE) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
   headers <- c("Content-Type" = "", "apikey" = apikey)
-  res <- httr::GET(
-    url = "https://api.rsc.org/compounds/v1/lookups/datasources",
-    httr::add_headers(.headers = headers)
-  )
+  qurl <- "https://api.rsc.org/compounds/v1/lookups/datasources"
+  if (verbose) message("Querying list of data sources. ", appendLF = FALSE)
+  res <- try(httr::RETRY("GET",
+                         url = qurl,
+                         httr::add_headers(.headers = headers),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   if (res$status_code == 200) {
+    if (verbose) message(httr::message_for_status(res))
     out <- unlist(unname(jsonlite::fromJSON(rawToChar(res$content))))
     return(out)
   }
   else {
-    stop(httr::http_status(res)$message)
+    if (verbose) message(httr::message_for_status(res))
+    return(NA)
   }
 }
 
@@ -74,11 +82,11 @@ cs_datasources <- function(apikey = NULL) {
 #' @param datasources character; specifies the databases to query. Use
 #' \code{cs_datasources()} to retrieve available ChemSpider data sources.
 #' @param order_by character; specifies the sort order for the results.
-#' Valid values are \code{"recordId"}, \code{"massDefect"},
+#' Valid values are \code{"default"}, \code{"recordId"}, \code{"massDefect"},
 #' \code{"molecularWeight"}, \code{"referenceCount"}, \code{"dataSourceCount"},
 #' \code{"pubMedCount"}, \code{"rscCount"}.
 #' @param order_direction character; specifies the sort order for the results.
-#' Valid values are \code{"ascending"}, \code{"descending"}.
+#' Valid values are \code{"default"}, \code{"ascending"}, \code{"descending"}.
 #' @param include_all logical; see details.
 #' @param complexity character; see details.
 #' Valid values are \code{"any"} \code{"single"}, \code{"multiple"}.
@@ -106,17 +114,15 @@ cs_datasources <- function(apikey = NULL) {
 #' cs_control()
 #' cs_control(order_direction = "descending")
 cs_control <- function(datasources = vector(),
-                       order_by = "recordId", order_direction = "ascending",
+                       order_by = "default", order_direction = "default",
                        include_all = FALSE, complexity = "any",
                        isotopic = "any") {
   order_by <- match.arg(order_by, choices = c(
-    "recordId", "massDefect",
-    "molecularWeight", "referenceCount",
-    "dataSourceCount", "pubMedCount",
-    "rscCount"
+    "default", "recordId", "massDefect", "molecularWeight", "referenceCount",
+    "dataSourceCount", "pubMedCount", "rscCount"
   ))
-  order_direction <- match.arg(order_direction, choices = c("ascending",
-                                                          "descending"))
+  order_direction <- match.arg(order_direction, choices = c(
+    "default", "ascending", "descending"))
   include_all <- match.arg(as.character(include_all), choices = c(TRUE, FALSE))
   complexity <- match.arg(complexity, choices = c("any", "single", "multiple"))
   isotopic <- match.arg(isotopic, choices = c("any", "labeled", "unlabeled"))
@@ -159,9 +165,6 @@ cs_control <- function(datasources = vector(),
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
 #' <doi:10.18637/jss.v093.i13>.
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
-#' @importFrom tibble enframe
 #'
 #' @export
 #' @examples
@@ -185,22 +188,106 @@ get_csid <- function(query,
   }
   from <- match.arg(from)
   match <- match.arg(match)
-
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   foo <- function(x, from, match, verbose, apikey, ...) {
-    if (is.na(x)) return(NA_integer_)
-    res <- switch(from,
-                  name = cs_name_csid(x, apikey = apikey,
-                                      control = cs_control(...)),
-                  formula = cs_formula_csid(x, apikey = apikey,
-                                            control = cs_control(...)),
-                  inchi = cs_inchi_csid(x, apikey = apikey),
-                  inchikey = cs_inchikey_csid(x, apikey = apikey),
-                  smiles = cs_smiles_csid(x, apikey = apikey))
-    if(length(res) > 1) {
-      res <- matcher(res, query = x, match = match, from = from, verbose = verbose)
+    if (is.na(x)) {
+      if (verbose) webchem_message("na")
+      return(NA_integer_)
     }
-    if (length(res) == 0) res <- NA_integer_
-    return(res)
+    headers <- c("Content-Type" = "", "apikey" = apikey)
+    if (from == "name") {
+      body <- list(
+        "name" = x, "orderBy" = cs_control(...)$order_by,
+        "orderDirection" = cs_control(...)$order_direction
+      )
+      body <- jsonlite::toJSON(body, auto_unbox = TRUE)
+    }
+    if (from == "formula") {
+      body <- jsonlite::toJSON(list(
+        "formula" = unbox(x),
+        "dataSources" = cs_control(...)$datasources,
+        "orderBy" = unbox(cs_control(...)$order_by),
+        "orderDirection" = unbox(cs_control(...)$order_direction)),
+        auto_unbox = FALSE)
+    }
+    if (from == "inchi") {
+      body <- jsonlite::toJSON(list("inchi" = x), auto_unbox = TRUE)
+    }
+    if (from == "inchikey") {
+      body <- jsonlite::toJSON(list("inchikey" = x), auto_unbox = TRUE)
+    }
+    if (from == "smiles") {
+      body <- jsonlite::toJSON(list("smiles" = x), auto_unbox = TRUE)
+    }
+    if (verbose) webchem_message("query", x, appendLF = FALSE)
+    qurl <- paste0("https://api.rsc.org/compounds/v1/filter/", from)
+    postres <- try(httr::RETRY("POST",
+                               url = qurl,
+                               httr::add_headers(.headers = headers),
+                               body = body,
+                               terminate_on = 404,
+                               quiet = TRUE), silent = TRUE)
+    if (inherits(postres, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA_integer_)
+    }
+    if (postres$status_code == 200) {
+      query_id <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
+      qurl <- paste0("https://api.rsc.org/compounds/v1/filter/",
+                     query_id,
+                     "/status")
+      getstatus <- try(httr::RETRY("GET",
+                                   url = qurl,
+                                   httr::add_headers(.headers = headers),
+                                   terminate_on = 404,
+                                   quiet = TRUE), silent = TRUE)
+      if (inherits(getstatus, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(NA_integer_)
+      }
+      if (getstatus$status_code == 200) {
+        qurl <- paste0("https://api.rsc.org/compounds/v1/filter/",
+                       query_id,
+                       "/results")
+        getres <- try(httr::RETRY("GET",
+                                  url = qurl,
+                                  httr::add_headers(.headers = headers),
+                                  terminate_on = 404,
+                                  quiet = TRUE), silent = TRUE)
+        if (inherits(getres, "try-error")) {
+          if (verbose) webchem_message("service_down")
+          return(NA_integer_)
+        }
+        if (getres$status_code == 200) {
+          if (verbose) message(httr::message_for_status(getres))
+          res <- jsonlite::fromJSON(rawToChar(getres$content))$results
+          if (length(res) > 1) {
+            res <- matcher(res,
+                           query = x,
+                           match = match,
+                           from = from,
+                           verbose = verbose)
+          }
+          if (length(res) == 0) {
+            if (verbose) webchem_message("not_found")
+            res <- NA_integer_
+          }
+          return(res)
+        }
+        else {
+          if (verbose) message(httr::message_for_status(getres))
+          return(NA_integer_)
+        }
+      }
+      else {
+        if (verbose) message(httr::message_for_status(getstatus))
+        return(NA_integer_)
+      }
+    }
+    else {
+      if (verbose) message(httr::message_for_status(postres))
+      return(NA_integer_)
+    }
   }
   out <-
     lapply(
@@ -214,366 +301,8 @@ get_csid <- function(query,
     )
   names(out) <- query
   out <-
-    lapply(out, enframe, name = NULL, value = "csid") %>%
+    lapply(out, tibble::enframe, name = NULL, value = "csid") %>%
     bind_rows(.id = "query")
-  return(out)
-}
-
-#' Retrieve ChemSpider ID from a queryId returned by a non-batch POST request
-#'
-#' ChemSpider IDs (CSIDs) are obtained in multiple steps.
-#' First we assemble a POST request.
-#' These requests can take multiple forms and are assembled separately in each
-#' function that returns a CSID.
-#' A dedicated API handles the POST request and returns a queryId.
-#' This queryId is passed to another, more general API, that returns the CSID.
-#' This function communicates with the second API.
-#' @importFrom httr GET add_headers http_status
-#' @importFrom jsonlite fromJSON
-#' @param postres an object of class \code{\link{response}} containing the
-#' queryId returned by the previous API.
-#' @param headers list; contains the API key.
-#' @return Returns a numeric vector of ChemSpider IDs.
-#' @note An API key is needed. Register at RSC.
-#' \url{https://developer.rsc.org/}
-#' for an API key.
-#' Please respect the Terms & conditions \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @noRd
-cs_query_csid <- function(postres, headers) {
-  query_id <- jsonlite::fromJSON(rawToChar(postres$content))$queryId
-  getstatus <- httr::GET(
-    url = paste0(
-      "https://api.rsc.org/compounds/v1/filter/",
-      query_id, "/status"
-    ),
-    httr::add_headers(.headers = headers)
-  )
-  apistatus <- jsonlite::fromJSON(rawToChar(getstatus$content))$status
-  while (apistatus == "Processing") {
-    message("Your request is being processed.")
-    Sys.sleep(5)
-    getstatus <- httr::GET(
-      url = paste0(
-        "https://api.rsc.org/compounds/v1/filter/",
-        query_id, "/status"
-      ),
-      httr::add_headers(.headers = headers)
-    )
-    apistatus <- jsonlite::fromJSON(rawToChar(getstatus$content))$status
-  }
-  if (apistatus == "Complete") {
-    getres <- httr::GET(
-      url = paste0(
-        "https://api.rsc.org/compounds/v1/filter/",
-        query_id, "/results"
-      ),
-      httr::add_headers(.headers = headers)
-    )
-    if (getres$status_code == 200) {
-      out <- jsonlite::fromJSON(rawToChar(getres$content))
-      return(out)
-    }
-    else {
-      stop(httr::http_status(getres)$message)
-    }
-  }
-  else {
-    dict <- data.frame(
-      "Status" = c("Suspended", "Failed", "Not Found"),
-      "Message" = c(
-        "The results could not be compiled within reasonable amount of time. ",
-        "The backend system could not compile the results. ",
-        "The Query ID has not been registered or has expired. "
-      ),
-      stringsAsFactors = FALSE
-    )
-    stop(paste0(dict[which(dict[, 1] %in% apistatus), 2]))
-  }
-}
-
-#' Retrieve ChemSpider ID from compound name
-#'
-#' Query a single compund by name and return a vector of ChemSpider IDs.
-#'
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
-#' @param name character; search term.
-#' @param apikey character; your API key. If NULL (default),
-#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
-#' @param control list; see details.
-#' @return Returns a numeric vector of ChemSpider IDs.
-#' @details Control options available for this function are \code{order_by},
-#' \code{order_direction}. See \code{cs_control()} for a full list of valid
-#' values for these control options.
-#' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & conditions
-#' \url{https://developer.rsc.org/terms}.
-#' @references https://developer.rsc.org/compounds-v1/apis
-#' @note This is a low level function and is not exported.
-#' @examples
-#' \dontrun{
-#' cs_name_csid("ethanol")
-#' }
-#' @noRd
-cs_name_csid <- function(name, apikey = NULL, control = cs_control()) {
-  if (is.null(apikey)) {
-    apikey <- cs_check_key()
-  }
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- list(
-    "name" = name, "orderBy" = control$order_by,
-    "orderDirection" = control$order_direction
-  )
-  body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/name",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)$results
-    return(out)
-  }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
-}
-
-#' Retrieve ChemSpider ID from compound formula
-#'
-#' Query a single compund by formula and return a vector of ChemSpider IDs.
-#'
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
-#' @param formula character; search term.
-#' @param apikey character; your API key. If NULL (default),
-#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
-#' @param control list; see details.
-#' @return Returns a numeric vector of ChemSpider IDs.
-#' @details \code{formula} can be expressed with and without LaTeX syntax.
-#' @details Control options available for this function are \code{datasources},
-#' \code{order_by}, \code{order_direction}. See \code{cs_control()} for a full
-#' list of valid values for these control options.
-#' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & conditions
-#' \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @note This is a low level function and is not exported.
-#' @examples
-#' \dontrun{
-#' cs_formula_csid("C2H6O")
-#' cs_formula_csid("C_{2}H_{6}O")
-#' }
-#' @noRd
-cs_formula_csid <- function(formula, apikey = NULL, control = cs_control()) {
-  if (is.null(apikey)) {
-    apikey <- cs_check_key()
-  }
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- jsonlite::toJSON(list(
-    "formula" = unbox(formula),
-    "dataSources" = control$datasources,
-    "orderBy" = unbox(control$order_by),
-    "orderDirection" = unbox(control$order_direction)), auto_unbox = FALSE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/formula",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)$results
-    return(out)
-  }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
-}
-
-#' Retrieve ChemSpider ID from SMILES
-#'
-#' Query a single compund by SMILES and return a vector of ChemSpider IDs.
-#'
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
-#' @param smiles character; search term.
-#' @param apikey character; your API key. If NULL (default),
-#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
-#' @return Returns a numeric vector of ChemSpider IDs.
-#' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & conditions
-#' \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @note This is a low level function and is not exported.
-#' @examples
-#' \dontrun{
-#' cs_smiles_csid("CC(O)=O")
-#' cs_smiles_csid(c("CC(O)=O","CC=O"))
-#' }
-#' @noRd
-cs_smiles_csid <- function(smiles, apikey = NULL) {
-  if (is.null(apikey)) {
-    apikey <- cs_check_key()
-  }
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- jsonlite::toJSON(list("smiles" = smiles), auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/smiles",
-    httr::add_headers(.headers = headers), body = body
-  ) # filter-smiles-post
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)$results
-    return(out)
-  }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
-  return(out)
-}
-
-#' Retrieve ChemSpider ID from InChI
-#'
-#' Query a single compund by InChI and return a vector of ChemSpider IDs.
-#'
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
-#' @param inchi character; search term.
-#' @param apikey character; your API key. If NULL (default),
-#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
-#' @return Returns a numeric vector of ChemSpider IDs.
-#' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & conditions
-#' \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @note This is a low level function and is not exported.
-#' @examples
-#' \dontrun{
-#' cs_inchi_csid(inchi = "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
-#' cs_inchi_csid(inchi = c(
-#' "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)",
-#' "InChI=1/C2H4O/c1-2-3/h2H,1H3"))
-#' }
-#' @noRd
-cs_inchi_csid <- function(inchi, apikey = NULL) {
-  if (is.null(apikey)) {
-    apikey <- cs_check_key()
-  }
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- jsonlite::toJSON(list("inchi" = inchi), auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/inchi",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)$results
-    return(out)
-  }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
-  return(out)
-}
-
-#' Retrieve ChemSpider ID from InChIKey
-#'
-#' Query a single compund by InChI and return a vector of ChemSpider IDs.
-#'
-#' @importFrom httr POST add_headers http_status
-#' @importFrom jsonlite toJSON
-#' @param inchikey character; search term.
-#' @param apikey character; your API key. If NULL (default),
-#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
-#' @return Returns a numeric vector of ChemSpider IDs.
-#' @note An API key is needed. Register at RSC \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & conditions
-#' \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @note This is a low level function and is not exported.
-#' @examples
-#' \dontrun{
-#' cs_inchikey_csid("QTBSBXVTEAMEQO-UHFFFAOYAR")
-#' cs_inchikey_csid(c("QTBSBXVTEAMEQO-UHFFFAOYAR", "IKHGUXGNUITLKF-UHFFFAOYAB"))
-#' }
-#' @noRd
-cs_inchikey_csid <- function(inchikey, apikey = NULL) {
-  if (is.null(apikey)) {
-    apikey <- cs_check_key()
-  }
-  headers <- c("Content-Type" = "", "apikey" = apikey)
-  body <- jsonlite::toJSON(list("inchikey" = inchikey), auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/filter/inchikey",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- cs_query_csid(postres = postres, headers = headers)$results
-    return(out)
-  }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
-  return(out)
-}
-
-#' Convert between SMILES, InChI, InChiKey, Mol identifiers using ChemSpider
-#'
-#' Submit a single identifier (SMILES, InChI, InChIKey or Mol) and return an
-#' identifier in another format (SMILES, InChI, InChIKey or Mol). Not all
-#' conversions are supported.
-#' @importFrom jsonlite fromJSON toJSON
-#' @importFrom httr POST add_headers http_status
-#' @param input character; the identifier to be converted.
-#' @param from character; the format to be converted from. Valid values are
-#' \code{"smiles"}, \code{"inchi"}, \code{"inchikey"}, \code{"mol"}.
-#' @param to character; the format to be converted to. Valid values are
-#' \code{"smiles"}, \code{"inchi"}, \code{"inchikey"}, \code{"mol"}.
-#' @param apikey character; your API key. If NULL (default),
-#' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
-#' @details Not all conversions are supported. Allowed conversions:
-#' \itemize{
-#' \item InChI <-> InChIKey
-#' \item InChI <-> SMILES
-#' \item InChI -> Mol file
-#' \item InChIKey <-> Mol file
-#' }
-#' @return Returns a character vector of length one containing the converted
-#' identifier.
-#' @note An API key is needed. Register at \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
-#' can be found at \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
-#' @seealso This is a low level function and is not exported. See
-#' \code{\link{cs_convert}} for the top level function.
-#' @seealso \code{\link{parse_mol}}
-#' @examples
-#' \dontrun{
-#' cs_convert_multiple("CC(=O)O", "smiles", "inchi")
-#' cs_convert_multiple("InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)", "inchi",
-#' "inchikey")
-#' cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol")
-#' cs_convert_multiple("QTBSBXVTEAMEQO-UHFFFAOYSA-N", "inchikey", "mol",
-#' parse = TRUE)
-#' }
-#' @noRd
-cs_convert_multiple <- function(input, from, to, apikey = NULL) {
-  if (is.null(apikey)) {
-    apikey <- cs_check_key()
-  }
-  headers <- c(`Content-Type` = "", `apikey` = apikey)
-  body <- list(
-    "input" = input, "inputFormat" = from,
-    "outputFormat" = to
-  )
-  body <- jsonlite::toJSON(body, auto_unbox = TRUE)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/tools/convert",
-    httr::add_headers(.headers = headers), body = body
-  )
-  if (postres$status_code == 200) {
-    out <- jsonlite::fromJSON(rawToChar(postres$content))$output
-    return(out)
-  }
-  else {
-    stop(httr::http_status(postres)$message)
-  }
   return(out)
 }
 
@@ -585,6 +314,7 @@ cs_convert_multiple <- function(input, from, to, apikey = NULL) {
 #' @param query character; query ID.
 #' @param from character; type of query ID.
 #' @param to character; type to convert to.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Not all conversions are supported. Allowed conversions:
@@ -621,32 +351,22 @@ cs_convert_multiple <- function(input, from, to, apikey = NULL) {
 #' )
 #' cs_convert(160, from = "csid", to = "smiles")
 #' }
-cs_convert <- function(query, from, to, apikey = NULL) {
+cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
   valid <- c("csid", "inchikey", "inchi", "smiles", "mol")
   from <- match.arg(from, choices = valid)
   to <- match.arg(to, choices = valid)
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   cs_compinfo_dict <- data.frame(
     "name" = c("inchi", "inchikey", "smiles", "mol"),
     "cs_compinfo" = c("InChI", "InChIKey", "SMILES", "Mol2D"),
     stringsAsFactors = FALSE
   )
   to2 <- cs_compinfo_dict[which(cs_compinfo_dict$name == to), 2]
-  cs_convert_router <- function(from, to) {
-    if (from == to) {
-      return("identity")
-    }
-    if (from == "csid") {
-      return("cs_compinfo")
-    }
-    if (to == "csid") {
-      return(paste("cs", from, to, sep = "_"))
-    }
-    if (from != "csid" & to != "csid") {
-      return("cs_convert_multiple")
-    }
+  if (from == to) {
+    return(query)
   }
   if (from == "csid") {
     out <- cs_compinfo(query, fields = to2, apikey = apikey)
@@ -656,21 +376,69 @@ cs_convert <- function(query, from, to, apikey = NULL) {
     else {
       out <- out[, 1]
     }
+    return(out)
   }
-  else {
-    out <- unname(sapply(query, function(x) {
-      if (is.na(x)) return(NA)
-      switch(cs_convert_router(from, to),
-             identity = query,
-             cs_convert_multiple = cs_convert_multiple(
-               x, from = from, to = to, apikey = apikey
-             ),
-             cs_inchikey_csid = cs_inchikey_csid(x, apikey = apikey),
-             cs_inchi_csid = cs_inchi_csid(x, apikey = apikey),
-             cs_smiles_csid = cs_smiles_csid(x, apikey = apikey),
-             cs_mol_csid = stop("Conversion not supported."))
-      }))
+  if (to == "csid") {
+    if (from == "mol") {
+      if (verbose) stop("Conversion not supported. Returning NA.")
+      return(NA_integer_)
     }
+    else {
+      out <- get_csid(query, from = from, apikey = apikey)$csid
+      return(out)
+    }
+  }
+  if (from == "inchikey" & to == "smiles") {
+    if (verbose) stop("Conversion not supported. Returning NA.")
+    return(NA)
+  }
+  if (from == "smiles" & to %in% c("inchikey", "mol")) {
+    if (verbose) stop("Conversion not supported. Returning NA.")
+    return(NA)
+  }
+  if (from == "mol" & to %in% c("inchi", "smiles")) {
+    if (verbose) stop("Conversion not supported. Returning NA.")
+    return(NA)
+  }
+  foo <- function(x, from, to, verbose, apikey) {
+    if (is.na(x)) {
+      if (verbose) webchem_message("na")
+      return(NA)
+    }
+    headers <- c(`Content-Type` = "", `apikey` = apikey)
+    body <- list(
+      "input" = query, "inputFormat" = from,
+      "outputFormat" = to
+    )
+    if (verbose) webchem_message("query", x, appendLF = FALSE)
+    body <- jsonlite::toJSON(body, auto_unbox = TRUE)
+    qurl <- "https://api.rsc.org/compounds/v1/tools/convert"
+    postres <- try(httr::RETRY("POST",
+                               url = qurl,
+                               httr::add_headers(.headers = headers),
+                               body = body,
+                               terminate_on = 404,
+                               quiet = TRUE), silent = TRUE)
+    if (inherits(postres, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (postres$status_code == 200) {
+      if (verbose) message(httr::message_for_status(postres))
+      out <- jsonlite::fromJSON(rawToChar(postres$content))$output
+      return(out)
+    }
+    else {
+      if (verbose) message(httr::message_for_status(postres))
+      return(NA)
+    }
+  }
+  out <- unname(sapply(query,
+                       foo,
+                       from = from,
+                       to = to,
+                       verbose = verbose,
+                       apikey = apikey))
   return(out)
 }
 
@@ -678,11 +446,9 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #'
 #' Submit a ChemSpider ID (CSID) and the fields you are interested in, and
 #' retrieve the record details for your query.
-#' @importFrom jsonlite toJSON
-#' @importFrom httr POST add_headers
-#' @importFrom dplyr left_join
 #' @param csid numeric; can be obtained using \code{\link{get_csid}}
 #' @param fields character; see details.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @param apikey character; your API key. If NULL (default),
 #' \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @details Valid values for \code{fields} are \code{"SMILES"},
@@ -703,8 +469,11 @@ cs_convert <- function(query, from, to, apikey = NULL) {
 #' cs_compinfo(171, c("SMILES", "CommonName"))
 #' cs_compinfo(171:182, "SMILES")
 #' }
-cs_compinfo <- function(csid, fields, apikey = NULL) {
-  if (mean(is.na(csid)) == 1) return(data.frame(id = NA))
+cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
+  if (mean(is.na(csid)) == 1) {
+    if (verbose) webchem_message("na")
+    return(NA)
+  }
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
@@ -724,19 +493,32 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
     "recordIds" = csid[!is.na(csid)], "fields" = fields
   )
   body <- jsonlite::toJSON(body)
-  postres <- httr::POST(
-    url = "https://api.rsc.org/compounds/v1/records/batch",
-    httr::add_headers(.headers = headers), body = body
-  )
+  if (verbose) webchem_message("query_all", appendLF = FALSE)
+  qurl <- "https://api.rsc.org/compounds/v1/records/batch"
+  postres <- try(httr::RETRY("POST",
+                             url = qurl,
+                             httr::add_headers(.headers = headers),
+                             body = body,
+                             terminate_on = 404,
+                             quiet = TRUE), silent = TRUE)
+  if (inherits(postres, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
   if (postres$status_code == 200) {
     res <- jsonlite::fromJSON(rawToChar(postres$content))$records
-    if (length(res) == 0) return(data.frame(id = NA))
+    if (length(res) == 0) {
+      if (verbose) webchem_message("not_found")
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(postres))
     out <- data.frame(id = csid)
     out <- dplyr::left_join(out, res, by = "id")
     return(out)
   }
   else {
-    stop(httr::http_status(postres)$message)
+    if (verbose) message(httr::message_for_status(postres))
+    return(NA)
   }
 }
 
@@ -744,7 +526,6 @@ cs_compinfo <- function(csid, fields, apikey = NULL) {
 #'
 #' Get extended info from ChemSpider, see \url{https://www.chemspider.com/}
 #' @import xml2
-#' @importFrom stats rgamma
 #' @param csid character,  ChemSpider ID.
 #' @param token character; security token.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -775,6 +556,7 @@ cs_extcompinfo <- function(csid, token, verbose = TRUE, ...) {
   .Deprecated("cs_compinfo()", old = "cs_extcompinfo()",
               msg = "'cs_extcompinfo' is deprecated.
 use 'cs_commpinfo()' instead.")
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   foo <- function(csid, token, verbose) {
     if (is.na(csid)) {
       out <- as.list(rep(NA, 13))
@@ -788,7 +570,7 @@ use 'cs_commpinfo()' instead.")
     qurl <- paste0(baseurl, 'CSID=', csid, '&token=', token)
     if (verbose)
       message(qurl)
-    Sys.sleep(rgamma(1, shape = 15, scale = 1/45))
+    webchem_sleep(type = 'API')
     h <- try(read_xml(qurl), silent = TRUE)
     if (inherits(h, "try-error")) {
       warning('CSID not found... Returning NA.')
@@ -836,9 +618,6 @@ use 'cs_commpinfo()' instead.")
 #' can be found at \url{https://developer.rsc.org/terms}.
 #' @references \url{https://developer.rsc.org/compounds-v1/apis}
 #' @seealso \code{\link{get_csid}}, \code{\link{cs_check_key}}
-#' @importFrom httr GET add_headers message_for_status content
-#' @importFrom jsonlite fromJSON
-#' @importFrom base64enc base64decode
 #' @export
 #' @examples
 #' \dontrun{
@@ -854,22 +633,28 @@ cs_img <- function(csid,
     apikey <- cs_check_key()
   }
   verbose <- match.arg(as.character(verbose), choices = c(TRUE, FALSE))
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
   foo <- function(csid, dir = dir, overwrite = overwrite, apikey = apikey,
                   verbose = verbose) {
-    if (verbose) message("Searching ", csid, ". ", appendLF = FALSE)
+    if (verbose) webchem_message("query", csid, appendLF = FALSE)
     if (is.na(csid)) {
-      if (verbose) {
-        message("Invalid input.")
-      }
+      if (verbose) webchem_message("na")
       return(tibble(query = csid, path = NA))
     }
+    path <- paste0(dir, "/", csid, ".png")
+    url <- paste0("https://api.rsc.org/compounds/v1/records/", csid, "/image")
+    headers <- c("Content-Type" = "", "apikey" = apikey)
+    res <- try(httr::RETRY("GET",
+                           url,
+                           httr::add_headers(.headers = headers),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = FALSE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+    }
     else {
-      path <- paste0(dir, "/", csid, ".png")
-      url <- paste0("https://api.rsc.org/compounds/v1/records/", csid, "/image")
-      headers <- c("Content-Type" = "", "apikey" = apikey)
-      res <- httr::GET(url, httr::add_headers(.headers = headers))
       if (verbose) message(httr::message_for_status(res))
-      if (res$status_code < 300) {
+      if (res$status_code == 200) {
         cont <- httr::content(res, type = "image", encoding = "base64")
         cont <- unlist(jsonlite::fromJSON(rawToChar(cont)))
         cont <- base64enc::base64decode(cont)

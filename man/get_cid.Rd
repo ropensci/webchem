@@ -24,7 +24,7 @@ get_cid(
 \code{"substance"}, \code{"assay"}.}
 
 \item{match}{character; How should multiple hits be handled?, \code{"all"}
-all matches are returned, \code{"best"} the best matching is returned,
+all matches are returned, \code{"first"} the first matching is returned,
 \code{"ask"} enters an interactive mode and the user is asked for input,
 \code{"na"} returns NA if multiple hits are found.}
 

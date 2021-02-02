@@ -137,7 +137,7 @@ cir_query <- function(identifier, representation = "smiles",
     if (!is.null(resolver)) {
       qurl <- paste0(qurl, '?resolver=', resolver)
     }
-    Sys.sleep(1.5)
+    webchem_sleep(type = 'API')
     h <- try(httr::RETRY("GET",
                          qurl,
                          httr::user_agent(webchem_url()),
@@ -373,7 +373,7 @@ cir_img <- function(query,
     qurl <- URLencode(paste0(qurl, opts))
     path <- file.path(dir, paste0(query, ".", sub("format=", "", format)))
     # query
-    Sys.sleep(1)
+    webchem_sleep(type = 'API')
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     res <- try(httr::RETRY("GET",
                            qurl,

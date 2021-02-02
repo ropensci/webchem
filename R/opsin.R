@@ -41,7 +41,7 @@ opsin_query <- function(query, verbose = TRUE, ...){
     out <- 'json'
     qurl <- paste0(baseurl, query_u, '.', out)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    Sys.sleep( rgamma(1, shape = 5, scale = 1/10))
+    webchem_sleep(type = 'API')
     res <- try(httr::RETRY("GET",
                            qurl,
                            user_agent(webchem_url()),
