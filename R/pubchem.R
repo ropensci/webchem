@@ -501,7 +501,7 @@ pc_synonyms <- function(query,
     }
   }
   out <- lapply(query, foo, from = from, verbose = verbose)
-  out <- setNames(out, query)
+  names(out) <- query
   if (!is.null(choices)) #if only one choice is returned, convert list to vector
     out <- unlist(out)
   return(out)
