@@ -158,7 +158,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
     }
   }
   out <- lapply(query, function(x) foo(x, from = from, verbose = verbose))
-  out <- setNames(out, query)
+  names(out) <- query
   class(out) <- c("aw_query", "list")
   return(out)
 }

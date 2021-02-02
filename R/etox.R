@@ -251,7 +251,7 @@ etox_basic <- function(id, verbose = TRUE) {
     }
     }
   out <- lapply(id, foo, verbose = verbose)
-  out <- setNames(out, id)
+  names(out) <- id
   class(out) <- c('etox_basic', 'list')
   return(out)
 }
@@ -355,7 +355,7 @@ etox_targets <- function(id, verbose = TRUE) {
     }
   }
   out <- lapply(id, foo, verbose = verbose)
-  out <- setNames(out, id)
+  names(out) <- id
   return(out)
 }
 
@@ -447,6 +447,6 @@ etox_tests <- function(id, verbose = TRUE) {
     }
   }
   out <- lapply(id, foo, verbose = verbose)
-  out <- setNames(out, id)
+  names(out) <- id
   return(out)
 }

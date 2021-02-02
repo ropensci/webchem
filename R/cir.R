@@ -172,7 +172,7 @@ cir_query <- function(identifier, representation = "smiles",
   }
   out <- lapply(identifier, foo, representation = representation,
                 resolver = resolver, first = first, verbose = verbose)
-  out <- setNames(out, identifier)
+  names(out) <- identifier
   return(out)
 }
 

@@ -105,7 +105,7 @@ find_db <- function(query, from,
   }
 
   out <- lapply(sources, foo, query = query, from = from)
-  out <- setNames(out, names(sources))
+  names(out) <- names(sources)
   out <- dplyr::bind_cols(query = query, out)
 
   if (plot) {

@@ -355,7 +355,7 @@ nist_ri <- function(query,
 
   querynames <- query
   querynames [is.na(querynames)] <- ".NA"
-  ri_xmls <- setNames(ri_xmls, querynames)
+  names(ri_xmls) <- querynames
 
   ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
     dplyr::mutate(query = na_if(query, ".NA"))

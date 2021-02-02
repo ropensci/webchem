@@ -232,7 +232,7 @@ ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
     }
   }
   out <- lapply(query, foo, from = from, match = match, verbose = verbose)
-  out <- setNames(out, query)
+  names(out) <- query
   class(out) <- c('ci_query', 'list')
   return(out)
 }
