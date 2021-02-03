@@ -262,7 +262,7 @@ etox_basic <- function(id, verbose = TRUE) {
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality
 #' Targets \url{https://webetox.uba.de/webETOX/index.do} for quality targets
 #'
-#' @import xml2 RCurl
+#' @import xml2
 #' @importFrom utils read.table
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?
@@ -365,7 +365,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
 #' \url{https://webetox.uba.de/webETOX/index.do} for tests
 #'
-#' @import xml2 RCurl
+#' @import xml2
 #' @importFrom utils read.table
 #' @param id character; ETOX ID
 #' @param verbose logical; print message during processing to console?

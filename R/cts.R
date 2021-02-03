@@ -78,7 +78,7 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #' Convert Ids using Chemical Translation Service (CTS)
 #'
 #' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
-#' @import RCurl jsonlite
+#' @import jsonlite
 #' @importFrom utils URLencode
 #' @param query character; query ID.
 #' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},

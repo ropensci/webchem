@@ -10,7 +10,8 @@
   "codeRepository": "https://github.com/ropensci/webchem",
   "relatedLink": [
     "https://docs.ropensci.org/webchem",
-    "https://CRAN.R-project.org/package=webchem"
+    "https://CRAN.R-project.org/package=webchem",
+    "https://docs.ropensci.org/webchem/"
   ],
   "issueTracker": "https://github.com/ropensci/webchem/issues",
   "license": "https://spdx.org/licenses/MIT",
@@ -20,7 +21,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.3 (2020-02-29)",
+  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -64,6 +65,11 @@
       "@type": "Person",
       "givenName": "Jan",
       "familyName": "Stanstrup"
+    },
+    {
+      "@type": "Person",
+      "givenName": "João Vitor",
+      "familyName": "F Cavalcante"
     },
     {
       "@type": "Person",
@@ -171,6 +177,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=plot.matrix"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "usethis",
+      "name": "usethis",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=usethis"
     }
   ],
   "softwareRequirements": [
@@ -215,18 +233,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rvest"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "RCurl",
-      "name": "RCurl",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=RCurl"
     },
     {
       "@type": "SoftwareApplication",
