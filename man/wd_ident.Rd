@@ -2,7 +2,7 @@
 % Please edit documentation in R/wikidata.R
 \name{wd_ident}
 \alias{wd_ident}
-\title{Retrieve Indentifiers from Wikidata}
+\title{Retrieve identifiers from Wikidata}
 \usage{
 wd_ident(id, verbose = TRUE)
 }
@@ -13,10 +13,10 @@ wd_ident(id, verbose = TRUE)
 }
 \value{
 A data.frame of identifiers. Currently these are 'smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-'drugbank', 'zvg', 'chebi', 'chembl', 'unii' and source_url.
+'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids' and source_url.
 }
 \description{
-Retrieve Indentifiers from Wikidata
+Retrieve identifiers from Wikidata
 }
 \note{
 Only matches in labels are returned. If more than one unique hit is found,
