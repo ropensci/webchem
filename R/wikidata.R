@@ -195,7 +195,7 @@ wd_ident <- function(id, verbose = TRUE){
 
       if (length(out) == 0) {
         if (verbose) webchem_message("not_found")
-        out <- as.list(rep(NA, 13))
+        out <- as.list(rep(NA, 15))
         names(out) <- c(vars_out, 'source_url')
         return(out)
       }

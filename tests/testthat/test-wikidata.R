@@ -65,7 +65,7 @@ test_that("wd integration test", {
   f <- wd_ident(get_wdid('xxxxxxxAX', language = 'en', match = 'best')$wdid)
 
   expect_equal(d$cas, "110-54-3")
-  expect_equal(ncol(d), 14)
+  expect_equal(ncol(d), 16)
   expect_s3_class(d, 'data.frame')
   expect_true(all(is.na(f[1, ])))
 })
