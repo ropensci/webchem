@@ -20,12 +20,12 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
+[![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem) 
 [![R build status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
 [![Coverage](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://codecov.io/gh/ropensci/webchem/branch/master) 
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
-[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
 
 <!-- badges: end -->
 

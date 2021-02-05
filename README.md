@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
 [![R build
 status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
@@ -12,7 +13,6 @@ status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](ht
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
-[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
 
 <!-- badges: end -->
 
@@ -52,7 +52,7 @@ documentation
     (CIR)](http://cactus.nci.nih.gov/chemical/structure)
   - [Chemical Translation Service
     (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-  - [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/)
+  - [ChemIDplus](https://chem.nlm.nih.gov/chemidplus/)
   - [ChemSpider](http://www.chemspider.com/) (requires an [API
     token](\(https://developer.rsc.org/\)))
   - [ETOX](http://webetox.uba.de/webETOX/index.do)
