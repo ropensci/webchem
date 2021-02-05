@@ -1,10 +1,12 @@
-# webchem 1.1.0.9001
+# webchem 1.1.1.
+
+## NEW FEATURES
+
+* Fetch LIPID MAPS and SwissLipids identifiers from Wikidata.
 
 ## BUG FIXES
 
 * Fix get_csid() so it doesn't break when a query is invalid.
-* Typo fix in Wikidata.R
-* Added support for fetching LIPID MAPS and SwissLipids identifiers from Wikidata.
 
 # webchem 1.1.0.
 
