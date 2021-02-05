@@ -39,7 +39,21 @@ test_that("wd_ident returns correct results", {
   expect_true(is.na(o1$smiles[4]))
   expect_equal(o1$cas[1], '50-29-3')
   expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'source_url', 'query'))
+                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids', 'source_url', 'query'))
+})
+
+test_that("wd_ident returns correct results for two lipids", {
+  skip_on_cran()
+  skip_if_not(up, "Wikidata service is down")
+
+  id <- c( "Q27089367", "Q410888")
+  o1 <- wd_ident(id)
+  expect_s3_class(o1, 'data.frame')
+  expect_equal(nrow(o1), 2)
+  expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
+                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids', 'source_url', 'query'))
+  expect_equal(o1$swisslipids[1], 'SLM:000000510')
+  expect_equal(o1$lipidmaps[2], 'LMPR0102010003')
 })
 
 
@@ -51,7 +65,7 @@ test_that("wd integration test", {
   f <- wd_ident(get_wdid('xxxxxxxAX', language = 'en', match = 'best')$wdid)
 
   expect_equal(d$cas, "110-54-3")
-  expect_equal(ncol(d), 14)
+  expect_equal(ncol(d), 16)
   expect_s3_class(d, 'data.frame')
   expect_true(all(is.na(f[1, ])))
 })
