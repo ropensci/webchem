@@ -98,6 +98,8 @@ issue or making a pull request to edit this section\!
     Drosophila melanogaster Odorant Responses. Scientific Reports
     6:21841. <https://doi.org/10.1038/srep21841>
 
+### Citation
+
 If you use `webchem` in a publication, please cite our paper:
 
   - Szöcs E, Stirling T, Scott ER, et al (2020) webchem: An R Package to

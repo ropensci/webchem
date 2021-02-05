@@ -84,6 +84,8 @@ Have you used `webchem` in your work?  Please let us know by opening an issue or
 - Brokl M, Morales V, Bishop L, et al (2019) Comparison of Mainstream Smoke Composition from CR20 Resin Filter and Empty-Cavity Filter Cigarettes by Headspace SPME Coupled with GC×GC TOFMS and Chemometric Analysis. Beiträge zur Tabakforschung International/Contributions to Tobacco Research 28:231–249. https://doi.org/10.2478/cttr-2019-0004
 - Münch D, Galizia CG (2016) DoOR 2.0 - Comprehensive Mapping of Drosophila melanogaster Odorant Responses. Scientific Reports 6:21841. https://doi.org/10.1038/srep21841
 
+### Citation
+
 If you use `webchem` in a publication, please cite our paper:
 
 - Szöcs E, Stirling T, Scott ER, et al (2020) webchem: An R Package to Retrieve Chemical Information from the Web. J Stat Soft 93:. https://doi.org/10.18637/jss.v093.i13
