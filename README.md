@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
 [![R build
 status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
@@ -12,7 +13,6 @@ status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](ht
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
-[![DOI](https://zenodo.org/badge/17223/ropensci/webchem.svg)](https://zenodo.org/badge/latestdoi/17223/ropensci/webchem)
 
 <!-- badges: end -->
 
@@ -26,17 +26,6 @@ format of `source_functionality`, with the exception of functions that
 retrieve database identifiers which follow the format of
 `get_identifier`. e.g.`cs_compinfo` uses ChemSpider to retrieve compound
 informations and `get_csid()` retrieves ChemSpider IDs.
-
-## Fill out the survey\!
-
-Do you use chemical information databases in your work? Help us help you
-by filling out our short survey at
-<https://forms.gle/V7dfGGn73dkesn5L6>.
-
-The `webchem` survey allows us to learn which databases you use and how
-you interact with chemical data. This is extremely valuable information
-for us and guides our development efforts. The survey takes about 5
-minutes to fill out.
 
 ## Chemical databases currently accessed by webchem
 
@@ -52,7 +41,7 @@ documentation
     (CIR)](http://cactus.nci.nih.gov/chemical/structure)
   - [Chemical Translation Service
     (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-  - [ChemIDplus](http://chem.sis.nlm.nih.gov/chemidplus/)
+  - [ChemIDplus](https://chem.nlm.nih.gov/chemidplus/)
   - [ChemSpider](http://www.chemspider.com/) (requires an [API
     token](\(https://developer.rsc.org/\)))
   - [ETOX](http://webetox.uba.de/webETOX/index.do)
@@ -109,6 +98,8 @@ issue or making a pull request to edit this section\!
     Drosophila melanogaster Odorant Responses. Scientific Reports
     6:21841. <https://doi.org/10.1038/srep21841>
 
+### Citation
+
 If you use `webchem` in a publication, please cite our paper:
 
   - Szöcs E, Stirling T, Scott ER, et al (2020) webchem: An R Package to
@@ -120,18 +111,6 @@ If you use `webchem` in a publication, please cite our paper:
 Without the fantastic web services `webchem` wouldn’t be here.
 Therefore, kudos to the web service providers and developers\! Please
 remember to acknowledge these data resources in your work using
-`webchem`.
-
-### Related Projects
-
-You can find some related packages in the [ChemPhys CRAN Task
-View](https://cran.r-project.org/web/views/ChemPhys.html)
-
-If you’re more familiar with Python you should check out [Matt
-Swains](https://github.com/mcs07) repositories:
-[ChemSpiPy](https://github.com/mcs07/ChemSpiPy),
-[PubChemPy](https://github.com/mcs07/PubChemPy) and
-[CirPy](https://github.com/mcs07/CIRpy) provide similar functionality as
 `webchem`.
 
 ### Want to contribute?

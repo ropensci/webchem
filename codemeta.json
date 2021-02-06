@@ -15,7 +15,7 @@
   ],
   "issueTracker": "https://github.com/ropensci/webchem/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -399,5 +399,6 @@
         }
       }
     }
-  ]
+  ],
+  "developmentStatus": "https://www.repostatus.org/#active"
 }
