@@ -64,7 +64,7 @@
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
-#' <doi:10.18637/jss.v093.i13>.
+#' \doi{10.18637/jss.v093.i13}.
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
@@ -296,7 +296,7 @@ get_cid <-
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
-#' <doi:10.18637/jss.v093.i13>.
+#' \doi{10.18637/jss.v093.i13}.
 #' @note Please respect the Terms and Conditions of the National Library of
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
@@ -541,7 +541,7 @@ pc_synonyms <- function(query,
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
-#' (2019). https://doi.org/10.1186/s13321-019-0375-2.
+#' (2019). \doi{10.1186/s13321-019-0375-2}.
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_prop}}
 #' @examples
 #' # might fail if API is not available
@@ -592,7 +592,7 @@ pc_sect <- function(id,
 #' \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
-#' (2019). https://doi.org/10.1186/s13321-019-0375-2.
+#' (2019). \doi{10.1186/s13321-019-0375-2}.
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
@@ -671,7 +671,7 @@ pc_page <- function(id,
 #' be found at \url{https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72}.
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 #' access to chemical annotations integrated in PubChem. J Cheminform 11, 56
-#' (2019). https://doi.org/10.1186/s13321-019-0375-2.
+#' (2019). \doi{10.1186/s13321-019-0375-2}.
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
