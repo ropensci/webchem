@@ -27,7 +27,7 @@ pan_query(
 }
 \value{
 a named list of 73 entries,
-  see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
+  see \url{https://www.pesticideinfo.org/about/overview.html} for more information.
   If \code{match="best"} an additional entry \code{match_score} with the normalized
   Levenshtein distance (0 = perfect match, 1 = worst match).
 
@@ -64,7 +64,7 @@ Irrigation Water Guidelines (ug/L); Livestock Water Guidelines (ug/L);
 Chemical Name; matching synonym; source URL
 }
 \description{
-Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/}).
+Retrieve information from the PAN database (\url{https://www.pesticideinfo.org/}).
 This function is currently broken.
 }
 \examples{

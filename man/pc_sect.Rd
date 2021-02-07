@@ -68,7 +68,7 @@ pc_sect("1ZHY_A", "Sequence", "protein")
 \references{
 Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
 access to chemical annotations integrated in PubChem. J Cheminform 11, 56
-(2019). https://doi.org/10.1186/s13321-019-0375-2.
+(2019). \doi{10.1186/s13321-019-0375-2}.
 }
 \seealso{
 \code{\link{get_cid}}, \code{\link{pc_prop}}
