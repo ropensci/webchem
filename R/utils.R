@@ -21,7 +21,7 @@
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
-#' <doi:10.18637/jss.v093.i13>.
+#' \doi{10.18637/jss.v093.i13}.
 #' @export
 #' @examples
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N')
@@ -190,7 +190,7 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
-#' <doi:10.18637/jss.v093.i13>.
+#' \doi{10.18637/jss.v093.i13}.
 #'
 #' @export
 #' @examples
@@ -336,7 +336,7 @@ extr_num <- function(x) {
 #' @references Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 #' a toolset for transforming SD/Molfile structure information into R objects.
 #' Source Code for Biology and Medicine, 7, 12.
-#' \url{https://doi.org/10.1186/1751-0473-7-12}
+#' \doi{10.1186/1751-0473-7-12}
 #' @export
 
 parse_mol <- function(string) {

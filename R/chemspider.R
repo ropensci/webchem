@@ -164,7 +164,7 @@ cs_control <- function(datasources = vector(),
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
-#' <doi:10.18637/jss.v093.i13>.
+#' \doi{10.18637/jss.v093.i13}.
 #'
 #' @export
 #' @examples
@@ -336,7 +336,7 @@ get_csid <- function(query,
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
-#' <doi:10.18637/jss.v093.i13>.
+#' \doi{10.18637/jss.v093.i13}.
 #' @export
 #' @examples
 #' \dontrun{

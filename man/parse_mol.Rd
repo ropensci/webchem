@@ -33,5 +33,5 @@ Parse Molfile (as returned by ChemSpider) into a R-object.
 Grabner, M., Varmuza, K., & Dehmer, M. (2012). RMol:
 a toolset for transforming SD/Molfile structure information into R objects.
 Source Code for Biology and Medicine, 7, 12.
-\url{https://doi.org/10.1186/1751-0473-7-12}
+\doi{10.1186/1751-0473-7-12}
 }

@@ -309,7 +309,7 @@ tidy_ritable <- function(ri_xml) {
 #'   "Retention Indices" in NIST Chemistry WebBook, NIST Standard Reference
 #'   Database Number 69, Eds. P.J. Linstrom and W.G. Mallard,
 #'   National Institute of Standards and Technology, Gaithersburg MD, 20899,
-#'   \url{https://doi.org/10.18434/T4D303}.
+#'   \doi{10.18434/T4D303}.
 #'
 #' @export
 #' @note Copyright for NIST Standard Reference Data is governed by the Standard

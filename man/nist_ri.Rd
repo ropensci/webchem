@@ -82,7 +82,7 @@ NIST Mass Spectrometry Data Center, William E. Wallace, director,
   "Retention Indices" in NIST Chemistry WebBook, NIST Standard Reference
   Database Number 69, Eds. P.J. Linstrom and W.G. Mallard,
   National Institute of Standards and Technology, Gaithersburg MD, 20899,
-  \url{https://doi.org/10.18434/T4D303}.
+  \doi{10.18434/T4D303}.
 }
 \seealso{
 \code{\link{is.cas}} \code{\link{as.cas}}
