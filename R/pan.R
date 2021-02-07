@@ -1,6 +1,6 @@
 #' Query the PAN Pesticide database
 #'
-#' Retrieve information from the PAN database (\url{http://www.pesticideinfo.org/}).
+#' Retrieve information from the PAN database (\url{https://www.pesticideinfo.org/}).
 #' This function is currently broken.
 #' @import xml2
 #' @importFrom utils adist
@@ -13,7 +13,7 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
 #' @return a named list of 73 entries,
-#'   see \url{http://www.pesticideinfo.org/Docs/ref_overview.html} for more information.
+#'   see \url{https://www.pesticideinfo.org/about/overview.html} for more information.
 #'   If \code{match="best"} an additional entry \code{match_score} with the normalized
 #'   Levenshtein distance (0 = perfect match, 1 = worst match).
 #'
@@ -84,7 +84,7 @@ pan_query <- function(query, from = c("name", "cas"),
       if (verbose) webchem_message("na")
       return(NA)
     }
-    baseurl <- 'http://www.pesticideinfo.org/List_Chemicals.jsp?'
+    baseurl <- 'https://www.pesticideinfo.org/List_Chemicals.jsp?'
     baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',
                     'dDPR_Chem_Code=y&dUseList=y&dClassList=y&dMol_weight=y&',
                     'dEPA_Reg=y&dCA_Reg=y&dPIC=y&dPOP=y&dWHOObsolete=y&dEPA_HAP=y&',
@@ -141,7 +141,7 @@ pan_query <- function(query, from = c("name", "cas"),
       # return also source url
       # xmlview::xml_view(nd, add_filter = TRUE)
       source_url <- xml_attr(xml_find_all(nd, ".//a[contains(., 'Details')]"), 'href')
-      out[['source_url']] <- paste0('http://www.pesticideinfo.org/', source_url)
+      out[['source_url']] <- paste0('https://www.pesticideinfo.org/', source_url)
 
       ind <-
         matcher(
