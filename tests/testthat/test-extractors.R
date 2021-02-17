@@ -13,10 +13,9 @@ test_that("extractors work with chemid", {
   skip_on_cran()
   skip_if_not(ping_service("ci"), "CHEMID service is down")
 
-  out_ci_query <- ci_query(c('Aspirin', 'Triclosan'), from = 'name')
+  out_ci_query <- ci_query(c("BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+                             "XEFQLINVKFYRCS-UHFFFAOYSA-N"), from = "inchikey")
   expect_equivalent(cas(out_ci_query),  c("50-78-2", "3380-34-5"))
-  expect_equivalent(inchikey(out_ci_query),
-                    c("BSYNRYMUTXBXSQ-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-N"))
   expect_equivalent(smiles(out_ci_query), c("CC(=O)", "Oc1cc(Cl)"))
 })
 
