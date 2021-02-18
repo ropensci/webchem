@@ -42,7 +42,7 @@
 get_etoxid <- function(query,
                        from = c("name", "cas", "ec", "gsbl", "rtecs"),
                        match = c("all", "best", "first", "ask", "na"),
-                       verbose = TRUE) {
+                       verbose = getOption("verbose")) {
 
   if (!ping_service("etox")) stop(webchem_message("service_down"))
 
@@ -168,7 +168,7 @@ get_etoxid <- function(query,
 #' # extract cas numbers
 #' sapply(out, function(y) y$cas)
 #' }
-etox_basic <- function(id, verbose = TRUE) {
+etox_basic <- function(id, verbose = getOption("verbose")) {
 
   if (!ping_service("etox")) stop(webchem_message("service_down"))
 
@@ -194,7 +194,7 @@ etox_basic <- function(id, verbose = TRUE) {
     if (res$status_code == 200) {
       tt <- try(read_html(res), silent = TRUE)
       if (inherits(tt, 'try-error')) {
-        webchem_message("not_found")
+        if (verbose) webchem_message("not_found")
         return(NA)
       }
       tabs <- try(suppressWarnings(html_table(tt, fill = TRUE)), silent = TRUE)
@@ -289,7 +289,7 @@ etox_basic <- function(id, verbose = TRUE) {
 #' etox_targets( c("20179", "9051"))
 #'
 #' }
-etox_targets <- function(id, verbose = TRUE) {
+etox_targets <- function(id, verbose = getOption("verbose")) {
 
   if (!ping_service("etox")) stop(webchem_message("service_down"))
 
@@ -386,7 +386,7 @@ etox_targets <- function(id, verbose = TRUE) {
 #' 'Endpoint', 'Value', 'Unit')]
 #' etox_tests( c("20179", "9051"))
 #' }
-etox_tests <- function(id, verbose = TRUE) {
+etox_tests <- function(id, verbose = getOption("verbose")) {
 
   if (!ping_service("etox")) stop(webchem_message("service_down"))
 
@@ -412,7 +412,7 @@ etox_tests <- function(id, verbose = TRUE) {
     if (res$status_code == 200) {
       tt <- try(read_html(res), silent = TRUE)
       if (inherits(tt, 'try-error')) {
-        webchem_message("not_found")
+        if (verbose) webchem_message("not_found")
         return(NA)
       }
       link2 <- xml_attrs(xml_find_all(tt, "//a[contains(.,'Tests') and contains(@href,'stoff')]"), 'href')
