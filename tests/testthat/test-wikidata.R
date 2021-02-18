@@ -15,8 +15,9 @@ test_that("get_wdid returns correct results", {
   expect_s3_class(o3, 'data.frame')
   expect_s3_class(o4, 'data.frame')
 
-  expect_equivalent(o1$wdid, c("Q163648", "Q57731093", NA, 'Q47512'))
-  expect_equivalent(o2$wdid[1:2], c("Q163648", "Q949424"))
+  expect_equal(o1$wdid, c("Q163648", "Q57731093", NA, 'Q47512'),
+               ignore_attr = TRUE)
+  expect_equal(o2$wdid[1:2], c("Q163648", "Q949424"), ignore_attr = TRUE)
 })
 
 test_that("get_wdid() handles NAs", {
@@ -38,8 +39,10 @@ test_that("wd_ident returns correct results", {
   expect_true(is.na(o1$smiles[3]))
   expect_true(is.na(o1$smiles[4]))
   expect_equal(o1$cas[1], '50-29-3')
-  expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids', 'source_url', 'query'))
+  expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi',
+                            'inchikey', 'drugbank', 'zvg', 'chebi', 'chembl',
+                            'unii', 'lipidmaps', 'swisslipids', 'source_url',
+                            'query'))
 })
 
 test_that("wd_ident returns correct results for two lipids", {
@@ -50,8 +53,10 @@ test_that("wd_ident returns correct results for two lipids", {
   o1 <- wd_ident(id)
   expect_s3_class(o1, 'data.frame')
   expect_equal(nrow(o1), 2)
-  expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi', 'inchikey',
-                           'drugbank', 'zvg', 'chebi', 'chembl', 'unii', 'lipidmaps', 'swisslipids', 'source_url', 'query'))
+  expect_equal(names(o1), c('smiles', 'cas', 'cid', 'einecs', 'csid', 'inchi',
+                            'inchikey', 'drugbank', 'zvg', 'chebi', 'chembl',
+                            'unii', 'lipidmaps', 'swisslipids', 'source_url',
+                            'query'))
   expect_equal(o1$swisslipids[1], 'SLM:000000510')
   expect_equal(o1$lipidmaps[2], 'LMPR0102010003')
 })
