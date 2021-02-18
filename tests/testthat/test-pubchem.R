@@ -63,8 +63,8 @@ test_that("get_cid()", {
   expect_true(nrow(get_cid(c("Triclosan", "Aspirin"))) == 2)
   #invalid input
   expect_true(is.na(get_cid(NA)$cid[1]))
-  expect_true(is.na(suppressWarnings(get_cid("xxxx", verbose = FALSE))$cid[1]))
-  expect_equal(capture_messages(get_cid("balloon")),
+  expect_true(is.na(suppressWarnings(get_cid("xxxx"))$cid[1]))
+  expect_equal(capture_messages(get_cid("balloon", verbose = TRUE)),
                c("Querying balloon. ", "Not Found (HTTP 404).", "\n"))
   # sourceall
   expect_equal(get_cid("Optopharma Ltd", from = "sourceall",
@@ -82,10 +82,8 @@ test_that("pc_prop", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
-  b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles",
-                                verbose = FALSE))
-  c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"),
-               verbose = FALSE)
+  b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles"))
+  c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"))
   expect_true(is.na(b))
   expect_equal(ncol(c), 3)
 })
@@ -93,7 +91,7 @@ test_that("pc_prop", {
 test_that("pc_synonyms", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
-  expect_equivalent(pc_synonyms(NA), NA)
+  expect_equal(pc_synonyms(NA), list(NA), ignore_attr = TRUE)
   expect_equal(pc_synonyms("Acetyl Salicylic Acid")[[1]][1], "aspirin")
   expect_equal(length(pc_synonyms(c("Triclosan", "Aspirin"))), 2)
   expect_equal(pc_synonyms("BPGDAMSIGCZZLK-UHFFFAOYSA-N",
@@ -108,8 +106,8 @@ test_that("cid integration tests", {
   expect_equal(pc_prop(get_cid("Triclosan")$cid[1],
                        properties = "CanonicalSmiles")$CanonicalSMILES,
                "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
-  expect_true(is.na(suppressWarnings(pc_prop(NA, properties = "CanonicalSmiles",
-                            verbose = FALSE))))
+  expect_true(is.na(suppressWarnings(pc_prop(NA,
+                                             properties = "CanonicalSmiles"))))
 })
 
 test_that("pc_page()", {
@@ -120,27 +118,11 @@ test_that("pc_page()", {
 
   expect_type(a, "list")
   expect_length(a, 5)
-  expect_is(a[[1]], c("Node", "R6"))
-  expect_is(a[[2]], c("Node", "R6"))
+  expect_s3_class(a[[1]], c("Node", "R6"))
+  expect_s3_class(a[[2]], c("Node", "R6"))
   expect_equal(a[[3]], NA)
   expect_equal(a[[4]], NA)
   expect_equal(a[[5]], NA)
-})
-
-test_that("pc_extract() chemical and physical properties", {
-  skip_on_cran()
-  skip_if_not(up, "PubChem service is down")
-
-  s <- pc_page(c(NA, 176, 311, "balloon"), "chemical and physical properties")
-  mw <- pc_extract(s, "molecular weight") # example for a computed property
-  pd <- pc_extract(s, "physical description") # textual description
-  bp <- pc_extract(s, "boiling point")
-  mp <- pc_extract(s, "melting point")
-  fp <- pc_extract(s, "flash point")
-  so <- pc_extract(s, "solubility") # data with headers
-  ow <- pc_extract(s, "octanol/water partition coefficient") #negative numbers
-  logs <- pc_extract(s, "logs")
-  logkoa <- pc_extract(s, "logkoa")
 })
 
 test_that("pc_sect()", {
@@ -156,8 +138,8 @@ test_that("pc_sect()", {
   b <- pc_sect(2231, "depositor-supplied synonyms", "substance")
   expect_s3_class(b, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(b), c("SID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equivalent(b$Result, c("cholesterol", "57-88-5",
-                                "5-cholestene-3beta-ol"))
+  expect_equal(b$Result, c("cholesterol", "57-88-5",
+                                "5-cholestene-3beta-ol"), ignore_attr = TRUE)
 
   c <- pc_sect(780286, "modify date", "assay")
   expect_s3_class(c, c("tbl_df", "tbl", "data.frame"))
@@ -167,6 +149,6 @@ test_that("pc_sect()", {
   d <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_s3_class(d, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(d), c("pdbID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equivalent(d$Result[1],
-                    ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)")
+  expect_equal(d$Result[1], ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)",
+               ignore_attr = TRUE)
  })

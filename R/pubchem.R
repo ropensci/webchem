@@ -116,7 +116,7 @@ get_cid <-
            from = "name",
            domain = c("compound", "substance", "assay"),
            match = c("all", "first", "ask", "na"),
-           verbose = TRUE,
+           verbose = getOption("verbose"),
            arg = NULL,
            first = NULL,
            ...) {
@@ -253,7 +253,8 @@ get_cid <-
         cont <- jsonlite::fromJSON(cont)$InformationList$Information$CID
       }
       out <- unique(unlist(cont))
-      out <- matcher(x = out, query = query, match = match, from = from, verbose = verbose)
+      out <- matcher(x = out, query = query, match = match, from = from,
+                     verbose = verbose)
       out <- as.character(out)
       return(tibble::tibble("query" = query, "cid" = out))
     }
@@ -317,7 +318,7 @@ get_cid <-
 #' pc_prop(cids$cid, properties = c("MolecularFormula", "MolecularWeight",
 #' "CanonicalSMILES"))
 #' }
-pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
+pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...) {
 
   if (!ping_service("pc")) stop(webchem_message("service_down"))
 
@@ -449,7 +450,7 @@ pc_prop <- function(cid, properties = NULL, verbose = TRUE, ...) {
 pc_synonyms <- function(query,
                         from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
                         match = c("all", "first", "ask", "na"),
-                        verbose = TRUE,
+                        verbose = getOption("verbose"),
                         arg = NULL, choices = NULL, ...) {
 
   if (!ping_service("pc")) stop(webchem_message("service_down"))
@@ -494,7 +495,8 @@ pc_synonyms <- function(query,
       out <- unlist(cont)[-1] #first result is always an ID number
       names(out) <- NULL
 
-      out <- matcher(out, query = query, match = match, from = from, verbose = verbose)
+      out <- matcher(out, query = query, match = match, from = from,
+                     verbose = verbose)
     }
     else {
       return(NA)
@@ -558,7 +560,7 @@ pc_sect <- function(id,
                     section,
                     domain = c("compound", "substance", "assay", "gene",
                                 "protein", "patent"),
-                    verbose = TRUE) {
+                    verbose = getOption("verbose")) {
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))
   if (section %in% c("standard non-polar",
@@ -604,7 +606,7 @@ pc_page <- function(id,
                     section,
                     domain = c("compound", "substance", "assay", "gene",
                                "protein", "patent"),
-                    verbose = TRUE) {
+                    verbose = getOption("verbose")) {
 
   if (!ping_service("pc")) stop(webchem_message("service_down"))
 
