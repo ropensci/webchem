@@ -8,8 +8,9 @@ test_that("chemid returns correct results", {
   expect_type(o2, 'list')
   expect_type(o3, 'list')
 
-  o1 <- ci_query(c('xxxxx', NA, 'Aspirin', 'Triclosan'), from = 'name', match = 'best')
-  expect_is(o1, 'list')
+  o1 <- suppressWarnings(ci_query(c('xxxxx', NA, 'Aspirin', 'Triclosan'),
+                                  from = 'name', match = 'best'))
+  expect_type(o1, 'list')
 
   expect_true(length(o1) == 4)
   expect_true(is.na(o1[[1]]))
@@ -19,13 +20,13 @@ test_that("chemid returns correct results", {
   expect_length(o1[[3]], 9)
   expect_s3_class(o1[[3]]$physprop, "data.frame")
 
-  b1 <- ci_query('Tetracyclin', from = 'name')
+  b1 <- suppressWarnings(ci_query('Tetracyclin', from = 'name'))
   expect_equal(b1[[1]]$name[1], "Tetracycline")
-  b2 <- ci_query('Edetic acid', from = 'name', match = 'best')
+  b2 <- suppressWarnings(ci_query('Edetic acid', from = 'name', match = 'best'))
   expect_equal(b2[[1]]$name[1], "Edetic acid")
 
   # test multiple matches
-  m1 <- ci_query('Tetracyclin', from = 'name', match = 'first')
+  m1 <- suppressWarnings(ci_query('Tetracyclin', from = 'name', match = 'first'))
   m2 <- b1 #best is default
   m3 <- ci_query('Tetracyclin', from = 'name', match = 'na')
 
