@@ -8,7 +8,7 @@ ci_query(
   query,
   from = c("name", "rn", "inchikey", "cas"),
   match = c("first", "best", "ask", "na"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   type
 )
 }
