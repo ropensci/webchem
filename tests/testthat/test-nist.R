@@ -94,7 +94,8 @@ test_that("nist_ri() works with multiple queries", {
       polarity = "non-polar",
       temp_prog = "ramp"
     )
-  expect_equivalent(unique(myRIs$query), c("78-70-6", "13474-59-4"))
+  expect_equal(unique(myRIs$query), c("78-70-6", "13474-59-4"),
+               ignore_attr = TRUE)
 })
 
 test_that("cas =  is deprecated gently", {
@@ -126,5 +127,5 @@ test_that("nist_ri works with NAs", {
     colnames(natest),
     colnames(test)
   )
-  expect_equivalent(unique(natest$query), c(NA, "107-86-8"))
+  expect_equal(unique(natest$query), c(NA, "107-86-8"), ignore_attr = TRUE)
 })
