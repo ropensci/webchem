@@ -67,8 +67,8 @@ test_that("get_cid()", {
   expect_equal(capture_messages(get_cid("balloon", verbose = TRUE)),
                c("Querying balloon. ", "Not Found (HTTP 404).", "\n"))
   # sourceall
-  expect_equal(get_cid("Optopharma Ltd", from = "sourceall",
-                       domain = "substance")$cid[1], "102361739")
+  opto <- get_cid("Optopharma Ltd", from = "sourceall", domain = "substance")
+  expect_equal(min(opto$cid), "102361739")
 })
 
 test_that("get_cid() handles special characters in SMILES", {
