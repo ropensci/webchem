@@ -1,0 +1,102 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/lookups/datasources
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:11 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"dataSources":["abcr","Acros Organics","Activate Scientific","ACToR:
+        Aggregated Computational Toxicology Resource","Adrian Hobson","Advanced ChemBlocks","AK
+        Scientific","AKos","Alfa Aesar","Alfa Chemistry","Alichem","Alinda Chemical","Alkamid","Amadis
+        Chemical","Ambeed","AnalytiCon Discovery","Antony_Williams","Apollo Scientific
+        Limited","AraCyc","Atomax","Attempted Reactions - Products Subset","Attempted
+        Reactions - Reactants Subset","Aurora Fine Chemicals","AxisPharm","Baoji Herbest
+        Bio-Tech","barbara odell","BARK Information Services","Bennett Group at SUNY
+        Oneonta (BLONDES)","BIND (no longer updated)","BindingDB","BioCyc","Biological
+        Magnetic Resonance Data Bank","BIONET-Key Organics","Biosynth Carbosynth","BLDpharm","BOC
+        Sciences","Bovine Metabolome Database","Bovine Rumen Metabolome Database","Brad
+        Rose","Bradley Lab","BroadPharm","Bull Group ","Caliper Discovery Alliances
+        & Services","Cambridge Structural Database","CambridgeSoft Corporation","Carbone
+        Scientific","Carotenoids Database","Cayman Chemical","ChEBI","ChemAdvisor","ChemBank","ChEMBL","ChemBlock","ChemBridge","ChemDiv","Chemenu","Chemical
+        Biology Department, Max Planck Institute of Molecular Physiology","ChemicalProbes.org","ChemIDplus","Chemistry
+        World from the Royal Society of Chemistry","ChemMine","ChemPedia","ChemScene","Chemspace","ChemSpider
+        SyntheticPages","ChemSpiderman","ChemSynthesis","Chirals","Chris Cooksey","Christopher
+        Data","CMLD-BU","Colin Batchelor","Collaborative Drug Discovery","CombiUgi","CommonChemistry.org","Comparative
+        Toxicogenomics Database","Crystallography Open Database (COD)","CSF Metabolome
+        database","CSIR-OSDD","DailyMed","dashtemp","David Bulger","David Schiessel","David
+        Sharpe Test","demo and testing","Directory of Useful Decoys","DiscoveryGate","DISMA,
+        Department of Agri-Food Molecular Sciences, University of Milano, Italy","Dr.
+        Parvinder Pal Singh, Medicinal Chemistry Division, CSIR-Indian Institute of
+        Integrative Medicine","DrugBank","DSigDB","DTP/NCI","E. coli Metabolome Database","EAWAG
+        Biocatalysis/Biodegradation Database","Ecker Research Group","eCrystals","Egon
+        Willighagen","EINECS","Enamine","enviPath","EPA DSSTox","EPA Toxcast","Ereztech","Erowid","EU-OpenScreen","Excipients
+        Browser","Exposome Explorer","Extrasynthese","FDA","FDA Structured Product
+        Labeling index data","FDA UNII - NLM","Fecal Metabolome database","Florida
+        Center for Heterocyclic Compounds","Food and Agriculture Organization of the
+        United Nations","FooDB","Francis Girard","Freebase (No Longer Updated)","Frinton
+        Laboratories","Gimeno''s Lab","GlaxoSmithKline Malaria Set","Glentham Life
+        Sciences","Golm Metabolome Database","Graham McCann","Guide to PHARMACOLOGY","Hefei
+        Hirisun Pharmatech","Hello Bio","Henry S Rzepa","hko / nmr inhouse database
+        ","Human Metabolome Database","IDBS E-Workbook Suite","IHU Mediterranee Infection","Indofine","Infotherm","Istituto
+        Superiore di Sanità","IUCr","Jan Davies","Jean-Claude Bradley Open Melting
+        Point Dataset","Joerg Kurt Wegner","John Harry MacMillan Database","John Hoggett","Journal
+        of Heterocyclic Chemistry","Kaye & Laby (No longer updated)","KEGG","KinasePro
+        Blog","KinbaraLab@TokyoTech","KUMGM","KWF Consulting","LabNetwork","Laboratory
+        Chemical Safety Summary","Laura Broad","LeadScope","LGC Standards","Lhasa
+        Limited","LipidMAPS","Manchester Organics","Marine Drugs","Mark Archibald","Martin
+        Walker","MassBank","Matthew McBride","MCISB","Mcule","MDPI","MedChem Express","Merck
+        Millipore","MeSH","MICAD","Milk Composition Database","MLSMR","MMDB","Molbank","Molecule
+        of the Day","MOLI","MolMall","Molport","MP_Test","MuseChem","Nanogen Index","Nature
+        Chemical Biology","Nature Chemistry","Nature Communications","NCSU Max Weaver
+        Dye Library","NIAID","Nicolas B. Andersen","NIH Clinical Collection","NINDS
+        Approved Drug Screening Program","NIOSH","NIST","NIST Chemistry WebBook","NIST
+        Spectra","NMRShiftDB","NPAtlas","NuBBE database","Oakwood","ONSChallenge","Open
+        Notebook Solubility Challenge","OrgPrepDaily Blog","OU Chemical Safety Data
+        (No longer updated)","P Slaich","PANACHE","Paterson Group Cambridge University","Paul
+        Baures","PDB","PDSP, Pharmacology School of Medicine UNC Chapel Hill","PENN-ABS","Peptides","Pesticide
+        Common Names","Phenol-Explorer","PIChemicals","Pillbox","Planta Piloto de
+        Química Fina. Universidad de Alcalá","PlantCyc","Prasun Dutta","Pratik Gurnani","Prous
+        Science Drugs of the Future","PubMed","PurePEG","QSAR","Royal Society of Chemistry","Rudolf
+        Boehm Institute","Sabio-RK","Saliva Metabolome Database","SANCDB","ScienceBase","SDBS
+        Spectral Database for Organic Compounds","Sean Ekins","Sequoia Research Products","Serum
+        Metabolome Database","SGC Chemical Probes","SGCOxCompounds","SGCStoCompounds","Shanghai
+        Institute of Organic Chemistry","Shaw lab at Southern Illinois University
+        Edwardsville","Shoichet Laboratory","Sigma-Aldrich","Sigma-Aldrich Compliance","Single
+        Depositions","Slovak Academy of Sciences","SMPDB Small Molecule Pathway Database","SORD","Springer
+        Materials","Springer Nature","Strem","StreptomeDB","Structure Searchable Blogs","Submitted
+        chemical data","Susan Richardson","SynQuest","TargetMol","Taylor Group, York","TCI","The
+        Ley Group at the University of Cambridge","The Merck Index Online","The National
+        Compound Collection","Theodore Gray","Thieme Chemistry","Thomson Pharma","Tobi","Tocris
+        Bioscience","Todd Group","Totallysynthetic.com Blog","Toxin, Toxin-Target
+        Database","UPCMLD","Urine Metabolome Database","UsefulChem","Usefulchem Group
+        Bradley Lab","Vitas-M","VulcanChem","Web of Science","Whitby Group, University
+        of Southampton","WHO INN","Wikidata","WikiHyperGlossary","WikiPathways","Wikipedia","Wolfram|AlphaTM","xPharm","Yeast
+        Metabolome Database"]}'
+  recorded_at: 2021-02-20 19:48:11 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
