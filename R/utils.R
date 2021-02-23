@@ -365,6 +365,41 @@ parse_mol <- function(string) {
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
 
+#' Export a Chemical Structure in .mol Format.
+#'
+#' Some webchem functions return character strings that contain a chemical
+#' structure in Mol format. This function exports these character strings as
+#' .mol files so they can be read by other chemistry software.
+#' @param x a character vector of chemical structures in mol format.
+#' @param file a character vector of file names
+#' @param add_extension should ".mol" be added to the end of each file name?
+#' @export
+#' @examples
+#' \dontrun{
+#' # export Mol file
+#' csid <- get_csid("bergapten")
+#' mol3d <- cs_compinfo(csid$csid, field = "Mol3D")
+#' write_mol(mol3d$mol3D, file = mol3d$id)
+#'
+#' # export multiple Mol files
+#' csids <- get_csid(c("bergapten", "xanthotoxin"))
+#' mol3ds <- cs_compinfo(csids$csid, field = "Mol3D")
+#' mapply(function(x, y) write_mol(x, y), x = mol3ds$mol3D, y = mol3ds$id)
+#' }
+write_mol <- function(x, file, add_extension = TRUE, dir = tempdir()) {
+  if (!is.character(x)) stop("x must be a character vector")
+  mol <- try(parse_mol(x), silent = TRUE)
+  if (inherits(mol, "try-error")) {
+    stop ("x is not a Mol string")
+  }
+  if (add_extension) file <- paste0(file, ".mol")
+  path <- paste(dir, file, sep = "/")
+  write.table(x,
+              file = file,
+              row.names = FALSE,
+              col.names= FALSE,
+              quote = FALSE)
+}
 
 #' Format numbers as CAS numbers
 #' @description This function attempts to format numeric (or character) vectors
