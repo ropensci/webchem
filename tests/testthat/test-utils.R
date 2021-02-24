@@ -81,6 +81,32 @@ test_that("as.cas() returns correct reults", {
                    c("761-65-9", NA, NA))
 })
 
+test_that("parse_mol()", {
+  expect_error(write_mol(123), regex = "string is not a character string")
+
+  csid <- get_csid("bergapten")
+  mol3d <- cs_compinfo(csid$csid, field = "Mol3D")
+  mol <- parse_mol(mol3d$mol3D)
+
+  expect_type(mol, "list")
+  expect_equivalent(names(mol), c("eh", "cl", "ab", "bb"))
+  expect_type(mol$eh, "character")
+  expect_type(mol$cl, "character")
+  expect_s3_class(mol$ab, "data.frame")
+  expect_s3_class(mol$bb, "data.frame")
+})
+
+test_that("write_mol()", {
+  expect_error(write_mol(123), regex = "x is not a character string")
+  expect_error(write_mol("hello world"), regex = "x is not a Mol string")
+
+  #csid <- get_csid("bergapten")
+  #mol3d <- cs_compinfo(csid$csid, field = "Mol3D")
+
+  #add snapshot tests after testthat 3 has been activated
+
+})
+
 test_that("matcher() warns when 'best' is used with chemical names", {
   expect_warning(
     matcher(x = c("formalin", "carbon monoxide"),
