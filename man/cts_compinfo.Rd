@@ -4,7 +4,12 @@
 \alias{cts_compinfo}
 \title{Get record details from Chemical Translation Service (CTS)}
 \usage{
-cts_compinfo(query, from = "inchikey", verbose = TRUE, inchikey)
+cts_compinfo(
+  query,
+  from = "inchikey",
+  verbose = getOption("verbose"),
+  inchikey
+)
 }
 \arguments{
 \item{query}{character; InChIkey.}
@@ -17,7 +22,8 @@ cts_compinfo(query, from = "inchikey", verbose = TRUE, inchikey)
 }
 \value{
 a list of lists (for each supplied inchikey):
-a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
+a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and
+externalIds
 }
 \description{
 Get record details from CTS, see \url{http://cts.fiehnlab.ucdavis.edu/}
@@ -40,6 +46,7 @@ sapply(out2, function(y) y$molweight)
 }
 }
 \references{
-Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
--- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O.
+Fiehn 2010The Chemical Translation Service -- a Web-Based Tool to Improve
+Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 }

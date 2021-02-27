@@ -8,7 +8,7 @@ pc_synonyms(
   query,
   from = c("name", "cid", "sid", "aid", "smiles", "inchi", "inchikey"),
   match = c("all", "first", "ask", "na"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   arg = NULL,
   choices = NULL,
   ...

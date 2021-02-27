@@ -4,7 +4,7 @@
 \alias{etox_basic}
 \title{Get basic information from a ETOX ID}
 \usage{
-etox_basic(id, verbose = TRUE)
+etox_basic(id, verbose = getOption("verbose"))
 }
 \arguments{
 \item{id}{character; ETOX ID}

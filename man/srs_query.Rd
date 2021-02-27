@@ -7,7 +7,7 @@
 srs_query(
   query,
   from = c("itn", "cas", "epaid", "tsn", "name"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   ...
 )
 }

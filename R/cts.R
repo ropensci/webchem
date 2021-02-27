@@ -7,10 +7,12 @@
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param inchikey deprecated
 #' @return a list of lists (for each supplied inchikey):
-#' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and externalIds
+#' a list of 7. inchikey, inchicode, molweight, exactmass, formula, synonyms and
+#' externalIds
 #'
-#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
-#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O.
+#' Fiehn 2010The Chemical Translation Service -- a Web-Based Tool to Improve
+#' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
 #' \donttest{
@@ -28,7 +30,8 @@
 #' # extract molecular weight
 #' sapply(out2, function(y) y$molweight)
 #' }
-cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
+cts_compinfo <- function(query, from = "inchikey",
+                         verbose = getOption("verbose"), inchikey){
 
   if (!ping_service("cts")) stop(webchem_message("service_down"))
 
@@ -77,12 +80,13 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 
 #' Convert Ids using Chemical Translation Service (CTS)
 #'
-#' Convert Ids using Chemical Translation Service (CTS), see \url{http://cts.fiehnlab.ucdavis.edu/}
+#' Convert Ids using Chemical Translation Service (CTS), see
+#' \url{http://cts.fiehnlab.ucdavis.edu/}
 #' @import jsonlite
 #' @importFrom utils URLencode
 #' @param query character; query ID.
-#' @param from character; type of query ID, e.g. \code{'Chemical Name'} , \code{'InChIKey'},
-#'  \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
+#' @param from character; type of query ID, e.g. \code{'Chemical Name'} ,
+#' \code{'InChIKey'}, \code{'PubChem CID'}, \code{'ChemSpider'}, \code{'CAS'}.
 #' @param to character; type to convert to.
 #' @param match character; How should multiple hits be handled? \code{"all"}
 #' returns all matches, \code{"first"} returns only the first result,
@@ -91,15 +95,17 @@ cts_compinfo <- function(query, from = "inchikey", verbose = TRUE, inchikey){
 #' @param choices deprecated.  Use the \code{match} argument instead.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return a list of character vectors or if \code{choices} is used, then a single named vector.
+#' @return a list of character vectors or if \code{choices} is used, then a
+#' single named vector.
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #' for possible values of from and to.
 #'
-#' @seealso \code{\link{cts_from}} for possible values in the 'from' argument and
-#' \code{\link{cts_to}} for possible values in the 'to' argument.
+#' @seealso \code{\link{cts_from}} for possible values in the 'from' argument
+#' and \code{\link{cts_to}} for possible values in the 'to' argument.
 #'
-#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
-#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O.
+#' Fiehn 2010The Chemical Translation Service -- a Web-Based Tool to Improve
+#' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
 #' \donttest{
@@ -114,7 +120,7 @@ cts_convert <- function(query,
                         from,
                         to,
                         match = c("all", "first", "ask", "na"),
-                        verbose = TRUE,
+                        verbose = getOption("verbose"),
                         choices = NULL,
                         ...){
 
@@ -136,7 +142,8 @@ cts_convert <- function(query,
     }
   }
   if (length(from) > 1 | length(to) > 1) {
-    stop('Cannot handle multiple input or output types.  Please provide only one argument for `from` and `to`.')
+    stop('Cannot handle multiple input or output types.  Please provide only one
+         argument for `from` and `to`.')
   }
 
   from <-  match.arg(tolower(from), c(cts_from(), "name"))
@@ -180,14 +187,16 @@ cts_convert <- function(query,
         return(NA)
       }
       out <- out$result[[1]]
-      out <- matcher(out, match = match, query = query, from = from, verbose = verbose)
+      out <- matcher(out, match = match, query = query, from = from,
+                     verbose = verbose)
       return(out)
     }
     else {
       return(NA)
     }
   }
-  out <- lapply(query, foo, from = from, to = to, first = first, verbose = verbose)
+  out <- lapply(query, foo, from = from, to = to, first = first,
+                verbose = verbose)
   names(out) <- query
   return(out)
 }
@@ -203,14 +212,15 @@ cts_convert <- function(query,
 #'
 #' @seealso \code{\link{cts_convert}}
 #'
-#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
-#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O.
+#' Fiehn 2010The Chemical Translation Service -- a Web-Based Tool to Improve
+#' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
 #' \donttest{
 #' cts_from()
 #' }
-cts_from <- function(verbose = TRUE){
+cts_from <- function(verbose = getOption("verbose")){
 
   if (!ping_service("cts")) stop(webchem_message("service_down"))
 
@@ -239,14 +249,15 @@ cts_from <- function(verbose = TRUE){
 #'
 #' @seealso \code{\link{cts_convert}}
 #'
-#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
-#' -- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+#' @references Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O.
+#' Fiehn 2010The Chemical Translation Service -- a Web-Based Tool to Improve
+#' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
 #' \donttest{
 #' cts_from()
 #' }
-cts_to <- function(verbose = TRUE){
+cts_to <- function(verbose = getOption("verbose")){
 
   if (!ping_service("cts")) stop(webchem_message("service_down"))
 

@@ -4,7 +4,11 @@
 \alias{is.inchikey}
 \title{Check if input is a valid inchikey}
 \usage{
-is.inchikey(x, type = c("format", "chemspider"), verbose = TRUE)
+is.inchikey(
+  x,
+  type = c("format", "chemspider"),
+  verbose = getOption("verbose")
+)
 }
 \arguments{
 \item{x}{character; input InChIKey}

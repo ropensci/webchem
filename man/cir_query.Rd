@@ -9,7 +9,7 @@ cir_query(
   representation = "smiles",
   resolver = NULL,
   match = c("all", "first", "ask", "na"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   choices = NULL,
   ...
 )

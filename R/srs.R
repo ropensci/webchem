@@ -27,7 +27,7 @@
 srs_query <-
   function(query,
            from = c("itn", "cas", "epaid", "tsn", "name"),
-           verbose = TRUE, ...) {
+           verbose = getOption("verbose"), ...) {
 
     if (!ping_service("srs")) stop(webchem_message("service_down"))
 

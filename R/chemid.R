@@ -36,7 +36,8 @@
 #'  y$physprop$Value[y$physprop$`Physical Property` == 'log P (octanol-water)']
 #'  })
 #' }
-ci_query <- function(query, from = c("rn", "inchikey"), verbose = TRUE){
+ci_query <- function(query, from = c("rn", "inchikey"),
+                     verbose = getOption("verbose")){
 
   if (!ping_service("ci")) stop(webchem_message("service_down"))
 

@@ -7,7 +7,7 @@
 get_wdid(
   query,
   match = c("best", "first", "all", "ask", "na"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   language = "en"
 )
 }

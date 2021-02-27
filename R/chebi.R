@@ -73,7 +73,7 @@ get_chebiid <- function(query,
                         match = c("all", "best", "first", "ask", "na"),
                         max_res = 200,
                         stars =  c('all', 'two only', 'three only'),
-                        verbose = TRUE,
+                        verbose = getOption("verbose"),
                         ...) {
 
   if (!ping_service("chebi")) stop(webchem_message("service_down"))
@@ -134,7 +134,7 @@ get_chebiid <- function(query,
       names(out) <- tolower(names(out))
       out <- as_tibble(out)
       if (nrow(out) == 0) {
-        webchem_message("not_found")
+        if (verbose) webchem_message("not_found")
         return(tibble::tibble("query" = query, "chebiid" = NA_character_))
       }
       if (nrow(out) > 0) out$query <- query
@@ -238,7 +238,7 @@ get_chebiid <- function(query,
 #'
 #' }
 chebi_comp_entity <- function(chebiid,
-                              verbose = TRUE,
+                              verbose = getOption("verbose"),
                               ...) {
 
   if (!ping_service("chebi")) stop(webchem_message("service_down"))

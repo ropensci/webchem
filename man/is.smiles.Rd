@@ -4,7 +4,7 @@
 \alias{is.smiles}
 \title{Check if input is a SMILES string}
 \usage{
-is.smiles(x, verbose = TRUE)
+is.smiles(x, verbose = getOption("verbose"))
 }
 \arguments{
 \item{x}{character; input SMILES.}

@@ -4,7 +4,7 @@
 \alias{etox_tests}
 \title{Get Tests from a ETOX ID}
 \usage{
-etox_tests(id, verbose = TRUE)
+etox_tests(id, verbose = getOption("verbose"))
 }
 \arguments{
 \item{id}{character; ETOX ID}

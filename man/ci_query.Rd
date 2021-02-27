@@ -4,7 +4,7 @@
 \alias{ci_query}
 \title{Retrieve information from ChemIDPlus}
 \usage{
-ci_query(query, from = c("rn", "inchikey"), verbose = TRUE)
+ci_query(query, from = c("rn", "inchikey"), verbose = getOption("verbose"))
 }
 \arguments{
 \item{query}{character; query string}

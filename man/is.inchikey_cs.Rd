@@ -4,7 +4,7 @@
 \alias{is.inchikey_cs}
 \title{Check if input is a valid inchikey using ChemSpider API}
 \usage{
-is.inchikey_cs(x, verbose = TRUE)
+is.inchikey_cs(x, verbose = getOption("verbose"))
 }
 \arguments{
 \item{x}{character; input string}
