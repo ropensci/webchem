@@ -4,7 +4,7 @@
 \alias{wd_ident}
 \title{Retrieve identifiers from Wikidata}
 \usage{
-wd_ident(id, verbose = TRUE)
+wd_ident(id, verbose = getOption("verbose"))
 }
 \arguments{
 \item{id}{character; identifier, as returned by \code{\link{get_wdid}}}

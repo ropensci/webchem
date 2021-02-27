@@ -24,7 +24,7 @@
 #'}
 #' @export
 
-opsin_query <- function(query, verbose = TRUE, ...){
+opsin_query <- function(query, verbose = getOption("verbose"), ...){
 
   if (!ping_service("opsin")) stop(webchem_message("service_down"))
 

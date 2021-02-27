@@ -1,3 +1,9 @@
+# webchem 1.1.1.9000
+
+## MINOR IMPROVEMENTS
+
+* webchem functions now default to global options regarding verbose messages.
+
 # webchem 1.1.1.
 
 ## NEW FEATURES

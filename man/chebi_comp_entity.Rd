@@ -4,7 +4,7 @@
 \alias{chebi_comp_entity}
 \title{Retrieve Complete Entity from ChEBI}
 \usage{
-chebi_comp_entity(chebiid, verbose = TRUE, ...)
+chebi_comp_entity(chebiid, verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{chebiid}{character; search term (i.e. chebiid).}

@@ -23,7 +23,8 @@
 #' }
 #' @export
 
-fn_percept <- function(query, from = "cas", verbose = TRUE, CAS, ...)
+fn_percept <- function(query, from = "cas", verbose = getOption("verbose"),
+                       CAS, ...)
 {
 
   if (!ping_service("fn")) stop(webchem_message("service_down"))

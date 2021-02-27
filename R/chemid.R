@@ -53,7 +53,7 @@
 #' }
 ci_query <- function(query, from = c('name', 'rn', 'inchikey', 'cas'),
                      match = c('first', 'best', 'ask', 'na'),
-                     verbose = TRUE, type){
+                     verbose = getOption("verbose"), type){
 
   if (!ping_service("ci")) stop(webchem_message("service_down"))
 

@@ -4,7 +4,7 @@
 \alias{is.cas}
 \title{Check if input is a valid CAS}
 \usage{
-is.cas(x, verbose = TRUE)
+is.cas(x, verbose = getOption("verbose"))
 }
 \arguments{
 \item{x}{character; input CAS}
