@@ -352,18 +352,14 @@ parse_mol <- function(string) {
   nchar(cl)
   splits <- c(seq(1, 33, by = 3), 34)
   cl <- trimws(substring(cl, splits, c(splits[-1] - 1, nchar(cl))))
-  names(cl) <- c('a', 'b', 'l', 'f', 'c', 's', 'x', 'r', 'p', 'i', 'm', 'p')
   # atom block
   na <- as.numeric(cl[1])
   ab <- m[5:(4 + na)]
   ab <- read.table(text = ab)
-  names(ab) <- c('x', 'y', 'z', 'a', 'd', 'c', 's', 'h', 'b', 'v', 'H', 'm',
-                 'n', 'e')
   # bound block
   nb <- as.numeric(cl[2])
   bb <- m[(5 + na):(4 + na + nb)]
   bb <- read.table(text = bb)
-  names(bb) <- c('1', '2', 't', 's', 'x', 'r', 'c')
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
 
