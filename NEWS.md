@@ -1,8 +1,16 @@
-# webchem 1.1.1.9000
+# webchem 1.1.1.9003
 
 ## NEW FEATURES
 
 * Export chemical structures in Mol format with write_mol().
+
+## BUG FIXES
+
+* ci_query() can no longer query chemicals by name.
+
+## MINOR IMPROVEMENTS
+
+* webchem functions now default to global options regarding verbose messages.
 
 # webchem 1.1.1.
 

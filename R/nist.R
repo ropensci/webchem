@@ -327,7 +327,7 @@ nist_ri <- function(query,
                     polarity = c("polar", "non-polar"),
                     temp_prog = c("isothermal", "ramp", "custom"),
                     cas = NULL,
-                    verbose = TRUE) {
+                    verbose = getOption("verbose")) {
 
   if (!is.null(cas)) {
     warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")

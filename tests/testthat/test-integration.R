@@ -15,7 +15,7 @@ test_that("with_cts() works when no translation needed", {
       query = CASs,
       from = "cas",
       .f = "fn_percept",
-      .verbose = TRUE
+      .verbose = getOption("verbose")
     )
   b <- fn_percept(CASs)
   expect_equal(a, b)
@@ -46,5 +46,5 @@ test_that("find_db() function works", {
   df <- tibble(query = c("triclosan", NA, "balloon"),
                etox = c(TRUE, FALSE, FALSE),
                fn = c(FALSE, FALSE, FALSE))
-  expect_equivalent(out, df)
+  expect_equal(out, df, ignore_attr = TRUE)
 })

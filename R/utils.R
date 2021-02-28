@@ -31,7 +31,8 @@
 #' is.inchikey('BQJCRHHNABKAKU/KBQPJGBKSA/N')
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
-is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
+is.inchikey = function(x, type = c('format', 'chemspider'),
+                       verbose = getOption("verbose")) {
   # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -64,7 +65,7 @@ is.inchikey = function(x, type = c('format', 'chemspider'), verbose = TRUE) {
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 #' }
-is.inchikey_cs <- function(x, verbose = TRUE){
+is.inchikey_cs <- function(x, verbose = getOption("verbose")){
 
   if (!ping_service("cs_web")) stop(webchem_message("service_down"))
 
@@ -128,7 +129,7 @@ is.inchikey_cs <- function(x, verbose = TRUE){
 #' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 #' }
-is.inchikey_format = function(x, verbose = TRUE) {
+is.inchikey_format = function(x, verbose = getOption("verbose")) {
   # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -200,7 +201,7 @@ is.inchikey_format = function(x, verbose = TRUE) {
 #' is.cas('64-177-6')
 #' is.cas('64-17-55')
 #' is.cas('64-17-6')
-is.cas <-  function(x, verbose = TRUE) {
+is.cas <-  function(x, verbose = getOption("verbose")) {
 
   foo <- function(x, verbose) {
     # pass NA's through
@@ -282,7 +283,7 @@ is.cas <-  function(x, verbose = TRUE) {
 #' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1Cl')
 #' is.smiles('Clc(c(Cl)c(Cl)c1C(=O)O)c(Cl)c1ClJ')
 #' }
-is.smiles <- function(x, verbose = TRUE) {
+is.smiles <- function(x, verbose = getOption("verbose")) {
   if (!requireNamespace("rcdk", quietly = TRUE)) {
     stop("rcdk needed for this function to work. Please install it.",
          call. = FALSE)
@@ -457,7 +458,7 @@ matcher <-
            result = NULL,
            match = c("all", "best", "first", "ask", "na"),
            from = NULL,
-           verbose = FALSE) {
+           verbose = getOption("verbose")) {
 
     match <- match.arg(match)
     names(x) <- result
@@ -469,7 +470,8 @@ matcher <-
 
       if (!is.null(from)) {
         if (!str_detect(tolower(from), "name") & match == "best") {
-          warning("match = 'best' only makes sense for chemical name queries.\n Setting match = 'first'.")
+          warning("match = 'best' only makes sense for chemical name queries.\n
+                  Setting match = 'first'.")
           match <- "first"
         }
       }

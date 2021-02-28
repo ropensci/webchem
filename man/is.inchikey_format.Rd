@@ -4,7 +4,7 @@
 \alias{is.inchikey_format}
 \title{Check if input is a valid inchikey using format}
 \usage{
-is.inchikey_format(x, verbose = TRUE)
+is.inchikey_format(x, verbose = getOption("verbose"))
 }
 \arguments{
 \item{x}{character; input string}

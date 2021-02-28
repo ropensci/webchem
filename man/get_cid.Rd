@@ -9,7 +9,7 @@ get_cid(
   from = "name",
   domain = c("compound", "substance", "assay"),
   match = c("all", "first", "ask", "na"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   arg = NULL,
   first = NULL,
   ...

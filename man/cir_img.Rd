@@ -22,7 +22,7 @@ cir_img(
   header = NULL,
   footer = NULL,
   frame = NULL,
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   ...
 )
 }
@@ -120,7 +120,7 @@ cir_img(query,
         header = "My funky chemical structure..",
         footer = "..is just so awesome!",
         frame = 1,
-        verbose = TRUE)
+        verbose = getOption("verbose"))
 }
 }
 \references{

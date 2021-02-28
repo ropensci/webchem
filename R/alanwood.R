@@ -31,7 +31,8 @@
 #' # use CAS-numbers
 #' aw_query("79622-59-6", from = 'cas')
 #' }
-aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
+aw_query <- function(query, from = c("name", "cas"),
+                     verbose = getOption("verbose"),
                      type, ...) {
 
   if (!ping_service("aw")) stop(webchem_message("service_down"))
@@ -176,7 +177,7 @@ aw_query <- function(query, from = c("name", "cas"), verbose = TRUE,
 #' @seealso \code{\link{aw_query}}, \code{\link{tempdir}}
 #' @source \url{http://www.alanwood.net/pesticides/}
 #' @noRd
-build_aw_idx <- function(verbose = TRUE, force_build = FALSE) {
+build_aw_idx <- function(verbose = getOption("verbose"), force_build = FALSE) {
   if (!ping_service("aw")) stop(webchem_message("service_down"))
   suppressWarnings(try(load(paste0(tempdir(), "/data/aw_idx.rda")),
                        silent = TRUE))

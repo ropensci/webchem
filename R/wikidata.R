@@ -34,7 +34,7 @@
 get_wdid <-
   function(query,
            match = c('best', 'first', 'all', 'ask', 'na'),
-           verbose = TRUE,
+           verbose = getOption("verbose"),
            language = 'en') {
 
     if (!ping_service("wd")) stop(webchem_message("service_down"))
@@ -146,7 +146,7 @@ get_wdid <-
 #'  id <- c("Q408646", "Q18216")
 #'  wd_ident(id)
 #' }
-wd_ident <- function(id, verbose = TRUE){
+wd_ident <- function(id, verbose = getOption("verbose")){
 
   if (!ping_service("wd")) stop(webchem_message("service_down"))
 

@@ -11,7 +11,7 @@ nist_ri(
   polarity = c("polar", "non-polar"),
   temp_prog = c("isothermal", "ramp", "custom"),
   cas = NULL,
-  verbose = TRUE
+  verbose = getOption("verbose")
 )
 }
 \arguments{

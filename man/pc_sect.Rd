@@ -8,7 +8,7 @@ pc_sect(
   id,
   section,
   domain = c("compound", "substance", "assay", "gene", "protein", "patent"),
-  verbose = TRUE
+  verbose = getOption("verbose")
 )
 }
 \arguments{

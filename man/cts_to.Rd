@@ -4,7 +4,7 @@
 \alias{cts_to}
 \title{Return a list of all possible ids}
 \usage{
-cts_to(verbose = TRUE)
+cts_to(verbose = getOption("verbose"))
 }
 \arguments{
 \item{verbose}{logical; should a verbose output be printed on the console?}
@@ -24,8 +24,9 @@ cts_from()
 }
 }
 \references{
-Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O. Fiehn 2010The Chemical Translation Service
--- a Web-Based Tool to Improve Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
+Wohlgemuth, G., P. K. Haldiya, E. Willighagen, T. Kind, and O.
+Fiehn 2010The Chemical Translation Service -- a Web-Based Tool to Improve
+Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 }
 \seealso{
 \code{\link{cts_convert}}
