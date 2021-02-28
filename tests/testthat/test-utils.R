@@ -87,28 +87,37 @@ test_that("as.cas() returns correct reults", {
 })
 
 test_that("parse_mol()", {
-  expect_error(write_mol(123), regex = "string is not a character string")
 
-  csid <- get_csid("bergapten")
-  mol3d <- cs_compinfo(csid$csid, field = "Mol3D")
-  mol <- parse_mol(mol3d$mol3D)
+  A <- cs_compinfo(2265, field = "Mol3D")
+  a <- parse_mol(A$mol3D)
+  B <- cs_compinfo(2265, field = "Mol2D")
+  b <- parse_mol(B$mol2D)
+  C <- cs_convert("BGEBZHIAGXMEMV-UHFFFAOYAX", "inchikey", "mol")
+  c <- parse_mol(C)
 
-  expect_type(mol, "list")
-  expect_equivalent(names(mol), c("eh", "cl", "ab", "bb"))
-  expect_type(mol$eh, "character")
-  expect_type(mol$cl, "character")
-  expect_s3_class(mol$ab, "data.frame")
-  expect_s3_class(mol$bb, "data.frame")
+  # issue #294
+  res <- POST("https://www.ebi.ac.uk/chembl/api/utils/smiles2ctab",
+              body = "CC(O)=O",
+              httr::user_agent(webchem:::webchem_url())
+  )
+  D <- rawToChar(res$content)
+  d <- parse_mol(D)
+
+  expect_type(a, "list")
+  expect_type(a$eh, "character")
+  expect_type(a$cl, "character")
+  expect_s3_class(a$ab, "data.frame")
+  expect_s3_class(a$bb, "data.frame")
+  expect_type(b, "list")
+  expect_type(c, "list")
+  expect_type(d, "list")
 })
 
 test_that("write_mol()", {
   expect_error(write_mol(123), regex = "x is not a character string")
   expect_error(write_mol("hello world"), regex = "x is not a Mol string")
 
-  #csid <- get_csid("bergapten")
-  #mol3d <- cs_compinfo(csid$csid, field = "Mol3D")
-
-  #add snapshot tests after testthat 3 has been activated
+  # test a file output
 
 })
 
