@@ -4,32 +4,15 @@
 \alias{ci_query}
 \title{Retrieve information from ChemIDPlus}
 \usage{
-ci_query(
-  query,
-  from = c("name", "rn", "inchikey", "cas"),
-  match = c("first", "best", "ask", "na"),
-  verbose = TRUE,
-  type
-)
+ci_query(query, from = c("rn", "inchikey"), verbose = getOption("verbose"))
 }
 \arguments{
 \item{query}{character; query string}
 
-\item{from}{character; type of query string. \code{"rn"} for registry number
-(see
-\href{https://chem.nlm.nih.gov/chemidplus/jsp/chemidheavy/help.jsp#LiteSearchDataFields}{documentation}
-for more details), \code{"name"} for common name, or \code{"inchikey"} for
-inchikey as input. \code{"cas"} is a synonym for \code{"rn"} and provided
-for consistency across functions.}
-
-\item{match}{character; How should multiple hits be handled? \code{"first"}
-returns only the first match, \code{"best"} the best matching (by name) ID,
-\code{"ask"} enters an interactive mode and the user is asked for input,
-\code{"na"} returns NA if multiple hits are found.}
+\item{from}{character; type of query string, can be one of \code{"rn"} for
+CAS registry numbers or \code{"inchikey"}.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{type}{deprecated}
 }
 \value{
 A list of 8 entries: name (vector), synonyms (vector), cas (vector),
@@ -47,22 +30,19 @@ Medicine, \url{https://www.nlm.nih.gov/databases/download.html}.
 \examples{
 \dontrun{
 # might fail if API is not available
-# query common name
-y1 <- ci_query(c('Formaldehyde', 'Triclosan'), from = 'name')
-names(y1)
-str(y1[['Triclosan']]) # lots of information inside
-y1[['Triclosan']]$inchikey
-
-# Query by CAS
-y2 <- ci_query('50-00-0', from = 'rn', match = 'first')
-y2[['50-00-0']]$inchikey
+y1 <- ci_query('50-00-0', from = 'rn', match = 'first')
+y1[['50-00-0']]$inchikey
 
 # query by inchikey
-y3 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', from = 'inchikey')
-y3[[1]]$name
+y2 <- ci_query('WSFSSNUMVMOOMR-UHFFFAOYSA-N', from = 'inchikey')
+y2[[1]]$name
 
-# extract lop-P
-sapply(y1, function(y){
+# query multiple compounds
+comps <- c("50-00-0", "64-17-5")
+y3 <- ci_query(comps, from = "rn")
+
+# extract log-P
+sapply(y3, function(y){
  if (length(y) == 1 && is.na(y))
    return(NA)
  y$physprop$Value[y$physprop$`Physical Property` == 'log P (octanol-water)']

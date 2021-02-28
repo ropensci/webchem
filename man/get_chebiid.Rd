@@ -12,7 +12,7 @@ get_chebiid(
   match = c("all", "best", "first", "ask", "na"),
   max_res = 200,
   stars = c("all", "two only", "three only"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   ...
 )
 }

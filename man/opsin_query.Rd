@@ -4,7 +4,7 @@
 \alias{opsin_query}
 \title{OPSIN web interface}
 \usage{
-opsin_query(query, verbose = TRUE, ...)
+opsin_query(query, verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{query}{character;  chemical name that should be queryed.}

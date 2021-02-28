@@ -6,9 +6,10 @@ test_that("cts_compinfo()", {
 
   expect_true(is.na(cts_compinfo("xxx")))
 
-  o1 <- suppressWarnings(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N", verbose = FALSE))
-  o2 <- suppressWarnings(cts_compinfo(c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "XEFQLINVKFYRCS-UHFFFAOYSA-X"), verbose = FALSE))
-  expect_equal(suppressWarnings(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X", verbose = FALSE))[[1]], NA)
+  o1 <- suppressWarnings(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N"))
+  o2 <- suppressWarnings(cts_compinfo(c("XEFQLINVKFYRCS-UHFFFAOYSA-N",
+                                        "XEFQLINVKFYRCS-UHFFFAOYSA-X")))
+  expect_equal(suppressWarnings(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X"))[[1]], NA)
   expect_true(is.na(cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-X")))
   expect_length(o1[[1]], 10)
   expect_equal(round(o1[[1]][["molweight"]], 3), 289.542)
@@ -25,11 +26,12 @@ test_that("cts_convert()", {
   expect_error(cts_convert(comp, c('Chemical Name', 'CAS'), 'CAS'))
   expect_error(cts_convert('Triclosan', 'CAS'))
   expect_true(is.na(cts_convert('xxxx', 'Chemical Name', 'inchikey')))
-  o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', match = "first", verbose = FALSE)
+  o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', match = "first")
   expect_length(o1, 2)
 
   expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
-  expect_equivalent(cts_convert(NA, from = "Chemical Name", to = "inchikey"), NA)
+  expect_equal(cts_convert(NA, from = "Chemical Name", to = "inchikey"),
+               list(NA), ignore_attr = TRUE)
 })
 
 

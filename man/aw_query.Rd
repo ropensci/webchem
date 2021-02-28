@@ -4,7 +4,13 @@
 \alias{aw_query}
 \title{Query http://www.alanwood.net/pesticides/}
 \usage{
-aw_query(query, from = c("name", "cas"), verbose = TRUE, type, ...)
+aw_query(
+  query,
+  from = c("name", "cas"),
+  verbose = getOption("verbose"),
+  type,
+  ...
+)
 }
 \arguments{
 \item{query}{character; search string}

@@ -4,7 +4,7 @@
 \alias{pc_prop}
 \title{Retrieve compound properties from a pubchem CID}
 \usage{
-pc_prop(cid, properties = NULL, verbose = TRUE, ...)
+pc_prop(cid, properties = NULL, verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{cid}{character; Pubchem ID (CID).}

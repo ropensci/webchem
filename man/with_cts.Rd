@@ -4,7 +4,7 @@
 \alias{with_cts}
 \title{Auto-translate identifiers and search databases}
 \usage{
-with_cts(query, from, .f, .verbose = TRUE, ...)
+with_cts(query, from, .f, .verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{query}{character; the search term}

@@ -33,10 +33,10 @@ test_that("chebi returns correct results", {
   A <- chebi_comp_entity("CHEBI:27744")
   B <- chebi_comp_entity("27732")
 
-  expect_is(a, "data.frame")
-  expect_is(b, "data.frame")
-  expect_is(A, "list")
-  expect_is(B, "list")
+  expect_s3_class(a, "data.frame")
+  expect_s3_class(b, "data.frame")
+  expect_type(A, "list")
+  expect_type(B, "list")
 
   expect_equal(names(a)[2], "chebiid")
   expect_length(names(a), 5)

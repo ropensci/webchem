@@ -4,7 +4,7 @@
 \alias{fn_percept}
 \title{Retrieve flavor percepts from www.flavornet.org}
 \usage{
-fn_percept(query, from = "cas", verbose = TRUE, CAS, ...)
+fn_percept(query, from = "cas", verbose = getOption("verbose"), CAS, ...)
 }
 \arguments{
 \item{query}{character; CAS number to search by. See \code{\link{is.cas}} for correct formatting}

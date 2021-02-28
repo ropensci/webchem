@@ -22,7 +22,7 @@
 #' \dontrun{
 #' with_cts("XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
 #' }
-with_cts <- function(query, from, .f, .verbose = TRUE, ...) {
+with_cts <- function(query, from, .f, .verbose = getOption("verbose"), ...) {
   f <- rlang::as_function(.f)
   pos_froms <- eval(rlang::fn_fmls(f)$from)
 

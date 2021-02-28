@@ -4,7 +4,7 @@
 \alias{etox_targets}
 \title{Get Quality Targets from a ETOX ID}
 \usage{
-etox_targets(id, verbose = TRUE)
+etox_targets(id, verbose = getOption("verbose"))
 }
 \arguments{
 \item{id}{character; ETOX ID}

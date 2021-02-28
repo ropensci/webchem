@@ -115,7 +115,7 @@
 cir_query <- function(identifier, representation = "smiles",
                       resolver = NULL,
                       match = c("all", "first", "ask", "na"),
-                      verbose = TRUE,
+                      verbose = getOption("verbose"),
                       choices = NULL,
                       ...){
 
@@ -262,7 +262,7 @@ cir_query <- function(identifier, representation = "smiles",
 #'         header = "My funky chemical structure..",
 #'         footer = "..is just so awesome!",
 #'         frame = 1,
-#'         verbose = TRUE)
+#'         verbose = getOption("verbose"))
 #'}
 #' @export
 #'
@@ -283,7 +283,7 @@ cir_img <- function(query,
                     header = NULL,
                     footer = NULL,
                     frame = NULL,
-                    verbose = TRUE,
+                    verbose = getOption("verbose"),
                     ...) {
 
   if (!ping_service("cir")) stop(webchem_message("service_down"))
