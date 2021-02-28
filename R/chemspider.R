@@ -407,7 +407,7 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
     }
     headers <- c(`Content-Type` = "", `apikey` = apikey)
     body <- list(
-      "input" = query, "inputFormat" = from,
+      "input" = x, "inputFormat" = from,
       "outputFormat" = to
     )
     if (verbose) webchem_message("query", x, appendLF = FALSE)

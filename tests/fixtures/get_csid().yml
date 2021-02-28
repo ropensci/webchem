@@ -1,0 +1,2416 @@
+http_interactions:
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:27 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"d04ca49f-0673-40f0-9293-c6b1f486bb29"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"Triclosan","orderBy":"default","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:27 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"88b86a34-22ed-4f67-8c70-cb5e1de25049"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/88b86a34-22ed-4f67-8c70-cb5e1de25049/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:27 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/88b86a34-22ed-4f67-8c70-cb5e1de25049/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:27 GMT
+      content-type: application/json
+      content-length: '46'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[5363],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:27 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"a96c4e59-ee52-4f2a-ac35-90016dc041d4"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"Naproxene","orderBy":"default","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:28 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"1eb68a2e-c69a-44c9-87f0-f04d21b56474"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/1eb68a2e-c69a-44c9-87f0-f04d21b56474/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:28 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/1eb68a2e-c69a-44c9-87f0-f04d21b56474/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:28 GMT
+      content-type: application/json
+      content-length: '48'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[137720],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:28 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"94d831ba-2891-42e9-8f11-258d6e50ecaa"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"Triclosan","orderBy":"default","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:28 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"7e6e6582-2015-4be6-aa06-e9cfe9409c5c"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/7e6e6582-2015-4be6-aa06-e9cfe9409c5c/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:28 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/7e6e6582-2015-4be6-aa06-e9cfe9409c5c/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:29 GMT
+      content-type: application/json
+      content-length: '46'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[5363],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"Naproxene","orderBy":"default","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:29 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"d137466c-81ca-40f5-a6a5-11ffbf9718d6"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/d137466c-81ca-40f5-a6a5-11ffbf9718d6/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:29 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/d137466c-81ca-40f5-a6a5-11ffbf9718d6/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:29 GMT
+      content-type: application/json
+      content-length: '48'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[137720],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:29 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"fc4a8b92-e97b-4e31-bfb9-425868e19617"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"ethanol","orderBy":"default","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:30 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"414975c9-3b6c-437a-b14b-d7b8a4988fd8"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/414975c9-3b6c-437a-b14b-d7b8a4988fd8/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:30 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/414975c9-3b6c-437a-b14b-d7b8a4988fd8/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:30 GMT
+      content-type: application/json
+      content-length: '45'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[682],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"balloon","orderBy":"default","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:30 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"49bc94e3-da0f-4c14-a8db-1f33da607268"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/49bc94e3-da0f-4c14-a8db-1f33da607268/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:30 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":0,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/49bc94e3-da0f-4c14-a8db-1f33da607268/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:31 GMT
+      content-type: application/json
+      content-length: '42'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"acetic acid","orderBy":"default","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:31 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"ef259fe6-26cd-4ccc-a1d6-89e21d5180a4"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/ef259fe6-26cd-4ccc-a1d6-89e21d5180a4/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:31 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":3,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/ef259fe6-26cd-4ccc-a1d6-89e21d5180a4/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:31 GMT
+      content-type: application/json
+      content-length: '62'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[171,8329490,21171080],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:32 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"77bd23c3-c7be-4cb7-8a24-2b1103e23e9d"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"iron oxide","orderBy":"recordId","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:32 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"098a2ff5-cdbe-4bb6-af18-1da4f5e87f52"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/098a2ff5-cdbe-4bb6-af18-1da4f5e87f52/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:32 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":8,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/098a2ff5-cdbe-4bb6-af18-1da4f5e87f52/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:32 GMT
+      content-type: application/json
+      content-length: '94'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[14147,14237,55474,82623,392353,396260,452497,4937312],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:33 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"be374740-4d66-4b68-9b30-aecda215e59f"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"iron oxide","orderBy":"molecularWeight","orderDirection":"default"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:33 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"f8bc0631-9bcf-4d9f-ae17-2558d120acfb"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/f8bc0631-9bcf-4d9f-ae17-2558d120acfb/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:33 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":8,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/f8bc0631-9bcf-4d9f-ae17-2558d120acfb/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:33 GMT
+      content-type: application/json
+      content-length: '94'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[14237,396260,392353,82623,14147,452497,55474,4937312],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:34 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"860772aa-83b4-4844-9ff1-95ca6d8077fb"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/formula
+    body:
+      encoding: ''
+      string: '{"formula":"C6H12O6","dataSources":[],"orderBy":"referenceCount","orderDirection":"descending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:34 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"a1a65bfb-c117-469f-bfb7-7562e11a622a"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/a1a65bfb-c117-469f-bfb7-7562e11a622a/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:34 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":470,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/a1a65bfb-c117-469f-bfb7-7562e11a622a/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:34 GMT
+      content-type: application/json
+      content-length: '4012'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[23139,1070,868,388747,161434,96749,388476,58238,71358,5589,9484839,388480,5814,5764,17893,10239179,2301265,141983,83142,6638,81254,388775,96680,89855,10254646,2006057,3391434,92408,9129332,85516,4573712,10254647,74279,696,22728,395203,388592,72376,10199754,146783,388443,81406,76670,16736990,9140328,10254648,16736991,388309,389852,10175754,2006622,389853,92322,99744,99879,2005829,388604,395424,99735,3308,390208,388666,4881976,2006681,16736992,10136054,8305737,73715,10199749,9205584,5341887,388644,388332,167821,388436,389851,389854,4810295,9826659,13076841,5360239,134838,9923,389447,5341975,2299155,9281078,5447163,163678,389855,392284,1266050,390203,5381152,5404393,5341883,8305745,66738595,9194630,5028037,5341895,5447164,223817,14466,81206,29367860,388638,5360257,5360183,5341899,5341900,5034781,4883375,8395166,9530770,9943812,10194220,9312824,4937931,5341974,73987,606,134145,4477600,4573617,9281077,44205657,10254580,20017462,10188374,9194629,5496225,8329822,5341976,112956,304771,388680,5341973,4476277,3821706,8096168,21230391,21865584,13085544,10254583,10254593,10254594,28576279,34988825,10194260,10254579,19356740,19489809,58784816,9183704,10194221,4451304,5404266,5291550,4573806,10194222,10188373,9553766,9140327,8305738,60497946,19953363,19954310,21865632,21537264,21865583,10254589,35766931,24784702,21865719,21865720,26326034,26329832,26584598,61715408,61665226,22901092,28685609,19953364,61403193,57488056,33690,571271,8351877,9655623,9746666,9530772,9392640,9964477,57488058,58784526,61389513,58803807,61401992,61408502,61422840,61432534,61432826,21865718,10468468,33288561,33288562,35799833,26667994,31045940,61688685,61626774,62986489,62989328,61692437,61694353,61711027,61715240,61715255,67035626,68644941,68899492,75233219,61696876,61699511,62998876,62998957,64808680,62882974,62903283,62915839,81367823,75319141,61703044,61638365,61627073,61632477,61648517,61650093,61656114,61656873,61688828,61675954,61682641,61688149,61688327,61688459,61688635,61667236,61432394,61664604,61671867,74090228,31047299,28411744,22906009,35802285,44750373,57488025,32696449,32967091,24784948,24794240,19981628,61580938,61592313,61596938,61597102,61597135,61597464,61427274,61415279,61420485,61421988,61438137,61401993,61038855,61403453,59650916,61406361,61405223,61397782,61398242,57489876,9227394,4573852,57579068,58783950,58785383,61398768,61398775,61398954,61398955,61398968,61398990,61400404,61406196,61406278,61406358,61404316,61228409,61228658,61229787,61285707,61318172,61402027,59053198,61447558,61451364,61454055,61454322,61455193,61458815,61579141,61580112,61580902,61422723,61429076,61411296,61600590,61601672,61602663,61605506,61606847,61610654,61611989,61621422,61625353,61626231,61626668,61597196,61583327,61583328,61437137,19993535,21379182,20171909,21173652,17216070,17216093,34978157,34978159,23942409,24534238,32674256,32674257,32674258,32674261,32674262,74171152,74176756,74176759,74940269,74940817,74947056,74987855,74987888,74988179,74988202,74988203,74988204,74988818,74989014,74989044,74989237,74989238,74989239,74992475,74992551,74993433,74999296,74999336,74999338,74999347,74999348,75001543,75146970,75147748,75147749,75147750,75147751,75147752,75147753,75147754,75148733,75148758,75148924,75148930,75149369,75150840,75151734,75152447,75152695,75158506,75159224,75161745,75226942,75227600,75228166,75229233,75230354,61673151,61668879,61670927,61671613,61682261,61682622,61689857,61658282,61659268,61650354,61651209,61652372,61653656,61656113,61635835,61636681,61637147,61637495,61640138,61626948,75319861,75566818,75566821,75682827,76598990,76599185,76608025,78433910,78476243,78478131,81367601,81368185,81368283,81368329,81368454,88293913,88294229,88294470,88294671,95544406,95605502,95669675,95715953,96439164,96457796,96459794,96459861,96459881,96459882,96459899,97509988,61702298,61702664,61702885,61695018,61695729,75233953,75233954,75233955,75233956,75235045,75317567,71116516,71116575,71116935,67155399,67175631,67494622,67032066],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:34 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"57ee41ad-89bf-4523-9f45-446d9a57a603"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/formula
+    body:
+      encoding: ''
+      string: '{"formula":"C6H12O6","dataSources":[],"orderBy":"dataSourceCount","orderDirection":"descending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:35 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"bc5bdbc3-ec5a-46c4-9e86-5e6b9258020f"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/bc5bdbc3-ec5a-46c4-9e86-5e6b9258020f/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:35 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":470,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/bc5bdbc3-ec5a-46c4-9e86-5e6b9258020f/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:35 GMT
+      content-type: application/json
+      content-length: '4012'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[10239179,5764,58238,71358,83142,96749,2301265,17893,141983,6638,868,96680,10254646,9129332,5589,388480,3391434,388775,10254647,92408,5814,89855,81254,395203,10199754,76670,22728,72376,74279,4573712,81406,23139,388476,1070,85516,388747,16736990,16736991,10175754,10254648,161434,92322,146783,9140328,2006622,99879,99744,389852,389853,390208,388604,99735,395424,2005829,73715,388666,10136054,2006057,2006681,4881976,5341887,8305737,10199749,388309,16736992,9826659,9205584,388332,134838,389851,389854,388436,13076841,5360239,5447163,388443,167821,389447,5341975,4810295,2299155,1266050,5381152,9281078,390203,392284,389855,388644,3308,9923,81206,163678,9194630,8305745,5447164,5341883,29367860,5360257,223817,5404393,5341974,5341900,5341895,5028037,4883375,5360183,9312824,9943812,4937931,5034781,5341899,134145,388638,696,73987,5341976,4477600,9281077,10254580,9484839,44205657,9530770,8395166,8096168,5496225,10194220,8329822,10254583,4573617,606,14466,21230391,21865584,388680,304771,388592,5341973,10254593,10254594,13085544,9194629,10188374,5404266,4451304,10194221,9553766,5291550,10194260,10194222,19489809,26326034,21537264,20017462,58784816,28576279,34988825,61665226,8305738,9183704,9140327,10254589,10254579,4573806,4476277,19356740,19953363,24784702,26584598,19953364,21865632,21865583,21865719,21865720,33690,112956,61403193,57488056,22901092,19954310,10188373,60497946,10468468,31045940,3821706,9530772,9655623,8351877,35799833,35766931,58784526,58803807,26667994,26329832,28685609,57488058,61694353,61692437,62989328,62986489,61715408,61711027,61432826,61408502,61389513,571271,9964477,9746666,9392640,33288561,33288562,61401992,61422840,61432534,61626774,61688685,61688828,61703044,62915839,62998876,62998957,68899492,61650093,61656114,61656873,61667236,61596938,61432394,61405223,61406361,61415279,61420485,75233219,61401993,61403453,61038855,61398242,24784948,44750373,21865718,74090228,9227394,61427274,61421988,67035626,61438137,61648517,61597464,61632477,61627073,61597135,61597102,61592313,61580938,61699511,61696876,61715255,61715240,61682641,61688149,62903283,62882974,61671867,61688635,61688459,61688327,61675954,61664604,61638365,31047299,28411744,32967091,32696449,59650916,35802285,57488025,61397782,57489876,22906009,19981628,75319141,68644941,66738595,81367823,75319861,96459899,96459882,96459881,96459861,96459794,96457796,96439164,81368329,81368283,64808680,75317567,81368185,21379182,20171909,24794240,81368454,81367601,59053198,61398990,61398968,58785383,57579068,32674262,32674261,32674258,32674257,32674256,61637495,61636681,61635835,61659268,61653656,61651209,61650354,61673151,61670927,61668879,61689857,61695729,61695018,61702885,61702664,61702298,61580902,61580112,61579141,61458815,61455193,61454055,61451364,61626668,61625353,61621422,61611989,61610654,61606847,61602663,61601672,61600590,61597196,61640138,61429076,61411296,61406196,61318172,61285707,61229787,61228658,61228409,4573852,74947056,74987855,74987888,74988179,74988202,74988203,74988204,74993433,78433910,95544406,97509988,95715953,95669675,95605502,88294671,88294470,88294229,88293913,78478131,78476243,76608025,76599185,76598990,75682827,75566821,75566818,75235045,75233956,75233955,75233954,75233953,23942409,24534238,19993535,21173652,17216070,17216093,58783950,34978157,34978159,61398768,61398775,61398954,61398955,61400404,61404316,61402027,75230354,75229233,75228166,75227600,75226942,75161745,75159224,75158506,75152695,75152447,75151734,75150840,75149369,75148930,75148924,75148758,75148733,75147754,75147753,75147752,75147751,75147750,75147749,75147748,75146970,75001543,74999348,74999347,74999338,74999336,74999296,74992551,74992475,74989239,74989238,74989237,74989044,74989014,74988818,74940817,74940269,74176759,74176756,74171152,71116935,71116575,71116516,61422723,61406278,61406358,61605506,61626231,61626948,61637147,61437137,61447558,61454322,61583327,61583328,61671613,61682261,61682622,61658282,61652372,61656113,67494622,67175631,67155399,67032066],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:36 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"79296184-8ae4-45d0-9f78-1e086682e901"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/formula
+    body:
+      encoding: ''
+      string: '{"formula":"C6H12O6","dataSources":[],"orderBy":"pubMedCount","orderDirection":"descending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:36 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"0ff593fa-047a-4052-bd04-d709fe0be019"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/0ff593fa-047a-4052-bd04-d709fe0be019/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:36 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":470,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/0ff593fa-047a-4052-bd04-d709fe0be019/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:36 GMT
+      content-type: application/json
+      content-length: '4012'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[96749,5589,71358,58238,9484839,9312824,10239179,5814,388480,2301265,2006057,388775,5764,17893,141983,96680,23139,388476,9129332,388747,161434,22728,6638,83142,390208,17216093,76670,92408,17216070,388604,395203,2299155,89855,10254647,81254,388309,74279,19489809,81406,4573712,99744,389854,4477600,10199754,5447163,395424,389851,85516,10254648,389853,389852,92322,72376,4810295,9140328,5404393,146783,16736992,16736991,99735,5447164,5381152,10175754,10199749,73715,16736990,1070,388332,2006622,10136054,99879,389855,8305737,5341975,21379182,2006681,134145,388436,19993535,20171909,10254646,19953363,19953364,134838,163678,390203,389447,3308,696,868,9923,14466,73987,81206,3391434,4451304,4573806,9281078,9826659,9943812,9964477,10254579,10254580,10254583,10254589,10254593,10254594,10188373,10188374,5496225,10194220,10194221,10194222,10194260,8305738,8305745,8329822,8351877,8395166,9183704,9194629,9194630,9205584,9227394,9281077,9140327,9392640,9530770,9530772,9553766,9655623,9746666,4573852,5404266,8096168,4476277,4573617,5341976,5360183,5360239,5360257,3821706,571271,1266050,2005829,4881976,4883375,4937931,5028037,5034781,5291550,5341883,5341887,5341895,5341899,5341900,5341973,5341974,33690,606,388592,388638,388644,388666,388680,392284,167821,223817,304771,112956,388443,19954310,19981628,19356740,10468468,13076841,13085544,21173652,21230391,20017462,21537264,21865583,21865584,21865632,21865718,21865719,21865720,22901092,22906009,23942409,24534238,24784702,24784948,24794240,26326034,26329832,26584598,26667994,28411744,28576279,28685609,29367860,31045940,31047299,32674256,32674257,32674258,32674261,32674262,32696449,32967091,33288561,33288562,34978157,34978159,34988825,35766931,35799833,35802285,44205657,44750373,57488025,57488056,57488058,57489876,57579068,58783950,58784526,58784816,58785383,58803807,59053198,59650916,60497946,61038855,61228409,61228658,61229787,61285707,61318172,61389513,61397782,61398242,61398768,61398775,61398954,61398955,61398968,61398990,61400404,61401992,61401993,61402027,61403193,61403453,61404316,61405223,61406196,61406278,61406358,61406361,61408502,61411296,61415279,61420485,61421988,61422723,61422840,61427274,61429076,61432394,61432534,61432826,61437137,61438137,61447558,61451364,61454055,61454322,61455193,61458815,61579141,61580112,61580902,61580938,61583327,61583328,61592313,61596938,61597102,61597135,61597196,61597464,61600590,61601672,61602663,61605506,61606847,61610654,61611989,61621422,61625353,61626231,61626668,61626774,61626948,61627073,61632477,61635835,61636681,61637147,61637495,61638365,61640138,61648517,61650093,61650354,61651209,61652372,61653656,61656113,61656114,61656873,61658282,61659268,61664604,61665226,61667236,61668879,61670927,61671613,61671867,61673151,61675954,61682261,61682622,61682641,61688149,61688327,61688459,61688635,61688685,61688828,61689857,61692437,61694353,61695018,61695729,61696876,61699511,61702298,61702664,61702885,61703044,61711027,61715240,61715255,61715408,62882974,62903283,62915839,62986489,62989328,62998876,62998957,64808680,66738595,67032066,67035626,67155399,67175631,67494622,68644941,68899492,71116516,71116575,71116935,74090228,74171152,74176756,74176759,74940269,74940817,74947056,74987855,74987888,74988179,74988202,74988203,74988204,74988818,74989014,74989044,74989237,74989238,74989239,74992475,74992551,74993433,74999296,74999336,74999338,74999347,74999348,75001543,75146970,75147748,75147749,75147750,75147751,75147752,75147753,75147754,75148733,75148758,75148924,75148930,75149369,75150840,75151734,75152447,75152695,75158506,75159224,75161745,75226942,75227600,75228166,75229233,75230354,75233219,75233953,75233954,75233955,75233956,75235045,75317567,75319141,75319861,75566818,75566821,75682827,76598990,76599185,76608025,78433910,78476243,78478131,81367601,81367823,81368185,81368283,81368329,81368454,88293913,88294229,88294470,88294671,95544406,95605502,95669675,95715953,96439164,96457796,96459794,96459861,96459881,96459882,96459899,97509988],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:37 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"ef4f499d-e476-406f-b51f-afeb82623e0b"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/formula
+    body:
+      encoding: ''
+      string: '{"formula":"C6H12O6","dataSources":[],"orderBy":"rscCount","orderDirection":"descending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:37 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"447fc30c-bce5-48a2-a3ad-434287deb119"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/447fc30c-bce5-48a2-a3ad-434287deb119/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:37 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":470,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/447fc30c-bce5-48a2-a3ad-434287deb119/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:38 GMT
+      content-type: application/json
+      content-length: '4012'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[96749,5589,71358,58238,9312824,9484839,2301265,5814,388480,17893,141983,388775,5764,2006057,10239179,23139,388476,389851,388747,161434,6638,22728,17216093,96680,92408,17216070,85516,83142,9129332,5447163,395424,89855,99744,388309,388604,395203,2299155,390208,76670,10254647,389854,4477600,389853,16736991,389852,81254,5447164,5381152,5404393,4810295,146783,10254648,389447,16736992,19489809,9281078,72376,74279,99735,81406,4573712,10199749,10199754,16736990,1070,92322,73715,388332,10175754,99879,10254646,2006622,3391434,10136054,19993535,8305737,134838,81206,9923,163678,389855,388436,696,73987,9140328,9943812,4573806,19953363,19953364,21379182,2006681,5341975,4451304,9826659,868,3308,14466,134145,390203,20171909,20017462,34978157,34978159,34988825,35766931,35799833,35802285,44205657,44750373,57488025,57488056,57488058,57489876,57579068,58783950,58784526,58784816,58785383,58803807,59053198,59650916,60497946,61038855,61228409,61228658,61229787,61285707,61318172,61389513,61397782,61398242,61398768,61398775,61398954,61398955,61398968,61398990,61400404,61401992,61401993,61402027,61403193,61403453,61404316,61405223,61406196,61406278,61406358,61406361,61408502,61411296,61415279,61420485,61421988,61422723,61422840,61427274,61429076,61432394,61432534,61432826,61437137,61438137,61447558,61451364,61454055,61454322,61455193,61458815,61579141,61580112,61580902,61580938,61583327,61583328,61592313,61596938,61597102,61597135,61597196,61597464,61600590,61601672,61602663,61605506,61606847,61610654,61611989,61621422,61625353,61626231,61626668,61626774,61626948,61627073,61632477,61635835,61636681,61637147,61637495,61638365,61640138,61648517,61650093,61650354,61651209,61652372,61653656,61656113,61656114,61656873,61658282,61659268,61664604,61665226,61667236,61668879,61670927,61671613,61671867,61673151,61675954,61682261,61682622,61682641,61688149,61688327,61688459,61688635,61688685,61688828,61689857,61692437,61694353,61695018,61695729,61696876,61699511,61702298,61702664,61702885,61703044,61711027,61715240,61715255,61715408,62882974,62903283,62915839,62986489,62989328,62998876,62998957,64808680,66738595,67032066,67035626,67155399,67175631,67494622,68644941,68899492,71116516,71116575,71116935,74090228,74171152,74176756,74176759,74940269,74940817,74947056,74987855,74987888,74988179,74988202,74988203,74988204,74988818,74989014,74989044,74989237,74989238,74989239,74992475,74992551,74993433,74999296,74999336,74999338,74999347,74999348,75001543,75146970,75147748,75147749,75147750,75147751,75147752,75147753,75147754,75148733,75148758,75148924,75148930,75149369,75150840,75151734,75152447,75152695,75158506,75159224,75161745,75226942,75227600,75228166,75229233,75230354,75233219,75233953,75233954,75233955,75233956,75235045,75317567,75319141,75319861,75566818,75566821,75682827,76598990,76599185,76608025,78433910,78476243,78478131,81367601,81367823,81368185,81368283,81368329,81368454,88293913,88294229,88294470,88294671,95544406,95605502,95669675,95715953,96439164,96457796,96459794,96459861,96459881,96459882,96459899,97509988,392284,388638,388644,388666,388680,112956,167821,223817,304771,388443,388592,33690,606,9964477,10254579,10254580,10254583,10254589,10254593,10254594,10188373,10188374,5496225,3821706,10194220,10194221,10194222,10194260,9183704,9194629,9194630,9205584,9227394,9281077,8305738,8305745,8329822,8351877,8395166,9140327,9392640,9530770,9530772,9553766,9655623,9746666,4476277,571271,1266050,2005829,4881976,4883375,4937931,5028037,5034781,5291550,5341883,5341887,5341895,5341899,5341900,5341973,5341974,5341976,5360183,5360239,5360257,4573617,4573852,5404266,8096168,21865583,21865584,21865632,21865718,21865719,21865720,22901092,22906009,23942409,24534238,24784702,24784948,24794240,26326034,26329832,26584598,26667994,28411744,28576279,28685609,29367860,31045940,31047299,32674256,32674257,32674258,32674261,32674262,32696449,32967091,33288561,33288562,21537264,19954310,19981628,10468468,13076841,13085544,21173652,21230391,19356740],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:38 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"1efb74f7-6dea-4d07-926a-22f2fddbc0bb"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"iron oxide","orderBy":"molecularWeight","orderDirection":"descending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:38 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"0699f0c0-3165-4a35-abed-52ec6dc09dd1"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/0699f0c0-3165-4a35-abed-52ec6dc09dd1/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:39 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":8,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/0699f0c0-3165-4a35-abed-52ec6dc09dd1/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:39 GMT
+      content-type: application/json
+      content-length: '94'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[4937312,55474,14147,452497,82623,392353,14237,396260],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:39 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"156e4809-4eea-417c-b4f0-ba1e7afee2ec"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/smiles
+    body:
+      encoding: ''
+      string: '{"smiles":"C#C"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:40 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"e2f1a736-e316-443d-a558-877cecaf2eaf"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/e2f1a736-e316-443d-a558-877cecaf2eaf/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:40 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/e2f1a736-e316-443d-a558-877cecaf2eaf/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:40 GMT
+      content-type: application/json
+      content-length: '46'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[6086],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:40 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"47b053bf-ec91-4cb8-8d9d-20b1dffd4744"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/smiles
+    body:
+      encoding: ''
+      string: '{"smiles":"CC(O)=O"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:41 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"a9b18968-bbda-4ba0-90d3-9a44088bdb93"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/a9b18968-bbda-4ba0-90d3-9a44088bdb93/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:41 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/a9b18968-bbda-4ba0-90d3-9a44088bdb93/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:41 GMT
+      content-type: application/json
+      content-length: '45'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[171],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:42 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"29f0c402-b941-433a-925e-9daa32f76aaa"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/inchi
+    body:
+      encoding: ''
+      string: '{"inchi":"InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:42 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"da6701f9-8ca8-4c8a-aa71-3f08d6341753"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/da6701f9-8ca8-4c8a-aa71-3f08d6341753/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:42 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/da6701f9-8ca8-4c8a-aa71-3f08d6341753/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:43 GMT
+      content-type: application/json
+      content-length: '45'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[171],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:43 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"33201b37-6c44-4726-a4a6-cebca4477cf1"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/inchikey
+    body:
+      encoding: ''
+      string: '{"inchikey":"QTBSBXVTEAMEQO-UHFFFAOYSA-N"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:43 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"6fed99f7-31b6-4602-90c5-26c024c45d66"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/6fed99f7-31b6-4602-90c5-26c024c45d66/status
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:44 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"count":1,"message":"","status":"Complete"}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
+- request:
+    method: get
+    uri: https://api.rsc.org/compounds/v1/filter/6fed99f7-31b6-4602-90c5-26c024c45d66/results
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Sat, 20 Feb 2021 19:48:44 GMT
+      content-type: application/json
+      content-length: '45'
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"results":[171],"limitedToMaxAllowed":false}'
+  recorded_at: 2021-02-20 19:48:44 GMT
+  recorded_with: vcr/0.6.0, webmockr/0.7.4
