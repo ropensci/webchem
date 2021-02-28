@@ -1,4 +1,8 @@
-# webchem 1.1.1.9000
+# webchem 1.1.1.9001
+
+## BUG FIXES
+
+* ci_query() can no longer query chemicals by name.
 
 ## MINOR IMPROVEMENTS
 
