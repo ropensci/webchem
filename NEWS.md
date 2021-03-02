@@ -1,4 +1,8 @@
-# webchem 1.1.1.9001
+# webchem 1.1.1.9005
+
+## NEW FEATURES
+
+* Retrieve data from webTEST, a Web-Services Program to Estimate Toxicity from Molecular Structure with webtest_query().
 
 ## BUG FIXES
 
