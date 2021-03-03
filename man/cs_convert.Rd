@@ -4,7 +4,7 @@
 \alias{cs_convert}
 \title{Convert identifiers using ChemSpider}
 \usage{
-cs_convert(query, from, to, verbose = TRUE, apikey = NULL)
+cs_convert(query, from, to, verbose = getOption("verbose"), apikey = NULL)
 }
 \arguments{
 \item{query}{character; query ID.}

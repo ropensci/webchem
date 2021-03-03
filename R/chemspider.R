@@ -48,7 +48,7 @@ cs_check_key <- function() {
 #' \dontrun{
 #' cs_datasources()
 #' }
-cs_datasources <- function(apikey = NULL, verbose = TRUE) {
+cs_datasources <- function(apikey = NULL, verbose = getOption("verbose")) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
@@ -180,7 +180,7 @@ cs_control <- function(datasources = vector(),
 get_csid <- function(query,
                      from = c("name", "formula", "inchi", "inchikey", "smiles"),
                      match = c("all", "first", "ask", "na"),
-                     verbose = TRUE,
+                     verbose = getOption("verbose"),
                      apikey = NULL,
                      ...) {
   if (is.null(apikey)) {
@@ -351,7 +351,8 @@ get_csid <- function(query,
 #' )
 #' cs_convert(160, from = "csid", to = "smiles")
 #' }
-cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
+cs_convert <- function(query, from, to, verbose = getOption("verbose"),
+                       apikey = NULL) {
   if (is.null(apikey)) {
     apikey <- cs_check_key()
   }
@@ -469,7 +470,8 @@ cs_convert <- function(query, from, to, verbose = TRUE, apikey = NULL) {
 #' cs_compinfo(171, c("SMILES", "CommonName"))
 #' cs_compinfo(171:182, "SMILES")
 #' }
-cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
+cs_compinfo <- function(csid, fields, verbose = getOption("verbose"),
+                        apikey = NULL) {
   if (mean(is.na(csid)) == 1) {
     if (verbose) webchem_message("na")
     return(NA)
@@ -552,7 +554,7 @@ cs_compinfo <- function(csid, fields, verbose = TRUE, apikey = NULL) {
 #' csids <- get_csid(c('Aspirin', 'Triclosan'))
 #' cs_compinfo(csids)
 #' }
-cs_extcompinfo <- function(csid, token, verbose = TRUE, ...) {
+cs_extcompinfo <- function(csid, token, verbose = getOption("verbose"), ...) {
   .Deprecated("cs_compinfo()", old = "cs_extcompinfo()",
               msg = "'cs_extcompinfo' is deprecated.
 use 'cs_commpinfo()' instead.")
@@ -627,7 +629,7 @@ cs_img <- function(csid,
                    dir,
                    overwrite = TRUE,
                    apikey = NULL,
-                   verbose = TRUE) {
+                   verbose = getOption("verbose")) {
   overwrite <- match.arg(as.character(overwrite), choices = c(TRUE, FALSE))
   if (is.null(apikey)) {
     apikey <- cs_check_key()
