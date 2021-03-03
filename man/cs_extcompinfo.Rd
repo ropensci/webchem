@@ -4,7 +4,7 @@
 \alias{cs_extcompinfo}
 \title{Get extended record details by ChemSpider ID}
 \usage{
-cs_extcompinfo(csid, token, verbose = TRUE, ...)
+cs_extcompinfo(csid, token, verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{csid}{character,  ChemSpider ID.}

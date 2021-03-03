@@ -4,7 +4,13 @@
 \alias{cs_img}
 \title{Download images from ChemSpider}
 \usage{
-cs_img(csid, dir, overwrite = TRUE, apikey = NULL, verbose = TRUE)
+cs_img(
+  csid,
+  dir,
+  overwrite = TRUE,
+  apikey = NULL,
+  verbose = getOption("verbose")
+)
 }
 \arguments{
 \item{csid}{numeric; the ChemSpider ID (CSID) of the substance. This will

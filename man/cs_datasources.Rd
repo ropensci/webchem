@@ -4,7 +4,7 @@
 \alias{cs_datasources}
 \title{Retrieve ChemSpider data sources}
 \usage{
-cs_datasources(apikey = NULL, verbose = TRUE)
+cs_datasources(apikey = NULL, verbose = getOption("verbose"))
 }
 \arguments{
 \item{apikey}{character; your API key. If NULL (default),

@@ -8,7 +8,7 @@ get_csid(
   query,
   from = c("name", "formula", "inchi", "inchikey", "smiles"),
   match = c("all", "first", "ask", "na"),
-  verbose = TRUE,
+  verbose = getOption("verbose"),
   apikey = NULL,
   ...
 )

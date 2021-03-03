@@ -28,7 +28,7 @@ test_that("cs_datasources()", {
     a <- cs_datasources()
   })
 
-  expect_is(a, "character")
+  expect_type(a, "character")
 })
 
 test_that("cs_control()", {
@@ -103,7 +103,7 @@ test_that("get_csid()", {
     })
 
   # get_csid() works with defaults
-  expect_is(a, "data.frame")
+  expect_s3_class(a, "data.frame")
   expect_equal(a$csid, 5363)
   expect_equal(b$csid, 137720)
   expect_equal(ab$csid, c(5363, 137720))
@@ -122,15 +122,15 @@ test_that("get_csid()", {
   expect_equal(d1$csid, 6086)
 
   # get_csid() can query smiles
-  expect_is(e1$csid, "integer")
+  expect_type(e1$csid, "integer")
   expect_equal(e1$csid, 171)
 
   # get_csid() can query inchis
-  expect_is(f1$csid, "integer")
+  expect_type(f1$csid, "integer")
   expect_equal(f1$csid, 171)
 
   # get_csid() can query inchikeys
-  expect_is(g1$csid, "integer")
+  expect_type(g1$csid, "integer")
   expect_equal(g1$csid, 171)
 })
 
@@ -184,7 +184,7 @@ test_that("cs_convert()", {
   expect_length(c2_rev, 2)
   expect_equal(c, "CC(=O)O")
   expect_equal(c_rev, 171)
-  expect_is(d, "character")
+  expect_type(d, "character")
   expect_length(d2, 2)
   expect_equal(e, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
   expect_equal(e_rev, "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
@@ -194,11 +194,11 @@ test_that("cs_convert()", {
   expect_equal(f_rev, "InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
   expect_length(f2, 2)
   expect_length(f2_rev, 2)
-  expect_is(g, "character")
+  expect_type(g, "character")
   #expect_equal(g_rev, "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)")
   #possible db error
   expect_length(g2, 2)
-  expect_is(h, "character")
+  expect_type(h, "character")
   expect_equal(h_rev, "QTBSBXVTEAMEQO-UHFFFAOYSA-N")
   expect_length(h2, 2)
   expect_length(h2_rev, 2)
@@ -225,9 +225,9 @@ test_that("cs_compinfo()", {
         "RSCCount", "Mol2D", "Mol3D"))
   })
 
-  expect_is(a, "data.frame")
+  expect_s3_class(a, "data.frame")
   expect_equal(dim(a), c(1, 18))
-  expect_is(b, "data.frame")
+  expect_s3_class(b, "data.frame")
   expect_equal(dim(b), c(2, 18))
 })
 
