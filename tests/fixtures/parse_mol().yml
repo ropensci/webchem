@@ -1,0 +1,184 @@
+http_interactions:
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/records/batch
+    body:
+      encoding: ''
+      string: '{"recordIds":[2265],"fields":["Mol3D"]}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 05 Mar 2021 08:25:19 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"records":[{"id":2265,"mol3D":"2355\n  Marvin  12300703363D          \n\n
+        24 26  0  0  0  0            999 V2000\n    1.9095    2.7937   -0.2938 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.0348   -2.0377   -0.2964
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9595    0.3931   -0.0771 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1997   -4.1635   -0.2351
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0449    1.5347   -0.2760 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.0015   -0.8911   -0.2884
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7016    0.3410   -0.2302 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4427    1.5231   -0.2994
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4278   -0.8990   -0.3054 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1535    0.3113   -0.3059
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.3415    2.8704   -0.2766 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.6144   -2.1541   -0.2995
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.8325    3.6159   -0.2774 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.1210   -3.2825   -0.2814
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.4860   -3.1729   -0.2708 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.5744    0.3637    1.1113
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1755    0.3159   -0.3042 H   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2964    3.2342   -0.2731
+        H   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.6057   -2.2309   -0.3200 H   0  0  0  0  0  0  0  0  0  0  0  0\n    0.8770    4.6362   -0.2655
+        H   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.3247   -4.1722   -0.2768 H   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.6515    0.3758    0.9503
+        H   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.3072    1.2345    1.7154 H   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.3265   -0.5395    1.6759
+        H   0  0  0  0  0  0  0  0  0  0  0  0\n  1  8  1  0  0  0  0\n  1 13  1  0  0  0  0\n  2  9  1  0  0  0  0\n  2
+        15  1  0  0  0  0\n  3  7  1  0  0  0  0\n  3 16  1  0  0  0  0\n  4 15  2  0  0  0  0\n  5  7  1  0  0  0  0\n  5  8  2  0  0  0  0\n  5
+        11  1  0  0  0  0\n  6  7  2  0  0  0  0\n  6  9  1  0  0  0  0\n  6 12  1  0  0  0  0\n  8
+        10  1  0  0  0  0\n  9 10  2  0  0  0  0\n 10 17  1  0  0  0  0\n 11 13  2  0  0  0  0\n
+        11 18  1  0  0  0  0\n 12 14  2  0  0  0  0\n 12 19  1  0  0  0  0\n 13 20  1  0  0  0  0\n
+        14 15  1  0  0  0  0\n 14 21  1  0  0  0  0\n 16 22  1  0  0  0  0\n 16 23  1  0  0  0  0\n
+        16 24  1  0  0  0  0\nM  END\n> <PUBCHEM_BONDANNOTATIONS>\n1  13  8\n1  8  8\n11  13  8\n12  14  8\n14  15  8\n2  15  8\n2  9  8\n5  11  8\n5  7  8\n5  8  8\n6  12  8\n6  7  8\n6  9  8\n8  10  8\n9  10  8\n\n$$$$\n"}]}'
+  recorded_at: 2021-03-05 08:25:20 GMT
+  recorded_with: vcr/0.6.1.96, webmockr/0.7.4.95
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/records/batch
+    body:
+      encoding: ''
+      string: '{"recordIds":[2265],"fields":["Mol2D"]}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 05 Mar 2021 08:25:19 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"records":[{"id":2265,"mol2D":"\n  ACD/Labs03221914022D\n\n 16 18  0  0  0  0  0  0  0  0  1
+        V2000\n    2.0457   -4.6536    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2013   -3.9900    0.0000
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2013   -2.6626    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.3491   -1.9911    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5047   -2.6626    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.6603   -1.9911    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.6603   -0.6637    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.8081    0.0000    0.0000
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5047    0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.3491   -0.6637    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2013    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.0457   -0.6637    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.0457   -1.9911    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7886   -2.4049    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000   -1.3274    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7886   -0.2577    0.0000
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  3
+        13  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4 10  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  2  0  0  0  0\n  7  9  1  0  0  0  0\n  9
+        10  1  0  0  0  0\n 10 11  2  0  0  0  0\n 11 12  1  0  0  0  0\n 12 13  2  0  0  0  0\n
+        12 16  1  0  0  0  0\n 13 14  1  0  0  0  0\n 14 15  2  0  0  0  0\n 15 16  1  0  0  0  0\nM  END\n"}]}'
+  recorded_at: 2021-03-05 08:25:20 GMT
+  recorded_with: vcr/0.6.1.96, webmockr/0.7.4.95
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 05 Mar 2021 08:25:19 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"queryId":"912f0be8-d199-4757-accc-8dce541ef17c"}'
+  recorded_at: 2021-03-05 08:25:20 GMT
+  recorded_with: vcr/0.6.1.96, webmockr/0.7.4.95
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/tools/convert
+    body:
+      encoding: ''
+      string: '{"input":"BGEBZHIAGXMEMV-UHFFFAOYAX","inputFormat":"inchikey","outputFormat":"mol"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 05 Mar 2021 08:25:20 GMT
+      content-type: application/json; charset=utf-8
+      transfer-encoding: chunked
+      connection: keep-alive
+      server: Kestrel
+      x-rsc-apigee: ''
+      x-powered-by: ASP.NET
+      access-control-allow-origin: ''
+      access-control-allow-headers: origin, x-requested-with, accept, content-type,
+        authorization, apikey
+      access-control-max-age: '3628800'
+      access-control-allow-methods: GET, POST, OPTIONS
+    body:
+      encoding: UTF-8
+      file: no
+      string: '{"output":"\n  ACD/Labs03221914022D\n\n 16 18  0  0  0  0  0  0  0  0  1
+        V2000\n    2.0457   -4.6536    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2013   -3.9900    0.0000
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2013   -2.6626    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.3491   -1.9911    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5047   -2.6626    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.6603   -1.9911    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.6603   -0.6637    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.8081    0.0000    0.0000
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.5047    0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.3491   -0.6637    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2013    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.0457   -0.6637    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.0457   -1.9911    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7886   -2.4049    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000   -1.3274    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7886   -0.2577    0.0000
+        O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  3
+        13  1  0  0  0  0\n  4  5  1  0  0  0  0\n  4 10  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  7  1  0  0  0  0\n  7  8  2  0  0  0  0\n  7  9  1  0  0  0  0\n  9
+        10  1  0  0  0  0\n 10 11  2  0  0  0  0\n 11 12  1  0  0  0  0\n 12 13  2  0  0  0  0\n
+        12 16  1  0  0  0  0\n 13 14  1  0  0  0  0\n 14 15  2  0  0  0  0\n 15 16  1  0  0  0  0\nM  END\n"}'
+  recorded_at: 2021-03-05 08:25:20 GMT
+  recorded_with: vcr/0.6.1.96, webmockr/0.7.4.95

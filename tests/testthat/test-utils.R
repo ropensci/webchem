@@ -88,11 +88,14 @@ test_that("as.cas() returns correct reults", {
 
 test_that("parse_mol()", {
 
-  A <- cs_compinfo(2265, field = "Mol3D")
+  vcr::use_cassette("parse_mol()",{
+    A <- cs_compinfo(2265, field = "Mol3D")
+    B <- cs_compinfo(2265, field = "Mol2D")
+    C <- cs_convert("BGEBZHIAGXMEMV-UHFFFAOYAX", "inchikey", "mol")
+  })
+
   a <- parse_mol(A$mol3D)
-  B <- cs_compinfo(2265, field = "Mol2D")
   b <- parse_mol(B$mol2D)
-  C <- cs_convert("BGEBZHIAGXMEMV-UHFFFAOYAX", "inchikey", "mol")
   c <- parse_mol(C)
 
   # issue #294
