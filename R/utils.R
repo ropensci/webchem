@@ -389,11 +389,11 @@ write_mol <- function(x, file = "") {
   if (inherits(mol, "try-error")) {
     stop ("x is not a Mol string")
   }
-  write.table(x,
-              file = file,
-              row.names = FALSE,
-              col.names= FALSE,
-              quote = FALSE)
+  utils::write.table(x,
+                     file = file,
+                     row.names = FALSE,
+                     col.names= FALSE,
+                     quote = FALSE)
 }
 
 #' Format numbers as CAS numbers
