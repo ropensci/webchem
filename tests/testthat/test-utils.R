@@ -86,6 +86,44 @@ test_that("as.cas() returns correct reults", {
                    c("761-65-9", NA, NA), ignore_attr = TRUE)
 })
 
+test_that("parse_mol()", {
+
+  vcr::use_cassette("parse_mol()",{
+    A <- cs_compinfo(2265, field = "Mol3D")
+    B <- cs_compinfo(2265, field = "Mol2D")
+    C <- cs_convert("BGEBZHIAGXMEMV-UHFFFAOYAX", "inchikey", "mol")
+  })
+
+  a <- parse_mol(A$mol3D)
+  b <- parse_mol(B$mol2D)
+  c <- parse_mol(C)
+
+  # issue #294
+  res <- POST("https://www.ebi.ac.uk/chembl/api/utils/smiles2ctab",
+              body = "CC(O)=O",
+              httr::user_agent(webchem:::webchem_url())
+  )
+  D <- rawToChar(res$content)
+  d <- parse_mol(D)
+
+  expect_type(a, "list")
+  expect_type(a$eh, "character")
+  expect_type(a$cl, "character")
+  expect_s3_class(a$ab, "data.frame")
+  expect_s3_class(a$bb, "data.frame")
+  expect_type(b, "list")
+  expect_type(c, "list")
+  expect_type(d, "list")
+})
+
+test_that("write_mol()", {
+  expect_error(write_mol(123), regex = "x is not a character string")
+  expect_error(write_mol("hello world"), regex = "x is not a Mol string")
+
+  # test a file output
+
+})
+
 test_that("matcher() warns when 'best' is used with chemical names", {
   expect_warning(
     matcher(x = c("formalin", "carbon monoxide"),

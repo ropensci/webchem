@@ -341,6 +341,7 @@ extr_num <- function(x) {
 #' @export
 
 parse_mol <- function(string) {
+  if (!is.character(string)) stop("string is not a character string")
   if (length(string) > 1)
     stop('string must be of length 1')
   m <- readLines(textConnection(string))
@@ -351,21 +352,49 @@ parse_mol <- function(string) {
   nchar(cl)
   splits <- c(seq(1, 33, by = 3), 34)
   cl <- trimws(substring(cl, splits, c(splits[-1] - 1, nchar(cl))))
-  names(cl) <- c('a', 'b', 'l', 'f', 'c', 's', 'x', 'r', 'p', 'i', 'm', 'p')
   # atom block
   na <- as.numeric(cl[1])
   ab <- m[5:(4 + na)]
   ab <- read.table(text = ab)
-  names(ab) <- c('x', 'y', 'z', 'a', 'd', 'c', 's', 'h', 'b', 'v', 'H', 'm',
-                 'n', 'e')
   # bound block
   nb <- as.numeric(cl[2])
   bb <- m[(5 + na):(4 + na + nb)]
   bb <- read.table(text = bb)
-  names(bb) <- c('1', '2', 't', 's', 'x', 'r', 'c')
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
 
+#' Export a Chemical Structure in .mol Format.
+#'
+#' Some webchem functions return character strings that contain a chemical
+#' structure in Mol format. This function exports a character string as a .mol
+#' file so it can be imported with other chemistry software.
+#' @param x a character string of a chemical structure in mol format.
+#' @param file a character vector of file names
+#' @export
+#' @examples
+#' \dontrun{
+#' # export Mol file
+#' csid <- get_csid("bergapten")
+#' mol3d <- cs_compinfo(csid$csid, field = "Mol3D")
+#' write_mol(mol3d$mol3D, file = mol3d$id)
+#'
+#' # export multiple Mol files
+#' csids <- get_csid(c("bergapten", "xanthotoxin"))
+#' mol3ds <- cs_compinfo(csids$csid, field = "Mol3D")
+#' mapply(function(x, y) write_mol(x, y), x = mol3ds$mol3D, y = mol3ds$id)
+#' }
+write_mol <- function(x, file = "") {
+  if (!is.character(x)) stop("x is not a character string")
+  mol <- try(parse_mol(x), silent = TRUE)
+  if (inherits(mol, "try-error")) {
+    stop ("x is not a Mol string")
+  }
+  utils::write.table(x,
+                     file = file,
+                     row.names = FALSE,
+                     col.names= FALSE,
+                     quote = FALSE)
+}
 
 #' Format numbers as CAS numbers
 #' @description This function attempts to format numeric (or character) vectors

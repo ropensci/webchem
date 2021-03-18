@@ -1,4 +1,8 @@
-# webchem 1.1.1.9001
+# webchem 1.1.1.9003
+
+## NEW FEATURES
+
+* Export chemical structures in Mol format with write_mol().
 
 ## BUG FIXES
 

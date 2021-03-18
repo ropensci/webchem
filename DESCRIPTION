@@ -40,7 +40,8 @@ Imports:
     data.tree,
     tibble,
     base64enc,
-    rlang
+    rlang,
+    utils
 Suggests:
     testthat,
     rcdk,
