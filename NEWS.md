@@ -1,3 +1,5 @@
+# webchem (development version)
+
 # webchem 1.1.1.9003
 
 ## NEW FEATURES
@@ -7,6 +9,7 @@
 ## BUG FIXES
 
 * ci_query() can no longer query chemicals by name.
+* is.cas() now catches whitespaces correctly.
 
 ## MINOR IMPROVEMENTS
 
