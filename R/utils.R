@@ -206,6 +206,7 @@ is.cas <-  function(x, verbose = getOption("verbose")) {
   foo <- function(x, verbose) {
     # pass NA's through
     if (is.na(x)) return(NA)
+
     # cas must not have any alpha characters
     if (grepl(pattern = "[[:alpha:]]", x = x)) {
       if (isTRUE(verbose)) {
@@ -214,6 +215,13 @@ is.cas <-  function(x, verbose = getOption("verbose")) {
       return(FALSE)
     }
 
+    # cas must not have any white space
+    if (grepl(pattern = "\\s+", x = x)) {
+      if(isTRUE(verbose)) {
+        message(x, ": String contains whitespace")
+      }
+      return(FALSE)
+    }
     # cas must have two hyphens
     nsep <- str_count(x, '-')
     if (nsep != 2) {
