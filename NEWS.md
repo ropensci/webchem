@@ -1,3 +1,5 @@
+# webchem (development version)
+
 # webchem 1.1.1.9003
 
 ## NEW FEATURES
@@ -7,6 +9,7 @@
 ## BUG FIXES
 
 * ci_query() can no longer query chemicals by name.
+* non-exported function ping_pubchem_pw() was incorrectly reporting that PUG VIEW was down.  This has been fixed.
 
 ## MINOR IMPROVEMENTS
 
