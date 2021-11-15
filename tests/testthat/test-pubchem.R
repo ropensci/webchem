@@ -149,6 +149,6 @@ test_that("pc_sect()", {
   d <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_s3_class(d, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(d), c("pdbID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equal(d$Result[1], ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)",
+  expect_equal(d$Result[1], ">pdb|1ZHY|A Chain A, KES1 protein (Run BLAST)",
                ignore_attr = TRUE)
  })
