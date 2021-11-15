@@ -57,7 +57,7 @@ usage policies of the individual data sources
 \examples{
 # might fail if API is not available
 \donttest{
-pc_sect(176, "pka")
+pc_sect(176, "Dissociation Constants")
 pc_sect(c(176, 311), "density")
 pc_sect(2231, "depositor-supplied synonyms", "substance")
 pc_sect(780286, "modify date", "assay")
