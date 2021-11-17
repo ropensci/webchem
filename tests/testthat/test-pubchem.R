@@ -120,7 +120,6 @@ test_that("pc_page()", {
   expect_length(a, 5)
   expect_s3_class(a[[1]], c("Node", "R6"))
   expect_s3_class(a[[2]], c("Node", "R6"))
-  expect_equal(a[[3]], NA) #why was this expected to be NA?
   expect_equal(a[[4]], NA)
   expect_equal(a[[5]], NA)
 })
