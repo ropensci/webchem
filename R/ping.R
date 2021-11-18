@@ -10,7 +10,7 @@
 #' }
 ping_service <-
   function(service = c(
-    "aw",
+    "bcpc",
     "chebi",
     "ci",
     "cs",
@@ -42,7 +42,7 @@ ping_service <-
       #if service can be pinged with simple GET request, just add URL
       ping_url <-
         switch(service,
-               "aw" = "http://www.alanwood.net/pesticides/index_rn.html",
+               "bcpc" = "https://pesticidecompendium.bcpc.org/introduction.html",
                "ci" = "https://chem.nlm.nih.gov/chemidplus/rn/50-00-0",
                "cir" = "http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml",
                "cts" = "http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N",
@@ -54,11 +54,21 @@ ping_service <-
                "srs" = "https://cdxnodengn.epa.gov/cdx-srs-rest/substance/name/triclosan",
                "wd" = "https://www.wikidata.org/w/api.php"
         )
+      if (identical(service, "bcpc")) {
+        # For the BCPC server we need to disable gzip encoding as it currently
+        # (2021-11-18) results in 
+        # Error in curl_fetch_memory(https://...): 
+        # "Failed writing received data to disk/application"
+        httr_config <- httr::config(accept_encoding = "identity")
+      } else {
+        httr_config <- httr::config()
+      }
       res <- try(httr::RETRY("GET",
                              ping_url,
                              httr::user_agent(webchem_url()),
                              terminate_on = 404,
-                             quiet = TRUE), silent = TRUE)
+                             config = httr_config,
+                             quiet = FALSE), silent = FALSE)
       if (inherits(res, "try-error")) {
         out <- FALSE
       }

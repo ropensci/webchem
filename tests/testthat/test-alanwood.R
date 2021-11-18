@@ -1,10 +1,13 @@
-up <- ping_service("aw")
+up <- ping_service("bcpc")
 test_that("examples in the article are unchanged", {
   skip_on_cran()
-  skip_if_not(up, "Alanwood service is down")
+  skip_if_not(up, "BCPC pesticide compendium is down")
 
   data("lc50", package = "webchem")
-  aw_data <- aw_query(lc50$cas[1:3], from = "cas")
+  expect_warning(
+    aw_data <- aw_query(lc50$cas[1:3], from = "cas"),
+    "deprecated"
+  )
   igroup <- sapply(aw_data, function(y) y$subactivity[1])
 
   expect_type(igroup, "character")
@@ -14,12 +17,12 @@ test_that("examples in the article are unchanged", {
                                  "phenyl organothiophosphate insecticides"))
 })
 
-test_that("alanwood, name", {
+test_that("BCPC pesticide compendium, name", {
   skip_on_cran()
-  skip_if_not(up, "Alanwood service is down")
+  skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA)
-  o1 <- aw_query(comps, from = "name")
+  o1 <- bcpc_query(comps, from = "name")
 
   expect_type(o1, "list")
   expect_equal(length(o1), 4)
@@ -34,22 +37,22 @@ test_that("alanwood, name", {
 })
 
 
-test_that("alanwood, invalid input", {
+test_that("BCPC pesticide compendium, invalid input", {
   skip_on_cran()
-  skip_if_not(up, "Alanwood service is down")
+  skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("balloon", NA)
-  o1 <- aw_query(comps)
+  o1 <- bcpc_query(comps)
   expect_type(o1, "list")
   expect_equal(o1[[1]], NA)
   expect_equal(o1[[2]], NA)
 })
 
-test_that("alanwood, build_index", {
+test_that("BCPC pesticide compendium, build_index", {
   skip_on_cran()
-  skip_if_not(up, "Alanwood service is down")
+  skip_if_not(up, "BCPC pesticide compendium is down")
 
-  idx <- suppressWarnings(build_aw_idx(force_build = TRUE))
+  idx <- suppressWarnings(webchem:::build_bcpc_idx(force_build = TRUE))
   expect_s3_class(idx, "data.frame")
   expect_equal(ncol(idx), 4)
   expect_equal(names(idx), c("names", "links", "linknames", "source"))

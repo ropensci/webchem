@@ -1,7 +1,8 @@
-#' Query http://www.alanwood.net/pesticides/
+#' Query http://pesticidecompendium.bcpc.org
 #'
-#' Query Alan Woods Compendium of Pesticide Common Names
-#' \url{http://www.alanwood.net/pesticides/}
+#' Query the BCPC Compendium of Pesticide Common Names
+#' \url{http://pesticidecompendium.bcpc.org}
+#' formerly known as Alan Woods Compendium of Pesticide Common Names
 #' @import xml2
 #'
 #' @param  query character; search string
@@ -14,7 +15,7 @@
 #' url.
 #' @note for from = 'cas' only the first matched link is returned.
 #' Please respect Copyright, Terms and Conditions
-#' \url{http://www.alanwood.net/pesticides/legal.html}!
+#' \url{http://pesticidecompendium.bcpc.org/legal.html}!
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
@@ -22,20 +23,20 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' aw_query('Fluazinam', from = 'name')
-#' out <- aw_query(c('Fluazinam', 'Diclofop'), from = 'name')
+#' bcpc_query('Fluazinam', from = 'name')
+#' out <- bcpc_query(c('Fluazinam', 'Diclofop'), from = 'name')
 #' out
 #' # extract subactivity from object
 #' sapply(out, function(y) y$subactivity[1])
 #'
 #' # use CAS-numbers
-#' aw_query("79622-59-6", from = 'cas')
+#' bcpc_query("79622-59-6", from = 'cas')
 #' }
-aw_query <- function(query, from = c("name", "cas"),
-                     verbose = getOption("verbose"),
-                     type, ...) {
+bcpc_query <- function(query, from = c("name", "cas"),
+                       verbose = getOption("verbose"),
+                       type, ...) {
 
-  if (!ping_service("aw")) stop(webchem_message("service_down"))
+  if (!ping_service("bcpc")) stop(webchem_message("service_down"))
 
   if (!missing(type)) {
     message('"type" is deprecated. Please use "from" instead. ')
@@ -47,7 +48,7 @@ aw_query <- function(query, from = c("name", "cas"),
     from <- "name"
   }
   from <- match.arg(from)
-  aw_idx <- build_aw_idx(verbose, ...)
+  bcpc_idx <- build_bcpc_idx(verbose, ...)
 
   foo <- function(query, from, verbose) {
     if (is.na(query)) {
@@ -57,16 +58,16 @@ aw_query <- function(query, from = c("name", "cas"),
     if (verbose) webchem_message("query", query, appendLF = FALSE)
   # search links in indexes
     if (from == "name") {
-      links <- aw_idx$links[aw_idx$source == "cn"]
-      names <- aw_idx$linknames[aw_idx$source == "cn"]
+      links <- bcpc_idx$links[bcpc_idx$source == "cn"]
+      names <- bcpc_idx$linknames[bcpc_idx$source == "cn"]
       cname <-  query
     }
 
     if (from == "cas") {
-      names <- aw_idx$names[aw_idx$source == "rn"]
+      names <- bcpc_idx$names[bcpc_idx$source == "rn"]
       # select only first link
-      links <- aw_idx$links[aw_idx$source == "rn"]
-      linknames <- aw_idx$linknames[aw_idx$source == "rn"]
+      links <- bcpc_idx$links[bcpc_idx$source == "rn"]
+      linknames <- bcpc_idx$linknames[bcpc_idx$source == "rn"]
       cname <-  linknames[tolower(names) == tolower(query)]
     }
 
@@ -83,12 +84,13 @@ aw_query <- function(query, from = c("name", "cas"),
       }
     }
 
-    qurl <- paste0("http://www.alanwood.net/pesticides/", takelink)
+    qurl <- paste0("https://pesticidecompendium.bcpc.org/", takelink)
     webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),
                            terminate_on = 404,
+                           config = httr::config(accept_encoding = "identity"),
                            quiet = TRUE), silent = TRUE)
     if (inherits(res, "try-error")) {
       if (verbose) webchem_message("service_down")
@@ -145,13 +147,12 @@ aw_query <- function(query, from = c("name", "cas"),
                      r_isomer = gsub(".*\\(R\\)-isomer:(.*)", "\\1", inchi))
         }
       }
-      # add source url
-      source_url <- paste0("http://www.alanwood.net/pesticides/", takelink)
+      
       out <- list(cname = cname, status = status,
                   pref_iupac_name = pref_iupac_name, iupac_name = iupac_name,
                   cas = cas, formula = formula, activity = activity,
                   subactivity = subactivity, inchikey = inchikey, inchi = inchi,
-                  source_url = source_url)
+                  source_url = qurl)
       return(out)
     }
     else {
@@ -160,46 +161,48 @@ aw_query <- function(query, from = c("name", "cas"),
   }
   out <- lapply(query, function(x) foo(x, from = from, verbose = verbose))
   names(out) <- query
-  class(out) <- c("aw_query", "list")
+  class(out) <- c("bcpc_query", "list")
   return(out)
 }
 
 #' Function to build index
 #'
-#' This function builds an index of Alan Woods Compendium of Pesticides
-#' \url{http://www.alanwood.net/pesticides/} and saves it to
-#' \code{\link{tempdir}}.
+#' This function builds an index of the BCPC Compendium of Pesticides
+#' and saves it to \code{\link{tempdir}}.
 #' @import xml2
 #'
 #' @param verbose logical; print message during processing to console?
 #' @param force_build logical; force building a new index?
 #' @return a data.frame
-#' @seealso \code{\link{aw_query}}, \code{\link{tempdir}}
-#' @source \url{http://www.alanwood.net/pesticides/}
+#' @seealso \code{\link{bcpc_query}}, \code{\link{tempdir}}
+#' @source \url{https://pesticidecompendium.bcpc.org}
 #' @noRd
-build_aw_idx <- function(verbose = getOption("verbose"), force_build = FALSE) {
-  if (!ping_service("aw")) stop(webchem_message("service_down"))
-  suppressWarnings(try(load(paste0(tempdir(), "/data/aw_idx.rda")),
+build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) {
+  if (!ping_service("bcpc")) stop(webchem_message("service_down"))
+  suppressWarnings(try(load(paste0(tempdir(), "/data/bcpc_idx.rda")),
                        silent = TRUE))
-  if (!file.exists(paste0(tempdir(), "/data/aw_idx.rda")) |
+  if (!file.exists(paste0(tempdir(), "/data/bcpc_idx.rda")) |
       force_build |
-      try(Sys.Date() - attr(aw_idx, "date"), silent = TRUE) > 30) {
+      try(Sys.Date() - attr(bcpc_idx, "date"), silent = TRUE) > 30) {
     if (!dir.exists(paste0(tempdir(), "/data"))) {
       dir.create(paste0(tempdir(), "/data"))
     }
     if (verbose) message("Building index. ", appendLF = FALSE)
-    res <- try(httr::RETRY("GET",
-                           "http://www.alanwood.net/pesticides/index_rn.html",
+    idx1_url <- "https://pesticidecompendium.bcpc.org/index_rn.html"
+    idx4_url <- "https://pesticidecompendium.bcpc.org/index_cn.html"
+    res1 <- try(httr::RETRY("GET",
+                           idx1_url,
                            httr::user_agent(webchem_url()),
+                           config = httr::config(accept_encoding = "identity"),
                            terminate_on = 404,
                            quiet = TRUE), silent= TRUE)
-    if (inherits(res, "try-error")) {
+    if (inherits(res1, "try-error")) {
       if (verbose) webchem_message("service_down")
       return(NA)
     }
-    if (verbose) message(httr::message_for_status(res))
-    if (res$status_code == 200){
-      idx1 <- read_html("http://www.alanwood.net/pesticides/index_rn.html")
+    if (verbose) message(httr::message_for_status(res1))
+    if (res1$status_code == 200){
+      idx1 <- read_html(res1)
       prep_idx <- function(y) {
         names <- xml_text(xml_find_all(y, "//dl/dt"))
         links <- xml_attr(
@@ -208,9 +211,19 @@ build_aw_idx <- function(verbose = getOption("verbose"), force_build = FALSE) {
           xml_find_all(y, "//dt/following-sibling::dd[1]/a[1]"))
         return(data.frame(names, links, linknames, stringsAsFactors = FALSE))
       }
-      aw_idx <- rbind(prep_idx(idx1))
-      aw_idx[["source"]] <- "rn"
-      idx4 <- read_html("http://www.alanwood.net/pesticides/index_cn.html")
+      bcpc_idx <- rbind(prep_idx(idx1))
+      bcpc_idx[["source"]] <- "rn"
+      res4 <- try(httr::RETRY("GET",
+                             idx4_url,
+                             httr::user_agent(webchem_url()),
+                             config = httr::config(accept_encoding = "identity"),
+                             terminate_on = 404,
+                             quiet = TRUE), silent= TRUE)
+    if (inherits(res4, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+      idx4 <- read_html(res4)
       n <- xml_find_all(idx4, "//a")
       names <- xml_text(n)
       rm <- names == ""
@@ -219,16 +232,16 @@ build_aw_idx <- function(verbose = getOption("verbose"), force_build = FALSE) {
       links <- links[!rm]
       idx4 <- data.frame(names = NA, links = links, linknames = names,
                          source = "cn", stringsAsFactors = FALSE)
-      aw_idx <- rbind(aw_idx, idx4)
+      bcpc_idx <- rbind(bcpc_idx, idx4)
 
       # fix encoding
-      ln <- aw_idx$linknames
+      ln <- bcpc_idx$linknames
       Encoding(ln) <- "latin1"
       ln <- iconv(ln, from = "latin1", to = "ASCII", sub = "")
-      aw_idx$linknames <- ln
-      attr(aw_idx, "date") <- Sys.Date()
-      save(aw_idx, file = paste0(tempdir(), "/data/aw_idx.rda"))
+      bcpc_idx$linknames <- ln
+      attr(bcpc_idx, "date") <- Sys.Date()
+      save(bcpc_idx, file = paste0(tempdir(), "/data/bcpc_idx.rda"))
     }
   }
-  return(aw_idx)
+  return(bcpc_idx)
 }

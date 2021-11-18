@@ -39,7 +39,7 @@ They follow the format of `source_functionality`, with the exception of function
 
 At least some of the data in the following sources is accesible through `webchem` functions.  To learn more about what is available, browse the documentation [here](https://docs.ropensci.org/webchem/reference/index.html).
 
-- [Alan Wood's Compendium of Pesticide Common Names](http://www.alanwood.net/pesticides/)
+- [BCPC Compendium of Pesticide Common Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood's Compendium of Pesticide Common Names)
 - [ChEBI](https://www.ebi.ac.uk/chebi/)
 - [Chemical Identifier Resolver (CIR)](http://cactus.nci.nih.gov/chemical/structure)
 - [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
