@@ -7,7 +7,7 @@
 find_db(
   query,
   from,
-  sources = c("etox", "pc", "chebi", "cs", "aw", "fn", "pan", "srs"),
+  sources = c("etox", "pc", "chebi", "cs", "bcpc", "fn", "pan", "srs"),
   plot = FALSE
 )
 }

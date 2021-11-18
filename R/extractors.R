@@ -37,7 +37,7 @@ cas.pan_query <- function(x, ...) {
 }
 
 #' @export
-cas.aw_query <- function(x, ...) {
+cas.bcpc_query <- function(x, ...) {
   sapply(x, function(y) y$cas)
 }
 
@@ -83,7 +83,7 @@ inchikey.default <- function(x, ...) {
 }
 
 #' @export
-inchikey.aw_query <- function(x, ...) {
+inchikey.bcpc_query <- function(x, ...) {
   sapply(x, function(y) {
     if (length(y) == 1 && is.na(y)) return(NA)
     y$inchikey
@@ -175,7 +175,7 @@ smiles.opsin_query <- function(x, ...) {
   x$smiles
 }
 #' @export
-smiles.aw_query <- function(x, ...) {
+smiles.bcpc_query <- function(x, ...) {
   stop("SMILES is not returned by this datasource!")
 }
 #' @export
