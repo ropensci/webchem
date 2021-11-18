@@ -3,7 +3,7 @@ test_that("examples in the article are unchanged", {
   skip_on_cran()
   skip_if_not(up, "ETOX service is down")
 
-  data("jagst", package = "webchem")
+  utils::data("jagst", package = "webchem")
   subs <- head(unique(jagst$substance))
   ids <- get_etoxid(subs, match = "best")
   etox_data <- etox_basic(ids$etoxid)
@@ -76,7 +76,7 @@ test_that("examples from webchem article run", {
   skip_if_not(up, "ETOX service is down")
 
   # tests for the article
-  data("jagst")
+  utils::data("jagst")
   ids <- get_etoxid(head(unique(jagst$substance),6), match = "best")
 
   expect_s3_class(ids, "data.frame")

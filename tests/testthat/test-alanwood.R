@@ -3,7 +3,7 @@ test_that("examples in the article are unchanged", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
 
-  data("lc50", package = "webchem")
+  utils::data("lc50", package = "webchem")
   expect_warning(
     aw_data <- aw_query(lc50$cas[1:3], from = "cas"),
     "deprecated"
