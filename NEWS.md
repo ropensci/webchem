@@ -8,6 +8,7 @@
 
 * ci_query() can no longer query chemicals by name.
 * is.cas() now catches whitespaces correctly.
+* aw_query() was renamed and adapted to bcpc_query, as the alanwood site has moved
 
 ## MINOR IMPROVEMENTS
 
