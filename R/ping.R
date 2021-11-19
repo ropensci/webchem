@@ -207,7 +207,7 @@ ping_pubchem <- function(...) {
 #'  }
 ping_pubchem_pw <- function(...) {
   qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data",
-               "compound/176/JSON?heading=density", sep = "/")
+               "compound/176/JSON", sep = "/")
   res <- try(httr::RETRY("POST",
                          qurl,
                          httr::user_agent(webchem_url()),

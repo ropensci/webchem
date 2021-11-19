@@ -548,7 +548,7 @@ pc_synonyms <- function(query,
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
-#' pc_sect(176, "pka")
+#' pc_sect(176, "Dissociation Constants")
 #' pc_sect(c(176, 311), "density")
 #' pc_sect(2231, "depositor-supplied synonyms", "substance")
 #' pc_sect(780286, "modify date", "assay")
@@ -598,7 +598,7 @@ pc_sect <- function(id,
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
-#' pc_page(c(176, 311), "pka")
+#' pc_page(c(176, 311), "Dissociation Constants")
 #' pc_page(49854366, "external id", domain = "substance")
 #' }
 #' @noRd
@@ -677,8 +677,8 @@ pc_page <- function(id,
 #' @examples
 #' # might fail if API is not available
 #' \donttest{
-#' comps <- pc_page(c(176, 311), "pka")
-#' pc_extract(comps, "pka")
+#' comps <- pc_page(c(176, 311), "Dissociation Constants")
+#' pc_extract(comps, "Dissociation Constants")
 #' subs <- pc_page(49854366, "external id", domain = "substance")
 #' pc_extract(subs, "external id")
 #' }

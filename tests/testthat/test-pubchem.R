@@ -114,13 +114,12 @@ test_that("pc_page()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
-  a <- pc_page(c(311, 176, 1118, "balloon", NA), "pKa")
+  a <- pc_page(c(311, 176, 1118, "balloon", NA), "Dissociation Constants")
 
   expect_type(a, "list")
   expect_length(a, 5)
   expect_s3_class(a[[1]], c("Node", "R6"))
   expect_s3_class(a[[2]], c("Node", "R6"))
-  expect_equal(a[[3]], NA)
   expect_equal(a[[4]], NA)
   expect_equal(a[[5]], NA)
 })
@@ -129,7 +128,7 @@ test_that("pc_sect()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
-  a <- pc_sect(c(311, 176, 1118, "balloon", NA), "pKa")
+  a <- pc_sect(c(311, 176, 1118, "balloon", NA), "Dissociation Constants")
   expect_s3_class(a, c("tbl_df", "tbl", "data.frame"))
   expect_equal(mean(c("Citric acid", "Acetic acid", NA) %in% a$Name), 1)
   expect_equal(mean(c("2.79", "4.76 (at 25 °C)", NA) %in% a$Result), 1)
@@ -149,6 +148,6 @@ test_that("pc_sect()", {
   d <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_s3_class(d, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(d), c("pdbID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equal(d$Result[1], ">pdb|1ZHY|A Chain A, 1 Kes1 Protein (Run BLAST)",
+  expect_equal(d$Result[1], ">pdb|1ZHY|A Chain A, KES1 protein (Run BLAST)",
                ignore_attr = TRUE)
  })

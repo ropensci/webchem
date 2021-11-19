@@ -7,6 +7,7 @@
 ## BUG FIXES
 
 * ci_query() can no longer query chemicals by name.
+* non-exported function ping_pubchem_pw() was incorrectly reporting that PUG VIEW was down.  This has been fixed.
 * is.cas() now catches whitespaces correctly.
 
 ## MINOR IMPROVEMENTS
