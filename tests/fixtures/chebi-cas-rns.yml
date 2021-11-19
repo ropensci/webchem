@@ -1,0 +1,542 @@
+http_interactions:
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |-
+        <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>triclosan</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:03 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:164200</chebiId><chebiAsciiName>triclosan</chebiAsciiName><searchScore>0.85</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:89302</chebiId><chebiAsciiName>Triclosan
+        glucuronide</chebiAsciiName><searchScore>0.26</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:89301</chebiId><chebiAsciiName>Triclosan
+        sulfate</chebiAsciiName><searchScore>0.14</searchScore><entityStar>2</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>563-12-2</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:04 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:38663</chebiId><chebiAsciiName>ethion</chebiAsciiName><searchScore>0.49</searchScore><entityStar>3</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>96182-53-5</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:04 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:38951</chebiId><chebiAsciiName>tebupirimfos</chebiAsciiName><searchScore>0.54</searchScore><entityStar>3</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>3383-96-8</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:05 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:38954</chebiId><chebiAsciiName>temephos</chebiAsciiName><searchScore>0.51</searchScore><entityStar>3</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |-
+        <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>triclosan</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:05 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:164200</chebiId><chebiAsciiName>triclosan</chebiAsciiName><searchScore>0.85</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:89302</chebiId><chebiAsciiName>Triclosan
+        glucuronide</chebiAsciiName><searchScore>0.26</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:89301</chebiId><chebiAsciiName>Triclosan
+        sulfate</chebiAsciiName><searchScore>0.14</searchScore><entityStar>2</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getCompleteEntity>
+                    <chebi:chebiId>CHEBI:38663</chebi:chebiId>
+                  </chebi:getCompleteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:06 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: "<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><getCompleteEntityResponse
+        xmlns=\"https://www.ebi.ac.uk/webservices/chebi\"><return><chebiId>CHEBI:38663</chebiId><chebiAsciiName>ethion</chebiAsciiName><definition>An
+        organic thiophosphate that is S,S'-methanediyl bis[dihydrogen (phosphorodithioate)]
+        in which all the hydroxy groups have been converted to their corresponding
+        ethyl esters respectively. Ethion is an organophosphate insecticide with inhibitory
+        activity towards the enzyme acetylcholinesterase ( EC 3.1.1.7).</definition><status>CHECKED</status><smiles>CCOP(=S)(OCC)SCSP(=S)(OCC)OCC</smiles><inchi>InChI=1S/C9H22O4P2S4/c1-5-10-14(16,11-6-2)18-9-19-15(17,12-7-3)13-8-4/h5-9H2,1-4H3</inchi><inchiKey>RIZMRRKBZQXFOY-UHFFFAOYSA-N</inchiKey><charge>0</charge><mass>384.48010</mass><monoisotopicMass>383.98762</monoisotopicMass><entityStar>3</entityStar><Synonyms><data>Bis(S-(diethoxyphosphinothioyl)mercapto)methane</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>O,O,O',O'-tetraethyl
+        S,S'-methanediyl bis(dithiophosphate)</data><type>SYNONYM</type><source>IUPAC</source></Synonyms><Synonyms><data>O,O,O',O'-Tetraethyl
+        S,S'-methylenebis(phosphorodithioate)</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>S,S'-Methylene
+        bis(O,O-diethyl phosphorodithioate)</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><IupacNames><data>O,O,O',O'-tetraethyl
+        S,S'-methanediyl bis(phosphorodithioate)</data><type>IUPAC NAME</type><source>IUPAC</source></IupacNames><Formulae><data>C9H22O4P2S4</data><source>ChemIDplus</source></Formulae><RegistryNumbers><data>1804530</data><type>Beilstein
+        Registry Number</type><source>Beilstein</source></RegistryNumbers><RegistryNumbers><data>1804530</data><type>Reaxys
+        Registry Number</type><source>Reaxys</source></RegistryNumbers><RegistryNumbers><data>563-12-2</data><type>CAS
+        Registry Number</type><source>KEGG COMPOUND</source></RegistryNumbers><RegistryNumbers><data>563-12-2</data><type>CAS
+        Registry Number</type><source>ChemIDplus</source></RegistryNumbers><RegistryNumbers><data>563-12-2</data><type>CAS
+        Registry Number</type><source>NIST Chemistry WebBook</source></RegistryNumbers><Citations><data>21366965</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>21560835</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>23127602</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>24398360</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><Citations><data>24401442</data><type>PubMed
+        citation</type><source>Europe PMC</source></Citations><ChemicalStructures><structure>\n
+        \ Marvin  06250717252D          \n\n 19 18  0  0  0  0            999 V2000\n
+        \  -4.9063    0.6875    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.1918
+        \   1.1000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3339    1.1000
+        \   0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2385    0.6875    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4773    0.6875    0.0000 O   0
+        \ 0  0  0  0  0  0  0  0  0  0  0\n    0.8095    0.6875    0.0000 O   0  0
+        \ 0  0  0  0  0  0  0  0  0  0\n    1.5240    1.1000    0.0000 C   0  0  0
+        \ 0  0  0  0  0  0  0  0  0\n   -2.7628    1.9250    0.0000 S   0  0  0  0
+        \ 0  0  0  0  0  0  0  0\n    0.0950    1.9250    0.0000 S   0  0  0  0  0
+        \ 0  0  0  0  0  0  0\n   -0.6194    0.6875    0.0000 S   0  0  0  0  0  0
+        \ 0  0  0  0  0  0\n   -2.0484    0.6875    0.0000 S   0  0  0  0  0  0  0
+        \ 0  0  0  0  0\n   -2.7628    1.1000    0.0000 P   0  0  3  0  0  0  0  0
+        \ 0  0  0  0\n    0.0950    1.1000    0.0000 P   0  0  3  0  0  0  0  0  0
+        \ 0  0  0\n   -2.9764    0.3031    0.0000 O   0  0  0  0  0  0  0  0  0  0
+        \ 0  0\n   -2.3930   -0.2803    0.0000 C   0  0  0  0  0  0  0  0  0  0  0
+        \ 0\n   -2.6065   -1.0771    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n
+        \   0.3086    0.3031    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.2748
+        \  -0.2803    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.0613   -1.0771
+        \   0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n
+        \ 2  5  1  0  0  0  0\n  5 12  1  0  0  0  0\n 12 11  1  0  0  0  0\n 11  3
+        \ 1  0  0  0  0\n  3 10  1  0  0  0  0\n 10 13  1  0  0  0  0\n 13  6  1  0
+        \ 0  0  0\n  6  7  1  0  0  0  0\n  7  4  1  0  0  0  0\n 12 14  1  0  0  0
+        \ 0\n 13 17  1  0  0  0  0\n 12  8  2  0  0  0  0\n 13  9  2  0  0  0  0\n
+        14 15  1  0  0  0  0\n 15 16  1  0  0  0  0\n 17 18  1  0  0  0  0\n 18 19
+        \ 1  0  0  0  0\nM  END\n</structure><type>mol</type><dimension>2D</dimension><defaultStructure>true</defaultStructure></ChemicalStructures><DatabaseLinks><data>276</data><type>PPDB
+        accession</type></DatabaseLinks><DatabaseLinks><data>C18725</data><type>KEGG
+        COMPOUND accession</type></DatabaseLinks><DatabaseLinks><data>Ethion</data><type>Wikipedia
+        accession</type></DatabaseLinks><OntologyParents><chebiName>insecticide</chebiName><chebiId>CHEBI:24852</chebiId><type>has
+        role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>environmental
+        contaminant</chebiName><chebiId>CHEBI:78298</chebiId><type>has role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>EC
+        3.1.1.7 (acetylcholinesterase) inhibitor</chebiName><chebiId>CHEBI:38462</chebiId><type>has
+        role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>organic
+        thiophosphate</chebiName><chebiId>CHEBI:37512</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>acaricide</chebiName><chebiId>CHEBI:22153</chebiId><type>has
+        role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>agrochemical</chebiName><chebiId>CHEBI:33286</chebiId><type>has
+        role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents></return></getCompleteEntityResponse></S:Body></S:Envelope>"
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getCompleteEntity>
+                    <chebi:chebiId>CHEBI:38951</chebi:chebiId>
+                  </chebi:getCompleteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:06 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: "<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><getCompleteEntityResponse
+        xmlns=\"https://www.ebi.ac.uk/webservices/chebi\"><return><chebiId>CHEBI:38951</chebiId><chebiAsciiName>tebupirimfos</chebiAsciiName><definition></definition><status>CHECKED</status><smiles>CCOP(=S)(OC(C)C)Oc1cnc(nc1)C(C)(C)C</smiles><inchi>InChI=1S/C13H23N2O3PS/c1-7-16-19(20,17-10(2)3)18-11-8-14-12(15-9-11)13(4,5)6/h8-10H,7H2,1-6H3</inchi><inchiKey>AWYOMXWDGWUJHS-UHFFFAOYSA-N</inchiKey><charge>0</charge><mass>318.37316</mass><monoisotopicMass>318.11670</monoisotopicMass><entityStar>3</entityStar><Synonyms><data>O-(2-(1,1-Dimethylethyl)-5-pyrimidinyl)
+        O-ethyl O-(1-methylethyl) phosphorothioate</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>O-(2-tert-butylpyrimidin-5-yl)
+        O-ethyl O-isopropyl thiophosphate</data><type>SYNONYM</type><source>IUPAC</source></Synonyms><Synonyms><data>Phosphorothioic
+        acid, O-(2-(1,1-dimethylethyl)-5-pyrimidinyl) O-ethyl O-(1-methylethyl) ester</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>Phostebupirim</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>Tebupirimphos</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><IupacNames><data>O-(2-tert-butylpyrimidin-5-yl)
+        O-ethyl O-(propan-2-yl) phosphorothioate</data><type>IUPAC NAME</type><source>IUPAC</source></IupacNames><Formulae><data>C13H23N2O3PS</data><source>ChemIDplus</source></Formulae><RegistryNumbers><data>96182-53-5</data><type>CAS
+        Registry Number</type><source>KEGG COMPOUND</source></RegistryNumbers><RegistryNumbers><data>96182-53-5</data><type>CAS
+        Registry Number</type><source>ChemIDplus</source></RegistryNumbers><ChemicalStructures><structure>\n
+        \ Marvin  07230717102D          \n\n 20 20  0  0  0  0            999 V2000\n
+        \  -1.2315    2.5065    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2315
+        \   1.6815    0.0000 P   0  0  3  0  0  0  0  0  0  0  0  0\n   -1.6440    0.9670
+        \   0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.2315    0.2526    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.6440   -0.4619    0.0000 C   0
+        \ 0  0  0  0  0  0  0  0  0  0  0\n   -1.9460    1.2690    0.0000 O   0  0
+        \ 0  0  0  0  0  0  0  0  0  0\n   -3.3749    1.2690    0.0000 C   0  0  0
+        \ 0  0  0  0  0  0  0  0  0\n   -2.6605    1.6815    0.0000 C   0  0  3  0
+        \ 0  0  0  0  0  0  0  0\n   -2.6605    2.5065    0.0000 C   0  0  0  0  0
+        \ 0  0  0  0  0  0  0\n   -0.5170    1.2690    0.0000 O   0  0  0  0  0  0
+        \ 0  0  0  0  0  0\n    0.1974    1.6815    0.0000 C   0  0  0  0  0  0  0
+        \ 0  0  0  0  0\n    0.1974    2.5065    0.0000 C   0  0  0  0  0  0  0  0
+        \ 0  0  0  0\n    0.9119    1.2690    0.0000 C   0  0  0  0  0  0  0  0  0
+        \ 0  0  0\n    0.9119    2.9190    0.0000 N   0  0  0  0  0  0  0  0  0  0
+        \ 0  0\n    1.6264    1.6815    0.0000 N   0  0  0  0  0  0  0  0  0  0  0
+        \ 0\n    1.6264    2.5065    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n
+        \   2.1273    3.7159    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9242
+        \   2.3357    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3408    2.9190
+        \   0.0000 C   0  0  3  0  0  0  0  0  0  0  0  0\n    3.0553    3.3315    0.0000
+        C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  2  0  0  0  0\n  2  6  1  0
+        \ 0  0  0\n  2 10  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0
+        \ 0\n  4  5  1  0  0  0  0\n  6  8  1  0  0  0  0\n  8  7  1  0  0  0  0\n
+        \ 8  9  1  0  0  0  0\n 10 11  1  0  0  0  0\n 12 11  2  0  0  0  0\n 11 13
+        \ 1  0  0  0  0\n 14 12  1  0  0  0  0\n 14 16  2  0  0  0  0\n 13 15  2  0
+        \ 0  0  0\n 15 16  1  0  0  0  0\n 16 19  1  0  0  0  0\n 19 17  1  0  0  0
+        \ 0\n 19 18  1  0  0  0  0\n 19 20  1  0  0  0  0\nM  END\n</structure><type>mol</type><dimension>2D</dimension><defaultStructure>true</defaultStructure></ChemicalStructures><DatabaseLinks><data>1572</data><type>PPDB
+        accession</type></DatabaseLinks><DatabaseLinks><data>C18692</data><type>KEGG
+        COMPOUND accession</type></DatabaseLinks><OntologyParents><chebiName>EC 3.1.1.7
+        (acetylcholinesterase) inhibitor</chebiName><chebiId>CHEBI:38462</chebiId><type>has
+        role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>organic
+        thiophosphate</chebiName><chebiId>CHEBI:37512</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>organothiophosphate
+        insecticide</chebiName><chebiId>CHEBI:25715</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>2-tert-butylpyrimidin-5-ol</chebiName><chebiId>CHEBI:38952</chebiId><type>has
+        functional parent</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents></return></getCompleteEntityResponse></S:Body></S:Envelope>"
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getCompleteEntity>
+                    <chebi:chebiId>CHEBI:38954</chebi:chebiId>
+                  </chebi:getCompleteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:02:07 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: |-
+        <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getCompleteEntityResponse xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><chebiId>CHEBI:38954</chebiId><chebiAsciiName>temephos</chebiAsciiName><definition>An organic sulfide that is diphenyl sulfide in which the hydrogen at the para position of each of the phenyl groups has been replaced by a (dimethoxyphosphorothioyl)oxy group.</definition><status>CHECKED</status><smiles>S=P(OC)(OC1=CC=C(C=C1)SC2=CC=C(C=C2)OP(=S)(OC)OC)OC</smiles><inchi>InChI=1S/C16H20O6P2S3/c1-17-23(25,18-2)21-13-5-9-15(10-6-13)27-16-11-7-14(8-12-16)22-24(26,19-3)20-4/h5-12H,1-4H3</inchi><inchiKey>WWJZWCUNLNYYAU-UHFFFAOYSA-N</inchiKey><charge>0</charge><mass>466.473</mass><monoisotopicMass>465.98973</monoisotopicMass><entityStar>3</entityStar><Synonyms><data>Abate</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>O,O'-(thiodi-4,1-phenylene) bis(O,O-dimethyl phosphorothioate)</data><type>SYNONYM</type><source>Alan Wood's Pesticides</source></Synonyms><Synonyms><data>O,O'-(Thiodi-p-phenylene) O,O,O',O'-tetramethyl bis(phosphorothioate)</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>O,O,O',O'-tetramethyl O,O'-(sulfanediyldi-4,1-phenylene) bis(phosphorothioate)</data><type>SYNONYM</type><source>Alan Wood's Pesticides</source></Synonyms><Synonyms><data>O,O,O',O'-tetramethyl O,O'-(sulfanediyldibenzene-4,1-diyl) bis(thiophosphate)</data><type>SYNONYM</type><source>IUPAC</source></Synonyms><Synonyms><data>O,O,O',O'-tetramethyl O,O'-thiodi-p-phenylene bis(phosphorothioate)</data><type>SYNONYM</type><source>Alan Wood's Pesticides</source></Synonyms><Synonyms><data>O,O,O',O'-tetramethyl O,O'-thiodi-p-phenylene diphosphorothioate</data><type>SYNONYM</type><source>Alan Wood's Pesticides</source></Synonyms><Synonyms><data>Phosphorothioic acid, O,O'-(thiodi-4,1-phenylene) O,O,O',O'-tetramethyl ester</data><type>SYNONYM</type><source>ChemIDplus</source></Synonyms><Synonyms><data>temefos</data><type>SYNONYM</type><source>Alan Wood's Pesticides</source><Comments><text>While 'temephos' is the ISO-approved name, the name 'temefos' is approved by the World Health Organization.</text><date>2016-12-15</date></Comments></Synonyms><Synonyms><data>temephos</data><type>SYNONYM</type><source>ChEBI</source></Synonyms><IupacNames><data>O,O,O',O'-tetramethyl O,O'-(sulfanediyldibenzene-4,1-diyl) bis(phosphorothioate)</data><type>IUPAC NAME</type><source>IUPAC</source></IupacNames><Formulae><data>C16H20O6P2S3</data><source>ChEBI</source></Formulae><RegistryNumbers><data>1896901</data><type>Beilstein Registry Number</type><source>Beilstein</source></RegistryNumbers><RegistryNumbers><data>3383-96-8</data><type>CAS Registry Number</type><source>Alan Wood's Pesticides</source></RegistryNumbers><RegistryNumbers><data>3383-96-8</data><type>CAS Registry Number</type><source>ChemIDplus</source></RegistryNumbers><RegistryNumbers><data>3383-96-8</data><type>CAS Registry Number</type><source>NIST Chemistry WebBook</source></RegistryNumbers><Citations><data>27180726</data><type>PubMed citation</type><source>Europe PMC</source></Citations><Citations><data>27419140</data><type>PubMed citation</type><source>Europe PMC</source></Citations><ChemicalStructures><structure>
+          Ketcher 12151613312D 1   1.00000     0.00000     0
+
+         27 28  0     0  0            999 V2000
+            8.8962  -20.1508    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0
+            8.8962  -21.1509    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
+            8.0300  -21.6509    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+            7.1640  -21.1509    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+            9.7623  -21.6509    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           10.6284  -21.1509    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           12.3605  -21.1510    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           11.4945  -21.6510    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           10.6284  -20.1509    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           11.4946  -19.6509    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           12.3606  -20.1509    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           13.2268  -19.6509    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0
+           13.2268  -18.6509    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           14.0929  -18.1508    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           12.3607  -18.1508    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           12.3608  -17.1507    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           14.0930  -17.1507    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           13.2269  -16.6507    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           13.2308  -15.6564    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           12.3405  -14.1705    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0
+           12.3566  -15.1704    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
+           11.4987  -15.6845    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           10.6247  -15.1985    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           12.1210  -16.1416    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           11.1615  -16.4233    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+            8.6266  -22.1181    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+            7.6581  -22.3673    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+          2  1  2  0     0  0
+          2  3  1  0     0  0
+          2  5  1  0     0  0
+          3  4  1  0     0  0
+          5  6  1  0     0  0
+          8  6  2  0     0  0
+          6  9  1  0     0  0
+          7  8  1  0     0  0
+          7 11  2  0     0  0
+          9 10  2  0     0  0
+         10 11  1  0     0  0
+         11 12  1  0     0  0
+         12 13  1  0     0  0
+         14 13  2  0     0  0
+         13 15  1  0     0  0
+         14 17  1  0     0  0
+         15 16  2  0     0  0
+         16 18  1  0     0  0
+         18 17  2  0     0  0
+         18 19  1  0     0  0
+         19 21  1  0     0  0
+         21 20  2  0     0  0
+         21 22  1  0     0  0
+         22 23  1  0     0  0
+         21 24  1  0     0  0
+         24 25  1  0     0  0
+          2 26  1  0     0  0
+         26 27  1  0     0  0
+        M  END
+        </structure><type>mol</type><dimension>2D</dimension><defaultStructure>true</defaultStructure></ChemicalStructures><ChemicalStructures><structure>
+          Ketcher 12151613312D 1   1.00000     0.00000     0
+
+         27 28  0     0  0            999 V2000
+            8.4616  -17.1640    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0
+            8.4616  -18.1639    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
+            7.5955  -18.6638    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+            6.7297  -18.1639    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+            9.3275  -18.6638    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           10.1934  -18.1639    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           11.0593  -16.6640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           10.1934  -17.1640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           11.0593  -18.6638    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           11.9252  -18.1639    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           11.9252  -17.1640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           12.7912  -16.6640    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0
+           13.6570  -17.1640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           14.5230  -16.6640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           13.6570  -18.1639    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           14.5230  -18.6638    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           15.3889  -17.1640    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           15.3889  -18.1639    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           16.2548  -18.6638    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           17.1207  -17.1640    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0
+           17.1207  -18.1639    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
+           17.9867  -18.6638    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           18.8525  -18.1639    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+           17.3719  -19.1309    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+           18.3358  -19.3969    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+            8.1921  -19.1309    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+            7.2236  -19.3800    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+          2  1  2  0     0  0
+          2  3  1  0     0  0
+          2  5  1  0     0  0
+          3  4  1  0     0  0
+          5  6  1  0     0  0
+          8  6  2  0     0  0
+          6  9  1  0     0  0
+          7  8  1  0     0  0
+          7 11  2  0     0  0
+          9 10  2  0     0  0
+         10 11  1  0     0  0
+         11 12  1  0     0  0
+         12 13  1  0     0  0
+         14 13  2  0     0  0
+         13 15  1  0     0  0
+         14 17  1  0     0  0
+         15 16  2  0     0  0
+         16 18  1  0     0  0
+         18 17  2  0     0  0
+         18 19  1  0     0  0
+         19 21  1  0     0  0
+         21 20  2  0     0  0
+         21 22  1  0     0  0
+         22 23  1  0     0  0
+         21 24  1  0     0  0
+         24 25  1  0     0  0
+          2 26  1  0     0  0
+         26 27  1  0     0  0
+        M  END
+        </structure><type>mol</type><dimension>2D</dimension><defaultStructure>false</defaultStructure></ChemicalStructures><DatabaseLinks><data>618</data><type>VSDB accession</type></DatabaseLinks><DatabaseLinks><data>618</data><type>PPDB accession</type></DatabaseLinks><DatabaseLinks><data>C18809</data><type>KEGG COMPOUND accession</type></DatabaseLinks><DatabaseLinks><data>D06062</data><type>KEGG DRUG accession</type></DatabaseLinks><DatabaseLinks><data>LSM-3148</data><type>LINCS accession</type></DatabaseLinks><DatabaseLinks><data>temephos</data><type>Pesticides accession</type></DatabaseLinks><OntologyParents><chebiName>organic sulfide</chebiName><chebiId>CHEBI:16385</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>EC 3.1.1.7 (acetylcholinesterase) inhibitor</chebiName><chebiId>CHEBI:38462</chebiId><type>has role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>organic thiophosphate</chebiName><chebiId>CHEBI:37512</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>organothiophosphate insecticide</chebiName><chebiId>CHEBI:25715</chebiId><type>is a</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>acaricide</chebiName><chebiId>CHEBI:22153</chebiId><type>has role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>agrochemical</chebiName><chebiId>CHEBI:33286</chebiId><type>has role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>ectoparasiticide</chebiName><chebiId>CHEBI:38956</chebiId><type>has role</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents><OntologyParents><chebiName>4,4'-thiodiphenol</chebiName><chebiId>CHEBI:38957</chebiId><type>has functional parent</type><status>CHECKED</status><cyclicRelationship>false</cyclicRelationship></OntologyParents></return></getCompleteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:02:07 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0

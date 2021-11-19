@@ -1,0 +1,173 @@
+http_interactions:
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |-
+        <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>triclosan</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:04:21 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:164200</chebiId><chebiAsciiName>triclosan</chebiAsciiName><searchScore>0.85</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:89302</chebiId><chebiAsciiName>Triclosan
+        glucuronide</chebiAsciiName><searchScore>0.26</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:89301</chebiId><chebiAsciiName>Triclosan
+        sulfate</chebiAsciiName><searchScore>0.14</searchScore><entityStar>2</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:04:23 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>triclosan</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:04:21 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:164200</chebiId><chebiAsciiName>triclosan</chebiAsciiName><searchScore>0.85</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:89302</chebiId><chebiAsciiName>Triclosan
+        glucuronide</chebiAsciiName><searchScore>0.26</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:89301</chebiId><chebiAsciiName>Triclosan
+        sulfate</chebiAsciiName><searchScore>0.14</searchScore><entityStar>2</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:04:23 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>glyphosate</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:04:22 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:27744</chebiId><chebiAsciiName>glyphosate</chebiAsciiName><searchScore>0.92</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:133673</chebiId><chebiAsciiName>glyphosate(1-)</chebiAsciiName><searchScore>0.81</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:67052</chebiId><chebiAsciiName>glyphosate(2-)</chebiAsciiName><searchScore>0.65</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:81834</chebiId><chebiAsciiName>glyphosate-isopropylammonium</chebiAsciiName><searchScore>0.33</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:81835</chebiId><chebiAsciiName>Glyphosate-monoammonium</chebiAsciiName><searchScore>0.13</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:28812</chebiId><chebiAsciiName>(aminomethyl)phosphonic
+        acid</chebiAsciiName><searchScore>0.05</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:142824</chebiId><chebiAsciiName>saflufenacil</chebiAsciiName><searchScore>0.04</searchScore><entityStar>3</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:04:23 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>balloon</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Tue, 13 Oct 2020 13:04:23 GMT
+    body:
+      encoding: UTF-8
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return/></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2020-10-13 13:04:23 GMT
+  recorded_with: vcr/0.5.4, webmockr/0.7.0
