@@ -37,17 +37,17 @@ test_that("extractors work with opsin", {
                ignore_attr = TRUE)
 })
 
-test_that("extractors work with Alanwood", {
+test_that("extractors work with BCPC compendium", {
   skip_on_cran()
-  skip_if_not(ping_service("aw"), "Alanwood database not reachable")
+  skip_if_not(ping_service("bcpc"), "BCPC compendium not reachable")
 
-  out_aw_query <- aw_query(c('Fluazinam', 'Diclofop'), from = 'name')
-  expect_equal(cas(out_aw_query), c("79622-59-6", "40843-25-2"),
+  out_bcpc_query <- bcpc_query(c('Fluazinam', 'Diclofop'), from = 'name')
+  expect_equal(cas(out_bcpc_query), c("79622-59-6", "40843-25-2"),
                ignore_attr = TRUE)
-  expect_equal(inchikey(out_aw_query),
+  expect_equal(inchikey(out_bcpc_query),
                     c("UZCGKGPEKUCDTF-UHFFFAOYSA-N",
                       "OOLBCHYXZDXLDS-UHFFFAOYSA-N"), ignore_attr = TRUE)
-  expect_error(smiles(out_aw_query), "SMILES is not returned by this datasource!")
+  expect_error(smiles(out_bcpc_query), "SMILES is not returned by this datasource!")
 
 })
 

@@ -3,9 +3,12 @@
 \name{webchem-deprecated}
 \alias{webchem-deprecated}
 \alias{cid_compinfo}
+\alias{aw_query}
 \title{Deprecated function(s) in the webchem package}
 \usage{
 cid_compinfo(...)
+
+aw_query(...)
 }
 \arguments{
 \item{...}{Parameters to be passed to the modern version of the function}
@@ -18,6 +21,7 @@ removed.
 \details{
 Deprecated functions are:
 \tabular{rl}{
-  \code{pc_compinfo} \tab is now a synonym for \code{\link{cid_compinfo}}\cr
+  \code{pc_prop} \tab was formerly \code{\link{cid_compinfo}}\cr
+  \code{bcpc_query} \tab was formerly \code{\link{aw_query}}\cr
 }
 }

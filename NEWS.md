@@ -9,6 +9,7 @@
 * ci_query() can no longer query chemicals by name.
 * non-exported function ping_pubchem_pw() was incorrectly reporting that PUG VIEW was down.  This has been fixed.
 * is.cas() now catches whitespaces correctly.
+* aw_query() was renamed and adapted to bcpc_query, as the alanwood site has moved
 
 ## MINOR IMPROVEMENTS
 

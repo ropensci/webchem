@@ -10,9 +10,18 @@
 #' @aliases cid_compinfo
 #' @details Deprecated functions are:
 #' \tabular{rl}{
-#'   \code{pc_compinfo} \tab is now a synonym for \code{\link{cid_compinfo}}\cr
+#'   \code{pc_prop} \tab was formerly \code{\link{cid_compinfo}}\cr
+#'   \code{bcpc_query} \tab was formerly \code{\link{aw_query}}\cr
 #' }
 cid_compinfo <- function(...) {
-  .Deprecated("pc_compinfo", package = "webchem")
+  .Deprecated("pc_prop", package = "webchem")
   cid_compinfo(...)
+}
+
+#' @rdname webchem-deprecated
+#' @aliases aw_query
+#' @export
+aw_query <- function(...) {
+  .Deprecated("bcpc_query", package = "webchem")
+  bcpc_query(...)
 }

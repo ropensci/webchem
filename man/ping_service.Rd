@@ -5,8 +5,8 @@
 \title{Ping an API used in webchem to see if it's working.}
 \usage{
 ping_service(
-  service = c("aw", "chebi", "ci", "cs", "cs_web", "cir", "cts", "etox", "fn", "nist",
-    "opsin", "pan", "pc", "srs", "wd")
+  service = c("bcpc", "chebi", "ci", "cs", "cs_web", "cir", "cts", "etox", "fn",
+    "nist", "opsin", "pan", "pc", "srs", "wd")
 )
 }
 \arguments{
