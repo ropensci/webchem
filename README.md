@@ -39,18 +39,18 @@ documentation
     Compendium of Pesticide Common Names)
 -   [ChEBI](https://www.ebi.ac.uk/chebi/)
 -   [Chemical Identifier Resolver
-    (CIR)](http://cactus.nci.nih.gov/chemical/structure)
+    (CIR)](https://cactus.nci.nih.gov/chemical/structure)
 -   [Chemical Translation Service
     (CTS)](http://cts.fiehnlab.ucdavis.edu/)
 -   [ChemIDplus](https://chem.nlm.nih.gov/chemidplus/)
 -   [ChemSpider](http://www.chemspider.com/) (requires an [API
-    token]((https://developer.rsc.org/)))
+    token](https://developer.rsc.org/))
 -   [ETOX](http://webetox.uba.de/webETOX/index.do)
 -   [Flavornet](http://www.flavornet.org)
 -   [NIST](https://webbook.nist.gov) (currently gas chromatography
     retention indices only)
 -   [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)
--   [PAN Pesticide Database](http://www.pesticideinfo.org/)
+-   [PAN Pesticide Database](https://www.pesticideinfo.org/)
 -   [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
 -   [U.S. EPA Substance Registry Service
     (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
@@ -130,4 +130,4 @@ here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
     of Conduct](https://ropensci.org/code-of-conduct/). By contributing
     to this project, you agree to abide by its terms.
 
-[![ropensci](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![ropensci](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
