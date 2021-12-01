@@ -12,7 +12,7 @@ A data frame with 124 rows and 2 variables:
 }
 }
 \source{
-\url{http://cfpub.epa.gov/ecotox/}
+\url{https://cfpub.epa.gov/ecotox/}
 }
 \usage{
 lc50
@@ -20,7 +20,7 @@ lc50
 \description{
 This dataset comprises acute ecotoxicity data of 124 insecticides.
 The data is publicly available and can be retrieved from the EPA ECOTOX database
-(\url{http://cfpub.epa.gov/ecotox/})
+(\url{https://cfpub.epa.gov/ecotox/})
 It comprises acute toxicity data (D. magna, 48h, Laboratory, 48h) and has been
 preprocessed (remove non-insecticides, aggregate multiple value, keep only numeric data etc).
 }
