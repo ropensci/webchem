@@ -26,3 +26,5 @@ README_cache
 
 codemeta.json
 ^codemeta\.json$
+
+cran-comments.md
