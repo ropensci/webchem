@@ -5,7 +5,7 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "webchem",
-  "description": "Chemical information from around the web. This package interacts \n    with a suite of web services for chemical information. Sources include: Alan\n    Wood's Compendium of Pesticide Common Names, Chemical Identifier Resolver,\n    ChEBI, Chemical Translation Service, ChemIDplus, ChemSpider, ETOX,\n    Flavornet, NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem,\n    SRS, Wikidata.",
+  "description": "Chemical information from around the web. This package interacts with a suite of web services for chemical information. Sources include: Alan Wood's Compendium of Pesticide Common Names, Chemical Identifier Resolver, ChEBI, Chemical Translation Service, ChemIDplus, ChemSpider, ETOX, Flavornet, NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem, SRS, Wikidata.",
   "name": "webchem: Chemical Information from the Web",
   "codeRepository": "https://github.com/ropensci/webchem",
   "relatedLink": [
@@ -15,13 +15,13 @@
   ],
   "issueTracker": "https://github.com/ropensci/webchem/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
+  "runtimePlatform": "R version 4.1.2 (2021-11-01)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -189,6 +189,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=usethis"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "vcr",
+      "name": "vcr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=vcr"
     }
   ],
   "softwareRequirements": [
@@ -334,10 +346,15 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
     }
   ],
   "readme": "https://github.com/ropensci/webchem/blob/master/README.md",
-  "fileSize": "0KB",
+  "fileSize": "616.471KB",
   "keywords": [
     "rstats",
     "ropensci",
@@ -350,7 +367,7 @@
     "r-package"
   ],
   "releaseNotes": "https://github.com/ropensci/webchem/blob/master/NEWS.md",
-  "contIntegration": "https://codecov.io/gh/ropensci/webchem/branch/master",
+  "contIntegration": ["https://github.com/ropensci/webchem/actions", "https://codecov.io/gh/ropensci/webchem/branch/master"],
   "citation": [
     {
       "@type": "ScholarlyArticle",
