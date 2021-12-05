@@ -42,7 +42,7 @@ cs_check_key <- function() {
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @export
 #' @examples
 #' \dontrun{
@@ -107,7 +107,7 @@ cs_datasources <- function(apikey = NULL, verbose = getOption("verbose")) {
 #' Each API uses a subset of these controls.
 #' The controls that are available for a given function are indicated within the
 #' documentation of the function.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @seealso \code{\link{get_csid}}
 #' @export
 #' @examples
@@ -160,7 +160,7 @@ cs_control <- function(datasources = vector(),
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/} for
 #'   an API key. Please respect the Terms & conditions:
 #'   \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
@@ -332,7 +332,7 @@ get_csid <- function(query,
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
@@ -463,7 +463,7 @@ cs_convert <- function(query, from, to, verbose = getOption("verbose"),
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @export
 #' @examples
 #' \dontrun{
@@ -618,7 +618,7 @@ use 'cs_commpinfo()' instead.")
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
 #' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
 #' can be found at \url{https://developer.rsc.org/terms}.
-#' @references \url{https://developer.rsc.org/compounds-v1/apis}
+#' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @seealso \code{\link{get_csid}}, \code{\link{cs_check_key}}
 #' @export
 #' @examples
