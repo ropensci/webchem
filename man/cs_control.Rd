@@ -65,7 +65,7 @@ cs_control()
 cs_control(order_direction = "descending")
 }
 \references{
-\url{https://developer.rsc.org/compounds-v1/apis}
+\url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 }
 \seealso{
 \code{\link{get_csid}}

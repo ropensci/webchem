@@ -32,5 +32,5 @@ cs_datasources()
 }
 }
 \references{
-\url{https://developer.rsc.org/compounds-v1/apis}
+\url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 }

@@ -125,7 +125,7 @@ ci_query <- function(query, from = c("rn", "inchikey"),
         physprop <- NA
       } else {
         physprop <- html_table(xml_find_all(ttt, "//h2[contains(., 'Physical Prop')]/following-sibling::div//table"))[[1]]
-        physprop[ , 'Value'] <- as.numeric(physprop[ , 'Value'])
+        physprop[ , 'Value'] <- as.numeric(unlist(physprop[ , 'Value']))
         #= same as physprop
       }
 

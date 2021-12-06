@@ -1,7 +1,7 @@
-#' Query http://pesticidecompendium.bcpc.org
+#' Query https://pesticidecompendium.bcpc.org
 #'
 #' Query the BCPC Compendium of Pesticide Common Names
-#' \url{http://pesticidecompendium.bcpc.org}
+#' \url{https://pesticidecompendium.bcpc.org}
 #' formerly known as Alan Woods Compendium of Pesticide Common Names
 #' @import xml2
 #'
@@ -15,7 +15,7 @@
 #' url.
 #' @note for from = 'cas' only the first matched link is returned.
 #' Please respect Copyright, Terms and Conditions
-#' \url{http://pesticidecompendium.bcpc.org/legal.html}!
+#' \url{https://pesticidecompendium.bcpc.org/legal.html}!
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
 #' Information from the Web. Journal of Statistical Software, 93(13).
@@ -147,7 +147,7 @@ bcpc_query <- function(query, from = c("name", "cas"),
                      r_isomer = gsub(".*\\(R\\)-isomer:(.*)", "\\1", inchi))
         }
       }
-      
+
       out <- list(cname = cname, status = status,
                   pref_iupac_name = pref_iupac_name, iupac_name = iupac_name,
                   cas = cas, formula = formula, activity = activity,

@@ -38,7 +38,7 @@ if (getRversion() >= "2.15.1")
 #'
 #' This dataset comprises acute ecotoxicity data of 124 insecticides.
 #' The data is publicly available and can be retrieved from the EPA ECOTOX database
-#' (\url{http://cfpub.epa.gov/ecotox/})
+#' (\url{https://cfpub.epa.gov/ecotox/})
 #' It comprises acute toxicity data (D. magna, 48h, Laboratory, 48h) and has been
 #' preprocessed (remove non-insecticides, aggregate multiple value, keep only numeric data etc).
 #'
@@ -47,5 +47,5 @@ if (getRversion() >= "2.15.1")
 #'   \item{cas}{CAS registry number}
 #'   \item{value}{LC50value}
 #' }
-#' @source \url{http://cfpub.epa.gov/ecotox/}
+#' @source \url{https://cfpub.epa.gov/ecotox/}
 "lc50"

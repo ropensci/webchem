@@ -64,7 +64,7 @@ get_csid("QTBSBXVTEAMEQO-UHFFFAOYAR", from = "inchikey")
 }
 }
 \references{
-\url{https://developer.rsc.org/compounds-v1/apis}
+\url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 
 Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical

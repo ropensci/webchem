@@ -45,14 +45,18 @@ Convert Ids using Chemical Translation Service (CTS), see
 See also \url{http://cts.fiehnlab.ucdavis.edu/}
 for possible values of from and to.
 }
+\note{
+When this version of webchem was released, CTS was temporarily unable
+to convert chemical names to IDs.
+}
 \examples{
 \donttest{
 # might fail if API is not available
-cts_convert("triclosan", "Chemical Name", "inchikey")
+cts_convert("XEFQLINVKFYRCS-UHFFFAOYSA-N", "inchikey", "Chemical Name")
 
 ### multiple inputs
-comp <- c("triclosan", "hexane")
-cts_convert(comp, "Chemical Name", "cas")
+keys <- c("XEFQLINVKFYRCS-UHFFFAOYSA-N", "VLKZOEOYAKHREP-UHFFFAOYSA-N")
+cts_convert(keys, "inchikey", "cas")
 }
 }
 \references{

@@ -1,4 +1,4 @@
-# webchem (development version)
+# webchem 1.1.2
 
 ## NEW FEATURES
 
@@ -7,7 +7,7 @@
 ## BUG FIXES
 
 * ci_query() can no longer query chemicals by name.
-* non-exported function ping_pubchem_pw() was incorrectly reporting that PUG VIEW was down.  This has been fixed.
+* Non-exported function ping_pubchem_pw() was incorrectly reporting that PUG VIEW was down.  This has been fixed.
 * is.cas() now catches whitespaces correctly.
 * aw_query() was renamed and adapted to bcpc_query, as the alanwood site has moved
 
@@ -59,8 +59,8 @@
 
 ## MINOR IMPROVEMENTS
 
-* all `get_*()` functions now output tibbles with a column for the query and a column for the retrieved ID.
-* changes to arguments in `get_*()` functions to make them more consistent.
+* All `get_*()` functions now output tibbles with a column for the query and a column for the retrieved ID.
+* Changes to arguments in `get_*()` functions to make them more consistent.
 * aw_idx.rda is no longer included in the package as a data set. Instead, it is built by build_aw_idx() to tempdir().
 
 
@@ -91,7 +91,7 @@
 ## MINOR IMPROVEMENTS
 
 * as.cas() added.
-* removed documentation files for non-exported functions that were only used internally.
+* Removed documentation files for non-exported functions that were only used internally.
 
 ## BUG FIXES
 
@@ -129,7 +129,7 @@
 * cs_prop() did not parse scientific number correctly.
 * is.smiles() failed because of changes in rcdk.
 * cir_query() failed with identifiers containing spaces (e.g. 'acetic acid').
-* several other functions failed with identifiers containing spaces & returned wrong distance.
+* Aeveral other functions failed with identifiers containing spaces & returned wrong distance.
 
 ## DEPRECATED FUNCTIONS
 
@@ -179,11 +179,11 @@
 
 
 ## NEW FEATURES
-* added ping_pubchem() to check whether pubchem is up & running.
-* added cs_web_ping () to check whether the chemspider webpage is functional.
+* Added ping_pubchem() to check whether pubchem is up & running.
+* Added cs_web_ping () to check whether the chemspider webpage is functional.
 
 ## MINOR IMPROVEMENTS
-* updated allan wood index.
+* Updated allan wood index.
 
 ## BUG FIXES
 * pc_prop() returned to many rows if last cid supplied was NA.
@@ -202,16 +202,16 @@
 
 
 ## NEW FEATURES
-* added cts_to() and cts_from() to retrieve possible ids that can be queried.
+* Added cts_to() and cts_from() to retrieve possible ids that can be queried.
 * cts_*(), pp_query(), cir_query(), get_cid(), get_etoxid(), etox_*(), pan_query() get_wdid(), aw_query(), get_csid(), cs_prop(), cs_compinfo() and ci_query() can handle multiple inputs.
 * pc_prop() queries properties and pc_synonmy() synonyms from PUG-REST.
-* added extractors for webchem objects: cas(), inchikey() and smiles().
+* Added extractors for webchem objects: cas(), inchikey() and smiles().
 
 
 ## MINOR IMPROVEMENTS
-* rewrite of pubchem functions using PUG-REST.
-* chemspider: better use of NA in input (=return NA).
-* more robust matching in get_etoxid.
+* Rewrite of pubchem functions using PUG-REST.
+* ChemSpider: better use of NA in input (=return NA).
+* More robust matching in get_etoxid.
 
 ## BUG FIXES
 
@@ -253,14 +253,14 @@ The new ppdb_parse() parses only a html, but does not interact with the database
   - names of returned list changed.
   - result is numeric where appropriate.
 * cir(): result is numeric where appropriate.
-* unified naming scheme of functions.
+* Unified naming scheme of functions.
 * is.inchikey_cs() has been integrated into is.inchikey().
 * aw_query() returns multiple inchikey if found.
 * pan() now returns chemical name and matched synonym.
 
 ## BUG FIXES
 
-* utility functions are not vectorized and throw an error.
+* Utility functions are not vectorized and throw an error.
 * chemid() did mot work with inchikey as input.
 * ppdb_idx returned duplicated CAS values, which caused ppdb() to fail.
 * ppdb() failed in some cases because of false encoding.
@@ -321,7 +321,7 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 * alanwood() returns only results for first match in case of multiple links found.
 * physprop() stopped working after change of SRC to https, fixed now.
-* changed etox_* functions to https.
+* Changed etox_* functions to https.
 
 
 ## DEPRECATED FUNCTIONS
@@ -351,8 +351,8 @@ The new ppdb_parse() parses only a html, but does not interact with the database
 
 ## MINOR IMPROVEMENTS
 
-* added exceptions/checks to tests.
-* improved robustness of cir_query().
+* Added exceptions/checks to tests.
+* Improved robustness of cir_query().
 
 ## BUG FIXES
 

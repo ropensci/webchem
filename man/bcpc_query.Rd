@@ -2,7 +2,7 @@
 % Please edit documentation in R/bcpc.R
 \name{bcpc_query}
 \alias{bcpc_query}
-\title{Query http://pesticidecompendium.bcpc.org}
+\title{Query https://pesticidecompendium.bcpc.org}
 \usage{
 bcpc_query(
   query,
@@ -30,13 +30,13 @@ url.
 }
 \description{
 Query the BCPC Compendium of Pesticide Common Names
-\url{http://pesticidecompendium.bcpc.org}
+\url{https://pesticidecompendium.bcpc.org}
 formerly known as Alan Woods Compendium of Pesticide Common Names
 }
 \note{
 for from = 'cas' only the first matched link is returned.
 Please respect Copyright, Terms and Conditions
-\url{http://pesticidecompendium.bcpc.org/legal.html}!
+\url{https://pesticidecompendium.bcpc.org/legal.html}!
 }
 \examples{
 \dontrun{
