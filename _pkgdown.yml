@@ -61,4 +61,4 @@ reference:
   - webchem
 
 # build locally with:
-# rotemplate::build_ropensci_docs(here::here())
+# pkgdown::build_site()
