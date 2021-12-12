@@ -1,5 +1,10 @@
 url: https://docs.ropensci.org/webchem
 
+template:
+  package: rotemplate
+
+destination: docs
+
 reference:
 - title: Retrieve and translate chemical identifiers
 - contents:
@@ -15,9 +20,8 @@ reference:
   - etox_basic
 - title: Retrieve chemical properties
 - contents:
-  - aw_query
-  - ci_query
-  - cir_query
+  - ends_with("_query")
+  - -opsin_query
   - chebi_comp_entity
   - cs_compinfo
   - cs_extcompinfo
@@ -26,10 +30,8 @@ reference:
   - etox_tests
   - fn_percept
   - nist_ri
-  - pan_query
   - pc_prop
   - pc_sect
-  - srs_query
 - title: Molecular structure images
 - contents:
   - ends_with("_img")
@@ -43,13 +45,13 @@ reference:
 - contents:
   - as.cas
   - starts_with("is.")
-  - build_aw_idx
   - cs_check_key
   - cs_control
   - extractors
   - ping_service
   - cs_datasources
   - parse_mol
+  - write_mol
 - title: Deprecated and defunct
 - contents:
   - webchem-defunct
@@ -59,6 +61,4 @@ reference:
   - webchem
 
 # build locally with:
-# template <- list(package = "rotemplate")
-# pkgdown::build_site(devel = FALSE, override = list(template = template))
-
+# rotemplate::build_ropensci_docs(here::here())
