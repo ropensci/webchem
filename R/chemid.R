@@ -18,7 +18,7 @@
 #' @examples
 #' \dontrun{
 #' # might fail if API is not available
-#' y1 <- ci_query('50-00-0', from = 'rn', match = 'first')
+#' y1 <- ci_query('50-00-0', from = 'rn')
 #' y1[['50-00-0']]$inchikey
 #'
 #' # query by inchikey
@@ -43,7 +43,7 @@ ci_query <- function(query, from = c("rn", "inchikey"),
 
   from <- match.arg(from)
 
-  foo <- function(query, from, match, verbose){
+  foo <- function(query, from, verbose){
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -136,7 +136,7 @@ ci_query <- function(query, from = c("rn", "inchikey"),
       }
   }
 
-  out <- lapply(query, foo, from = from, match = match, verbose = verbose)
+  out <- lapply(query, foo, from = from, verbose = verbose)
   names(out) <- query
   class(out) <- c('ci_query', 'list')
   return(out)
