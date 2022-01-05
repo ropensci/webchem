@@ -30,7 +30,7 @@ Medicine, \url{https://www.nlm.nih.gov/databases/download.html}.
 \examples{
 \dontrun{
 # might fail if API is not available
-y1 <- ci_query('50-00-0', from = 'rn', match = 'first')
+y1 <- ci_query('50-00-0', from = 'rn')
 y1[['50-00-0']]$inchikey
 
 # query by inchikey
