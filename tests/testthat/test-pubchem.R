@@ -69,6 +69,25 @@ test_that("get_cid()", {
   # sourceall
   opto <- get_cid("Optopharma Ltd", from = "sourceall", domain = "substance")
   expect_equal(min(opto$cid), "102361739")
+
+  #issue 283
+  smiles0 <- "O=S(=O)(NCCNC/C=C/c1ccc(Br)cc1)c2cccc3cnccc23"
+  smiles1 <- "FC(OC(C(F)(F)F)Cl)F"
+  smiles2 <- "CC(C)([C@H]1/C=C(/C(F)(F)F)\\Cl)[C@@H]1C(OCC1=C(C)C(C2=CC=CC=C2)=CC=C1)=O"
+  smiles3 <- "CCCOC/C(\\N1C=NC=C1)=N\\C(C(C(F)(F)F)=C1)=CC=C1Cl"
+  smiles4 <- "FC(/C(\\C1=CC=CC=C1)=N\\C1=CC=CC=C1)(F)F"
+
+  cid0 <- get_cid(smiles0, from = "smiles", domain = "compound")
+  cid1 <- get_cid(smiles1, from = "smiles", domain = "compound")
+  cid2 <- get_cid(smiles2, from = "smiles", domain = "compound")
+  cid3 <- get_cid(smiles3, from = "smiles", domain = "compound")
+  cid4 <- get_cid(smiles4, from = "smiles", domain = "compound")
+
+  expect_equal(cid0$cid, "449241")
+  expect_equal(cid1$cid, "3763")
+  expect_equal(cid2$cid, "6442842")
+  expect_equal(cid3$cid, "91699")
+  expect_equal(cid4$cid, "136176")
 })
 
 test_that("get_cid() handles special characters in SMILES", {

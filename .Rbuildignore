@@ -28,3 +28,4 @@ codemeta.json
 ^codemeta\.json$
 
 cran-comments.md
+^CRAN-RELEASE$

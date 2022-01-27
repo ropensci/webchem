@@ -1,3 +1,9 @@
+# webchem 1.1.2.9001
+
+## BUG FIXES
+
+* get_cid() became more robust to smiles queries with special characters.
+
 # webchem 1.1.2
 
 ## NEW FEATURES
