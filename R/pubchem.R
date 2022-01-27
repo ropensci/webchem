@@ -183,13 +183,21 @@ get_cid <-
                       "json",
                       sep = "/")
       } else {
-        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain,
-                      from,
-                      URLencode(as.character(query), reserved = TRUE),
-                      "cids",
-                      "json",
-                      sep = "/")
+        if (from == "smiles") {
+          qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug/",
+                         domain, "/",
+                         from, "/",
+                         "cids/JSON?smiles=",
+                         URLencode(as.character(query), reserved = TRUE))
+        } else {
+          qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+                        domain,
+                        from,
+                        URLencode(as.character(query), reserved = TRUE),
+                        "cids",
+                        "json",
+                        sep = "/")
+        }
       }
       if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
       webchem_sleep(type = 'API')
