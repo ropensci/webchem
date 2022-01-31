@@ -109,11 +109,19 @@ bcpc_query <- function(query, from = c("name", "cas"),
         xml_find_all(ttt, "//tr/th[@id='r5']/following-sibling::td"))
       formula <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r6']/following-sibling::td"))
-      activity <- xml_text(
+      activity_text <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
-      subactivity <- trimws(
-        strsplit(gsub("^.*\\((.*)\\)", "\\1", activity), ";")[[1]])
-      activity <- gsub("^(.*) \\(.*\\)", "\\1", activity)
+      n_activities <- stringr::str_count(activity_text, "\\(")
+      activity <- gsub("^(.*?) \\(.*\\)", "\\1", activity_text)
+      subactivity <- gsub("^.*? \\((.*?)\\).*", "\\1", activity_text)
+      if (n_activities == 2) {
+        activity_2 <- gsub("^.*\\)(.*?) \\(.*\\)", "\\1", activity_text)
+        activity <- c(activity, activity_2)
+        subactivity_2 <- gsub("^.* \\((.*?)\\)$", "\\1", activity_text)
+        subactivity <- c(subactivity, subactivity_2)
+      }
+      if (n_activities > 2) warning("More than two activity types will not correctly be parsed")
+
       inchikey_r <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r11']/following-sibling::td"))
       if (length(inchikey_r) == 0) {
