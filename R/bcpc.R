@@ -109,19 +109,15 @@ bcpc_query <- function(query, from = c("name", "cas"),
         xml_find_all(ttt, "//tr/th[@id='r5']/following-sibling::td"))
       formula <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r6']/following-sibling::td"))
-      activity_text <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
-      n_activities <- stringr::str_count(activity_text, "\\(")
-      activity <- gsub("^(.*?) \\(.*\\)", "\\1", activity_text)
-      subactivity <- gsub("^.*? \\((.*?)\\).*", "\\1", activity_text)
-      if (n_activities == 2) {
-        activity_2 <- gsub("^.*\\)(.*?) \\(.*\\)", "\\1", activity_text)
-        activity <- c(activity, activity_2)
-        subactivity_2 <- gsub("^.* \\((.*?)\\)$", "\\1", activity_text)
-        subactivity <- c(subactivity, subactivity_2)
-      }
-      if (n_activities > 2) warning("More than two activity types will not correctly be parsed")
-
+      activity_text <- as.character(xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
+      a_tmp_1 <- trimws(gsub("<td.*?>(.*)</td>", "\\1", activity_text))
+      a_tmp_2 <- gsub("<a.*?>", "", a_tmp_1)
+      a_tmp_3 <- gsub("</a>", "", a_tmp_2)
+      a_split <- strsplit(a_tmp_3, "<br>")[[1]]
+      activity <- unname(sapply(a_split, function(x) gsub(" \\(.*\\)$", "", x)))
+      subactivity <- unname(sapply(a_split, function(x) {
+          if (grepl("\\(.*\\)", x)) gsub(".*\\((.*)\\)$", "\\1", x)
+          else NA}))
       inchikey_r <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r11']/following-sibling::td"))
       if (length(inchikey_r) == 0) {
