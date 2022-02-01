@@ -8,22 +8,17 @@ test_that("examples in the article are unchanged as far as it can be reasonably 
     aw_data <- aw_query(lc50$cas[1:3], from = "cas"),
     "deprecated"
   )
-  igroup <- sapply(aw_data, function(y) y$subactivity[1])
+
+  # After fixing issue #342, we need to select the second subactivity
+  # from these examples, as this is the one that was captured
+  # with the original code
+  igroup <- sapply(aw_data, function(y) y$subactivity[2])
 
   expect_type(igroup, "character")
   expect_equal(names(igroup), c("50-29-3", "52-68-6", "55-38-9"))
-
-  # After fixing issue #342, only the subactivity for the third element
-  # is returned unchanged, because 1 (DDT) and 2 (trichloron) previously
-  # returned only one subactivity (organochlorine insecticides and phosphonate
-  # insecticides), where in fact BCPC lists two activities with corresponding
-  # subactivities
-  expect_equal(unname(igroup)[3], "phenyl organothiophosphate insecticides")
-
-  # The subactivities for DDT and trichloron originally returned can still be
-  # checked, as they are returned as the second element of the subactivities
-  expect_equal(aw_data[[1]]$subactivity[2], "organochlorine insecticides")
-  expect_equal(aw_data[[2]]$subactivity[2], "phosphonate insecticides")
+  expect_equal(unname(igroup), c("organochlorine insecticides",
+                                 "phosphonate insecticides",
+                                 "phenyl organothiophosphate insecticides"))
 })
 
 test_that("BCPC pesticide compendium, name", {
