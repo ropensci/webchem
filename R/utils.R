@@ -502,7 +502,7 @@ matcher <-
         } else {
           choices <- x
         }
-        pick <- menu(choices, graphics = FALSE, "Select one:")
+        pick <- menu(choices, graphics = FALSE, paste0("Select result for '", query, "':"))
         return(x[pick])
 
       } else if (match == "na") {
