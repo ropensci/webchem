@@ -74,19 +74,19 @@ test_that("get_csid()", {
                      match = "first")
 
     # get_csid() works with cs_control()
-    c1 <- head(get_csid("iron oxide", from = "name", order_by = "recordId"))
-    c3 <- head(get_csid("iron oxide", from = "name",
+    c1 <- utils::head(get_csid("iron oxide", from = "name", order_by = "recordId"))
+    c3 <- utils::head(get_csid("iron oxide", from = "name",
                         order_by = "molecularWeight"))
-    c4 <- head(get_csid("C6H12O6", from = "formula",
+    c4 <- utils::head(get_csid("C6H12O6", from = "formula",
                         order_by = "referenceCount",
                         order_direction = "descending"))
-    c5 <- head(get_csid("C6H12O6", from = "formula", order_by = "dataSourceCount",
+    c5 <- utils::head(get_csid("C6H12O6", from = "formula", order_by = "dataSourceCount",
                         order_direction = "descending"))
-    c6 <- head(get_csid("C6H12O6", from = "formula", order_by = "pubMedCount",
+    c6 <- utils::head(get_csid("C6H12O6", from = "formula", order_by = "pubMedCount",
                         order_direction = "descending"))
-    c7 <- head(get_csid("C6H12O6", from = "formula", order_by = "rscCount",
+    c7 <- utils::head(get_csid("C6H12O6", from = "formula", order_by = "rscCount",
                         order_direction = "descending"))
-    c8 <- head(get_csid("iron oxide", from = "name", order_by = "molecularWeight",
+    c8 <- utils::head(get_csid("iron oxide", from = "name", order_by = "molecularWeight",
                         order_direction = "descending"))
 
     # get_csid() handles special characters in SMILES

@@ -109,11 +109,15 @@ bcpc_query <- function(query, from = c("name", "cas"),
         xml_find_all(ttt, "//tr/th[@id='r5']/following-sibling::td"))
       formula <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r6']/following-sibling::td"))
-      activity <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
-      subactivity <- trimws(
-        strsplit(gsub("^.*\\((.*)\\)", "\\1", activity), ";")[[1]])
-      activity <- gsub("^(.*) \\(.*\\)", "\\1", activity)
+      activity_text <- as.character(xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
+      a_tmp_1 <- trimws(gsub("<td.*?>(.*)</td>", "\\1", activity_text))
+      a_tmp_2 <- gsub("<a.*?>", "", a_tmp_1)
+      a_tmp_3 <- gsub("</a>", "", a_tmp_2)
+      a_split <- strsplit(a_tmp_3, "<br>")[[1]]
+      activity <- unname(sapply(a_split, function(x) gsub(" \\(.*\\)$", "", x)))
+      subactivity <- unname(sapply(a_split, function(x) {
+          if (grepl("\\(.*\\)", x)) gsub(".*\\((.*)\\)$", "\\1", x)
+          else NA}))
       inchikey_r <- xml_text(
         xml_find_all(ttt, "//tr/th[@id='r11']/following-sibling::td"))
       if (length(inchikey_r) == 0) {

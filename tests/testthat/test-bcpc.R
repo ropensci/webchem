@@ -1,5 +1,5 @@
 up <- ping_service("bcpc")
-test_that("examples in the article are unchanged", {
+test_that("examples in the article are unchanged as far as it can be reasonably expected", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
 
@@ -8,7 +8,11 @@ test_that("examples in the article are unchanged", {
     aw_data <- aw_query(lc50$cas[1:3], from = "cas"),
     "deprecated"
   )
-  igroup <- sapply(aw_data, function(y) y$subactivity[1])
+
+  # After fixing issue #342, we need to select the second subactivity
+  # from these examples, as this is the one that was captured
+  # with the original code
+  igroup <- sapply(aw_data, function(y) y$subactivity[2])
 
   expect_type(igroup, "character")
   expect_equal(names(igroup), c("50-29-3", "52-68-6", "55-38-9"))
@@ -58,4 +62,20 @@ test_that("BCPC pesticide compendium, build_index", {
   expect_equal(names(idx), c("names", "links", "linknames", "source"))
   expect_equal(unique(idx$source), c("rn", "cn"))
   expect_equal(idx$names[1], "50-00-0")
+})
+
+test_that("BCPC pesticide compendium, activity", {
+  skip_on_cran()
+  skip_if_not(up, "BCPC pesticide compendium is down")
+
+  comps <- c("atrazine", "2,4-D", "Copper hydroxide", "ziram")
+  o1 <- bcpc_query(comps)
+  expect_equal(o1[[1]]$activity, "herbicides")
+  expect_equal(o1[[1]]$subactivity, "chlorotriazine herbicides")
+  expect_equal(o1[[2]]$activity, c("herbicides", "plant growth regulators"))
+  expect_equal(o1[[2]]$subactivity, c("phenoxyacetic herbicides", "auxins"))
+  expect_equal(o1[[3]]$activity, c("bactericides", "fungicides"))
+  expect_equal(o1[[3]]$subactivity, c(NA, "copper fungicides"))
+  expect_equal(o1[[4]]$activity, c("bird repellents", "fungicides", "mammal repellents"))
+  expect_equal(o1[[4]]$subactivity, c(NA, "dithiocarbamate fungicides; zinc fungicides", NA))
 })

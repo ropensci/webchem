@@ -4,7 +4,7 @@ test_that("examples in the article are unchanged", {
   skip_if_not(up, "ETOX service is down")
 
   utils::data("jagst", package = "webchem")
-  subs <- head(unique(jagst$substance))
+  subs <- utils::head(unique(jagst$substance))
   ids <- get_etoxid(subs, match = "best")
   etox_data <- etox_basic(ids$etoxid)
   #values go to test-pubchem
@@ -77,7 +77,7 @@ test_that("examples from webchem article run", {
 
   # tests for the article
   utils::data("jagst")
-  ids <- get_etoxid(head(unique(jagst$substance),6), match = "best")
+  ids <- get_etoxid(utils::head(unique(jagst$substance),6), match = "best")
 
   expect_s3_class(ids, "data.frame")
   expect_equal(ids$etoxid, c("8668","8494",NA,"8397","7240","7331"),
