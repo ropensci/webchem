@@ -138,9 +138,9 @@ cir_query <- function(identifier,
       return(na_tbl)
     }
     if (verbose) webchem_message("query", identifier, appendLF = FALSE)
-    identifier <- URLencode(identifier, reserved = TRUE)
+    id <- URLencode(identifier, reserved = TRUE)
     baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
-    qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
+    qurl <- paste(baseurl, id, representation, 'xml', sep = '/')
     if (!is.null(resolver)) {
       qurl <- paste0(qurl, '?resolver=', resolver)
     }
