@@ -5,6 +5,7 @@
 #'
 #' @import xml2
 #' @importFrom utils URLencode
+#' @importFrom rlang :=
 #'
 #' @param identifier character; chemical identifier.
 #' @param representation character; what representation of the identifier should
