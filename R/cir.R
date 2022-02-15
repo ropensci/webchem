@@ -131,7 +131,8 @@ cir_query <- function(identifier,
   }
 
   match <- match.arg(match)
-  foo <- function(identifier, representation, resolver, first, verbose) {
+
+  foo <- function(identifier, representation, resolver, match, verbose) {
     if (is.na(identifier)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -170,16 +171,18 @@ cir_query <- function(identifier,
                                 'heavy_atom_count', 'deprotonable_group_count',
                                 'protonable_group_count') )
         out <- as.numeric(out)
-      return(out)
+      out_tbl <- tibble(query = identifier, !!representation := out)
+      return(out_tbl)
     }
     else {
       return(NA)
     }
   }
+
+
   out <- lapply(identifier, foo, representation = representation,
-                resolver = resolver, first = first, verbose = verbose)
-  names(out) <- identifier
-  return(out)
+                resolver = resolver, match = match, verbose = verbose)
+  bind_rows(out)
 }
 
 #' Query Chemical Identifier Resolver Images
