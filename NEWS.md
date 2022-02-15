@@ -1,4 +1,4 @@
-# webchem 1.1.2.9001
+# webchem (development version)
 
 ## NEW FEATURES
 
