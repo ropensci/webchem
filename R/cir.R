@@ -131,11 +131,11 @@ cir_query <- function(identifier,
   }
 
   match <- match.arg(match)
-
+  na_tbl <- tibble(query = NA, !!representation := NA)
   foo <- function(identifier, representation, resolver, match, verbose) {
     if (is.na(identifier)) {
       if (verbose) webchem_message("na")
-      return(NA)
+      return(na_tbl)
     }
     if (verbose) webchem_message("query", identifier, appendLF = FALSE)
     identifier <- URLencode(identifier, reserved = TRUE)
@@ -152,7 +152,7 @@ cir_query <- function(identifier,
                          quiet = TRUE), silent = TRUE)
     if (inherits(h, "try-error")) {
       if (verbose) webchem_message("service_down")
-      return(NA)
+      return(na_tbl)
     }
     if (verbose) message(httr::message_for_status(h))
     if (h$status_code == 200){
@@ -160,7 +160,7 @@ cir_query <- function(identifier,
       out <- xml_text(xml_find_all(tt, '//item'))
       if (length(out) == 0) {
         if (verbose) webchem_message("not_found")
-        return(NA)
+        return(na_tbl)
       }
       out <- matcher(out, query = identifier, match = match, verbose = verbose)
       if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
@@ -171,11 +171,12 @@ cir_query <- function(identifier,
                                 'heavy_atom_count', 'deprotonable_group_count',
                                 'protonable_group_count') )
         out <- as.numeric(out)
+
       out_tbl <- tibble(query = identifier, !!representation := out)
       return(out_tbl)
     }
     else {
-      return(NA)
+      return(na_tbl)
     }
   }
 
