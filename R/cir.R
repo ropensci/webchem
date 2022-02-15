@@ -112,7 +112,8 @@
 #'
 #'}
 #' @export
-cir_query <- function(identifier, representation = "smiles",
+cir_query <- function(identifier,
+                      representation = "smiles",
                       resolver = NULL,
                       match = c("all", "first", "ask", "na"),
                       verbose = getOption("verbose"),
@@ -124,6 +125,11 @@ cir_query <- function(identifier, representation = "smiles",
   if (!missing("choices")) {
     stop("`choices` is deprecated.  Use `match` instead.")
   }
+
+  if (length(representation) > 1 | !is.character(representation)) {
+    stop("`representation` must be a string.  See ?cir_query for options.")
+  }
+
   match <- match.arg(match)
   foo <- function(identifier, representation, resolver, first, verbose) {
     if (is.na(identifier)) {
