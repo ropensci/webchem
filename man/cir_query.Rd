@@ -36,7 +36,7 @@ returns all matches, \code{"first"} returns only the first result,
 \item{...}{currently not used.}
 }
 \value{
-A list of character vectors.
+A tibble with a `query` column an a column for the requested representation.
 }
 \description{
 A interface to the Chemical Identifier Resolver (CIR).

@@ -19,7 +19,7 @@
 #' @param choices deprecated.  Use the \code{match} argument instead.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return A list of character vectors.
+#' @return A tibble with a `query` column an a column for the requested representation.
 #' @details
 #'  CIR can resolve can be of the following \code{identifier}: Chemical Names,
 #'  IUPAC names,
