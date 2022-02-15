@@ -1,5 +1,9 @@
 # webchem 1.1.2.9001
 
+## NEW FEATURES
+
+* cir_query() now returns a tibble instead of a list to be consistent with other translator functions. This is a potentially *breaking change* for users.
+
 ## BUG FIXES
 
 * get_cid() became more robust to smiles queries with special characters.
