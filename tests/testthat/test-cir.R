@@ -31,6 +31,17 @@ test_that("cir_query() handles special characters in SMILES", {
                "InChIKey=HSFWRNGVRCDJHI-UHFFFAOYNA-N")
 })
 
+test_that("cir_query() handles NA queries and queries that return NA", {
+  skip_on_cran()
+  skip_if_not(up, "CIR server is down")
+
+  expect_identical(
+    cir_query(c("Triclosan", "pumpkin", NA), representation = "cas",match = "first"),
+    tibble(query = c("Triclosan", "pumpkin", NA_character_),
+           cas = c("3380-34-5", NA_character_, NA_character_))
+  )
+})
+
 test_that("cir_img()", {
   skip_on_cran()
   skip_if_not(up, "CIR server is down")
