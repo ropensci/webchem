@@ -132,8 +132,9 @@ cir_query <- function(identifier,
   }
 
   match <- match.arg(match)
-  na_tbl <- tibble(query = NA, !!representation := NA)
+
   foo <- function(identifier, representation, resolver, match, verbose) {
+    na_tbl <- tibble(query = identifier, !!representation := NA)
     if (is.na(identifier)) {
       if (verbose) webchem_message("na")
       return(na_tbl)
