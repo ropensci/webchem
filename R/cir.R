@@ -5,6 +5,7 @@
 #'
 #' @import xml2
 #' @importFrom utils URLencode
+#' @importFrom rlang :=
 #'
 #' @param identifier character; chemical identifier.
 #' @param representation character; what representation of the identifier should
@@ -19,7 +20,7 @@
 #' @param choices deprecated.  Use the \code{match} argument instead.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... currently not used.
-#' @return A list of character vectors.
+#' @return A tibble with a `query` column and a column for the requested representation.
 #' @details
 #'  CIR can resolve can be of the following \code{identifier}: Chemical Names,
 #'  IUPAC names,
@@ -112,7 +113,8 @@
 #'
 #'}
 #' @export
-cir_query <- function(identifier, representation = "smiles",
+cir_query <- function(identifier,
+                      representation = "smiles",
                       resolver = NULL,
                       match = c("all", "first", "ask", "na"),
                       verbose = getOption("verbose"),
@@ -124,16 +126,23 @@ cir_query <- function(identifier, representation = "smiles",
   if (!missing("choices")) {
     stop("`choices` is deprecated.  Use `match` instead.")
   }
+
+  if (length(representation) > 1 | !is.character(representation)) {
+    stop("`representation` must be a string.  See ?cir_query for options.")
+  }
+
   match <- match.arg(match)
-  foo <- function(identifier, representation, resolver, first, verbose) {
+
+  foo <- function(identifier, representation, resolver, match, verbose) {
+    na_tbl <- tibble(query = identifier, !!representation := NA)
     if (is.na(identifier)) {
       if (verbose) webchem_message("na")
-      return(NA)
+      return(na_tbl)
     }
     if (verbose) webchem_message("query", identifier, appendLF = FALSE)
-    identifier <- URLencode(identifier, reserved = TRUE)
+    id <- URLencode(identifier, reserved = TRUE)
     baseurl <- "https://cactus.nci.nih.gov/chemical/structure"
-    qurl <- paste(baseurl, identifier, representation, 'xml', sep = '/')
+    qurl <- paste(baseurl, id, representation, 'xml', sep = '/')
     if (!is.null(resolver)) {
       qurl <- paste0(qurl, '?resolver=', resolver)
     }
@@ -145,7 +154,7 @@ cir_query <- function(identifier, representation = "smiles",
                          quiet = TRUE), silent = TRUE)
     if (inherits(h, "try-error")) {
       if (verbose) webchem_message("service_down")
-      return(NA)
+      return(na_tbl)
     }
     if (verbose) message(httr::message_for_status(h))
     if (h$status_code == 200){
@@ -153,7 +162,7 @@ cir_query <- function(identifier, representation = "smiles",
       out <- xml_text(xml_find_all(tt, '//item'))
       if (length(out) == 0) {
         if (verbose) webchem_message("not_found")
-        return(NA)
+        return(na_tbl)
       }
       out <- matcher(out, query = identifier, match = match, verbose = verbose)
       if (representation %in% c('mw', 'monoisotopic_mass', 'h_bond_donor_count',
@@ -164,16 +173,19 @@ cir_query <- function(identifier, representation = "smiles",
                                 'heavy_atom_count', 'deprotonable_group_count',
                                 'protonable_group_count') )
         out <- as.numeric(out)
-      return(out)
+
+      out_tbl <- tibble(query = identifier, !!representation := out)
+      return(out_tbl)
     }
     else {
-      return(NA)
+      return(na_tbl)
     }
   }
+
+
   out <- lapply(identifier, foo, representation = representation,
-                resolver = resolver, first = first, verbose = verbose)
-  names(out) <- identifier
-  return(out)
+                resolver = resolver, match = match, verbose = verbose)
+  bind_rows(out)
 }
 
 #' Query Chemical Identifier Resolver Images
