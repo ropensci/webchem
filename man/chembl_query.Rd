@@ -9,7 +9,8 @@ chembl_query(query, resource = "molecule")
 \arguments{
 \item{query}{character; a vector of ChEMBL IDs.}
 
-\item{resource}{character; the ChEMBL resource to query.}
+\item{resource}{character; the ChEMBL resource to query. Use
+\code{chembl_resources()} to see all available resources.}
 }
 \value{
 The function return a list of lists, where each element of the list
@@ -19,11 +20,34 @@ possible.
 \description{
 Retrieve ChEMBL data using a vector of ChEMBL IDs.
 }
+\details{
+Each entry in ChEMBL has a unique ID. Data in ChEMBL is organized in
+databases called resources. An entry may or may not have a record in a
+particular resource. An entry may have a record in more than resources, e.g.
+a compound may be present in both the "molecule" and the "drug" resource.
+This function queries a vector of ChEMBL IDs from a specific ChEMBL resource.
+Use this function with the \code{"chembl_id_lookup"} resource to find the
+appropriate resource for a ChEMBL ID.
+}
+\note{
+Links to the webservice documentation:
+\itemize{
+     \item \url{https://chembl.gitbook.io/chembl-interface-documentation},
+     \item \url{https://www.ebi.ac.uk/chembl/api/data/docs}
+}
+}
 \examples{
-\donttest {
-# might fail if API is not available
+\donttest{
+# Might fail if API is not available
+
+# Search molecules
 chembl_query("CHEMBL1082", resource = "molecule")
 chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
+
+# Look up ChEMBL IDs in ChEMBL "resources", return one resource per query.
+chembl_query("CHEMBL771355", "chembl_id_lookup")
+
+# Search assays
 chembl_query("CHEMBL771355", resource = "assay")
 }
 }
