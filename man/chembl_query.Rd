@@ -4,13 +4,20 @@
 \alias{chembl_query}
 \title{Query ChEMBL using ChEMBL IDs}
 \usage{
-chembl_query(query, resource = "molecule")
+chembl_query(
+  query,
+  resource = "molecule",
+  cache = FALSE,
+  verbose = getOption("verbose")
+)
 }
 \arguments{
 \item{query}{character; a vector of ChEMBL IDs.}
 
 \item{resource}{character; the ChEMBL resource to query. Use
 \code{chembl_resources()} to see all available resources.}
+
+\item{verbose}{logical; should a verbose output be printed on the console?}
 }
 \value{
 The function return a list of lists, where each element of the list

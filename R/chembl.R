@@ -4,6 +4,7 @@
 #' @param query character; a vector of ChEMBL IDs.
 #' @param resource character; the ChEMBL resource to query. Use
 #' \code{chembl_resources()} to see all available resources.
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @return The function return a list of lists, where each element of the list
 #' contains a list of respective query results. Results are simplified, if
 #' possible.
@@ -34,21 +35,65 @@
 #' # Search assays
 #' chembl_query("CHEMBL771355", resource = "assay")
 #' }
-#' @importFrom jsonlite fromJSON
+#' @importFrom httr RETRY message_for_status content
 #' @export
-chembl_query <- function(query, resource = "molecule") {
+chembl_query <- function(query,
+                         resource = "molecule",
+                         cache = FALSE,
+                         verbose = getOption("verbose")) {
   resource <- match.arg(resource, chembl_resources())
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
-  if (length(query) == 1) {
-    url <- paste0(stem, "/", resource, "/", query)
-    res <- jsonlite::fromJSON(url)
+  if (cache) {
+    if (file.exists("query_results.rda")) load("query_results.rda") else {
+      query_results <- list()
+    }
   }
-  if (length(query) > 1) {
-    queries <- paste(query, collapse = ";")
-    url <- paste0(stem, "/", resource, "/set/", queries)
-    res <- jsonlite::fromJSON(url)
+  foo <- function(query, verbose) {
+    if (is.na(query)) {
+      if (verbose) webchem_message("na")
+      return(NA)
+    }
+    if (grepl("^CHEMBL[0-9]+", query) == FALSE) {
+      if (verbose) message("Query is not a ChEMBL ID. Returning NA.")
+      return(NA)
+    }
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    url <- paste0(stem, "/", resource, "/", query, ".json")
+    webchem_sleep(type = 'API')
+    res <- try(httr::RETRY("GET",
+                           url,
+                           user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (res$status_code != 200) {
+      if (verbose) message(httr::message_for_status(res))
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res))
+    cont <- httr::content(res, type = "application/json")
+    return(cont)
   }
-  return(res)
+  out <- lapply(query, function(x) {
+    if (cache) {
+      if (x %in% names(query_results)) {
+        return(query_results[[x]])
+      } else {
+        new <- foo(x, verbose)
+        if (!is.na(new)) {
+          query_results[[x]] <- new
+          save(query_results, file = "query_results.rda")
+        }
+        return(new)
+      }
+    } else {
+      foo(x, verbose)
+    }
+  })
+  return(out)
 }
 
 #' List ChEMBL Resources
