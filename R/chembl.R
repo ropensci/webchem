@@ -75,19 +75,42 @@ chembl_query <- function(query,
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
+    if ("atc_classifications" %in% names(cont)) {
+      cont$atc_classifications <- unlist(cont$atc_classifications)
+    }
+    if ("cross_references" %in% names(cont)) {
+      cont$cross_references <- dplyr::bind_rows(cont$cross_references)
+    }
+    if ("molecule_hierarchy" %in% names(cont)) {
+      cont$molecule_hierarchy <- dplyr::bind_rows(cont$molecule_hierarchy)
+    }
+    if ("molecule_properties" %in% names(cont)) {
+      cont$molecule_properties <- dplyr::bind_rows(cont$molecule_properties)
+    }
+    if ("molecule_structures" %in% names(cont)) {
+      cont$molecule_structures <- dplyr::bind_rows(cont$molecule_structures)
+    }
+    if ("molecule_synonyms" %in% names(cont)) {
+      cont$molecule_synonyms <- dplyr::bind_rows(cont$molecule_synonyms)
+    }
+    cont$molecule_synonyms <- dplyr::bind_rows(cont$molecule_synonyms)
     return(cont)
   }
   out <- lapply(query, function(x) {
     if (cache) {
       if (x %in% names(query_results)) {
+        if (verbose) webchem_message("query", x, appendLF = FALSE)
+        if (verbose) message("Already retrieved.")
         return(query_results[[x]])
       } else {
         new <- foo(x, verbose)
-        if (!is.na(new)) {
-          query_results[[x]] <- new
+        if (length(new[[1]]) == 1 && is.na(new[[1]][1])) {
+          return(new)
+        } else {
+          query_results[[x]] <<- new
           save(query_results, file = "query_results.rda")
+          return(new)
         }
-        return(new)
       }
     } else {
       foo(x, verbose)
