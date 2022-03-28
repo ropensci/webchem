@@ -62,7 +62,7 @@ chembl_query <- function(query,
     webchem_sleep(type = 'API')
     res <- try(httr::RETRY("GET",
                            url,
-                           user_agent(webchem_url()),
+                           httr::user_agent(webchem_url()),
                            terminate_on = 404,
                            quiet = TRUE), silent = TRUE)
     if (inherits(res, "try-error")) {
@@ -136,4 +136,73 @@ chembl_resources <- function() {
     "target_relation", "tissue", "xref_source"
   )
   return(resources)
+}
+
+#' Retrieve all ATC classes
+#'
+#' Retrieve all available classes within the Anatomical Therapeutic Chemical
+#' (ATC) classification system.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' \donttest{
+#' # Might fail if API is not available
+#'
+#' atc <- atc_classes()
+#' }
+#' @importFrom httr RETRY user_agent message_for_status content
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr bind_rows
+#' @export
+atc_classes <- function(verbose = getOption("verbose")) {
+  url <- "https://www.ebi.ac.uk/chembl/api/data/atc_class.json?limit=1000&offset=0"
+  webchem_sleep(type = 'API')
+  res <- try(httr::RETRY("GET",
+                         url,
+                         httr::user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
+  if (res$status_code != 200) {
+    if (verbose) message(httr::message_for_status(res))
+    return(NA)
+  }
+  if (verbose) message(httr::message_for_status(res))
+  cont <- httr::content(res, type = "application/json")
+  atc_classes <- lapply(cont$atc, function(x) tibble::as_tibble(x))
+  atc_classes <- dplyr::bind_rows(atc_classes)
+  next_page <- cont$page_meta$`next`
+  while(!is.null(next_page)) {
+    url <- paste0("https://www.ebi.ac.uk", next_page)
+    webchem_sleep(type = 'API')
+    res <- try(httr::RETRY("GET",
+                           url,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (res$status_code != 200) {
+      if (verbose) message(httr::message_for_status(res))
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res))
+    cont <- httr::content(res, type = "application/json")
+    new_classes <- lapply(cont$atc, function(x) tibble::as_tibble(x))
+    new_classes <- dplyr::bind_rows(new_classes)
+    atc_classes <- dplyr::bind_rows(atc_classes, new_classes)
+    next_page <- cont$page_meta$`next`
+  }
+  atc_classes <- atc_classes[,c(
+    "who_name",
+    "level1", "level1_description",
+    "level2", "level2_description",
+    "level3", "level3_description",
+    "level4", "level4_description",
+    "level5"
+  )]
+  return(atc_classes)
 }
