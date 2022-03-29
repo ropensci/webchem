@@ -13,14 +13,19 @@
 #' particular resource. An entry may have a record in more than resources, e.g.
 #' a compound may be present in both the "molecule" and the "drug" resource.
 #' This function queries a vector of ChEMBL IDs from a specific ChEMBL resource.
-#' Use this function with the \code{"chembl_id_lookup"} resource to find the
-#' appropriate resource for a ChEMBL ID.
+#' If you are unsure which ChEMBL resource contains your ChEMBL ID, ese this
+#' function with the \code{"chembl_id_lookup"} resource to find the appropriate
+#' resource for a ChEMBL ID.
 #' @note
 #' Links to the webservice documentation:
 #' \itemize{
 #'      \item \url{https://chembl.gitbook.io/chembl-interface-documentation},
 #'      \item \url{https://www.ebi.ac.uk/chembl/api/data/docs}
 #' }
+#' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
+#' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
+#' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
+#' D1100-D1107.
 #' @examples
 #' \donttest{
 #' # Might fail if API is not available
@@ -29,7 +34,7 @@
 #' chembl_query("CHEMBL1082", resource = "molecule")
 #' chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
 #'
-#' # Look up ChEMBL IDs in ChEMBL "resources", return one resource per query.
+#' # Look up ChEMBL IDs in ChEMBL "resources", returns one resource per query.
 #' chembl_query("CHEMBL771355", "chembl_id_lookup")
 #'
 #' # Search assays
@@ -59,7 +64,7 @@ chembl_query <- function(query,
     }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     url <- paste0(stem, "/", resource, "/", query, ".json")
-    webchem_sleep(type = 'API')
+    webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,
                            httr::user_agent(webchem_url()),
@@ -123,6 +128,10 @@ chembl_query <- function(query,
 #'
 #' Data in ChEMBL is organized in databases called resources. This function
 #' lists available ChEMBL resources.
+#' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
+#' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
+#' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
+#' D1100-D1107.
 #' @export
 chembl_resources <- function() {
   resources <- c(
@@ -143,6 +152,11 @@ chembl_resources <- function() {
 #' Retrieve all available classes within the Anatomical Therapeutic Chemical
 #' (ATC) classification system.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
+#' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
+#' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
+#' D1100-D1107.
+#' @examples
 #' \donttest{
 #' # Might fail if API is not available
 #'
@@ -154,7 +168,7 @@ chembl_resources <- function() {
 #' @export
 atc_classes <- function(verbose = getOption("verbose")) {
   url <- "https://www.ebi.ac.uk/chembl/api/data/atc_class.json?limit=1000&offset=0"
-  webchem_sleep(type = 'API')
+  webchem_sleep(type = "API")
   res <- try(httr::RETRY("GET",
                          url,
                          httr::user_agent(webchem_url()),
@@ -164,18 +178,14 @@ atc_classes <- function(verbose = getOption("verbose")) {
     if (verbose) webchem_message("service_down")
     return(NA)
   }
-  if (res$status_code != 200) {
-    if (verbose) message(httr::message_for_status(res))
-    return(NA)
-  }
   if (verbose) message(httr::message_for_status(res))
   cont <- httr::content(res, type = "application/json")
   atc_classes <- lapply(cont$atc, function(x) tibble::as_tibble(x))
   atc_classes <- dplyr::bind_rows(atc_classes)
   next_page <- cont$page_meta$`next`
-  while(!is.null(next_page)) {
+  while (!is.null(next_page)) {
     url <- paste0("https://www.ebi.ac.uk", next_page)
-    webchem_sleep(type = 'API')
+    webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,
                            httr::user_agent(webchem_url()),
@@ -185,10 +195,6 @@ atc_classes <- function(verbose = getOption("verbose")) {
       if (verbose) webchem_message("service_down")
       return(NA)
     }
-    if (res$status_code != 200) {
-      if (verbose) message(httr::message_for_status(res))
-      return(NA)
-    }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
     new_classes <- lapply(cont$atc, function(x) tibble::as_tibble(x))
@@ -196,7 +202,7 @@ atc_classes <- function(verbose = getOption("verbose")) {
     atc_classes <- dplyr::bind_rows(atc_classes, new_classes)
     next_page <- cont$page_meta$`next`
   }
-  atc_classes <- atc_classes[,c(
+  atc_classes <- atc_classes[, c(
     "who_name",
     "level1", "level1_description",
     "level2", "level2_description",

@@ -10,3 +10,9 @@ chembl_resources()
 Data in ChEMBL is organized in databases called resources. This function
 lists available ChEMBL resources.
 }
+\references{
+Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
+Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
+bioactivity database for drug discovery. Nucleic acids research, 40(D1),
+D1100-D1107.
+}

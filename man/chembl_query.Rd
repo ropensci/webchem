@@ -33,8 +33,9 @@ databases called resources. An entry may or may not have a record in a
 particular resource. An entry may have a record in more than resources, e.g.
 a compound may be present in both the "molecule" and the "drug" resource.
 This function queries a vector of ChEMBL IDs from a specific ChEMBL resource.
-Use this function with the \code{"chembl_id_lookup"} resource to find the
-appropriate resource for a ChEMBL ID.
+If you are unsure which ChEMBL resource contains your ChEMBL ID, ese this
+function with the \code{"chembl_id_lookup"} resource to find the appropriate
+resource for a ChEMBL ID.
 }
 \note{
 Links to the webservice documentation:
@@ -51,10 +52,16 @@ Links to the webservice documentation:
 chembl_query("CHEMBL1082", resource = "molecule")
 chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
 
-# Look up ChEMBL IDs in ChEMBL "resources", return one resource per query.
+# Look up ChEMBL IDs in ChEMBL "resources", returns one resource per query.
 chembl_query("CHEMBL771355", "chembl_id_lookup")
 
 # Search assays
 chembl_query("CHEMBL771355", resource = "assay")
 }
+}
+\references{
+Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
+Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
+bioactivity database for drug discovery. Nucleic acids research, 40(D1),
+D1100-D1107.
 }
