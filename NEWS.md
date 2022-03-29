@@ -1,8 +1,9 @@
-# webchem (development version)
+# webchem 1.1.2.9005
 
 ## NEW FEATURES
 
 * cir_query() now returns a tibble instead of a list to be consistent with other translator functions. This is a potentially *breaking change* for users.
+* webchem can now access ChEMBL (https://www.ebi.ac.uk/chembl/). ChEMBL is a manually curated database of bioactive molecules with drug-like properties.
 
 ## BUG FIXES
 
