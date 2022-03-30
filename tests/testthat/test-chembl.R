@@ -31,17 +31,18 @@ test_that("chembl_query()", {
   expect_equal(o5m[6], "Query is not a ChEMBL ID. Returning NA.\n")
 
   #caching
-  o6 <- chembl_query("CHEMBL1082", resource = "molecule", cache = TRUE)
+  o6 <- chembl_query("CHEMBL1082", resource = "molecule", cache_file = "test")
   o7m <- capture_messages(chembl_query("CHEMBL1082", resource = "molecule",
-                                       cache = TRUE, verbose = TRUE)
+                                       cache_file = "test", verbose = TRUE)
   )
-  o8 <- chembl_query(NA, resource = "molecule", cache = TRUE)
+  o8 <- chembl_query(NA, resource = "molecule", cache_file = "test")
 
   expect_equal(o7m[1], "Querying CHEMBL1082. ")
   expect_equal(o7m[2], "Already retrieved.\n")
   expect_equal(o8[[1]], NA)
 
-  if (file.exists("query_results.rda")) file.remove("query_results.rda")
+  if (file.exists("./cache/test.rds")) file.remove("./cache/test.rds")
+  if (dir.exists("cache")) unlink("cache", recursive = TRUE)
 
   #messages
   o9 <- capture_messages(

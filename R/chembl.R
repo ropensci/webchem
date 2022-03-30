@@ -4,25 +4,26 @@
 #' @param query character; a vector of ChEMBL IDs.
 #' @param resource character; the ChEMBL resource to query. Use
 #' \code{chembl_resources()} to see all available resources.
-#' @param cache logical; should function output be saved to hard drive?
+#' @param cache_file character; the name of the cache file without the file
+#' extension. If \code{NULL}, results are not cached.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @return The function return a list of lists, where each element of the list
+#' @return The function returns a list of lists, where each element of the list
 #' contains a list of respective query results. Results are simplified, if
 #' possible.
 #' @details Each entry in ChEMBL has a unique ID. Data in ChEMBL is organized in
 #' databases called resources. An entry may or may not have a record in a
-#' particular resource. An entry may have a record in more than resources, e.g.
-#' a compound may be present in both the "molecule" and the "drug" resource.
-#' This function queries a vector of ChEMBL IDs from a specific ChEMBL resource.
-#' If you are unsure which ChEMBL resource contains your ChEMBL ID, ese this
-#' function with the \code{"chembl_id_lookup"} resource to find the appropriate
-#' resource for a ChEMBL ID.
-#' @details If \code{cache = TRUE} the function will create a
-#' \code{query_results.rda} file in the working directory and use it for
-#' subsequent calls of the same function. The function first tries to retrieve
-#' query results from the cache file and only accesses the webservice if the
-#' ChEMBL ID cannot be found in the cache file. The cache file is extended as
-#' new ChEMBL ID-s are queried during the session.
+#' particular resource. An entry may have a record in more than one resource,
+#' e.g. a compound may be present in both the "molecule" and the "drug"
+#' resource. This function queries a vector of ChEMBL IDs from a specific ChEMBL
+#' resource. If you are unsure which ChEMBL resource contains your ChEMBL ID,
+#' use this function with the \code{"chembl_id_lookup"} resource to find the
+#' appropriate resource for a ChEMBL ID.
+#' @details If \code{cache_file} is not \code{NULL} the function creates a
+#' cache directory in the working directory and a cache file in the cache
+#' directory. This file is used in subsequent calls of the function. The
+#' function first tries to retrieve query results from the cache file and only
+#' accesses the webservice if the ChEMBL ID cannot be found in the cache file.
+#' The cache file is extended as new ChEMBL ID-s are queried during the session.
 #' @note
 #' Links to the webservice documentation:
 #' \itemize{
@@ -51,15 +52,10 @@
 #' @export
 chembl_query <- function(query,
                          resource = "molecule",
-                         cache = FALSE,
+                         cache_file = NULL,
                          verbose = getOption("verbose")) {
   resource <- match.arg(resource, chembl_resources())
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
-  if (cache) {
-    if (file.exists("query_results.rda")) load("query_results.rda") else {
-      query_results <- list()
-    }
-  }
   foo <- function(query, verbose) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
@@ -87,47 +83,34 @@ chembl_query <- function(query,
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    if ("atc_classifications" %in% names(cont)) {
-      cont$atc_classifications <- unlist(cont$atc_classifications)
-    }
-    if ("cross_references" %in% names(cont)) {
-      cont$cross_references <- dplyr::bind_rows(cont$cross_references)
-    }
-    if ("molecule_hierarchy" %in% names(cont)) {
-      cont$molecule_hierarchy <- dplyr::bind_rows(cont$molecule_hierarchy)
-    }
-    if ("molecule_properties" %in% names(cont)) {
-      cont$molecule_properties <- dplyr::bind_rows(cont$molecule_properties)
-    }
-    if ("molecule_structures" %in% names(cont)) {
-      cont$molecule_structures <- dplyr::bind_rows(cont$molecule_structures)
-    }
-    if ("molecule_synonyms" %in% names(cont)) {
-      cont$molecule_synonyms <- dplyr::bind_rows(cont$molecule_synonyms)
-    }
-    cont$molecule_synonyms <- dplyr::bind_rows(cont$molecule_synonyms)
+    cont <- format_chembl(cont)
     return(cont)
   }
-  out <- lapply(query, function(x) {
-    if (cache) {
+  if (is.null(cache_file)) {
+    out <- lapply(query, function(x) foo(x, verbose = verbose))
+  } else {
+    if (!dir.exists("cache")) dir.create("cache")
+    cfpath <- paste0("cache/", cache_file, ".rds")
+    if (file.exists(cfpath)) {
+      query_results <- readRDS(file = cfpath)
+    } else {
+      query_results <- list()
+    }
+    out <- lapply(query, function(x) {
       if (x %in% names(query_results)) {
         if (verbose) webchem_message("query", x, appendLF = FALSE)
         if (verbose) message("Already retrieved.")
         return(query_results[[x]])
       } else {
-        new <- foo(x, verbose)
-        if (length(new[[1]]) == 1 && is.na(new[[1]][1])) {
-          return(new)
-        } else {
+        new <- foo(x, verbose = verbose)
+        if (!is.na(x)) {
           query_results[[x]] <<- new
-          save(query_results, file = "query_results.rda")
-          return(new)
+          saveRDS(query_results, file = cfpath)
         }
-      }
-    } else {
-      foo(x, verbose)
-    }
-  })
+        return(new)
+        }
+      })
+  }
   return(out)
 }
 
@@ -218,4 +201,31 @@ atc_classes <- function(verbose = getOption("verbose")) {
     "level5"
   )]
   return(atc_classes)
+}
+
+#' Format ChEMBL results
+#'
+#' Format ChEMBL results by collapsing nested lists into tibbles.
+#' @param cont list; json output from \code{chembl_query()}
+#' @noRd
+format_chembl <- function(cont) {
+  if ("atc_classifications" %in% names(cont)) {
+    cont$atc_classifications <- unlist(cont$atc_classifications)
+  }
+  if ("cross_references" %in% names(cont)) {
+    cont$cross_references <- dplyr::bind_rows(cont$cross_references)
+  }
+  if ("molecule_hierarchy" %in% names(cont)) {
+    cont$molecule_hierarchy <- dplyr::bind_rows(cont$molecule_hierarchy)
+  }
+  if ("molecule_properties" %in% names(cont)) {
+    cont$molecule_properties <- dplyr::bind_rows(cont$molecule_properties)
+  }
+  if ("molecule_structures" %in% names(cont)) {
+    cont$molecule_structures <- dplyr::bind_rows(cont$molecule_structures)
+  }
+  if ("molecule_synonyms" %in% names(cont)) {
+    cont$molecule_synonyms <- dplyr::bind_rows(cont$molecule_synonyms)
+  }
+  return(cont)
 }
