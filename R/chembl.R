@@ -7,6 +7,7 @@
 #' @param cache_file character; the name of the cache file without the file
 #' extension. If \code{NULL}, results are not cached.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param test_service_down logical; this argument is only used for testing.
 #' @return The function returns a list of lists, where each element of the list
 #' contains a list of respective query results. Results are simplified, if
 #' possible.
@@ -53,7 +54,8 @@
 chembl_query <- function(query,
                          resource = "molecule",
                          cache_file = NULL,
-                         verbose = getOption("verbose")) {
+                         verbose = getOption("verbose"),
+                         test_service_down = FALSE) {
   resource <- match.arg(resource, chembl_resources())
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   foo <- function(query, verbose) {
@@ -66,7 +68,8 @@ chembl_query <- function(query,
       return(NA)
     }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    url <- paste0(stem, "/", resource, "/", query, ".json")
+    url <- ifelse(
+      test_service_down, "", paste0(stem, "/", resource, "/", query, ".json"))
     webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,
@@ -114,34 +117,12 @@ chembl_query <- function(query,
   return(out)
 }
 
-#' List ChEMBL Resources
-#'
-#' Data in ChEMBL is organized in databases called resources. This function
-#' lists available ChEMBL resources.
-#' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
-#' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
-#' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
-#' D1100-D1107.
-#' @export
-chembl_resources <- function() {
-  resources <- c(
-    "activity", "activity_supplementary_data_by_activity", "assay",
-    "assay_class", "atc_class", "binding_site", "biotherapeutic", "cell_line",
-    "chembl_id_lookup", "compound_record", "compound_structural_alert",
-    "document", "document_similarity", "drug", "drug_indication",
-    "drug_warning", "go_slim", "image", "mechanism",  "metabolism",
-    "molecule", "molecule_form", "organism", "protein_class", "similarity",
-    "source", "status", "substructure", "target", "target_component",
-    "target_relation", "tissue", "xref_source"
-  )
-  return(resources)
-}
-
 #' Retrieve all ATC classes
 #'
 #' Retrieve all available classes within the Anatomical Therapeutic Chemical
 #' (ATC) classification system.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param test_service_down logical; this argument is only used for testing.
 #' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
 #' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
 #' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
@@ -156,26 +137,17 @@ chembl_resources <- function() {
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr bind_rows
 #' @export
-atc_classes <- function(verbose = getOption("verbose")) {
-  url <- "https://www.ebi.ac.uk/chembl/api/data/atc_class.json?limit=1000&offset=0"
-  webchem_sleep(type = "API")
-  res <- try(httr::RETRY("GET",
-                         url,
-                         httr::user_agent(webchem_url()),
-                         terminate_on = 404,
-                         quiet = TRUE), silent = TRUE)
-  if (inherits(res, "try-error")) {
-    if (verbose) webchem_message("service_down")
-    return(NA)
-  }
-  if (verbose) message(httr::message_for_status(res))
-  cont <- httr::content(res, type = "application/json")
-  atc_classes <- lapply(cont$atc, function(x) tibble::as_tibble(x))
-  atc_classes <- dplyr::bind_rows(atc_classes)
-  next_page <- cont$page_meta$`next`
+atc_classes <- function(verbose = getOption("verbose"),
+                        test_service_down = FALSE) {
+  i = 0
+  next_page <- "/chembl/api/data/atc_class.json?limit=1000&offset=0"
+  atc_classes <- data.frame()
   while (!is.null(next_page)) {
-    url <- paste0("https://www.ebi.ac.uk", next_page)
+    i = i + 1
+    url <- ifelse(
+      test_service_down, "", paste0("https://www.ebi.ac.uk", next_page))
     webchem_sleep(type = "API")
+    if (verbose) webchem_message("query", paste0("Page ", i), appendLF = FALSE)
     res <- try(httr::RETRY("GET",
                            url,
                            httr::user_agent(webchem_url()),
@@ -201,6 +173,29 @@ atc_classes <- function(verbose = getOption("verbose")) {
     "level5"
   )]
   return(atc_classes)
+}
+
+#' List ChEMBL Resources
+#'
+#' Data in ChEMBL is organized in databases called resources. This function
+#' lists available ChEMBL resources.
+#' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
+#' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
+#' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
+#' D1100-D1107.
+#' @export
+chembl_resources <- function() {
+  resources <- c(
+    "activity", "activity_supplementary_data_by_activity", "assay",
+    "assay_class", "atc_class", "binding_site", "biotherapeutic", "cell_line",
+    "chembl_id_lookup", "compound_record", "compound_structural_alert",
+    "document", "document_similarity", "drug", "drug_indication",
+    "drug_warning", "go_slim", "image", "mechanism",  "metabolism",
+    "molecule", "molecule_form", "organism", "protein_class", "similarity",
+    "source", "status", "substructure", "target", "target_component",
+    "target_relation", "tissue", "xref_source"
+  )
+  return(resources)
 }
 
 #' Format ChEMBL results

@@ -7,8 +7,9 @@
 chembl_query(
   query,
   resource = "molecule",
-  cache = FALSE,
-  verbose = getOption("verbose")
+  cache_file = NULL,
+  verbose = getOption("verbose"),
+  test_service_down = FALSE
 )
 }
 \arguments{
@@ -17,12 +18,15 @@ chembl_query(
 \item{resource}{character; the ChEMBL resource to query. Use
 \code{chembl_resources()} to see all available resources.}
 
-\item{cache}{logical; should function output be saved to hard drive?}
+\item{cache_file}{character; the name of the cache file without the file
+extension. If \code{NULL}, results are not cached.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{test_service_down}{logical; this argument is only used for testing.}
 }
 \value{
-The function return a list of lists, where each element of the list
+The function returns a list of lists, where each element of the list
 contains a list of respective query results. Results are simplified, if
 possible.
 }
@@ -32,19 +36,19 @@ Retrieve ChEMBL data using a vector of ChEMBL IDs.
 \details{
 Each entry in ChEMBL has a unique ID. Data in ChEMBL is organized in
 databases called resources. An entry may or may not have a record in a
-particular resource. An entry may have a record in more than resources, e.g.
-a compound may be present in both the "molecule" and the "drug" resource.
-This function queries a vector of ChEMBL IDs from a specific ChEMBL resource.
-If you are unsure which ChEMBL resource contains your ChEMBL ID, ese this
-function with the \code{"chembl_id_lookup"} resource to find the appropriate
-resource for a ChEMBL ID.
+particular resource. An entry may have a record in more than one resource,
+e.g. a compound may be present in both the "molecule" and the "drug"
+resource. This function queries a vector of ChEMBL IDs from a specific ChEMBL
+resource. If you are unsure which ChEMBL resource contains your ChEMBL ID,
+use this function with the \code{"chembl_id_lookup"} resource to find the
+appropriate resource for a ChEMBL ID.
 
-If \code{cache = TRUE} the function will create a
-\code{query_results.rda} file in the working directory and use it for
-subsequent calls of the same function. The function first tries to retrieve
-query results from the cache file and only accesses the webservice if the
-ChEMBL ID cannot be found in the cache file. The cache file is extended as
-new ChEMBL ID-s are queried during the session.
+If \code{cache_file} is not \code{NULL} the function creates a
+cache directory in the working directory and a cache file in the cache
+directory. This file is used in subsequent calls of the function. The
+function first tries to retrieve query results from the cache file and only
+accesses the webservice if the ChEMBL ID cannot be found in the cache file.
+The cache file is extended as new ChEMBL ID-s are queried during the session.
 }
 \note{
 Links to the webservice documentation:

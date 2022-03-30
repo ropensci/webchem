@@ -4,10 +4,12 @@
 \alias{atc_classes}
 \title{Retrieve all ATC classes}
 \usage{
-atc_classes(verbose = getOption("verbose"))
+atc_classes(verbose = getOption("verbose"), test_service_down = FALSE)
 }
 \arguments{
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{test_service_down}{logical; this argument is only used for testing.}
 }
 \description{
 Retrieve all available classes within the Anatomical Therapeutic Chemical

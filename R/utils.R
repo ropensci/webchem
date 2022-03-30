@@ -532,9 +532,9 @@ webchem_message <- function(action = c("na",
     na = "Query is NA. Returning NA.",
     query = paste0("Querying ", ..., ". "),
     query_all = "Querying. ",
-    not_found = " Not found. Returning NA.",
-    not_available = " Not available. Returning NA.",
-    service_down = " Service not available. Returning NA."
+    not_found = "Not found. Returning NA.",
+    not_available = "Not available. Returning NA.",
+    service_down = "Service not available. Returning NA."
     )
   message(string, appendLF = FALSE)
   if (appendLF) message("")
