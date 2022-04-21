@@ -41,6 +41,9 @@ test_that("cts_convert()", {
   expect_equal(cts_convert(NA, from = "Chemical Name", to = "inchikey"),
                list(NA), ignore_attr = TRUE)
 
+  expect_equal(cts_convert(180, "pubchem cid", "inchikey")[[1]],
+               "CSCPPACGZOOCGX-UHFFFAOYSA-N")
+
 
 })
 

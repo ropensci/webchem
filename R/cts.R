@@ -148,6 +148,7 @@ cts_convert <- function(query,
          argument for `from` and `to`.')
   }
 
+  query <- as.character(query)
   from <-  match.arg(tolower(from), c(cts_from(), "name"))
   to <-  match.arg(tolower(to), c(cts_to(), "name"))
   match <- match.arg(match)

@@ -6,6 +6,7 @@
 
 ## BUG FIXES
 
+* cts_convert() now accepts numeric input as well e.g. PubChem CID.
 * get_cid() became more robust to smiles queries with special characters.
 * `bcpc_query` now correctly parses the activity in cases that two activities are given (e.g. "herbicides" and "plant growth regulators")
 
