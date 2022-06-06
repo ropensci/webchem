@@ -17,7 +17,7 @@
 #' Chemical Name to Structure: OPSIN, an Open Source Solution. Journal of Chemical Information and Modeling,
 #' 51(3), 739–753. \doi{10.1021/ci100384d}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' opsin_query('Cyclopropane')
 #' opsin_query(c('Cyclopropane', 'Octane'))
 #' opsin_query(c('Cyclopropane', 'Octane', 'xxxxx'))

@@ -55,7 +55,7 @@
 #'   \doi{10.18637/jss.v093.i13}.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' get_chebiid('Glyphosate')
 #' get_chebiid('BPGDAMSIGCZZLK-UHFFFAOYSA-N')
@@ -228,7 +228,7 @@ get_chebiid <- function(query,
 #' \doi{10.18637/jss.v093.i13}.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' chebi_comp_entity('CHEBI:27744')
 #'

@@ -15,7 +15,7 @@
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' out <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N")
 #' # = Triclosan
@@ -110,7 +110,7 @@ cts_compinfo <- function(query, from = "inchikey",
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' cts_convert("XEFQLINVKFYRCS-UHFFFAOYSA-N", "inchikey", "Chemical Name")
 #'
@@ -220,7 +220,7 @@ cts_convert <- function(query,
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' cts_from()
 #' }
 cts_from <- function(verbose = getOption("verbose")){
@@ -257,7 +257,7 @@ cts_from <- function(verbose = getOption("verbose")){
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' cts_from()
 #' }
 cts_to <- function(verbose = getOption("verbose")){
