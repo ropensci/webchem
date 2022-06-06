@@ -50,7 +50,7 @@ When this version of webchem was released, CTS was temporarily unable
 to convert chemical names to IDs.
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 cts_convert("XEFQLINVKFYRCS-UHFFFAOYSA-N", "inchikey", "Chemical Name")
 

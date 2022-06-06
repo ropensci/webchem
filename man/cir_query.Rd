@@ -36,7 +36,7 @@ returns all matches, \code{"first"} returns only the first result,
 \item{...}{currently not used.}
 }
 \value{
-A tibble with a `query` column an a column for the requested representation.
+A tibble with a `query` column and a column for the requested representation.
 }
 \description{
 A interface to the Chemical Identifier Resolver (CIR).
@@ -112,7 +112,7 @@ CIR can resolve can be of the following \code{identifier}: Chemical Names,
 You can only make 1 request per second (this is a hard-coded feature).
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 cir_query("Triclosan", "cas")
 cir_query("3380-34-5", "cas", match = "first")

@@ -19,7 +19,7 @@ Return a list of all possible ids that can be used in the 'to' argument
 See also \url{http://cts.fiehnlab.ucdavis.edu/services}
 }
 \examples{
-\donttest{
+\dontrun{
 cts_from()
 }
 }

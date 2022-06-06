@@ -448,8 +448,6 @@ as.cas <- function(x){
 #'   name) ID, "ask" is a interactive mode and the user is asked for input, "na"
 #' @param from character; used only to check that match = "best" is used sensibly.
 #' @param verbose print messages?
-#'
-#' @return
 #' @noRd
 #'
 #' @examples
