@@ -45,10 +45,6 @@ Convert Ids using Chemical Translation Service (CTS), see
 See also \url{http://cts.fiehnlab.ucdavis.edu/}
 for possible values of from and to.
 }
-\note{
-When this version of webchem was released, CTS was temporarily unable
-to convert chemical names to IDs.
-}
 \examples{
 \dontrun{
 # might fail if API is not available

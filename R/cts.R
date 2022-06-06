@@ -99,9 +99,6 @@ cts_compinfo <- function(query, from = "inchikey",
 #' single named vector.
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #' for possible values of from and to.
-#' @note When this version of webchem was released, CTS was temporarily unable
-#' to convert chemical names to IDs.
-#'
 #' @seealso \code{\link{cts_from}} for possible values in the 'from' argument
 #' and \code{\link{cts_to}} for possible values in the 'to' argument.
 #'
