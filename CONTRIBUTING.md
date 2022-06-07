@@ -66,6 +66,8 @@ Some consistency guidelines:
 
 14. Print verbose messages. Use `httr::message_for_status()` and `webchem_message()` functions to generate standard messages when possible.
 
+15. Wrap function examples that interact with an API in `\dontrun{}`. Avoid using `\donttest{}`.
+
 ### Data Sources
 
 You might think all webscraping is perfectly legal but it is unfortunately not that simple.

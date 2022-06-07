@@ -33,7 +33,7 @@ a list of lists (for each supplied query): a list of 22. subsKey,
 Get record details from SRS, see \url{https://cdxnodengn.epa.gov/cdx-srs-rest/}
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 srs_query(query = '50-00-0', from = 'cas')
 

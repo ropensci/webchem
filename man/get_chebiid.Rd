@@ -54,7 +54,7 @@ stars (stars) using the SOAP protocol:
 \url{https://www.ebi.ac.uk/chebi/webServices.do}
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 get_chebiid('Glyphosate')
 get_chebiid('BPGDAMSIGCZZLK-UHFFFAOYSA-N')

@@ -99,7 +99,7 @@
 #'
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' cir_query("Triclosan", "cas")
 #' cir_query("3380-34-5", "cas", match = "first")
@@ -247,7 +247,7 @@ cir_query <- function(identifier,
 #'
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' cir_img("CCO", dir = tempdir()) # SMILES
 #'

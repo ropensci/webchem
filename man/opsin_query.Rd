@@ -21,7 +21,7 @@ Query the OPSIN  (Open Parser for Systematic IUPAC nomenclature) web service
 \url{https://opsin.ch.cam.ac.uk/instructions.html}.
 }
 \examples{
-\donttest{
+\dontrun{
 opsin_query('Cyclopropane')
 opsin_query(c('Cyclopropane', 'Octane'))
 opsin_query(c('Cyclopropane', 'Octane', 'xxxxx'))

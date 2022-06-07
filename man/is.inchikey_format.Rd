@@ -24,7 +24,7 @@ Inchikey must fulfill the following criteria:
 5) 25th character (version character) must be 'A' (currently).
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA')

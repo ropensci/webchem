@@ -26,7 +26,7 @@ as a list ("chem_structure") in the list.
 The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 chebi_comp_entity('CHEBI:27744')
 
