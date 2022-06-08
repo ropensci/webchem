@@ -16,7 +16,7 @@
 #'@export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' srs_query(query = '50-00-0', from = 'cas')
 #'

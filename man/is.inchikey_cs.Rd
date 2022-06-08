@@ -18,7 +18,7 @@ a logical
 Check if input is a valid inchikey using ChemSpider API
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')

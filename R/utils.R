@@ -55,7 +55,7 @@ is.inchikey = function(x, type = c('format', 'chemspider'),
 #' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSA')
@@ -119,7 +119,7 @@ is.inchikey_cs <- function(x, verbose = getOption("verbose")){
 #' @seealso \code{\link{is.inchikey}} for a pure-R implementation.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA-N')
 #' is.inchikey_format('BQJCRHHNABKAKU-KBQPJGBKSA')
@@ -448,8 +448,6 @@ as.cas <- function(x){
 #'   name) ID, "ask" is a interactive mode and the user is asked for input, "na"
 #' @param from character; used only to check that match = "best" is used sensibly.
 #' @param verbose print messages?
-#'
-#' @return
 #' @noRd
 #'
 #' @examples
