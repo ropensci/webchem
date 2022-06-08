@@ -36,7 +36,7 @@
 #' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
 #' D1100-D1107.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Might fail if API is not available
 #'
 #' # Search molecules
@@ -128,7 +128,7 @@ chembl_query <- function(query,
 #' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
 #' D1100-D1107.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Might fail if API is not available
 #'
 #' atc <- atc_classes()
