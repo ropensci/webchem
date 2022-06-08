@@ -7,8 +7,8 @@ Description: Chemical information from around the web. This package interacts
     Flavornet, NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem,
     SRS, Wikidata.
 Type: Package
-Version: 1.1.2.9002
-Date: 2021-12-06
+Version: 1.1.3
+Date: 2022-06-10
 License: MIT + file LICENSE
 URL: https://docs.ropensci.org/webchem/, https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
