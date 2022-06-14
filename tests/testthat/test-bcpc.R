@@ -16,7 +16,7 @@ test_that("examples in the article are unchanged as far as it can be reasonably 
 
   expect_type(igroup, "character")
   expect_equal(names(igroup), c("50-29-3", "52-68-6", "55-38-9"))
-  expect_equal(unname(igroup), c("organochlorine insecticides",
+  expect_equal(unname(igroup), c("organochlorine",
                                  "phosphonate insecticides",
                                  "phenyl organothiophosphate insecticides"))
 })
