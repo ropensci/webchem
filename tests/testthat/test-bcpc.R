@@ -17,8 +17,8 @@ test_that("examples in the article are unchanged as far as it can be reasonably 
   expect_type(igroup, "character")
   expect_equal(names(igroup), c("50-29-3", "52-68-6", "55-38-9"))
   expect_equal(unname(igroup), c("organochlorine",
-                                 "phosphonate insecticides",
-                                 "phenyl organothiophosphate insecticides"))
+                                 "phosphonate",
+                                 "phenyl organothiophosphate"))
 })
 
 test_that("BCPC pesticide compendium, name", {
@@ -71,11 +71,11 @@ test_that("BCPC pesticide compendium, activity", {
   comps <- c("atrazine", "2,4-D", "Copper hydroxide", "ziram")
   o1 <- bcpc_query(comps)
   expect_equal(o1[[1]]$activity, "herbicides")
-  expect_equal(o1[[1]]$subactivity, "chlorotriazine herbicides")
-  expect_equal(o1[[2]]$activity, c("herbicides", "plant growth regulators"))
-  expect_equal(o1[[2]]$subactivity, c("phenoxyacetic herbicides", "auxins"))
+  expect_equal(o1[[1]]$subactivity, "chlorotriazine")
+  expect_equal(o1[[2]]$activity, "herbicides")
+  expect_equal(o1[[2]]$subactivity, "phenoxyacetic")
   expect_equal(o1[[3]]$activity, c("bactericides", "fungicides"))
-  expect_equal(o1[[3]]$subactivity, c(NA, "copper fungicides"))
+  expect_equal(o1[[3]]$subactivity, c(NA, "copper compound"))
   expect_equal(o1[[4]]$activity, c("bird repellents", "fungicides", "mammal repellents"))
-  expect_equal(o1[[4]]$subactivity, c(NA, "dithiocarbamate fungicides; zinc fungicides", NA))
+  expect_equal(o1[[4]]$subactivity, c(NA, "dimethyldithiocarbamate; zinc compound", NA))
 })
