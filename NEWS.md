@@ -1,3 +1,9 @@
+# webchem dev
+
+## BUG FIXES
+
+* ChemSpider functions did not include time delays between queries. This has been fixed.
+
 # webchem 1.1.3
 
 ## NEW FEATURES
