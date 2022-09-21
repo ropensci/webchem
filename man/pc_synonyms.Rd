@@ -51,7 +51,7 @@ usage policies of the indicidual data sources
 \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 }
 \examples{
-\donttest{
+\dontrun{
 pc_synonyms("Aspirin")
 pc_synonyms(c("Aspirin", "Triclosan"))
 pc_synonyms(5564, from = "cid")

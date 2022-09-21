@@ -30,16 +30,16 @@ test_that("cts_convert()", {
   o1 <- cts_convert(comp, 'Chemical Name', 'inchikey', match = "first")
   expect_length(o1, 2)
 
-  #Test below currently returns NA but it shouldn't.
-  #Seems to be an issue with the webservice.
-  #expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
+  expect_equal(o1[[1]], 'XEFQLINVKFYRCS-UHFFFAOYSA-N')
 
-  #edit tests and function note if test below no longer returns NA.
   expect_equal(cts_convert("triclosan", "chemical name", "inchikey")$triclosan,
-               NA)
+               "XEFQLINVKFYRCS-UHFFFAOYSA-N")
 
   expect_equal(cts_convert(NA, from = "Chemical Name", to = "inchikey"),
                list(NA), ignore_attr = TRUE)
+
+  expect_equal(cts_convert(180, "pubchem cid", "inchikey")[[1]],
+               "CSCPPACGZOOCGX-UHFFFAOYSA-N")
 
 
 })

@@ -15,7 +15,7 @@
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' out <- cts_compinfo("XEFQLINVKFYRCS-UHFFFAOYSA-N")
 #' # = Triclosan
@@ -99,9 +99,6 @@ cts_compinfo <- function(query, from = "inchikey",
 #' single named vector.
 #' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #' for possible values of from and to.
-#' @note When this version of webchem was released, CTS was temporarily unable
-#' to convert chemical names to IDs.
-#'
 #' @seealso \code{\link{cts_from}} for possible values in the 'from' argument
 #' and \code{\link{cts_to}} for possible values in the 'to' argument.
 #'
@@ -110,7 +107,7 @@ cts_compinfo <- function(query, from = "inchikey",
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # might fail if API is not available
 #' cts_convert("XEFQLINVKFYRCS-UHFFFAOYSA-N", "inchikey", "Chemical Name")
 #'
@@ -148,6 +145,7 @@ cts_convert <- function(query,
          argument for `from` and `to`.')
   }
 
+  query <- as.character(query)
   from <-  match.arg(tolower(from), c(cts_from(), "name"))
   to <-  match.arg(tolower(to), c(cts_to(), "name"))
   match <- match.arg(match)
@@ -219,7 +217,7 @@ cts_convert <- function(query,
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' cts_from()
 #' }
 cts_from <- function(verbose = getOption("verbose")){
@@ -256,7 +254,7 @@ cts_from <- function(verbose = getOption("verbose")){
 #' Standardization of Metabolomic Reports. Bioinformatics 26(20): 2647–2648.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' cts_from()
 #' }
 cts_to <- function(verbose = getOption("verbose")){

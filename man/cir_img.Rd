@@ -93,7 +93,7 @@ CIR can resolve can be of the following \code{identifier}: Chemical Names,
 You can only make 1 request per second (this is a hard-coded feature).
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 cir_img("CCO", dir = tempdir()) # SMILES
 

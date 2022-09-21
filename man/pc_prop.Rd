@@ -36,7 +36,7 @@ usage policies of the indicidual data sources
 \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 }
 \examples{
-\donttest{
+\dontrun{
 # might fail if API is not available
 pc_prop(5564)
 
