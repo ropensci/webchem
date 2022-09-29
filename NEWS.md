@@ -1,15 +1,24 @@
-# webchem 1.1.2.9005
+# webchem dev
+
+## BUG FIXES
+
+* ChemSpider functions did not include time delays between queries. This has been fixed.
+
+## NEW FEATURES
+
+* webchem can now access ChEMBL (https://www.ebi.ac.uk/chembl/). ChEMBL is a manually curated database of bioactive molecules with drug-like properties.
+
+# webchem 1.1.3
 
 ## NEW FEATURES
 
 * cir_query() now returns a tibble instead of a list to be consistent with other translator functions. This is a potentially *breaking change* for users.
-* webchem can now access ChEMBL (https://www.ebi.ac.uk/chembl/). ChEMBL is a manually curated database of bioactive molecules with drug-like properties.
 
 ## BUG FIXES
 
 * cts_convert() now accepts numeric input as well e.g. PubChem CID.
 * get_cid() became more robust to smiles queries with special characters.
-* `bcpc_query` now correctly parses the activity in cases that two activities are given (e.g. "herbicides" and "plant growth regulators")
+* `bcpc_query` now correctly parses the activity in cases that two activities are given (e.g. "herbicides" and "plant growth regulators").
 
 # webchem 1.1.2
 
@@ -22,7 +31,7 @@
 * ci_query() can no longer query chemicals by name.
 * Non-exported function ping_pubchem_pw() was incorrectly reporting that PUG VIEW was down.  This has been fixed.
 * is.cas() now catches whitespaces correctly.
-* aw_query() was renamed and adapted to bcpc_query, as the alanwood site has moved
+* aw_query() was renamed and adapted to bcpc_query, as the alanwood site has moved.
 
 ## MINOR IMPROVEMENTS
 
