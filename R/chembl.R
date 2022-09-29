@@ -3,7 +3,7 @@
 #' Retrieve ChEMBL data using a vector of ChEMBL IDs.
 #' @param query character; a vector of ChEMBL IDs.
 #' @param resource character; the ChEMBL resource to query. Use
-#' \code{chembl_resources()} to see all available resources.
+#' [chembl_resources()] to see all available resources.
 #' @param cache_file character; the name of the cache file without the file
 #' extension. If \code{NULL}, results are not cached.
 #' @param verbose logical; should a verbose output be printed on the console?
