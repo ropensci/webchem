@@ -59,9 +59,9 @@ test_that("chembl_query()", {
   expect_equal(o10m[2], "Service not available. Returning NA.")
 })
 
-test_that("atc_classes()", {
-  o1 <- atc_classes()
-  o2 <- capture_messages(atc_classes(verbose = TRUE))
+test_that("chembl_atc_classes()", {
+  o1 <- chembl_atc_classes()
+  o2 <- capture_messages(chembl_atc_classes(verbose = TRUE))
 
   expect_s3_class(o1, c("tbl_df", "tbl", "data.frame"))
   expect_equal(o2[1], "Querying Page 1. ")
@@ -69,8 +69,9 @@ test_that("atc_classes()", {
 
   #service down
 
-  o3 <- atc_classes(test_service_down = TRUE)
-  o3m <- capture_messages(atc_classes(test_service_down = TRUE, verbose = TRUE))
+  o3 <- chembl_atc_classes(test_service_down = TRUE)
+  o3m <- capture_messages(
+    chembl_atc_classes(test_service_down = TRUE, verbose = TRUE))
 
   expect_equal(o3, NA)
   expect_equal(o3m[2], "Service not available. Returning NA.")
