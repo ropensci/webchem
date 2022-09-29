@@ -139,8 +139,8 @@ chembl_query <- function(query,
 #' @importFrom tibble tibble as_tibble
 #' @importFrom dplyr bind_rows
 #' @export
-atc_classes <- function(verbose = getOption("verbose"),
-                        test_service_down = FALSE) {
+chembl_atc_classes <- function(verbose = getOption("verbose"),
+                               test_service_down = FALSE) {
   i = 0
   next_page <- "/chembl/api/data/atc_class.json?limit=1000&offset=0"
   atc_classes <- tibble::tibble()
