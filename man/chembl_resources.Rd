@@ -10,6 +10,11 @@ chembl_resources()
 Data in ChEMBL is organized in databases called resources. This function
 lists available ChEMBL resources.
 }
+\note{
+The list was compiled manually using the following url: \url{
+https://chembl.gitbook.io/chembl-interface-documentation/web-services/
+chembl-data-web-services}
+}
 \references{
 Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
 Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale

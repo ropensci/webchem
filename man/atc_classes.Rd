@@ -16,7 +16,7 @@ Retrieve all available classes within the Anatomical Therapeutic Chemical
 (ATC) classification system.
 }
 \examples{
-\donttest{
+\dontrun{
 # Might fail if API is not available
 
 atc <- atc_classes()

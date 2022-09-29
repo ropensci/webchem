@@ -58,7 +58,7 @@ Links to the webservice documentation:
 }
 }
 \examples{
-\donttest{
+\dontrun{
 # Might fail if API is not available
 
 # Search molecules
