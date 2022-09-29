@@ -16,9 +16,11 @@
 #' particular resource. An entry may have a record in more than one resource,
 #' e.g. a compound may be present in both the "molecule" and the "drug"
 #' resource. This function queries a vector of ChEMBL IDs from a specific ChEMBL
-#' resource. If you are unsure which ChEMBL resource contains your ChEMBL ID,
+#' resource.
+#' @details If you are unsure which ChEMBL resource contains your ChEMBL ID,
 #' use this function with the \code{"chembl_id_lookup"} resource to find the
-#' appropriate resource for a ChEMBL ID.
+#' appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
+#' not a separate function but a resource used by \code{chembl_query}.
 #' @details If \code{cache_file} is not \code{NULL} the function creates a
 #' cache directory in the working directory and a cache file in the cache
 #' directory. This file is used in subsequent calls of the function. The

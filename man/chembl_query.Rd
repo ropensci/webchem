@@ -16,7 +16,7 @@ chembl_query(
 \item{query}{character; a vector of ChEMBL IDs.}
 
 \item{resource}{character; the ChEMBL resource to query. Use
-\code{chembl_resources()} to see all available resources.}
+[chembl_resources()] to see all available resources.}
 
 \item{cache_file}{character; the name of the cache file without the file
 extension. If \code{NULL}, results are not cached.}
@@ -39,9 +39,12 @@ databases called resources. An entry may or may not have a record in a
 particular resource. An entry may have a record in more than one resource,
 e.g. a compound may be present in both the "molecule" and the "drug"
 resource. This function queries a vector of ChEMBL IDs from a specific ChEMBL
-resource. If you are unsure which ChEMBL resource contains your ChEMBL ID,
+resource.
+
+If you are unsure which ChEMBL resource contains your ChEMBL ID,
 use this function with the \code{"chembl_id_lookup"} resource to find the
-appropriate resource for a ChEMBL ID.
+appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
+not a separate function but a resource used by \code{chembl_query}.
 
 If \code{cache_file} is not \code{NULL} the function creates a
 cache directory in the working directory and a cache file in the cache
