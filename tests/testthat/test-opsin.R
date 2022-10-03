@@ -14,7 +14,7 @@ test_that("opsin_query()", {
 
   expect_equal(
     colnames(o1),
-    c("query", "inchi", "stdinchi", "stdinchikey", "smiles", "message", "status")
+    c("query", "status", "message", "inchi", "stdinchi", "stdinchikey", "smiles")
   )
 
   expect_equal(nrow(o1), 2)

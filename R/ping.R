@@ -12,6 +12,7 @@ ping_service <-
   function(service = c(
     "bcpc",
     "chebi",
+    "chembl",
     "ci",
     "cs",
     "cs_web",
@@ -43,6 +44,7 @@ ping_service <-
       ping_url <-
         switch(service,
                "bcpc" = "https://pesticidecompendium.bcpc.org/introduction.html",
+               "chembl" = "https://www.ebi.ac.uk/chembl/api/data/molecule/CHEMBL1082.json",
                "ci" = "https://chem.nlm.nih.gov/chemidplus/rn/50-00-0",
                "cir" = "http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml",
                "cts" = "http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N",
@@ -56,8 +58,8 @@ ping_service <-
         )
       if (identical(service, "bcpc")) {
         # For the BCPC server we need to disable gzip encoding as it currently
-        # (2021-11-18) results in 
-        # Error in curl_fetch_memory(https://...): 
+        # (2021-11-18) results in
+        # Error in curl_fetch_memory(https://...):
         # "Failed writing received data to disk/application"
         httr_config <- httr::config(accept_encoding = "identity")
       } else {

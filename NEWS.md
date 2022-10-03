@@ -4,6 +4,10 @@
 
 * ChemSpider functions did not include time delays between queries. This has been fixed.
 
+## NEW FEATURES
+
+* webchem can now access ChEMBL (https://www.ebi.ac.uk/chembl/). ChEMBL is a manually curated database of bioactive molecules with drug-like properties.
+
 # webchem 1.1.3
 
 ## NEW FEATURES
