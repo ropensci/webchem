@@ -3,6 +3,7 @@
 ## BUG FIXES
 
 * ChemSpider functions did not include time delays between queries. This has been fixed.
+* Multiple ChemSpider functions failed when the API key was provided during function call. This has been fixed.
 
 ## NEW FEATURES
 
