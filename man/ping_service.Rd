@@ -6,11 +6,16 @@
 \usage{
 ping_service(
   service = c("bcpc", "chebi", "chembl", "ci", "cs", "cs_web", "cir", "cts", "etox",
-    "fn", "nist", "opsin", "pan", "pc", "srs", "wd")
+    "fn", "nist", "opsin", "pan", "pc", "srs", "wd"),
+  apikey = NULL
 )
 }
 \arguments{
-\item{service}{character; the same abbreviations used as prefixes in \code{webchem} functions, with the exception of \code{"cs_web"}, which only checks if the ChemSpider website is up, and thus doesn't require an API key.}
+\item{service}{character; the same abbreviations used as prefixes in
+\code{webchem} functions, with the exception of \code{"cs_web"}, which only
+checks if the ChemSpider website is up, and thus doesn't require an API key.}
+
+\item{apikey}{character; API key for services that require API keys}
 }
 \value{
 A logical, TRUE if the service is available or FALSE if it isn't
