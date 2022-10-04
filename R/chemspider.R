@@ -188,7 +188,7 @@ get_csid <- function(query,
   }
   from <- match.arg(from)
   match <- match.arg(match)
-  if (!ping_service("cs")) stop(webchem_message("service_down"))
+  if (!ping_service("cs", apikey = apikey)) stop(webchem_message("service_down"))
   foo <- function(x, from, match, verbose, apikey, ...) {
     if (is.na(x)) {
       if (verbose) webchem_message("na")
