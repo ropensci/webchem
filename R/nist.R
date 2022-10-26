@@ -182,7 +182,7 @@ tidy_ritable <- function(ri_xml) {
                              "gas" = "Carrier gas",
                              "substrate" = "Substrate",
                              "diameter" = "Column diameter (mm)",
-                             "thickness" = "Phase thickness (m)",
+                             "thickness" = "Phase thickness (\u03bcm)",
                              "program" = "Program",
                              "reference" = "Reference",
                              "comment" = "Comment") %>%
@@ -199,7 +199,7 @@ tidy_ritable <- function(ri_xml) {
                              "gas" = "Carrier gas",
                              "substrate" = "Substrate",
                              "diameter" = "Column diameter (mm)",
-                             "thickness" = "Phase thickness (m)",
+                             "thickness" = "Phase thickness (\u03bcm)",
                              "temp_start" = "Tstart (C)",
                              "temp_end" = "Tend (C)",
                              "temp_rate" = "Heat rate (K/min)",
@@ -232,7 +232,7 @@ tidy_ritable <- function(ri_xml) {
                              "gas" = "Carrier gas",
                              "substrate" = "Substrate",
                              "diameter" = "Column diameter (mm)",
-                             "thickness" = "Phase thickness (m)",
+                             "thickness" = "Phase thickness (\u03bcm)",
                              "temp" = "Temperature (C)",
                              "reference" = "Reference",
                              "comment" = "Comment") %>%

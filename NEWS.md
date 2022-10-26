@@ -4,6 +4,7 @@
 
 * ChemSpider functions did not include time delays between queries. This has been fixed.
 * Multiple ChemSpider functions failed when the API key was provided during function call. This has been fixed.
+* Minor change in NIST retention index tables was causing `nist_ri()` to fail.  This has been fixed.
 
 ## NEW FEATURES
 

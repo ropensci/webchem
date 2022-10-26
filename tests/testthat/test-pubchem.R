@@ -149,7 +149,7 @@ test_that("pc_sect()", {
 
   a <- pc_sect(c(311, 176, 1118, "balloon", NA), "Dissociation Constants")
   expect_s3_class(a, c("tbl_df", "tbl", "data.frame"))
-  expect_equal(mean(c("Citric acid", "Acetic Acid", NA) %in% a$Name), 1)
+  expect_setequal(c("citric acid", "acetic acid", "sulfuric acid", NA), tolower(a$Name))
   expect_equal(mean(c("2.79", "4.76 (at 25 °C)", NA) %in% a$Result), 1)
   expect_equal(mean(c("DrugBank", NA) %in% a$SourceName), 1)
   expect_equal(mean(c("DB04272", "DB03166", NA) %in% a$SourceID), 1)
