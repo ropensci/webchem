@@ -23,6 +23,7 @@ reference:
   - ends_with("_query")
   - -opsin_query
   - chebi_comp_entity
+  - chembl_query
   - cs_compinfo
   - cs_extcompinfo
   - cts_compinfo
@@ -50,6 +51,8 @@ reference:
   - extractors
   - ping_service
   - cs_datasources
+  - chembl_atc_classes
+  - chembl_resources
   - parse_mol
   - write_mol
 - title: Deprecated and defunct
