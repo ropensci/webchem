@@ -6,9 +6,9 @@ on:
       branches:
         - master
   
-  name: check-pkgdown
+name: check-pkgdown
   
-  jobs:
+jobs:
     check_pkgdown:
       runs-on: ubuntu-22.04
       steps:
