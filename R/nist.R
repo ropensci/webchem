@@ -119,7 +119,7 @@ get_ri_xml <-
         #message if table doesn't exist at URL
         if (length(ri_xml.all) == 0) {
           if (verbose) webchem_message("not_available")
-          return(NA)
+          ri_xml <- NA
         } else {
           ri_xml <- ri_xml.all
         }
@@ -133,6 +133,7 @@ get_ri_xml <-
     attr(ri_xml, "type") <- type
     attr(ri_xml, "polarity") <- polarity
     attr(ri_xml, "temp_prog") <- temp_prog
+    attr(ri_xml, "cas") <- gsub("C", "", ID)
     return(ri_xml)
   }
 
@@ -153,7 +154,7 @@ get_ri_xml <-
 tidy_ritable <- function(ri_xml) {
   #Skip all these steps if the table didn't exist at the URL and was set to NA
   if (any(is.na(ri_xml))) {
-    return(tibble(RI = NA))
+    return(tibble(RI = NA, cas=attr(ri_xml, "cas")))
 
   } else {
     # Read in the tables from xml
@@ -252,6 +253,7 @@ tidy_ritable <- function(ri_xml) {
           TRUE                  ~ as.character(NA)
         )
       ) %>%
+      dplyr::mutate(cas = attr(ri_xml, "cas")) %>%
       # reorder columns
       dplyr::select("RI", "type", "phase", everything())
   }
