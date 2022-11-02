@@ -6,7 +6,6 @@
 .gitignore
 .github
 
-
 # READMES
 README.html
 README.Rmd
@@ -29,3 +28,5 @@ codemeta.json
 
 cran-comments.md
 ^CRAN-RELEASE$
+
+revdep/
