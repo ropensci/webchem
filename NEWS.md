@@ -2,7 +2,7 @@
 
 ## NEW FEATURES
 
-* webchem can now access ChEMBL (https://www.ebi.ac.uk/chembl/). ChEMBL is a manually curated database of bioactive molecules with drug-like properties.
+* webchem can now access ChEMBL (https://www.ebi.ac.uk/chembl/) with `chembl_*()` functions. ChEMBL is a manually curated database of bioactive molecules with drug-like properties.
 
 ## BUG FIXES
 
