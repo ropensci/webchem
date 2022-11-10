@@ -133,7 +133,7 @@ get_ri_xml <-
     attr(ri_xml, "type") <- type
     attr(ri_xml, "polarity") <- polarity
     attr(ri_xml, "temp_prog") <- temp_prog
-    attr(ri_xml, "cas") <- gsub("C", "", ID)
+    attr(ri_xml, "cas") <- gsub("C", "", format_cas(ID))
     return(ri_xml)
   }
 
@@ -342,6 +342,14 @@ nist_ri <- function(query,
   polarity <- match.arg(polarity)
   temp_prog <- match.arg(temp_prog)
 
+  if (from == "cas") {
+    msg <- testthat::capture_messages(is.cas(query, verbose = TRUE))
+    if (length(msg) > 0) {
+      msg <- paste(msg, collapse = "  ")
+      stop(msg)
+    }
+  }
+
   ri_xmls <-
     purrr::map(
       query,
@@ -362,4 +370,25 @@ nist_ri <- function(query,
   ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
     dplyr::mutate(query = na_if(query, ".NA"))
   return(ri_tables)
+}
+
+#' Format NIST CAS to standard CAS
+#'
+#' NIST uses CAS without dashes and sometimes with leading alpha characters.
+#' This is a utility function that convert such a string to standard CAS.
+#' @param x character; a NIST CAS
+#' @return a character
+#' @examples
+#' format_cas("78706")
+#' format_cas("R628941")
+#' @noRd
+format_cas <- function(x) {
+  # format CAS
+  x <- strsplit(gsub("^[a-zA-Z]+", "", x), "")[[1]]
+  len <- length(x)
+  first <- paste(x[1:(len-3)], collapse = "")
+  second <- paste(x[(len-2):(len-1)], collapse = "")
+  third <- x[len]
+  cas <- paste(first, second, third, sep = "-")
+  return(cas)
 }
