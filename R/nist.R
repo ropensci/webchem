@@ -17,10 +17,11 @@ get_ri_xml <-
            type,
            polarity,
            temp_prog,
-           verbose) {
+           verbose,
+           validate_cas = FALSE) {
 
     if (!ping_service("nist")) stop(webchem_message("service_down"))
-
+    cas_found <- FALSE
     from_str <- (switch(
       from,
       "name" = "Name",
@@ -36,17 +37,11 @@ get_ri_xml <-
       if (verbose) webchem_message("na")
       return(NA)
     } else {
-      if (from == "cas") {
-        ID <- paste0("C", gsub("-", "", query))
-      } else {
+      if (from != "cas" | validate_cas){
         qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
         webchem_sleep(type = 'scrape')
         if (verbose) webchem_message("query", query, appendLF = FALSE)
-        res <- try(httr::RETRY("GET",
-                               qurl,
-                               httr::user_agent(webchem_url()),
-                               terminate_on = 404,
-                               quiet = TRUE), silent = TRUE)
+        res <- try_url(qurl)
         if (inherits(res, "try-error")) {
           if (verbose) webchem_message("service_down")
           return(NA)
@@ -54,7 +49,6 @@ get_ri_xml <-
         if (verbose) message(httr::message_for_status(res))
         if (res$status_code == 200) {
           page <- xml2::read_html(res)
-
           #Warnings
           result <- page %>%
             html_node("main h1") %>%
@@ -83,59 +77,80 @@ get_ri_xml <-
           } else {
             if (verbose) message(" CAS found. ", appendLF = FALSE)
             ID <- stringr::str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+            cas_found <- TRUE
           }
         }
         else {
           return(NA)
         }
+      } else{
+        ID <- paste0("C", gsub("-", "", query))
       }
-      #scrape RI table
-      type_str <- toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
-
-      qurl <- paste0(baseurl, "?ID=", ID, "&Units-SI&Mask=2000&Type=", type_str)
-      webchem_sleep(type = 'scrape')
-      if (verbose) {
-        if (from == "cas") {
-          webchem_message("query", query, appendLF = FALSE)
+      if (any(sapply(list(type, polarity, temp_prog), length) > 1)){
+        res2 <- try_url(paste0("https://webbook.nist.gov", gaschrom))
+        if (inherits(res2, "try-error")) {
+          if (verbose) webchem_message("service_down")
+          return(NA)
         }
-        else {
-          webchem_message("query", ID, appendLF = FALSE)
-        }
-      }
-      res2 <- try(httr::RETRY("GET",
-                              qurl,
-                              httr::user_agent(webchem_url()),
-                              terminate_on = 404,
-                              quiet = TRUE), silent = TRUE)
-      if (inherits(res2, "try-error")) {
-        if (verbose) webchem_message("service_down")
-        return(NA)
-      }
-      if (verbose) message(httr::message_for_status(res2))
-      if (res2$status_code == 200) {
         page <- xml2::read_html(res2)
-        ri_xml.all <- html_nodes(page, ".data")
-
-        #message if table doesn't exist at URL
-        if (length(ri_xml.all) == 0) {
-          if (verbose) webchem_message("not_available")
-          ri_xml <- NA
-        } else {
-          ri_xml <- ri_xml.all
-        }
+        tables <- page %>% html_nodes(".data") %>% html_attr("aria-label")
+        tables <- format_gaschrom_tables(tables)
+        tables.idx <- which(tables[,1] %in% type &
+                              tables[,2] %in% polarity &
+                              tables[,3] %in% temp_prog)
+        tables <- tables[tables.idx,,drop=FALSE]
+      } else {
+        tables <- data.frame(type, polarity, temp_prog)
       }
-      else {
-        return(NA)
-      }
-    }
-    #set attributes to label what type of RI
-    attr(ri_xml, "from") <- from
-    attr(ri_xml, "type") <- type
-    attr(ri_xml, "polarity") <- polarity
-    attr(ri_xml, "temp_prog") <- temp_prog
-    attr(ri_xml, "cas") <- gsub("C", "", ID)
-    return(ri_xml)
+      ri_xmls<-lapply(seq_len(nrow(tables)), function(i){
+        ri_xml <- scrape_RI_table(ID, type=tables[i,1], polarity = tables[i,2],
+                        temp_prog = tables[i,3], from=from, verbose=verbose,
+                        cas_found = cas_found)
+        attr(ri_xml, "query") <- query
+        ri_xml
+      })
+      purrr::map_dfr(ri_xmls, tidy_ritable)
   }
+}
+
+#' @noRd
+scrape_RI_table <- function(ID, type, polarity, temp_prog,
+                            from, verbose, cas_found){
+    #scrape RI table
+    type_str <- toupper(paste(type, "RI", polarity, temp_prog, sep = "-"))
+    baseurl <- "https://webbook.nist.gov/cgi/cbook.cgi"
+    qurl <- paste0(baseurl, "?ID=", ID, "&Units-SI&Mask=2000&Type=", type_str)
+    webchem_sleep(type = 'scrape')
+    if (verbose) webchem_message("query", ID, appendLF = FALSE)
+    res2 <- try_url(qurl)
+    if (inherits(res2, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res2))
+    if (res2$status_code == 200) {
+      page <- xml2::read_html(res2)
+      ri_xml.all <- html_nodes(page, ".data")
+
+      #message if table doesn't exist at URL
+      if (length(ri_xml.all) == 0) {
+        if (verbose) webchem_message("not_available")
+        ri_xml <- NA
+      } else {
+        ri_xml <- ri_xml.all
+        cas_found <- TRUE
+      }
+    } else {
+      return(NA)
+    }
+  #set attributes to label what type of RI
+  attr(ri_xml, "from") <- from
+  attr(ri_xml, "type") <- type
+  attr(ri_xml, "polarity") <- polarity
+  attr(ri_xml, "temp_prog") <- temp_prog
+  attr(ri_xml, "cas") <- ifelse(cas_found, as.cas(gsub("C","",ID)), NA)
+  return(ri_xml)
+}
 
 
 #' Tidier for webscraped RI ri_xml
@@ -148,18 +163,17 @@ get_ri_xml <-
 #' @importFrom tibble as_tibble
 #' @import dplyr
 #' @noRd
-#'
 #' @return a single table
 #'
 tidy_ritable <- function(ri_xml) {
   #Skip all these steps if the table didn't exist at the URL and was set to NA
+  cas <- attr(ri_xml, "cas")
   if (any(is.na(ri_xml))) {
-    return(tibble(RI = NA, cas=attr(ri_xml, "cas")))
+    return(tibble(cas=ifelse(is.null(cas),NA,cas), RI = NA))
 
   } else {
     # Read in the tables from xml
     table.list <- purrr::map(ri_xml, html_table)
-
     # Transpose and tidy
     tidy1 <- purrr::map_dfr(
       table.list,
@@ -171,76 +185,27 @@ tidy_ritable <- function(ri_xml) {
       }
     )
 
-    # Extract the temperature program metadata
-    temp_prog <- attr(ri_xml, "temp_prog")
-
-    if (temp_prog == "custom") {
-      tidy2 <- dplyr::select(tidy1,
-                             "RI" = "I",
-                             "type" = "Column type",
-                             "phase" = "Active phase",
-                             "length" = "Column length (m)",
-                             "gas" = "Carrier gas",
-                             "substrate" = "Substrate",
-                             "diameter" = "Column diameter (mm)",
-                             "thickness" = "Phase thickness (\u03bcm)",
-                             "program" = "Program",
-                             "reference" = "Reference",
-                             "comment" = "Comment") %>%
-        # fix column types and make uniform contents of some columns
-        dplyr::mutate_at(vars("length", "diameter", "thickness", "RI"),
-                  as.numeric)
-
-    } else if (temp_prog == "ramp") {
-      tidy2 <- dplyr::select(tidy1,
-                             "RI" = "I",
-                             "type" = "Column type",
-                             "phase" = "Active phase",
-                             "length" = "Column length (m)",
-                             "gas" = "Carrier gas",
-                             "substrate" = "Substrate",
-                             "diameter" = "Column diameter (mm)",
-                             "thickness" = "Phase thickness (\u03bcm)",
-                             "temp_start" = "Tstart (C)",
-                             "temp_end" = "Tend (C)",
-                             "temp_rate" = "Heat rate (K/min)",
-                             "hold_start" = "Initial hold (min)",
-                             "hold_end" = "Final hold (min)",
-                             "reference" = "Reference",
-                             "comment" = "Comment") %>%
-        # fix column types and make uniform contents of some columns
-        dplyr::mutate_at(
-          dplyr::vars(
-            "length",
-            "diameter",
-            "thickness",
-            "temp_start",
-            "temp_end",
-            "temp_rate",
-            "hold_start",
-            "hold_end",
-            "RI"
-          ),
-          as.numeric
-        )
-
-    } else if (temp_prog == "isothermal") {
-      tidy2 <- dplyr::select(tidy1,
-                             "RI" = "I",
-                             "type" = "Column type",
-                             "phase" = "Active phase",
-                             "length" = "Column length (m)",
-                             "gas" = "Carrier gas",
-                             "substrate" = "Substrate",
-                             "diameter" = "Column diameter (mm)",
-                             "thickness" = "Phase thickness (\u03bcm)",
-                             "temp" = "Temperature (C)",
-                             "reference" = "Reference",
-                             "comment" = "Comment") %>%
-        # fix column types and make uniform contents of some columns
-        dplyr::mutate_at(vars("length", "diameter", "thickness", "temp",  "RI"),
-                  as.numeric)
-    }
+    tidy2 <- dplyr::select(tidy1,
+                           "RI" = "I",
+                           "type" = "Column type",
+                           "phase" = "Active phase",
+                           "length" = "Column length (m)",
+                           "gas" = "Carrier gas",
+                           "substrate" = "Substrate",
+                           "diameter" = "Column diameter (mm)",
+                           "thickness" = "Phase thickness (\u03bcm)",
+                           "program" = contains("Program"),
+                           "temp" = contains("Temperature (C)"),
+                           "temp_start" = contains("Tstart (C)"),
+                           "temp_end" = contains("Tend (C)"),
+                           "temp_rate" = contains("Heat rate (K/min)"),
+                           "hold_start" = contains("Initial hold (min)"),
+                           "hold_end" = contains("Final hold (min)"),
+                           "reference" = "Reference",
+                           "comment" = "Comment") %>%
+  dplyr::mutate_at(vars(any_of(c("length", "diameter", "thickness", "temp",
+                            "temp_start","temp_end","temp_rate",
+                            "hold_start","hold_end", "RI"))), as.numeric)
 
     # make NAs explicit and gas abbreviations consistent
     output <- tidy2 %>%
@@ -253,9 +218,14 @@ tidy_ritable <- function(ri_xml) {
           TRUE                  ~ as.character(NA)
         )
       ) %>%
-      dplyr::mutate(cas = attr(ri_xml, "cas")) %>%
+      dplyr::mutate(query = attr(ri_xml, "query"),
+                    cas = attr(ri_xml, "cas"),
+                    type = attr(ri_xml, "type"),
+                    polarity = attr(ri_xml, "polarity"),
+                    temp_prog = attr(ri_xml, "temp_prog"),) %>%
       # reorder columns
-      dplyr::select("RI", "type", "phase", everything())
+      dplyr::select("query","cas", "type", "polarity", "temp_prog", "RI", "type",
+                    "phase", everything())
   }
   return(output)
 }
@@ -263,7 +233,19 @@ tidy_ritable <- function(ri_xml) {
 
 #' Retrieve retention indices from NIST
 #' @description This function scrapes NIST for literature retention indices
-#'   given CAS numbers as an input.
+#'   given a query or vector of queries as input. The query can be a cas
+#'   number, IUPAC name, or International Chemical Identifier (\code{inchikey}),
+#'   according to the value of the \code{from} argument. Retention indices are
+#'   stored in tables by \code{type}, \code{polarity} and temperature program
+#'   (\code{temp_prog}). The function can only return one of these tables at a
+#'   time.
+#'
+#'   If a non-cas query is provided, the function will try to resolve the query
+#'   by searching the NIST WebBook for a corresponding CAS number. If a CAS
+#'   number is found, it will be returned in a \code{tibble} with the
+#'   corresponding information from the NIST retention index database. If a CAS
+#'   number if provided to the function, the validity of the CAS number will
+#'   not be chewcked
 #'
 #' @param query character; the search term
 #' @param from character; type of search term. can be one of \code{"name"},
@@ -280,6 +262,8 @@ tidy_ritable <- function(ri_xml) {
 #'   \code{"ramp"}, or \code{"custom"}.
 #' @param cas deprecated.  Use \code{query} instead.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param validate_cas Logical. Whether to validate the provided cas number to
+#' see if it exists in the NIST WebBook. Defaults to FALSE.
 #' @details The types of retention indices included in NIST include Kovats
 #'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
 #'   (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
@@ -291,10 +275,11 @@ tidy_ritable <- function(ri_xml) {
 #'
 #' @return returns a tibble of literature RIs with the following columns:
 #' \itemize{
-#' \item{\code{CAS} is the CAS number}
+#' \item{\code{query} is the query provided to the NIST server}
+#' \item{\code{cas} is the CAS number or unique record identified used by NIST}
+#' \item{\code{RI} is retention index}
 #' \item{\code{type} is the column type, e.g. "capillary"}
 #' \item{\code{phase} is the stationary phase (column phase)}
-#' \item{\code{RI} is retention index}
 #' \item{\code{length} is column length in meters}
 #' \item{\code{gas} is the carrier gas used}
 #' \item{\code{substrate}}
@@ -329,7 +314,8 @@ nist_ri <- function(query,
                     polarity = c("polar", "non-polar"),
                     temp_prog = c("isothermal", "ramp", "custom"),
                     cas = NULL,
-                    verbose = getOption("verbose")) {
+                    verbose = getOption("verbose"),
+                    validate_cas = FALSE) {
 
   if (!is.null(cas)) {
     warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
@@ -338,11 +324,23 @@ nist_ri <- function(query,
   }
 
   from <- match.arg(from)
-  type <- match.arg(type)
-  polarity <- match.arg(polarity)
-  temp_prog <- match.arg(temp_prog)
+  type <- match.arg(type, c("kovats", "linear", "alkane", "lee"), several.ok = TRUE)
+  polarity <- match.arg(polarity, c("polar", "non-polar"), several.ok = TRUE)
+  temp_prog <- match.arg(temp_prog, c("isothermal", "ramp", "custom"), several.ok = TRUE)
 
-  ri_xmls <-
+  if (from == "cas") {
+    if (!is.cas(query)){
+      qu <- as.cas(query)
+      query <- ifelse(is.cas(qu) & !is.na(qu), as.cas(query), query)
+    }
+    # msg <- testthat::capture_messages(is.cas(query, verbose = TRUE))
+    # if (length(msg) > 0) {
+    #   msg <- paste(msg, collapse = "  ")
+    #   warning(msg)
+    # }
+  }
+
+  ri_tables <-
     purrr::map(
       query,
       ~ get_ri_xml(
@@ -351,15 +349,62 @@ nist_ri <- function(query,
         type = type,
         polarity = polarity,
         temp_prog = temp_prog,
-        verbose = verbose
+        verbose = verbose,
+        validate_cas = validate_cas
       )
     )
 
   querynames <- query
   querynames [is.na(querynames)] <- ".NA"
-  names(ri_xmls) <- querynames
+  names(ri_tables) <- querynames
 
-  ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
-    dplyr::mutate(query = na_if(query, ".NA"))
+  # ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
+  #   dplyr::mutate(query = na_if(query, ".NA"))
   return(ri_tables)
+}
+
+#' Convert chemical names to NIST format
+#'
+#' NIST uses Greek letters to distinguish stereoisomers, but users may have
+#' strings that spell out the letters in Latin script. This is utility
+#' function to convert chemical names to NIST format.
+#' @param x character; a NIST CAS
+#' @return a character
+#' @examples
+#' format_cas("78706")
+#' format_cas("R628941")
+#' @noRd
+format_name_nist <- function(x) {
+  # format name
+  dictionary <- c("alpha" = "α", "beta" = "β", "gamma" = "γ", "delta" = "𝛿")
+  x <- stringr::str_replace_all(x, dictionary)
+  return(x)
+}
+
+#' @noRd
+try_url <- function(qurl){
+  try(httr::RETRY("GET",
+                qurl,
+                httr::user_agent(webchem_url()),
+                terminate_on = 404,
+                quiet = TRUE), silent = TRUE)
+}
+
+#' @noRd
+format_gaschrom_tables <- function(tables){
+  tables <- stringr::str_split_fixed(tables,",",3)
+
+  tables[,1] <- stringr::str_replace_all(tables[,1],
+                                         pattern = c("Kovats' RI" = "kovats",
+                                                     "Normal alkane RI" = "alkane",
+                                                     "Van Den Dool and Kratz RI" = "linear",
+                                                     "Lee's RI" = "lee")
+  )
+  tables[,2] <- stringr::str_split_fixed(tables[,2], " ", 3)[,2]
+  tables[,3] <- stringr::str_replace_all(tables[,3],
+                                         pattern = c(" isothermal" = "isothermal",
+                                                     " custom temperature program" = "custom",
+                                                     " temperature ramp" = "ramp")
+  )
+  tables
 }

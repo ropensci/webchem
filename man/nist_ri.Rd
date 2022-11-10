@@ -11,7 +11,8 @@ nist_ri(
   polarity = c("polar", "non-polar"),
   temp_prog = c("isothermal", "ramp", "custom"),
   cas = NULL,
-  verbose = getOption("verbose")
+  verbose = getOption("verbose"),
+  validate_cas = FALSE
 )
 }
 \arguments{
@@ -36,14 +37,18 @@ to get RIs calculated for polar or non-polar columns.}
 \item{cas}{deprecated.  Use \code{query} instead.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
+
+\item{validate_cas}{Logical. Whether to validate the provided cas number to
+see if it exists in the NIST WebBook. Defaults to FALSE.}
 }
 \value{
 returns a tibble of literature RIs with the following columns:
 \itemize{
-\item{\code{CAS} is the CAS number}
+\item{\code{query} is the query provided to the NIST server}
+\item{\code{cas} is the CAS number or unique record identified used by NIST}
+\item{\code{RI} is retention index}
 \item{\code{type} is the column type, e.g. "capillary"}
 \item{\code{phase} is the stationary phase (column phase)}
-\item{\code{RI} is retention index}
 \item{\code{length} is column length in meters}
 \item{\code{gas} is the carrier gas used}
 \item{\code{substrate}}
@@ -58,7 +63,19 @@ returns a tibble of literature RIs with the following columns:
 }
 \description{
 This function scrapes NIST for literature retention indices
-  given CAS numbers as an input.
+  given a query or vector of queries as input. The query can be a cas
+  number, IUPAC name, or International Chemical Identifier (\code{inchikey}),
+  according to the value of the \code{from} argument. Retention indices are
+  stored in tables by \code{type}, \code{polarity} and temperature program
+  (\code{temp_prog}). The function can only return one of these tables at a
+  time.
+
+  If a non-cas query is provided, the function will try to resolve the query
+  by searching the NIST WebBook for a corresponding CAS number. If a CAS
+  number is found, it will be returned in a \code{tibble} with the
+  corresponding information from the NIST retention index database. If a CAS
+  number if provided to the function, the validity of the CAS number will
+  not be chewcked
 }
 \details{
 The types of retention indices included in NIST include Kovats
