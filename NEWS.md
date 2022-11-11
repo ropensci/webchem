@@ -1,9 +1,13 @@
+# webchem dev
+
+## NEW FEATURES
+
 # webchem 1.2.0
+* The `nist_ri` function now returns a column with the CAS number to facilitate querying of multiple retention index tables.
 
 ## NEW FEATURES
 
 * webchem can now access ChEMBL (https://www.ebi.ac.uk/chembl/) with `chembl_*()` functions. ChEMBL is a manually curated database of bioactive molecules with drug-like properties.
-* The `nist_ri` function now returns a column with the CAS number to facilitate querying of multiple retention index tables.
 
 ## BUG FIXES
 

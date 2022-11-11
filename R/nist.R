@@ -380,11 +380,11 @@ nist_ri <- function(query,
 #' NIST uses Greek letters to distinguish stereoisomers, but users may have
 #' strings that spell out the letters in Latin script. This is utility
 #' function to convert chemical names to NIST format.
-#' @param x character; a NIST CAS
+#' @param x character; a IUPAC chemical name
 #' @return a character
 #' @examples
-#' format_cas("78706")
-#' format_cas("R628941")
+#' format_name_nist("alpha-bergatomene")
+#' format_name_nist("beta-bisabolene")
 #' @noRd
 format_name_nist <- function(x) {
   format_name <- function(x){
@@ -398,8 +398,6 @@ format_name_nist <- function(x) {
   }
   sapply(x, format_name)
 }
-
-
 
 #' @noRd
 try_url <- function(qurl){
