@@ -1,3 +1,128 @@
+#' Retrieve retention indices from NIST
+#' @description This function scrapes NIST for literature retention indices
+#'   given a query or vector of queries as input. The query can be a cas
+#'   number, IUPAC name, or International Chemical Identifier (\code{inchikey}),
+#'   according to the value of the \code{from} argument. Retention indices are
+#'   stored in tables by \code{type}, \code{polarity} and temperature program
+#'   (\code{temp_prog}). The function can take multiple arguments for these
+#'   parameters and will return any retention times matching the specified
+#'   criteria in a single table.
+#'
+#'   If a non-cas query is provided, the function will try to resolve the query
+#'   by searching the NIST WebBook for a corresponding CAS number. If a CAS
+#'   number is found, it will be returned in a \code{tibble} with the
+#'   corresponding information from the NIST retention index database.
+#'
+#' @param query character; the search term
+#' @param from character; type of search term. can be one of \code{"name"},
+#'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
+#'   preferred to \code{"name"} since \code{NA} is returned in the event of
+#'   multiple matches to a query. Using an identifier other than a CAS number
+#'   will cause this function to run slower as CAS numbers are used as internal
+#'   identifiers by NIST.
+#' @param type Retention index type: \code{"kovats"}, \code{"linear"},
+#'   \code{"alkane"}, and/or \code{"lee"}. See details for more.
+#' @param polarity Column polarity: \code{"polar"} and/or \code{"non-polar"}
+#'   to get RIs calculated for polar or non-polar columns.
+#' @param temp_prog Temperature program: \code{"isothermal"},
+#'   \code{"ramp"}, and/or \code{"custom"}.
+#' @param cas deprecated.  Use \code{query} instead.
+#' @param verbose logical; should a verbose output be printed on the console?
+#' @details The types of retention indices included in NIST include Kovats
+#'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
+#'   (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
+#'   calculated are available on the NIST website:
+#'   \url{https://webbook.nist.gov/chemistry/gc-ri/}
+#' @importFrom purrr map
+#' @importFrom purrr map_dfr
+#' @import dplyr
+#'
+#' @return returns a tibble of literature RIs with the following columns:
+#' \itemize{
+#' \item{\code{query} is the query provided to the NIST server}
+#' \item{\code{cas} is the CAS number or unique record identified used by NIST}
+#' \item{\code{RI} is retention index}
+#' \item{\code{type} is the type of RI (e.g. "kovats", "linear", "alkane", or "lee")}
+#' \item{\code{polarity} is the polarity of the column (either "polar" or "non-polar")}
+#' \item{\code{temp_prog} is the type of temperature program (e.g. "isothermal", "ramp", or "custom")}
+#' \item{\code{column} is the column type, e.g. "capillary"}
+#' \item{\code{phase} is the stationary phase (column phase)}
+#' \item{\code{length} is column length in meters}
+#' \item{\code{gas} is the carrier gas used}
+#' \item{\code{substrate}}
+#' \item{\code{diameter} is the column diameter in mm}
+#' \item{\code{thickness} is the phase thickness in µm}
+#' \item{\code{program}. various columns depending on the value of
+#' \code{temp_prog}}
+#' \item{\code{reference} is where this retention index was published}
+#' \item{\code{comment}. I believe this denotes the database these data
+#'       were aggregated from}
+#'}
+#'
+#' @references NIST Mass Spectrometry Data Center, William E. Wallace, director,
+#'   "Retention Indices" in NIST Chemistry WebBook, NIST Standard Reference
+#'   Database Number 69, Eds. P.J. Linstrom and W.G. Mallard,
+#'   National Institute of Standards and Technology, Gaithersburg MD, 20899,
+#'   \doi{10.18434/T4D303}.
+#'
+#' @export
+#' @note Copyright for NIST Standard Reference Data is governed by the Standard
+#' Reference Data Act, \url{https://www.nist.gov/srd/public-law}.
+#' @seealso \code{\link{is.cas}} \code{\link{as.cas}}
+#'
+#' @examples
+#' \dontrun{
+#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
+#' "non-polar", "ramp")
+#' }
+nist_ri <- function(query,
+                    from = c("cas", "inchi", "inchikey", "name"),
+                    type = c("kovats", "linear", "alkane", "lee"),
+                    polarity = c("polar", "non-polar"),
+                    temp_prog = c("isothermal", "ramp", "custom"),
+                    cas = NULL,
+                    verbose = getOption("verbose")) {
+
+  if (!is.null(cas)) {
+    warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
+    query <- cas
+    from <- "cas"
+  }
+
+  from <- match.arg(from)
+  type <- match.arg(type, c("kovats", "linear", "alkane", "lee"), several.ok = TRUE)
+  polarity <- match.arg(polarity, c("polar", "non-polar"), several.ok = TRUE)
+  temp_prog <- match.arg(temp_prog, c("isothermal", "ramp", "custom"), several.ok = TRUE)
+
+  if (from == "cas"){
+    query <- format_cas(query)
+  } else if (from == "name"){
+    query <- format_name_nist(query)
+  }
+
+  ri_tables <-
+    purrr::map(
+      query,
+      ~ get_ri_xml(
+        query = .x,
+        from = from,
+        type = type,
+        polarity = polarity,
+        temp_prog = temp_prog,
+        verbose = verbose
+      )
+    )
+
+  querynames <- query
+  querynames [is.na(querynames)] <- ".NA"
+  names(ri_tables) <- querynames
+
+  # ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
+  #   dplyr::mutate(query = na_if(query, ".NA"))
+  ri_tables <- dplyr::bind_rows(ri_tables)
+  return(ri_tables)
+}
+
 #' Scrape Retention Indices from NIST
 #'
 #' @param query query of type matching the options in `from`
@@ -208,7 +333,7 @@ tidy_ritable <- function(ri_xml) {
 
     tidy2 <- dplyr::select(tidy1,
                            "RI" = "I",
-                           "type" = "Column type",
+                           "column" = "Column type",
                            "phase" = "Active phase",
                            "length" = "Column length (m)",
                            "gas" = "Carrier gas",
@@ -249,130 +374,6 @@ tidy_ritable <- function(ri_xml) {
                     "phase", everything())
   }
   return(output)
-}
-
-
-#' Retrieve retention indices from NIST
-#' @description This function scrapes NIST for literature retention indices
-#'   given a query or vector of queries as input. The query can be a cas
-#'   number, IUPAC name, or International Chemical Identifier (\code{inchikey}),
-#'   according to the value of the \code{from} argument. Retention indices are
-#'   stored in tables by \code{type}, \code{polarity} and temperature program
-#'   (\code{temp_prog}). The function can only return one of these tables at a
-#'   time.
-#'
-#'   If a non-cas query is provided, the function will try to resolve the query
-#'   by searching the NIST WebBook for a corresponding CAS number. If a CAS
-#'   number is found, it will be returned in a \code{tibble} with the
-#'   corresponding information from the NIST retention index database. If a CAS
-#'   number if provided to the function, the validity of the CAS number will
-#'   not be chewcked
-#'
-#' @param query character; the search term
-#' @param from character; type of search term. can be one of \code{"name"},
-#'   \code{"inchi"}, \code{"inchikey"}, or \code{"cas"}. Using an identifier is
-#'   preferred to \code{"name"} since \code{NA} is returned in the event of
-#'   multiple matches to a query. Using an identifier other than a CAS number
-#'   will cause this function to run slower as CAS numbers are used as internal
-#'   identifiers by NIST.
-#' @param type Retention index type. One of \code{"kovats"}, \code{"linear"},
-#'   \code{"alkane"}, or \code{"lee"}. See details for more.
-#' @param polarity Column polarity. One of \code{"polar"} or \code{"non-polar"}
-#'   to get RIs calculated for polar or non-polar columns.
-#' @param temp_prog Temperature program. One of \code{"isothermal"},
-#'   \code{"ramp"}, or \code{"custom"}.
-#' @param cas deprecated.  Use \code{query} instead.
-#' @param verbose logical; should a verbose output be printed on the console?
-#' @details The types of retention indices included in NIST include Kovats
-#'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
-#'   (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
-#'   calculated are available on the NIST website:
-#'   \url{https://webbook.nist.gov/chemistry/gc-ri/}
-#' @importFrom purrr map
-#' @importFrom purrr map_dfr
-#' @import dplyr
-#'
-#' @return returns a tibble of literature RIs with the following columns:
-#' \itemize{
-#' \item{\code{query} is the query provided to the NIST server}
-#' \item{\code{cas} is the CAS number or unique record identified used by NIST}
-#' \item{\code{RI} is retention index}
-#' \item{\code{type} is the column type, e.g. "capillary"}
-#' \item{\code{phase} is the stationary phase (column phase)}
-#' \item{\code{length} is column length in meters}
-#' \item{\code{gas} is the carrier gas used}
-#' \item{\code{substrate}}
-#' \item{\code{diameter} is the column diameter in mm}
-#' \item{\code{thickness} is the phase thickness in µm}
-#' \item{\code{program}. various columns depending on the value of
-#' \code{temp_prog}}
-#' \item{\code{reference} is where this retention index was published}
-#' \item{\code{comment}. I believe this denotes the database these data
-#'       were aggregated from}
-#'}
-#'
-#' @references NIST Mass Spectrometry Data Center, William E. Wallace, director,
-#'   "Retention Indices" in NIST Chemistry WebBook, NIST Standard Reference
-#'   Database Number 69, Eds. P.J. Linstrom and W.G. Mallard,
-#'   National Institute of Standards and Technology, Gaithersburg MD, 20899,
-#'   \doi{10.18434/T4D303}.
-#'
-#' @export
-#' @note Copyright for NIST Standard Reference Data is governed by the Standard
-#' Reference Data Act, \url{https://www.nist.gov/srd/public-law}.
-#' @seealso \code{\link{is.cas}} \code{\link{as.cas}}
-#'
-#' @examples
-#' \dontrun{
-#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
-#' "non-polar", "ramp")
-#' }
-nist_ri <- function(query,
-                    from = c("cas", "inchi", "inchikey", "name"),
-                    type = c("kovats", "linear", "alkane", "lee"),
-                    polarity = c("polar", "non-polar"),
-                    temp_prog = c("isothermal", "ramp", "custom"),
-                    cas = NULL,
-                    verbose = getOption("verbose")) {
-
-  if (!is.null(cas)) {
-    warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
-    query <- cas
-    from <- "cas"
-  }
-
-  from <- match.arg(from)
-  type <- match.arg(type, c("kovats", "linear", "alkane", "lee"), several.ok = TRUE)
-  polarity <- match.arg(polarity, c("polar", "non-polar"), several.ok = TRUE)
-  temp_prog <- match.arg(temp_prog, c("isothermal", "ramp", "custom"), several.ok = TRUE)
-
-  if (from == "cas"){
-      query <- format_cas(query)
-    } else if (from == "name"){
-    query <- format_name_nist(query)
-  }
-
-  ri_tables <-
-    purrr::map(
-      query,
-      ~ get_ri_xml(
-        query = .x,
-        from = from,
-        type = type,
-        polarity = polarity,
-        temp_prog = temp_prog,
-        verbose = verbose
-      )
-    )
-
-  querynames <- query
-  querynames [is.na(querynames)] <- ".NA"
-  names(ri_tables) <- querynames
-
-  # ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
-  #   dplyr::mutate(query = na_if(query, ".NA"))
-  ri_tables <- dplyr::bind_rows(ri_tables)
-  return(ri_tables)
 }
 
 #' Format chemical names into NIST format
