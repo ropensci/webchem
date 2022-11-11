@@ -17,8 +17,7 @@ get_ri_xml <-
            type,
            polarity,
            temp_prog,
-           verbose,
-           validate_cas = FALSE) {
+           verbose) {
 
     if (!ping_service("nist")) stop(webchem_message("service_down"))
     cas_found <- FALSE
@@ -35,82 +34,104 @@ get_ri_xml <-
     #handle NAs
     if (is.na(query)) {
       if (verbose) webchem_message("na")
-      return(NA)
-    } else {
-      if (from != "cas" | validate_cas){
-        qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
-        webchem_sleep(type = 'scrape')
-        if (verbose) webchem_message("query", query, appendLF = FALSE)
-        res <- try_url(qurl)
-        if (inherits(res, "try-error")) {
-          if (verbose) webchem_message("service_down")
-          return(NA)
-        }
-        if (verbose) message(httr::message_for_status(res))
-        if (res$status_code == 200) {
-          page <- xml2::read_html(res)
-          #Warnings
-          result <- page %>%
-            html_node("main h1") %>%
-            html_text()
-          # if cquery not found
-          if (stringr::str_detect(result, "Not Found")) {
-            if (verbose) webchem_message("not_found", appendLF = FALSE)
-            ri_xml <- tibble(query = query)
-          }
+      return(dplyr::tibble(query=NA))
+    }
+    if (from == "cas"){
+      ID <- paste0("C", gsub("-", "", query))
+    }
+    # check for existence of record
+      qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
+      webchem_sleep(type = 'scrape')
+      if (verbose) webchem_message("query", query, appendLF = FALSE)
+      res <- try_url(qurl)
+      if (inherits(res, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(dplyr::tibble(query=NA))
+      }
+      if (verbose) message(httr::message_for_status(res))
+      if (res$status_code == 200) {
+        page <- xml2::read_html(res)
+        #Warnings
+        result <- page %>%
+          rvest::html_node("main h1") %>%
+          rvest::html_text()
+        # if cquery not found
+        if (stringr::str_detect(result, "Not Found")) {
+          if (verbose) webchem_message("not_found", appendLF = FALSE)
+          ri_xml <- construct_NA_table(query)
+        } else if (result == "Search Results") {
           # if more than one compound found
-          if (result == "Search Results") {
-            message(paste0(" More than one match for '", query,
-                           "'. Returning NA."))
-            return(NA)
-          }
-          links <-
-            page %>%
-            rvest::html_nodes("li li a") %>%
-            rvest::html_attr("href")
+          message(paste0(" More than one match for '", query,
+                         "'. Returning NA."))
+          ri_xml <- dplyr::tibble(query = query)
+        } else{
+        links <-
+          page %>%
+          rvest::html_nodes("li li a") %>%
+          rvest::html_attr("href")
 
-          gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
+        gaschrom <- links[which(regexpr("Gas-Chrom", links) >= 1)]
 
-          if (length(gaschrom) == 0) {
-            if (verbose) webchem_message("not_available")
-            return(NA)
-          } else {
-            if (verbose) message(" CAS found. ", appendLF = FALSE)
-            ID <- stringr::str_extract(gaschrom, "(?<=ID=).+?(?=&)")
-            cas_found <- TRUE
+        if (length(gaschrom) == 0) {
+          if (verbose) webchem_message("not_available")
+          cas <- page %>%
+            rvest::html_nodes("li") %>%
+            grep("CAS Registry", ., value=TRUE) %>%
+            gsub("<li>\n<strong>CAS Registry Number:</strong> |</li>", "",.)
+          ri_xml <- construct_NA_table(query, cas=ifelse(length(cas) > 0, cas, NA))
+        } else {
+          if (verbose) message(" CAS found. ", appendLF = FALSE)
+          ID <- stringr::str_extract(gaschrom, "(?<=ID=).+?(?=&)")
+          cas_found <- TRUE
+        }
+      }
+    } else {
+        return(dplyr::tibble(query=NA))
+      }
+    if (cas_found){
+      # check which records exist
+      check_records <- function(gaschrom, type, polarity, temp_prog, verbose){
+        if (any(sapply(list(type, polarity, temp_prog), length) > 1)){
+          res2 <- try_url(paste0("https://webbook.nist.gov", gaschrom))
+          if (inherits(res2, "try-error")) {
+            if (verbose) webchem_message("service_down")
+            return(dplyr::tibble(query=NA))
           }
+          page <- xml2::read_html(res2)
+          tables <- page %>% html_nodes(".data") %>% html_attr("aria-label")
+          tables <- format_gaschrom_tables(tables)
+          tables.idx <- which(tables[,1] %in% type &
+                                tables[,2] %in% polarity &
+                                tables[,3] %in% temp_prog)
+          tables <- tables[tables.idx,,drop=FALSE]
+        } else {
+          tables <- data.frame(type, polarity, temp_prog)
         }
-        else {
-          return(NA)
-        }
+        tables
+      }
+
+      tables <- check_records(gaschrom, type, polarity, temp_prog, verbose)
+      if (nrow(tables) == 0){
+        ri_xml <- construct_NA_table(query, cas=ID)
       } else{
-        ID <- paste0("C", gsub("-", "", query))
+        ri_xml <- lapply(seq_len(nrow(tables)), function(i){
+          ri_xml <- scrape_RI_table(ID, type=tables[i,1], polarity = tables[i,2],
+                          temp_prog = tables[i,3], from=from, verbose=verbose,
+                          cas_found = cas_found)
+          attr(ri_xml, "query") <- query
+          ri_xml
+        })
       }
-      if (any(sapply(list(type, polarity, temp_prog), length) > 1)){
-        res2 <- try_url(paste0("https://webbook.nist.gov", gaschrom))
-        if (inherits(res2, "try-error")) {
-          if (verbose) webchem_message("service_down")
-          return(NA)
-        }
-        page <- xml2::read_html(res2)
-        tables <- page %>% html_nodes(".data") %>% html_attr("aria-label")
-        tables <- format_gaschrom_tables(tables)
-        tables.idx <- which(tables[,1] %in% type &
-                              tables[,2] %in% polarity &
-                              tables[,3] %in% temp_prog)
-        tables <- tables[tables.idx,,drop=FALSE]
-      } else {
-        tables <- data.frame(type, polarity, temp_prog)
-      }
-      ri_xmls<-lapply(seq_len(nrow(tables)), function(i){
-        ri_xml <- scrape_RI_table(ID, type=tables[i,1], polarity = tables[i,2],
-                        temp_prog = tables[i,3], from=from, verbose=verbose,
-                        cas_found = cas_found)
-        attr(ri_xml, "query") <- query
-        ri_xml
-      })
-      purrr::map_dfr(ri_xmls, tidy_ritable)
+    }
+      purrr::map_dfr(ri_xml, tidy_ritable)
   }
+
+#' @noRd
+construct_NA_table <- function(query, cas=NA){
+  x<-NA
+  attr(x,"query")<-query
+  attr(x,"cas") <- as.cas(gsub("C", "", cas))
+  list(x)
 }
 
 #' @noRd
@@ -125,7 +146,7 @@ scrape_RI_table <- function(ID, type, polarity, temp_prog,
     res2 <- try_url(qurl)
     if (inherits(res2, "try-error")) {
       if (verbose) webchem_message("service_down")
-      return(NA)
+      return(dplyr::tibble(query=NA))
     }
     if (verbose) message(httr::message_for_status(res2))
     if (res2$status_code == 200) {
@@ -141,14 +162,14 @@ scrape_RI_table <- function(ID, type, polarity, temp_prog,
         cas_found <- TRUE
       }
     } else {
-      return(NA)
+      return(dplyr::tibble(query=NA))
     }
   #set attributes to label what type of RI
   attr(ri_xml, "from") <- from
   attr(ri_xml, "type") <- type
   attr(ri_xml, "polarity") <- polarity
   attr(ri_xml, "temp_prog") <- temp_prog
-  attr(ri_xml, "cas") <- ifelse(cas_found, as.cas(gsub("C","",ID)), NA)
+  attr(ri_xml, "cas") <- ifelse(cas_found, format_cas(ID), NA)
   return(ri_xml)
 }
 
@@ -169,8 +190,8 @@ tidy_ritable <- function(ri_xml) {
   #Skip all these steps if the table didn't exist at the URL and was set to NA
   cas <- attr(ri_xml, "cas")
   if (any(is.na(ri_xml))) {
-    return(tibble(cas=ifelse(is.null(cas),NA,cas), RI = NA))
-
+    return(tibble(query = attr(ri_xml, "query"),
+                  cas=ifelse(is.null(cas), NA, cas), RI = NA))
   } else {
     # Read in the tables from xml
     table.list <- purrr::map(ri_xml, html_table)
@@ -262,8 +283,6 @@ tidy_ritable <- function(ri_xml) {
 #'   \code{"ramp"}, or \code{"custom"}.
 #' @param cas deprecated.  Use \code{query} instead.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param validate_cas Logical. Whether to validate the provided cas number to
-#' see if it exists in the NIST WebBook. Defaults to FALSE.
 #' @details The types of retention indices included in NIST include Kovats
 #'   (\code{"kovats"}), Van den Dool and Kratz (\code{"linear"}), normal alkane
 #'   (\code{"alkane"}), and Lee (\code{"lee"}). Details about how these are
@@ -314,8 +333,7 @@ nist_ri <- function(query,
                     polarity = c("polar", "non-polar"),
                     temp_prog = c("isothermal", "ramp", "custom"),
                     cas = NULL,
-                    verbose = getOption("verbose"),
-                    validate_cas = FALSE) {
+                    verbose = getOption("verbose")) {
 
   if (!is.null(cas)) {
     warning("`cas` is deprecated.  Using `query` instead with `from = 'cas'`.")
@@ -328,16 +346,10 @@ nist_ri <- function(query,
   polarity <- match.arg(polarity, c("polar", "non-polar"), several.ok = TRUE)
   temp_prog <- match.arg(temp_prog, c("isothermal", "ramp", "custom"), several.ok = TRUE)
 
-  if (from == "cas") {
-    if (!is.cas(query)){
-      qu <- as.cas(query)
-      query <- ifelse(is.cas(qu) & !is.na(qu), as.cas(query), query)
-    }
-    # msg <- testthat::capture_messages(is.cas(query, verbose = TRUE))
-    # if (length(msg) > 0) {
-    #   msg <- paste(msg, collapse = "  ")
-    #   warning(msg)
-    # }
+  if (from == "cas"){
+      query <- format_cas(query)
+    } else if (from == "name"){
+    query <- format_name_nist(query)
   }
 
   ri_tables <-
@@ -349,8 +361,7 @@ nist_ri <- function(query,
         type = type,
         polarity = polarity,
         temp_prog = temp_prog,
-        verbose = verbose,
-        validate_cas = validate_cas
+        verbose = verbose
       )
     )
 
@@ -360,10 +371,11 @@ nist_ri <- function(query,
 
   # ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
   #   dplyr::mutate(query = na_if(query, ".NA"))
+  ri_tables <- dplyr::bind_rows(ri_tables)
   return(ri_tables)
 }
 
-#' Convert chemical names to NIST format
+#' Format chemical names into NIST format
 #'
 #' NIST uses Greek letters to distinguish stereoisomers, but users may have
 #' strings that spell out the letters in Latin script. This is utility
@@ -375,11 +387,19 @@ nist_ri <- function(query,
 #' format_cas("R628941")
 #' @noRd
 format_name_nist <- function(x) {
-  # format name
-  dictionary <- c("alpha" = "α", "beta" = "β", "gamma" = "γ", "delta" = "𝛿")
-  x <- stringr::str_replace_all(x, dictionary)
-  return(x)
+  format_name <- function(x){
+    # format name
+    dictionary <- c("alpha" = "\\u03b1",
+                    "beta" = "\\u03b2",
+                    "gamma" = "\\u03b3",
+                    "delta" = "\\U0001d6ff")
+    x <- stringr::str_replace_all(x, dictionary)
+    x
+  }
+  sapply(x, format_name)
 }
+
+
 
 #' @noRd
 try_url <- function(qurl){
@@ -388,6 +408,14 @@ try_url <- function(qurl){
                 httr::user_agent(webchem_url()),
                 terminate_on = 404,
                 quiet = TRUE), silent = TRUE)
+}
+
+format_cas <- function(ID){
+  format_cas <- function(ID){
+    cas <- as.cas(gsub("C","",ID))
+    ifelse(is.cas(cas) & !is.na(cas), cas, ID)
+  }
+ sapply(ID, format_cas)
 }
 
 #' @noRd

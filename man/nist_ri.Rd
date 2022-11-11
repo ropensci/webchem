@@ -11,8 +11,7 @@ nist_ri(
   polarity = c("polar", "non-polar"),
   temp_prog = c("isothermal", "ramp", "custom"),
   cas = NULL,
-  verbose = getOption("verbose"),
-  validate_cas = FALSE
+  verbose = getOption("verbose")
 )
 }
 \arguments{
@@ -37,9 +36,6 @@ to get RIs calculated for polar or non-polar columns.}
 \item{cas}{deprecated.  Use \code{query} instead.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{validate_cas}{Logical. Whether to validate the provided cas number to
-see if it exists in the NIST WebBook. Defaults to FALSE.}
 }
 \value{
 returns a tibble of literature RIs with the following columns:
