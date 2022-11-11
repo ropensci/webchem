@@ -2,8 +2,10 @@
 
 ## NEW FEATURES
 
-# webchem 1.2.0
 * The `nist_ri` function now returns a column with the CAS number to facilitate querying of multiple retention index tables.
+* The `nist_ri` function can now take multiple arguments for `type`, `polarity` and `temp_prog`.
+
+# webchem 1.2.0
 
 ## NEW FEATURES
 
