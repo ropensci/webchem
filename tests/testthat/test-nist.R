@@ -165,7 +165,7 @@ test_that("a record with no CAS number returns expected output", {
 test_that("nist_ri() can deal appropriately with a mixture of queries", {
   test <- nist_ri(query=c(NA, "baloon", "methane", "hexanol"), from = "name",
                   type=c("kovats","linear"), polarity="polar",
-                  temp_prog = "ramp", verbose=TRUE)
+                  temp_prog = "ramp")
 
   expect_true(all(is.na(test[1,])))
   expect_true(is.na(test[[2,"cas"]]))

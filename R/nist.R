@@ -409,6 +409,7 @@ try_url <- function(qurl){
                 quiet = TRUE), silent = TRUE)
 }
 
+#' @noRd
 format_cas <- function(ID){
   format_cas <- function(ID){
     cas <- as.cas(gsub("C","",ID))

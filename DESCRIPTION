@@ -21,6 +21,7 @@ Authors@R: c(person("Eduard", "Szöcs", role = "aut"),
     person("Jan", "Stanstrup", role = "ctb"),
     person("João Vitor", "F Cavalcante", role = "ctb"),
     person("Gordon", "Getzinger", role = "ctb"),
+    person("Ethan", "Bass", role="ctb"),
     person("Tamás", "Stirling", email = "stirling.tamas@gmail.com", role = c("ctb", "cre")))
 Maintainer: Tamás Stirling <stirling.tamas@gmail.com>
 LazyLoad: yes
