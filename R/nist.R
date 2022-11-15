@@ -75,9 +75,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
-#' "non-polar", "ramp")
-#' }
+#' myRIs <-
+#'   nist_ri(
+#'     c("78-70-6", "13474-59-4"),
+#'     from = "cas",
+#'     type = c("linear", "kovats"),
+#'     polarity = "non-polar",
+#'     temp_prog = "ramp"
+#'   )
+myRIs
 nist_ri <- function(query,
                     from = c("cas", "inchi", "inchikey", "name"),
                     type = c("kovats", "linear", "alkane", "lee"),
@@ -186,7 +192,7 @@ get_ri_xml <-
         result <- page %>%
           rvest::html_node("main h1") %>%
           rvest::html_text()
-        # if cquery not found
+        # if query not found
         if (stringr::str_detect(result, "Not Found")) {
           if (verbose) webchem_message("not_found", appendLF = FALSE)
           ri_xml <- construct_NA_table(query)
@@ -355,7 +361,7 @@ tidy_ritable <- function(ri_xml) {
                            "hold_end" = contains("Final hold (min)"),
                            "reference" = "Reference",
                            "comment" = "Comment") %>%
-  dplyr::mutate_at(vars(any_of(c("length", "diameter", "thickness", "temp",
+  dplyr::mutate_at(any_of(c("length", "diameter", "thickness", "temp",
                             "temp_start","temp_end","temp_rate",
                             "hold_start","hold_end", "RI"))), as.numeric)
 
