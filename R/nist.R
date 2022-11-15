@@ -186,7 +186,7 @@ get_ri_xml <-
         result <- page %>%
           rvest::html_node("main h1") %>%
           rvest::html_text()
-        # if cquery not found
+        # if query not found
         if (stringr::str_detect(result, "Not Found")) {
           if (verbose) webchem_message("not_found", appendLF = FALSE)
           ri_xml <- construct_NA_table(query)
