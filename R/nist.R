@@ -9,8 +9,11 @@
 #'   criteria in a single table.
 #'
 #'   If a non-cas query is provided, the function will try to resolve the query
-#'   by searching the NIST WebBook for a corresponding CAS number. If a CAS
-#'   number is found, it will be returned in a \code{tibble} with the
+#'   by searching the NIST WebBook for a corresponding CAS number. If
+#'   \code{from == "name"}, phonetic spellings of Greek stereo-descriptors
+#'   (e.g. "alpha", "beta", "gamma") will be automatically
+#'   converted to the corresponding letters to match the form used by NIST. If
+#'   a CAS number is found, it will be returned in a \code{tibble} with the
 #'   corresponding information from the NIST retention index database.
 #'
 #' @param query character; the search term
@@ -95,7 +98,10 @@ nist_ri <- function(query,
   temp_prog <- match.arg(temp_prog, c("isothermal", "ramp", "custom"), several.ok = TRUE)
 
   if (from == "cas"){
-    query <- format_cas(query)
+    query <- sapply(query, function(x){
+      cas <- as.cas(gsub("C","", x))
+      ifelse(is.cas(cas) & !is.na(cas), cas, x)
+    })
   } else if (from == "name"){
     query <- format_name_nist(query)
   }
@@ -237,11 +243,11 @@ get_ri_xml <-
 
       tables <- check_records(gaschrom, type, polarity, temp_prog, verbose)
       if (nrow(tables) == 0){
-        ri_xml <- construct_NA_table(query, cas=ID)
+        ri_xml <- construct_NA_table(query, cas = ID)
       } else{
         ri_xml <- lapply(seq_len(nrow(tables)), function(i){
           ri_xml <- scrape_RI_table(ID, type=tables[i,1], polarity = tables[i,2],
-                          temp_prog = tables[i,3], from=from, verbose=verbose,
+                          temp_prog = tables[i,3], from = from, verbose = verbose,
                           cas_found = cas_found)
           attr(ri_xml, "query") <- query
           ri_xml
@@ -253,8 +259,8 @@ get_ri_xml <-
 
 #' @noRd
 construct_NA_table <- function(query, cas=NA){
-  x<-NA
-  attr(x,"query")<-query
+  x <- NA
+  attr(x,"query") <- query
   attr(x,"cas") <- as.cas(gsub("C", "", cas))
   list(x)
 }
@@ -294,7 +300,7 @@ scrape_RI_table <- function(ID, type, polarity, temp_prog,
   attr(ri_xml, "type") <- type
   attr(ri_xml, "polarity") <- polarity
   attr(ri_xml, "temp_prog") <- temp_prog
-  attr(ri_xml, "cas") <- ifelse(cas_found, format_cas(ID), NA)
+  attr(ri_xml, "cas") <- ifelse(cas_found, as.cas(gsub("C","",ID)), NA)
   return(ri_xml)
 }
 
@@ -316,7 +322,7 @@ tidy_ritable <- function(ri_xml) {
   cas <- attr(ri_xml, "cas")
   if (any(is.na(ri_xml))) {
     return(tibble(query = attr(ri_xml, "query"),
-                  cas=ifelse(is.null(cas), NA, cas), RI = NA))
+                  cas = ifelse(is.null(cas), NA, cas), RI = NA))
   } else {
     # Read in the tables from xml
     table.list <- purrr::map(ri_xml, html_table)
@@ -390,10 +396,18 @@ tidy_ritable <- function(ri_xml) {
 format_name_nist <- function(x) {
   format_name <- function(x){
     # format name
-    dictionary <- c("alpha" = "\\u03b1",
-                    "beta" = "\\u03b2",
-                    "gamma" = "\\u03b3",
-                    "delta" = "\\U0001d6ff")
+    dictionary <- c("[^a-zA-Z]alpha[^a-zA-Z]" = "-\\u03b1-",
+                    "^alpha[^a-zA-Z]" = "\\u03b1-",
+                    "[^a-zA-Z]alpha$" = "-\\u03b1",
+                    "[^a-zA-Z]beta[^a-zA-Z]" = "-\\u03b2-",
+                    "^beta[^a-zA-Z]" = "\\u03b2-",
+                    "[^a-zA-Z]beta$" = "-\\u03b2",
+                    "[^a-zA-Z]gamma[^a-zA-Z]" = "-\\u03b3-",
+                    "^gamma[^a-zA-Z]" = "\\u03b3-",
+                    "[^a-zA-Z]gamma$" = "-\\u03b3",
+                    "[^a-zA-Z]delta[^a-zA-Z]" = "-\\U0001d6ff-",
+                    "^delta[^a-zA-Z]" = "\\U0001d6ff-",
+                    "[^a-zA-Z]delta$" = "-\\U0001d6ff")
     x <- stringr::str_replace_all(x, dictionary)
     x
   }
@@ -407,15 +421,6 @@ try_url <- function(qurl){
                 httr::user_agent(webchem_url()),
                 terminate_on = 404,
                 quiet = TRUE), silent = TRUE)
-}
-
-#' @noRd
-format_cas <- function(ID){
-  format_cas <- function(ID){
-    cas <- as.cas(gsub("C","",ID))
-    ifelse(is.cas(cas) & !is.na(cas), cas, ID)
-  }
- sapply(ID, format_cas)
 }
 
 #' @noRd

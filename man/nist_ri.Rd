@@ -71,8 +71,11 @@ This function scrapes NIST for literature retention indices
   criteria in a single table.
 
   If a non-cas query is provided, the function will try to resolve the query
-  by searching the NIST WebBook for a corresponding CAS number. If a CAS
-  number is found, it will be returned in a \code{tibble} with the
+  by searching the NIST WebBook for a corresponding CAS number. If
+  \code{from == "name"}, phonetic spellings of Greek stereo-descriptors
+  (e.g. "alpha", "beta", "gamma") will be automatically
+  converted to the corresponding letters to match the form used by NIST. If
+  a CAS number is found, it will be returned in a \code{tibble} with the
   corresponding information from the NIST retention index database.
 }
 \details{

@@ -32,15 +32,6 @@ test_that("nist_ri() works when only one row of data", {
   expect_true(!anyNA(testdf2$RI))
 })
 
-test_that("nist_ri() returns results", {
-  skip_on_cran()
-  skip_if_not(up, "NIST Web Book is down")
-
-  out <- nist_ri("78-70-6", type = "linear", polarity="non-polar", temp_prog = "custom")
-  expect_s3_class(out, "data.frame")
-  expect_true(!anyNA(out$RI))
-})
-
 test_that("nist_ri() works with inchikey query", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
@@ -108,13 +99,13 @@ test_that("nist_ri() can return multiple types", {
 
   out <- nist_ri("78-70-6", type = c("kovats","linear"), polarity="non-polar",
                  temp_prog = "custom")
+
   expect_s3_class(out, "data.frame")
   expect_true(!anyNA(out$RI))
   expect_true(all(c("kovats", "linear") %in% out$type))
   expect_true(all(out$polarity == "non-polar"))
   expect_true(all(out$temp_prog == "custom"))
 })
-
 
 test_that("cas =  is deprecated gently", {
   skip_on_cran()
@@ -159,7 +150,7 @@ test_that("a name returns CAS", {
 test_that("a record with no CAS number returns expected output", {
   test <- nist_ri("(Z,Z)-alpha-Farnesene", from="name", type = "linear", polarity="polar")
   expect_equal(test$query, "(Z,Z)-α-Farnesene")
-  expect_equal(test$cas, "U293031")
+  expect_equal(test$cas, NA)
 })
 
 test_that("nist_ri() can deal appropriately with a mixture of queries", {
@@ -178,4 +169,19 @@ test_that("nist_ri() can deal appropriately with a mixture of queries", {
   expect_equal(test[[4,"query"]], "hexanol")
   expect_equal(test[[4,"cas"]], "111-27-3")
   expect_equal(test[[4,"RI"]], 1339)
+})
+
+test_that("nist_ri() works with multiple temperature program arguments",{
+  df_ramp <- nist_ri("78-70-6", from = "cas", type = c("kovats"), polarity="polar",
+                        temp_prog = "ramp")
+  df_iso <- nist_ri("78-70-6", type = c("kovats"), polarity="polar",
+                        temp_prog = "isothermal")
+  df_both <- nist_ri("78-70-6", from = "cas", type = c("kovats"), polarity="polar",
+                    temp_prog = c("ramp","isothermal"))
+
+  all(colnames(df_ramp) %in% colnames(df_both))
+  all(colnames(df_iso) %in% colnames(df_both))
+  expect_true(all(df_ramp$RI %in% df_both$RI))
+  expect_true(all(df_iso$RI %in% df_both$RI))
+  expect_true(nrow(df_both) == nrow(df_ramp) + nrow(df_iso))
 })
