@@ -349,7 +349,7 @@ tidy_ritable <- function(ri_xml) {
                            "hold_end" = contains("Final hold (min)"),
                            "reference" = "Reference",
                            "comment" = "Comment") %>%
-  dplyr::mutate_at(vars(any_of(c("length", "diameter", "thickness", "temp",
+  dplyr::mutate_at(any_of(c("length", "diameter", "thickness", "temp",
                             "temp_start","temp_end","temp_rate",
                             "hold_start","hold_end", "RI"))), as.numeric)
 
