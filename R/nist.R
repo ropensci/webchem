@@ -83,7 +83,7 @@
 #'     polarity = "non-polar",
 #'     temp_prog = "ramp"
 #'   )
-myRIs
+#' myRIs}
 nist_ri <- function(query,
                     from = c("cas", "inchi", "inchikey", "name"),
                     type = c("kovats", "linear", "alkane", "lee"),
@@ -363,7 +363,7 @@ tidy_ritable <- function(ri_xml) {
                            "comment" = "Comment") %>%
   dplyr::mutate_at(any_of(c("length", "diameter", "thickness", "temp",
                             "temp_start","temp_end","temp_rate",
-                            "hold_start","hold_end", "RI"))), as.numeric)
+                            "hold_start","hold_end", "RI")), as.numeric)
 
     # make NAs explicit and gas abbreviations consistent
     output <- tidy2 %>%
