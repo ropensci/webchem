@@ -24,14 +24,14 @@ multiple matches to a query. Using an identifier other than a CAS number
 will cause this function to run slower as CAS numbers are used as internal
 identifiers by NIST.}
 
-\item{type}{Retention index type. One of \code{"kovats"}, \code{"linear"},
-\code{"alkane"}, or \code{"lee"}. See details for more.}
+\item{type}{Retention index type: \code{"kovats"}, \code{"linear"},
+\code{"alkane"}, and/or \code{"lee"}. See details for more.}
 
-\item{polarity}{Column polarity. One of \code{"polar"} or \code{"non-polar"}
+\item{polarity}{Column polarity: \code{"polar"} and/or \code{"non-polar"}
 to get RIs calculated for polar or non-polar columns.}
 
-\item{temp_prog}{Temperature program. One of \code{"isothermal"},
-\code{"ramp"}, or \code{"custom"}.}
+\item{temp_prog}{Temperature program: \code{"isothermal"},
+\code{"ramp"}, and/or \code{"custom"}.}
 
 \item{cas}{deprecated.  Use \code{query} instead.}
 
@@ -40,10 +40,14 @@ to get RIs calculated for polar or non-polar columns.}
 \value{
 returns a tibble of literature RIs with the following columns:
 \itemize{
-\item{\code{CAS} is the CAS number}
-\item{\code{type} is the column type, e.g. "capillary"}
-\item{\code{phase} is the stationary phase (column phase)}
+\item{\code{query} is the query provided to the NIST server}
+\item{\code{cas} is the CAS number or unique record identified used by NIST}
 \item{\code{RI} is retention index}
+\item{\code{type} is the type of RI (e.g. "kovats", "linear", "alkane", or "lee")}
+\item{\code{polarity} is the polarity of the column (either "polar" or "non-polar")}
+\item{\code{temp_prog} is the type of temperature program (e.g. "isothermal", "ramp", or "custom")}
+\item{\code{column} is the column type, e.g. "capillary"}
+\item{\code{phase} is the stationary phase (column phase)}
 \item{\code{length} is column length in meters}
 \item{\code{gas} is the carrier gas used}
 \item{\code{substrate}}
@@ -58,7 +62,21 @@ returns a tibble of literature RIs with the following columns:
 }
 \description{
 This function scrapes NIST for literature retention indices
-  given CAS numbers as an input.
+  given a query or vector of queries as input. The query can be a cas
+  number, IUPAC name, or International Chemical Identifier (\code{inchikey}),
+  according to the value of the \code{from} argument. Retention indices are
+  stored in tables by \code{type}, \code{polarity} and temperature program
+  (\code{temp_prog}). The function can take multiple arguments for these
+  parameters and will return any retention times matching the specified
+  criteria in a single table.
+
+  If a non-cas query is provided, the function will try to resolve the query
+  by searching the NIST WebBook for a corresponding CAS number. If
+  \code{from == "name"}, phonetic spellings of Greek stereo-descriptors
+  (e.g. "alpha", "beta", "gamma") will be automatically
+  converted to the corresponding letters to match the form used by NIST. If
+  a CAS number is found, it will be returned in a \code{tibble} with the
+  corresponding information from the NIST retention index database.
 }
 \details{
 The types of retention indices included in NIST include Kovats
@@ -73,9 +91,15 @@ Reference Data Act, \url{https://www.nist.gov/srd/public-law}.
 }
 \examples{
 \dontrun{
-myRIs <- nist_ri(c("78-70-6", "13474-59-4"), from = "cas", "linear",
-"non-polar", "ramp")
-}
+myRIs <-
+  nist_ri(
+    c("78-70-6", "13474-59-4"),
+    from = "cas",
+    type = c("linear", "kovats"),
+    polarity = "non-polar",
+    temp_prog = "ramp"
+  )
+myRIs}
 }
 \references{
 NIST Mass Spectrometry Data Center, William E. Wallace, director,
