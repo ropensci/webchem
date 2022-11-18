@@ -177,7 +177,7 @@ get_ri_xml <-
       ID <- paste0("C", gsub("-", "", query))
     }
     # check for existence of record
-      qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
+      qurl <- paste0(baseurl, "?", from_str, "=", gsub(" ","+", query), "&Units=SI")
       webchem_sleep(type = 'scrape')
       if (verbose) webchem_message("query", query, appendLF = FALSE)
       res <- try_url(qurl)
