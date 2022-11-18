@@ -198,9 +198,11 @@ get_ri_xml <-
           ri_xml <- construct_NA_table(query)
         } else if (result == "Search Results") {
           # if more than one compound found
+          if (verbose){
           message(paste0(" More than one match for '", query,
                          "'. Returning NA."))
-          ri_xml <- dplyr::tibble(query = query)
+          }
+          ri_xml <- construct_NA_table(query)
         } else{
         links <-
           page %>%
