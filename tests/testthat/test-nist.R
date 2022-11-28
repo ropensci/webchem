@@ -153,12 +153,20 @@ test_that("a record with no CAS number returns expected output", {
   expect_equal(test$cas, NA)
 })
 
+test_that("a query with spaces returns the expected output", {
+  test <- nist_ri(query = "methyl glyoxal", from="name",temp_prog = "ramp")
+  expect_equal(test$query, "methyl glyoxal")
+  expect_equal(test$cas, "78-98-8")
+  expect_true(!is.na(test[1,"RI"]))
+})
+
 test_that("nist_ri() can deal appropriately with a mixture of queries", {
-  test <- nist_ri(query=c(NA, "baloon", "methane", "hexanol"), from = "name",
+  test <- nist_ri(query=c(NA, "baloon", "methane", "deuterium", "hexanol"), from = "name",
                   type=c("kovats","linear"), polarity="polar",
                   temp_prog = "ramp")
 
   expect_true(all(is.na(test[1,])))
+
   expect_true(is.na(test[[2,"cas"]]))
   expect_true(is.na(test[[2,"RI"]]))
 
@@ -166,9 +174,12 @@ test_that("nist_ri() can deal appropriately with a mixture of queries", {
   expect_equal(test[[3,"cas"]], "74-82-8")
   expect_true(is.na(test[[3,"RI"]]))
 
-  expect_equal(test[[4,"query"]], "hexanol")
-  expect_equal(test[[4,"cas"]], "111-27-3")
-  expect_equal(test[[4,"RI"]], 1339)
+  expect_equal(test[[4,"query"]], "deuterium")
+  expect_true(all(is.na(test[4,-1])))
+
+  expect_equal(test[[5,"query"]], "hexanol")
+  expect_equal(test[[5,"cas"]], "111-27-3")
+  expect_equal(test[[5,"RI"]], 1339)
 })
 
 test_that("nist_ri() works with multiple temperature program arguments",{

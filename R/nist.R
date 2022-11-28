@@ -129,8 +129,6 @@ nist_ri <- function(query,
   querynames [is.na(querynames)] <- ".NA"
   names(ri_tables) <- querynames
 
-  # ri_tables <- purrr::map_dfr(ri_xmls, tidy_ritable, .id = "query") %>%
-  #   dplyr::mutate(query = na_if(query, ".NA"))
   ri_tables <- dplyr::bind_rows(ri_tables)
   return(ri_tables)
 }
@@ -146,6 +144,7 @@ nist_ri <- function(query,
 #' @noRd
 #' @import rvest
 #' @import xml2
+#' @importFrom utils URLencode
 #' @return an xml nodeset
 #'
 get_ri_xml <-
@@ -177,7 +176,7 @@ get_ri_xml <-
       ID <- paste0("C", gsub("-", "", query))
     }
     # check for existence of record
-      qurl <- paste0(baseurl, "?", from_str, "=", query, "&Units=SI")
+      qurl <- URLencode(paste0(baseurl, "?", from_str, "=", gsub(" ","+", query), "&Units=SI"))
       webchem_sleep(type = 'scrape')
       if (verbose) webchem_message("query", query, appendLF = FALSE)
       res <- try_url(qurl)
@@ -198,9 +197,11 @@ get_ri_xml <-
           ri_xml <- construct_NA_table(query)
         } else if (result == "Search Results") {
           # if more than one compound found
+          if (verbose){
           message(paste0(" More than one match for '", query,
                          "'. Returning NA."))
-          ri_xml <- dplyr::tibble(query = query)
+          }
+          ri_xml <- construct_NA_table(query)
         } else{
         links <-
           page %>%
