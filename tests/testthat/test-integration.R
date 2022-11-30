@@ -2,6 +2,7 @@
 # somewhat unreliable.
 
 etox_up <- ping_service("etox")
+fn_up <- ping_service("fn")
 up <- ping_service("cts")
 
 test_that("with_cts() works when no translation needed", {
@@ -17,11 +18,11 @@ test_that("with_cts() works when no translation needed", {
       .f = "get_etoxid",
       .verbose = getOption("verbose")
     )
-  b <- get_etoxid(CASs)
+  b <- get_etoxid(CASs, from = "cas")
   expect_equal(a, b)
 })
 
-etox_up <- ping_service("etox")
+
 test_that("with_cts() translates", {
   skip_on_cran()
   skip_if_not(etox_up, "ETOX down!")
