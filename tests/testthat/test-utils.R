@@ -66,6 +66,7 @@ test_that("is.inchikey() returns correct results", {
 
 
 test_that("is.smiles() returns correct results", {
+  skip_if_not_installed("rcdk")
   expect_true(is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)Cl'))
   expect_false(suppressWarnings(
     is.smiles('Clc1ccc(cc1)C(c2ccc(Cl)cc2)C(Cl)(Cl)ClWWX')))
