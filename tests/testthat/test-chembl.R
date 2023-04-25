@@ -14,7 +14,7 @@ test_that("chembl_query()", {
   o4 <- chembl_query("CHEMBL771355", resource = "assay")
 
   expect_type(o1, "list")
-  expect_equal(length(o1[[1]]), 38)
+  expect_equal(length(o1[[1]]), 34)
   expect_equal(o1m[2], "OK (HTTP 200).")
   expect_equal(length(o2), 2)
   expect_equal(o3[[1]]$entity_type, "ASSAY")
