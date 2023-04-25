@@ -9,6 +9,10 @@
 
 * ci_query() has been removed from the package because NLM had retired ChemIDplus.
 
+## BUG FIXES
+
+* nist_ri() failed because the behaviour of a dependency had changed. This has been fixed.
+
 # webchem 1.2.0
 
 ## NEW FEATURES
