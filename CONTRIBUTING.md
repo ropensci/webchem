@@ -2,12 +2,6 @@
 
 Thank you for your interest in contributing to the project! The goal of this guide is to help you with your endevour. There are many ways to contribute and we have outlined some opportunities which might be interesting to you. If you have any questions or suggestions, feel free to contact us at <webchem@ropensci.org>.
 
-### Fill out the survey
-
-You can fill out our survey at https://forms.gle/V7dfGGn73dkesn5L6.
-
-The `webchem` survey allows us to learn which databases you use and how you interact with chemical data. This is extremely valuable information for us and guides our development efforts. The survey takes about 5 minutes to fill out.
-
 ### Share a use case
 
 Write us an e-mail and show us a full example of how you use or how you would like to use `webchem` in your data analysis! This would give us ideas about new features and also help us create better vignettes that help others get started. Please send your e-mails to <webchem@ropensci.org>.
@@ -67,6 +61,8 @@ Some consistency guidelines:
 14. Print verbose messages. Use `httr::message_for_status()` and `webchem_message()` functions to generate standard messages when possible.
 
 15. Wrap function examples that interact with an API in `\dontrun{}`. Avoid using `\donttest{}`.
+
+16. If an API is no longer available defunct all the exported functions interacting with it.
 
 ### Data Sources
 

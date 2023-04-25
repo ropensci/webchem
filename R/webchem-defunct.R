@@ -62,3 +62,55 @@ cs_prop <- function() {
     the scraping of ChemSpider pages."
   )
 }
+
+ci_query <- function() {
+  .Defunct(
+    "ci_query",
+    package = "webchem",
+    msg = paste0(
+      "ci_query() has been removed from the package because NLM had retired ",
+      "ChemIDplus. According to NLM all data found in ChemIDplus is available ",
+      "in PubChem. 'webchem' provides a number of functions for ",
+      "programmatically accessing PubChem."
+    )
+  )
+}
+
+cas.ci_query <- function() {
+  .Defunct(
+    "cas.ci_query",
+    package = "webchem",
+    msg = paste0(
+      "cas.ci_query() has been removed from the package because NLM had ",
+      "retired ChemIDplus. According to NLM all data found in ChemIDplus is ",
+      "available in PubChem. 'webchem' provides a number of functions for ",
+      "programmatically accessing PubChem."
+    )
+  )
+}
+
+inchikey.ci_query <- function() {
+  .Defunct(
+    "inchikey.ci_query",
+    package = "webchem",
+    msg = paste0(
+      "inchikey.ci_query() has been removed from the package because NLM had ",
+      "retired ChemIDplus. According to NLM all data found in ChemIDplus is ",
+      "available in PubChem. 'webchem' provides a number of functions for ",
+      "programmatically accessing PubChem."
+    )
+  )
+}
+
+smiles.ci_query <- function() {
+  .Defunct(
+    "smiles.ci_query",
+    package = "webchem",
+    msg = paste0(
+      "smiles.ci_query() has been removed from the package because NLM had ",
+      "retired ChemIDplus. According to NLM all data found in ChemIDplus is ",
+      "available in PubChem. 'webchem' provides a number of functions for ",
+      "programmatically accessing PubChem."
+    )
+  )
+}
