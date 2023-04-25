@@ -641,6 +641,10 @@ pc_page <- function(id,
     if (verbose) message(httr::message_for_status(res))
     if (res$status_code == 200) {
       cont <- httr::content(res, type = "text", encoding = "UTF-8")
+      # Intercepting any NA cont before it gets to fromJSON.
+      if(is.na(cont)) {
+        return(NA)
+      }
       cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
       tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
       tree$Do(function(node) node$name <- tolower(node$name))
