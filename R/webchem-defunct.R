@@ -62,3 +62,16 @@ cs_prop <- function() {
     the scraping of ChemSpider pages."
   )
 }
+
+ci_query <- function() {
+  .Defunct(
+    "ci_query",
+    package = "webchem",
+    msg = paste0(
+      "ci_query() has been removed from the package because NLM had retired ",
+      "ChemIDplus. According to NLM all data found in ChemIDplus is available ",
+      "in PubChem. 'webchem' provides a number of functions for ",
+      "programmatically accessing PubChem."
+    )
+  )
+}

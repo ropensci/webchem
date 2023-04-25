@@ -3,9 +3,9 @@ Title: Chemical Information from the Web
 Description: Chemical information from around the web. This package interacts 
     with a suite of web services for chemical information. Sources include: Alan
     Wood's Compendium of Pesticide Common Names, Chemical Identifier Resolver,
-    ChEBI, Chemical Translation Service, ChemIDplus, ChemSpider, ETOX,
-    Flavornet, NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem,
-    SRS, Wikidata.
+    ChEBI, Chemical Translation Service, ChemSpider, ETOX, Flavornet,
+    NIST Chemistry WebBook, OPSIN, PAN Pesticide Database, PubChem, SRS,
+    Wikidata.
 Type: Package
 Version: 1.2.0
 Date: 2022-11-02

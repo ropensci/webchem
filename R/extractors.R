@@ -61,15 +61,6 @@ cas.etox_basic <- function(x, ...) {
   })
 }
 
-#' @export
-cas.ci_query <- function(x, ...) {
-  sapply(x, function(y) {
-    if (length(y) == 1 && is.na(y))
-      return(NA)
-    unique(y$cas)
-  })
-}
-
 # InChIKey ----------------------------------------------------------------
 #' @rdname extractors
 #' @export
@@ -129,15 +120,6 @@ inchikey.cts_compinfo <- function(x, ...) {
   sapply(x, function(x) x$inchikey)
 }
 
-#' @export
-inchikey.ci_query <- function(x, ...) {
-  sapply(x, function(y) {
-    if (length(y) == 1 && is.na(y))
-      return(NA)
-    unique(y$inchikey)
-  })
-}
-
 # SMILES ------------------------------------------------------------------
 #' @rdname extractors
 #' @export
@@ -188,13 +170,4 @@ smiles.pc_prop <- function(x, ...) {
 #' @export
 smiles.wd_ident <- function(x, ...) {
   x$smiles
-}
-
-#' @export
-smiles.ci_query <- function(x, ...) {
-  sapply(x, function(y) {
-    if (length(y) == 1 && is.na(y))
-      return(NA)
-    unique(y$smiles)
-  })
 }
