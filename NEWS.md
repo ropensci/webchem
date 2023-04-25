@@ -5,6 +5,10 @@
 * The `nist_ri` function now returns a column with the CAS number to facilitate querying of multiple retention index tables.
 * The `nist_ri` function can now take multiple arguments for `type`, `polarity` and `temp_prog`.
 
+## DEFUNCT FUNCTIONS
+
+* ci_query() has been removed from the package because NLM had retired ChemIDplus.
+
 # webchem 1.2.0
 
 ## NEW FEATURES
