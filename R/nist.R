@@ -368,7 +368,7 @@ tidy_ritable <- function(ri_xml) {
 
     # make NAs explicit and gas abbreviations consistent
     output <- tidy2 %>%
-      dplyr::mutate_all(~ na_if(., "")) %>%
+      mutate(across(where(is.character), ~na_if(., ""))) %>%
       dplyr::mutate(
         gas = case_when(
           stringr::str_detect(gas, "He") ~ "Helium",
