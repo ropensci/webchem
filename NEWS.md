@@ -1,4 +1,4 @@
-# webchem dev
+# webchem 1.3.0
 
 ## NEW FEATURES
 
@@ -12,6 +12,7 @@
 ## BUG FIXES
 
 * nist_ri() failed because the behaviour of a dependency had changed. This has been fixed.
+* pc_sect() failed when query response was valid but the content was NA. This has been fixed.
 
 # webchem 1.2.0
 
