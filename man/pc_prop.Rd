@@ -12,7 +12,7 @@ pc_prop(cid, properties = NULL, verbose = getOption("verbose"), ...)
 \item{properties}{character vector; properties to retrieve, e.g.
 c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 properties are retrieved. See
-\url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
+\url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest}
 for a list of all available properties.}
 
 \item{verbose}{logical; should a verbose output be printed to the console?}
@@ -31,7 +31,7 @@ Please respect the Terms and Conditions of the National Library of
 Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 usage policies of National Center for Biotechnology Information,
 \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-\url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+\url{https://pubchem.ncbi.nlm.nih.gov/docs/programmatic-access}, and the data
 usage policies of the indicidual data sources
 \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 }
