@@ -69,7 +69,7 @@
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' \url{https://pubchem.ncbi.nlm.nih.gov/docs/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @import httr
@@ -283,7 +283,7 @@ get_cid <-
 #' @param properties character vector; properties to retrieve, e.g.
 #' c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 #' properties are retrieved. See
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/pug-rest}
+#' \url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest}
 #' for a list of all available properties.
 #' @param verbose logical; should a verbose output be printed to the console?
 #' @param ... currently not used.
@@ -310,7 +310,7 @@ get_cid <-
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' \url{https://pubchem.ncbi.nlm.nih.gov/docs/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @export
@@ -444,7 +444,7 @@ pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...)
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' \url{https://pubchem.ncbi.nlm.nih.gov/docs/programmatic-access}, and the data
 #' usage policies of the indicidual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @export
@@ -546,7 +546,7 @@ pc_synonyms <- function(query,
 #' Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 #' usage policies of National Center for Biotechnology Information,
 #' \url{https://www.ncbi.nlm.nih.gov/home/about/policies/},
-#' \url{https://pubchemdocs.ncbi.nlm.nih.gov/programmatic-access}, and the data
+#' \url{https://pubchem.ncbi.nlm.nih.gov/docs/programmatic-access}, and the data
 #' usage policies of the individual data sources
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 #' @references Kim, S., Thiessen, P.A., Cheng, T. et al. PUG-View: programmatic
