@@ -1,6 +1,6 @@
 #' Retrieve flavor percepts from www.flavornet.org
 #'
-#' Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
+#' Retrieve flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
 #' perceptible to humans detected using gas chromatography olfactometry (GCO).
 #'
 #' @import xml2

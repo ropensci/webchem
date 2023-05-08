@@ -21,7 +21,7 @@ fn_percept(query, from = "cas", verbose = getOption("verbose"), CAS, ...)
 A named character vector containing flavor percepts or NA's in the case of CAS numbers that are not found
 }
 \description{
-Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
+Retrieve flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
 perceptible to humans detected using gas chromatography olfactometry (GCO).
 }
 \examples{
