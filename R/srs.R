@@ -30,10 +30,12 @@ srs_query <-
            verbose = getOption("verbose"), ...) {
 
     if (!ping_service("srs")) stop(webchem_message("service_down"))
-
+    names(query) <- query
     from <- match.arg(from)
     entity_url <- "https://cdxnodengn.epa.gov/cdx-srs-rest/"
-
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     rst <- lapply(query, function(x) {
       if (is.na(x)){
         if (verbose) webchem_message("na")
@@ -64,6 +66,5 @@ srs_query <-
         return(NA)
       }
     })
-    names(rst) <- query
     return(rst)
   }

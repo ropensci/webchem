@@ -46,6 +46,8 @@ get_etoxid <- function(query,
                        verbose = getOption("verbose")) {
 
   if (!ping_service("etox")) stop(webchem_message("service_down"))
+  names(query) <- query
+
 
   clean_char <- function(x) {
     # rm \n \t
@@ -67,7 +69,10 @@ get_etoxid <- function(query,
       if (verbose) webchem_message("na")
       return(tibble("query" = query, "match" = NA, "etoxid" = NA))
     }
-    if(verbose) webchem_message("query", query, appendLF = FALSE)
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
     if (from == 'name') {
       body <- list("stoffname.selection[0].name" = query,
@@ -172,6 +177,7 @@ get_etoxid <- function(query,
 etox_basic <- function(id, verbose = getOption("verbose")) {
 
   if (!ping_service("etox")) stop(webchem_message("service_down"))
+  names(id) <- id
 
   foo <- function(id, verbose) {
     if (is.na(id)) {
@@ -252,7 +258,6 @@ etox_basic <- function(id, verbose = getOption("verbose")) {
     }
     }
   out <- lapply(id, foo, verbose = verbose)
-  names(out) <- id
   class(out) <- c('etox_basic', 'list')
   return(out)
 }
@@ -291,8 +296,8 @@ etox_basic <- function(id, verbose = getOption("verbose")) {
 #'
 #' }
 etox_targets <- function(id, verbose = getOption("verbose")) {
-
   if (!ping_service("etox")) stop(webchem_message("service_down"))
+  names(id) <- id
 
   foo <- function(id, verbose) {
     if (is.na(id)) {
@@ -356,7 +361,6 @@ etox_targets <- function(id, verbose = getOption("verbose")) {
     }
   }
   out <- lapply(id, foo, verbose = verbose)
-  names(out) <- id
   return(out)
 }
 
@@ -390,7 +394,7 @@ etox_targets <- function(id, verbose = getOption("verbose")) {
 etox_tests <- function(id, verbose = getOption("verbose")) {
 
   if (!ping_service("etox")) stop(webchem_message("service_down"))
-
+  names(id) <- id
   foo <- function(id, verbose){
     if (is.na(id)) {
       if (verbose) webchem_message("na")
@@ -448,6 +452,5 @@ etox_tests <- function(id, verbose = getOption("verbose")) {
     }
   }
   out <- lapply(id, foo, verbose = verbose)
-  names(out) <- id
   return(out)
 }

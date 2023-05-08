@@ -133,6 +133,9 @@ get_cid <-
   }
     #input validation
     from <- tolower(from)
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     domain <- match.arg(domain)
     xref <- paste(
       "xref",
@@ -468,6 +471,8 @@ pc_synonyms <- function(query,
   # from = "name"
   from <- match.arg(from)
   match <- match.arg(match)
+  names(query) <- query
+
   if (!missing("choices"))
     stop("'choices' is deprecated. Use 'match' instead.")
   foo <- function(query, from, verbose, ...) {
@@ -511,7 +516,6 @@ pc_synonyms <- function(query,
     }
   }
   out <- lapply(query, foo, from = from, verbose = verbose)
-  names(out) <- query
   if (!is.null(choices)) #if only one choice is returned, convert list to vector
     out <- unlist(out)
   return(out)

@@ -34,13 +34,17 @@ fn_percept <- function(query, from = "cas", verbose = getOption("verbose"),
     query <- CAS
   }
   match.arg(from)
+  names(query) <- query
   foo <- function (query, verbose){
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
     }
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
-    if(verbose) webchem_message("query", query, appendLF = FALSE)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
@@ -64,6 +68,5 @@ fn_percept <- function(query, from = "cas", verbose = getOption("verbose"),
     }
   }
   percepts <- sapply(query, foo, verbose = verbose)
-  names(percepts) <- query
   return(percepts)
 }

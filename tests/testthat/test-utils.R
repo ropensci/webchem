@@ -28,7 +28,7 @@ test_that("is.cas() returns correct results", {
 })
 
 test_that("as.cas() handles properly formatted CAS",{
-  expect_identical(as.cas("64-17-5"), "64-17-5")
+  expect_equal(as.cas("64-17-5"), "64-17-5", ignore_attr=TRUE)
   expect_silent(as.cas("64-17-5"))
 })
 
