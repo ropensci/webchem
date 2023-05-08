@@ -166,7 +166,7 @@ cts_convert <- function(query,
       if (verbose) webchem_message("na")
       return(NA)
     }
-    if (from == "CAS"){
+    if (from == "cas"){
       query <- as.cas(query, verbose = verbose)
     }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
