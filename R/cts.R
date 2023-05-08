@@ -167,7 +167,7 @@ cts_convert <- function(query,
       return(NA)
     }
     if (from == "CAS"){
-      query <- sapply(query, as.cas, verbose = verbose)
+      query <- as.cas(query, verbose = verbose)
     }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     query <- URLencode(query, reserved = TRUE)

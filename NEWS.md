@@ -4,6 +4,8 @@
 
 * The `nist_ri` function now returns a column with the CAS number to facilitate querying of multiple retention index tables.
 * The `nist_ri` function can now take multiple arguments for `type`, `polarity` and `temp_prog`.
+* CAS numbers are automatically reformatted using `as.cas` in `bcpc_query`, `cts_compinfo`, `cts_convert`, `get_etoxid`, `fn_percept`, `get_cid`, and `srs_query`.
+* The `as.cas` function now has a `verbose` argument.
 
 ## DEFUNCT FUNCTIONS
 
