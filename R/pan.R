@@ -81,12 +81,12 @@ pan_query <- function(query, from = c("name", "cas"),
   names(query) <- query
 
   foo <- function(query, match, from, verbose) {
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
-    }
-    if (from == "cas"){
-      query <- as.cas(query, verbose = verbose)
     }
     baseurl <- 'https://www.pesticideinfo.org/List_Chemicals.jsp?'
     baseq <- paste0('ChooseSearchType=Begin&ResultCnt=50&dCAS_No=y&dEPA_PCCode=y&',

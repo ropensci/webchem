@@ -45,9 +45,6 @@ cts_compinfo <- function(query, from = "inchikey",
       if (verbose) webchem_message("na")
       return(NA)
     }
-    if (from == "cas"){
-      query <- as.cas(query, verbose = verbose)
-    }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     if (!is.inchikey(query, verbose = FALSE)) {
       if (verbose) message("Input is not a valid inchikey.")
@@ -162,12 +159,12 @@ cts_convert <- function(query,
   }
 
   foo <- function(query, from, to, first, verbose){
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
-    }
-    if (from == "CAS"){
-      query <- as.cas(query, verbose = verbose)
     }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     query <- URLencode(query, reserved = TRUE)

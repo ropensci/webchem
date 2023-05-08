@@ -36,12 +36,12 @@ fn_percept <- function(query, from = "cas", verbose = getOption("verbose"),
   match.arg(from)
   names(query) <- query
   foo <- function (query, verbose){
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
-    }
-    if (from == "cas"){
-      query <- as.cas(query, verbose = verbose)
     }
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
     if (verbose) webchem_message("query", query, appendLF = FALSE)
