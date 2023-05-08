@@ -133,8 +133,9 @@ get_cid <-
   }
     #input validation
     from <- tolower(from)
-    if (from == "cas"){
-      query <- as.cas(query, verbose = verbose)
+    from <- ifelse(from == "cas", "xref/rn", from)
+    if (from == "xref/rn"){
+       query <- as.cas(query, verbose = verbose)
     }
     domain <- match.arg(domain)
     xref <- paste(
