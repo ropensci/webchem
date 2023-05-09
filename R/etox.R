@@ -48,7 +48,6 @@ get_etoxid <- function(query,
   if (!ping_service("etox")) stop(webchem_message("service_down"))
   names(query) <- query
 
-
   clean_char <- function(x) {
     # rm \n \t
     x <- gsub("\n | \t", "", x)
@@ -65,12 +64,12 @@ get_etoxid <- function(query,
     warning("match = 'best' only makes sense when querying chemical names. ")
   }
   foo <- function(query, from, match, verbose) {
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(tibble("query" = query, "match" = NA, "etoxid" = NA))
-    }
-    if (from == "cas"){
-      query <- as.cas(query, verbose = verbose)
     }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     baseurl <- "https://webetox.uba.de/webETOX/public/search/stoff.do"
