@@ -131,7 +131,7 @@ get_etoxid <- function(query,
     }
   }
   out <- lapply(query, foo, from = from, match = match, verbose = verbose)
-  out <- dplyr::bind_rows(out)
+  out <- dplyr::bind_rows(out, .id = "query")
   return(out)
 }
 
