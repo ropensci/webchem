@@ -19,8 +19,8 @@
 #' \code{domain}:
 #' \itemize{
 #' \item{\code{compound}: \code{"name"}, \code{"smiles"}, \code{"inchi"},
-#' \code{"inchikey"}, \code{"formula"}, \code{"sdf"}, <xref>,
-#' <structure search>, <fast search>.}
+#' \code{"inchikey"}, \code{"formula"}, \code{"sdf"}, \code{"cas"} (an alias for
+#' \code{"xref/RN"}), <xref>, <structure search>, <fast search>.}
 #' \item{\code{substance}: \code{"name"}, \code{"sid"},
 #' \code{<xref>}, \code{"sourceid/<source id>"} or \code{"sourceall"}.}
 #' \item{\code{assay}: \code{"aid"}, \code{<assay target>}.}
