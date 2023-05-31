@@ -418,7 +418,7 @@ write_mol <- function(x, file = "") {
 #' x = c(58082, 123456, "hexenol")
 #' as.cas(x)
 #'
-as.cas <- function(x, verbose = FALSE){
+as.cas <- function(x, verbose = getOption("verbose")){
   format.cas <- function(x){
     if(is.na(x)) {
       return(NA)
