@@ -77,16 +77,7 @@ install_github("ropensci/webchem")
 
 ### Use Cases
 
-Have you used `webchem` in your work?  Please let us know by opening an issue or making a pull request to edit this section!
-
-- Noecker C, Sanchez J, Bisanz JE, Escalante V, Alexander M, et al. (2023) Systems biology elucidates the distinctive metabolic niche filled by the human gut microbe Eggerthella lenta. PLOS Biology 21(5): e3002125. https://doi.org/10.1371/journal.pbio.3002125
-- Klupinski, T.P., Moyer, R.A., Chen, P.-H.A., Strozier, E.D., Buehler, S.S., Friedenberg, D.A., Koszowski, B., 2022. A procedure to detect and identify specific chemicals of potential inhalation toxicity concern in aerosols. Inhalation Toxicology 34, 120–134. https://doi.org/10.1080/08958378.2022.2051646
-- Passos Mansoldo, F.R., Garrett, R., da Silva Cardoso, V., Alves, M.A., Vermelho, A.B., (2022) Metabology: Analysis of metabolomics data using community ecology tools. Analytica Chimica Acta 1232, 340469. https://doi.org/10.1016/j.aca.2022.340469
-- Song, Xuechao & Dreolin, Nicola & Canellas, Elena & Goshawk, Jeff & Nerín, Cristina. (2022). Prediction of Collision Cross-Section Values for Extractables and Leachables from Plastic Products. Environmental Science and Technology. 56. 9463-9473. 10.1021/acs.est.2c02853. 
-- Allaway RJ, La Rosa S, Guinney J, Gosline SJC (2018) Probing the chemical–biological relationship space with the Drug Target Explorer. Journal of Cheminformatics 10:41. https://doi.org/10.1186/s13321-018-0297-4
-- Bergmann AJ, Points GL, Scott RP, et al (2018) Development of quantitative screen for 1550 chemicals with GC-MS. Anal Bioanal Chem 410:3101–3110. https://doi.org/10.1007/s00216-018-0997-7
-- Brokl M, Morales V, Bishop L, et al (2019) Comparison of Mainstream Smoke Composition from CR20 Resin Filter and Empty-Cavity Filter Cigarettes by Headspace SPME Coupled with GC×GC TOFMS and Chemometric Analysis. Beiträge zur Tabakforschung International/Contributions to Tobacco Research 28:231–249. https://doi.org/10.2478/cttr-2019-0004
-- Münch D, Galizia CG (2016) DoOR 2.0 - Comprehensive Mapping of Drosophila melanogaster Odorant Responses. Scientific Reports 6:21841. https://doi.org/10.1038/srep21841
+See how `webchem` has been used or cited in literature [here](https://scholar.google.com/scholar?cites=14244442030948237605&as_sdt=40000005&sciodt=0,22&hl=en).
 
 ### Citation
 
