@@ -6,7 +6,7 @@
 \usage{
 ping_service(
   service = c("bcpc", "chebi", "chembl", "cs", "cs_web", "cir", "cts", "etox", "fn",
-    "nist", "opsin", "pan", "pc", "srs", "wd"),
+    "nist", "opsin", "pc", "srs", "wd"),
   apikey = NULL
 )
 }
@@ -25,6 +25,6 @@ Ping an API used in webchem to see if it's working.
 }
 \examples{
 \dontrun{
-ping_service("pan")
+ping_service("chembl")
 }
 }

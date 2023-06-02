@@ -32,11 +32,6 @@ cas.opsin_query <- function(x, ...) {
 }
 
 #' @export
-cas.pan_query <- function(x, ...) {
-  sapply(x, function(y) y$`CAS Number`)
-}
-
-#' @export
 cas.bcpc_query <- function(x, ...) {
   sapply(x, function(y) y$cas)
 }
@@ -95,11 +90,6 @@ inchikey.etox_basic <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
 }
 #' @export
-inchikey.pan_query <- function(x, ...) {
-  stop("InChIkey is not returned by this datasource!")
-}
-
-#' @export
 inchikey.opsin_query <- function(x, ...) {
   x$stdinchikey
 }
@@ -147,10 +137,6 @@ smiles.cts_compinfo <- function(x, ...) {
 #' @export
 smiles.etox_basic <- function(x, ...) {
   stop("InChIkey is not returned by this datasource!")
-}
-#' @export
-smiles.pan_query <- function(x, ...) {
-  stop("SMILES is not returned by this datasource!")
 }
 #' @export
 smiles.opsin_query <- function(x, ...) {

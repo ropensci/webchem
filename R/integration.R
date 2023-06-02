@@ -73,7 +73,7 @@ with_cts <- function(query, from, .f, .verbose = getOption("verbose"), ...) {
 #' }
 find_db <- function(query, from,
                            sources = c("etox", "pc", "chebi", "cs",
-                                       "bcpc", "fn", "pan", "srs"),
+                                       "bcpc", "fn", "srs"),
                            plot = FALSE) {
   sources <- match.arg(sources, several.ok = TRUE)
   sources <- sapply(sources, switch,
@@ -83,7 +83,6 @@ find_db <- function(query, from,
                     "cs" = "get_csid",
                     "bcpc" = "bcpc_query",
                     "fn" = "fn_percept",
-                    "pan" = "pan_query",
                     "srs" = "srs_query")
 
   foo <- function(.f, query, from) {
