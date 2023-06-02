@@ -85,6 +85,11 @@ issue or making a pull request to edit this section!
   al. (2023) Systems biology elucidates the distinctive metabolic niche
   filled by the human gut microbe Eggerthella lenta. PLOS Biology 21(5):
   e3002125. <https://doi.org/10.1371/journal.pbio.3002125>
+- Klupinski, T.P., Moyer, R.A., Chen, P.-H.A., Strozier, E.D., Buehler,
+  S.S., Friedenberg, D.A., Koszowski, B., 2022. A procedure to detect
+  and identify specific chemicals of potential inhalation toxicity
+  concern in aerosols. Inhalation Toxicology 34, 120–134.
+  <https://doi.org/10.1080/08958378.2022.2051646>
 - Passos Mansoldo, F.R., Garrett, R., da Silva Cardoso, V., Alves, M.A.,
   Vermelho, A.B., (2022) Metabology: Analysis of metabolomics data using
   community ecology tools. Analytica Chimica Acta 1232, 340469.
