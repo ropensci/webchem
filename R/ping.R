@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' ping_service("pan")
+#' ping_service("chembl")
 #' }
 ping_service <-
   function(service = c(
@@ -24,7 +24,6 @@ ping_service <-
     "fn",
     "nist",
     "opsin",
-    "pan",
     "pc",
     "srs",
     "wd"
@@ -54,7 +53,6 @@ ping_service <-
                "fn" = "http://www.flavornet.org/info/121-33-5.html",
                "nist" = "https://webbook.nist.gov/cgi/cbook.cgi?Name=2-hexene&Units=SI",
                "opsin" = "https://opsin.ch.cam.ac.uk/opsin/cyclopropane.json",
-               "pan" = "http://www.pesticideinfo.org/List_Chemicals.jsp?",
                "srs" = "https://cdxnodengn.epa.gov/cdx-srs-rest/substance/name/triclosan",
                "wd" = "https://www.wikidata.org/w/api.php"
         )

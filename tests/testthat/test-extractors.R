@@ -68,15 +68,3 @@ test_that("extractors work with pubchem", {
                       "CC(=O)OC1=CC=CC=C1C(=O)O"), ignore_attr = TRUE)
   expect_error(smiles(out_pc_prop2))
 })
-
-test_that("extractors work with PAN", {
-  skip("PAN functions are currently broken")
-  skip_on_cran()
-  skip_if_not(ping_service("pan"), "PAN service is down")
-
-  out_pan_query <- pan_query(c('2,4-dichlorophenol', 'Atrazin'), match = 'best')
-  expect_equal(cas(out_pan_query),  c("120-83-2", "1912-24-9"),
-               ignore_attr = TRUE)
-  expect_error(inchikey(out_pan_query))
-  expect_error(smiles(out_pan_query))
-})
