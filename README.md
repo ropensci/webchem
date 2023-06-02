@@ -13,6 +13,7 @@ status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](ht
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
+[![DOI](https://img.shields.io/badge/DOI-10.18637%2Fjss.v093.i13-blue)](https://doi.org/10.18637/jss.v093.i13)
 
 <!-- badges: end -->
 
@@ -80,6 +81,18 @@ install_github("ropensci/webchem")
 Have you used `webchem` in your work? Please let us know by opening an
 issue or making a pull request to edit this section!
 
+- Noecker C, Sanchez J, Bisanz JE, Escalante V, Alexander M, et
+  al. (2023) Systems biology elucidates the distinctive metabolic niche
+  filled by the human gut microbe Eggerthella lenta. PLOS Biology 21(5):
+  e3002125. <https://doi.org/10.1371/journal.pbio.3002125>
+- Passos Mansoldo, F.R., Garrett, R., da Silva Cardoso, V., Alves, M.A.,
+  Vermelho, A.B., (2022) Metabology: Analysis of metabolomics data using
+  community ecology tools. Analytica Chimica Acta 1232, 340469.
+  <https://doi.org/10.1016/j.aca.2022.340469>
+- Song, Xuechao & Dreolin, Nicola & Canellas, Elena & Goshawk, Jeff &
+  Nerín, Cristina. (2022). Prediction of Collision Cross-Section Values
+  for Extractables and Leachables from Plastic Products. Environmental
+  Science and Technology. 56. 9463-9473. 10.1021/acs.est.2c02853.
 - Allaway RJ, La Rosa S, Guinney J, Gosline SJC (2018) Probing the
   chemical–biological relationship space with the Drug Target Explorer.
   Journal of Cheminformatics 10:41.
