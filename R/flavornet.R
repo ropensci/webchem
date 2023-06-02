@@ -1,6 +1,6 @@
 #' Retrieve flavor percepts from www.flavornet.org
 #'
-#' Retreive flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
+#' Retrieve flavor percepts from \url{http://www.flavornet.org}.  Flavornet is a database of 738 compounds with odors
 #' perceptible to humans detected using gas chromatography olfactometry (GCO).
 #'
 #' @import xml2
@@ -34,13 +34,17 @@ fn_percept <- function(query, from = "cas", verbose = getOption("verbose"),
     query <- CAS
   }
   match.arg(from)
+  names(query) <- query
   foo <- function (query, verbose){
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
     }
     qurl <- paste0("http://www.flavornet.org/info/",query,".html")
-    if(verbose) webchem_message("query", query, appendLF = FALSE)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     webchem_sleep(type = 'scrape')
     res <- try(httr::RETRY("GET",
                            qurl,
@@ -64,6 +68,5 @@ fn_percept <- function(query, from = "cas", verbose = getOption("verbose"),
     }
   }
   percepts <- sapply(query, foo, verbose = verbose)
-  names(percepts) <- query
   return(percepts)
 }

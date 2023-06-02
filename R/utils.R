@@ -410,7 +410,7 @@ write_mol <- function(x, file = "") {
 #' format or don't pass \code{\link{is.cas}}, \code{NA} is returned
 #' @param x numeric vector, or character vector of CAS numbers missing the
 #' hyphens
-#'
+#' @param verbose logical; should a verbose output be printed on the console?
 #' @return character vector of valid CAS numbers
 #' @seealso \code{\link{is.cas}}
 #' @export
@@ -418,7 +418,7 @@ write_mol <- function(x, file = "") {
 #' x = c(58082, 123456, "hexenol")
 #' as.cas(x)
 #'
-as.cas <- function(x){
+as.cas <- function(x, verbose = getOption("verbose")){
   format.cas <- function(x){
     if(is.na(x)) {
       return(NA)
@@ -426,13 +426,14 @@ as.cas <- function(x){
       return(x)
     } else {
       parsed <- gsub("([0-9]+)([0-9]{2})([0-9]{1})", '\\1-\\2-\\3', x)
-      pass <- is.cas(parsed)
+      pass <- is.cas(parsed, verbose = verbose)
       out <- ifelse(pass, parsed, NA)
       return(out)
     }
   }
-
-  sapply(x, format.cas, USE.NAMES = FALSE)
+  cas <- sapply(x, format.cas, USE.NAMES = TRUE)
+  names(cas) <- x
+  cas
 }
 
 

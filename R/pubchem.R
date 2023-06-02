@@ -19,8 +19,8 @@
 #' \code{domain}:
 #' \itemize{
 #' \item{\code{compound}: \code{"name"}, \code{"smiles"}, \code{"inchi"},
-#' \code{"inchikey"}, \code{"formula"}, \code{"sdf"}, <xref>,
-#' <structure search>, <fast search>.}
+#' \code{"inchikey"}, \code{"formula"}, \code{"sdf"}, \code{"cas"} (an alias for
+#' \code{"xref/RN"}), <xref>, <structure search>, <fast search>.}
 #' \item{\code{substance}: \code{"name"}, \code{"sid"},
 #' \code{<xref>}, \code{"sourceid/<source id>"} or \code{"sourceall"}.}
 #' \item{\code{assay}: \code{"aid"}, \code{<assay target>}.}
@@ -133,6 +133,10 @@ get_cid <-
   }
     #input validation
     from <- tolower(from)
+    from <- ifelse(from == "cas", "xref/rn", from)
+    if (from == "xref/rn"){
+       query <- as.cas(query, verbose = verbose)
+    }
     domain <- match.arg(domain)
     xref <- paste(
       "xref",
@@ -468,6 +472,8 @@ pc_synonyms <- function(query,
   # from = "name"
   from <- match.arg(from)
   match <- match.arg(match)
+  names(query) <- query
+
   if (!missing("choices"))
     stop("'choices' is deprecated. Use 'match' instead.")
   foo <- function(query, from, verbose, ...) {
@@ -511,7 +517,6 @@ pc_synonyms <- function(query,
     }
   }
   out <- lapply(query, foo, from = from, verbose = verbose)
-  names(out) <- query
   if (!is.null(choices)) #if only one choice is returned, convert list to vector
     out <- unlist(out)
   return(out)

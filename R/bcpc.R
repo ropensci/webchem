@@ -47,10 +47,21 @@ bcpc_query <- function(query, from = c("name", "cas"),
     message('To search by compound name use "name" instead of "commonname"')
     from <- "name"
   }
+
   from <- match.arg(from)
   bcpc_idx <- build_bcpc_idx(verbose, ...)
 
+  names(query) <- query
+
   foo <- function(query, from, verbose) {
+    if (from == "cas") {
+      query <- as.cas(query, verbose = verbose)
+      names <- bcpc_idx$names[bcpc_idx$source == "rn"]
+      # select only first link
+      links <- bcpc_idx$links[bcpc_idx$source == "rn"]
+      linknames <- bcpc_idx$linknames[bcpc_idx$source == "rn"]
+      cname <-  linknames[tolower(names) == tolower(query)]
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -61,14 +72,6 @@ bcpc_query <- function(query, from = c("name", "cas"),
       links <- bcpc_idx$links[bcpc_idx$source == "cn"]
       names <- bcpc_idx$linknames[bcpc_idx$source == "cn"]
       cname <-  query
-    }
-
-    if (from == "cas") {
-      names <- bcpc_idx$names[bcpc_idx$source == "rn"]
-      # select only first link
-      links <- bcpc_idx$links[bcpc_idx$source == "rn"]
-      linknames <- bcpc_idx$linknames[bcpc_idx$source == "rn"]
-      cname <-  linknames[tolower(names) == tolower(query)]
     }
 
     takelink <- links[tolower(names) == tolower(query)]
@@ -164,7 +167,6 @@ bcpc_query <- function(query, from = c("name", "cas"),
     }
   }
   out <- lapply(query, function(x) foo(x, from = from, verbose = verbose))
-  names(out) <- query
   class(out) <- c("bcpc_query", "list")
   return(out)
 }

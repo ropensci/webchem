@@ -34,7 +34,7 @@ cts_compinfo <- function(query, from = "inchikey",
                          verbose = getOption("verbose"), inchikey){
 
   if (!ping_service("cts")) stop(webchem_message("service_down"))
-
+  names(query) <- query
   if (!missing(inchikey)) {
     message('"inchikey" is deprecated.  Please use "query" instead.')
     query <- inchikey
@@ -45,7 +45,7 @@ cts_compinfo <- function(query, from = "inchikey",
       if (verbose) webchem_message("na")
       return(NA)
     }
-    if(verbose) webchem_message("query", query, appendLF = FALSE)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     if (!is.inchikey(query, verbose = FALSE)) {
       if (verbose) message("Input is not a valid inchikey.")
       return(NA)
@@ -72,7 +72,6 @@ cts_compinfo <- function(query, from = "inchikey",
     }
   }
   out <- lapply(query, foo, verbose = verbose)
-  names(out) <- query
   class(out) <- c('cts_compinfo','list')
   return(out)
 }
@@ -146,6 +145,7 @@ cts_convert <- function(query,
   }
 
   query <- as.character(query)
+  names(query) <- query
   from <-  match.arg(tolower(from), c(cts_from(), "name"))
   to <-  match.arg(tolower(to), c(cts_to(), "name"))
   match <- match.arg(match)
@@ -159,11 +159,14 @@ cts_convert <- function(query,
   }
 
   foo <- function(query, from, to, first, verbose){
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
     }
-    if(verbose) webchem_message("query", query, appendLF = FALSE)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     query <- URLencode(query, reserved = TRUE)
     from <- URLencode(from, reserved = TRUE)
     to <- URLencode(to, reserved = TRUE)
@@ -197,7 +200,6 @@ cts_convert <- function(query,
   }
   out <- lapply(query, foo, from = from, to = to, first = first,
                 verbose = verbose)
-  names(out) <- query
   return(out)
 }
 

@@ -78,8 +78,12 @@ pan_query <- function(query, from = c("name", "cas"),
 
   match <- match.arg(match)
   from <- match.arg(from)
+  names(query) <- query
 
   foo <- function(query, match, from, verbose) {
+    if (from == "cas"){
+      query <- as.cas(query, verbose = verbose)
+    }
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -162,7 +166,6 @@ pan_query <- function(query, from = c("name", "cas"),
     }
   }
   out <- lapply(query, foo, match = match, from = from, verbose = verbose)
-  names(out) <- query
   class(out) <- c('pan_query', 'list')
   return(out)
 }

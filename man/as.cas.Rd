@@ -4,11 +4,13 @@
 \alias{as.cas}
 \title{Format numbers as CAS numbers}
 \usage{
-as.cas(x)
+as.cas(x, verbose = getOption("verbose"))
 }
 \arguments{
 \item{x}{numeric vector, or character vector of CAS numbers missing the
 hyphens}
+
+\item{verbose}{logical; should a verbose output be printed on the console?}
 }
 \value{
 character vector of valid CAS numbers
