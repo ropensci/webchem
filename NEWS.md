@@ -9,7 +9,8 @@
 
 ## DEFUNCT FUNCTIONS
 
-* ci_query() has been removed from the package because NLM had retired ChemIDplus.
+* `ci_query()` has been removed from the package because NLM had retired ChemIDplus.
+* `pan_query()` has been removed from the package because PAN no longer supports programmatic access.
 
 ## BUG FIXES
 
