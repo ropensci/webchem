@@ -49,7 +49,6 @@ documentation
 - [NIST](https://webbook.nist.gov) (currently gas chromatography
   retention indices only)
 - [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)
-- [PAN Pesticide Database](https://www.pesticideinfo.org/)
 - [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
 - [U.S. EPA Substance Registry Service
   (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
