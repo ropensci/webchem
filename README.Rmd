@@ -49,7 +49,6 @@ At least some of the data in the following sources is accesible through `webchem
 - [Flavornet](http://www.flavornet.org) 
 - [NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only)
 - [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)
-- [PAN Pesticide Database](https://www.pesticideinfo.org/)
 - [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
 - [U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
 - [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)
