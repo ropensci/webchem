@@ -14,6 +14,14 @@ vignette: >
 ```r
 library(webchem)
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 ```
 
 The `lc50` dataset provided with `webchem` contains acute ecotoxicity of 124 insecticides.  We'll work with a subset of these to obtain chemical names and octanal/water partitioning coefficients from PubChem, and gas chromatography retention indices from the NIST Web Book.
@@ -40,7 +48,7 @@ First, we will covert CAS numbers to InChIKey identifiers using the Chemical Tra
 
 
 ```r
-lc50_sub$inchikey <- cts_convert(lc50_sub$cas, from = "CAS", to = "InChIKey", choices = 1, verbose = FALSE)
+lc50_sub$inchikey <- unlist(cts_convert(lc50_sub$cas, from = "CAS", to = "InChIKey", match = "first", verbose = FALSE))
 head(lc50_sub)
 #>        cas        value                    inchikey
 #> 4  50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N
@@ -48,7 +56,7 @@ head(lc50_sub)
 #> 15 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N
 #> 18 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N
 #> 21 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N
-#> 36 57-74-9    98.400000 BIWJNBZANLAXMG-YQELWRJZSA-N
+#> 36 57-74-9    98.400000 BIWJNBZANLAXMG-UHFFFAOYSA-N
 any(is.na(lc50_sub$inchikey))
 #> [1] FALSE
 ```
@@ -61,87 +69,89 @@ x <- get_cid(lc50_sub$inchikey, from = "inchikey", match = "first", verbose = FA
 library(dplyr)
 lc50_sub2 <- full_join(lc50_sub, x, by = c("inchikey" = "query"))
 head(lc50_sub2)
-#>       cas        value                    inchikey      cid
-#> 1 50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N     3036
-#> 2 52-68-6     1.282980 NFACJZMKEDPNKN-UHFFFAOYSA-N     5853
-#> 3 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N     3346
-#> 4 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N     5943
-#> 5 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N      991
-#> 6 57-74-9    98.400000 BIWJNBZANLAXMG-YQELWRJZSA-N 11954021
+#>       cas        value                    inchikey  cid
+#> 1 50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N 3036
+#> 2 52-68-6     1.282980 NFACJZMKEDPNKN-UHFFFAOYSA-N 5853
+#> 3 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N 3346
+#> 4 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N 5943
+#> 5 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N  991
+#> 6 57-74-9    98.400000 BIWJNBZANLAXMG-UHFFFAOYSA-N 5993
 ```
 
 ## Retrieving Chemical Properties
 
-Functions that query chemical information databases begin with a prefix that matches the database.  For example, functions to query PubChem begin with `pc_` and functions to query ChemSpider begin with `cs_`. In this example, we'll get the names and log octanal/water partitioning coefficients for each compound using PubChem, and the WHO acute toxicity rating from the PAN Pesticide database.
+Functions that query chemical information databases begin with a prefix that matches the database.  For example, functions to query PubChem begin with `pc_` and functions to query ChemSpider begin with `cs_`. In this example, we'll get the names and log octanol/water partitioning coefficients for each compound using PubChem, and the number of aromatic rings within the chemical structure using ChEMBL.
 
 
 ```r
 y <- pc_prop(lc50_sub2$cid, properties = c("IUPACName", "XLogP"))
-#> https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/property/IUPACName,XLogP/JSON
 y$CID <- as.character(y$CID)
 lc50_sub3 <- full_join(lc50_sub2, y, by = c("cid" = "CID"))
 head(lc50_sub3)
-#>       cas        value                    inchikey      cid
-#> 1 50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N     3036
-#> 2 52-68-6     1.282980 NFACJZMKEDPNKN-UHFFFAOYSA-N     5853
-#> 3 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N     3346
-#> 4 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N     5943
-#> 5 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N      991
-#> 6 57-74-9    98.400000 BIWJNBZANLAXMG-YQELWRJZSA-N 11954021
-#>                                                                      IUPACName XLogP
-#> 1                  1-chloro-4-[2,2,2-trichloro-1-(4-chlorophenyl)ethyl]benzene   6.9
-#> 2                                 2,2,2-trichloro-1-dimethoxyphosphorylethanol   0.5
-#> 3 dimethoxy-(3-methyl-4-methylsulfanylphenoxy)-sulfanylidene-lambda5-phosphane   4.1
-#> 4                                                           tetrachloromethane   2.8
-#> 5                    diethoxy-(4-nitrophenoxy)-sulfanylidene-lambda5-phosphane   3.8
-#> 6            (1R,7S)-1,3,4,7,8,9,10,10-octachlorotricyclo[5.2.1.02,6]dec-8-ene   4.9
+#>       cas        value                    inchikey  cid
+#> 1 50-29-3    12.415277 YVGGHNCTFXOJCH-UHFFFAOYSA-N 3036
+#> 2 52-68-6     1.282980 NFACJZMKEDPNKN-UHFFFAOYSA-N 5853
+#> 3 55-38-9    12.168138 PNVJTZOFSHSLTO-UHFFFAOYSA-N 3346
+#> 4 56-23-5 35000.000000 VZGDMQKNWNREIO-UHFFFAOYSA-N 5943
+#> 5 56-38-2     1.539119 LCCNCVORNKJIRZ-UHFFFAOYSA-N  991
+#> 6 57-74-9    98.400000 BIWJNBZANLAXMG-UHFFFAOYSA-N 5993
+#>                                                                      IUPACName
+#> 1                  1-chloro-4-[2,2,2-trichloro-1-(4-chlorophenyl)ethyl]benzene
+#> 2                                 2,2,2-trichloro-1-dimethoxyphosphorylethanol
+#> 3 dimethoxy-(3-methyl-4-methylsulfanylphenoxy)-sulfanylidene-lambda5-phosphane
+#> 4                                                           tetrachloromethane
+#> 5                    diethoxy-(4-nitrophenoxy)-sulfanylidene-lambda5-phosphane
+#> 6                    1,3,4,7,8,9,10,10-octachlorotricyclo[5.2.1.02,6]dec-8-ene
+#>   XLogP
+#> 1   6.9
+#> 2   0.5
+#> 3   4.1
+#> 4   2.8
+#> 5   3.8
+#> 6   4.9
 ```
 
 The IUPAC names are long and unwieldy, and one could use `pc_synonyms()` to choose better names. Several other functions return synonyms as well, even though they are not explicitly translator type functions.  We'll see an example of that next.
 
-Many of the chemical databases `webchem` can query contain vast amounts of information in a variety of structures.  Therefore, some `webchem` functions return nested lists rather than data frames.  `pan_query()` is one such function.
+Many of the chemical databases `webchem` can query contain vast amounts of information in a variety of structures. Therefore, some `webchem` functions return nested lists rather than data frames. `chembl_query()` is one such function.
+
+To look up entries in ChEMBL we need ChEMBL ID-s. These can be found on the PubChem page of each compound within the ChEMBL ID section and can be programmatically retrieved using `pc_sect()`.
 
 
 ```r
-out <- pan_query(lc50_sub3$cas, verbose = FALSE)
-#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
-
-#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
-
-#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
-
-#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
-
-#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
-
-#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
-
-#> Warning in lapply(out[tonum], as.numeric): NAs introduced by coercion
+lc50_sub3$chembl_id <- pc_sect(x$cid, "ChEMBL ID")$Result
+out <- chembl_query(lc50_sub3$chembl_id, verbose = FALSE)
 ```
 
-`out` is a nested list which you can inspect with `View()`.  It has an element for each query, and within each query, many elements corresponding to different properties in the database.  To extract a single property from all queries, we need to use a mapping function such as `sapply()` or one of the `map_*()` functions from the `purrr` package.
+`out` is a nested list which you can inspect with `View()`.  It has an element for each query, and within each query, many elements corresponding to different properties in the database.  To extract a single property from all queries, we need to use a mapping function such as `sapply()`.
 
 
 ```r
-lc50_sub3$who_tox <- sapply(out, function(y) y$`WHO Acute Toxicity`)
-lc50_sub3$common_name <- sapply(out, function(y) y$`Chemical name`)
-
-# #equivalent with purrr package:
-# lc50_sub3$who_tox <- map_chr(out, pluck, "WHO Acute Toxicity")
-# lc50_sub3$common_name <- map_chr(out, pluck, "Chemical name")
+lc50_sub3$aromatic_rings <- sapply(out, function(y) {
+  # return NA if entry cannot be found in ChEMBL
+  if (length(y) == 1 && is.na(y)) return(NA)
+  # return the number of aromatic rings
+  y$molecule_properties$aromatic_rings
+})
+lc50_sub3$common_name <- sapply(out, function(y) {
+  # return NA if entry cannot be found in ChEMBL
+  if (length(y) == 1 && is.na(y)) return(NA)
+  # return preferred name
+  ifelse(!is.null(y$pref_name), y$pref_name, NA)
+})
 ```
 
 
 ```r
 #tidy up columns
-lc50_done <- dplyr::select(lc50_sub3, common_name, cas, inchikey, XLogP, who_tox)
+lc50_done <- dplyr::select(lc50_sub3, common_name, cas, inchikey, XLogP, aromatic_rings)
 head(lc50_done)
-#>            common_name     cas                    inchikey XLogP                  who_tox
-#> 1            DDT, p,p' 50-29-3 YVGGHNCTFXOJCH-UHFFFAOYSA-N   6.9 II, Moderately Hazardous
-#> 2          Trichlorfon 52-68-6 NFACJZMKEDPNKN-UHFFFAOYSA-N   0.5 II, Moderately Hazardous
-#> 3             Fenthion 55-38-9 PNVJTZOFSHSLTO-UHFFFAOYSA-N   4.1 II, Moderately Hazardous
-#> 4 Carbon tetrachloride 56-23-5 VZGDMQKNWNREIO-UHFFFAOYSA-N   2.8               Not Listed
-#> 5            Parathion 56-38-2 LCCNCVORNKJIRZ-UHFFFAOYSA-N   3.8  Ia, Extremely Hazardous
-#> 6            Chlordane 57-74-9 BIWJNBZANLAXMG-YQELWRJZSA-N   4.9 II, Moderately Hazardous
+#>            common_name     cas                    inchikey XLogP aromatic_rings
+#> 1     CHLOROPHENOTHANE 50-29-3 YVGGHNCTFXOJCH-UHFFFAOYSA-N   6.9              2
+#> 2          TRICHLORFON 52-68-6 NFACJZMKEDPNKN-UHFFFAOYSA-N   0.5              0
+#> 3             FENTHION 55-38-9 PNVJTZOFSHSLTO-UHFFFAOYSA-N   4.1              1
+#> 4 CARBON TETRACHLORIDE 56-23-5 VZGDMQKNWNREIO-UHFFFAOYSA-N   2.8              0
+#> 5            PARATHION 56-38-2 LCCNCVORNKJIRZ-UHFFFAOYSA-N   3.8              1
+#> 6            CHLORDANE 57-74-9 BIWJNBZANLAXMG-UHFFFAOYSA-N   4.9              0
 ```
 
