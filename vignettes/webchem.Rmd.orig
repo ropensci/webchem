@@ -35,7 +35,7 @@ Usually a `webchem` workflow starts with translating and retrieving chemical ide
 First, we will covert CAS numbers to InChIKey identifiers using the Chemical Translation Service.  Then, we'll use these InChiKeys to get Pubchem CompoundID numbers, to use for retrieving chemical properties from PubChem.
 
 ```{r}
-lc50_sub$inchikey <- cts_convert(lc50_sub$cas, from = "CAS", to = "InChIKey", choices = 1, verbose = FALSE)
+lc50_sub$inchikey <- unlist(cts_convert(lc50_sub$cas, from = "CAS", to = "InChIKey", match = "first", verbose = FALSE))
 head(lc50_sub)
 any(is.na(lc50_sub$inchikey))
 ```
@@ -51,7 +51,7 @@ head(lc50_sub2)
 
 ## Retrieving Chemical Properties
 
-Functions that query chemical information databases begin with a prefix that matches the database.  For example, functions to query PubChem begin with `pc_` and functions to query ChemSpider begin with `cs_`. In this example, we'll get the names and log octanal/water partitioning coefficients for each compound using PubChem, and the WHO acute toxicity rating from the PAN Pesticide database.
+Functions that query chemical information databases begin with a prefix that matches the database.  For example, functions to query PubChem begin with `pc_` and functions to query ChemSpider begin with `cs_`. In this example, we'll get the names and log octanol/water partitioning coefficients for each compound using PubChem, and the number of aromatic rings within the chemical structure using ChEMBL.
 
 ```{r}
 y <- pc_prop(lc50_sub2$cid, properties = c("IUPACName", "XLogP"))
@@ -62,26 +62,35 @@ head(lc50_sub3)
 
 The IUPAC names are long and unwieldy, and one could use `pc_synonyms()` to choose better names. Several other functions return synonyms as well, even though they are not explicitly translator type functions.  We'll see an example of that next.
 
-Many of the chemical databases `webchem` can query contain vast amounts of information in a variety of structures.  Therefore, some `webchem` functions return nested lists rather than data frames.  `pan_query()` is one such function.
+Many of the chemical databases `webchem` can query contain vast amounts of information in a variety of structures. Therefore, some `webchem` functions return nested lists rather than data frames. `chembl_query()` is one such function.
 
-```{r message=FALSE}
-out <- pan_query(lc50_sub3$cas, verbose = FALSE)
-```
-
-`out` is a nested list which you can inspect with `View()`.  It has an element for each query, and within each query, many elements corresponding to different properties in the database.  To extract a single property from all queries, we need to use a mapping function such as `sapply()` or one of the `map_*()` functions from the `purrr` package.
+To look up entries in ChEMBL we need ChEMBL ID-s. These can be found on the PubChem page of each compound within the ChEMBL ID section and can be programmatically retrieved using `pc_sect()`.
 
 ```{r}
-lc50_sub3$who_tox <- sapply(out, function(y) y$`WHO Acute Toxicity`)
-lc50_sub3$common_name <- sapply(out, function(y) y$`Chemical name`)
+lc50_sub3$chembl_id <- pc_sect(x$cid, "ChEMBL ID")$Result
+out <- chembl_query(lc50_sub3$chembl_id, verbose = FALSE)
+```
 
-# #equivalent with purrr package:
-# lc50_sub3$who_tox <- map_chr(out, pluck, "WHO Acute Toxicity")
-# lc50_sub3$common_name <- map_chr(out, pluck, "Chemical name")
+`out` is a nested list which you can inspect with `View()`.  It has an element for each query, and within each query, many elements corresponding to different properties in the database.  To extract a single property from all queries, we need to use a mapping function such as `sapply()`.
+
+```{r}
+lc50_sub3$aromatic_rings <- sapply(out, function(y) {
+  # return NA if entry cannot be found in ChEMBL
+  if (length(y) == 1 && is.na(y)) return(NA)
+  # return the number of aromatic rings
+  y$molecule_properties$aromatic_rings
+})
+lc50_sub3$common_name <- sapply(out, function(y) {
+  # return NA if entry cannot be found in ChEMBL
+  if (length(y) == 1 && is.na(y)) return(NA)
+  # return preferred name
+  ifelse(!is.null(y$pref_name), y$pref_name, NA)
+})
 ```
 
 ```{r}
 #tidy up columns
-lc50_done <- dplyr::select(lc50_sub3, common_name, cas, inchikey, XLogP, who_tox)
+lc50_done <- dplyr::select(lc50_sub3, common_name, cas, inchikey, XLogP, aromatic_rings)
 head(lc50_done)
 ```
 
