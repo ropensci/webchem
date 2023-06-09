@@ -78,45 +78,6 @@ ci_query <- function() {
   )
 }
 
-cas.ci_query <- function() {
-  .Defunct(
-    "cas.ci_query",
-    package = "webchem",
-    msg = paste0(
-      "cas.ci_query() has been removed from the package because NLM had ",
-      "retired ChemIDplus. According to NLM all data found in ChemIDplus is ",
-      "available in PubChem. 'webchem' provides a number of functions for ",
-      "programmatically accessing PubChem."
-    )
-  )
-}
-
-inchikey.ci_query <- function() {
-  .Defunct(
-    "inchikey.ci_query",
-    package = "webchem",
-    msg = paste0(
-      "inchikey.ci_query() has been removed from the package because NLM had ",
-      "retired ChemIDplus. According to NLM all data found in ChemIDplus is ",
-      "available in PubChem. 'webchem' provides a number of functions for ",
-      "programmatically accessing PubChem."
-    )
-  )
-}
-
-smiles.ci_query <- function() {
-  .Defunct(
-    "smiles.ci_query",
-    package = "webchem",
-    msg = paste0(
-      "smiles.ci_query() has been removed from the package because NLM had ",
-      "retired ChemIDplus. According to NLM all data found in ChemIDplus is ",
-      "available in PubChem. 'webchem' provides a number of functions for ",
-      "programmatically accessing PubChem."
-    )
-  )
-}
-
 #' @rdname webchem-defunct
 #' @export
 pan_query <- function() {
@@ -126,41 +87,6 @@ pan_query <- function() {
     msg = paste0(
       "pan_query() has been removed from the package because programmatic ",
       "access to the Pesticide Action Network database is no longer supported."
-    )
-  )
-}
-
-cas.pan_query <- function() {
-  .Defunct(
-    "cas.pan_query",
-    package = "webchem",
-    msg = paste0(
-      "cas.pan_query() has been removed from the package because programmatic ",
-      "access to the Pesticide Action Network database is no longer supported."
-    )
-  )
-}
-
-inchikey.pan_query <- function() {
-  .Defunct(
-    "inchikey.pan_query",
-    package = "webchem",
-    msg = paste0(
-      "inchikey.pan_query() has been removed from the package because ",
-      "programmatic access to the Pesticide Action Network database is no ",
-      "longer supported."
-    )
-  )
-}
-
-smiles.pan_query <- function() {
-  .Defunct(
-    "smiles.pan_query",
-    package = "webchem",
-    msg = paste0(
-      "smiles.pan_query() has been removed from the package because ",
-      "programmatic access to the Pesticide Action Network database is no ",
-      "longer supported."
     )
   )
 }
