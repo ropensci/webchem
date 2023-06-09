@@ -489,7 +489,7 @@ matcher <-
         if (length(x) != length(result))
           stop("Can't use match = 'best' without query matches for each output")
         if (verbose) message("Returning best.")
-        dd <- adist(query, result) / nchar(result)
+        dd <- utils::adist(query, result) / nchar(result)
         return(x[which.min(dd)])
       } else if (match == "first") {
         if (verbose) message("Returning first.")
