@@ -1,3 +1,8 @@
+# webchem 1.3.0
+
+* This minor relese defuncts two functions, `ci_query()` and `pan_query()` because the webservices they were interacting with are no longer available.
+* Submission was rejected on 2023-05-04 due to the following check log entry: "Apparent methods for exported generics not registered: cas.ci_query inchikey.ci_query smiles.ci_query". This has been fixed.
+
 # webchem 1.1.3
 
 * Found the following (possibly) invalid URLs: https://www.gsbl.de (moved to 
