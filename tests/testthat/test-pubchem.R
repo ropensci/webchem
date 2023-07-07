@@ -105,6 +105,12 @@ test_that("pc_prop", {
   c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"))
   expect_true(is.na(b))
   expect_equal(ncol(c), 3)
+
+  cids <- c(5564, NA, -1, "balloon", "NULL", "2244")
+  d <- pc_prop(cids, properties = "CanonicalSmiles")
+  expect_true(all(d$CID == cids, na.rm = TRUE))
+  expect_true(all(is.na(d$CanonicalSmiles[c(2:5)])))
+  expect_false(any(is.na(d$CanonicalSmiles[c(1,6)])))
 })
 
 test_that("pc_synonyms", {
