@@ -1,3 +1,9 @@
+# dev
+
+## BUG FIXES
+
+* `pc_prop()` returned `NA` without much further explanation if any of the queries were not positive integers. The updated function attempts to coerce queries to positive integers, only progresses valid queries, and prints informative messages along the way if verbose messages are enabled.
+
 # webchem 1.3.0
 
 ## NEW FEATURES
