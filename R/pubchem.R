@@ -283,8 +283,10 @@ get_cid <-
 #' \url{https://pubchem.ncbi.nlm.nih.gov/}
 #' @import httr jsonlite
 #'
-#' @param cid character; Pubchem ID (CID).
-#' @param properties character vector; properties to retrieve, e.g.
+#' @param cid numeric; a vector of Pubchem IDs (CIDs). The input vector will be
+#' coerced to a vector of positive integers. The function will return a row of
+#' NAs for elements that cannot be coerced to positive integers.
+#' @param properties character; a vector of properties to retrieve, e.g.
 #' c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 #' properties are retrieved. See
 #' \url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest}

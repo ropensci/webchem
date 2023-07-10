@@ -7,9 +7,11 @@
 pc_prop(cid, properties = NULL, verbose = getOption("verbose"), ...)
 }
 \arguments{
-\item{cid}{character; Pubchem ID (CID).}
+\item{cid}{numeric; a vector of Pubchem IDs (CIDs). The input vector will be
+coerced to a vector of positive integers. The function will return a row of
+NAs for elements that cannot be coerced to positive integers.}
 
-\item{properties}{character vector; properties to retrieve, e.g.
+\item{properties}{character; a vector of properties to retrieve, e.g.
 c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 properties are retrieved. See
 \url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest}
