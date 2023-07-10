@@ -22,7 +22,8 @@ for a list of all available properties.}
 \item{...}{currently not used.}
 }
 \value{
-a data.frame
+a tibble; each row is a queried CID, each column is a requested
+property.
 }
 \description{
 Retrieve compound information from pubchem CID, see

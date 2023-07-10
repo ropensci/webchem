@@ -294,7 +294,8 @@ get_cid <-
 #' @param verbose logical; should a verbose output be printed to the console?
 #' @param ... currently not used.
 #'
-#' @return a data.frame
+#' @return a tibble; each row is a queried CID, each column is a requested
+#' property.
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_sect}}
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -432,8 +433,9 @@ pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...)
         }
       }}
     rownames(out) <- NULL
-    class(out) <- c("pc_prop", "data.frame")
     out$CID <- cid_o
+    out <- tibble::as_tibble(out)
+    class(out) <- c("pc_prop", class(out))
     return(out)
   }
   else {
