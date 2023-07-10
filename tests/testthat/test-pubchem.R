@@ -106,11 +106,24 @@ test_that("pc_prop", {
   expect_true(is.na(b))
   expect_equal(ncol(c), 3)
 
-  cids <- c(5564, NA, -1, "balloon", "NULL", "2244")
+  cids <- c(5564, NA, -1, "balloon", "2244")
   d <- pc_prop(cids, properties = "CanonicalSmiles")
   expect_true(all(d$CID == cids, na.rm = TRUE))
-  expect_true(all(is.na(d$CanonicalSmiles[c(2:5)])))
-  expect_false(any(is.na(d$CanonicalSmiles[c(1,6)])))
+  expect_true(all(is.na(d$CanonicalSMILES[c(2:4)])))
+  expect_false(any(is.na(d$CanonicalSMILES[c(1,5)])))
+
+  d1m <- capture_messages(
+    pc_prop(cids, properties = "CanonicalSmiles", verbose = TRUE))
+  expect_true(all(
+    d1m == c(
+    "Coercing queries to positive integers. ",
+    "balloon coerced to NA. ",
+    "-1 coerced to NA. ",
+    "Done.\n",
+    "Querying. ",
+    "OK (HTTP 200).",
+    "\n"
+  )))
 })
 
 test_that("pc_synonyms", {
