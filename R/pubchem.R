@@ -283,8 +283,10 @@ get_cid <-
 #' \url{https://pubchem.ncbi.nlm.nih.gov/}
 #' @import httr jsonlite
 #'
-#' @param cid character; Pubchem ID (CID).
-#' @param properties character vector; properties to retrieve, e.g.
+#' @param cid numeric; a vector of Pubchem IDs (CIDs). The input vector will be
+#' coerced to a vector of positive integers. The function will return a row of
+#' NAs for elements that cannot be coerced to positive integers.
+#' @param properties character; a vector of properties to retrieve, e.g.
 #' c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 #' properties are retrieved. See
 #' \url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest}
@@ -292,7 +294,8 @@ get_cid <-
 #' @param verbose logical; should a verbose output be printed to the console?
 #' @param ... currently not used.
 #'
-#' @return a data.frame
+#' @return a tibble; each row is a queried CID, each column is a requested
+#' property.
 #' @seealso \code{\link{get_cid}}, \code{\link{pc_sect}}
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for
@@ -334,12 +337,39 @@ pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...)
 
   if (!ping_service("pc")) stop(webchem_message("service_down"))
 
+  cid_o <- cid
+
+  if (verbose) message("Coercing queries to positive integers. ", appendLF = FALSE)
+
+  cid <- suppressWarnings(as.integer(cid))
+
+  if (verbose) {
+    index <- which(is.na(cid) & !is.na(cid_o))
+    if (length(index) > 0) {
+      for (i in index) {
+        message(paste0(cid_o[index], " coerced to NA. "), appendLF = FALSE)
+      }
+    }
+  }
+
+  if (any(cid <= 0, na.rm = TRUE)) {
+    index <- which(cid <= 0)
+    cid[index] <- NA
+    if (verbose) {
+      for (i in index) {
+        message(paste0(cid_o[index], " coerced to NA. "), appendLF = FALSE)
+      }
+    }
+  }
+
+  if (verbose) message("Done.")
+
   if (mean(is.na(cid)) == 1) {
     if (verbose) webchem_message("na")
     return(NA)
   }
+
   napos <- which(is.na(cid))
-  cid_o <- cid
   cid <- cid[!is.na(cid)]
   prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
   input <- "/compound/cid"
@@ -403,7 +433,9 @@ pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...)
         }
       }}
     rownames(out) <- NULL
-    class(out) <- c("pc_prop", "data.frame")
+    out$CID <- cid_o
+    out <- tibble::as_tibble(out)
+    class(out) <- c("pc_prop", class(out))
     return(out)
   }
   else {
