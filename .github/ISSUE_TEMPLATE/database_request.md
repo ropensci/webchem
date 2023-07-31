@@ -1,6 +1,7 @@
 ---
 name: Database suggestion
 about: Suggest a new data source to be accessed via `webchem`
+labels: "data source"
 ---
 
 Please answer the following questions to the best of your ability so contributors can get a sense of whether they might be excited about working on adding this functionality to `webchem`.  If you're interested in contributing code to access this database yourself, please indicate this and also see CONTRIBUTING.md
@@ -11,6 +12,6 @@ Please answer the following questions to the best of your ability so contributor
 
 2. **Scope**. What kind of data does the database contain? It should be primarily chemical properties, but databases of chemical identifiers or synonyms may also be considered.
 
-3. **Overlap**.  How much does the database contents overlap with current databases that webchem can access? Does it provide unique properties and/or data on a unique set of chemicals? 
+3. **Overlap**.  How much does the database contents overlap with current databases that `webchem` can access? Does it provide unique properties and/or data on a unique set of chemicals? 
 
 
