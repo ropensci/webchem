@@ -1,9 +1,9 @@
 ---
 name: Database suggestion
-about: Suggest a databaset to be integrated into webchem
+about: Suggest a new data source to be accessed via `webchem`
 ---
 
-Please answer the following questions to the best of your ability so contributors can get a sense of whether they might be excited about working on adding this functionality to `webchem`.  If you're intersted in contributing code to access this database yourself, please indicate this and also see CONTRIBUTING.md
+Please answer the following questions to the best of your ability so contributors can get a sense of whether they might be excited about working on adding this functionality to `webchem`.  If you're interested in contributing code to access this database yourself, please indicate this and also see CONTRIBUTING.md
 
 ### Suggested database: <name and link to home page>
 
