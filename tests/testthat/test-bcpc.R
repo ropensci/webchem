@@ -1,11 +1,14 @@
 up <- ping_service("bcpc")
+
 test_that("examples in the article are unchanged as far as it can be reasonably expected", {
-  skip_on_cran()
-  skip_if_not(up, "BCPC pesticide compendium is down")
+  # skip_on_cran()
+  # skip_if_not(up, "BCPC pesticide compendium is down")
 
   utils::data("lc50", package = "webchem")
   expect_warning(
-    aw_data <- aw_query(lc50$cas[1:3], from = "cas"),
+    with_mock_dir("aw-deprecated", {
+      aw_data <- aw_query(lc50$cas[1:3], from = "cas")
+    }),
     "deprecated"
   )
 
@@ -22,12 +25,13 @@ test_that("examples in the article are unchanged as far as it can be reasonably 
 })
 
 test_that("BCPC pesticide compendium, name", {
-  skip_on_cran()
-  skip_if_not(up, "BCPC pesticide compendium is down")
+  # skip_on_cran()
+  # skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA)
-  o1 <- bcpc_query(comps, from = "name")
-
+  with_mock_dir("bcpc", {
+    o1 <- bcpc_query(comps, from = "name")
+  })
   expect_type(o1, "list")
   expect_equal(length(o1), 4)
   expect_type(o1[[1]], "list")
@@ -42,11 +46,13 @@ test_that("BCPC pesticide compendium, name", {
 
 
 test_that("BCPC pesticide compendium, invalid input", {
-  skip_on_cran()
-  skip_if_not(up, "BCPC pesticide compendium is down")
+  # skip_on_cran()
+  # skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("balloon", NA)
-  o1 <- bcpc_query(comps)
+  with_mock_dir("bcpc-invalid", {
+    o1 <- bcpc_query(comps)
+  })
   expect_type(o1, "list")
   expect_equal(o1[[1]], NA)
   expect_equal(o1[[2]], NA)
@@ -54,9 +60,11 @@ test_that("BCPC pesticide compendium, invalid input", {
 
 test_that("BCPC pesticide compendium, build_index", {
   skip_on_cran()
-  skip_if_not(up, "BCPC pesticide compendium is down")
+  # skip_if_not(up, "BCPC pesticide compendium is down")
 
-  idx <- suppressWarnings(webchem:::build_bcpc_idx(force_build = TRUE))
+  with_mock_dir("bcpc-idx", {
+    idx <- suppressWarnings(webchem:::build_bcpc_idx(force_build = TRUE))
+  })
   expect_s3_class(idx, "data.frame")
   expect_equal(ncol(idx), 4)
   expect_equal(names(idx), c("names", "links", "linknames", "source"))
@@ -65,11 +73,13 @@ test_that("BCPC pesticide compendium, build_index", {
 })
 
 test_that("BCPC pesticide compendium, activity", {
-  skip_on_cran()
-  skip_if_not(up, "BCPC pesticide compendium is down")
+  # skip_on_cran()
+  # skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("atrazine", "2,4-D", "Copper hydroxide", "ziram")
-  o1 <- bcpc_query(comps)
+  with_mock_dir("bcpc-activity", {
+    o1 <- bcpc_query(comps)
+  })
   expect_equal(o1[[1]]$activity, "herbicides")
   expect_equal(o1[[1]]$subactivity, "chlorotriazine")
   expect_equal(o1[[2]]$activity, "herbicides")
