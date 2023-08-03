@@ -5,7 +5,7 @@ test_that("examples in the article are unchanged", {
               "CCNC1=NC(=NC(=N1)Cl)NC(C)C", "C1=CC=CC=C1",
               "CC(C)NC1=NC(=NC(=N1)N)Cl")
 
-  vcr::use_cassette("cs-article-examples", {
+  with_mock_dir("mocks/cs-article-examples", {
     csids <- get_csid(smiles, from = "smiles")
     inchikeys <- cs_convert(csids$csid, from = "csid", to = "inchikey")
   })
@@ -24,7 +24,7 @@ test_that("cs_check_key() can find API key in my local .Renviron", {
 
 test_that("cs_datasources()", {
 
-  vcr::use_cassette("cs_datasources()", {
+  with_mock_dir("mocks/cs_datasources", {
     a <- cs_datasources()
   })
 
@@ -65,7 +65,7 @@ test_that("cs_control()", {
 
 test_that("get_csid()", {
 
-  vcr::use_cassette("get_csid()", {
+  with_mock_dir("mocks/get_csid", {
     # get_csid() works with defaults
     a <- get_csid("Triclosan")
     b <- get_csid("Naproxene")
@@ -136,7 +136,7 @@ test_that("get_csid()", {
 
 test_that("cs_convert()", {
 
-  vcr::use_cassette("cs_convert()", {
+  with_mock_dir("mocks/cs_convert", {
     a <- cs_convert(171, "csid", "inchi")
     a_rev <- cs_convert(a, "inchi", "csid")
     a2 <- cs_convert(c(171, 172), "csid", "inchi")
@@ -210,7 +210,7 @@ test_that("cs_convert()", {
 
 test_that("cs_compinfo()", {
 
-  vcr::use_cassette("cs_compinfo()", {
+  with_mock_dir("mocks/cs_compinfo", {
     a <- cs_compinfo(
       171,
       c("SMILES", "Formula", "InChI", "InChIKey", "StdInChI", "StdInChIKey",
@@ -231,7 +231,7 @@ test_that("cs_compinfo()", {
   expect_equal(dim(b), c(2, 18))
 })
 
-#need to figure out how to test images with vcr
+#need to figure out how to test images with httptest
 #test_that("cs_img()", {
 
   #imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())

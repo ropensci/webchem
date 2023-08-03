@@ -1,0 +1,17 @@
+structure(list(url = "http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice", 
+    status_code = 200L, headers = structure(list(server = "Apache-Coyote/1.1", 
+        `content-type` = "text/xml;charset=utf-8", `transfer-encoding` = "chunked", 
+        date = "Thu, 03 Aug 2023 17:12:04 GMT"), class = c("insensitive", 
+    "list")), all_headers = list(list(status = 200L, version = "HTTP/1.1", 
+        headers = structure(list(server = "Apache-Coyote/1.1", 
+            `content-type` = "text/xml;charset=utf-8", `transfer-encoding` = "chunked", 
+            date = "Thu, 03 Aug 2023 17:12:04 GMT"), class = c("insensitive", 
+        "list")))), cookies = structure(list(domain = logical(0), 
+        flag = logical(0), path = logical(0), secure = logical(0), 
+        expiration = structure(numeric(0), class = c("POSIXct", 
+        "POSIXt")), name = logical(0), value = logical(0)), row.names = integer(0), class = "data.frame"), 
+    content = charToRaw("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><getLiteEntityResponse xmlns=\"https://www.ebi.ac.uk/webservices/chebi\"><return><ListElement><chebiId>CHEBI:164200</chebiId><chebiAsciiName>triclosan</chebiAsciiName><searchScore>0.88</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:89302</chebiId><chebiAsciiName>Triclosan glucuronide</chebiAsciiName><searchScore>0.26</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:89301</chebiId><chebiAsciiName>Triclosan sulfate</chebiAsciiName><searchScore>0.13</searchScore><entityStar>2</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>"), 
+    date = structure(1691082724, class = c("POSIXct", "POSIXt"
+    ), tzone = "GMT"), times = c(redirect = 0, namelookup = 3.2e-05, 
+    connect = 0, pretransfer = 0.000129, starttransfer = 0.214546, 
+    total = 0.21457)), class = "response")

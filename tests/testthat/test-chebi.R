@@ -5,7 +5,7 @@ test_that("examples in the article are unchanged", {
 
   utils::data("lc50", package = "webchem")
   cas_rns <- lc50[order(lc50$value)[1:3], "cas"]
-  with_mock_dir("chebi-examples", {
+  with_mock_dir("mocks/chebi-examples", {
     chebiids <- get_chebiid(cas_rns)
     comp <- chebi_comp_entity(chebiids$chebiid)
   })
@@ -30,7 +30,7 @@ test_that("examples in the article are unchanged", {
 test_that("chebi returns correct results", {
   # skip_on_cran()
   # skip_if_not(up, "CHEBI service is down")
-  with_mock_dir("chebi-correct", {
+  with_mock_dir("mocks/chebi-correct", {
     a <- get_chebiid("Glyphosate", from = "all")
     b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
     A <- chebi_comp_entity("CHEBI:27744")
@@ -53,7 +53,7 @@ test_that("chebi returns correct results", {
 test_that("get_chebiid() handles special characters in SMILES",{
   # skip_on_cran()
   # skip_if_not(up, "CHEBI service is down")
-  with_mock_dir("chebi-smiles", {
+  with_mock_dir("mocks/chebi-smiles", {
     expect_equal(get_chebiid("C#C", from = "smiles")$chebiid, "CHEBI:27518")
   })
 })

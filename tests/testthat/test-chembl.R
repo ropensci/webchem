@@ -5,7 +5,7 @@ test_that("chembl_query()", {
   # skip_if_not(up, "ChEMBL service is down")
 
   #examples
-  with_mock_dir("chembl-query", {
+  with_mock_dir("mocks/chembl-query", {
     o1 <- chembl_query("CHEMBL1082", resource = "molecule")
     o1m <- capture_messages(
       chembl_query("CHEMBL1082", resource = "molecule", verbose = TRUE))
@@ -24,7 +24,7 @@ test_that("chembl_query()", {
 })
 
 test_that("chembl_query() handles invalid inputs", {
-  with_mock_dir("chembl-invalid", {
+  with_mock_dir("mocks/chembl-invalid", {
     o5 <- chembl_query(c("CHEMBL1082", NA, "pumpkin", "CHEMBL25"))
     o5m <- capture_messages(
       chembl_query(c("CHEMBL1082", NA, "pumpkin", "CHEMBL25"), verbose = TRUE)
@@ -38,7 +38,7 @@ test_that("chembl_query() handles invalid inputs", {
 })
 
 test_that("caching works with chembl_query()", {
-  with_mock_dir("chembl-cache", {
+  with_mock_dir("mocks/chembl-cache", {
     o6 <- chembl_query("CHEMBL1082", resource = "molecule", cache_file = "test")
     o7m <- capture_messages(chembl_query("CHEMBL1082", resource = "molecule",
                                          cache_file = "test", verbose = TRUE)
@@ -56,7 +56,7 @@ test_that("caching works with chembl_query()", {
 
 test_that("chembl_query() handles 404 and service down errors", {
   #messages
-  with_mock_dir("chembl-404", {
+  with_mock_dir("mocks/chembl-404", {
     o9 <- capture_messages(
       chembl_query("CHEMBL12345678", resource = "molecule", verbose = TRUE))
   })
@@ -75,7 +75,7 @@ test_that("chembl_query() handles 404 and service down errors", {
 
 test_that("chembl_atc_classes()", {
 
-  with_mock_dir("chembl-atc", {
+  with_mock_dir("mocks/chembl-atc", {
     o1 <- chembl_atc_classes()
     o2 <- capture_messages(chembl_atc_classes(verbose = TRUE))
   })

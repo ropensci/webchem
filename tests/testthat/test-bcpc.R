@@ -6,7 +6,7 @@ test_that("examples in the article are unchanged as far as it can be reasonably 
 
   utils::data("lc50", package = "webchem")
   expect_warning(
-    with_mock_dir("aw-deprecated", {
+    with_mock_dir("mocks/aw-deprecated", {
       aw_data <- aw_query(lc50$cas[1:3], from = "cas")
     }),
     "deprecated"
@@ -29,7 +29,7 @@ test_that("BCPC pesticide compendium, name", {
   # skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA)
-  with_mock_dir("bcpc", {
+  with_mock_dir("mocks/bcpc", {
     o1 <- bcpc_query(comps, from = "name")
   })
   expect_type(o1, "list")
@@ -50,7 +50,7 @@ test_that("BCPC pesticide compendium, invalid input", {
   # skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("balloon", NA)
-  with_mock_dir("bcpc-invalid", {
+  with_mock_dir("mocks/bcpc-invalid", {
     o1 <- bcpc_query(comps)
   })
   expect_type(o1, "list")
@@ -62,7 +62,7 @@ test_that("BCPC pesticide compendium, build_index", {
   skip_on_cran()
   # skip_if_not(up, "BCPC pesticide compendium is down")
 
-  with_mock_dir("bcpc-idx", {
+  with_mock_dir("mocks/bcpc-idx", {
     idx <- suppressWarnings(webchem:::build_bcpc_idx(force_build = TRUE))
   })
   expect_s3_class(idx, "data.frame")
@@ -77,7 +77,7 @@ test_that("BCPC pesticide compendium, activity", {
   # skip_if_not(up, "BCPC pesticide compendium is down")
 
   comps <- c("atrazine", "2,4-D", "Copper hydroxide", "ziram")
-  with_mock_dir("bcpc-activity", {
+  with_mock_dir("mocks/bcpc-activity", {
     o1 <- bcpc_query(comps)
   })
   expect_equal(o1[[1]]$activity, "herbicides")
