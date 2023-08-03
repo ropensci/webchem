@@ -54,19 +54,21 @@ test_that("examples in the article are unchanged", {
 })
 
 test_that("get_etoxid returns correct results", {
-  skip_on_cran()
-  skip_if_not(up, "ETOX service is down")
+  # skip_on_cran()
+  # skip_if_not(up, "ETOX service is down")
 
   # test general
   comps <- c("Triclosan", "Glyphosate")
-  o1 <- suppressWarnings(get_etoxid(comps, match = "best"))
-  o2 <- suppressWarnings(get_etoxid(comps, match = "all"))
-  o3 <- get_etoxid("Triclosan", match = "first")
-  o4 <- get_etoxid("Triclosan", match = "na")
-  o5 <- get_etoxid("1071-83-6", from = 'cas', match = 'first')
-  o6 <- get_etoxid("133483", from = "gsbl")
-  o7 <- get_etoxid("203-157-5", from = "ec")
-  do2 <- get_etoxid("Thiamethoxam")
+  with_mock_dir("mocks/get_etoxid", {
+    o1 <- suppressWarnings(get_etoxid(comps, match = "best"))
+    o2 <- suppressWarnings(get_etoxid(comps, match = "all"))
+    o3 <- get_etoxid("Triclosan", match = "first")
+    o4 <- get_etoxid("Triclosan", match = "na")
+    o5 <- get_etoxid("1071-83-6", from = 'cas', match = 'first')
+    o6 <- get_etoxid("133483", from = "gsbl")
+    o7 <- get_etoxid("203-157-5", from = "ec")
+    do2 <- get_etoxid("Thiamethoxam")
+  })
 
   expect_s3_class(o1, "data.frame")
   expect_s3_class(o2, "data.frame")
@@ -84,11 +86,13 @@ test_that("get_etoxid returns correct results", {
 
 
 test_that("etox_basic returns correct results", {
-  skip_on_cran()
-  skip_if_not(up, "ETOX service is down")
+  # skip_on_cran()
+  # skip_if_not(up, "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
-  o1 <- etox_basic(ids)
+  with_mock_dir("mocks/etox_basic", {
+    o1 <- etox_basic(ids)
+  })
 
   expect_s3_class(o1, 'list')
   expect_equal(length(o1), 4)
@@ -100,11 +104,13 @@ test_that("etox_basic returns correct results", {
 })
 
 test_that("etox_targets returns correct results", {
-  skip_on_cran()
-  skip_if_not(up, "ETOX service is down")
+  # skip_on_cran()
+  # skip_if_not(up, "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
-  o1 <- etox_targets(ids)
+  with_mock_dir("mocks/etox_targets", {
+    o1 <- etox_targets(ids)
+  })
 
   expect_type(o1, 'list')
   expect_equal(length(o1), 4)
@@ -116,11 +122,13 @@ test_that("etox_targets returns correct results", {
 })
 
 test_that("etox_tests returns correct results", {
-  skip_on_cran()
-  skip_if_not(up, "ETOX service is down")
+  # skip_on_cran()
+  # skip_if_not(up, "ETOX service is down")
 
   ids <- c("20179", "9051", "xxxxx", NA)
-  o1 <- etox_tests(ids)
+  with_mock_dir("mocks/etox_tests", {
+    o1 <- etox_tests(ids)
+  })
 
   expect_type(o1, 'list')
   expect_equal(length(o1), 4)
@@ -133,16 +141,18 @@ test_that("etox_tests returns correct results", {
 
 
 test_that("etox integration tests", {
-  skip_on_cran()
-  skip_if_not(up, "ETOX service is down")
+  # skip_on_cran()
+  # skip_if_not(up, "ETOX service is down")
 
   comps <- c('Triclosan', 'Glyphosate', 'xxxx')
-  ids_b <- get_etoxid(comps, match = 'best')
-  ids_a <- get_etoxid(comps, match = 'all')
+  with_mock_dir("mocks/etox_integration", {
+    ids_b <- get_etoxid(comps, match = 'best')
+    ids_a <- get_etoxid(comps, match = 'all')
 
-  int1 <- etox_basic(ids_b$etoxid)
-  int2 <- etox_targets(ids_b$etoxid)
-  int3 <- etox_tests(ids_b$etoxid)
+    int1 <- etox_basic(ids_b$etoxid)
+    int2 <- etox_targets(ids_b$etoxid)
+    int3 <- etox_tests(ids_b$etoxid)
+  })
 
   expect_type(int1, 'list')
   expect_equal(length(int1), 3)
@@ -168,5 +178,7 @@ test_that("etox integration tests", {
 
 
 test_that("etox functions handle NAs", {
-  expect_equal(is.na(get_etoxid(NA)$match), TRUE)
+  with_mock_dir("mocks/etox_NA", {
+    expect_equal(is.na(get_etoxid(NA)$match), TRUE)
+  })
 })
