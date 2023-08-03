@@ -7,7 +7,6 @@
 #' @param cache_file character; the name of the cache file without the file
 #' extension. If \code{NULL}, results are not cached.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param test_service_down logical; this argument is only used for testing.
 #' @return The function returns a list of lists, where each element of the list
 #' contains a list of respective query results. Results are simplified, if
 #' possible.
@@ -56,8 +55,7 @@
 chembl_query <- function(query,
                          resource = "molecule",
                          cache_file = NULL,
-                         verbose = getOption("verbose"),
-                         test_service_down = FALSE) {
+                         verbose = getOption("verbose")) {
   resource <- match.arg(resource, chembl_resources())
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   foo <- function(query, verbose) {
@@ -70,8 +68,7 @@ chembl_query <- function(query,
       return(NA)
     }
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    url <- ifelse(
-      test_service_down, "", paste0(stem, "/", resource, "/", query, ".json"))
+    url <- paste0(stem, "/", resource, "/", query, ".json")
     webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,

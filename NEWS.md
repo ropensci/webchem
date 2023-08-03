@@ -4,6 +4,9 @@
 
 * `pc_prop()` returned `NA` without much further explanation if any of the queries were not positive integers. The updated function attempts to coerce queries to positive integers, only progresses valid queries, and prints informative messages along the way if verbose messages are enabled.
 
+## MINOR CHANGES
+* The `test_service_down` argument has been removed from `chembl_query()`.  Since it was only intended for use in testing, it shouldn't impact code using this function.
+
 # webchem 1.3.0
 
 ## NEW FEATURES
