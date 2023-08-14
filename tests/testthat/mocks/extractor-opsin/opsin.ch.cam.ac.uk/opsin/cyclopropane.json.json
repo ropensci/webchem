@@ -1,0 +1,9 @@
+{
+    "status": "SUCCESS",
+    "message": "",
+    "cml": "\n<cml xmlns=\"http://www.xml-cml.org/schema\" convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\" xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">Cyclopropane<\/name>\n    <atomArray>\n      <atom id=\"a1\" elementType=\"C\">\n        <label value=\"1\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a2\" elementType=\"C\">\n        <label value=\"2\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a3\" elementType=\"C\">\n        <label value=\"3\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a4\" elementType=\"H\"/>\n      <atom id=\"a5\" elementType=\"H\"/>\n      <atom id=\"a6\" elementType=\"H\"/>\n      <atom id=\"a7\" elementType=\"H\"/>\n      <atom id=\"a8\" elementType=\"H\"/>\n      <atom id=\"a9\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a2_a3\" atomRefs2=\"a2 a3\" order=\"S\"/>\n      <bond id=\"a1_a3\" atomRefs2=\"a1 a3\" order=\"S\"/>\n      <bond id=\"a1_a4\" atomRefs2=\"a1 a4\" order=\"S\"/>\n      <bond id=\"a1_a5\" atomRefs2=\"a1 a5\" order=\"S\"/>\n      <bond id=\"a2_a6\" atomRefs2=\"a2 a6\" order=\"S\"/>\n      <bond id=\"a2_a7\" atomRefs2=\"a2 a7\" order=\"S\"/>\n      <bond id=\"a3_a8\" atomRefs2=\"a3 a8\" order=\"S\"/>\n      <bond id=\"a3_a9\" atomRefs2=\"a3 a9\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n",
+    "inchi": "InChI=1/C3H6/c1-2-3-1/h1-3H2",
+    "stdinchi": "InChI=1S/C3H6/c1-2-3-1/h1-3H2",
+    "stdinchikey": "LVZWSLJZHVFIQJ-UHFFFAOYSA-N",
+    "smiles": "C1CC1"
+}
