@@ -1,0 +1,10 @@
+[
+    {
+        "fromIdentifier": "chemical name",
+        "searchTerm": "Hexane",
+        "toIdentifier": "inchikey",
+        "result": [
+            "VLKZOEOYAKHREP-UHFFFAOYSA-N"
+        ]
+    }
+]

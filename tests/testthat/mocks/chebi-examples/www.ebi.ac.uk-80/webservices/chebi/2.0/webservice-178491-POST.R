@@ -1,0 +1,17 @@
+structure(list(url = "http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice", 
+    status_code = 200L, headers = structure(list(server = "Apache-Coyote/1.1", 
+        `content-type` = "text/xml;charset=utf-8", `transfer-encoding` = "chunked", 
+        date = "Mon, 14 Aug 2023 13:00:39 GMT"), class = c("insensitive", 
+    "list")), all_headers = list(list(status = 200L, version = "HTTP/1.1", 
+        headers = structure(list(server = "Apache-Coyote/1.1", 
+            `content-type` = "text/xml;charset=utf-8", `transfer-encoding` = "chunked", 
+            date = "Mon, 14 Aug 2023 13:00:39 GMT"), class = c("insensitive", 
+        "list")))), cookies = structure(list(domain = logical(0), 
+        flag = logical(0), path = logical(0), secure = logical(0), 
+        expiration = structure(numeric(0), class = c("POSIXct", 
+        "POSIXt")), name = logical(0), value = logical(0)), row.names = integer(0), class = "data.frame"), 
+    content = charToRaw("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><getLiteEntityResponse xmlns=\"https://www.ebi.ac.uk/webservices/chebi\"><return><ListElement><chebiId>CHEBI:38954</chebiId><chebiAsciiName>temephos</chebiAsciiName><searchScore>0.53</searchScore><entityStar>3</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>"), 
+    date = structure(1692018039, class = c("POSIXct", "POSIXt"
+    ), tzone = "GMT"), times = c(redirect = 0, namelookup = 2.9e-05, 
+    connect = 0, pretransfer = 0.000161, starttransfer = 0.20998, 
+    total = 0.210003)), class = "response")

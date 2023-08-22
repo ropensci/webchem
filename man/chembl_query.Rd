@@ -8,8 +8,7 @@ chembl_query(
   query,
   resource = "molecule",
   cache_file = NULL,
-  verbose = getOption("verbose"),
-  test_service_down = FALSE
+  verbose = getOption("verbose")
 )
 }
 \arguments{
@@ -22,8 +21,6 @@ chembl_query(
 extension. If \code{NULL}, results are not cached.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
-
-\item{test_service_down}{logical; this argument is only used for testing.}
 }
 \value{
 The function returns a list of lists, where each element of the list
