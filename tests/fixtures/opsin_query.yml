@@ -1,0 +1,371 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/cyclopropane.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:37 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '1773'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"SUCCESS","message":"","cml":"\n<cml xmlns=\"http://www.xml-cml.org/schema\"
+        convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\"
+        xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule
+        id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">cyclopropane<\/name>\n    <atomArray>\n      <atom
+        id=\"a1\" elementType=\"C\">\n        <label value=\"1\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a2\" elementType=\"C\">\n        <label value=\"2\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a3\" elementType=\"C\">\n        <label value=\"3\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a4\" elementType=\"H\"/>\n      <atom id=\"a5\" elementType=\"H\"/>\n      <atom
+        id=\"a6\" elementType=\"H\"/>\n      <atom id=\"a7\" elementType=\"H\"/>\n      <atom
+        id=\"a8\" elementType=\"H\"/>\n      <atom id=\"a9\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond
+        id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a2_a3\" atomRefs2=\"a2
+        a3\" order=\"S\"/>\n      <bond id=\"a1_a3\" atomRefs2=\"a1 a3\" order=\"S\"/>\n      <bond
+        id=\"a1_a4\" atomRefs2=\"a1 a4\" order=\"S\"/>\n      <bond id=\"a1_a5\" atomRefs2=\"a1
+        a5\" order=\"S\"/>\n      <bond id=\"a2_a6\" atomRefs2=\"a2 a6\" order=\"S\"/>\n      <bond
+        id=\"a2_a7\" atomRefs2=\"a2 a7\" order=\"S\"/>\n      <bond id=\"a3_a8\" atomRefs2=\"a3
+        a8\" order=\"S\"/>\n      <bond id=\"a3_a9\" atomRefs2=\"a3 a9\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n","inchi":"InChI=1/C3H6/c1-2-3-1/h1-3H2","stdinchi":"InChI=1S/C3H6/c1-2-3-1/h1-3H2","stdinchikey":"LVZWSLJZHVFIQJ-UHFFFAOYSA-N","smiles":"C1CC1"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/Cyclopropane.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:37 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '1773'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"SUCCESS","message":"","cml":"\n<cml xmlns=\"http://www.xml-cml.org/schema\"
+        convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\"
+        xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule
+        id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">Cyclopropane<\/name>\n    <atomArray>\n      <atom
+        id=\"a1\" elementType=\"C\">\n        <label value=\"1\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a2\" elementType=\"C\">\n        <label value=\"2\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a3\" elementType=\"C\">\n        <label value=\"3\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a4\" elementType=\"H\"/>\n      <atom id=\"a5\" elementType=\"H\"/>\n      <atom
+        id=\"a6\" elementType=\"H\"/>\n      <atom id=\"a7\" elementType=\"H\"/>\n      <atom
+        id=\"a8\" elementType=\"H\"/>\n      <atom id=\"a9\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond
+        id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a2_a3\" atomRefs2=\"a2
+        a3\" order=\"S\"/>\n      <bond id=\"a1_a3\" atomRefs2=\"a1 a3\" order=\"S\"/>\n      <bond
+        id=\"a1_a4\" atomRefs2=\"a1 a4\" order=\"S\"/>\n      <bond id=\"a1_a5\" atomRefs2=\"a1
+        a5\" order=\"S\"/>\n      <bond id=\"a2_a6\" atomRefs2=\"a2 a6\" order=\"S\"/>\n      <bond
+        id=\"a2_a7\" atomRefs2=\"a2 a7\" order=\"S\"/>\n      <bond id=\"a3_a8\" atomRefs2=\"a3
+        a8\" order=\"S\"/>\n      <bond id=\"a3_a9\" atomRefs2=\"a3 a9\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n","inchi":"InChI=1/C3H6/c1-2-3-1/h1-3H2","stdinchi":"InChI=1S/C3H6/c1-2-3-1/h1-3H2","stdinchikey":"LVZWSLJZHVFIQJ-UHFFFAOYSA-N","smiles":"C1CC1"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/Octane.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:38 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '4268'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"SUCCESS","message":"","cml":"\n<cml xmlns=\"http://www.xml-cml.org/schema\"
+        convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\"
+        xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule
+        id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">Octane<\/name>\n    <atomArray>\n      <atom
+        id=\"a1\" elementType=\"C\">\n        <label value=\"1\" dictRef=\"cmlDict:locant\"/>\n        <label
+        value=\"alpha\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a2\" elementType=\"C\">\n        <label value=\"2\" dictRef=\"cmlDict:locant\"/>\n        <label
+        value=\"beta\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a3\"
+        elementType=\"C\">\n        <label value=\"3\" dictRef=\"cmlDict:locant\"/>\n        <label
+        value=\"gamma\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a4\" elementType=\"C\">\n        <label value=\"4\" dictRef=\"cmlDict:locant\"/>\n        <label
+        value=\"delta\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a5\" elementType=\"C\">\n        <label value=\"5\" dictRef=\"cmlDict:locant\"/>\n        <label
+        value=\"epsilon\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a6\" elementType=\"C\">\n        <label value=\"6\" dictRef=\"cmlDict:locant\"/>\n        <label
+        value=\"zeta\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a7\"
+        elementType=\"C\">\n        <label value=\"7\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a8\" elementType=\"C\">\n        <label value=\"8\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a9\" elementType=\"H\"/>\n      <atom id=\"a10\" elementType=\"H\"/>\n      <atom
+        id=\"a11\" elementType=\"H\"/>\n      <atom id=\"a12\" elementType=\"H\"/>\n      <atom
+        id=\"a13\" elementType=\"H\"/>\n      <atom id=\"a14\" elementType=\"H\"/>\n      <atom
+        id=\"a15\" elementType=\"H\"/>\n      <atom id=\"a16\" elementType=\"H\"/>\n      <atom
+        id=\"a17\" elementType=\"H\"/>\n      <atom id=\"a18\" elementType=\"H\"/>\n      <atom
+        id=\"a19\" elementType=\"H\"/>\n      <atom id=\"a20\" elementType=\"H\"/>\n      <atom
+        id=\"a21\" elementType=\"H\"/>\n      <atom id=\"a22\" elementType=\"H\"/>\n      <atom
+        id=\"a23\" elementType=\"H\"/>\n      <atom id=\"a24\" elementType=\"H\"/>\n      <atom
+        id=\"a25\" elementType=\"H\"/>\n      <atom id=\"a26\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond
+        id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a2_a3\" atomRefs2=\"a2
+        a3\" order=\"S\"/>\n      <bond id=\"a3_a4\" atomRefs2=\"a3 a4\" order=\"S\"/>\n      <bond
+        id=\"a4_a5\" atomRefs2=\"a4 a5\" order=\"S\"/>\n      <bond id=\"a5_a6\" atomRefs2=\"a5
+        a6\" order=\"S\"/>\n      <bond id=\"a6_a7\" atomRefs2=\"a6 a7\" order=\"S\"/>\n      <bond
+        id=\"a7_a8\" atomRefs2=\"a7 a8\" order=\"S\"/>\n      <bond id=\"a1_a9\" atomRefs2=\"a1
+        a9\" order=\"S\"/>\n      <bond id=\"a1_a10\" atomRefs2=\"a1 a10\" order=\"S\"/>\n      <bond
+        id=\"a1_a11\" atomRefs2=\"a1 a11\" order=\"S\"/>\n      <bond id=\"a2_a12\"
+        atomRefs2=\"a2 a12\" order=\"S\"/>\n      <bond id=\"a2_a13\" atomRefs2=\"a2
+        a13\" order=\"S\"/>\n      <bond id=\"a3_a14\" atomRefs2=\"a3 a14\" order=\"S\"/>\n      <bond
+        id=\"a3_a15\" atomRefs2=\"a3 a15\" order=\"S\"/>\n      <bond id=\"a4_a16\"
+        atomRefs2=\"a4 a16\" order=\"S\"/>\n      <bond id=\"a4_a17\" atomRefs2=\"a4
+        a17\" order=\"S\"/>\n      <bond id=\"a5_a18\" atomRefs2=\"a5 a18\" order=\"S\"/>\n      <bond
+        id=\"a5_a19\" atomRefs2=\"a5 a19\" order=\"S\"/>\n      <bond id=\"a6_a20\"
+        atomRefs2=\"a6 a20\" order=\"S\"/>\n      <bond id=\"a6_a21\" atomRefs2=\"a6
+        a21\" order=\"S\"/>\n      <bond id=\"a7_a22\" atomRefs2=\"a7 a22\" order=\"S\"/>\n      <bond
+        id=\"a7_a23\" atomRefs2=\"a7 a23\" order=\"S\"/>\n      <bond id=\"a8_a24\"
+        atomRefs2=\"a8 a24\" order=\"S\"/>\n      <bond id=\"a8_a25\" atomRefs2=\"a8
+        a25\" order=\"S\"/>\n      <bond id=\"a8_a26\" atomRefs2=\"a8 a26\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n","inchi":"InChI=1/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3","stdinchi":"InChI=1S/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3","stdinchikey":"TVMXDCGIABBOFY-UHFFFAOYSA-N","smiles":"CCCCCCCC"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/cyclopropane.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:38 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '1773'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"SUCCESS","message":"","cml":"\n<cml xmlns=\"http://www.xml-cml.org/schema\"
+        convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\"
+        xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule
+        id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">cyclopropane<\/name>\n    <atomArray>\n      <atom
+        id=\"a1\" elementType=\"C\">\n        <label value=\"1\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a2\" elementType=\"C\">\n        <label value=\"2\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a3\" elementType=\"C\">\n        <label value=\"3\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a4\" elementType=\"H\"/>\n      <atom id=\"a5\" elementType=\"H\"/>\n      <atom
+        id=\"a6\" elementType=\"H\"/>\n      <atom id=\"a7\" elementType=\"H\"/>\n      <atom
+        id=\"a8\" elementType=\"H\"/>\n      <atom id=\"a9\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond
+        id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a2_a3\" atomRefs2=\"a2
+        a3\" order=\"S\"/>\n      <bond id=\"a1_a3\" atomRefs2=\"a1 a3\" order=\"S\"/>\n      <bond
+        id=\"a1_a4\" atomRefs2=\"a1 a4\" order=\"S\"/>\n      <bond id=\"a1_a5\" atomRefs2=\"a1
+        a5\" order=\"S\"/>\n      <bond id=\"a2_a6\" atomRefs2=\"a2 a6\" order=\"S\"/>\n      <bond
+        id=\"a2_a7\" atomRefs2=\"a2 a7\" order=\"S\"/>\n      <bond id=\"a3_a8\" atomRefs2=\"a3
+        a8\" order=\"S\"/>\n      <bond id=\"a3_a9\" atomRefs2=\"a3 a9\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n","inchi":"InChI=1/C3H6/c1-2-3-1/h1-3H2","stdinchi":"InChI=1S/C3H6/c1-2-3-1/h1-3H2","stdinchikey":"LVZWSLJZHVFIQJ-UHFFFAOYSA-N","smiles":"C1CC1"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/xxxx.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 404
+      category: Client error
+      reason: Not Found
+      message: 'Client error: (404) Not Found'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:38 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '175'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"FAILURE","message":"xxxx was uninterpretable due to the
+        following section of the name: xxxx  The following was not understandable
+        in the context it was used: xxxx"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/cyclopropane.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:38 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '1773'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"SUCCESS","message":"","cml":"\n<cml xmlns=\"http://www.xml-cml.org/schema\"
+        convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\"
+        xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule
+        id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">cyclopropane<\/name>\n    <atomArray>\n      <atom
+        id=\"a1\" elementType=\"C\">\n        <label value=\"1\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a2\" elementType=\"C\">\n        <label value=\"2\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a3\" elementType=\"C\">\n        <label value=\"3\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a4\" elementType=\"H\"/>\n      <atom id=\"a5\" elementType=\"H\"/>\n      <atom
+        id=\"a6\" elementType=\"H\"/>\n      <atom id=\"a7\" elementType=\"H\"/>\n      <atom
+        id=\"a8\" elementType=\"H\"/>\n      <atom id=\"a9\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond
+        id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a2_a3\" atomRefs2=\"a2
+        a3\" order=\"S\"/>\n      <bond id=\"a1_a3\" atomRefs2=\"a1 a3\" order=\"S\"/>\n      <bond
+        id=\"a1_a4\" atomRefs2=\"a1 a4\" order=\"S\"/>\n      <bond id=\"a1_a5\" atomRefs2=\"a1
+        a5\" order=\"S\"/>\n      <bond id=\"a2_a6\" atomRefs2=\"a2 a6\" order=\"S\"/>\n      <bond
+        id=\"a2_a7\" atomRefs2=\"a2 a7\" order=\"S\"/>\n      <bond id=\"a3_a8\" atomRefs2=\"a3
+        a8\" order=\"S\"/>\n      <bond id=\"a3_a9\" atomRefs2=\"a3 a9\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n","inchi":"InChI=1/C3H6/c1-2-3-1/h1-3H2","stdinchi":"InChI=1S/C3H6/c1-2-3-1/h1-3H2","stdinchikey":"LVZWSLJZHVFIQJ-UHFFFAOYSA-N","smiles":"C1CC1"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/Acetic%20acid.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:39 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '1870'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"SUCCESS","message":"","cml":"\n<cml xmlns=\"http://www.xml-cml.org/schema\"
+        convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\"
+        xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule
+        id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">Acetic acid<\/name>\n    <atomArray>\n      <atom
+        id=\"a1\" elementType=\"C\" hydrogenCount=\"0\">\n        <label value=\"1\"
+        dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a2\" elementType=\"C\">\n        <label
+        value=\"2\" dictRef=\"cmlDict:locant\"/>\n        <label value=\"omega\" dictRef=\"cmlDict:locant\"/>\n        <label
+        value=\"alpha\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a4\" elementType=\"O\" hydrogenCount=\"0\">\n        <label value=\"O''\"
+        dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a5\" elementType=\"O\">\n        <label
+        value=\"O\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom id=\"a6\"
+        elementType=\"H\"/>\n      <atom id=\"a7\" elementType=\"H\"/>\n      <atom
+        id=\"a8\" elementType=\"H\"/>\n      <atom id=\"a9\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond
+        id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a1_a4\" atomRefs2=\"a1
+        a4\" order=\"D\"/>\n      <bond id=\"a1_a5\" atomRefs2=\"a1 a5\" order=\"S\"/>\n      <bond
+        id=\"a2_a6\" atomRefs2=\"a2 a6\" order=\"S\"/>\n      <bond id=\"a2_a7\" atomRefs2=\"a2
+        a7\" order=\"S\"/>\n      <bond id=\"a2_a8\" atomRefs2=\"a2 a8\" order=\"S\"/>\n      <bond
+        id=\"a5_a9\" atomRefs2=\"a5 a9\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n","inchi":"InChI=1/C2H4O2/c1-2(3)4/h1H3,(H,3,4)/f/h3H","stdinchi":"InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)","stdinchikey":"QTBSBXVTEAMEQO-UHFFFAOYSA-N","smiles":"C(C)(=O)O"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://opsin.ch.cam.ac.uk/opsin/cyclopropane.json
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:40:39 GMT
+      server: Restlet-Framework/2.4.3
+      content-type: application/json;charset=utf-8
+      accept-ranges: bytes
+      vary: Accept-Charset,Accept-Encoding,Accept-Language,Accept
+      content-length: '1773'
+      x-frame-options: sameorigin
+    body:
+      encoding: ''
+      file: no
+      string: '{"status":"SUCCESS","message":"","cml":"\n<cml xmlns=\"http://www.xml-cml.org/schema\"
+        convention=\"conventions:molecular\" xmlns:conventions=\"http://www.xml-cml.org/convention/\"
+        xmlns:cmlDict=\"http://www.xml-cml.org/dictionary/cml/\" xmlns:nameDict=\"http://www.xml-cml.org/dictionary/cml/name/\">\n  <molecule
+        id=\"m1\">\n    <name dictRef=\"nameDict:unknown\">cyclopropane<\/name>\n    <atomArray>\n      <atom
+        id=\"a1\" elementType=\"C\">\n        <label value=\"1\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a2\" elementType=\"C\">\n        <label value=\"2\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a3\" elementType=\"C\">\n        <label value=\"3\" dictRef=\"cmlDict:locant\"/>\n      <\/atom>\n      <atom
+        id=\"a4\" elementType=\"H\"/>\n      <atom id=\"a5\" elementType=\"H\"/>\n      <atom
+        id=\"a6\" elementType=\"H\"/>\n      <atom id=\"a7\" elementType=\"H\"/>\n      <atom
+        id=\"a8\" elementType=\"H\"/>\n      <atom id=\"a9\" elementType=\"H\"/>\n    <\/atomArray>\n    <bondArray>\n      <bond
+        id=\"a1_a2\" atomRefs2=\"a1 a2\" order=\"S\"/>\n      <bond id=\"a2_a3\" atomRefs2=\"a2
+        a3\" order=\"S\"/>\n      <bond id=\"a1_a3\" atomRefs2=\"a1 a3\" order=\"S\"/>\n      <bond
+        id=\"a1_a4\" atomRefs2=\"a1 a4\" order=\"S\"/>\n      <bond id=\"a1_a5\" atomRefs2=\"a1
+        a5\" order=\"S\"/>\n      <bond id=\"a2_a6\" atomRefs2=\"a2 a6\" order=\"S\"/>\n      <bond
+        id=\"a2_a7\" atomRefs2=\"a2 a7\" order=\"S\"/>\n      <bond id=\"a3_a8\" atomRefs2=\"a3
+        a8\" order=\"S\"/>\n      <bond id=\"a3_a9\" atomRefs2=\"a3 a9\" order=\"S\"/>\n    <\/bondArray>\n  <\/molecule>\n<\/cml>\n","inchi":"InChI=1/C3H6/c1-2-3-1/h1-3H2","stdinchi":"InChI=1S/C3H6/c1-2-3-1/h1-3H2","stdinchikey":"LVZWSLJZHVFIQJ-UHFFFAOYSA-N","smiles":"C1CC1"}'
+  recorded_at: 2023-08-04 17:40:39 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0

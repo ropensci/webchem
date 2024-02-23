@@ -1,0 +1,1640 @@
+http_interactions:
+- request:
+    method: get
+    uri: http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Thu, 03 Aug 2023 19:57:54 GMT
+      vary: Accept-Encoding
+      content-encoding: gzip
+      content-type: application/json;charset=utf-8
+      transfer-encoding: chunked
+    body:
+      encoding: ''
+      file: no
+      string: "{\n  \"inchikey\": \"XEFQLINVKFYRCS-UHFFFAOYSA-N\",\n  \"inchicode\":
+        \"InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H\",\n
+        \ \"molweight\": 289.54204,\n  \"exactmass\": 287.95116,\n  \"formula\": \"C12H7Cl3O2\",\n
+        \ \"dataSourcesCount\": 120,\n  \"referencesCount\": 854,\n  \"pubmedHits\":
+        1547,\n  \"smiles\": \"\",\n  \"synonyms\": \n  [\n    {\n      \"type\":
+        \"Synonym\",\n      \"name\": \"Triclosan\",\n      \"score\": 0\n    },\n
+        \   {\n      \"type\": \"Synonym\",\n      \"name\": \"DNDI1246774\",\n      \"score\":
+        0\n    },\n    {\n      \"type\": \"IUPAC Name (Allowed)\",\n      \"name\":
+        \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n      \"score\": 0\n    },\n
+        \   {\n      \"type\": \"IUPAC Name (Preferred)\",\n      \"name\": \"Triclosan\",\n
+        \     \"score\": 0\n    },\n    {\n      \"type\": \"Synonym\",\n      \"name\":
+        \"triclosan\",\n      \"score\": 0\n    },\n    {\n      \"type\": \"Synonym\",\n
+        \     \"name\": \"Irgasan DP 30\",\n      \"score\": 0\n    },\n    {\n      \"type\":
+        \"Synonym\",\n      \"name\": \"CH-3565\",\n      \"score\": 0\n    },\n    {\n
+        \     \"type\": \"Synonym\",\n      \"name\": \"5-chloro-2-(2, 4-dichlorophenoxy)phenol\",\n
+        \     \"score\": 0\n    },\n    {\n      \"type\": \"IUPAC Name (CAS-like
+        Style)\",\n      \"name\": \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n      \"score\":
+        0\n    },\n    {\n      \"type\": \"Synonym\",\n      \"name\": \"Triclosan
+        (USP/INN)\",\n      \"score\": 0\n    },\n    {\n      \"type\": \"IUPAC Name
+        (Preferred)\",\n      \"name\": \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n
+        \     \"score\": 0\n    },\n    {\n      \"type\": \"IUPAC Name (Traditional)\",\n
+        \     \"name\": \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n      \"score\":
+        0\n    },\n    {\n      \"type\": \"IUPAC Name (Systematic)\",\n      \"name\":
+        \"2-[2,4-bis(chloranyl)phenoxy]-5-chloranyl-phenol\",\n      \"score\": 0\n
+        \   },\n    {\n      \"type\": \"Synonym\",\n      \"name\": \"Stri-Dex cleansing
+        bar (TN)\",\n      \"score\": 0\n    },\n    {\n      \"type\": \"Synonym\",\n
+        \     \"name\": \"Cloxifenol\",\n      \"score\": 0\n    }\n  ],\n  \"externalIds\":
+        \n  [\n    {\n      \"name\": \"BindingDB\",\n      \"value\": \"8726\",\n
+        \     \"url\": \"http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=8726&entryid=1081\"\n
+        \   },\n    {\n      \"name\": \"Tox21\",\n      \"value\": \"NCGC00159417-02\",\n
+        \     \"url\": \"https://tripod.nih.gov/tox21/samples/Tox21_111648\"\n    },\n
+        \   {\n      \"name\": \"MMDB\",\n      \"value\": \"77488.6\",\n      \"url\":
+        \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=77488\"\n    },\n
+        \   {\n      \"name\": \"MMDB\",\n      \"value\": \"87724.6\",\n      \"url\":
+        \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=87724\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"24698180\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=24698180\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"86373.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=86373\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"136907267\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=136907267\"\n
+        \   },\n    {\n      \"name\": \"ICCB-Longwood/NSRB Screening Facility, Harvard
+        Medical School\",\n      \"value\": \"HMS2270M06\",\n      \"url\": \"\"\n
+        \   },\n    {\n      \"name\": \"AK Scientific, Inc. (AKSCI)\",\n      \"value\":
+        \"69778\",\n      \"url\": \"http://www.aksci.com/item_detail.php?cat=69778\"\n
+        \   },\n    {\n      \"name\": \"TimTec\",\n      \"value\": \"ST50826110\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Human Metabolome Database\",\n
+        \     \"value\": \"HMDB0061385\",\n      \"url\": \"http://www.hmdb.ca/metabolites/HMDB0061385\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"87723.5\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=87723\"\n
+        \   },\n    {\n      \"name\": \"PubChem CID\",\n      \"value\": \"5564\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi\"\n
+        \   },\n    {\n      \"name\": \"CAPOT\",\n      \"value\": \"PubChem9026\",\n
+        \     \"url\": \"http://www.capotchem.com/en/9026.htm\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"117695801\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695801\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"830483\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=830483\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124767531\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124767531\"\n
+        \   },\n    {\n      \"name\": \"Chembo\",\n      \"value\": \"KB-197273\",\n
+        \     \"url\": \"http://www.chembopharma.com/search/?keyword=KB-197273\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"196106428\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=196106428\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"179113938\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=179113938\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"56314344\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=56314344\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"29589.3\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=29589\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"89177.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=89177\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"223403966\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223403966\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"92519.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=92519\"\n
+        \   },\n    {\n      \"name\": \"ChemIDplus\",\n      \"value\": \"0003380345\",\n
+        \     \"url\": \"http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?result=advanced&regno=0003380345\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252091693\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252091693\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"13861.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=13861\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57244094\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57244094\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"135668580\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135668580\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"91011813\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=91011813\"\n
+        \   },\n    {\n      \"name\": \"Angene Chemical\",\n      \"value\": \"5-Chloro-2-(2,4-dichlorophenoxy)phenol\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"10322303\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=10322303\"\n
+        \   },\n    {\n      \"name\": \"CAS\",\n      \"value\": \"105093-20-7\",\n
+        \     \"url\": \"http://www.cas.org/\"\n    },\n    {\n      \"name\": \"Boerchem\",\n
+        \     \"value\": \"BC678270\",\n      \"url\": \"http://www.boerchemical.com/?product_39712.html\"\n
+        \   },\n    {\n      \"name\": \"Key Organics/BIONET\",\n      \"value\":
+        \"KS-5356\",\n      \"url\": \"http://www.keyorganics.net/bionet/catalog/product/view/id/516952\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"249832222\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=249832222\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"184558641\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=184558641\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"14720377\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14720377\"\n
+        \   },\n    {\n      \"name\": \"SureChEMBL\",\n      \"value\": \"SCHEMBL3269\",\n
+        \     \"url\": \"https://www.surechembl.org/chemical/SCHEMBL3269\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"92308067\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=92308067\"\n
+        \   },\n    {\n      \"name\": \"KEGG\",\n      \"value\": \"D06226\",\n      \"url\":
+        \"http://www.genome.jp/dbget-bin/www_bget?dr:D06226\"\n    },\n    {\n      \"name\":
+        \"MMDB\",\n      \"value\": \"24741.4\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=24741\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"87350665\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87350665\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"49387\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1642\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"113584955\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=113584955\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"226395494\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=226395494\"\n
+        \   },\n    {\n      \"name\": \"chemicalize.org by ChemAxon\",\n      \"value\":
+        \"3314\",\n      \"url\": \"http://www.chemicalize.org/structure/#!mol=5-Chlor-2-%282%2C4-dichlorphenoxy%29-phenol&source=pubchem\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"48426058\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=48426058\"\n
+        \   },\n    {\n      \"name\": \"ChemFrog\",\n      \"value\": \"888-827-166\",\n
+        \     \"url\": \"http://www.chemfrog.com/getPSupply/RHMLL/\"\n    },\n    {\n
+        \     \"name\": \"Immune Epitope Database (IEDB)\",\n      \"value\": \"Epitope
+        ID:119683\",\n      \"url\": \"http://www.iedb.org/epId/119683\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"165354372\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=165354372\"\n
+        \   },\n    {\n      \"name\": \"Calbiochem\",\n      \"value\": \"647950\",\n
+        \     \"url\": \"http://www.emdbiosciences.com/product/647950\"\n    },\n
+        \   {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-08\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"11752\",\n      \"value\":
+        \"BD20299\",\n      \"url\": \"http://www.bidepharmatech.com/en/goodsview_goodscode_BD20299.html\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"134982808\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134982808\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-03\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"638158\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=638158\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"136375618\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=136375618\"\n
+        \   },\n    {\n      \"name\": \"\",\n      \"value\": \"ST2411924\",\n      \"url\":
+        \"http://www.syntree.com/3380-34-5\"\n    },\n    {\n      \"name\": \"ChEBI\",\n
+        \     \"value\": \"CHEBI:164200\",\n      \"url\": \"http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:164200\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"250203727\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250203727\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001335937\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ChemMol\",\n      \"value\":
+        \"30100627\",\n      \"url\": \"http://www.chemmol.com/chemmol/30100627.html\"\n
+        \   },\n    {\n      \"name\": \"DiscoveryGate\",\n      \"value\": \"5564\",\n
+        \     \"url\": \"https://www.discoverygate.com/interlink/search?KeyName=EXTREG&KeyValue=5564&Database=INDEX&Source=PUBCHEM\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"152247191\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152247191\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144099663\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144099663\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"90004.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90004\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126613105\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126613105\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"11134.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11134\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124892179\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892179\"\n
+        \   },\n    {\n      \"name\": \"Aurum Pharmatech LLC\",\n      \"value\":
+        \"M-6446\",\n      \"url\": \"http://www.Aurumpharmatech.com/Product/ProductDetails/M_6446\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"584337\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=584337\"\n
+        \   },\n    {\n      \"name\": \"Center for Chemical Genomics, University
+        of Michigan\",\n      \"value\": \"CCG-213459\",\n      \"url\": \"\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"118307780\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=118307780\"\n
+        \   },\n    {\n      \"name\": \"Chembase.cn\",\n      \"value\": \"6212\",\n
+        \     \"url\": \"http://www.chembase.cn/molecule-6212.html\"\n    },\n    {\n
+        \     \"name\": \"LeadScope\",\n      \"value\": \"LS-67854\",\n      \"url\":
+        \"http://www.leadscope.com/structure_search_results.php?ss_string=LS-67854\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"12209.11\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=12209\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"8153420\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=8153420\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"250113382\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250113382\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"170464936\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170464936\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"87692612\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87692612\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"204386565\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=204386565\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"135578505\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135578505\"\n
+        \   },\n    {\n      \"name\": \"Hangzhou APIChem Technology\",\n      \"value\":
+        \"AC-10667\",\n      \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"827598\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=827598\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"14214\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14214\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252083456\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252083456\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"117695799\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695799\"\n
+        \   },\n    {\n      \"name\": \"EMD Millipore\",\n      \"value\": \"647950\",\n
+        \     \"url\": \"http://www.emdbiosciences.com/product/647950\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"164187925\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=164187925\"\n
+        \   },\n    {\n      \"name\": \"NextMove Software\",\n      \"value\": \"XEFQLINVKFYRCS-UHFFFAOYSA-N\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"A&J Pharmtech CO., LTD.\",\n
+        \     \"value\": \"AJ-08144\",\n      \"url\": \"http://www.ajpharmtech.com/\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57652433\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57652433\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"160969637\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=160969637\"\n
+        \   },\n    {\n      \"name\": \"ChemMol\",\n      \"value\": \"44010202\",\n
+        \     \"url\": \"http://www.chemmol.com/chemmol/44010202.html\"\n    },\n
+        \   {\n      \"name\": \"Milwaukee Institute for Drug Discovery\",\n      \"value\":
+        \"NC00516\",\n      \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"47207884\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=47207884\"\n
+        \   },\n    {\n      \"name\": \"ChemMol\",\n      \"value\": \"99161097\",\n
+        \     \"url\": \"http://www.chemmol.com/chemmol/99161097.html\"\n    },\n
+        \   {\n      \"name\": \"Ambinter\",\n      \"value\": \"SBB058565\",\n      \"url\":
+        \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"5664285\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=5664285\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"114065.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=114065\"\n
+        \   },\n    {\n      \"name\": \"Tractus\",\n      \"value\": \"RTR-014090\",\n
+        \     \"url\": \"http://www.tractuschem.com/productshow/RTR-014090.html\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124766493\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124766493\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126522651\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126522651\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252126888\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252126888\"\n
+        \   },\n    {\n      \"name\": \"CAPOT\",\n      \"value\": \"9026\",\n      \"url\":
+        \"http://www.capotchem.com/en/9026.htm\"\n    },\n    {\n      \"name\": \"Anward\",\n
+        \     \"value\": \"ANW-42338\",\n      \"url\": \"http://www.anward.com/pro_result/29973\"\n
+        \   },\n    {\n      \"name\": \"TimTec\",\n      \"value\": \"SBB058565\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ICCB-Longwood/NSRB Screening
+        Facility, Harvard Medical School\",\n      \"value\": \"HMS2093L17\",\n      \"url\":
+        \"http://iccb.med.harvard.edu/screening/compound_libraries/bioactives_microsource1.htm\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"47193732\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=47193732\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-04\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"EPA Substance Registry
+        Services\",\n      \"value\": \"115139\",\n      \"url\": \"http://iaspub.epa.gov/sor_internet/registry/substreg/searchandretrieve/advancedsearch/externalSearch.do?p_type=SRSITN&p_value=115139\"\n
+        \   },\n    {\n      \"name\": \"CAS\",\n      \"value\": \"3380-34-5\",\n
+        \     \"url\": \"http://www.cas.org/\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"137003021\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=137003021\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"117695803\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695803\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57389809\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57389809\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"103905760\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103905760\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"99401.5\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=99401\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"143433021\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=143433021\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"123938.12\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=123938\"\n
+        \   },\n    {\n      \"name\": \"BioCyc\",\n      \"value\": \"CPD0-1227\",\n
+        \     \"url\": \"http://biocyc.org/META/NEW-IMAGE?type=COMPOUND&object=CPD0-1227\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"208265074\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=208265074\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"103222736\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103222736\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"125022.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=125022\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"90003.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90003\"\n
+        \   },\n    {\n      \"name\": \"ChemDB\",\n      \"value\": \"3968915\",\n
+        \     \"url\": \"http://cdb.ics.uci.edu/CHEMDB/Web/cgibin/ChemicalDetailWeb.py?chemical_id=3968915\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49674565\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49674565\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"211786863\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=211786863\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"7890716\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=7890716\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"43585.7\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=43585\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"175442272\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=175442272\"\n
+        \   },\n    {\n      \"name\": \"Mcule\",\n      \"value\": \"MCULE-2614621397\",\n
+        \     \"url\": \"https://mcule.com/MCULE-2614621397\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"172080639\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=172080639\"\n
+        \   },\n    {\n      \"name\": \"SGCOxCompounds\",\n      \"value\": \"S00100\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"IS Chemical Technology\",\n
+        \     \"value\": \"I01-2897\",\n      \"url\": \"http://www.ispharm.com/product/I01-2897.html\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126632200\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126632200\"\n
+        \   },\n    {\n      \"name\": \"ChemTik\",\n      \"value\": \"CTK3J8301\",\n
+        \     \"url\": \"http://www.chemtik.com/pro_result/398301/\"\n    },\n    {\n
+        \     \"name\": \"MMDB\",\n      \"value\": \"65341.6\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=65341\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"250180394\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250180394\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"152137732\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152137732\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"251886846\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=251886846\"\n
+        \   },\n    {\n      \"name\": \"SCRIPDB\",\n      \"value\": \"US20120010284A1-20120112-C00025_9\",\n
+        \     \"url\": \"http://dcv.uhnres.utoronto.ca/SCRIPDB/results/?patentid=US20120010284A1-20120112-C00025_9\"\n
+        \   },\n    {\n      \"name\": \"Shanghai Institute of Organic Chemistry\",\n
+        \     \"value\": \"3p9t\",\n      \"url\": \"http://www.pdbbind-cn.org/quickpdb.asp?quickpdb=3p9t\"\n
+        \   },\n    {\n      \"name\": \"Therapeutic Targets Database\",\n      \"value\":
+        \"DNC001513\",\n      \"url\": \"http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=DNC001513\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126648856\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126648856\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57260157\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57260157\"\n
+        \   },\n    {\n      \"name\": \"TCI (Tokyo Chemical Industry)\",\n      \"value\":
+        \"T1872\",\n      \"url\": \"\"\n    },\n    {\n      \"name\": \"DrugBank\",\n
+        \     \"value\": \"DB08604\",\n      \"url\": \"http://www.drugbank.ca/drugs/DB08604\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"151989799\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=151989799\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57322843\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57322843\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-05\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"152138388\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152138388\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"134338639\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134338639\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"830851\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=830851\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"135684207\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135684207\"\n
+        \   },\n    {\n      \"name\": \"3B_SCI\",\n      \"value\": \"3B3-011899\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"11109466\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=11109466\"\n
+        \   },\n    {\n      \"name\": \"HDH Pharma\",\n      \"value\": \"IN1424\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"MMDB\",\n      \"value\":
+        \"86123.4\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=86123\"\n
+        \   },\n    {\n      \"name\": \"Life Chemicals\",\n      \"value\": \"F2173-0825\",\n
+        \     \"url\": \"http://lifechemicals.emolecules.com\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"223774642\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223774642\"\n
+        \   },\n    {\n      \"name\": \"CAS\",\n      \"value\": \"88032-08-0\",\n
+        \     \"url\": \"http://www.cas.org/\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"92710097\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=92710097\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"125348302\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=125348302\"\n
+        \   },\n    {\n      \"name\": \"FINETECH\",\n      \"value\": \"FT-0609773\",\n
+        \     \"url\": \"http://www.finetechnology-ind.com/product_detail.shtml?catalogNo=FT-0609773\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"11627.3\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11627\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"104309596\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=104309596\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144205201\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144205201\"\n
+        \   },\n    {\n      \"name\": \"Tox21\",\n      \"value\": \"NCGC00159417-06\",\n
+        \     \"url\": \"https://tripod.nih.gov/tox21/samples/Tox21_400079\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"129676338\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=129676338\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"26754498\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=26754498\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"121362549\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=121362549\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49903859\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49903859\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"80407.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=80407\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"164794929\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=164794929\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"50109854\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=50109854\"\n
+        \   },\n    {\n      \"name\": \"Sigma-Aldrich\",\n      \"value\": \"72779_SIGMA\",\n
+        \     \"url\": \"http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/72779?cm_mmc=affiliate-_-PubChem-_-product-_-link\"\n
+        \   },\n    {\n      \"name\": \"Hangzhou Trylead Chemical Technology\",\n
+        \     \"value\": \"TL8002539\",\n      \"url\": \"\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"135668588\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135668588\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"99453849\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=99453849\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"14922470\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14922470\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57260158\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57260158\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"37767\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"NIH Clinical Collection\",\n
+        \     \"value\": \"SAM002554907\",\n      \"url\": \"\"\n    },\n    {\n      \"name\":
+        \"Tractus\",\n      \"value\": \"TR-014090\",\n      \"url\": \"\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"56313852\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=56313852\"\n
+        \   },\n    {\n      \"name\": \"Oakwood Products\",\n      \"value\": \"079476\",\n
+        \     \"url\": \"http://www.oakwoodchemical.com/ProductsList.aspx?CategoryID=-2&txtSearch=64650&ExtHyperLink=1\"\n
+        \   },\n    {\n      \"name\": \"Collaborative Drug Discovery, Inc.\",\n      \"value\":
+        \"2304\",\n      \"url\": \"https://app.collaborativedrug.com/public/structures/2304\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"186020461\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=186020461\"\n
+        \   },\n    {\n      \"name\": \"A&J Pharmtech CO., LTD.\",\n      \"value\":
+        \"ZB000507\",\n      \"url\": \"http://www.ajpharmtech.com/\"\n    },\n    {\n
+        \     \"name\": \"\",\n      \"value\": \"50-7869\",\n      \"url\": \"http://www.greenchempharm.com/\"\n
+        \   },\n    {\n      \"name\": \"DTP/NCI\",\n      \"value\": \"759151\",\n
+        \     \"url\": \"http://dtp.nci.nih.gov/dtpstandard/servlet/dwindex?searchtype=NSC&outputformat=html&searchlist=759151\"\n
+        \   },\n    {\n      \"name\": \"ChEMBL\",\n      \"value\": \"CHEMBL849\",\n
+        \     \"url\": \"https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/CHEMBL849\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"176324148\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=176324148\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"241151993\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=241151993\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"26759661\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=26759661\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"170481145\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170481145\"\n
+        \   },\n    {\n      \"name\": \"Broad Institute\",\n      \"value\": \"BRD-K41731458-001-09-4\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"223485437\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223485437\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49968902\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49968902\"\n
+        \   },\n    {\n      \"name\": \"ABI Chem\",\n      \"value\": \"AC1L1KMN\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ChemMol\",\n      \"value\":
+        \"99084008\",\n      \"url\": \"http://www.chemmol.com/chemmol/99084008.html\"\n
+        \   },\n    {\n      \"name\": \"MolPort\",\n      \"value\": \"MolPort-003-666-702\",\n
+        \     \"url\": \"https://www.molport.com/shop/molecule-link/MolPort-003-666-702\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"104170014\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=104170014\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"174006648\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=174006648\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"160809838\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=160809838\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"836967\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=836967\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"45855.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=45855\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"172848469\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=172848469\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124813021\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124813021\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"223519140\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223519140\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144214040\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144214040\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"174477329\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=174477329\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001066347\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"163812839\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=163812839\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"38016.7\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=38016\"\n
+        \   },\n    {\n      \"name\": \"King Scientific\",\n      \"value\": \"KSC498G0D\",\n
+        \     \"url\": \"http://www.kingscientific.com/pro_result/8687/\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252039861\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252039861\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"162174892\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=162174892\"\n
+        \   },\n    {\n      \"name\": \"Ark Pharm, Inc.\",\n      \"value\": \"AK-73001\",\n
+        \     \"url\": \"http://www.arkpharminc.com/web/products-detail.html?catalogno=AK-73001\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"99398.10\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=99398\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144075889\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144075889\"\n
+        \   },\n    {\n      \"name\": \"A&J Pharmtech CO., LTD.\",\n      \"value\":
+        \"CJ-00083\",\n      \"url\": \"http://www.ajpharmtech.com/\"\n    },\n    {\n
+        \     \"name\": \"Pubchem SID\",\n      \"value\": \"241074904\",\n      \"url\":
+        \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=241074904\"\n    },\n
+        \   {\n      \"name\": \"IBM\",\n      \"value\": \"96566AD92878ECA0254CFD7818088D7A\",\n
+        \     \"url\": \"http://www.ibm.com/gbs/nih/?sid=96566AD92878ECA0254CFD7818088D7A&ik=XEFQLINVKFYRCS-UHFFFAOYSA-N\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"99445075\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=99445075\"\n
+        \   },\n    {\n      \"name\": \"Tox21\",\n      \"value\": \"NCGC00159417-05\",\n
+        \     \"url\": \"https://tripod.nih.gov/tox21/samples/Tox21_111648_1\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"85172710\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=85172710\"\n
+        \   },\n    {\n      \"name\": \"Therapeutic Targets Database\",\n      \"value\":
+        \"DAP001435\",\n      \"url\": \"http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=DAP001435\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124892178\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892178\"\n
+        \   },\n    {\n      \"name\": \"NovoSeek\",\n      \"value\": \"5564\",\n
+        \     \"url\": \"http://www.novoseek.com/AccessPoint.action?corpus=MEDLINE&externalDBId=cid%3d5564&DBName=pubchem&actionName=search&bioType=drug\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"223454576\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223454576\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"90005.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90005\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"87577595\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87577595\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-06\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"MMDB\",\n      \"value\":
+        \"43581.4\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=43581\"\n
+        \   },\n    {\n      \"name\": \"labseeker\",\n      \"value\": \"SC-16588\",\n
+        \     \"url\": \"http://www.labseeker.com/goods.php?id=22337\"\n    },\n    {\n
+        \     \"name\": \"Pubchem SID\",\n      \"value\": \"103905763\",\n      \"url\":
+        \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103905763\"\n    },\n
+        \   {\n      \"name\": \"Berrchem\",\n      \"value\": \"BR-73001\",\n      \"url\":
+        \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49832484\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49832484\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"134340679\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134340679\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124892177\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892177\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"143858045\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=143858045\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-07\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ChemMol\",\n      \"value\":
+        \"1034685\",\n      \"url\": \"http://www.chemmol.com/chemmol/1034685.html\"\n
+        \   },\n    {\n      \"name\": \"AKos Consulting & Solutions\",\n      \"value\":
+        \"AKOS015850380\",\n      \"url\": \"http://akoscompounds.de/catalogue/akossamplesretrieval.php?IDNUMBERS=AKOS015850380\"\n
+        \   },\n    {\n      \"name\": \"KEGG\",\n      \"value\": \"C12059\",\n      \"url\":
+        \"http://www.genome.jp/dbget-bin/www_bget?cpd:C12059\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"175611134\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=175611134\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"48839\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE8861\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"22126.7\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=22126\"\n
+        \   },\n    {\n      \"name\": \"AmicBase - Antimicrobial Activities\",\n
+        \     \"value\": \"6191\",\n      \"url\": \"http://www.manetec-52.de/apps/amicbase_drugs-online/base.nsf/WebMain4?SearchView&Query=%28%5BDocType%5D=%22DataFormular%22%29%20AND%20%28%5BLine_1_S%5D=%28%226191*%22%29%29&SearchWV=FALSE&SearchOrder=4&SearchMax=0&Count=50&Start=1&SearchBasis=extern2&FromView=WebMain4\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144071986\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144071986\"\n
+        \   },\n    {\n      \"name\": \"SMID\",\n      \"value\": \"TCL\",\n      \"url\":
+        \"http://smid.blueprint.org/SMInfo.php?hetname=TCL\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"162766619\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=162766619\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"131311043\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=131311043\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144071804\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144071804\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001335938\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Shanghai Institute of
+        Organic Chemistry\",\n      \"value\": \"1nhg\",\n      \"url\": \"http://www.pdbbind-cn.org/quickpdb.asp?quickpdb=1nhg\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001074876\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"113584959\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=113584959\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"85256706\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=85256706\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"11303.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11303\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"40328\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Thomson Pharma\",\n
+        \     \"value\": \"00026732\",\n      \"url\": \"http://www.thomson-pharma.com/report/chemistry?ch=TS00026732\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"53800864\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=53800864\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"103022876\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103022876\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"89179.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=89179\"\n
+        \   },\n    {\n      \"name\": \"Amadis Chemical\",\n      \"value\": \"A821950\",\n
+        \     \"url\": \"http://www.amadischem.com/en-US/ProductDetail.aspx?catalog=A821950\"\n
+        \   },\n    {\n      \"name\": \"NIST\",\n      \"value\": \"XEFQLINVKFYRCS-UHFFFAOYSA-N\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"138139326\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=138139326\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"170483649\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170483649\"\n
+        \   },\n    {\n      \"name\": \"ICCB-Longwood/NSRB Screening Facility, Harvard
+        Medical School\",\n      \"value\": \"HMS3259K19\",\n      \"url\": \"http://iccb.med.harvard.edu/screening/compound_libraries/ncc2.htm\"\n
+        \   },\n    {\n      \"name\": \"NIAID\",\n      \"value\": \"095068\",\n
+        \     \"url\": \"http://chemdb.niaid.nih.gov/CompoundDetails.aspx?AIDSNO=095068\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"163687196\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=163687196\"\n
+        \   }\n  ]\n}"
+  recorded_at: 2023-08-03 19:57:54 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://cts.fiehnlab.ucdavis.edu/service/conversion/toValues
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Thu, 03 Aug 2023 19:57:54 GMT
+      vary: Accept-Encoding
+      content-encoding: gzip
+      content-type: application/json;charset=utf-8
+      transfer-encoding: chunked
+    body:
+      encoding: ''
+      file: no
+      string: |2-
+
+        [
+          "BioCyc",
+          "CAS",
+          "ChEBI",
+          "Chemical Name",
+          "Human Metabolome Database",
+          "InChI Code",
+          "InChIKey",
+          "KEGG",
+          "LMSD",
+          "LipidMAPS",
+          "PubChem CID",
+          "SMILES",
+          "Pubchem SID",
+          "ChemSpider",
+          "ChemDB",
+          "ChEMBL",
+          "ChemBank",
+          "ZINC",
+          "Broad Institute",
+          "The Scripps Research Institute Molecular Screening Center",
+          "DrugBank",
+          "MMDB",
+          "ChemMol",
+          "NIAID",
+          "Southern Research Institute",
+          "NIH Clinical Collection",
+          "Comparative Toxicogenomics Database",
+          "MolPort",
+          "SMID",
+          "ChemBridge",
+          "GlaxoSmithKline (GSK)",
+          "NINDS Approved Drug Screening Program",
+          "NIST",
+          "SCRIPDB",
+          "Southern Research Specialized Biocontainment Screening Center",
+          "TimTec",
+          "Tox21",
+          "Web of Science",
+          "ABI Chem",
+          "Center for Chemical Genomics, University of Michigan",
+          "ChemIDplus",
+          "Sigma-Aldrich",
+          "ASINEX",
+          "ChemBlock",
+          "DiscoveryGate",
+          "Specs",
+          "Ambinter",
+          "Emory University Molecular Libraries Screening Center",
+          "MLSMR",
+          "Vitas-M Laboratory",
+          "AAA Chemistry",
+          "ChemFrog",
+          "Isoprenoids",
+          "NCGC",
+          "Acesobio",
+          "ALDRICH",
+          "Ambit Biosciences",
+          "CLRI (CSIR)",
+          "InFarmatik",
+          "IS Chemical Technology",
+          "MOLI",
+          "SIGMA",
+          "Tetrahedron Scientific Inc",
+          "Thomson Pharma",
+          "ABBLIS Chemicals",
+          "Abbott Labs",
+          "AbMole Bioscience",
+          "Achemica",
+          "Acorn PharmaTech",
+          "Active Biopharma",
+          "Adooq BioScience",
+          "AKos Consulting & Solutions",
+          "AK Scientific, Inc. (AKSCI)",
+          "Alagar Yadav, Karpagam University",
+          "Alinda Chemical",
+          "Alsachim",
+          "Amadis Chemical",
+          "Amatye",
+          "AmicBase - Antimicrobial Activities",
+          "Angene Chemical",
+          "Angene International",
+          "Ark Pharm, Inc.",
+          "BioChemPartner",
+          "BroadPharm",
+          "Chembase.cn",
+          "Chembo",
+          "chemicalize.org by ChemAxon",
+          "Fragmenta",
+          "Anitha, Department of Bioinformatics, Karpagam University",
+          "Annker Organics",
+          "Anward",
+          "Apeiron Synthesis",
+          "ApexBio Technology",
+          "Apexmol",
+          "Aromsyn catalogue",
+          "Aronis",
+          "Aurora Fine Chemicals LLC",
+          "Aurum Pharmatech LLC",
+          "Avanti Polar Lipids",
+          "Beijing Advanced Technology Co, Ltd",
+          "Bertin Pharma",
+          "Bhaskar Lab, Department of Zoology, Sri Venkateswara University",
+          "BIDD",
+          "BIND",
+          "BindingDB",
+          "Biological Magnetic Resonance Data Bank (BMRB)",
+          "Bioprocess Technology Lab, Department of Microbiology, Bharathidasan University",
+          "Biosynth",
+          "Burnham Center for Chemical Genomics",
+          "Calbiochem",
+          "Cambridge Crystallographic Data Centre",
+          "CAPOT",
+          "Cayman Chemical",
+          "CC_PMLSC",
+          "ChemExper Chemical Directory",
+          "Chemical Biology Department, Max Planck Institute of Molecular Physiology",
+          "ChemScene",
+          "ChemSynthesis",
+          "ChemTik",
+          "Chiralblock Biosciences",
+          "Circadian Research, Kay Laboratory, University of California at San Diego (UCSD)",
+          "CMLD-BU",
+          "Columbia University Molecular Screening Center",
+          "Creasyn Finechem",
+          "Department of Pharmacy, LMU",
+          "DTP/NCI",
+          "EDASA Scientific Compounds June 2013",
+          "EMD Biosciences",
+          "Enamine",
+          "Ennopharm",
+          "EPA DSSTox",
+          "Excenen Pharmatech",
+          "Exchemistry",
+          "FINETECH",
+          "Finley and King Labs, Harvard Medical School",
+          "FLUKA",
+          "ForeChem",
+          "Georganics",
+          "GLIDA, GPCR-Ligand Database",
+          "GNF / Scripps Winzeler lab",
+          "Golm Metabolome Database (GMD), Max Planck Institute of Molecular Plant Physiology",
+          "Hangzhou APIChem Technology",
+          "Hangzhou Trylead Chemical Technology",
+          "HDH Pharma",
+          "HUMGENEX",
+          "IBCH RAS",
+          "IBM",
+          "ICCB-Longwood/NSRB Screening Facility, Harvard Medical School",
+          "Immunology Lab, Department of Biotechnology, Calicut University",
+          "Inhibitor 2",
+          "Insect Molecular Biology Lab, Department of Environmental Biotechnology, Bharathidasan University",
+          "iThemba Pharmaceuticals",
+          "IUPHAR-DB",
+          "Jamson Pharmachem Technology",
+          "Japan Chemical Substance Dictionary (Nikkaji)",
+          "Johns Hopkins Ion Channel Center",
+          "Kingston Chemistry",
+          "KUMGM",
+          "LeadScope",
+          "MedChemexpress MCE",
+          "MICAD",
+          "MIC Scientific",
+          "Milwaukee Institute for Drug Discovery",
+          "Molecular Libraries Program, Specialized Chemistry Center, University of Kansas",
+          "MP Biomedicals",
+          "MTDP",
+          "Nanjing Pharmaceutical Factory",
+          "Nantong Baihua Bio-Pharmaceutical Co., Ltd",
+          "Nature Chemical Biology",
+          "Nature Chemistry",
+          "Nature Communications",
+          "NIST Chemistry WebBook",
+          "Nitric Oxide Research, National Cancer Institute (NCI)",
+          "NMMLSC",
+          "NMRShiftDB",
+          "NovoSeek",
+          "Oakwood Products",
+          "ORST SMALL MOLECULE SCREENING CENTER",
+          "P3 BioSystems",
+          "PANACHE",
+          "Paul Baures",
+          "PCMD",
+          "PDSP",
+          "PENN-ABS",
+          "PennChem-GAM",
+          "PFC",
+          "P.Ravikumar, M.Jeyam and G.Shalini. Biochematics Division, Bharathiar University",
+          "priyadharshini sabarathinam angayarkanni murugesh palaniswamy",
+          "Prous Science Drugs of the Future",
+          "Rangan Lab, Department of Biotechnology, IIT Guwahati",
+          "R&D Chemicals",
+          "R.Sathishkumar, Phytomatics Laboratory, Department of Bioinformatics, Bharathiar University",
+          "RSChem, LLC",
+          "SASTRA University, Quorum sensing and Peptidomimetics Laboratory",
+          "Selleckbio",
+          "Selleck Chemicals",
+          "SGCOxCompounds",
+          "SGCStoCompounds",
+          "S.GURUDEEBAN, T.RAMANATHAN & K.SATYAVANI, Marine Medicinal Plant Biotechnology Laboratory, Faculty of Marine Sciences, Annamalai Universtiy",
+          "Shanghai Institute of Organic Chemistry",
+          "Shanghai Sinofluoro Scientific Company",
+          "SLING Consortium",
+          "SRMLSC",
+          "Structural Genomics Consortium",
+          "SureChem",
+          "SYNCHEM OHG",
+          "Syntechem",
+          "TCI (Tokyo Chemical Industry)",
+          "ten Dijke Lab, Leiden University Medical Center",
+          "Therapeutic Targets Database",
+          "Total TOSLab Building-Blocks",
+          "True PharmaChem",
+          "Tyger Scientific",
+          "UCLA Molecular Screening Shared Resource",
+          "UM-BBD",
+          "UniCarbKB",
+          "University of Pittsburgh Molecular Library Screening Center",
+          "UPCMLD",
+          "Vanderbilt Screening Center for GPCRs, Ion Channels and Transporters",
+          "Vanderbilt Specialized Chemistry Center",
+          "Vanderbilt University Medical Center",
+          "VIT University",
+          "Watec Laboratories",
+          "Watson International Ltd",
+          "xPharm",
+          "Zancheng Functional Chemicals",
+          "zealing chemical"
+        ]
+  recorded_at: 2023-08-03 19:57:54 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Thu, 03 Aug 2023 19:57:54 GMT
+      vary: Accept-Encoding
+      content-encoding: gzip
+      content-type: application/json;charset=utf-8
+      transfer-encoding: chunked
+    body:
+      encoding: ''
+      file: no
+      string: "{\n  \"inchikey\": \"XEFQLINVKFYRCS-UHFFFAOYSA-N\",\n  \"inchicode\":
+        \"InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H\",\n
+        \ \"molweight\": 289.54204,\n  \"exactmass\": 287.95116,\n  \"formula\": \"C12H7Cl3O2\",\n
+        \ \"dataSourcesCount\": 120,\n  \"referencesCount\": 854,\n  \"pubmedHits\":
+        1547,\n  \"smiles\": \"\",\n  \"synonyms\": \n  [\n    {\n      \"type\":
+        \"Synonym\",\n      \"name\": \"Triclosan\",\n      \"score\": 0\n    },\n
+        \   {\n      \"type\": \"Synonym\",\n      \"name\": \"DNDI1246774\",\n      \"score\":
+        0\n    },\n    {\n      \"type\": \"IUPAC Name (Allowed)\",\n      \"name\":
+        \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n      \"score\": 0\n    },\n
+        \   {\n      \"type\": \"IUPAC Name (Preferred)\",\n      \"name\": \"Triclosan\",\n
+        \     \"score\": 0\n    },\n    {\n      \"type\": \"Synonym\",\n      \"name\":
+        \"triclosan\",\n      \"score\": 0\n    },\n    {\n      \"type\": \"Synonym\",\n
+        \     \"name\": \"Irgasan DP 30\",\n      \"score\": 0\n    },\n    {\n      \"type\":
+        \"Synonym\",\n      \"name\": \"CH-3565\",\n      \"score\": 0\n    },\n    {\n
+        \     \"type\": \"Synonym\",\n      \"name\": \"5-chloro-2-(2, 4-dichlorophenoxy)phenol\",\n
+        \     \"score\": 0\n    },\n    {\n      \"type\": \"IUPAC Name (CAS-like
+        Style)\",\n      \"name\": \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n      \"score\":
+        0\n    },\n    {\n      \"type\": \"Synonym\",\n      \"name\": \"Triclosan
+        (USP/INN)\",\n      \"score\": 0\n    },\n    {\n      \"type\": \"IUPAC Name
+        (Preferred)\",\n      \"name\": \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n
+        \     \"score\": 0\n    },\n    {\n      \"type\": \"IUPAC Name (Traditional)\",\n
+        \     \"name\": \"5-chloro-2-(2,4-dichlorophenoxy)phenol\",\n      \"score\":
+        0\n    },\n    {\n      \"type\": \"IUPAC Name (Systematic)\",\n      \"name\":
+        \"2-[2,4-bis(chloranyl)phenoxy]-5-chloranyl-phenol\",\n      \"score\": 0\n
+        \   },\n    {\n      \"type\": \"Synonym\",\n      \"name\": \"Stri-Dex cleansing
+        bar (TN)\",\n      \"score\": 0\n    },\n    {\n      \"type\": \"Synonym\",\n
+        \     \"name\": \"Cloxifenol\",\n      \"score\": 0\n    }\n  ],\n  \"externalIds\":
+        \n  [\n    {\n      \"name\": \"BindingDB\",\n      \"value\": \"8726\",\n
+        \     \"url\": \"http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=8726&entryid=1081\"\n
+        \   },\n    {\n      \"name\": \"Tox21\",\n      \"value\": \"NCGC00159417-02\",\n
+        \     \"url\": \"https://tripod.nih.gov/tox21/samples/Tox21_111648\"\n    },\n
+        \   {\n      \"name\": \"MMDB\",\n      \"value\": \"77488.6\",\n      \"url\":
+        \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=77488\"\n    },\n
+        \   {\n      \"name\": \"MMDB\",\n      \"value\": \"87724.6\",\n      \"url\":
+        \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=87724\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"24698180\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=24698180\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"86373.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=86373\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"136907267\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=136907267\"\n
+        \   },\n    {\n      \"name\": \"ICCB-Longwood/NSRB Screening Facility, Harvard
+        Medical School\",\n      \"value\": \"HMS2270M06\",\n      \"url\": \"\"\n
+        \   },\n    {\n      \"name\": \"AK Scientific, Inc. (AKSCI)\",\n      \"value\":
+        \"69778\",\n      \"url\": \"http://www.aksci.com/item_detail.php?cat=69778\"\n
+        \   },\n    {\n      \"name\": \"TimTec\",\n      \"value\": \"ST50826110\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Human Metabolome Database\",\n
+        \     \"value\": \"HMDB0061385\",\n      \"url\": \"http://www.hmdb.ca/metabolites/HMDB0061385\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"87723.5\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=87723\"\n
+        \   },\n    {\n      \"name\": \"PubChem CID\",\n      \"value\": \"5564\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi\"\n
+        \   },\n    {\n      \"name\": \"CAPOT\",\n      \"value\": \"PubChem9026\",\n
+        \     \"url\": \"http://www.capotchem.com/en/9026.htm\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"117695801\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695801\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"830483\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=830483\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124767531\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124767531\"\n
+        \   },\n    {\n      \"name\": \"Chembo\",\n      \"value\": \"KB-197273\",\n
+        \     \"url\": \"http://www.chembopharma.com/search/?keyword=KB-197273\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"196106428\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=196106428\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"179113938\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=179113938\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"56314344\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=56314344\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"29589.3\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=29589\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"89177.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=89177\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"223403966\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223403966\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"92519.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=92519\"\n
+        \   },\n    {\n      \"name\": \"ChemIDplus\",\n      \"value\": \"0003380345\",\n
+        \     \"url\": \"http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?result=advanced&regno=0003380345\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252091693\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252091693\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"13861.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=13861\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57244094\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57244094\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"135668580\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135668580\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"91011813\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=91011813\"\n
+        \   },\n    {\n      \"name\": \"Angene Chemical\",\n      \"value\": \"5-Chloro-2-(2,4-dichlorophenoxy)phenol\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"10322303\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=10322303\"\n
+        \   },\n    {\n      \"name\": \"CAS\",\n      \"value\": \"105093-20-7\",\n
+        \     \"url\": \"http://www.cas.org/\"\n    },\n    {\n      \"name\": \"Boerchem\",\n
+        \     \"value\": \"BC678270\",\n      \"url\": \"http://www.boerchemical.com/?product_39712.html\"\n
+        \   },\n    {\n      \"name\": \"Key Organics/BIONET\",\n      \"value\":
+        \"KS-5356\",\n      \"url\": \"http://www.keyorganics.net/bionet/catalog/product/view/id/516952\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"249832222\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=249832222\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"184558641\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=184558641\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"14720377\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14720377\"\n
+        \   },\n    {\n      \"name\": \"SureChEMBL\",\n      \"value\": \"SCHEMBL3269\",\n
+        \     \"url\": \"https://www.surechembl.org/chemical/SCHEMBL3269\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"92308067\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=92308067\"\n
+        \   },\n    {\n      \"name\": \"KEGG\",\n      \"value\": \"D06226\",\n      \"url\":
+        \"http://www.genome.jp/dbget-bin/www_bget?dr:D06226\"\n    },\n    {\n      \"name\":
+        \"MMDB\",\n      \"value\": \"24741.4\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=24741\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"87350665\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87350665\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"49387\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1642\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"113584955\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=113584955\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"226395494\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=226395494\"\n
+        \   },\n    {\n      \"name\": \"chemicalize.org by ChemAxon\",\n      \"value\":
+        \"3314\",\n      \"url\": \"http://www.chemicalize.org/structure/#!mol=5-Chlor-2-%282%2C4-dichlorphenoxy%29-phenol&source=pubchem\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"48426058\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=48426058\"\n
+        \   },\n    {\n      \"name\": \"ChemFrog\",\n      \"value\": \"888-827-166\",\n
+        \     \"url\": \"http://www.chemfrog.com/getPSupply/RHMLL/\"\n    },\n    {\n
+        \     \"name\": \"Immune Epitope Database (IEDB)\",\n      \"value\": \"Epitope
+        ID:119683\",\n      \"url\": \"http://www.iedb.org/epId/119683\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"165354372\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=165354372\"\n
+        \   },\n    {\n      \"name\": \"Calbiochem\",\n      \"value\": \"647950\",\n
+        \     \"url\": \"http://www.emdbiosciences.com/product/647950\"\n    },\n
+        \   {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-08\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"11752\",\n      \"value\":
+        \"BD20299\",\n      \"url\": \"http://www.bidepharmatech.com/en/goodsview_goodscode_BD20299.html\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"134982808\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134982808\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-03\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"638158\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=638158\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"136375618\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=136375618\"\n
+        \   },\n    {\n      \"name\": \"\",\n      \"value\": \"ST2411924\",\n      \"url\":
+        \"http://www.syntree.com/3380-34-5\"\n    },\n    {\n      \"name\": \"ChEBI\",\n
+        \     \"value\": \"CHEBI:164200\",\n      \"url\": \"http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:164200\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"250203727\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250203727\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001335937\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ChemMol\",\n      \"value\":
+        \"30100627\",\n      \"url\": \"http://www.chemmol.com/chemmol/30100627.html\"\n
+        \   },\n    {\n      \"name\": \"DiscoveryGate\",\n      \"value\": \"5564\",\n
+        \     \"url\": \"https://www.discoverygate.com/interlink/search?KeyName=EXTREG&KeyValue=5564&Database=INDEX&Source=PUBCHEM\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"152247191\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152247191\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144099663\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144099663\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"90004.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90004\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126613105\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126613105\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"11134.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11134\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124892179\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892179\"\n
+        \   },\n    {\n      \"name\": \"Aurum Pharmatech LLC\",\n      \"value\":
+        \"M-6446\",\n      \"url\": \"http://www.Aurumpharmatech.com/Product/ProductDetails/M_6446\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"584337\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=584337\"\n
+        \   },\n    {\n      \"name\": \"Center for Chemical Genomics, University
+        of Michigan\",\n      \"value\": \"CCG-213459\",\n      \"url\": \"\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"118307780\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=118307780\"\n
+        \   },\n    {\n      \"name\": \"Chembase.cn\",\n      \"value\": \"6212\",\n
+        \     \"url\": \"http://www.chembase.cn/molecule-6212.html\"\n    },\n    {\n
+        \     \"name\": \"LeadScope\",\n      \"value\": \"LS-67854\",\n      \"url\":
+        \"http://www.leadscope.com/structure_search_results.php?ss_string=LS-67854\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"12209.11\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=12209\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"8153420\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=8153420\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"250113382\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250113382\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"170464936\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170464936\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"87692612\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87692612\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"204386565\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=204386565\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"135578505\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135578505\"\n
+        \   },\n    {\n      \"name\": \"Hangzhou APIChem Technology\",\n      \"value\":
+        \"AC-10667\",\n      \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"827598\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=827598\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"14214\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14214\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252083456\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252083456\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"117695799\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695799\"\n
+        \   },\n    {\n      \"name\": \"EMD Millipore\",\n      \"value\": \"647950\",\n
+        \     \"url\": \"http://www.emdbiosciences.com/product/647950\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"164187925\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=164187925\"\n
+        \   },\n    {\n      \"name\": \"NextMove Software\",\n      \"value\": \"XEFQLINVKFYRCS-UHFFFAOYSA-N\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"A&J Pharmtech CO., LTD.\",\n
+        \     \"value\": \"AJ-08144\",\n      \"url\": \"http://www.ajpharmtech.com/\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57652433\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57652433\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"160969637\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=160969637\"\n
+        \   },\n    {\n      \"name\": \"ChemMol\",\n      \"value\": \"44010202\",\n
+        \     \"url\": \"http://www.chemmol.com/chemmol/44010202.html\"\n    },\n
+        \   {\n      \"name\": \"Milwaukee Institute for Drug Discovery\",\n      \"value\":
+        \"NC00516\",\n      \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"47207884\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=47207884\"\n
+        \   },\n    {\n      \"name\": \"ChemMol\",\n      \"value\": \"99161097\",\n
+        \     \"url\": \"http://www.chemmol.com/chemmol/99161097.html\"\n    },\n
+        \   {\n      \"name\": \"Ambinter\",\n      \"value\": \"SBB058565\",\n      \"url\":
+        \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"5664285\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=5664285\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"114065.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=114065\"\n
+        \   },\n    {\n      \"name\": \"Tractus\",\n      \"value\": \"RTR-014090\",\n
+        \     \"url\": \"http://www.tractuschem.com/productshow/RTR-014090.html\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124766493\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124766493\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126522651\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126522651\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252126888\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252126888\"\n
+        \   },\n    {\n      \"name\": \"CAPOT\",\n      \"value\": \"9026\",\n      \"url\":
+        \"http://www.capotchem.com/en/9026.htm\"\n    },\n    {\n      \"name\": \"Anward\",\n
+        \     \"value\": \"ANW-42338\",\n      \"url\": \"http://www.anward.com/pro_result/29973\"\n
+        \   },\n    {\n      \"name\": \"TimTec\",\n      \"value\": \"SBB058565\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ICCB-Longwood/NSRB Screening
+        Facility, Harvard Medical School\",\n      \"value\": \"HMS2093L17\",\n      \"url\":
+        \"http://iccb.med.harvard.edu/screening/compound_libraries/bioactives_microsource1.htm\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"47193732\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=47193732\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-04\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"EPA Substance Registry
+        Services\",\n      \"value\": \"115139\",\n      \"url\": \"http://iaspub.epa.gov/sor_internet/registry/substreg/searchandretrieve/advancedsearch/externalSearch.do?p_type=SRSITN&p_value=115139\"\n
+        \   },\n    {\n      \"name\": \"CAS\",\n      \"value\": \"3380-34-5\",\n
+        \     \"url\": \"http://www.cas.org/\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"137003021\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=137003021\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"117695803\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695803\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57389809\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57389809\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"103905760\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103905760\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"99401.5\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=99401\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"143433021\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=143433021\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"123938.12\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=123938\"\n
+        \   },\n    {\n      \"name\": \"BioCyc\",\n      \"value\": \"CPD0-1227\",\n
+        \     \"url\": \"http://biocyc.org/META/NEW-IMAGE?type=COMPOUND&object=CPD0-1227\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"208265074\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=208265074\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"103222736\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103222736\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"125022.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=125022\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"90003.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90003\"\n
+        \   },\n    {\n      \"name\": \"ChemDB\",\n      \"value\": \"3968915\",\n
+        \     \"url\": \"http://cdb.ics.uci.edu/CHEMDB/Web/cgibin/ChemicalDetailWeb.py?chemical_id=3968915\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49674565\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49674565\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"211786863\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=211786863\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"7890716\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=7890716\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"43585.7\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=43585\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"175442272\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=175442272\"\n
+        \   },\n    {\n      \"name\": \"Mcule\",\n      \"value\": \"MCULE-2614621397\",\n
+        \     \"url\": \"https://mcule.com/MCULE-2614621397\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"172080639\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=172080639\"\n
+        \   },\n    {\n      \"name\": \"SGCOxCompounds\",\n      \"value\": \"S00100\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"IS Chemical Technology\",\n
+        \     \"value\": \"I01-2897\",\n      \"url\": \"http://www.ispharm.com/product/I01-2897.html\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126632200\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126632200\"\n
+        \   },\n    {\n      \"name\": \"ChemTik\",\n      \"value\": \"CTK3J8301\",\n
+        \     \"url\": \"http://www.chemtik.com/pro_result/398301/\"\n    },\n    {\n
+        \     \"name\": \"MMDB\",\n      \"value\": \"65341.6\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=65341\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"250180394\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250180394\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"152137732\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152137732\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"251886846\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=251886846\"\n
+        \   },\n    {\n      \"name\": \"SCRIPDB\",\n      \"value\": \"US20120010284A1-20120112-C00025_9\",\n
+        \     \"url\": \"http://dcv.uhnres.utoronto.ca/SCRIPDB/results/?patentid=US20120010284A1-20120112-C00025_9\"\n
+        \   },\n    {\n      \"name\": \"Shanghai Institute of Organic Chemistry\",\n
+        \     \"value\": \"3p9t\",\n      \"url\": \"http://www.pdbbind-cn.org/quickpdb.asp?quickpdb=3p9t\"\n
+        \   },\n    {\n      \"name\": \"Therapeutic Targets Database\",\n      \"value\":
+        \"DNC001513\",\n      \"url\": \"http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=DNC001513\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"126648856\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126648856\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57260157\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57260157\"\n
+        \   },\n    {\n      \"name\": \"TCI (Tokyo Chemical Industry)\",\n      \"value\":
+        \"T1872\",\n      \"url\": \"\"\n    },\n    {\n      \"name\": \"DrugBank\",\n
+        \     \"value\": \"DB08604\",\n      \"url\": \"http://www.drugbank.ca/drugs/DB08604\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"151989799\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=151989799\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57322843\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57322843\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-05\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"152138388\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152138388\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"134338639\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134338639\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"830851\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=830851\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"135684207\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135684207\"\n
+        \   },\n    {\n      \"name\": \"3B_SCI\",\n      \"value\": \"3B3-011899\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"11109466\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=11109466\"\n
+        \   },\n    {\n      \"name\": \"HDH Pharma\",\n      \"value\": \"IN1424\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"MMDB\",\n      \"value\":
+        \"86123.4\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=86123\"\n
+        \   },\n    {\n      \"name\": \"Life Chemicals\",\n      \"value\": \"F2173-0825\",\n
+        \     \"url\": \"http://lifechemicals.emolecules.com\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"223774642\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223774642\"\n
+        \   },\n    {\n      \"name\": \"CAS\",\n      \"value\": \"88032-08-0\",\n
+        \     \"url\": \"http://www.cas.org/\"\n    },\n    {\n      \"name\": \"Pubchem
+        SID\",\n      \"value\": \"92710097\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=92710097\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"125348302\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=125348302\"\n
+        \   },\n    {\n      \"name\": \"FINETECH\",\n      \"value\": \"FT-0609773\",\n
+        \     \"url\": \"http://www.finetechnology-ind.com/product_detail.shtml?catalogNo=FT-0609773\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"11627.3\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11627\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"104309596\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=104309596\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144205201\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144205201\"\n
+        \   },\n    {\n      \"name\": \"Tox21\",\n      \"value\": \"NCGC00159417-06\",\n
+        \     \"url\": \"https://tripod.nih.gov/tox21/samples/Tox21_400079\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"129676338\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=129676338\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"26754498\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=26754498\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"121362549\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=121362549\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49903859\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49903859\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"80407.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=80407\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"164794929\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=164794929\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"50109854\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=50109854\"\n
+        \   },\n    {\n      \"name\": \"Sigma-Aldrich\",\n      \"value\": \"72779_SIGMA\",\n
+        \     \"url\": \"http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/72779?cm_mmc=affiliate-_-PubChem-_-product-_-link\"\n
+        \   },\n    {\n      \"name\": \"Hangzhou Trylead Chemical Technology\",\n
+        \     \"value\": \"TL8002539\",\n      \"url\": \"\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"135668588\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135668588\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"99453849\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=99453849\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"14922470\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14922470\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"57260158\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57260158\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"37767\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"NIH Clinical Collection\",\n
+        \     \"value\": \"SAM002554907\",\n      \"url\": \"\"\n    },\n    {\n      \"name\":
+        \"Tractus\",\n      \"value\": \"TR-014090\",\n      \"url\": \"\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"56313852\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=56313852\"\n
+        \   },\n    {\n      \"name\": \"Oakwood Products\",\n      \"value\": \"079476\",\n
+        \     \"url\": \"http://www.oakwoodchemical.com/ProductsList.aspx?CategoryID=-2&txtSearch=64650&ExtHyperLink=1\"\n
+        \   },\n    {\n      \"name\": \"Collaborative Drug Discovery, Inc.\",\n      \"value\":
+        \"2304\",\n      \"url\": \"https://app.collaborativedrug.com/public/structures/2304\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"186020461\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=186020461\"\n
+        \   },\n    {\n      \"name\": \"A&J Pharmtech CO., LTD.\",\n      \"value\":
+        \"ZB000507\",\n      \"url\": \"http://www.ajpharmtech.com/\"\n    },\n    {\n
+        \     \"name\": \"\",\n      \"value\": \"50-7869\",\n      \"url\": \"http://www.greenchempharm.com/\"\n
+        \   },\n    {\n      \"name\": \"DTP/NCI\",\n      \"value\": \"759151\",\n
+        \     \"url\": \"http://dtp.nci.nih.gov/dtpstandard/servlet/dwindex?searchtype=NSC&outputformat=html&searchlist=759151\"\n
+        \   },\n    {\n      \"name\": \"ChEMBL\",\n      \"value\": \"CHEMBL849\",\n
+        \     \"url\": \"https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/CHEMBL849\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"176324148\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=176324148\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"241151993\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=241151993\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"26759661\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=26759661\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"170481145\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170481145\"\n
+        \   },\n    {\n      \"name\": \"Broad Institute\",\n      \"value\": \"BRD-K41731458-001-09-4\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"223485437\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223485437\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49968902\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49968902\"\n
+        \   },\n    {\n      \"name\": \"ABI Chem\",\n      \"value\": \"AC1L1KMN\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ChemMol\",\n      \"value\":
+        \"99084008\",\n      \"url\": \"http://www.chemmol.com/chemmol/99084008.html\"\n
+        \   },\n    {\n      \"name\": \"MolPort\",\n      \"value\": \"MolPort-003-666-702\",\n
+        \     \"url\": \"https://www.molport.com/shop/molecule-link/MolPort-003-666-702\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"104170014\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=104170014\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"174006648\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=174006648\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"160809838\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=160809838\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"836967\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=836967\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"45855.6\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=45855\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"172848469\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=172848469\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124813021\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124813021\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"223519140\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223519140\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144214040\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144214040\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"174477329\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=174477329\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001066347\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"163812839\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=163812839\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"38016.7\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=38016\"\n
+        \   },\n    {\n      \"name\": \"King Scientific\",\n      \"value\": \"KSC498G0D\",\n
+        \     \"url\": \"http://www.kingscientific.com/pro_result/8687/\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"252039861\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252039861\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"162174892\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=162174892\"\n
+        \   },\n    {\n      \"name\": \"Ark Pharm, Inc.\",\n      \"value\": \"AK-73001\",\n
+        \     \"url\": \"http://www.arkpharminc.com/web/products-detail.html?catalogno=AK-73001\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"99398.10\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=99398\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144075889\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144075889\"\n
+        \   },\n    {\n      \"name\": \"A&J Pharmtech CO., LTD.\",\n      \"value\":
+        \"CJ-00083\",\n      \"url\": \"http://www.ajpharmtech.com/\"\n    },\n    {\n
+        \     \"name\": \"Pubchem SID\",\n      \"value\": \"241074904\",\n      \"url\":
+        \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=241074904\"\n    },\n
+        \   {\n      \"name\": \"IBM\",\n      \"value\": \"96566AD92878ECA0254CFD7818088D7A\",\n
+        \     \"url\": \"http://www.ibm.com/gbs/nih/?sid=96566AD92878ECA0254CFD7818088D7A&ik=XEFQLINVKFYRCS-UHFFFAOYSA-N\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"99445075\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=99445075\"\n
+        \   },\n    {\n      \"name\": \"Tox21\",\n      \"value\": \"NCGC00159417-05\",\n
+        \     \"url\": \"https://tripod.nih.gov/tox21/samples/Tox21_111648_1\"\n    },\n
+        \   {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"85172710\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=85172710\"\n
+        \   },\n    {\n      \"name\": \"Therapeutic Targets Database\",\n      \"value\":
+        \"DAP001435\",\n      \"url\": \"http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=DAP001435\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124892178\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892178\"\n
+        \   },\n    {\n      \"name\": \"NovoSeek\",\n      \"value\": \"5564\",\n
+        \     \"url\": \"http://www.novoseek.com/AccessPoint.action?corpus=MEDLINE&externalDBId=cid%3d5564&DBName=pubchem&actionName=search&bioType=drug\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"223454576\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223454576\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"90005.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90005\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"87577595\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87577595\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-06\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"MMDB\",\n      \"value\":
+        \"43581.4\",\n      \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=43581\"\n
+        \   },\n    {\n      \"name\": \"labseeker\",\n      \"value\": \"SC-16588\",\n
+        \     \"url\": \"http://www.labseeker.com/goods.php?id=22337\"\n    },\n    {\n
+        \     \"name\": \"Pubchem SID\",\n      \"value\": \"103905763\",\n      \"url\":
+        \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103905763\"\n    },\n
+        \   {\n      \"name\": \"Berrchem\",\n      \"value\": \"BR-73001\",\n      \"url\":
+        \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"49832484\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49832484\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"134340679\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134340679\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"124892177\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892177\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"143858045\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=143858045\"\n
+        \   },\n    {\n      \"name\": \"NCGC\",\n      \"value\": \"NCGC00159417-07\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"ChemMol\",\n      \"value\":
+        \"1034685\",\n      \"url\": \"http://www.chemmol.com/chemmol/1034685.html\"\n
+        \   },\n    {\n      \"name\": \"AKos Consulting & Solutions\",\n      \"value\":
+        \"AKOS015850380\",\n      \"url\": \"http://akoscompounds.de/catalogue/akossamplesretrieval.php?IDNUMBERS=AKOS015850380\"\n
+        \   },\n    {\n      \"name\": \"KEGG\",\n      \"value\": \"C12059\",\n      \"url\":
+        \"http://www.genome.jp/dbget-bin/www_bget?cpd:C12059\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"175611134\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=175611134\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"48839\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE8861\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"22126.7\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=22126\"\n
+        \   },\n    {\n      \"name\": \"AmicBase - Antimicrobial Activities\",\n
+        \     \"value\": \"6191\",\n      \"url\": \"http://www.manetec-52.de/apps/amicbase_drugs-online/base.nsf/WebMain4?SearchView&Query=%28%5BDocType%5D=%22DataFormular%22%29%20AND%20%28%5BLine_1_S%5D=%28%226191*%22%29%29&SearchWV=FALSE&SearchOrder=4&SearchMax=0&Count=50&Start=1&SearchBasis=extern2&FromView=WebMain4\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144071986\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144071986\"\n
+        \   },\n    {\n      \"name\": \"SMID\",\n      \"value\": \"TCL\",\n      \"url\":
+        \"http://smid.blueprint.org/SMInfo.php?hetname=TCL\"\n    },\n    {\n      \"name\":
+        \"Pubchem SID\",\n      \"value\": \"162766619\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=162766619\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"131311043\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=131311043\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"144071804\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144071804\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001335938\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Shanghai Institute of
+        Organic Chemistry\",\n      \"value\": \"1nhg\",\n      \"url\": \"http://www.pdbbind-cn.org/quickpdb.asp?quickpdb=1nhg\"\n
+        \   },\n    {\n      \"name\": \"MLSMR\",\n      \"value\": \"MLS001074876\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"113584959\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=113584959\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"85256706\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=85256706\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"11303.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11303\"\n
+        \   },\n    {\n      \"name\": \"EPA DSSTox\",\n      \"value\": \"40328\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Thomson Pharma\",\n
+        \     \"value\": \"00026732\",\n      \"url\": \"http://www.thomson-pharma.com/report/chemistry?ch=TS00026732\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"53800864\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=53800864\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"103022876\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103022876\"\n
+        \   },\n    {\n      \"name\": \"MMDB\",\n      \"value\": \"89179.4\",\n
+        \     \"url\": \"http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=89179\"\n
+        \   },\n    {\n      \"name\": \"Amadis Chemical\",\n      \"value\": \"A821950\",\n
+        \     \"url\": \"http://www.amadischem.com/en-US/ProductDetail.aspx?catalog=A821950\"\n
+        \   },\n    {\n      \"name\": \"NIST\",\n      \"value\": \"XEFQLINVKFYRCS-UHFFFAOYSA-N\",\n
+        \     \"url\": \"\"\n    },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\":
+        \"138139326\",\n      \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=138139326\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"170483649\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170483649\"\n
+        \   },\n    {\n      \"name\": \"ICCB-Longwood/NSRB Screening Facility, Harvard
+        Medical School\",\n      \"value\": \"HMS3259K19\",\n      \"url\": \"http://iccb.med.harvard.edu/screening/compound_libraries/ncc2.htm\"\n
+        \   },\n    {\n      \"name\": \"NIAID\",\n      \"value\": \"095068\",\n
+        \     \"url\": \"http://chemdb.niaid.nih.gov/CompoundDetails.aspx?AIDSNO=095068\"\n
+        \   },\n    {\n      \"name\": \"Pubchem SID\",\n      \"value\": \"163687196\",\n
+        \     \"url\": \"https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=163687196\"\n
+        \   }\n  ]\n}"
+  recorded_at: 2023-08-03 19:57:54 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://cts.fiehnlab.ucdavis.edu/service/conversion/fromValues
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Thu, 03 Aug 2023 19:57:54 GMT
+      vary: Accept-Encoding
+      content-encoding: gzip
+      content-type: application/json;charset=utf-8
+      transfer-encoding: chunked
+    body:
+      encoding: ''
+      file: no
+      string: |2-
+
+        [
+          "BioCyc",
+          "CAS",
+          "ChEBI",
+          "Chemical Name",
+          "Human Metabolome Database",
+          "InChIKey",
+          "KEGG",
+          "LMSD",
+          "LipidMAPS",
+          "PubChem CID",
+          "SMILES",
+          "Pubchem SID",
+          "ChemSpider",
+          "ChemDB",
+          "ChEMBL",
+          "ChemBank",
+          "ZINC",
+          "Broad Institute",
+          "The Scripps Research Institute Molecular Screening Center",
+          "DrugBank",
+          "MMDB",
+          "ChemMol",
+          "NIAID",
+          "Southern Research Institute",
+          "NIH Clinical Collection",
+          "Comparative Toxicogenomics Database",
+          "MolPort",
+          "SMID",
+          "ChemBridge",
+          "GlaxoSmithKline (GSK)",
+          "NINDS Approved Drug Screening Program",
+          "NIST",
+          "SCRIPDB",
+          "Southern Research Specialized Biocontainment Screening Center",
+          "TimTec",
+          "Tox21",
+          "Web of Science",
+          "ABI Chem",
+          "Center for Chemical Genomics, University of Michigan",
+          "ChemIDplus",
+          "Sigma-Aldrich",
+          "ASINEX",
+          "ChemBlock",
+          "DiscoveryGate",
+          "Specs",
+          "Ambinter",
+          "Emory University Molecular Libraries Screening Center",
+          "MLSMR",
+          "Vitas-M Laboratory",
+          "AAA Chemistry",
+          "ChemFrog",
+          "Isoprenoids",
+          "NCGC",
+          "Acesobio",
+          "ALDRICH",
+          "Ambit Biosciences",
+          "CLRI (CSIR)",
+          "InFarmatik",
+          "IS Chemical Technology",
+          "MOLI",
+          "SIGMA",
+          "Tetrahedron Scientific Inc",
+          "Thomson Pharma",
+          "ABBLIS Chemicals",
+          "Abbott Labs",
+          "AbMole Bioscience",
+          "Achemica",
+          "Acorn PharmaTech",
+          "Active Biopharma",
+          "Adooq BioScience",
+          "AKos Consulting & Solutions",
+          "AK Scientific, Inc. (AKSCI)",
+          "Alagar Yadav, Karpagam University",
+          "Alinda Chemical",
+          "Alsachim",
+          "Amadis Chemical",
+          "Amatye",
+          "AmicBase - Antimicrobial Activities",
+          "Angene Chemical",
+          "Angene International",
+          "Ark Pharm, Inc.",
+          "BioChemPartner",
+          "BroadPharm",
+          "Chembase.cn",
+          "Chembo",
+          "chemicalize.org by ChemAxon",
+          "Fragmenta",
+          "Anitha, Department of Bioinformatics, Karpagam University",
+          "Annker Organics",
+          "Anward",
+          "Apeiron Synthesis",
+          "ApexBio Technology",
+          "Apexmol",
+          "Aromsyn catalogue",
+          "Aronis",
+          "Aurora Fine Chemicals LLC",
+          "Aurum Pharmatech LLC",
+          "Avanti Polar Lipids",
+          "Beijing Advanced Technology Co, Ltd",
+          "Bertin Pharma",
+          "Bhaskar Lab, Department of Zoology, Sri Venkateswara University",
+          "BIDD",
+          "BIND",
+          "BindingDB",
+          "Biological Magnetic Resonance Data Bank (BMRB)",
+          "Bioprocess Technology Lab, Department of Microbiology, Bharathidasan University",
+          "Biosynth",
+          "Burnham Center for Chemical Genomics",
+          "Calbiochem",
+          "Cambridge Crystallographic Data Centre",
+          "CAPOT",
+          "Cayman Chemical",
+          "CC_PMLSC",
+          "ChemExper Chemical Directory",
+          "Chemical Biology Department, Max Planck Institute of Molecular Physiology",
+          "ChemScene",
+          "ChemSynthesis",
+          "ChemTik",
+          "Chiralblock Biosciences",
+          "Circadian Research, Kay Laboratory, University of California at San Diego (UCSD)",
+          "CMLD-BU",
+          "Columbia University Molecular Screening Center",
+          "Creasyn Finechem",
+          "Department of Pharmacy, LMU",
+          "DTP/NCI",
+          "EDASA Scientific Compounds June 2013",
+          "EMD Biosciences",
+          "Enamine",
+          "Ennopharm",
+          "EPA DSSTox",
+          "Excenen Pharmatech",
+          "Exchemistry",
+          "FINETECH",
+          "Finley and King Labs, Harvard Medical School",
+          "FLUKA",
+          "ForeChem",
+          "Georganics",
+          "GLIDA, GPCR-Ligand Database",
+          "GNF / Scripps Winzeler lab",
+          "Golm Metabolome Database (GMD), Max Planck Institute of Molecular Plant Physiology",
+          "Hangzhou APIChem Technology",
+          "Hangzhou Trylead Chemical Technology",
+          "HDH Pharma",
+          "HUMGENEX",
+          "IBCH RAS",
+          "IBM",
+          "ICCB-Longwood/NSRB Screening Facility, Harvard Medical School",
+          "Immunology Lab, Department of Biotechnology, Calicut University",
+          "Inhibitor 2",
+          "Insect Molecular Biology Lab, Department of Environmental Biotechnology, Bharathidasan University",
+          "iThemba Pharmaceuticals",
+          "IUPHAR-DB",
+          "Jamson Pharmachem Technology",
+          "Japan Chemical Substance Dictionary (Nikkaji)",
+          "Johns Hopkins Ion Channel Center",
+          "Kingston Chemistry",
+          "KUMGM",
+          "LeadScope",
+          "MedChemexpress MCE",
+          "MICAD",
+          "MIC Scientific",
+          "Milwaukee Institute for Drug Discovery",
+          "Molecular Libraries Program, Specialized Chemistry Center, University of Kansas",
+          "MP Biomedicals",
+          "MTDP",
+          "Nanjing Pharmaceutical Factory",
+          "Nantong Baihua Bio-Pharmaceutical Co., Ltd",
+          "Nature Chemical Biology",
+          "Nature Chemistry",
+          "Nature Communications",
+          "NIST Chemistry WebBook",
+          "Nitric Oxide Research, National Cancer Institute (NCI)",
+          "NMMLSC",
+          "NMRShiftDB",
+          "NovoSeek",
+          "Oakwood Products",
+          "ORST SMALL MOLECULE SCREENING CENTER",
+          "P3 BioSystems",
+          "PANACHE",
+          "Paul Baures",
+          "PCMD",
+          "PDSP",
+          "PENN-ABS",
+          "PennChem-GAM",
+          "PFC",
+          "P.Ravikumar, M.Jeyam and G.Shalini. Biochematics Division, Bharathiar University",
+          "priyadharshini sabarathinam angayarkanni murugesh palaniswamy",
+          "Prous Science Drugs of the Future",
+          "Rangan Lab, Department of Biotechnology, IIT Guwahati",
+          "R&D Chemicals",
+          "R.Sathishkumar, Phytomatics Laboratory, Department of Bioinformatics, Bharathiar University",
+          "RSChem, LLC",
+          "SASTRA University, Quorum sensing and Peptidomimetics Laboratory",
+          "Selleckbio",
+          "Selleck Chemicals",
+          "SGCOxCompounds",
+          "SGCStoCompounds",
+          "S.GURUDEEBAN, T.RAMANATHAN & K.SATYAVANI, Marine Medicinal Plant Biotechnology Laboratory, Faculty of Marine Sciences, Annamalai Universtiy",
+          "Shanghai Institute of Organic Chemistry",
+          "Shanghai Sinofluoro Scientific Company",
+          "SLING Consortium",
+          "SRMLSC",
+          "Structural Genomics Consortium",
+          "SureChem",
+          "SYNCHEM OHG",
+          "Syntechem",
+          "TCI (Tokyo Chemical Industry)",
+          "ten Dijke Lab, Leiden University Medical Center",
+          "Therapeutic Targets Database",
+          "Total TOSLab Building-Blocks",
+          "True PharmaChem",
+          "Tyger Scientific",
+          "UCLA Molecular Screening Shared Resource",
+          "UM-BBD",
+          "UniCarbKB",
+          "University of Pittsburgh Molecular Library Screening Center",
+          "UPCMLD",
+          "Vanderbilt Screening Center for GPCRs, Ion Channels and Transporters",
+          "Vanderbilt Specialized Chemistry Center",
+          "Vanderbilt University Medical Center",
+          "VIT University",
+          "Watec Laboratories",
+          "Watson International Ltd",
+          "xPharm",
+          "Zancheng Functional Chemicals",
+          "zealing chemical"
+        ]
+  recorded_at: 2023-08-03 19:57:54 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0

@@ -1,12 +1,14 @@
 up <- ping_service("chebi")
 test_that("examples in the article are unchanged", {
-  skip_on_cran()
-  skip_if_not(up, "CHEBI service is down")
+  # skip_on_cran()
+  # skip_if_not(up, "CHEBI service is down")
 
   utils::data("lc50", package = "webchem")
   cas_rns <- lc50[order(lc50$value)[1:3], "cas"]
-  chebiids <- get_chebiid(cas_rns)
-  comp <- chebi_comp_entity(chebiids$chebiid)
+  vcr::use_cassette("chebi-article", {
+    chebiids <- get_chebiid(cas_rns)
+    comp <- chebi_comp_entity(chebiids$chebiid)
+  })
   pars <- lapply(comp, function(x) {
     with(x, parents[parents$type == "has role", ])
   })
@@ -26,12 +28,14 @@ test_that("examples in the article are unchanged", {
 })
 
 test_that("chebi returns correct results", {
-  skip_on_cran()
-  skip_if_not(up, "CHEBI service is down")
-  a <- get_chebiid("Glyphosate", from = "all")
-  b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
-  A <- chebi_comp_entity("CHEBI:27744")
-  B <- chebi_comp_entity("27732")
+  # skip_on_cran()
+  # skip_if_not(up, "CHEBI service is down")
+  vcr::use_cassette("chebi-correct", {
+    a <- get_chebiid("Glyphosate", from = "all")
+    b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
+    A <- chebi_comp_entity("CHEBI:27744")
+    B <- chebi_comp_entity("27732")
+  })
 
   expect_s3_class(a, "data.frame")
   expect_s3_class(b, "data.frame")
@@ -47,8 +51,9 @@ test_that("chebi returns correct results", {
 })
 
 test_that("get_chebiid() handles special characters in SMILES",{
-  skip_on_cran()
-  skip_if_not(up, "CHEBI service is down")
-
-  expect_equal(get_chebiid("C#C", from = "smiles")$chebiid, "CHEBI:27518")
+  # skip_on_cran()
+  # skip_if_not(up, "CHEBI service is down")
+  vcr::use_cassette("chebi-smiles", {
+    expect_equal(get_chebiid("C#C", from = "smiles")$chebiid, "CHEBI:27518")
+  })
 })

@@ -1,0 +1,561 @@
+http_interactions:
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/121-33-5.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:27 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:28 GMT
+      accept-ranges: bytes
+      content-length: '3722'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>vanillin
+        \ 121-33-5</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>vanillin<br>\n<span class=title2>4-hydroxy-3-methoxybenzaldehyde</span></p>\n<img
+        src=\"../gif/121-33-5.gif\" alt=\"121-33-5\"> \n<!--<p class=cas>CAS 121-33-5</p>>-->\n<p
+        class=cas><span style=font-weight:bold>CAS 121-33-5</span>&nbsp;-&nbsp;MW
+        152.0</p>\n<!--JMOL entry-->\n<form>\n     <script>\n      jmolInitialize(\"jmol/../jmol\");
+        \n      jmolSetAppletColor(\"white\"); \n      jmolApplet(300, \"load jmol/pdb/121-33-5.pdb\");\n
+        \     \"spacefill 0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots
+        on\", \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>1345</td><td>1410</td><td>1635</td><td>2569</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>965</td><td>1011</td><td>1170</td><td>1901</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>&nbsp;</td></tr>\n</table>\n<p>Percepts:
+        vanilla</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n<p>Notes:  Ferreira2001-DBWax=
+        2585Aznar(2001)DBWax= 2581Ong1999-HPWax= 2591</p>\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Ong,
+        P. and T. E. Acree (1999). J. of Agric. and Food Chem. 47(2): 665-670. [HP-1].</p>\n<p><b>DB5</b>&nbsp;Valim,
+        M. F., R. L. Rouseff, et al. (2003). J. Agric. Food Chem. 51(4): 1010-1015.Blank,
+        Fischer &amp; Grosch 1989, Z Lebensm Unters Forsch, 189, 426-433. [SE-54].Rychlik,
+        Schieberle &amp; Grosch Compilation of Odor Thresholds, Odor Qualities and
+        Retention Indices of Key Food Odorants, Lichtenbergstra&szlig;e, Germany,
+        1998. [SE-54].</p>\n<p><b>OV1701</b>&nbsp;Blank, Fischer &amp; Grosch 1989,
+        Z Lebensm Unters Forsch, 189, 426-433. Rychlik, Schieberle &amp; Grosch Compilation
+        of Odor Thresholds, Odor Qualities and Retention Indices of Key Food Odorants,
+        Lichtenbergstra&szlig;e, Germany, 1998.</p>\n<p><b>C20M</b>&nbsp;Rychlik,
+        Schieberle &amp; Grosch Compilation of Odor Thresholds, Odor Qualities and
+        Retention Indices of Key Food Odorants, Lichtenbergstra&szlig;e, Germany,
+        1998. [FFAP]</p>\n<p class=credit>Source: <b>Flavornet</b> by Terry Acree
+        &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy; Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:29 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/123-32-0.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:28 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:28 GMT
+      accept-ranges: bytes
+      content-length: '3006'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>dimethyl
+        pyrazine  123-32-0</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>dimethyl pyrazine<br>\n<span class=title2>2,5-dimethyl pyrazine,
+        2,5-dimethyl -1,4-diazine</span></p>\n<img src=\"../gif/123-32-0.gif\" alt=\"123-32-0\">
+        \n<!--<p class=cas>CAS 123-32-0</p>>-->\n<p class=cas><span style=font-weight:bold>CAS
+        123-32-0</span>&nbsp;-&nbsp;MW 108.14</p>\n<!--JMOL entry-->\n<form>\n     <script>\n
+        \     jmolInitialize(\"jmol/../jmol\"); \n      jmolSetAppletColor(\"white\");
+        \n      jmolApplet(300, \"load jmol/pdb/123-32-0.pdb\");\n      \"spacefill
+        0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots on\",
+        \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>888</td><td>[905]</td><td>[996]</td><td>[1253]</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>504</td><td>[501]</td><td>[532]</td><td>[624]</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>[interpolated]</td></tr>\n</table>\n<p>Percepts:
+        cocoa, roasted nut, roast beef, medicine</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Yong,
+        Acree, Lavin &amp; Butts 1989; Thermal generation of aroma, American Chemistry
+        Society, 26, 276-283</p>\n<p><b>DB5</b>&nbsp;</p>\n<p><b>OV1701</b>&nbsp;</p>\n<p><b>C20M</b>&nbsp;</p>\n<p
+        class=credit>Source: <b>Flavornet</b> by Terry Acree &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy;
+        Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:29 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/121-33-5.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:28 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:28 GMT
+      accept-ranges: bytes
+      content-length: '3722'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>vanillin
+        \ 121-33-5</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>vanillin<br>\n<span class=title2>4-hydroxy-3-methoxybenzaldehyde</span></p>\n<img
+        src=\"../gif/121-33-5.gif\" alt=\"121-33-5\"> \n<!--<p class=cas>CAS 121-33-5</p>>-->\n<p
+        class=cas><span style=font-weight:bold>CAS 121-33-5</span>&nbsp;-&nbsp;MW
+        152.0</p>\n<!--JMOL entry-->\n<form>\n     <script>\n      jmolInitialize(\"jmol/../jmol\");
+        \n      jmolSetAppletColor(\"white\"); \n      jmolApplet(300, \"load jmol/pdb/121-33-5.pdb\");\n
+        \     \"spacefill 0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots
+        on\", \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>1345</td><td>1410</td><td>1635</td><td>2569</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>965</td><td>1011</td><td>1170</td><td>1901</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>&nbsp;</td></tr>\n</table>\n<p>Percepts:
+        vanilla</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n<p>Notes:  Ferreira2001-DBWax=
+        2585Aznar(2001)DBWax= 2581Ong1999-HPWax= 2591</p>\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Ong,
+        P. and T. E. Acree (1999). J. of Agric. and Food Chem. 47(2): 665-670. [HP-1].</p>\n<p><b>DB5</b>&nbsp;Valim,
+        M. F., R. L. Rouseff, et al. (2003). J. Agric. Food Chem. 51(4): 1010-1015.Blank,
+        Fischer &amp; Grosch 1989, Z Lebensm Unters Forsch, 189, 426-433. [SE-54].Rychlik,
+        Schieberle &amp; Grosch Compilation of Odor Thresholds, Odor Qualities and
+        Retention Indices of Key Food Odorants, Lichtenbergstra&szlig;e, Germany,
+        1998. [SE-54].</p>\n<p><b>OV1701</b>&nbsp;Blank, Fischer &amp; Grosch 1989,
+        Z Lebensm Unters Forsch, 189, 426-433. Rychlik, Schieberle &amp; Grosch Compilation
+        of Odor Thresholds, Odor Qualities and Retention Indices of Key Food Odorants,
+        Lichtenbergstra&szlig;e, Germany, 1998.</p>\n<p><b>C20M</b>&nbsp;Rychlik,
+        Schieberle &amp; Grosch Compilation of Odor Thresholds, Odor Qualities and
+        Retention Indices of Key Food Odorants, Lichtenbergstra&szlig;e, Germany,
+        1998. [FFAP]</p>\n<p class=credit>Source: <b>Flavornet</b> by Terry Acree
+        &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy; Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:29 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/75-07-0.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:28 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:50 GMT
+      accept-ranges: bytes
+      content-length: '3065'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>ethanal
+        \ 75-07-0</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>ethanal<br>\n<span class=title2>acetaldehyde</span></p>\n<img
+        src=\"../gif/75-07-0.gif\" alt=\"75-07-0\"> \n<!--<p class=cas>CAS 75-07-0</p>>-->\n<p
+        class=cas><span style=font-weight:bold>CAS 75-07-0</span>&nbsp;-&nbsp;MW 44.0</p>\n<!--JMOL
+        entry-->\n<form>\n     <script>\n      jmolInitialize(\"jmol/../jmol\"); \n
+        \     jmolSetAppletColor(\"white\"); \n      jmolApplet(300, \"load jmol/pdb/75-07-0.pdb\");\n
+        \     \"spacefill 0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots
+        on\", \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>418</td><td>427</td><td>[518]</td><td>714</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>29</td><td>23</td><td>&nbsp;</td><td>95</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>[interpolated]</td></tr>\n</table>\n<p>Percepts:
+        pungent, ether</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Chung,
+        Eiserich &amp; Shibamoto 1993; J. Agric. Food Chem., 41, 1693-1697. [HP101].</p>\n<p><b>DB5</b>&nbsp;Jirovetz,
+        L., G. Buchbauer, et al. (2002). Journal of Chromatography A 976(1-2): 265-275.
+        [RSL200].</p>\n<p><b>OV1701</b>&nbsp;</p>\n<p><b>C20M</b>&nbsp;Chung, Eiserich
+        &amp; Shibamoto 1993; J. Agric. Food Chem., 41, 1693-1697. [HP20M].</p>\n<p
+        class=credit>Source: <b>Flavornet</b> by Terry Acree &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy;
+        Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:30 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/123-32-0.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:28 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:28 GMT
+      accept-ranges: bytes
+      content-length: '3006'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>dimethyl
+        pyrazine  123-32-0</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>dimethyl pyrazine<br>\n<span class=title2>2,5-dimethyl pyrazine,
+        2,5-dimethyl -1,4-diazine</span></p>\n<img src=\"../gif/123-32-0.gif\" alt=\"123-32-0\">
+        \n<!--<p class=cas>CAS 123-32-0</p>>-->\n<p class=cas><span style=font-weight:bold>CAS
+        123-32-0</span>&nbsp;-&nbsp;MW 108.14</p>\n<!--JMOL entry-->\n<form>\n     <script>\n
+        \     jmolInitialize(\"jmol/../jmol\"); \n      jmolSetAppletColor(\"white\");
+        \n      jmolApplet(300, \"load jmol/pdb/123-32-0.pdb\");\n      \"spacefill
+        0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots on\",
+        \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>888</td><td>[905]</td><td>[996]</td><td>[1253]</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>504</td><td>[501]</td><td>[532]</td><td>[624]</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>[interpolated]</td></tr>\n</table>\n<p>Percepts:
+        cocoa, roasted nut, roast beef, medicine</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Yong,
+        Acree, Lavin &amp; Butts 1989; Thermal generation of aroma, American Chemistry
+        Society, 26, 276-283</p>\n<p><b>DB5</b>&nbsp;</p>\n<p><b>OV1701</b>&nbsp;</p>\n<p><b>C20M</b>&nbsp;</p>\n<p
+        class=credit>Source: <b>Flavornet</b> by Terry Acree &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy;
+        Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:30 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/121-33-5.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:29 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:28 GMT
+      accept-ranges: bytes
+      content-length: '3722'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>vanillin
+        \ 121-33-5</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>vanillin<br>\n<span class=title2>4-hydroxy-3-methoxybenzaldehyde</span></p>\n<img
+        src=\"../gif/121-33-5.gif\" alt=\"121-33-5\"> \n<!--<p class=cas>CAS 121-33-5</p>>-->\n<p
+        class=cas><span style=font-weight:bold>CAS 121-33-5</span>&nbsp;-&nbsp;MW
+        152.0</p>\n<!--JMOL entry-->\n<form>\n     <script>\n      jmolInitialize(\"jmol/../jmol\");
+        \n      jmolSetAppletColor(\"white\"); \n      jmolApplet(300, \"load jmol/pdb/121-33-5.pdb\");\n
+        \     \"spacefill 0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots
+        on\", \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>1345</td><td>1410</td><td>1635</td><td>2569</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>965</td><td>1011</td><td>1170</td><td>1901</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>&nbsp;</td></tr>\n</table>\n<p>Percepts:
+        vanilla</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n<p>Notes:  Ferreira2001-DBWax=
+        2585Aznar(2001)DBWax= 2581Ong1999-HPWax= 2591</p>\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Ong,
+        P. and T. E. Acree (1999). J. of Agric. and Food Chem. 47(2): 665-670. [HP-1].</p>\n<p><b>DB5</b>&nbsp;Valim,
+        M. F., R. L. Rouseff, et al. (2003). J. Agric. Food Chem. 51(4): 1010-1015.Blank,
+        Fischer &amp; Grosch 1989, Z Lebensm Unters Forsch, 189, 426-433. [SE-54].Rychlik,
+        Schieberle &amp; Grosch Compilation of Odor Thresholds, Odor Qualities and
+        Retention Indices of Key Food Odorants, Lichtenbergstra&szlig;e, Germany,
+        1998. [SE-54].</p>\n<p><b>OV1701</b>&nbsp;Blank, Fischer &amp; Grosch 1989,
+        Z Lebensm Unters Forsch, 189, 426-433. Rychlik, Schieberle &amp; Grosch Compilation
+        of Odor Thresholds, Odor Qualities and Retention Indices of Key Food Odorants,
+        Lichtenbergstra&szlig;e, Germany, 1998.</p>\n<p><b>C20M</b>&nbsp;Rychlik,
+        Schieberle &amp; Grosch Compilation of Odor Thresholds, Odor Qualities and
+        Retention Indices of Key Food Odorants, Lichtenbergstra&szlig;e, Germany,
+        1998. [FFAP]</p>\n<p class=credit>Source: <b>Flavornet</b> by Terry Acree
+        &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy; Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:30 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/75-07-0.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:29 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:50 GMT
+      accept-ranges: bytes
+      content-length: '3065'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>ethanal
+        \ 75-07-0</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>ethanal<br>\n<span class=title2>acetaldehyde</span></p>\n<img
+        src=\"../gif/75-07-0.gif\" alt=\"75-07-0\"> \n<!--<p class=cas>CAS 75-07-0</p>>-->\n<p
+        class=cas><span style=font-weight:bold>CAS 75-07-0</span>&nbsp;-&nbsp;MW 44.0</p>\n<!--JMOL
+        entry-->\n<form>\n     <script>\n      jmolInitialize(\"jmol/../jmol\"); \n
+        \     jmolSetAppletColor(\"white\"); \n      jmolApplet(300, \"load jmol/pdb/75-07-0.pdb\");\n
+        \     \"spacefill 0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots
+        on\", \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>418</td><td>427</td><td>[518]</td><td>714</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>29</td><td>23</td><td>&nbsp;</td><td>95</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>[interpolated]</td></tr>\n</table>\n<p>Percepts:
+        pungent, ether</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Chung,
+        Eiserich &amp; Shibamoto 1993; J. Agric. Food Chem., 41, 1693-1697. [HP101].</p>\n<p><b>DB5</b>&nbsp;Jirovetz,
+        L., G. Buchbauer, et al. (2002). Journal of Chromatography A 976(1-2): 265-275.
+        [RSL200].</p>\n<p><b>OV1701</b>&nbsp;</p>\n<p><b>C20M</b>&nbsp;Chung, Eiserich
+        &amp; Shibamoto 1993; J. Agric. Food Chem., 41, 1693-1697. [HP20M].</p>\n<p
+        class=credit>Source: <b>Flavornet</b> by Terry Acree &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy;
+        Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:30 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/123-32-0.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:29 GMT
+      server: Apache
+      last-modified: Tue, 19 Nov 2019 10:51:28 GMT
+      accept-ranges: bytes
+      content-length: '3006'
+      content-type: text/html
+    body:
+      encoding: ''
+      file: no
+      string: "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n
+        \       \"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n<!--
+        script generated page. do not edit! --> \n<html>\n<head>\n\t<title>dimethyl
+        pyrazine  123-32-0</title> \n<script src=\"jmol/../jmol/Jmol.js\"></script>\n<style
+        type=\"text/css\"> \n<!-- \nbody { \n\tbackground-color:#fff;\n\tmargin-top:-5px;\n\tmargin-right:20px;\n\tmargin-left:20px;
+        \n\tfont-family:Helvetica,Arial,sans-serif; \n\tfont-size:11px;\n\tline-height:14px;
+        \n\tcolor:#222 } \ntable { border-collapse:collapse; border-spacing:0px }\ntd
+        { width:50px; text-align:center; line-height:16px; background-color:#eee }\n.t
+        { width:110px; text-align:left }\n.no { background-color:#fff }\n.title {\n\tbackground-color:#dfe;\n\tcolor:#333;\n\tpadding:15px;\n\tmargin-left:-11px;\n\tmargin-right:-11px;\n\tmargin-bottom:20px;\n\tfont-size:15px;
+        \n\tline-height:18px; \n\tfont-weight:bold } \n.title2 { font-size:12px; line-height:18px
+        }\n.cas { font-size:12px; margin-top:20px } \n.mw { font-size:12px;  margin-top:20px}
+        \n.ref { \n\tmargin-top:-5px;\n\tmargin-left:10px;text-indent:-10px } \n.credit
+        { font-size:9px; line-height:12px } \nb { font-weight:bold }\na:link {color:#000;
+        text-decoration:none}\na:visited {color:#000; text-decoration:none}\na:hover
+        {color:#ff9; text-decoration:none}\na:active {color:#ff9; text-decoration:none}\na:focus
+        {color:#000; text-decoration:none}\t\n //--> \n</style> \n</head><body>\n<p
+        class=title>dimethyl pyrazine<br>\n<span class=title2>2,5-dimethyl pyrazine,
+        2,5-dimethyl -1,4-diazine</span></p>\n<img src=\"../gif/123-32-0.gif\" alt=\"123-32-0\">
+        \n<!--<p class=cas>CAS 123-32-0</p>>-->\n<p class=cas><span style=font-weight:bold>CAS
+        123-32-0</span>&nbsp;-&nbsp;MW 108.14</p>\n<!--JMOL entry-->\n<form>\n     <script>\n
+        \     jmolInitialize(\"jmol/../jmol\"); \n      jmolSetAppletColor(\"white\");
+        \n      jmolApplet(300, \"load jmol/pdb/123-32-0.pdb\");\n      \"spacefill
+        0%\";\n      jmolBr();\n      // a checkbox\n      jmolCheckbox(\"dots on\",
+        \"dots off\", \"Van der Waals surface\");\n      jmolBr();\n      jmolCheckbox(\"spacefill
+        90%\", \"spacefill 0%\", \"Fill space 80%\");\n      jmolBr();\n      jmolCheckbox(\"spin
+        on\", \"spin off\", \"Spin\");\n      jmolBr();\n     </script>\n </form>
+        <!--JMOL end-->\n<table>\n<tr><td class=t></td><td>OV101</td><td>DB5</td><td>OV1701</td><td>C20M</td></tr>\n<tr><td
+        class=t>Kovats RI</td><td>888</td><td>[905]</td><td>[996]</td><td>[1253]</td></tr><tr><td
+        class=t>Ethyl ester RI</td><td>504</td><td>[501]</td><td>[532]</td><td>[624]</td></tr><tr><td
+        class=no><br></td><td class=no colspan=4>[interpolated]</td></tr>\n</table>\n<p>Percepts:
+        cocoa, roasted nut, roast beef, medicine</p>\n<!--<p class=mw>MW $$mw$$</p>-->\n\n<p>References:</p>\n<p><b>OV101</b>&nbsp;Yong,
+        Acree, Lavin &amp; Butts 1989; Thermal generation of aroma, American Chemistry
+        Society, 26, 276-283</p>\n<p><b>DB5</b>&nbsp;</p>\n<p><b>OV1701</b>&nbsp;</p>\n<p><b>C20M</b>&nbsp;</p>\n<p
+        class=credit>Source: <b>Flavornet</b> by Terry Acree &amp; Heinrich Arn<br>http://www.flavornet.org<br>&copy;
+        Datu Inc., 2004 \n</p>\n</body>\n</html>\n"
+  recorded_at: 2023-08-04 17:36:30 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: get
+    uri: http://www.flavornet.org/info/50-00-0.html
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+  response:
+    status:
+      status_code: 404
+      category: Client error
+      reason: Not Found
+      message: 'Client error: (404) Not Found'
+    headers:
+      date: Fri, 04 Aug 2023 17:36:30 GMT
+      server: Apache
+      content-length: '315'
+      content-type: text/html; charset=iso-8859-1
+    body:
+      encoding: ''
+      file: no
+      string: |
+        <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+        <html><head>
+        <title>404 Not Found</title>
+        </head><body>
+        <h1>Not Found</h1>
+        <p>The requested URL was not found on this server.</p>
+        <p>Additionally, a 404 Not Found
+        error was encountered while trying to use an ErrorDocument to handle the request.</p>
+        </body></html>
+  recorded_at: 2023-08-04 17:36:30 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0

@@ -21,17 +21,25 @@ test_that("examples in the article are unchanged", {
   }))
 
   expect_s3_class(ids, "data.frame")
-  expect_equal(names(ids), c("query", "match", "etoxid"))
-  expect_equal(ids$etoxid,
-               c("8668", "8494", NA, "8397", "7240", "7331"),
+  expect_equal(ids$etoxid, c("8668","8494",NA,"8397","7240","7331"),
                ignore_attr = TRUE)
-  expect_equal(
-    ids$match,
-    c("2,4-Xylenol", "4-Chlor-2-methylphenol", NA,
-      "Atrazin", "Benzol", "Desethylatrazin"))
-  expect_equal(ids$query,
-               c("2,4-Dimethylphenol", "4-Chlor-2-methylphenol",
-                 "4-para-nonylphenol", "Atrazin", "Benzol", "Desethylatrazin"))
+  expect_equal(ids$match, c(
+    "2,4-Xylenol",
+    "4-Chlor-2-methylphenol",
+    NA,
+    "Atrazin",
+    "Benzol",
+    "Desethylatrazin"
+  ), ignore_attr = TRUE)
+  expect_equal(ids$query, c(
+    "2,4-Dimethylphenol",
+    "4-Chlor-2-methylphenol",
+    "4-para-nonylphenol",
+    "Atrazin",
+    "Benzol",
+    "Desethylatrazin"
+  ), ignore_attr = TRUE)
+  expect_equal(names(ids), c("query", "match", "etoxid"))
 
   expect_type(etox_cas, "character")
   expect_equal(names(etox_cas),
@@ -71,35 +79,6 @@ test_that("get_etoxid returns correct results", {
                ignore_attr = TRUE)
 })
 
-test_that("examples from webchem article run", {
-  skip_on_cran()
-  skip_if_not(up, "ETOX service is down")
-
-  # tests for the article
-  utils::data("jagst")
-  ids <- get_etoxid(utils::head(unique(jagst$substance),6), match = "best")
-
-  expect_s3_class(ids, "data.frame")
-  expect_equal(ids$etoxid, c("8668","8494",NA,"8397","7240","7331"),
-               ignore_attr = TRUE)
-  expect_equal(ids$match, c(
-    "2,4-Xylenol",
-    "4-Chlor-2-methylphenol",
-    NA,
-    "Atrazin",
-    "Benzol",
-    "Desethylatrazin"
-  ), ignore_attr = TRUE)
-  expect_equal(ids$query, c(
-    "2,4-Dimethylphenol",
-    "4-Chlor-2-methylphenol",
-    "4-para-nonylphenol",
-    "Atrazin",
-    "Benzol",
-    "Desethylatrazin"
-  ), ignore_attr = TRUE)
-
-})
 
 test_that("etox_basic returns correct results", {
   skip_on_cran()

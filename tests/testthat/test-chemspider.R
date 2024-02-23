@@ -19,7 +19,7 @@ test_that("examples in the article are unchanged", {
 
 test_that("cs_check_key() can find API key in my local .Renviron", {
 
-    expect_type(cs_check_key(), "character")
+  expect_type(cs_check_key(), "character")
 })
 
 test_that("cs_datasources()", {
@@ -76,18 +76,18 @@ test_that("get_csid()", {
     # get_csid() works with cs_control()
     c1 <- utils::head(get_csid("iron oxide", from = "name", order_by = "recordId"))
     c3 <- utils::head(get_csid("iron oxide", from = "name",
-                        order_by = "molecularWeight"))
+                               order_by = "molecularWeight"))
     c4 <- utils::head(get_csid("C6H12O6", from = "formula",
-                        order_by = "referenceCount",
-                        order_direction = "descending"))
+                               order_by = "referenceCount",
+                               order_direction = "descending"))
     c5 <- utils::head(get_csid("C6H12O6", from = "formula", order_by = "dataSourceCount",
-                        order_direction = "descending"))
+                               order_direction = "descending"))
     c6 <- utils::head(get_csid("C6H12O6", from = "formula", order_by = "pubMedCount",
-                        order_direction = "descending"))
+                               order_direction = "descending"))
     c7 <- utils::head(get_csid("C6H12O6", from = "formula", order_by = "rscCount",
-                        order_direction = "descending"))
+                               order_direction = "descending"))
     c8 <- utils::head(get_csid("iron oxide", from = "name", order_by = "molecularWeight",
-                        order_direction = "descending"))
+                               order_direction = "descending"))
 
     # get_csid() handles special characters in SMILES
     d1 <- get_csid("C#C", from = "smiles")
@@ -100,7 +100,7 @@ test_that("get_csid()", {
 
     # get_csid() can query inchikeys
     g1 <- get_csid("QTBSBXVTEAMEQO-UHFFFAOYSA-N", from = "inchikey")
-    })
+  })
 
   # get_csid() works with defaults
   expect_s3_class(a, "data.frame")
@@ -231,11 +231,12 @@ test_that("cs_compinfo()", {
   expect_equal(dim(b), c(2, 18))
 })
 
-#need to figure out how to test images with vcr
-#test_that("cs_img()", {
+#TODO: need to figure out how to test images with vcr
+test_that("cs_img()", {
+  skip_on_cran()
+  skip_if_not(ping_service("cs"), "Chemspider is down")
+  imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
 
-  #imgs <- cs_img(c(682, 5363, "balloon", NA), dir = tempdir())
-
-  #expect_true(file.exists(paste0(tempdir(), "/", "682.png")))
-  #expect_true(file.exists(paste0(tempdir(), "/", "5363.png")))
-#})
+  expect_true(file.exists(paste0(tempdir(), "/", "682.png")))
+  expect_true(file.exists(paste0(tempdir(), "/", "5363.png")))
+})
