@@ -1,0 +1,444 @@
+{
+    "atc_classifications": [
+        "J01CA04"
+    ],
+    "availability_type": 1,
+    "biotherapeutic": null,
+    "black_box_warning": 0,
+    "chebi_par_id": 2676,
+    "chemical_probe": 0,
+    "chirality": 1,
+    "cross_references": [
+        {
+            "xref_id": "amoxicillin",
+            "xref_name": "amoxicillin",
+            "xref_src": "DailyMed"
+        },
+        {
+            "xref_id": "144204854",
+            "xref_name": "SID: 144204854",
+            "xref_src": "PubChem"
+        },
+        {
+            "xref_id": "144204855",
+            "xref_name": "SID: 144204855",
+            "xref_src": "PubChem"
+        },
+        {
+            "xref_id": "50124271",
+            "xref_name": "SID: 50124271",
+            "xref_src": "PubChem"
+        },
+        {
+            "xref_id": "855939",
+            "xref_name": "SID: 855939",
+            "xref_src": "PubChem"
+        },
+        {
+            "xref_id": "Amoxicillin",
+            "xref_name": null,
+            "xref_src": "Wikipedia"
+        }
+    ],
+    "dosed_ingredient": true,
+    "first_approval": 1974,
+    "first_in_class": 0,
+    "helm_notation": null,
+    "indication_class": "Antibacterial",
+    "inorganic_flag": 0,
+    "max_phase": "4.0",
+    "molecule_chembl_id": "CHEMBL1082",
+    "molecule_hierarchy": {
+        "active_chembl_id": "CHEMBL1082",
+        "molecule_chembl_id": "CHEMBL1082",
+        "parent_chembl_id": "CHEMBL1082"
+    },
+    "molecule_properties": {
+        "alogp": "0.02",
+        "aromatic_rings": 1,
+        "cx_logd": "-2.67",
+        "cx_logp": "-2.31",
+        "cx_most_apka": "3.23",
+        "cx_most_bpka": "7.22",
+        "full_molformula": "C16H19N3O5S",
+        "full_mwt": "365.41",
+        "hba": 6,
+        "hba_lipinski": 8,
+        "hbd": 4,
+        "hbd_lipinski": 5,
+        "heavy_atoms": 25,
+        "molecular_species": "ACID",
+        "mw_freebase": "365.41",
+        "mw_monoisotopic": "365.1045",
+        "np_likeness_score": "0.94",
+        "num_lipinski_ro5_violations": 0,
+        "num_ro5_violations": 0,
+        "psa": "132.96",
+        "qed_weighted": "0.55",
+        "ro3_pass": "N",
+        "rtb": 4
+    },
+    "molecule_structures": {
+        "canonical_smiles": "CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccc(O)cc3)C(=O)N2[C@H]1C(=O)O",
+        "molfile": "\n     RDKit          2D\n\n 26 28  0  0  1  0  0  0  0  0999 V2000\n    3.0667   -2.7500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0667   -2.0417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3542   -2.7542    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3542   -2.0417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7417   -2.9667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7375   -1.8167    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    4.1542   -2.3917    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7292   -1.6792    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.1167   -2.0417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7292   -3.6667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5042   -1.6875    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8542   -3.2542    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.1167   -2.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.1083   -2.0417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.1167   -4.0167    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7208   -1.6792    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.1083   -2.7417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5042   -0.9792    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.3417   -4.0292    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    4.7667   -2.7417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.7667   -2.0292    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3333   -2.7417    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.3333   -2.0375    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7125   -3.1000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9458   -3.1000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0542   -1.3292    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0\n  3  1  1  0\n  4  3  1  0\n  5  1  1  0\n  6  2  1  0\n  7  5  1  0\n  4  8  1  1\n  9  8  1  0\n  5 10  1  6\n 11  9  1  0\n 12  3  2  0\n 13  9  2  0\n 14 11  1  0\n 15 10  2  0\n 16 14  2  0\n 17 14  1  0\n 11 18  1  1\n 19 10  1  0\n 20  7  1  0\n 21  7  1  0\n 22 24  1  0\n 23 16  1  0\n 24 17  2  0\n 25 22  1  0\n  2 26  1  6\n  7  6  1  0\n  2  4  1  0\n 23 22  2  0\nM  END\n> <chembl_id>\nCHEMBL1082\n\n> <chembl_pref_name>\nAMOXICILLIN",
+        "standard_inchi": "InChI=1S/C16H19N3O5S/c1-16(2)11(15(23)24)19-13(22)10(14(19)25-16)18-12(21)9(17)7-3-5-8(20)6-4-7/h3-6,9-11,14,20H,17H2,1-2H3,(H,18,21)(H,23,24)/t9-,10-,11+,14-/m1/s1",
+        "standard_inchi_key": "LSQZJLSUYDQPKJ-NJBDSQKTSA-N"
+    },
+    "molecule_synonyms": [
+        {
+            "molecule_synonym": "Amix 125",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMIX 125"
+        },
+        {
+            "molecule_synonym": "Amix 250",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMIX 250"
+        },
+        {
+            "molecule_synonym": "Amix 500",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMIX 500"
+        },
+        {
+            "molecule_synonym": "Amopen",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOPEN"
+        },
+        {
+            "molecule_synonym": "Amoram",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMORAM"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "ATC",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "BAN",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "BNF",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "FDA",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "INN",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "JAN",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "MERCK_INDEX",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "USAN",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin",
+            "syn_type": "USP",
+            "synonyms": "AMOXICILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxicillin anhydrous",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXICILLIN ANHYDROUS"
+        },
+        {
+            "molecule_synonym": "Amoxicillin (anhydrous)",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXICILLIN (ANHYDROUS)"
+        },
+        {
+            "molecule_synonym": "Amoxicillin (as trihydrate)",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXICILLIN (AS TRIHYDRATE)"
+        },
+        {
+            "molecule_synonym": "Amoxicilline",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Amoxicilline"
+        },
+        {
+            "molecule_synonym": "Amoxicilline",
+            "syn_type": "INN",
+            "synonyms": "AMOXICILLINE"
+        },
+        {
+            "molecule_synonym": "Amoxicillin hydrate",
+            "syn_type": "JAN",
+            "synonyms": "AMOXICILLIN HYDRATE"
+        },
+        {
+            "molecule_synonym": "Amoxicillin hydrate",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXICILLIN HYDRATE"
+        },
+        {
+            "molecule_synonym": "Amoxicillin pediatric",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOXICILLIN PEDIATRIC"
+        },
+        {
+            "molecule_synonym": "Amoxicillin trihydrate",
+            "syn_type": "MERCK_INDEX",
+            "synonyms": "AMOXICILLIN TRIHYDRATE"
+        },
+        {
+            "molecule_synonym": "Amoxicillin trihydrate",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXICILLIN TRIHYDRATE"
+        },
+        {
+            "molecule_synonym": "Amoxicillinum trihydricum",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXICILLINUM TRIHYDRICUM"
+        },
+        {
+            "molecule_synonym": "Amoxident 250",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOXIDENT 250"
+        },
+        {
+            "molecule_synonym": "Amoxident 500",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOXIDENT 500"
+        },
+        {
+            "molecule_synonym": "Amoxi-Inject",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Amoxi-Inject"
+        },
+        {
+            "molecule_synonym": "Amoxil",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Amoxil"
+        },
+        {
+            "molecule_synonym": "Amoxil fiztab",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOXIL FIZTAB"
+        },
+        {
+            "molecule_synonym": "Amoxil sf",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOXIL SF"
+        },
+        {
+            "molecule_synonym": "Amoxi-Tabs",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Amoxi-Tabs"
+        },
+        {
+            "molecule_synonym": "Amoxycillin",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Amoxycillin"
+        },
+        {
+            "molecule_synonym": "Amoxycillin",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXYCILLIN"
+        },
+        {
+            "molecule_synonym": "Amoxyke",
+            "syn_type": "OTHER",
+            "synonyms": "AMOXYKE"
+        },
+        {
+            "molecule_synonym": "Amoxymed",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMOXYMED"
+        },
+        {
+            "molecule_synonym": "Amrit",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "AMRIT"
+        },
+        {
+            "molecule_synonym": "Aquacil",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Aquacil"
+        },
+        {
+            "molecule_synonym": "Atoksilin",
+            "syn_type": "OTHER",
+            "synonyms": "ATOKSILIN"
+        },
+        {
+            "molecule_synonym": "Biomox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Biomox"
+        },
+        {
+            "molecule_synonym": "BRL 2333",
+            "syn_type": "RESEARCH_CODE",
+            "synonyms": "BRL 2333"
+        },
+        {
+            "molecule_synonym": "BRL-2333",
+            "syn_type": "RESEARCH_CODE",
+            "synonyms": "BRL-2333"
+        },
+        {
+            "molecule_synonym": "Damoxy",
+            "syn_type": "OTHER",
+            "synonyms": "DAMOXY"
+        },
+        {
+            "molecule_synonym": "Dedoxil",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "DEDOXIL"
+        },
+        {
+            "molecule_synonym": "Demoksil",
+            "syn_type": "OTHER",
+            "synonyms": "DEMOKSIL"
+        },
+        {
+            "molecule_synonym": "Dispermox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Dispermox"
+        },
+        {
+            "molecule_synonym": "Flemoxin solutab",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "FLEMOXIN SOLUTAB"
+        },
+        {
+            "molecule_synonym": "Galenamox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "GALENAMOX"
+        },
+        {
+            "molecule_synonym": "Largopen",
+            "syn_type": "OTHER",
+            "synonyms": "LARGOPEN"
+        },
+        {
+            "molecule_synonym": "Larotid",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Larotid"
+        },
+        {
+            "molecule_synonym": "Moksilin",
+            "syn_type": "OTHER",
+            "synonyms": "MOKSILIN"
+        },
+        {
+            "molecule_synonym": "Moxatag",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "MOXATAG"
+        },
+        {
+            "molecule_synonym": "NSC-277174",
+            "syn_type": "RESEARCH_CODE",
+            "synonyms": "NSC-277174"
+        },
+        {
+            "molecule_synonym": "Polymox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "POLYMOX"
+        },
+        {
+            "molecule_synonym": "Promoxil",
+            "syn_type": "OTHER",
+            "synonyms": "PROMOXIL"
+        },
+        {
+            "molecule_synonym": "Remoxil",
+            "syn_type": "OTHER",
+            "synonyms": "REMOXIL"
+        },
+        {
+            "molecule_synonym": "Respillin",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "RESPILLIN"
+        },
+        {
+            "molecule_synonym": "Robamox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Robamox"
+        },
+        {
+            "molecule_synonym": "Sumox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Sumox"
+        },
+        {
+            "molecule_synonym": "Topramoxin",
+            "syn_type": "OTHER",
+            "synonyms": "TOPRAMOXIN"
+        },
+        {
+            "molecule_synonym": "Trimox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Trimox"
+        },
+        {
+            "molecule_synonym": "Utimox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "UTIMOX"
+        },
+        {
+            "molecule_synonym": "Vetremox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "Vetremox"
+        },
+        {
+            "molecule_synonym": "Wymox",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "WYMOX"
+        },
+        {
+            "molecule_synonym": "Zoxycil 250",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "ZOXYCIL 250"
+        },
+        {
+            "molecule_synonym": "Zoxycil 500",
+            "syn_type": "TRADE_NAME",
+            "synonyms": "ZOXYCIL 500"
+        }
+    ],
+    "molecule_type": "Small molecule",
+    "natural_product": 1,
+    "oral": true,
+    "parenteral": false,
+    "polymer_flag": 0,
+    "pref_name": "AMOXICILLIN",
+    "prodrug": 0,
+    "structure_type": "MOL",
+    "therapeutic_flag": true,
+    "topical": false,
+    "usan_stem": "-cillin",
+    "usan_stem_definition": "penicillins",
+    "usan_substem": "-cillin",
+    "usan_year": 1972,
+    "withdrawn_flag": false
+}

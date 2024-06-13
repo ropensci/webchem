@@ -1,0 +1,10 @@
+[
+    {
+        "fromIdentifier": "chemical name",
+        "searchTerm": "triclosan",
+        "toIdentifier": "inchikey",
+        "result": [
+            "XEFQLINVKFYRCS-UHFFFAOYSA-N"
+        ]
+    }
+]

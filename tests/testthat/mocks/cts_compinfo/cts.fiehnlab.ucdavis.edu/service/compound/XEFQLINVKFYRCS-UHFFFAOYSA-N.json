@@ -1,0 +1,1465 @@
+{
+    "inchikey": "XEFQLINVKFYRCS-UHFFFAOYSA-N",
+    "inchicode": "InChI=1S/C12H7Cl3O2/c13-7-1-3-11(9(15)5-7)17-12-4-2-8(14)6-10(12)16/h1-6,16H",
+    "molweight": 289.54204,
+    "exactmass": 287.95116,
+    "formula": "C12H7Cl3O2",
+    "dataSourcesCount": 120,
+    "referencesCount": 854,
+    "pubmedHits": 1547,
+    "smiles": "",
+    "synonyms": [
+        {
+            "type": "Synonym",
+            "name": "Triclosan",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "DNDI1246774",
+            "score": 0
+        },
+        {
+            "type": "IUPAC Name (Allowed)",
+            "name": "5-chloro-2-(2,4-dichlorophenoxy)phenol",
+            "score": 0
+        },
+        {
+            "type": "IUPAC Name (Preferred)",
+            "name": "Triclosan",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "triclosan",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "Irgasan DP 30",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "CH-3565",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "5-chloro-2-(2, 4-dichlorophenoxy)phenol",
+            "score": 0
+        },
+        {
+            "type": "IUPAC Name (CAS-like Style)",
+            "name": "5-chloro-2-(2,4-dichlorophenoxy)phenol",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "Triclosan (USP/INN)",
+            "score": 0
+        },
+        {
+            "type": "IUPAC Name (Preferred)",
+            "name": "5-chloro-2-(2,4-dichlorophenoxy)phenol",
+            "score": 0
+        },
+        {
+            "type": "IUPAC Name (Traditional)",
+            "name": "5-chloro-2-(2,4-dichlorophenoxy)phenol",
+            "score": 0
+        },
+        {
+            "type": "IUPAC Name (Systematic)",
+            "name": "2-[2,4-bis(chloranyl)phenoxy]-5-chloranyl-phenol",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "Stri-Dex cleansing bar (TN)",
+            "score": 0
+        },
+        {
+            "type": "Synonym",
+            "name": "Cloxifenol",
+            "score": 0
+        }
+    ],
+    "externalIds": [
+        {
+            "name": "BindingDB",
+            "value": "8726",
+            "url": "http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=8726&entryid=1081"
+        },
+        {
+            "name": "Tox21",
+            "value": "NCGC00159417-02",
+            "url": "https://tripod.nih.gov/tox21/samples/Tox21_111648"
+        },
+        {
+            "name": "MMDB",
+            "value": "77488.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=77488"
+        },
+        {
+            "name": "MMDB",
+            "value": "87724.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=87724"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "24698180",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=24698180"
+        },
+        {
+            "name": "MMDB",
+            "value": "86373.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=86373"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "136907267",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=136907267"
+        },
+        {
+            "name": "ICCB-Longwood/NSRB Screening Facility, Harvard Medical School",
+            "value": "HMS2270M06",
+            "url": ""
+        },
+        {
+            "name": "AK Scientific, Inc. (AKSCI)",
+            "value": "69778",
+            "url": "http://www.aksci.com/item_detail.php?cat=69778"
+        },
+        {
+            "name": "TimTec",
+            "value": "ST50826110",
+            "url": ""
+        },
+        {
+            "name": "Human Metabolome Database",
+            "value": "HMDB0061385",
+            "url": "http://www.hmdb.ca/metabolites/HMDB0061385"
+        },
+        {
+            "name": "MMDB",
+            "value": "87723.5",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=87723"
+        },
+        {
+            "name": "PubChem CID",
+            "value": "5564",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi"
+        },
+        {
+            "name": "CAPOT",
+            "value": "PubChem9026",
+            "url": "http://www.capotchem.com/en/9026.htm"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "117695801",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695801"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "830483",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=830483"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "124767531",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124767531"
+        },
+        {
+            "name": "Chembo",
+            "value": "KB-197273",
+            "url": "http://www.chembopharma.com/search/?keyword=KB-197273"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "196106428",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=196106428"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "179113938",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=179113938"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "56314344",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=56314344"
+        },
+        {
+            "name": "MMDB",
+            "value": "29589.3",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=29589"
+        },
+        {
+            "name": "MMDB",
+            "value": "89177.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=89177"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "223403966",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223403966"
+        },
+        {
+            "name": "MMDB",
+            "value": "92519.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=92519"
+        },
+        {
+            "name": "ChemIDplus",
+            "value": "0003380345",
+            "url": "http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?result=advanced&regno=0003380345"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "252091693",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252091693"
+        },
+        {
+            "name": "MMDB",
+            "value": "13861.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=13861"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "57244094",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57244094"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "135668580",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135668580"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "91011813",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=91011813"
+        },
+        {
+            "name": "Angene Chemical",
+            "value": "5-Chloro-2-(2,4-dichlorophenoxy)phenol",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "10322303",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=10322303"
+        },
+        {
+            "name": "CAS",
+            "value": "105093-20-7",
+            "url": "http://www.cas.org/"
+        },
+        {
+            "name": "Boerchem",
+            "value": "BC678270",
+            "url": "http://www.boerchemical.com/?product_39712.html"
+        },
+        {
+            "name": "Key Organics/BIONET",
+            "value": "KS-5356",
+            "url": "http://www.keyorganics.net/bionet/catalog/product/view/id/516952"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "249832222",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=249832222"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "184558641",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=184558641"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "14720377",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14720377"
+        },
+        {
+            "name": "SureChEMBL",
+            "value": "SCHEMBL3269",
+            "url": "https://www.surechembl.org/chemical/SCHEMBL3269"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "92308067",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=92308067"
+        },
+        {
+            "name": "KEGG",
+            "value": "D06226",
+            "url": "http://www.genome.jp/dbget-bin/www_bget?dr:D06226"
+        },
+        {
+            "name": "MMDB",
+            "value": "24741.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=24741"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "87350665",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87350665"
+        },
+        {
+            "name": "EPA DSSTox",
+            "value": "49387",
+            "url": "http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE1642"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "113584955",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=113584955"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "226395494",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=226395494"
+        },
+        {
+            "name": "chemicalize.org by ChemAxon",
+            "value": "3314",
+            "url": "http://www.chemicalize.org/structure/#!mol=5-Chlor-2-%282%2C4-dichlorphenoxy%29-phenol&source=pubchem"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "48426058",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=48426058"
+        },
+        {
+            "name": "ChemFrog",
+            "value": "888-827-166",
+            "url": "http://www.chemfrog.com/getPSupply/RHMLL/"
+        },
+        {
+            "name": "Immune Epitope Database (IEDB)",
+            "value": "Epitope ID:119683",
+            "url": "http://www.iedb.org/epId/119683"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "165354372",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=165354372"
+        },
+        {
+            "name": "Calbiochem",
+            "value": "647950",
+            "url": "http://www.emdbiosciences.com/product/647950"
+        },
+        {
+            "name": "NCGC",
+            "value": "NCGC00159417-08",
+            "url": ""
+        },
+        {
+            "name": "11752",
+            "value": "BD20299",
+            "url": "http://www.bidepharmatech.com/en/goodsview_goodscode_BD20299.html"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "134982808",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134982808"
+        },
+        {
+            "name": "NCGC",
+            "value": "NCGC00159417-03",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "638158",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=638158"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "136375618",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=136375618"
+        },
+        {
+            "name": "",
+            "value": "ST2411924",
+            "url": "http://www.syntree.com/3380-34-5"
+        },
+        {
+            "name": "ChEBI",
+            "value": "CHEBI:164200",
+            "url": "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:164200"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "250203727",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250203727"
+        },
+        {
+            "name": "MLSMR",
+            "value": "MLS001335937",
+            "url": ""
+        },
+        {
+            "name": "ChemMol",
+            "value": "30100627",
+            "url": "http://www.chemmol.com/chemmol/30100627.html"
+        },
+        {
+            "name": "DiscoveryGate",
+            "value": "5564",
+            "url": "https://www.discoverygate.com/interlink/search?KeyName=EXTREG&KeyValue=5564&Database=INDEX&Source=PUBCHEM"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "152247191",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152247191"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "144099663",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144099663"
+        },
+        {
+            "name": "MMDB",
+            "value": "90004.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90004"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "126613105",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126613105"
+        },
+        {
+            "name": "MMDB",
+            "value": "11134.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11134"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "124892179",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892179"
+        },
+        {
+            "name": "Aurum Pharmatech LLC",
+            "value": "M-6446",
+            "url": "http://www.Aurumpharmatech.com/Product/ProductDetails/M_6446"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "584337",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=584337"
+        },
+        {
+            "name": "Center for Chemical Genomics, University of Michigan",
+            "value": "CCG-213459",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "118307780",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=118307780"
+        },
+        {
+            "name": "Chembase.cn",
+            "value": "6212",
+            "url": "http://www.chembase.cn/molecule-6212.html"
+        },
+        {
+            "name": "LeadScope",
+            "value": "LS-67854",
+            "url": "http://www.leadscope.com/structure_search_results.php?ss_string=LS-67854"
+        },
+        {
+            "name": "MMDB",
+            "value": "12209.11",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=12209"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "8153420",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=8153420"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "250113382",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250113382"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "170464936",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170464936"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "87692612",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87692612"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "204386565",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=204386565"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "135578505",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135578505"
+        },
+        {
+            "name": "Hangzhou APIChem Technology",
+            "value": "AC-10667",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "827598",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=827598"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "14214",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14214"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "252083456",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252083456"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "117695799",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695799"
+        },
+        {
+            "name": "EMD Millipore",
+            "value": "647950",
+            "url": "http://www.emdbiosciences.com/product/647950"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "164187925",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=164187925"
+        },
+        {
+            "name": "NextMove Software",
+            "value": "XEFQLINVKFYRCS-UHFFFAOYSA-N",
+            "url": ""
+        },
+        {
+            "name": "A&J Pharmtech CO., LTD.",
+            "value": "AJ-08144",
+            "url": "http://www.ajpharmtech.com/"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "57652433",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57652433"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "160969637",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=160969637"
+        },
+        {
+            "name": "ChemMol",
+            "value": "44010202",
+            "url": "http://www.chemmol.com/chemmol/44010202.html"
+        },
+        {
+            "name": "Milwaukee Institute for Drug Discovery",
+            "value": "NC00516",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "47207884",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=47207884"
+        },
+        {
+            "name": "ChemMol",
+            "value": "99161097",
+            "url": "http://www.chemmol.com/chemmol/99161097.html"
+        },
+        {
+            "name": "Ambinter",
+            "value": "SBB058565",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "5664285",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=5664285"
+        },
+        {
+            "name": "MMDB",
+            "value": "114065.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=114065"
+        },
+        {
+            "name": "Tractus",
+            "value": "RTR-014090",
+            "url": "http://www.tractuschem.com/productshow/RTR-014090.html"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "124766493",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124766493"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "126522651",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126522651"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "252126888",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252126888"
+        },
+        {
+            "name": "CAPOT",
+            "value": "9026",
+            "url": "http://www.capotchem.com/en/9026.htm"
+        },
+        {
+            "name": "Anward",
+            "value": "ANW-42338",
+            "url": "http://www.anward.com/pro_result/29973"
+        },
+        {
+            "name": "TimTec",
+            "value": "SBB058565",
+            "url": ""
+        },
+        {
+            "name": "ICCB-Longwood/NSRB Screening Facility, Harvard Medical School",
+            "value": "HMS2093L17",
+            "url": "http://iccb.med.harvard.edu/screening/compound_libraries/bioactives_microsource1.htm"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "47193732",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=47193732"
+        },
+        {
+            "name": "NCGC",
+            "value": "NCGC00159417-04",
+            "url": ""
+        },
+        {
+            "name": "EPA Substance Registry Services",
+            "value": "115139",
+            "url": "http://iaspub.epa.gov/sor_internet/registry/substreg/searchandretrieve/advancedsearch/externalSearch.do?p_type=SRSITN&p_value=115139"
+        },
+        {
+            "name": "CAS",
+            "value": "3380-34-5",
+            "url": "http://www.cas.org/"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "137003021",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=137003021"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "117695803",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=117695803"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "57389809",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57389809"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "103905760",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103905760"
+        },
+        {
+            "name": "MMDB",
+            "value": "99401.5",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=99401"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "143433021",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=143433021"
+        },
+        {
+            "name": "MMDB",
+            "value": "123938.12",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=123938"
+        },
+        {
+            "name": "BioCyc",
+            "value": "CPD0-1227",
+            "url": "http://biocyc.org/META/NEW-IMAGE?type=COMPOUND&object=CPD0-1227"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "208265074",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=208265074"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "103222736",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103222736"
+        },
+        {
+            "name": "MMDB",
+            "value": "125022.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=125022"
+        },
+        {
+            "name": "MMDB",
+            "value": "90003.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90003"
+        },
+        {
+            "name": "ChemDB",
+            "value": "3968915",
+            "url": "http://cdb.ics.uci.edu/CHEMDB/Web/cgibin/ChemicalDetailWeb.py?chemical_id=3968915"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "49674565",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49674565"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "211786863",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=211786863"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "7890716",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=7890716"
+        },
+        {
+            "name": "MMDB",
+            "value": "43585.7",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=43585"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "175442272",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=175442272"
+        },
+        {
+            "name": "Mcule",
+            "value": "MCULE-2614621397",
+            "url": "https://mcule.com/MCULE-2614621397"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "172080639",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=172080639"
+        },
+        {
+            "name": "SGCOxCompounds",
+            "value": "S00100",
+            "url": ""
+        },
+        {
+            "name": "IS Chemical Technology",
+            "value": "I01-2897",
+            "url": "http://www.ispharm.com/product/I01-2897.html"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "126632200",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126632200"
+        },
+        {
+            "name": "ChemTik",
+            "value": "CTK3J8301",
+            "url": "http://www.chemtik.com/pro_result/398301/"
+        },
+        {
+            "name": "MMDB",
+            "value": "65341.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=65341"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "250180394",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=250180394"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "152137732",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152137732"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "251886846",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=251886846"
+        },
+        {
+            "name": "SCRIPDB",
+            "value": "US20120010284A1-20120112-C00025_9",
+            "url": "http://dcv.uhnres.utoronto.ca/SCRIPDB/results/?patentid=US20120010284A1-20120112-C00025_9"
+        },
+        {
+            "name": "Shanghai Institute of Organic Chemistry",
+            "value": "3p9t",
+            "url": "http://www.pdbbind-cn.org/quickpdb.asp?quickpdb=3p9t"
+        },
+        {
+            "name": "Therapeutic Targets Database",
+            "value": "DNC001513",
+            "url": "http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=DNC001513"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "126648856",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=126648856"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "57260157",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57260157"
+        },
+        {
+            "name": "TCI (Tokyo Chemical Industry)",
+            "value": "T1872",
+            "url": ""
+        },
+        {
+            "name": "DrugBank",
+            "value": "DB08604",
+            "url": "http://www.drugbank.ca/drugs/DB08604"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "151989799",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=151989799"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "57322843",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57322843"
+        },
+        {
+            "name": "NCGC",
+            "value": "NCGC00159417-05",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "152138388",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=152138388"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "134338639",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134338639"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "830851",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=830851"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "135684207",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135684207"
+        },
+        {
+            "name": "3B_SCI",
+            "value": "3B3-011899",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "11109466",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=11109466"
+        },
+        {
+            "name": "HDH Pharma",
+            "value": "IN1424",
+            "url": ""
+        },
+        {
+            "name": "MMDB",
+            "value": "86123.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=86123"
+        },
+        {
+            "name": "Life Chemicals",
+            "value": "F2173-0825",
+            "url": "http://lifechemicals.emolecules.com"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "223774642",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223774642"
+        },
+        {
+            "name": "CAS",
+            "value": "88032-08-0",
+            "url": "http://www.cas.org/"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "92710097",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=92710097"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "125348302",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=125348302"
+        },
+        {
+            "name": "FINETECH",
+            "value": "FT-0609773",
+            "url": "http://www.finetechnology-ind.com/product_detail.shtml?catalogNo=FT-0609773"
+        },
+        {
+            "name": "MMDB",
+            "value": "11627.3",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11627"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "104309596",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=104309596"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "144205201",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144205201"
+        },
+        {
+            "name": "Tox21",
+            "value": "NCGC00159417-06",
+            "url": "https://tripod.nih.gov/tox21/samples/Tox21_400079"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "129676338",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=129676338"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "26754498",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=26754498"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "121362549",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=121362549"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "49903859",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49903859"
+        },
+        {
+            "name": "MMDB",
+            "value": "80407.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=80407"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "164794929",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=164794929"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "50109854",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=50109854"
+        },
+        {
+            "name": "Sigma-Aldrich",
+            "value": "72779_SIGMA",
+            "url": "http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/72779?cm_mmc=affiliate-_-PubChem-_-product-_-link"
+        },
+        {
+            "name": "Hangzhou Trylead Chemical Technology",
+            "value": "TL8002539",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "135668588",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=135668588"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "99453849",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=99453849"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "14922470",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=14922470"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "57260158",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=57260158"
+        },
+        {
+            "name": "EPA DSSTox",
+            "value": "37767",
+            "url": ""
+        },
+        {
+            "name": "NIH Clinical Collection",
+            "value": "SAM002554907",
+            "url": ""
+        },
+        {
+            "name": "Tractus",
+            "value": "TR-014090",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "56313852",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=56313852"
+        },
+        {
+            "name": "Oakwood Products",
+            "value": "079476",
+            "url": "http://www.oakwoodchemical.com/ProductsList.aspx?CategoryID=-2&txtSearch=64650&ExtHyperLink=1"
+        },
+        {
+            "name": "Collaborative Drug Discovery, Inc.",
+            "value": "2304",
+            "url": "https://app.collaborativedrug.com/public/structures/2304"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "186020461",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=186020461"
+        },
+        {
+            "name": "A&J Pharmtech CO., LTD.",
+            "value": "ZB000507",
+            "url": "http://www.ajpharmtech.com/"
+        },
+        {
+            "name": "",
+            "value": "50-7869",
+            "url": "http://www.greenchempharm.com/"
+        },
+        {
+            "name": "DTP/NCI",
+            "value": "759151",
+            "url": "http://dtp.nci.nih.gov/dtpstandard/servlet/dwindex?searchtype=NSC&outputformat=html&searchlist=759151"
+        },
+        {
+            "name": "ChEMBL",
+            "value": "CHEMBL849",
+            "url": "https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/CHEMBL849"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "176324148",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=176324148"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "241151993",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=241151993"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "26759661",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=26759661"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "170481145",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170481145"
+        },
+        {
+            "name": "Broad Institute",
+            "value": "BRD-K41731458-001-09-4",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "223485437",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223485437"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "49968902",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49968902"
+        },
+        {
+            "name": "ABI Chem",
+            "value": "AC1L1KMN",
+            "url": ""
+        },
+        {
+            "name": "ChemMol",
+            "value": "99084008",
+            "url": "http://www.chemmol.com/chemmol/99084008.html"
+        },
+        {
+            "name": "MolPort",
+            "value": "MolPort-003-666-702",
+            "url": "https://www.molport.com/shop/molecule-link/MolPort-003-666-702"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "104170014",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=104170014"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "174006648",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=174006648"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "160809838",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=160809838"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "836967",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=836967"
+        },
+        {
+            "name": "MMDB",
+            "value": "45855.6",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=45855"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "172848469",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=172848469"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "124813021",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124813021"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "223519140",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223519140"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "144214040",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144214040"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "174477329",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=174477329"
+        },
+        {
+            "name": "MLSMR",
+            "value": "MLS001066347",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "163812839",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=163812839"
+        },
+        {
+            "name": "MMDB",
+            "value": "38016.7",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=38016"
+        },
+        {
+            "name": "King Scientific",
+            "value": "KSC498G0D",
+            "url": "http://www.kingscientific.com/pro_result/8687/"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "252039861",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=252039861"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "162174892",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=162174892"
+        },
+        {
+            "name": "Ark Pharm, Inc.",
+            "value": "AK-73001",
+            "url": "http://www.arkpharminc.com/web/products-detail.html?catalogno=AK-73001"
+        },
+        {
+            "name": "MMDB",
+            "value": "99398.10",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=99398"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "144075889",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144075889"
+        },
+        {
+            "name": "A&J Pharmtech CO., LTD.",
+            "value": "CJ-00083",
+            "url": "http://www.ajpharmtech.com/"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "241074904",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=241074904"
+        },
+        {
+            "name": "IBM",
+            "value": "96566AD92878ECA0254CFD7818088D7A",
+            "url": "http://www.ibm.com/gbs/nih/?sid=96566AD92878ECA0254CFD7818088D7A&ik=XEFQLINVKFYRCS-UHFFFAOYSA-N"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "99445075",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=99445075"
+        },
+        {
+            "name": "Tox21",
+            "value": "NCGC00159417-05",
+            "url": "https://tripod.nih.gov/tox21/samples/Tox21_111648_1"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "85172710",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=85172710"
+        },
+        {
+            "name": "Therapeutic Targets Database",
+            "value": "DAP001435",
+            "url": "http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=DAP001435"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "124892178",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892178"
+        },
+        {
+            "name": "NovoSeek",
+            "value": "5564",
+            "url": "http://www.novoseek.com/AccessPoint.action?corpus=MEDLINE&externalDBId=cid%3d5564&DBName=pubchem&actionName=search&bioType=drug"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "223454576",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=223454576"
+        },
+        {
+            "name": "MMDB",
+            "value": "90005.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=90005"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "87577595",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=87577595"
+        },
+        {
+            "name": "NCGC",
+            "value": "NCGC00159417-06",
+            "url": ""
+        },
+        {
+            "name": "MMDB",
+            "value": "43581.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=43581"
+        },
+        {
+            "name": "labseeker",
+            "value": "SC-16588",
+            "url": "http://www.labseeker.com/goods.php?id=22337"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "103905763",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103905763"
+        },
+        {
+            "name": "Berrchem",
+            "value": "BR-73001",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "49832484",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=49832484"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "134340679",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=134340679"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "124892177",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=124892177"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "143858045",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=143858045"
+        },
+        {
+            "name": "NCGC",
+            "value": "NCGC00159417-07",
+            "url": ""
+        },
+        {
+            "name": "ChemMol",
+            "value": "1034685",
+            "url": "http://www.chemmol.com/chemmol/1034685.html"
+        },
+        {
+            "name": "AKos Consulting & Solutions",
+            "value": "AKOS015850380",
+            "url": "http://akoscompounds.de/catalogue/akossamplesretrieval.php?IDNUMBERS=AKOS015850380"
+        },
+        {
+            "name": "KEGG",
+            "value": "C12059",
+            "url": "http://www.genome.jp/dbget-bin/www_bget?cpd:C12059"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "175611134",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=175611134"
+        },
+        {
+            "name": "EPA DSSTox",
+            "value": "48839",
+            "url": "http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE8861"
+        },
+        {
+            "name": "MMDB",
+            "value": "22126.7",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=22126"
+        },
+        {
+            "name": "AmicBase - Antimicrobial Activities",
+            "value": "6191",
+            "url": "http://www.manetec-52.de/apps/amicbase_drugs-online/base.nsf/WebMain4?SearchView&Query=%28%5BDocType%5D=%22DataFormular%22%29%20AND%20%28%5BLine_1_S%5D=%28%226191*%22%29%29&SearchWV=FALSE&SearchOrder=4&SearchMax=0&Count=50&Start=1&SearchBasis=extern2&FromView=WebMain4"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "144071986",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144071986"
+        },
+        {
+            "name": "SMID",
+            "value": "TCL",
+            "url": "http://smid.blueprint.org/SMInfo.php?hetname=TCL"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "162766619",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=162766619"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "131311043",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=131311043"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "144071804",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=144071804"
+        },
+        {
+            "name": "MLSMR",
+            "value": "MLS001335938",
+            "url": ""
+        },
+        {
+            "name": "Shanghai Institute of Organic Chemistry",
+            "value": "1nhg",
+            "url": "http://www.pdbbind-cn.org/quickpdb.asp?quickpdb=1nhg"
+        },
+        {
+            "name": "MLSMR",
+            "value": "MLS001074876",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "113584959",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=113584959"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "85256706",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=85256706"
+        },
+        {
+            "name": "MMDB",
+            "value": "11303.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=11303"
+        },
+        {
+            "name": "EPA DSSTox",
+            "value": "40328",
+            "url": ""
+        },
+        {
+            "name": "Thomson Pharma",
+            "value": "00026732",
+            "url": "http://www.thomson-pharma.com/report/chemistry?ch=TS00026732"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "53800864",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=53800864"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "103022876",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=103022876"
+        },
+        {
+            "name": "MMDB",
+            "value": "89179.4",
+            "url": "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=89179"
+        },
+        {
+            "name": "Amadis Chemical",
+            "value": "A821950",
+            "url": "http://www.amadischem.com/en-US/ProductDetail.aspx?catalog=A821950"
+        },
+        {
+            "name": "NIST",
+            "value": "XEFQLINVKFYRCS-UHFFFAOYSA-N",
+            "url": ""
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "138139326",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=138139326"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "170483649",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=170483649"
+        },
+        {
+            "name": "ICCB-Longwood/NSRB Screening Facility, Harvard Medical School",
+            "value": "HMS3259K19",
+            "url": "http://iccb.med.harvard.edu/screening/compound_libraries/ncc2.htm"
+        },
+        {
+            "name": "NIAID",
+            "value": "095068",
+            "url": "http://chemdb.niaid.nih.gov/CompoundDetails.aspx?AIDSNO=095068"
+        },
+        {
+            "name": "Pubchem SID",
+            "value": "163687196",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=163687196"
+        }
+    ]
+}

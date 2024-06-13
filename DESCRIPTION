@@ -25,9 +25,9 @@ Maintainer: Tamás Stirling <stirling.tamas@gmail.com>
 LazyLoad: yes
 LazyData: yes
 Encoding: UTF-8
-Depends:
+Depends: 
     R (>= 3.0)
-Imports:
+Imports: 
     xml2,
     httr,
     rvest,
@@ -41,14 +41,15 @@ Imports:
     base64enc,
     rlang,
     utils
-Suggests:
-    testthat,
-    rcdk,
+Suggests: 
     covr,
-    robotstxt,
+    httptest,
     knitr,
-    rmarkdown,
     plot.matrix,
+    rcdk,
+    rmarkdown,
+    robotstxt,
+    testthat,
     usethis,
     vcr
 RoxygenNote: 7.2.3

@@ -1,0 +1,16 @@
+structure(list(url = "http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-X", 
+    status_code = 400L, headers = structure(list(date = "Mon, 14 Aug 2023 13:04:09 GMT", 
+        `content-type` = "application/json;charset=utf-8", `transfer-encoding` = "chunked"), class = c("insensitive", 
+    "list")), all_headers = list(list(status = 400L, version = "HTTP/1.1", 
+        headers = structure(list(date = "Mon, 14 Aug 2023 13:04:09 GMT", 
+            `content-type` = "application/json;charset=utf-8", 
+            `transfer-encoding` = "chunked"), class = c("insensitive", 
+        "list")))), cookies = structure(list(domain = logical(0), 
+        flag = logical(0), path = logical(0), secure = logical(0), 
+        expiration = structure(numeric(0), class = c("POSIXct", 
+        "POSIXt")), name = logical(0), value = logical(0)), row.names = integer(0), class = "data.frame"), 
+    content = charToRaw("\n[\n  \"Sorry, we couldn't find any matching results\"\n]"), 
+    date = structure(1692018249, class = c("POSIXct", "POSIXt"
+    ), tzone = "GMT"), times = c(redirect = 0, namelookup = 5.1e-05, 
+    connect = 0, pretransfer = 0.000145, starttransfer = 5.317962, 
+    total = 5.317989)), class = "response")

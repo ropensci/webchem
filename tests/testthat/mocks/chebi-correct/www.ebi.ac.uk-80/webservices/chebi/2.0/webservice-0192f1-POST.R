@@ -1,0 +1,17 @@
+structure(list(url = "http://www.ebi.ac.uk:80/webservices/chebi/2.0/webservice", 
+    status_code = 200L, headers = structure(list(server = "Apache-Coyote/1.1", 
+        `content-type` = "text/xml;charset=utf-8", `transfer-encoding` = "chunked", 
+        date = "Mon, 14 Aug 2023 13:00:43 GMT"), class = c("insensitive", 
+    "list")), all_headers = list(list(status = 200L, version = "HTTP/1.1", 
+        headers = structure(list(server = "Apache-Coyote/1.1", 
+            `content-type` = "text/xml;charset=utf-8", `transfer-encoding` = "chunked", 
+            date = "Mon, 14 Aug 2023 13:00:43 GMT"), class = c("insensitive", 
+        "list")))), cookies = structure(list(domain = logical(0), 
+        flag = logical(0), path = logical(0), secure = logical(0), 
+        expiration = structure(numeric(0), class = c("POSIXct", 
+        "POSIXt")), name = logical(0), value = logical(0)), row.names = integer(0), class = "data.frame"), 
+    content = charToRaw("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><getLiteEntityResponse xmlns=\"https://www.ebi.ac.uk/webservices/chebi\"><return><ListElement><chebiId>CHEBI:27744</chebiId><chebiAsciiName>glyphosate</chebiAsciiName><searchScore>0.95</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:133673</chebiId><chebiAsciiName>glyphosate(1-)</chebiAsciiName><searchScore>0.83</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:67052</chebiId><chebiAsciiName>glyphosate(2-)</chebiAsciiName><searchScore>0.67</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:81834</chebiId><chebiAsciiName>glyphosate-isopropylammonium</chebiAsciiName><searchScore>0.34</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:81835</chebiId><chebiAsciiName>Glyphosate-monoammonium</chebiAsciiName><searchScore>0.13</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:28812</chebiId><chebiAsciiName>(aminomethyl)phosphonic acid</chebiAsciiName><searchScore>0.06</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:142824</chebiId><chebiAsciiName>saflufenacil</chebiAsciiName><searchScore>0.05</searchScore><entityStar>3</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>"), 
+    date = structure(1692018043, class = c("POSIXct", "POSIXt"
+    ), tzone = "GMT"), times = c(redirect = 0, namelookup = 2.9e-05, 
+    connect = 0, pretransfer = 0.00012, starttransfer = 0.206389, 
+    total = 0.206411)), class = "response")
