@@ -32,7 +32,7 @@
 #' # use CAS-numbers
 #' bcpc_query("79622-59-6", from = 'cas')
 #' }
-bcpc_query <- function(query, from = c("name", "cas"),
+bcpc_query <- function(query, from = c("name", "cas", "inchikey", "name_fr"),
                        verbose = getOption("verbose"),
                        type, ...) {
 
@@ -194,54 +194,28 @@ build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) 
       dir.create(paste0(tempdir(), "/data"))
     }
     if (verbose) message("Building index. ", appendLF = FALSE)
-    idx1_url <- "https://pesticidecompendium.bcpc.org/index_rn.html"
-    idx4_url <- "https://pesticidecompendium.bcpc.org/index_cn.html"
-    res1 <- try(httr::RETRY("GET",
-                           idx1_url,
-                           httr::user_agent(webchem_url()),
-                           config = httr::config(accept_encoding = "identity"),
-                           terminate_on = 404,
-                           quiet = TRUE), silent= TRUE)
-    if (inherits(res1, "try-error")) {
-      if (verbose) webchem_message("service_down")
-      return(NA)
-    }
-    if (verbose) message(httr::message_for_status(res1))
-    if (res1$status_code == 200){
-      idx1 <- read_html(res1)
-      prep_idx <- function(y) {
-        names <- xml_text(xml_find_all(y, "//dl/dt"))
-        links <- xml_attr(
-          xml_find_all(y, "//dt/following-sibling::dd[1]/a[1]"), "href")
-        linknames <- xml_text(
-          xml_find_all(y, "//dt/following-sibling::dd[1]/a[1]"))
-        return(data.frame(names, links, linknames, stringsAsFactors = FALSE))
+    index_sources <- data.frame(
+      name = c("rn", "inchikey", "cn", "name_fr", "name_ru"),
+      code = c(TRUE, TRUE, FALSE, FALSE, FALSE),
+      url = c(
+        "https://pesticidecompendium.bcpc.org/index_rn.html",
+        "www.bcpcpesticidecompendium.org/index-inchikey.html",
+        "https://pesticidecompendium.bcpc.org/index_cn.html",
+        "https://pesticidecompendium.bcpc.org/index-fr.html",
+        "https://pesticidecompendium.bcpc.org/index-ru.html"
+      )
+    )
+    idxs <- apply(index_sources, 1, function(source) {
+      res <- query_idx(source[["url"]])
+      if (source[["code"]]) {
+        idx <- prep_idx_code(res, source = source[["name"]])
+      } else {
+        idx <- prep_idx_named(res, source = source[["name"]], xpath = "//p/a")
       }
-      bcpc_idx <- rbind(prep_idx(idx1))
-      bcpc_idx[["source"]] <- "rn"
-      res4 <- try(httr::RETRY("GET",
-                             idx4_url,
-                             httr::user_agent(webchem_url()),
-                             config = httr::config(accept_encoding = "identity"),
-                             terminate_on = 404,
-                             quiet = TRUE), silent= TRUE)
-    if (inherits(res4, "try-error")) {
-      if (verbose) webchem_message("service_down")
-      return(NA)
-    }
-      idx4 <- read_html(res4)
-      n <- xml_find_all(idx4, "//a")
-      names <- xml_text(n)
-      rm <- names == ""
-      names <- names[!rm]
-      links <- xml_attr(n, "href")
-      links <- links[!rm]
-      idx4 <- data.frame(names = NA, links = links, linknames = names,
-                         source = "cn", stringsAsFactors = FALSE)
-      bcpc_idx <- rbind(bcpc_idx, idx4)
-
-      # fix encoding
-      ln <- bcpc_idx$linknames
+    })
+    bcpc_idx <- do.call(rbind, idxs)
+    # fix encoding
+    ln <- bcpc_idx$linknames
       Encoding(ln) <- "latin1"
       ln <- iconv(ln, from = "latin1", to = "ASCII", sub = "")
       bcpc_idx$linknames <- ln
@@ -250,4 +224,59 @@ build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) 
     }
   }
   return(bcpc_idx)
+}
+
+load_cas_idx <- function() {
+  idx_cas_url <- "https://pesticidecompendium.bcpc.org/index_rn.html"
+}
+
+query_idx <- function(url, verbose = getOption("verbose")) {
+  res <- try(
+    httr::RETRY(
+      "GET",
+      url,
+      httr::user_agent(webchem_url()),
+      config = httr::config(accept_encoding = "identity"),
+      terminate_on = 404,
+      quiet = TRUE
+    ),
+    silent = TRUE
+  )
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
+  if (verbose) message(httr::message_for_status(res))
+  if (res$status_code == 200) return(res)
+}
+
+prep_idx_code <- function(res, source) {
+  idx <- read_html(res)
+  names <- xml_text(xml_find_all(idx, "//dl/dt"))
+  links <- xml_attr(
+    xml_find_all(idx, "//dt/following-sibling::dd[1]/a[1]"), "href"
+  )
+  linknames <- xml_text(
+    xml_find_all(idx, "//dt/following-sibling::dd[1]/a[1]")
+  )
+  df_idx <- data.frame(names, links, linknames, stringsAsFactors = FALSE)
+  df_idx[["source"]] <- source
+  return(df_idx)
+}
+
+prep_idx_named <- function(res, source, xpath) {
+  idx <- read_html(res)
+  n <- xml_find_all(idx, xpath)
+  names <- xml_text(n)
+  keep <- nzchar(names)
+  names <- names[keep]
+  links <- xml_attr(n, "href")
+  links <- links[keep]
+  data.frame(
+    names = NA,
+    links = links,
+    linknames = names,
+    source = source,
+    stringsAsFactors = FALSE
+  )
 }
