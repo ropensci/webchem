@@ -221,14 +221,11 @@ build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) 
       bcpc_idx$linknames <- ln
       attr(bcpc_idx, "date") <- Sys.Date()
       save(bcpc_idx, file = paste0(tempdir(), "/data/bcpc_idx.rda"))
-    }
+    
   }
   return(bcpc_idx)
 }
 
-load_cas_idx <- function() {
-  idx_cas_url <- "https://pesticidecompendium.bcpc.org/index_rn.html"
-}
 
 query_idx <- function(url, verbose = getOption("verbose")) {
   res <- try(
