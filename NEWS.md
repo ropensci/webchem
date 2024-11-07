@@ -1,4 +1,7 @@
 # dev
+ 
+## NEW FEATURES
+* `bcpc_query()` now supports searching for chinese, french, russian names as well as inchi key
 
 ## BUG FIXES
 
