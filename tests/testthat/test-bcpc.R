@@ -37,7 +37,7 @@ test_that("BCPC pesticide compendium, name", {
   expect_equal(o1[["Fluazinam"]]$cas, "79622-59-6")
   expect_equal(length(o1[["S-Metolachlor"]]$inchikey), 2)
   expect_equal(length(o1[["S-Metolachlor"]]$inchi), 2)
-  expect_equal(length(o1[["Fluazinam"]]), 11)
+  expect_equal(length(o1[["Fluazinam"]]), 14)
 })
 
 
@@ -60,7 +60,7 @@ test_that("BCPC pesticide compendium, build_index", {
   expect_s3_class(idx, "data.frame")
   expect_equal(ncol(idx), 4)
   expect_equal(names(idx), c("names", "links", "linknames", "source"))
-  expect_equal(unique(idx$source), c("rn", "cn"))
+  expect_equal(unique(idx$source), c("rn", "inchikey", "cn", "fr", "ru", "zh"))
   expect_equal(idx$names[1], "50-00-0")
 })
 
