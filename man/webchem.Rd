@@ -2,6 +2,7 @@
 % Please edit documentation in R/webchem-package.R
 \docType{package}
 \name{webchem}
+\alias{-package}
 \alias{webchem}
 \title{webchem: An R package to retrieve chemical information from the web.}
 \description{

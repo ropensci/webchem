@@ -6,7 +6,7 @@
 \usage{
 bcpc_query(
   query,
-  from = c("name", "cas"),
+  from = c("name", "cas", "rn", "cn", "fr", "en", "zh", "ru", "inchikey"),
   verbose = getOption("verbose"),
   type,
   ...
