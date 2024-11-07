@@ -32,25 +32,25 @@
 #' # use CAS-numbers
 #' bcpc_query("79622-59-6", from = 'cas')
 #' }
-bcpc_query <- function(query, from = c("name", "cas", "inchikey", "name_fr"),
+bcpc_query <- function(query, from = c("name", "cas","rn","cn","fr","en","zh","ru","inchikey"),
                        verbose = getOption("verbose"),
                        type, ...) {
 
   if (!ping_service("bcpc")) stop(webchem_message("service_down"))
 
+  # Deprecations messages
   if (!missing(type)) {
     message('"type" is deprecated. Please use "from" instead. ')
     from <- type
   }
-
   if ("commonname" %in% from) {
     message('To search by compound name use "name" instead of "commonname"')
     from <- "name"
   }
 
   from <- match.arg(from)
-  bcpc_idx <- build_bcpc_idx(verbose, ...)
-
+  from <- convert_from_arg_bcpc(from)
+  bcpc_idx <- build_bcpc_idx(verbose=verbose, force_build = FALSE, ...)
   names(query) <- query
   out <- lapply(query, function(x) scrape_bcpc_frame(x, from = from, idx = bcpc_idx, verbose = verbose))
   class(out) <- c("bcpc_query", "list")
@@ -69,30 +69,33 @@ bcpc_query <- function(query, from = c("name", "cas", "inchikey", "name_fr"),
 #' @seealso \code{\link{bcpc_query}}, \code{\link{tempdir}}
 #' @source \url{https://pesticidecompendium.bcpc.org}
 #' @noRd
-build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) {
+build_bcpc_idx <- function(sources = c("rn", "inchikey", "cn", "fr", "ru", "zh"), verbose = getOption("verbose"), force_build = FALSE) {
   if (!ping_service("bcpc")) stop(webchem_message("service_down"))
   suppressWarnings(try(load(paste0(tempdir(), "/data/bcpc_idx.rda")),
                        silent = TRUE))
-  if (!file.exists(paste0(tempdir(), "/data/bcpc_idx.rda")) |
-      force_build |
+  if (!file.exists(paste0(tempdir(), "/data/bcpc_idx.rda")) ||
+      force_build ||
       try(Sys.Date() - attr(bcpc_idx, "date"), silent = TRUE) > 30) {
     if (!dir.exists(paste0(tempdir(), "/data"))) {
       dir.create(paste0(tempdir(), "/data"))
     }
+    sources <- match.arg(sources, several.ok = TRUE)
     if (verbose) message("Building index. ", appendLF = FALSE)
-    index_sources <- data.frame(
-      name = c("rn", "inchikey", "cn", "name_fr", "name_ru"),
-      code = c(TRUE, TRUE, FALSE, FALSE, FALSE),
+    idx_sources <- data.frame(
+      name = c("rn", "inchikey", "cn", "fr", "ru", "zh"),
+      code = c(TRUE, TRUE, FALSE, FALSE, FALSE, FALSE),
       url = c(
         "https://pesticidecompendium.bcpc.org/index_rn.html",
         "www.bcpcpesticidecompendium.org/index-inchikey.html",
         "https://pesticidecompendium.bcpc.org/index_cn.html",
         "https://pesticidecompendium.bcpc.org/index-fr.html",
-        "https://pesticidecompendium.bcpc.org/index-ru.html"
+        "https://pesticidecompendium.bcpc.org/index-ru.html",
+        "https://pesticidecompendium.bcpc.org/index-zh.html"
       )
     )
-    idxs <- apply(index_sources, 1, function(source) {
-      res <- query_idx(source[["url"]])
+    selected <- subset(idx_sources, idx_sources$name %in% sources)
+    idxs <- apply(selected, 1, function(source) {
+      res <- query_bcpc_url(source[["url"]])
       if (source[["code"]]) {
         idx <- prep_idx_code(res, source = source[["name"]])
       } else {
@@ -102,12 +105,10 @@ build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) 
     bcpc_idx <- do.call(rbind, idxs)
     # fix encoding
     ln <- bcpc_idx$linknames
-      Encoding(ln) <- "latin1"
-      ln <- iconv(ln, from = "latin1", to = "ASCII", sub = "")
+      ln <- iconv(ln, to = "UTF-8", sub = "")#is it necessary?
       bcpc_idx$linknames <- ln
       attr(bcpc_idx, "date") <- Sys.Date()
       save(bcpc_idx, file = paste0(tempdir(), "/data/bcpc_idx.rda"))
-    
   }
   return(bcpc_idx)
 }
@@ -153,10 +154,9 @@ prep_idx_named <- function(res, source, xpath) {
   names <- xml_text(n)
   keep <- nzchar(names)
   names <- names[keep]
-  links <- xml_attr(n, "href")
-  links <- links[keep]
+  links <- xml_attr(n, "href")[keep]
   data.frame(
-    names = NA,
+    names = names,
     links = links,
     linknames = names,
     source = source,
