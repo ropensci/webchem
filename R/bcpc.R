@@ -113,8 +113,14 @@ build_bcpc_idx <- function(sources = c("rn", "inchikey", "cn", "fr", "ru", "zh")
   return(bcpc_idx)
 }
 
-
-query_idx <- function(url, verbose = getOption("verbose")) {
+#' Function to query bcpc and handle httr errors
+#'
+#' This function returns an httr response object
+#' @param url string; uri to query
+#' @param verbose logical; print message during processing to console?
+#' @return Httr response object
+#' @noRd
+query_bcpc_url <- function(url, verbose = getOption("verbose")) {
   res <- try(
     httr::RETRY(
       "GET",
@@ -134,6 +140,15 @@ query_idx <- function(url, verbose = getOption("verbose")) {
   if (res$status_code == 200) return(res)
 }
 
+#' Function scrape link names and urls from an httr response of a code (CAS, IUPAC, etc.) bcpc index frame
+#'
+#' This function returns a dataframe of linknames, links and sources
+#' @param res httr response object to scrape
+#' @param source string of response source
+#' @return data.frame
+#' @seealso \code{\link{build_bcpc_idx}} for referring function,
+#' for named index frame, use \code{\link{prep_idx_named}}
+#' @noRd
 prep_idx_code <- function(res, source) {
   idx <- read_html(res)
   names <- xml_text(xml_find_all(idx, "//dl/dt"))
@@ -148,6 +163,16 @@ prep_idx_code <- function(res, source) {
   return(df_idx)
 }
 
+#' Function scrape link names and urls from an httr response of a named bcpc index frame
+#'
+#' This function returns a dataframe of linknames, links and sources
+#' @param res httr response object to scrape
+#' @param source string of response source
+#' @param xpath a string of an xpath
+#' @return data.frame
+#' @seealso \code{\link{build_bcpc_idx}} for referring function,
+#' for coded index frame, use \code{\link{prep_idx_named}}
+#' @noRd
 prep_idx_named <- function(res, source, xpath) {
   idx <- read_html(res)
   n <- xml_find_all(idx, xpath)
