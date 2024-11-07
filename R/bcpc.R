@@ -50,7 +50,7 @@ bcpc_query <- function(query, from = c("name", "cas","rn","cn","fr","en","zh","r
 
   from <- match.arg(from)
   from <- convert_from_arg_bcpc(from)
-  bcpc_idx <- build_bcpc_idx(verbose=verbose, ...)
+  bcpc_idx <- build_bcpc_idx(verbose = verbose, ...)
   names(query) <- query
   out <- lapply(query, function(x) scrape_bcpc_frame(x, from = from, idx = bcpc_idx, verbose = verbose))
   class(out) <- c("bcpc_query", "list")
@@ -105,10 +105,10 @@ build_bcpc_idx <- function(sources = c("rn", "inchikey", "cn", "fr", "ru", "zh")
     bcpc_idx <- do.call(rbind, idxs)
     # fix encoding
     ln <- bcpc_idx$linknames
-      ln <- iconv(ln, to = "UTF-8", sub = "")#is it necessary?
-      bcpc_idx$linknames <- ln
-      attr(bcpc_idx, "date") <- Sys.Date()
-      save(bcpc_idx, file = paste0(tempdir(), "/data/bcpc_idx.rda"))
+    ln <- iconv(ln, to = "UTF-8", sub = "")#is it necessary?
+    bcpc_idx$linknames <- ln
+    attr(bcpc_idx, "date") <- Sys.Date()
+    save(bcpc_idx, file = paste0(tempdir(), "/data/bcpc_idx.rda"))
   }
   return(bcpc_idx)
 }
@@ -163,7 +163,7 @@ prep_idx_code <- function(res, source) {
   return(df_idx)
 }
 
-#' Function scrape link names and urls from an httr response of a named bcpc index frame
+#' Scrapes link names and urls from an httr response of a named bcpc index frame
 #'
 #' This function returns a dataframe of linknames, links and sources
 #' @param res httr response object to scrape
