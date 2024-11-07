@@ -52,121 +52,7 @@ bcpc_query <- function(query, from = c("name", "cas", "inchikey", "name_fr"),
   bcpc_idx <- build_bcpc_idx(verbose, ...)
 
   names(query) <- query
-
-  foo <- function(query, from, verbose) {
-    if (from == "cas") {
-      query <- as.cas(query, verbose = verbose)
-      names <- bcpc_idx$names[bcpc_idx$source == "rn"]
-      # select only first link
-      links <- bcpc_idx$links[bcpc_idx$source == "rn"]
-      linknames <- bcpc_idx$linknames[bcpc_idx$source == "rn"]
-      cname <-  linknames[tolower(names) == tolower(query)]
-    }
-    if (is.na(query)) {
-      if (verbose) webchem_message("na")
-      return(NA)
-    }
-    if (verbose) webchem_message("query", query, appendLF = FALSE)
-  # search links in indexes
-    if (from == "name") {
-      links <- bcpc_idx$links[bcpc_idx$source == "cn"]
-      names <- bcpc_idx$linknames[bcpc_idx$source == "cn"]
-      cname <-  query
-    }
-
-    takelink <- links[tolower(names) == tolower(query)]
-    if (length(takelink) == 0) {
-      if (verbose) message("Not found.")
-      return(NA)
-    }
-    if (length(takelink) > 1) {
-      takelink <- unique(takelink)
-      if (length(takelink) > 1) {
-        message("More then one link found. Returning first.")
-        takelink <- takelink[1]
-      }
-    }
-
-    qurl <- paste0("https://pesticidecompendium.bcpc.org/", takelink)
-    webchem_sleep(type = 'scrape')
-    res <- try(httr::RETRY("GET",
-                           qurl,
-                           httr::user_agent(webchem_url()),
-                           terminate_on = 404,
-                           config = httr::config(accept_encoding = "identity"),
-                           quiet = TRUE), silent = TRUE)
-    if (inherits(res, "try-error")) {
-      if (verbose) webchem_message("service_down")
-      return(NA)
-    }
-    if (verbose) message(httr::message_for_status(res))
-    if (res$status_code == 200){
-      ttt <- read_html(res)
-      status <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r1']/following-sibling::td"))
-      pref_iupac_name <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r2']/following-sibling::td"))
-      iupac_name <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r3']/following-sibling::td"))
-      cas <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r5']/following-sibling::td"))
-      formula <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r6']/following-sibling::td"))
-      activity_text <- as.character(xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
-      a_tmp_1 <- trimws(gsub("<td.*?>(.*)</td>", "\\1", activity_text))
-      a_tmp_2 <- gsub("<a.*?>", "", a_tmp_1)
-      a_tmp_3 <- gsub("</a>", "", a_tmp_2)
-      a_split <- strsplit(a_tmp_3, "<br>")[[1]]
-      activity <- unname(sapply(a_split, function(x) gsub(" \\(.*\\)$", "", x)))
-      subactivity <- unname(sapply(a_split, function(x) {
-          if (grepl("\\(.*\\)", x)) gsub(".*\\((.*)\\)$", "\\1", x)
-          else NA}))
-      inchikey_r <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r11']/following-sibling::td"))
-      if (length(inchikey_r) == 0) {
-        inchikey <- NA
-      } else {
-        if (grepl("isomer", inchikey_r)) {
-          inchikey <- c(
-            s_isomer = gsub(
-              ".*\\(S\\)-isomer:(.*)(minor component.*)", "\\1", inchikey_r),
-            r_isomer = gsub(".*\\(R\\)-isomer:(.*)", "\\1", inchikey_r))
-        }
-        if (grepl("identifier", inchikey_r)) {
-          inchikey <- c(gsub("(.*)identifier.*", "\\1", inchikey_r),
-                        gsub(".*identifier.*:(.*)", "\\1", inchikey_r))
-          names(inchikey) <- c("inchikey",
-                               gsub(".*(identifier.*:).*", "\\1", inchikey_r)
-          )
-        }
-        if (!grepl("isomer", inchikey_r) & !grepl("identifier", inchikey_r))
-          inchikey <- inchikey_r
-      }
-
-      inchi <- xml_text(
-        xml_find_all(ttt, "//tr/th[@id='r12']/following-sibling::td"))
-      if (length(inchi) == 0) {
-        inchi <- NA
-      } else {
-        if (grepl("isomer", inchi)) {
-          inchi <- c(s_isomer = gsub(".*\\(S\\)-isomer:(.*)(minor component.*)",
-                                     "\\1", inchi),
-                     r_isomer = gsub(".*\\(R\\)-isomer:(.*)", "\\1", inchi))
-        }
-      }
-
-      out <- list(cname = cname, status = status,
-                  pref_iupac_name = pref_iupac_name, iupac_name = iupac_name,
-                  cas = cas, formula = formula, activity = activity,
-                  subactivity = subactivity, inchikey = inchikey, inchi = inchi,
-                  source_url = qurl)
-      return(out)
-    }
-    else {
-      return(NA)
-    }
-  }
-  out <- lapply(query, function(x) foo(x, from = from, verbose = verbose))
+  out <- lapply(query, function(x) scrape_bcpc_frame(x, from = from, idx = bcpc_idx, verbose = verbose))
   class(out) <- c("bcpc_query", "list")
   return(out)
 }
@@ -276,4 +162,162 @@ prep_idx_named <- function(res, source, xpath) {
     source = source,
     stringsAsFactors = FALSE
   )
+}
+
+#' Function to handle synonymous arguments
+#'
+#' This function returns a dataframe of linknames, links and sources
+#' @param from argument (single) string
+#' @return string
+#' @seealso \code{\link{bcpc_query}}
+#' @noRd
+convert_from_arg_bcpc <- function(from) {
+  from <- gsub("name|name_en", "cn", from)
+  from <- gsub("cas", "rn", from)
+  from
+}
+
+#' Function to scrape information from a substance page
+#'
+#' This function returns a named list of substance attributes and values
+#' @param query string to query in index
+#' @param from source argument
+#' @param idx data.frame of bcpc index
+#' @return named list
+#' @seealso \code{\link{bcpc_query}}, \code{\link{build_bcpc_idx}}
+#' @noRd
+scrape_bcpc_frame <- function(query, from, idx, verbose) {
+  idx <- subset(idx, source == from)
+  if (is.na(query)) {
+    if (verbose) webchem_message("na")
+    return(NA)
+  }
+  if (verbose) webchem_message("query", query, appendLF = FALSE)
+  # generic selection
+  if (from == "cas") query <- as.cas(query, verbose = verbose)
+  names <- idx$names
+  links <- idx$links
+  linknames <- idx$linknames
+  cname <- linknames[tolower(names) == tolower(query)]
+  takelink <- links[tolower(names) == tolower(query)]
+  # end new
+  # search links in indexes
+  if (length(takelink) == 0) {
+    if (verbose) message("Not found.")
+    return(NA)
+  }
+  if (length(takelink) > 1) {
+    takelink <- unique(takelink)
+    if (length(takelink) > 1) {
+      message("More then one link found. Returning first.")
+      takelink <- takelink[1]
+    }
+  }
+
+  qurl <- paste0("https://pesticidecompendium.bcpc.org/", takelink)
+  webchem_sleep(type = "scrape")
+  res <- query_bcpc_url(qurl)
+  if (!length(res) || !res$status_code == 200) {
+    return(NA)
+  }
+
+  ttt <- read_html(res)
+  status <- xml_text(
+    xml_find_all(ttt, "//tr/th[@id='r1']/following-sibling::td")
+  )
+  name_fr <- xml_find_all(ttt, "//h2/span/following::span[@lang='fr'][1]")
+  # remove noun gender
+  name_fr <- xml_text(
+    read_xml(
+      gsub(" \\(<abbr.*>.*<\\/abbr>\\)", "", name_fr)
+    )
+  )
+  name_ru <- xml_text(
+    xml_find_all(ttt, "//h2/span/following::span[@lang='ru'][1]")
+  )
+  name_zh <- xml_text(
+    xml_find_all(ttt, "//h2/span/following::span[@lang='zh-Hans'][1]")
+  )
+  pref_iupac_name <- xml_text(
+    xml_find_all(ttt, "//tr/th[@id='r2']/following-sibling::td")
+  )
+  iupac_name <- xml_text(
+    xml_find_all(ttt, "//tr/th[@id='r3']/following-sibling::td")
+  )
+  cas <- xml_text(
+    xml_find_all(ttt, "//tr/th[@id='r5']/following-sibling::td")
+  )
+  formula <- xml_text(
+    xml_find_all(ttt, "//tr/th[@id='r6']/following-sibling::td")
+  )
+  activity_text <- as.character(xml_find_all(ttt, "//tr/th[@id='r7']/following-sibling::td"))
+  a_tmp_1 <- trimws(gsub("<td.*?>(.*)</td>", "\\1", activity_text))
+  a_tmp_2 <- gsub("<a.*?>", "", a_tmp_1)
+  a_tmp_3 <- gsub("</a>", "", a_tmp_2)
+  a_split <- strsplit(a_tmp_3, "<br>")[[1]]
+  activity <- unname(sapply(a_split, function(x) gsub(" \\(.*\\)$", "", x)))
+  subactivity <- unname(sapply(a_split, function(x) {
+    if (grepl("\\(.*\\)", x)) {
+      gsub(".*\\((.*)\\)$", "\\1", x)
+    } else {
+      NA
+    }
+  }))
+  inchikey_r <- xml_text(
+    xml_find_all(ttt, "//tr/th[@id='r11']/following-sibling::td")
+  )
+  if (length(inchikey_r) == 0) {
+    inchikey <- NA
+  } else {
+    if (grepl("isomer", inchikey_r)) {
+      inchikey <- c(
+        s_isomer = gsub(
+          ".*\\(S\\)-isomer:(.*)(minor component.*)", "\\1", inchikey_r
+        ),
+        r_isomer = gsub(".*\\(R\\)-isomer:(.*)", "\\1", inchikey_r)
+      )
+    }
+    if (grepl("identifier", inchikey_r)) {
+      inchikey <- c(
+        gsub("(.*)identifier.*", "\\1", inchikey_r),
+        gsub(".*identifier.*:(.*)", "\\1", inchikey_r)
+      )
+      names(inchikey) <- c(
+        "inchikey",
+        gsub(".*(identifier.*:).*", "\\1", inchikey_r)
+      )
+    }
+    if (!grepl("isomer", inchikey_r) & !grepl("identifier", inchikey_r)) {
+      inchikey <- inchikey_r
+    }
+  }
+
+  inchi <- xml_text(
+    xml_find_all(ttt, "//tr/th[@id='r12']/following-sibling::td")
+  )
+  if (length(inchi) == 0) {
+    inchi <- NA
+  } else {
+    if (grepl("isomer", inchi)) {
+      inchi <- c(
+        s_isomer = gsub(
+          ".*\\(S\\)-isomer:(.*)(minor component.*)",
+          "\\1", inchi
+        ),
+        r_isomer = gsub(".*\\(R\\)-isomer:(.*)", "\\1", inchi)
+      )
+    }
+  }
+  out <- list(
+    cname = cname,
+    name_fr = name_fr,
+    name_ru = name_ru,
+    name_zh = name_zh,
+    status = status,
+    pref_iupac_name = pref_iupac_name, iupac_name = iupac_name,
+    cas = cas, formula = formula, activity = activity,
+    subactivity = subactivity, inchikey = inchikey, inchi = inchi,
+    source_url = qurl
+  )
+  return(out)
 }
