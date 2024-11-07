@@ -50,7 +50,7 @@ bcpc_query <- function(query, from = c("name", "cas","rn","cn","fr","en","zh","r
 
   from <- match.arg(from)
   from <- convert_from_arg_bcpc(from)
-  bcpc_idx <- build_bcpc_idx(verbose=verbose, force_build = FALSE, ...)
+  bcpc_idx <- build_bcpc_idx(verbose=verbose, ...)
   names(query) <- query
   out <- lapply(query, function(x) scrape_bcpc_frame(x, from = from, idx = bcpc_idx, verbose = verbose))
   class(out) <- c("bcpc_query", "list")
