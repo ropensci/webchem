@@ -7,6 +7,7 @@
 is.inchikey(
   x,
   type = c("format", "chemspider"),
+  apikey = NULL,
   verbose = getOption("verbose")
 )
 }
@@ -15,6 +16,10 @@ is.inchikey(
 
 \item{type}{character; How should be checked? Either, by format (see above)
 ('format') or by ChemSpider ('chemspider').}
+
+\item{apikey}{character; your API key. If NULL (default),
+  \code{cs_check_key()} will look for it in .Renviron or .Rprofile. Only
+used when `type = "chemspider"`.}
 
 \item{verbose}{logical; print messages during processing to console?}
 }
