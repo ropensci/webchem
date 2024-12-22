@@ -4,8 +4,7 @@
 #' of web APIs for chemical information.
 #'
 #' @docType package
-#' @name webchem
 #' @importFrom methods is
 #' @importFrom utils globalVariables
-if (getRversion() >= "2.15.1")
-  globalVariables(c("."))
+"_PACKAGE"
+
