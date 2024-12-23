@@ -13,7 +13,7 @@ test_that("SRS returns correct results", {
   expect_true(is.na(a))
   expect_true(is.na(b))
   expect_type(c, "list")
-  expect_s3_class(c$`50-00-0`, "data.frame")
+  expect_true(inherits(c$`50-00-0`, "data.frame"))
   expect_equal(c$`50-00-0`$systematicName, "Formaldehyde")
 
   expect_equal(d$aniline$systematicName, "Benzenamine")

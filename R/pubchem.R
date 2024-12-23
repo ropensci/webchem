@@ -25,19 +25,19 @@
 #' \code{<xref>}, \code{"sourceid/<source id>"} or \code{"sourceall"}.}
 #' \item{\code{assay}: \code{"aid"}, \code{<assay target>}.}
 #' }
-#' @details <structure search> is assembled as "{\code{substructure} |
-#' \code{superstructure} | \code{similarity} | \code{identity}} / {\code{smiles}
-#'  | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+#' @details <structure search> is assembled as "(\code{substructure} |
+#' \code{superstructure} | \code{similarity} | \code{identity}) / (\code{smiles}
+#'  | \code{inchi} | \code{sdf} | \code{cid})", e.g.
 #'  \code{from = "substructure/smiles"}.
-#' @details \code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID} |
+#' @details \code{<xref>} is assembled as "\code{xref}/(\code{RegistryID} |
 #' \code{RN} | \code{PubMedID} | \code{MMDBID} | \code{ProteinGI},
 #' \code{NucleotideGI} | \code{TaxonomyID} | \code{MIMID} | \code{GeneID} |
-#' \code{ProbeID} | \code{PatentID}\}", e.g. \code{from = "xref/RN"} will query
+#' \code{ProbeID} | \code{PatentID})", e.g. \code{from = "xref/RN"} will query
 #' by CAS RN.
 #' @details <fast search> is either \code{fastformula} or it is assembled as
-#' "{\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
-#' \code{fastsubstructure} | \code{fastsuperstructure}}/{\code{smiles} |
-#' \code{smarts} | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+#' "(\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
+#' \code{fastsubstructure} | \code{fastsuperstructure})/(\code{smiles} |
+#' \code{smarts} | \code{inchi} | \code{sdf} | \code{cid})", e.g.
 #' \code{from = "fastidentity/smiles"}.
 #' @details \code{<source id>} is any valid PubChem Data Source ID. When
 #' \code{from = "sourceid/<source id>"}, the query is the ID of the substance in
@@ -46,8 +46,8 @@
 #' depositor names. Depositor names are not case sensitive.
 #' @details Depositor names and Data Source IDs can be found at
 #' \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
-#' @details \code{<assay target>} is assembled as "\code{target}/\{\code{gi} |
-#' \code{proteinname} | \code{geneid} | \code{genesymbol} | \code{accession}\}",
+#' @details \code{<assay target>} is assembled as "\code{target}/(\code{gi} |
+#' \code{proteinname} | \code{geneid} | \code{genesymbol} | \code{accession})",
 #' e.g. \code{from = "target/geneid"} will query by GeneID.
 #' @references Wang, Y., J. Xiao, T. O. Suzek, et al. 2009 PubChem: A Public
 #' Information System for

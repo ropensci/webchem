@@ -55,21 +55,21 @@ Valid values for the \code{from} argument depend on the
 \item{\code{assay}: \code{"aid"}, \code{<assay target>}.}
 }
 
-<structure search> is assembled as "{\code{substructure} |
-\code{superstructure} | \code{similarity} | \code{identity}} / {\code{smiles}
- | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+<structure search> is assembled as "(\code{substructure} |
+\code{superstructure} | \code{similarity} | \code{identity}) / (\code{smiles}
+ | \code{inchi} | \code{sdf} | \code{cid})", e.g.
  \code{from = "substructure/smiles"}.
 
-\code{<xref>} is assembled as "\code{xref}/\{\code{RegistryID} |
+\code{<xref>} is assembled as "\code{xref}/(\code{RegistryID} |
 \code{RN} | \code{PubMedID} | \code{MMDBID} | \code{ProteinGI},
 \code{NucleotideGI} | \code{TaxonomyID} | \code{MIMID} | \code{GeneID} |
-\code{ProbeID} | \code{PatentID}\}", e.g. \code{from = "xref/RN"} will query
+\code{ProbeID} | \code{PatentID})", e.g. \code{from = "xref/RN"} will query
 by CAS RN.
 
 <fast search> is either \code{fastformula} or it is assembled as
-"{\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
-\code{fastsubstructure} | \code{fastsuperstructure}}/{\code{smiles} |
-\code{smarts} | \code{inchi} | \code{sdf} | \code{cid}}", e.g.
+"(\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
+\code{fastsubstructure} | \code{fastsuperstructure})/(\code{smiles} |
+\code{smarts} | \code{inchi} | \code{sdf} | \code{cid})", e.g.
 \code{from = "fastidentity/smiles"}.
 
 \code{<source id>} is any valid PubChem Data Source ID. When
@@ -82,8 +82,8 @@ depositor names. Depositor names are not case sensitive.
 Depositor names and Data Source IDs can be found at
 \url{https://pubchem.ncbi.nlm.nih.gov/sources/}.
 
-\code{<assay target>} is assembled as "\code{target}/\{\code{gi} |
-\code{proteinname} | \code{geneid} | \code{genesymbol} | \code{accession}\}",
+\code{<assay target>} is assembled as "\code{target}/(\code{gi} |
+\code{proteinname} | \code{geneid} | \code{genesymbol} | \code{accession})",
 e.g. \code{from = "target/geneid"} will query by GeneID.
 }
 \note{

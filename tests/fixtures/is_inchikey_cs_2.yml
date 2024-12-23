@@ -1,0 +1,133 @@
+http_interactions:
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-type: application/json; charset=utf-8
+      content-length: '50'
+      date: Sat, 21 Dec 2024 21:31:20 GMT
+      x-amzn-requestid: 4171dd05-f6d3-47cf-9844-3adde68028a7
+      x-amz-apigw-id: DKUCYGV4LPEEfVQ=
+      x-amzn-trace-id: Root=1-676733a8-13c653d72b7a5f043a548451;Parent=041d6de2fef576a8;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Miss from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: 8sLJT26clMXUkzElTOnuLCqXMRvVP4pqGA_Jg8oG4A7kzsRD3yCjNA==
+    body:
+      encoding: ''
+      file: no
+      string: '{"queryId":"6273e02a-bc45-432d-b803-59b103c7a738"}'
+  recorded_at: 2024-12-21 21:31:21 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/tools/validate/inchikey
+    body:
+      encoding: ''
+      string: '{"inchikey":"BQJCRHHNABKAKU-KBQPJGBKSA-N"}'
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-type: application/json; charset=utf-8
+      content-length: '14'
+      date: Sat, 21 Dec 2024 21:31:21 GMT
+      x-amzn-requestid: 4fd54ac0-6be5-426f-b956-0500535f73b7
+      x-amz-apigw-id: DKUCeGc5LPEEfSA=
+      x-amzn-trace-id: Root=1-676733a9-53744b1f135212fc340ea85f;Parent=2191e1ac1081e71f;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Miss from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: 4gkNPhVjZwluvW4SB0m9wteE0_yw7WQZs5ZVqU4XKkzYtjTaHHDYew==
+    body:
+      encoding: ''
+      file: no
+      string: '{"valid":true}'
+  recorded_at: 2024-12-21 21:31:21 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-type: application/json; charset=utf-8
+      content-length: '50'
+      date: Sat, 21 Dec 2024 21:31:21 GMT
+      x-amzn-requestid: d36146ac-a1b6-4aa2-823d-7e5831faf2be
+      x-amz-apigw-id: DKUCgFczLPEEkSQ=
+      x-amzn-trace-id: Root=1-676733a9-3861a5cd0974962033127ee4;Parent=30ac0a94a7bf97ca;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Miss from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: L_hGgmxFVqoOWCVG9Fj7vBQETt2t8-ZLYQNl4EAZQvrlFUBRImmIEQ==
+    body:
+      encoding: ''
+      file: no
+      string: '{"queryId":"52dd367e-00f5-49b5-947e-380acb1043ea"}'
+  recorded_at: 2024-12-21 21:31:21 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/tools/validate/inchikey
+    body:
+      encoding: ''
+      string: '{"inchikey":"BQJCRHHNABKAKU-KBQPJGBKSA"}'
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-type: application/json; charset=utf-8
+      content-length: '15'
+      date: Sat, 21 Dec 2024 21:31:21 GMT
+      x-amzn-requestid: eb7e0e4d-30fa-4ed9-9517-c2622fa2e259
+      x-amz-apigw-id: DKUCjHG0LPEEZyQ=
+      x-amzn-trace-id: Root=1-676733a9-50266038062bbc1d3a775139;Parent=5d8a8bd923de62ba;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Miss from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: dhqj6-WSQgUY4Hmsbcdh6Oozx3PkvZ0wsX2Vk8h0yXVq8lF3bGC8Yg==
+    body:
+      encoding: ''
+      file: no
+      string: '{"valid":false}'
+  recorded_at: 2024-12-21 21:31:21 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0

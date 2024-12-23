@@ -4,10 +4,13 @@
 \alias{is.inchikey_cs}
 \title{Check if input is a valid inchikey using ChemSpider API}
 \usage{
-is.inchikey_cs(x, verbose = getOption("verbose"))
+is.inchikey_cs(x, apikey = NULL, verbose = getOption("verbose"))
 }
 \arguments{
 \item{x}{character; input string}
+
+\item{apikey}{character; your API key. If NULL (default),
+\code{cs_check_key()} will look for it in .Renviron or .Rprofile.}
 
 \item{verbose}{logical; print messages during processing to console?}
 }

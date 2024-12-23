@@ -32,7 +32,7 @@ srs_query <-
     if (!ping_service("srs")) stop(webchem_message("service_down"))
     names(query) <- query
     from <- match.arg(from)
-    entity_url <- "https://cdxnodengn.epa.gov/cdx-srs-rest/"
+    entity_url <- "https://cdxapps.epa.gov/oms-substance-registry-services/rest-api"
     if (from == "cas"){
       query <- as.cas(query, verbose = verbose)
     }
@@ -55,12 +55,12 @@ srs_query <-
       }
       if (verbose) message(httr::message_for_status(response))
       if (response$status_code == 200) {
-        text_content <- httr::content(response, "text")
+        text_content <- httr::content(response, "text", encoding = "utf-8")
         if (text_content == "[]") {
           if (verbose) webchem_message("not_available")
           return(NA)
         } else {
-          jsonlite::fromJSON(text_content)
+          tibble::as_tibble(jsonlite::fromJSON(text_content))
         }
       } else {
         return(NA)

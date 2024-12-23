@@ -11,6 +11,9 @@
 #' @param x character; input InChIKey
 #' @param type character; How should be checked? Either, by format (see above)
 #' ('format') or by ChemSpider ('chemspider').
+#' @param apikey character; your API key. If NULL (default),
+#'   \code{cs_check_key()} will look for it in .Renviron or .Rprofile. Only
+#' used when `type = "chemspider"`.
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
@@ -31,17 +34,23 @@
 #' is.inchikey('BQJCRHHNABKAKU/KBQPJGBKSA/N')
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #' is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSB-N')
-is.inchikey = function(x, type = c('format', 'chemspider'),
-                       verbose = getOption("verbose")) {
+is.inchikey = function(
+    x,
+    type = c('format', 'chemspider'),
+    apikey = NULL,
+    verbose = getOption("verbose")
+  ) {
   # x <- 'BQJCRHHNABKAKU-KBQPJGBKSA-N'
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
   }
 
   type <- match.arg(type)
-  out <- switch(type,
-                format = is.inchikey_format(x, verbose = verbose),
-                chemspider = is.inchikey_cs(x, verbose = verbose))
+  out <- switch(
+    type,
+    format = is.inchikey_format(x, verbose = verbose),
+    chemspider = is.inchikey_cs(x, apikey = apikey, verbose = verbose)
+  )
   return(out)
 }
 
@@ -49,6 +58,8 @@ is.inchikey = function(x, type = c('format', 'chemspider'),
 #' Check if input is a valid inchikey using ChemSpider API
 #'
 #' @param x character; input string
+#' @param apikey character; your API key. If NULL (default),
+#'   \code{cs_check_key()} will look for it in .Renviron or .Rprofile.
 #' @param verbose logical; print messages during processing to console?
 #' @return a logical
 #'
@@ -65,9 +76,15 @@ is.inchikey = function(x, type = c('format', 'chemspider'),
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKXA-N')
 #' is.inchikey_cs('BQJCRHHNABKAKU-KBQPJGBKSB-N')
 #' }
-is.inchikey_cs <- function(x, verbose = getOption("verbose")){
-
-  if (!ping_service("cs_web")) stop(webchem_message("service_down"))
+is.inchikey_cs <- function(
+    x,
+    apikey = NULL,
+    verbose = getOption("verbose")
+  ){
+  if (is.null(apikey)) {
+    apikey <- cs_check_key()
+  }
+  if (!ping_service("cs")) stop(webchem_message("service_down"))
 
   if (length(x) > 1) {
     stop('Cannot handle multiple input strings.')
@@ -76,13 +93,20 @@ is.inchikey_cs <- function(x, verbose = getOption("verbose")){
     if (verbose) webchem_message("na")
     return(NA)
   }
-  baseurl <- 'http://www.chemspider.com/InChI.asmx/IsValidInChIKey?'
-  qurl <- paste0(baseurl, 'inchi_key=', x)
-  webchem_sleep(type = 'scrape')
+  qurl <- 'https://api.rsc.org/compounds/v1/tools/validate/inchikey'
+  headers <- c(
+    "Accept" =  "application/json",
+    "Content-Type" = "application/json",
+    "apikey" = apikey
+  )
+  body <- list("inchikey" = x) |> jsonlite::toJSON(auto_unbox = TRUE)
+  webchem_sleep(type = 'API')
   if (verbose) webchem_message("query", x, appendLF = FALSE)
-  res <- try(httr::RETRY("GET",
-                         qurl,
-                         httr::user_agent(webchem_url()),
+  res <- try(httr::RETRY("POST",
+                         url = qurl,
+                         httr::add_headers(.headers = headers),
+                         body = body,
+                         encode = "json",
                          terminate_on = 404,
                          quiet = TRUE), silent = TRUE)
   if (inherits(res, "try-error")) {
@@ -91,13 +115,13 @@ is.inchikey_cs <- function(x, verbose = getOption("verbose")){
   }
   if (verbose) message(httr::message_for_status(res))
   if (res$status_code == 200){
-    h <- xml2::read_xml(res)
-    out <- as.logical(xml_text(h))
-    return(out)
-    }
-  else {
-    return(NA)
+    out <- as.logical(httr::content(res))
+  } else if (res$status_code == 400) {
+    out <- FALSE
+  } else {
+    out <- NA
   }
+  return(out)
 }
 
 

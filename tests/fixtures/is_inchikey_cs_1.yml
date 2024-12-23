@@ -1,0 +1,139 @@
+http_interactions:
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/filter/name
+    body:
+      encoding: ''
+      string: '{"name":"triclosan","orderBy":"recordId","orderDirection":"ascending"}'
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: ''
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-type: application/json; charset=utf-8
+      content-length: '50'
+      date: Sat, 21 Dec 2024 21:31:09 GMT
+      x-amzn-requestid: ecdd06c9-3b75-415d-b634-a5886580e2df
+      x-amz-apigw-id: DKUAuGcNLPEEa9A=
+      x-amzn-trace-id: Root=1-6767339d-3990071163dea691554eec92;Parent=5f382715e87ab0be;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Miss from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: u8vA6ESwF_LdnEeI7Ffotn6LXdU7DgmmKdNieQ0zx2k3mMxG9bUOpg==
+    body:
+      encoding: ''
+      file: no
+      string: '{"queryId":"7ea79f76-b7c0-43af-bf6f-8e0f5a003bef"}'
+  recorded_at: 2024-12-21 21:31:14 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/tools/validate/inchikey
+    body:
+      encoding: ''
+      string: '{"inchikey":"BQJCRHHNABKAKU-KBQPJGBKSA-5"}'
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 400
+      category: Client error
+      reason: Bad Request
+      message: 'Client error: (400) Bad Request'
+    headers:
+      content-type: application/problem+json; charset=utf-8
+      content-length: '242'
+      date: Sat, 21 Dec 2024 21:31:10 GMT
+      x-amzn-requestid: fac3519a-b35f-4cc7-93ec-91c96a7bf535
+      x-amz-apigw-id: DKUAyGVerPEEfDA=
+      x-amzn-trace-id: Root=1-6767339e-68245b8e72cbadd249058c1a;Parent=0e96806a9b8cc637;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Error from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: HCjrhtY_9PnEI1gz05vEDiGxCSs9C3l1q1-a7PbrsC4sDmLsLBXpsA==
+    body:
+      encoding: ''
+      file: no
+      string: '{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One
+        or more validation errors occurred.","status":400,"errors":{"InchiKey":["Invalid
+        InChIKey format"]},"traceId":"00-87ee51520649bbb0a242091d6fd8f000-0f4830f37364a214-00"}'
+  recorded_at: 2024-12-21 21:31:14 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/tools/validate/inchikey
+    body:
+      encoding: ''
+      string: '{"inchikey":"BQJCRHHNABKAKU-KBQPJGBKSA-5"}'
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 400
+      category: Client error
+      reason: Bad Request
+      message: 'Client error: (400) Bad Request'
+    headers:
+      content-type: application/problem+json; charset=utf-8
+      content-length: '242'
+      date: Sat, 21 Dec 2024 21:31:11 GMT
+      x-amzn-requestid: 2a916bf0-4091-4d27-9a93-74782a4943e0
+      x-amz-apigw-id: DKUBCGmCrPEEWxA=
+      x-amzn-trace-id: Root=1-6767339f-04595f9360d8142f0a3ccc9b;Parent=28114559baa9208f;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Error from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: ImZuFEWRPwlUvRvyMySXOZHurDa5lAe0qb4diEbv3glO60YDJEaiAw==
+    body:
+      encoding: ''
+      file: no
+      string: '{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One
+        or more validation errors occurred.","status":400,"errors":{"InchiKey":["Invalid
+        InChIKey format"]},"traceId":"00-d7514dc309643de0c5595201e8e32c5e-c4608b6c90ff786b-00"}'
+  recorded_at: 2024-12-21 21:31:14 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0
+- request:
+    method: post
+    uri: https://api.rsc.org/compounds/v1/tools/validate/inchikey
+    body:
+      encoding: ''
+      string: '{"inchikey":"BQJCRHHNABKAKU-KBQPJGBKSA-5"}'
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+      apikey: <<my_api_key>>
+  response:
+    status:
+      status_code: 400
+      category: Client error
+      reason: Bad Request
+      message: 'Client error: (400) Bad Request'
+    headers:
+      content-type: application/problem+json; charset=utf-8
+      content-length: '242'
+      date: Sat, 21 Dec 2024 21:31:14 GMT
+      x-amzn-requestid: 9c7e8f29-31b3-4d1b-8c0c-1aa699ab4135
+      x-amz-apigw-id: DKUBbGmRrPEEa9A=
+      x-amzn-trace-id: Root=1-676733a2-7cc1fbe16a4f1f3a3822fe84;Parent=05627547beb3e142;Sampled=0;Lineage=1:29310d16:0
+      x-cache: Error from cloudfront
+      via: 1.1 6164863a8032b4b19e42aff8915017e2.cloudfront.net (CloudFront)
+      x-amz-cf-pop: BUD50-P1
+      x-amz-cf-id: brMvkXtU1YwLibmvTlNGIFYY_HeCiYFnsK408AIPAr5qAkd_xEw5zA==
+    body:
+      encoding: ''
+      file: no
+      string: '{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One
+        or more validation errors occurred.","status":400,"errors":{"InchiKey":["Invalid
+        InChIKey format"]},"traceId":"00-ebfc6672e561a103f3a78748287168a3-d64320f2c929e4e2-00"}'
+  recorded_at: 2024-12-21 21:31:14 GMT
+  recorded_with: vcr/1.6.0.91, webmockr/2.0.0

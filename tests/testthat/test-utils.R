@@ -13,7 +13,11 @@ test_that("examples in the article are unchanged", {
     capture_messages(is.cas("64-17-6", verbose = TRUE)),
     "64-17-6: Checksum is not correct! 5 vs. 6\n")
   skip_if_not(up, "ChemSpider service is down, skipping tests")
-  expect_false(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKSA-5", type = "chemspider"))
+
+  vcr::use_cassette("is_inchikey_cs_1", {
+    A <- is.inchikey("BQJCRHHNABKAKU-KBQPJGBKSA-5", type = "chemspider")
+  })
+  expect_false(A)
 })
 
 test_that("is.cas() returns correct results", {
@@ -48,8 +52,10 @@ test_that("is.inchikey() returns correct results", {
   skip_on_ci()
   skip_if_not(up, "ChemSpider service is down, skipping tests")
 
-  g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
-  b <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA', type = 'chemspider')
+  vcr::use_cassette("is_inchikey_cs_2", {
+    g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
+    b <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA', type = 'chemspider')
+  })
 
   expect_true(g)
   expect_false(b)
