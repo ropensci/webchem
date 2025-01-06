@@ -1,0 +1,86 @@
+http_interactions:
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |-
+        <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>triclosan</chebi:search>
+                    <chebi:searchCategory>ALL</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Thu, 03 Aug 2023 19:34:28 GMT
+    body:
+      encoding: ''
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:164200</chebiId><chebiAsciiName>triclosan</chebiAsciiName><searchScore>0.88</searchScore><entityStar>3</entityStar></ListElement><ListElement><chebiId>CHEBI:89302</chebiId><chebiAsciiName>Triclosan
+        glucuronide</chebiAsciiName><searchScore>0.26</searchScore><entityStar>2</entityStar></ListElement><ListElement><chebiId>CHEBI:89301</chebiId><chebiAsciiName>Triclosan
+        sulfate</chebiAsciiName><searchScore>0.13</searchScore><entityStar>2</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2023-08-03 19:34:29 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
+- request:
+    method: post
+    uri: http://www.ebi.ac.uk/webservices/chebi/2.0/webservice
+    body:
+      encoding: ''
+      string: |2-
+
+            <soapenv:Envelope
+             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:chebi="https://www.ebi.ac.uk/webservices/chebi">
+              <soapenv:Header/>
+                <soapenv:Body>
+                  <chebi:getLiteEntity>
+                    <chebi:search>C#C</chebi:search>
+                    <chebi:searchCategory>SMILES</chebi:searchCategory>
+                    <chebi:maximumResults>200</chebi:maximumResults>
+                    <chebi:stars>ALL</chebi:stars>
+                  </chebi:getLiteEntity>
+                </soapenv:Body>
+             </soapenv:Envelope>
+    headers:
+      Accept: multipart/*
+      Content-Type: text/xml; charset=utf-8
+      SOAPAction: ''
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      server: Apache-Coyote/1.1
+      content-type: text/xml;charset=utf-8
+      transfer-encoding: chunked
+      date: Thu, 03 Aug 2023 19:34:28 GMT
+    body:
+      encoding: ''
+      file: no
+      string: <?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><getLiteEntityResponse
+        xmlns="https://www.ebi.ac.uk/webservices/chebi"><return><ListElement><chebiId>CHEBI:27518</chebiId><chebiAsciiName>acetylene</chebiAsciiName><searchScore>5.01</searchScore><entityStar>3</entityStar></ListElement></return></getLiteEntityResponse></S:Body></S:Envelope>
+  recorded_at: 2023-08-03 19:34:29 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0
