@@ -148,10 +148,10 @@ smiles.bcpc_query <- function(x, ...) {
 }
 #' @export
 smiles.pc_prop <- function(x, ...) {
-  if (!"CanonicalSMILES" %in% names(x)) {
-    stop("CanonicalSMILES not queried!")
+  if (!"SMILES" %in% names(x)) {
+    stop("SMILES not queried!")
   }
-  x$CanonicalSMILES
+  x$SMILES
 }
 #' @export
 smiles.wd_ident <- function(x, ...) {
