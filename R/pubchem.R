@@ -289,7 +289,7 @@ get_cid <-
 #' @param properties character; a vector of properties to retrieve, e.g.
 #' c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 #' properties are retrieved. See
-#' \url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest}
+#' \url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest#section=Compound-Property-Tables}
 #' for a list of all available properties.
 #' @param verbose logical; should a verbose output be printed to the console?
 #' @param ... currently not used.
@@ -374,22 +374,55 @@ pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...)
   prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
   input <- "/compound/cid"
   if (is.null(properties))
-    properties <- c("MolecularFormula", "MolecularWeight", "CanonicalSMILES",
-                  "IsomericSMILES", "InChI", "InChIKey", "IUPACName",
-                  "XLogP", "ExactMass", "MonoisotopicMass", "TPSA",
-                  "Complexity", "Charge", "HBondDonorCount",
-                  "HBondAcceptorCount", "RotatableBondCount", "HeavyAtomCount",
-                  "IsotopeAtomCount", "AtomStereoCount",
-                  "DefinedAtomStereoCount", "UndefinedAtomStereoCount",
-                  "BondStereoCount", "DefinedBondStereoCount",
-                  "UndefinedBondStereoCount", "CovalentUnitCount", "Volume3D",
-                  "XStericQuadrupole3D", "YStericQuadrupole3D",
-                  "ZStericQuadrupole3D", "FeatureCount3D",
-                  "FeatureAcceptorCount3D", "FeatureDonorCount3D",
-                  "FeatureAnionCount3D", "FeatureCationCount3D",
-                  "FeatureRingCount3D", "FeatureHydrophobeCount3D",
-                  "ConformerModelRMSD3D", "EffectiveRotorCount3D",
-                  "ConformerCount3D", "Fingerprint2D")
+    properties <- c(
+      "MolecularFormula",
+      "MolecularWeight",
+      "SMILES",
+      "ConnectivitySMILES",
+      "InChI",
+      "InChIKey",
+      "IUPACName",
+      "Title",
+      "XLogP",
+      "ExactMass",
+      "MonoisotopicMass",
+      "TPSA",
+      "Complexity",
+      "Charge",
+      "HBondDonorCount",
+      "HBondAcceptorCount",
+      "RotatableBondCount",
+      "HeavyAtomCount",
+      "IsotopeAtomCount",
+      "AtomStereoCount",
+      "DefinedAtomStereoCount",
+      "UndefinedAtomStereoCount",
+      "BondStereoCount",
+      "DefinedBondStereoCount",
+      "UndefinedBondStereoCount",
+      "CovalentUnitCount",
+      "PatentCount",
+      "PatentFamilyCount",
+      "AnnotationTypes",
+      "AnnotationTypeCount",
+      "SourceCategories",
+      "LiteratureCount",
+      "Volume3D",
+      "XStericQuadrupole3D",
+      "YStericQuadrupole3D",
+      "ZStericQuadrupole3D",
+      "FeatureCount3D",
+      "FeatureAcceptorCount3D",
+      "FeatureDonorCount3D",
+      "FeatureAnionCount3D",
+      "FeatureCationCount3D",
+      "FeatureRingCount3D",
+      "FeatureHydrophobeCount3D",
+      "ConformerModelRMSD3D",
+      "EffectiveRotorCount3D",
+      "ConformerCount3D",
+      "Fingerprint2D"
+    )
   properties <- paste(properties, collapse = ",")
   output <- paste0("/property/", properties, "/JSON")
 
