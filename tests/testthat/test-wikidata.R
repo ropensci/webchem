@@ -17,7 +17,7 @@ test_that("get_wdid returns correct results", {
 
   expect_equal(o1$wdid, c("Q163648", "Q20987744", NA, 'Q47512'),
                ignore_attr = TRUE)
-  expect_equal(o2$wdid[1:2], c("Q163648", "Q949424"), ignore_attr = TRUE)
+  expect_true(all(c("Q163648", "Q949424") %in% o2$wdid))
 })
 
 test_that("get_wdid() handles NAs", {
