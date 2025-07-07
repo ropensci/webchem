@@ -5,6 +5,7 @@
 * `pc_prop()` returned `NA` without much further explanation if any of the queries were not positive integers. The updated function attempts to coerce queries to positive integers, only progresses valid queries, and prints informative messages along the way if verbose messages are enabled.
 * `srs_query()` broke because the URL was no longer working. We have updated the URL.
 * `is.inchikey(type = "chemspider")` broke because the URL was no longer working. We have updated the URL but the function now requires an API key like all other ChemSpider functions.
+* `pc_prop()` failed with `properties = NULL` because the list of accepted property names had changed. The have updated the list.
 
 # webchem 1.3.0
 

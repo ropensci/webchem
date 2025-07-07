@@ -5,7 +5,7 @@ test_that("examples in the article are unchanged", {
   #values come from test-etox
   cas <- c("105-67-9", "1570-64-5", NA, "1912-24-9", "71-43-2", "6190-65-4")
   cids <- get_cid(cas, from = "xref/rn", match = "first")
-  pc_data <- pc_prop(cids$cid, properties = "CanonicalSMILES")
+  pc_data <- pc_prop(cids$cid, properties = "SMILES")
   #values go to test-chemspider
   pc_smiles <- smiles(pc_data)
 
@@ -101,19 +101,19 @@ test_that("pc_prop", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
 
-  b <- suppressWarnings(pc_prop("xxx", properties = "CanonicalSmiles"))
-  c <- pc_prop("5564", properties = c("CanonicalSmiles", "InChiKey"))
+  b <- suppressWarnings(pc_prop("xxx", properties = "SMILES"))
+  c <- pc_prop("5564", properties = c("SMILES", "InChiKey"))
   expect_true(is.na(b))
   expect_equal(ncol(c), 3)
 
   cids <- c(5564, NA, -1, "balloon", "2244")
-  d <- pc_prop(cids, properties = "CanonicalSmiles")
+  d <- pc_prop(cids, properties = "SMILES")
   expect_true(all(d$CID == cids, na.rm = TRUE))
-  expect_true(all(is.na(d$CanonicalSMILES[c(2:4)])))
-  expect_false(any(is.na(d$CanonicalSMILES[c(1,5)])))
+  expect_true(all(is.na(d$SMILES[c(2:4)])))
+  expect_false(any(is.na(d$SMILES[c(1,5)])))
 
   d1m <- capture_messages(
-    pc_prop(cids, properties = "CanonicalSmiles", verbose = TRUE))
+    pc_prop(cids, properties = "SMILES", verbose = TRUE))
   expect_true(all(
     d1m == c(
     "Coercing queries to positive integers. ",
@@ -133,7 +133,7 @@ test_that("pc_synonyms", {
   expect_equal(pc_synonyms("Acetyl Salicylic Acid")[[1]][1], "aspirin")
   expect_equal(length(pc_synonyms(c("Triclosan", "Aspirin"))), 2)
   expect_equal(pc_synonyms("BPGDAMSIGCZZLK-UHFFFAOYSA-N",
-                           from = "inchikey")[[1]][1], "Methylene diacetate")
+                           from = "inchikey")[[1]][1], "Methyl diacetate")
   expect_true(is.na(suppressWarnings(pc_synonyms("xxxx"))[[1]]))
 })
 
@@ -142,10 +142,10 @@ test_that("cid integration tests", {
   skip_if_not(ping_pubchem(), "PubChem service is down")
 
   expect_equal(pc_prop(get_cid("Triclosan")$cid[1],
-                       properties = "CanonicalSmiles")$CanonicalSMILES,
+                       properties = "SMILES")$SMILES,
                "C1=CC(=C(C=C1Cl)O)OC2=C(C=C(C=C2)Cl)Cl")
   expect_true(is.na(suppressWarnings(pc_prop(NA,
-                                             properties = "CanonicalSmiles"))))
+                                             properties = "SMILES"))))
 })
 
 test_that("pc_page()", {
