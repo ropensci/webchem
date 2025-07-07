@@ -14,7 +14,7 @@ NAs for elements that cannot be coerced to positive integers.}
 \item{properties}{character; a vector of properties to retrieve, e.g.
 c("MolecularFormula", "MolecularWeight"). If NULL (default) all available
 properties are retrieved. See
-\url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest}
+\url{https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest#section=Compound-Property-Tables}
 for a list of all available properties.}
 
 \item{verbose}{logical; should a verbose output be printed to the console?}
@@ -48,7 +48,7 @@ pc_prop(5564)
 comp <- c("Triclosan", "Aspirin")
 cids <- get_cid(comp)
 pc_prop(cids$cid, properties = c("MolecularFormula", "MolecularWeight",
-"CanonicalSMILES"))
+"SMILES"))
 }
 }
 \references{

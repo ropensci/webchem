@@ -331,7 +331,7 @@ get_cid <-
 #' comp <- c("Triclosan", "Aspirin")
 #' cids <- get_cid(comp)
 #' pc_prop(cids$cid, properties = c("MolecularFormula", "MolecularWeight",
-#' "CanonicalSMILES"))
+#' "SMILES"))
 #' }
 pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...) {
 
