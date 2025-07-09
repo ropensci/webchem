@@ -49,7 +49,7 @@ ping_service <-
                "chembl" = "https://www.ebi.ac.uk/chembl/api/data/molecule/CHEMBL1082.json",
                "cir" = "http://cactus.nci.nih.gov/chemical/structure/Triclosan/cas/xml",
                "cts" = "http://cts.fiehnlab.ucdavis.edu/service/compound/XEFQLINVKFYRCS-UHFFFAOYSA-N",
-               "cs_web" = "http://www.chemspider.com/Chemical-Structure.5363.html",
+               "cs_web" = "https://www.chemspider.com/Chemical-Structure.5363.html",
                "fn" = "http://www.flavornet.org/info/121-33-5.html",
                "nist" = "https://webbook.nist.gov/cgi/cbook.cgi?Name=2-hexene&Units=SI",
                "opsin" = "https://opsin.ch.cam.ac.uk/opsin/cyclopropane.json",

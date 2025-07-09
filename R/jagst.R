@@ -16,5 +16,5 @@
 #'   \item{value}{concentration in ug/L}
 #'   \item{qual}{qualifier, indicating values < LOQ}
 #' }
-#' @source \url{https://udo.lubw.baden-wuerttemberg.de/public/pages/home/index.xhtml}
+#' @source \url{https://udo.lubw.baden-wuerttemberg.de/public/}
 "jagst"

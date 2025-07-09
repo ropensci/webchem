@@ -42,13 +42,13 @@ documentation
 - [Chemical Identifier Resolver
   (CIR)](https://cactus.nci.nih.gov/chemical/structure)
 - [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-- [ChemSpider](http://www.chemspider.com/) (requires an [API
+- [ChemSpider](https://www.chemspider.com/) (requires an [API
   token](https://developer.rsc.org/))
 - [ETOX](http://webetox.uba.de/webETOX/index.do)
 - [Flavornet](http://www.flavornet.org)
 - [NIST](https://webbook.nist.gov) (currently gas chromatography
   retention indices only)
-- [OPSIN](http://opsin.ch.cam.ac.uk/instructions.html)
+- [OPSIN](https://www.ebi.ac.uk/opsin/)
 - [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
 - [U.S. EPA Substance Registry Service
   (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
