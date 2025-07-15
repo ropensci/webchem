@@ -6,7 +6,7 @@ Description: Chemical information from around the web. This package interacts
     ChEBI, Chemical Translation Service, ChemSpider, ETOX, Flavornet,
     NIST Chemistry WebBook, OPSIN, PubChem, SRS, Wikidata.
 Type: Package
-Version: 1.3.0
+Version: 1.3.1
 License: MIT + file LICENSE
 URL: https://docs.ropensci.org/webchem/, https://github.com/ropensci/webchem
 BugReports: https://github.com/ropensci/webchem/issues
@@ -26,7 +26,7 @@ LazyLoad: yes
 LazyData: yes
 Encoding: UTF-8
 Depends:
-    R (>= 3.0)
+    R (>= 4.1.0)
 Imports:
     xml2,
     httr,
