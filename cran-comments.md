@@ -1,7 +1,3 @@
-# webchem 1.3.1
-
-* `urlchecker::url_check()` returned the following error for \url{https://cfpub.epa.gov/ecotox/}: Error: SSL connect error [cfpub.epa.gov]: TLS connect error: error:0A000152:SSL routines::unsafe legacy renegotiation disabled. My understanding is that the issue is with the webservice and I have no way to resolve this error. This URL is used in the documentation of some example data sets and we would like to keep it, is possible.
-
 # webchem 1.3.0
 
 * This minor relese defuncts two functions, `ci_query()` and `pan_query()` because the webservices they were interacting with are no longer available.
