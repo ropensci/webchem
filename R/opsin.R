@@ -1,7 +1,7 @@
 #' OPSIN web interface
 #'
 #' Query the OPSIN  (Open Parser for Systematic IUPAC nomenclature) web service
-#' \url{https://opsin.ch.cam.ac.uk/instructions.html}.
+#' \url{https://www.ebi.ac.uk/opsin}.
 #'
 #' @import jsonlite httr xml2
 #' @import tibble

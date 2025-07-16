@@ -18,7 +18,7 @@ a tibble with six columnns: "query", inchi", "stdinchi", "stdinchikey", "smiles"
 }
 \description{
 Query the OPSIN  (Open Parser for Systematic IUPAC nomenclature) web service
-\url{https://opsin.ch.cam.ac.uk/instructions.html}.
+\url{https://www.ebi.ac.uk/opsin}.
 }
 \examples{
 \dontrun{
