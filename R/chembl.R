@@ -190,12 +190,11 @@ chembl_atc_classes <- function(verbose = getOption("verbose"),
 #' @export
 chembl_resources <- function() {
   resources <- c(
-    "activity", "activity_supplementary_data_by_activity", "assay",
-    "assay_class", "atc_class", "binding_site", "biotherapeutic", "cell_line",
+    "activity", "assay", "atc_class", "binding_site", "biotherapeutic", "cell_line",
     "chembl_id_lookup", "compound_record", "compound_structural_alert",
     "document", "document_similarity", "drug", "drug_indication",
     "drug_warning", "go_slim", "image", "mechanism",  "metabolism",
-    "molecule", "molecule_form", "organism", "protein_class", "similarity",
+    "molecule", "molecule_form", "organism", "protein_classification", "similarity",
     "source", "status", "substructure", "target", "target_component",
     "target_relation", "tissue", "xref_source"
   )
