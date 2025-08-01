@@ -71,8 +71,6 @@
 #' chembl_query("1", resource = "drug_warning")
 #' # Resource: go_slim - requires GO ID
 #' chembl_query("GO:0000003", resource = "go_slim")
-#' # Resource: image - requires ChEMBL ID
-#' chembl_query("CHEMBL1", resource = "image")
 #' # Resource: mechanism - requires mechanism ID
 #' chembl_query("13", resource = "mechanism")
 #' # Resource: metabolism - requires metabolism ID
@@ -111,6 +109,9 @@ chembl_query <- function(query,
                          verbose = getOption("verbose"),
                          test_service_down = FALSE) {
   resource <- match.arg(resource, chembl_resources())
+  if (resource == "image") {
+    stop("To download images, please use chembl_img().")
+  }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   foo <- function(query, verbose) {
     if (is.na(query)) {
@@ -167,6 +168,53 @@ chembl_query <- function(query,
       })
   }
   return(out)
+}
+
+#' @examples
+#' \dontrun{
+#' chembl_img("CHEMBL1", dir = ".")
+#' }
+#' @export
+chembl_img <- function(
+  query,
+  dir = tempdir(),
+  verbose = getOption("verbose"),
+  test_service_down = FALSE
+  ) {
+  stem <- "https://www.ebi.ac.uk/chembl/api/data"
+  foo <- function(query, verbose) {
+    if (is.na(query)) {
+      if (verbose) webchem_message("na")
+      return(NA)
+    }
+    query <- chembl_validate_query(query, "image", verbose)
+    if (is.na(query)) return(NA)
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    webchem_sleep(type = "API")
+    url <- ifelse(
+      test_service_down,
+      "",
+      paste0(stem, "/image/", query)
+    )
+    path <- paste0(dir, "/", query, ".svg")
+    res <- try(httr::RETRY("GET",
+                           url,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           httr::write_disk(path, overwrite = TRUE),
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (res$status_code != 200) {
+      if (verbose) message(httr::message_for_status(res))
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res))
+    return(NA)
+  }
+  out <- lapply(query, function(x) foo(x, verbose = verbose))
 }
 
 chembl_validate_query <- function(query, resource, verbose) {
