@@ -41,15 +41,67 @@
 #' \dontrun{
 #' # Might fail if API is not available
 #'
-#' # Search molecules
+#' # Resource: "activity" - requires activity ID
+#' chembl_query("31863", resource = "activity")
+#' # Resource: "assay" - requires assay ChEMBL ID
+#' chembl_query("CHEMBL615117", resource = "assay")
+#' # Resource: "atc_class" - requires ATC class ID
+#' chembl_query("A01AA01", resource = "atc_class")
+#' # Resource: binding_site - requires site ID
+#' chembl_query(2, resource = "binding_site")
+#' # Resource: biotherapeutic - requires ChEMBL ID
+#' chembl_query("CHEMBL448105", resource = "biotherapeutic")
+#' # Resource: cell_line - requires ChEMBL ID
+#' chembl_query("CHEMBL3307241", resource = "cell_line")
+#' # Resource: chembl_id_lookup - requires ChEMBL ID
+#' chembl_query("CHEMBL1", resource = "chembl_id_lookup")
+#' # Resource: compound_record - requires record ID
+#' chembl_query("1", resource = "compound_record")
+#' # Resource: compound_structural_alert - requires compound structural alert ID
+#' chembl_query("79048021", resource = "compound_structural_alert")
+#' # Resource: document - requires document ChEMBL ID
+#' chembl_query("CHEMBL1158643", resource = "document")
+#' # Resource: document_similarity - requires document 1 ChEMBL ID
+#' chembl_query("CHEMBL1148466", resource = "document_similarity")
+#' # Resource: drug - requires ChEMBL ID
+#' chembl_query("CHEMBL2", resource = "drug")
+#' # Resource: drug_indication - requires drug indication ID
+#' chembl_query("22606", resource = "drug_indication")
+#' # Resource: drug_warning - requires warning ID
+#' chembl_query("1", resource = "drug_warning")
+#' # Resource: go_slim - requires GO ID
+#' chembl_query("GO:0000003", resource = "go_slim")
+#' # Resource: image - requires ChEMBL ID
+#' chembl_query("CHEMBL1", resource = "image")
+#' # Resource: mechanism - requires mechanism ID
+#' chembl_query("13", resource = "mechanism")
+#' # Resource: metabolism - requires metabolism ID
+#' chembl_query("119", resource = "metabolism")
+#' # Resource: molecule - requires ChEMBL ID
 #' chembl_query("CHEMBL1082", resource = "molecule")
 #' chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
-#'
-#' # Look up ChEMBL IDs in ChEMBL "resources", returns one resource per query.
-#' chembl_query("CHEMBL771355", "chembl_id_lookup")
-#'
-#' # Search assays
-#' chembl_query("CHEMBL771355", resource = "assay")
+#' # Resource: molecule_form - requires ChEMBL ID
+#' chembl_query("CHEMBL6329", resource = "molecule_form")
+#' # Resource: organism - requires organism class ID (not taxid)
+#' chembl_query("1", resource = "organism")
+#' # Resource: protein_classification - requires protein class ID
+#' chembl_query("1", resource = "protein_classification")
+#' # Resource: similarity - requires SMILES
+#' chembl_query("CC(=O)Oc1ccccc1C(=O)O/70", resource = "similarity")
+#' # Resource: source - requires source ID
+#' chembl_query("1", resource = "source")
+#' # Resource: substructure - requires SMILES
+#' chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+#' # Resource: target - requires target ChEMBL ID
+#' chembl_query("CHEMBL2074", resource = "target")
+#' # Resource: target_component - requires target component ID
+#' chembl_query("1", resource = "target_component")
+#' # Resource: target_relation - requires target ChEMBL ID
+#' chembl_query("CHEMBL2251", resource = "target_relation")
+#' # Resource: tissue - requires tissue ChEMBL ID
+#' chembl_query("CHEMBL3988026", resource = "tissue")
+#' # Resource: xref_source - requires the name of the resource
+#' chembl_query("AlphaFoldDB", resource = "xref_source")
 #' }
 #' @importFrom httr RETRY message_for_status content
 #' @export
