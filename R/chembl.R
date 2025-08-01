@@ -65,10 +65,8 @@ chembl_query <- function(query,
       if (verbose) webchem_message("na")
       return(NA)
     }
-    if (grepl("^CHEMBL[0-9]+", query) == FALSE) {
-      if (verbose) message("Query is not a ChEMBL ID. Returning NA.")
-      return(NA)
-    }
+    query <- chembl_validate_query(query, resource, verbose)
+    if (is.na(query)) return(NA)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     url <- ifelse(
       test_service_down, "", paste0(stem, "/", resource, "/", query, ".json"))
@@ -117,6 +115,46 @@ chembl_query <- function(query,
       })
   }
   return(out)
+}
+
+chembl_validate_query <- function(query, resource, verbose) {
+  resource <- match.arg(resource, chembl_resources())
+  if (resource %in% c(
+    "activity",
+    "binding_site",
+    "compund_record",
+    "compound_structural_alert",
+    "drug_indication",
+    "drug_warning",
+    "mechanism",
+    "metabolism",
+    "organism",
+    "protein_classification",
+    "source"
+  )) {
+    query_numeric <- suppressWarnings(as.numeric(query))
+    if (is.na(query_numeric)) {
+      if (verbose) message("Query must be coercible to numeric. Returning NA.")
+      return(NA)
+    }
+  } else if (resource %in% c(
+    "assay",
+    "biotherapeutic",
+    "chembl_id_lookup",
+    "document",
+    "document_similarity",
+    "drug",
+    "molecule",
+    "molecule_form",
+    "target",
+    "tissue"
+  )) {
+    if (!grepl("^CHEMBL[0-9]+", query)) {
+      if (verbose) message("Query must be a ChEMBL ID. Returning NA.")
+      return(NA)
+    }
+  }
+  return(query)
 }
 
 #' Retrieve all ATC classes
