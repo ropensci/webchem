@@ -41,15 +41,65 @@
 #' \dontrun{
 #' # Might fail if API is not available
 #'
-#' # Search molecules
+#' # Resource: "activity" - requires activity ID
+#' chembl_query("31863", resource = "activity")
+#' # Resource: "assay" - requires assay ChEMBL ID
+#' chembl_query("CHEMBL615117", resource = "assay")
+#' # Resource: "atc_class" - requires ATC class ID
+#' chembl_query("A01AA01", resource = "atc_class")
+#' # Resource: binding_site - requires site ID
+#' chembl_query(2, resource = "binding_site")
+#' # Resource: biotherapeutic - requires ChEMBL ID
+#' chembl_query("CHEMBL448105", resource = "biotherapeutic")
+#' # Resource: cell_line - requires ChEMBL ID
+#' chembl_query("CHEMBL3307241", resource = "cell_line")
+#' # Resource: chembl_id_lookup - requires ChEMBL ID
+#' chembl_query("CHEMBL1", resource = "chembl_id_lookup")
+#' # Resource: compound_record - requires record ID
+#' chembl_query("1", resource = "compound_record")
+#' # Resource: compound_structural_alert - requires compound structural alert ID
+#' chembl_query("79048021", resource = "compound_structural_alert")
+#' # Resource: document - requires document ChEMBL ID
+#' chembl_query("CHEMBL1158643", resource = "document")
+#' # Resource: document_similarity - requires document 1 ChEMBL ID
+#' chembl_query("CHEMBL1148466", resource = "document_similarity")
+#' # Resource: drug - requires ChEMBL ID
+#' chembl_query("CHEMBL2", resource = "drug")
+#' # Resource: drug_indication - requires drug indication ID
+#' chembl_query("22606", resource = "drug_indication")
+#' # Resource: drug_warning - requires warning ID
+#' chembl_query("1", resource = "drug_warning")
+#' # Resource: go_slim - requires GO ID
+#' chembl_query("GO:0000003", resource = "go_slim")
+#' # Resource: mechanism - requires mechanism ID
+#' chembl_query("13", resource = "mechanism")
+#' # Resource: metabolism - requires metabolism ID
+#' chembl_query("119", resource = "metabolism")
+#' # Resource: molecule - requires ChEMBL ID
 #' chembl_query("CHEMBL1082", resource = "molecule")
 #' chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
-#'
-#' # Look up ChEMBL IDs in ChEMBL "resources", returns one resource per query.
-#' chembl_query("CHEMBL771355", "chembl_id_lookup")
-#'
-#' # Search assays
-#' chembl_query("CHEMBL771355", resource = "assay")
+#' # Resource: molecule_form - requires ChEMBL ID
+#' chembl_query("CHEMBL6329", resource = "molecule_form")
+#' # Resource: organism - requires organism class ID (not taxid)
+#' chembl_query("1", resource = "organism")
+#' # Resource: protein_classification - requires protein class ID
+#' chembl_query("1", resource = "protein_classification")
+#' # Resource: similarity - requires SMILES
+#' chembl_query("CC(=O)Oc1ccccc1C(=O)O/70", resource = "similarity")
+#' # Resource: source - requires source ID
+#' chembl_query("1", resource = "source")
+#' # Resource: substructure - requires SMILES
+#' chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+#' # Resource: target - requires target ChEMBL ID
+#' chembl_query("CHEMBL2074", resource = "target")
+#' # Resource: target_component - requires target component ID
+#' chembl_query("1", resource = "target_component")
+#' # Resource: target_relation - requires target ChEMBL ID
+#' chembl_query("CHEMBL2251", resource = "target_relation")
+#' # Resource: tissue - requires tissue ChEMBL ID
+#' chembl_query("CHEMBL3988026", resource = "tissue")
+#' # Resource: xref_source - requires the name of the resource
+#' chembl_query("AlphaFoldDB", resource = "xref_source")
 #' }
 #' @importFrom httr RETRY message_for_status content
 #' @export
@@ -59,16 +109,17 @@ chembl_query <- function(query,
                          verbose = getOption("verbose"),
                          test_service_down = FALSE) {
   resource <- match.arg(resource, chembl_resources())
+  if (resource == "image") {
+    stop("To download images, please use chembl_img().")
+  }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   foo <- function(query, verbose) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
     }
-    if (grepl("^CHEMBL[0-9]+", query) == FALSE) {
-      if (verbose) message("Query is not a ChEMBL ID. Returning NA.")
-      return(NA)
-    }
+    query <- chembl_validate_query(query, resource, verbose)
+    if (is.na(query)) return(NA)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     url <- ifelse(
       test_service_down, "", paste0(stem, "/", resource, "/", query, ".json"))
@@ -117,6 +168,119 @@ chembl_query <- function(query,
       })
   }
   return(out)
+}
+
+#' Download images from ChEMBL
+#'
+#' Retrieve images of substances from ChEMBL and save them in SVG format.
+#' @param query character; a vector of ChEMBL IDs.
+#' @param dir character; the directory in which to save the image(s). If the
+#' directory does not exist, it will be created. If `NULL` (default), the
+#' working directory will be used.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @param test_service_down logical; for internal testing only.
+#' @return Creates the download directory if needed and downloads one or more
+#' SVG files.
+#' @examples
+#' \dontrun{
+#' # download a single image
+#' chembl_img("CHEMBL1")
+#' # download a single image to another directory
+#' chembl_img("CHEMBL1", dir = tempdir())
+#' # download multiple images
+#' chembl_img(c("CHEMBL1", "CHEMBL2"))
+#' }
+#' @export
+chembl_img <- function(
+  query,
+  dir = NULL,
+  verbose = getOption("verbose"),
+  test_service_down = FALSE
+  ) {
+  stem <- "https://www.ebi.ac.uk/chembl/api/data"
+  foo <- function(query, verbose) {
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    query <- chembl_validate_query(query, "image", verbose)
+    if (is.na(query)) return(NA)
+    webchem_sleep(type = "API")
+    url <- ifelse(
+      test_service_down,
+      "",
+      paste0(stem, "/image/", query)
+    )
+    if (is.null(dir)) {
+      path <- paste0(query, ".svg")
+    } else {
+      if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+      path <- paste0(dir, "/", query, ".svg")
+    }
+    if (file.exists(path)) {
+      if (verbose) message("Already downloaded.")
+      return()
+    }
+    res <- try(httr::RETRY("GET",
+                           url,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           httr::write_disk(path, overwrite = TRUE),
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(NA)
+    }
+    if (res$status_code != 200) {
+      if (verbose) message(httr::message_for_status(res))
+      return(NA)
+    }
+    if (verbose) message(httr::message_for_status(res))
+    return(NA)
+  }
+  out <- lapply(query, function(x) foo(x, verbose = verbose))
+}
+
+chembl_validate_query <- function(query, resource, verbose) {
+  resource <- match.arg(resource, chembl_resources())
+  if (is.na(query)) {
+    if (verbose) webchem_message("na")
+    return(NA)
+  }
+  if (resource %in% c(
+    "activity",
+    "binding_site",
+    "compund_record",
+    "compound_structural_alert",
+    "drug_indication",
+    "drug_warning",
+    "mechanism",
+    "metabolism",
+    "organism",
+    "protein_classification",
+    "source"
+  )) {
+    query_numeric <- suppressWarnings(as.numeric(query))
+    if (is.na(query_numeric)) {
+      if (verbose) message("Query must be coercible to numeric. Returning NA.")
+      return(NA)
+    }
+  } else if (resource %in% c(
+    "assay",
+    "biotherapeutic",
+    "chembl_id_lookup",
+    "document",
+    "document_similarity",
+    "drug",
+    "image",
+    "molecule",
+    "molecule_form",
+    "target",
+    "tissue"
+  )) {
+    if (!grepl("^CHEMBL[0-9]+", query)) {
+      if (verbose) message("Query must be a ChEMBL ID. Returning NA.")
+      return(NA)
+    }
+  }
+  return(query)
 }
 
 #' Retrieve all ATC classes
@@ -190,12 +354,11 @@ chembl_atc_classes <- function(verbose = getOption("verbose"),
 #' @export
 chembl_resources <- function() {
   resources <- c(
-    "activity", "activity_supplementary_data_by_activity", "assay",
-    "assay_class", "atc_class", "binding_site", "biotherapeutic", "cell_line",
+    "activity", "assay", "atc_class", "binding_site", "biotherapeutic", "cell_line",
     "chembl_id_lookup", "compound_record", "compound_structural_alert",
     "document", "document_similarity", "drug", "drug_indication",
     "drug_warning", "go_slim", "image", "mechanism",  "metabolism",
-    "molecule", "molecule_form", "organism", "protein_class", "similarity",
+    "molecule", "molecule_form", "organism", "protein_classification", "similarity",
     "source", "status", "substructure", "target", "target_component",
     "target_relation", "tissue", "xref_source"
   )

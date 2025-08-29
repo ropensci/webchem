@@ -1,3 +1,9 @@
+# dev
+
+## NEW FEATURES
+
+* Added a new function `chembl_img()` for downloading SVG images from ChEMBL.
+
 # webchem 1.3.1
 
 ## BUG FIXES
