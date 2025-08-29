@@ -259,8 +259,7 @@ chembl_validate_query <- function(query, resource, verbose) {
   )) {
     query_numeric <- suppressWarnings(as.numeric(query))
     if (is.na(query_numeric)) {
-      if (verbose) message(
-        "Query must be coercible to numeric. Returning NA. ", appendLF = FALSE)
+      if (verbose) message("Query must be coercible to numeric. Returning NA.")
       return(NA)
     }
   } else if (resource %in% c(
@@ -277,8 +276,7 @@ chembl_validate_query <- function(query, resource, verbose) {
     "tissue"
   )) {
     if (!grepl("^CHEMBL[0-9]+", query)) {
-      if (verbose) message(
-        "Query must be a ChEMBL ID. Returning NA. ", appendLF = FALSE)
+      if (verbose) message("Query must be a ChEMBL ID. Returning NA.")
       return(NA)
     }
   }
