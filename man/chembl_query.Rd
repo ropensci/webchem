@@ -94,8 +94,6 @@ chembl_query("22606", resource = "drug_indication")
 chembl_query("1", resource = "drug_warning")
 # Resource: go_slim - requires GO ID
 chembl_query("GO:0000003", resource = "go_slim")
-# Resource: image - requires ChEMBL ID
-chembl_query("CHEMBL1", resource = "image")
 # Resource: mechanism - requires mechanism ID
 chembl_query("13", resource = "mechanism")
 # Resource: metabolism - requires metabolism ID
