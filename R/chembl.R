@@ -170,33 +170,54 @@ chembl_query <- function(query,
   return(out)
 }
 
+#' Download images from ChEMBL
+#'
+#' Retrieve images of substances from ChEMBL and save them in SVG format.
+#' @param query character; a vector of ChEMBL IDs.
+#' @param dir character; the directory in which to save the image(s). If the
+#' directory does not exist, it will be created. If `NULL` (default), the
+#' working directory will be used.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @param test_service_down logical; for internal testing only.
+#' @return Creates the download directory if needed and downloads one or more
+#' SVG files.
 #' @examples
 #' \dontrun{
-#' chembl_img("CHEMBL1", dir = ".")
+#' # download a single image
+#' chembl_img("CHEMBL1")
+#' # download a single image to another directory
+#' chembl_img("CHEMBL1", dir = tempdir())
+#' # download multiple images
+#' chembl_img(c("CHEMBL1", "CHEMBL2"))
 #' }
 #' @export
 chembl_img <- function(
   query,
-  dir = tempdir(),
+  dir = NULL,
   verbose = getOption("verbose"),
   test_service_down = FALSE
   ) {
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   foo <- function(query, verbose) {
-    if (is.na(query)) {
-      if (verbose) webchem_message("na")
-      return(NA)
-    }
+    if (verbose) webchem_message("query", query, appendLF = FALSE)
     query <- chembl_validate_query(query, "image", verbose)
     if (is.na(query)) return(NA)
-    if (verbose) webchem_message("query", query, appendLF = FALSE)
     webchem_sleep(type = "API")
     url <- ifelse(
       test_service_down,
       "",
       paste0(stem, "/image/", query)
     )
-    path <- paste0(dir, "/", query, ".svg")
+    if (is.null(dir)) {
+      path <- paste0(query, ".svg")
+    } else {
+      if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+      path <- paste0(dir, "/", query, ".svg")
+    }
+    if (file.exists(path)) {
+      if (verbose) message("Already downloaded.")
+      return()
+    }
     res <- try(httr::RETRY("GET",
                            url,
                            httr::user_agent(webchem_url()),
@@ -219,6 +240,10 @@ chembl_img <- function(
 
 chembl_validate_query <- function(query, resource, verbose) {
   resource <- match.arg(resource, chembl_resources())
+  if (is.na(query)) {
+    if (verbose) webchem_message("na")
+    return(NA)
+  }
   if (resource %in% c(
     "activity",
     "binding_site",
@@ -234,7 +259,8 @@ chembl_validate_query <- function(query, resource, verbose) {
   )) {
     query_numeric <- suppressWarnings(as.numeric(query))
     if (is.na(query_numeric)) {
-      if (verbose) message("Query must be coercible to numeric. Returning NA.")
+      if (verbose) message(
+        "Query must be coercible to numeric. Returning NA. ", appendLF = FALSE)
       return(NA)
     }
   } else if (resource %in% c(
@@ -244,13 +270,15 @@ chembl_validate_query <- function(query, resource, verbose) {
     "document",
     "document_similarity",
     "drug",
+    "image",
     "molecule",
     "molecule_form",
     "target",
     "tissue"
   )) {
     if (!grepl("^CHEMBL[0-9]+", query)) {
-      if (verbose) message("Query must be a ChEMBL ID. Returning NA.")
+      if (verbose) message(
+        "Query must be a ChEMBL ID. Returning NA. ", appendLF = FALSE)
       return(NA)
     }
   }
