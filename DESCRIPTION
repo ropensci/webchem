@@ -28,6 +28,7 @@ Encoding: UTF-8
 Depends:
     R (>= 4.1.0)
 Imports:
+    hoardr,
     xml2,
     httr,
     rvest,
