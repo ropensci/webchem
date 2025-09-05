@@ -25,6 +25,12 @@ test_that("assert()", {
   testthat::expect_error(assert(1:10, "data.frame"))
 })
 
+test_that("db_files()", {
+  o1 <- db_files("chembl", version = "35")
+  expect_true(all(o1$url_exists))
+  expect_error(db_files("hello"))
+})
+
 test_that("is.cas() returns correct results", {
 
   expect_true(is.cas('64-17-5'))

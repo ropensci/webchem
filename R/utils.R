@@ -18,6 +18,25 @@ assert <- function(x, y) {
   }
 }
 
+#' Get URLs and file names of local database files
+#' 
+#' @param db character; database name. Currently only "chembl" is supported.
+#' @param version character; version of the database. Either "latest" (default)
+#' or a specific version number, e.g. "30".
+#' @return a data frame with three columns "url", "file" and "type". "url" is 
+#' the download URL, "file" is the local file name and "type" is the file type 
+#' which guides downstream processing.
+#' @examples
+#' db_files("chembl", version = "latest")
+#' db_files("chembl", version = "30")
+#' @noRd
+db_files <- function(db, version = "latest") {
+  db <- match.arg(db, choices = c("chembl"))
+  if (db == "chembl") {
+    chembl_files(version = version)
+  }
+}
+
 #' Check if input is a valid inchikey
 #'
 #' @description This function checks if a string is a valid inchikey.
@@ -576,9 +595,9 @@ matcher <-
 url_exists <- function(url) {
   foo <- function(x) {
     res <- try(httr::HEAD(x), silent = TRUE)
-  if (inherits(res, "try-error")) return(FALSE)
-  status <- httr::status_code(res)
-  status >= 200 && status < 400
+    if (inherits(res, "try-error")) return(FALSE)
+    status <- httr::status_code(res)
+    status >= 200 && status < 400
   }
   unname(sapply(url, foo))
 }
