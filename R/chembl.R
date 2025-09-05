@@ -1,3 +1,34 @@
+#' Retrieve FTP URL for ChEMBL database files
+#'
+#' @param version character; release version
+#' @return FTP URL for ChEMBL databas files
+#' @examples {
+#' chembl_dir_url(version = "latest")
+#' chembl_dir_url(version = "34")
+#' chembl_dir_url(version = "24.1")
+#' }
+#' @noRd
+chembl_dir_url <- function(version = "latest") {
+  version <- validate_chembl_version(version = version)
+  if (version %in% c("22", "24")) {
+    url <- paste0(
+      "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_",
+      version, "/archived"
+    )
+  } else {
+    url <- paste0(
+      "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_",
+      version
+    )
+  }
+  if (url_exists(url)) {
+    return(url)
+  } else {
+    msg <- paste0("ChEMBL URL not found: ", url)
+    stop(msg)
+  }
+}
+
 #' Query ChEMBL using ChEMBL IDs
 #'
 #' Retrieve ChEMBL data using a vector of ChEMBL IDs.
@@ -393,10 +424,10 @@ format_chembl <- function(cont) {
 }
 
 #' Validate ChEMBL version
-#' 
-#' @description Validates the provided ChEMBL version. If "latest" (default), 
-#' returns the number of the lastest supported version (as a string). If the 
-#' provided version is lower than the earliest supported version, stops with 
+#'
+#' @description Validates the provided ChEMBL version. If "latest" (default),
+#' returns the number of the lastest supported version (as a string). If the
+#' provided version is lower than the earliest supported version, stops with
 #' an error.
 #' @param version character; the ChEMBL version to validate.
 #' @return Validated version number as a string.

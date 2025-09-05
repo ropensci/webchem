@@ -1,5 +1,23 @@
 up <- ping_service("chembl")
 
+test_that("chembl_dir_url()", {
+  # latest versions
+  expect_equal(chembl_dir_url(), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
+  expect_equal(chembl_dir_url("latest"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
+  expect_equal(chembl_dir_url("35"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
+  # previous versions
+  expect_equal(chembl_dir_url("34"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_34")
+  expect_equal(chembl_dir_url("24.1"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_24_1")
+  # archived versions
+  expect_equal(chembl_dir_url("24"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_24/archived")
+  expect_equal(chembl_dir_url("22"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_22/archived")
+  # invalid versions
+  expect_error(chembl_dir_url("22.5"))
+  expect_error(chembl_dir_url("19"))
+  expect_error(chembl_dir_url(c("34", "35")))
+  expect_error(chembl_dir_url("taxi"))
+})
+
 test_that("chembl_query() examples", {
   skip_on_cran()
   skip_if_not(up, "ChEMBL service is down")
