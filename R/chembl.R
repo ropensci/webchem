@@ -36,8 +36,9 @@ chembl_dir_url <- function(version = "latest") {
 #' @param version character; version of the database. Either "latest" (default)
 #' or a specific version number, e.g. "30".
 #' @return a data frame with three columns "url", "file" and "type". "url" is
-#' the download URL, "file" is the local file name and "type" is the file type
-#' which guides downstream processing.
+#' the download URL. "file" is the final path to the file within the download
+#' directory of the requested database version. "type" is the file type which
+#' guides further processing.
 #' @examples
 #' chembl_files("chembl", version = "latest")
 #' chembl_files("chembl", version = "30")
@@ -47,6 +48,7 @@ chembl_files <- function(version = "latest") {
     version <- validate_chembl_version(version = version)
   }
   dir_url <- chembl_dir_url(version = version)
+  # set default paths
   path_list <- list(
     checksum = data.frame(
       url = file.path(dir_url, "checksums.txt"),
@@ -55,25 +57,29 @@ chembl_files <- function(version = "latest") {
     sqlite = data.frame(
       url = file.path(
         dir_url, paste0("chembl_", version$version_path, "_sqlite.tar.gz")),
-      file = paste0("chembl_", version$version_base, ".db")
+      file = file.path(
+        paste0("chembl_", version$version_path),
+        paste0("chembl_", version$version_path, "_sqlite"),
+        paste0("chembl_", version$version_path, ".db")
     )
   )
+  )
+  # override defaults paths
+  if (as.numeric(version$version_base) <= 22) {
+    path_list$sqlite$file <-  file.path(
+      paste0("chembl_", version$version_path, "_sqlite"),
+      paste0("chembl_", version$version_base, ".db")
+    )
+  } else if (version$version == "24.1") {
+    path_list$sqlite$file <-  file.path(
+      paste0("chembl_", version$version_base),
+      paste0("chembl_", version$version_base, "_sqlite"),
+      paste0("chembl_", version$version_base, ".db")
+    )
+  }
   out <- do.call(rbind, Map(cbind, path_list, type = names(path_list)))
   rownames(out) <- NULL
-  out$url_exists <- url_exists(out$url)
-  out <- out |> dplyr::relocate("type", "file", "url", "url_exists")
-  urls_exist <- out$url_exists
-  if (!urls_exist[1]) {
-    warning("Checksum file not found. Data integrity cannot be checked.")
-    urls_exist <- urls_exist[-1]
-  }
-  if (any(!urls_exist)) {
-    msg <- paste0(
-      "The following ChEMBL URLs were not found:\n",
-      paste(out$url[which(!url_exists(out$url))], collapse = "\n")
-    )
-    stop(msg)
-  }
+  out <- out |> dplyr::relocate("type", "file", "url")
   return(out)
 }
 

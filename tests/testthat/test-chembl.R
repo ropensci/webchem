@@ -26,25 +26,20 @@ test_that("chembl_files()", {
   # previous versions
   for (i in 20:34) {
     out <- i |> as.character() |> chembl_files() |> suppressWarnings()
-    expect_true(all(out$url_exists[-1]))
+    expect_true(all(url_exists(out$url)[-1]))
   }
   o4 <- chembl_files("24.1")
-  o5 <- suppressWarnings(chembl_files("22.1"))
-  o5m <- capture_warnings(chembl_files("22.1"))
-  # archived versions
+  o5 <- chembl_files("22.1")
   o6 <- chembl_files("24")
-  o7 <- suppressWarnings(chembl_files("22"))
-  o7m <- capture_warnings(chembl_files("22"))
+  o7 <- chembl_files("22")
 
-  expect_true(all(o1$url_exists))
-  expect_true(all(o2$url_exists))
-  expect_true(all(o3$url_exists))
-  expect_true(all(o4$url_exists))
-  expect_true(all(o5$url_exists[-1]))
-  expect_equal(o7m, "Checksum file not found. Data integrity cannot be checked.")
-  expect_true(all(o6$url_exists))
-  expect_true(all(o7$url_exists[-1]))
-  expect_equal(o7m, "Checksum file not found. Data integrity cannot be checked.")
+  expect_true(all(url_exists(o1$url)))
+  expect_true(all(url_exists(o2$url)))
+  expect_true(all(url_exists(o3$url)))
+  expect_true(all(url_exists(o4$url)))
+  expect_true(all(url_exists(o5$url[-1])))
+  expect_true(all(url_exists(o6$url)))
+  expect_true(all(url_exists(o7$url[-1])))
 })
 
 test_that("chembl_query() examples", {
