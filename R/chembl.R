@@ -9,16 +9,18 @@
 #' }
 #' @noRd
 chembl_dir_url <- function(version = "latest") {
-  version <- validate_chembl_version(version = version)
-  if (version %in% c("22", "24")) {
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  if (version$version_path %in% c("22", "24")) {
     url <- paste0(
       "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_",
-      version, "/archived"
+      version$version_path, "/archived"
     )
   } else {
     url <- paste0(
       "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_",
-      version
+      version$version_path
     )
   }
   if (url_exists(url)) {
@@ -41,16 +43,19 @@ chembl_dir_url <- function(version = "latest") {
 #' chembl_files("chembl", version = "30")
 #' @noRd
 chembl_files <- function(version = "latest") {
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
   dir_url <- chembl_dir_url(version = version)
-  version <- validate_chembl_version(version = version)
   path_list <- list(
     checksum = data.frame(
       url = file.path(dir_url, "checksums.txt"),
       file = "checksums.txt"
     ),
     sqlite = data.frame(
-      url = file.path(dir_url, paste0("chembl_", version, "_sqlite.tar.gz")),
-      file = paste0("chembl_", version, ".db")
+      url = file.path(
+        dir_url, paste0("chembl_", version$version_path, "_sqlite.tar.gz")),
+      file = paste0("chembl_", version$version_base, ".db")
     )
   )
   out <- do.call(rbind, Map(cbind, path_list, type = names(path_list)))
@@ -480,12 +485,23 @@ validate_chembl_version <- function(version = "latest") {
   stopifnot(length(version) == 1)
   if (version == "latest") version <- "35"
   version_num <- suppressWarnings(as.numeric(version))
+  version_base <- as.character(floor(version_num))
   if (is.na(version_num)) {
     stop("Version must be 'latest' or coercible to numeric.")
   }
   if (version_num < 20) {
     stop("Version not supported. Try a more recent version.")
   }
-  if (version_num %% 1 != 0) version <- gsub("\\.", "_", version)
-  return(version)
+  if (version_num %% 1 != 0) {
+    version_path <- gsub("\\.", "_", version)
+  } else {
+    version_path <- version
+  }
+  out <- list(
+    version = version,
+    version_path = version_path,
+    version_base = version_base
+  )
+  class(out) <- c("chembl_version", class(version))
+  return(out)
 }
