@@ -23,9 +23,7 @@ assert <- function(x, y) {
 #' @param db character; database name. Currently only "chembl" is supported.
 #' @param version character; version of the database. Either "latest" (default)
 #' or a specific version number, e.g. "30".
-#' @return a data frame with three columns "url", "file" and "type". "url" is 
-#' the download URL, "file" is the local file name and "type" is the file type 
-#' which guides downstream processing.
+#' @return A data frame. Variables depend on the database.
 #' @examples
 #' db_files("chembl", version = "latest")
 #' db_files("chembl", version = "30")
