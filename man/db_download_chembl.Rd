@@ -24,7 +24,9 @@ those files that are used by the package. If you need other files as well,
 please download them manually.
 }
 \examples{
+\dontrun{
 db_download_chembl(version = "35", verbose = TRUE)
+}
 }
 \references{
 You can find more information about ChEMBL releases at

@@ -11,7 +11,9 @@
 #' @references You can find more information about ChEMBL releases at
 #' \url{https://chembl.gitbook.io/chembl-interface-documentation/downloads}
 #' @examples
+#' \dontrun{
 #' db_download_chembl(version = "35", verbose = TRUE)
+#' }
 #' @export
 db_download_chembl <- function(
     version = "latest",
