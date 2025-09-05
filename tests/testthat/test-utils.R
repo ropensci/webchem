@@ -147,3 +147,8 @@ test_that("matcher() warns when 'best' is used with chemical names", {
           match = "best"),
     "match = 'best' only makes sense for chemical name queries.")
 })
+
+test_that("url_exists()", {
+  expect_true(url_exists("https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35/"))
+  expect_false(url_exists("https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_00/"))
+})
