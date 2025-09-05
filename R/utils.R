@@ -19,7 +19,7 @@ assert <- function(x, y) {
 }
 
 #' Get URLs and file names of local database files
-#' 
+#'
 #' @param db character; database name. Currently only "chembl" is supported.
 #' @param version character; version of the database. Either "latest" (default)
 #' or a specific version number, e.g. "30".
@@ -432,18 +432,6 @@ parse_mol <- function(string) {
   return(list(eh = h, cl = cl, ab = ab, bb = bb))
 }
 
-#' Check if an url exists
-#'
-#' @param url url
-#' @return logical; does the url exist?
-#' @noRd
-url_exists <- function(url) {
-  res <- try(httr::HEAD(url), silent = TRUE)
-  if (inherits(res, "try-error")) return(FALSE)
-  status <- httr::status_code(res)
-  status >= 200 && status < 400
-}
-
 #' Export a Chemical Structure in .mol Format.
 #'
 #' Some webchem functions return character strings that contain a chemical
@@ -589,7 +577,7 @@ matcher <-
 #' Check if an url exists
 #'
 #' @param url url
-#' @noRd 
+#' @noRd
 url_exists <- function(url) {
   foo <- function(x) {
     res <- try(httr::HEAD(x), silent = TRUE)
