@@ -29,6 +29,49 @@ chembl_dir_url <- function(version = "latest") {
   }
 }
 
+#' Retrieve paths for ChEMBL database files
+#'
+#' @param version character; version of the database. Either "latest" (default)
+#' or a specific version number, e.g. "30".
+#' @return a data frame with three columns "url", "file" and "type". "url" is
+#' the download URL, "file" is the local file name and "type" is the file type
+#' which guides downstream processing.
+#' @examples
+#' chembl_files("chembl", version = "latest")
+#' chembl_files("chembl", version = "30")
+#' @noRd
+chembl_files <- function(version = "latest") {
+  dir_url <- chembl_dir_url(version = version)
+  version <- validate_chembl_version(version = version)
+  path_list <- list(
+    checksum = data.frame(
+      url = file.path(dir_url, "checksums.txt"),
+      file = "checksums.txt"
+    ),
+    sqlite = data.frame(
+      url = file.path(dir_url, paste0("chembl_", version, "_sqlite.tar.gz")),
+      file = paste0("chembl_", version, ".db")
+    )
+  )
+  out <- do.call(rbind, Map(cbind, path_list, type = names(path_list)))
+  rownames(out) <- NULL
+  out$url_exists <- url_exists(out$url)
+  out <- out |> dplyr::relocate("type", "file", "url", "url_exists")
+  urls_exist <- out$url_exists
+  if (!urls_exist[1]) {
+    warning("Checksum file not found. Data integrity cannot be checked.")
+    urls_exist <- urls_exist[-1]
+  }
+  if (any(!urls_exist)) {
+    msg <- paste0(
+      "The following ChEMBL URLs were not found:\n",
+      paste(out$url[which(!url_exists(out$url))], collapse = "\n")
+    )
+    stop(msg)
+  }
+  return(out)
+}
+
 #' Query ChEMBL using ChEMBL IDs
 #'
 #' Retrieve ChEMBL data using a vector of ChEMBL IDs.
