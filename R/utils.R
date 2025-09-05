@@ -1,3 +1,23 @@
+#' Assert whether object belongs to a class
+#'
+#' @description Checks if an object belongs to a certain class or classes. If
+#' not, stops with an error message.
+#' @param x object to be checked
+#' @param y character; class name(s)
+#' @references Copied from \url{https://github.com/ropensci/taxizedb}
+#' @noRd
+#' @examples
+#' assert(1:10, "integer")
+#' assert(data.frame(a = 1:10), c("data.frame", "list"))
+assert <- function(x, y) {
+  if (!is.null(x)) {
+    if (!inherits(x, y)) {
+      stop(deparse(substitute(x)), " must be of class ",
+           paste0(y, collapse = ", "), call. = FALSE)
+    }
+  }
+}
+
 #' Check if input is a valid inchikey
 #'
 #' @description This function checks if a string is a valid inchikey.
@@ -536,6 +556,16 @@ matcher <-
       }
     }
   }
+
+#' Check if an url exists
+#'
+#' @param url url
+url_exists <- function(url) {
+  res <- try(httr::HEAD(url), silent = TRUE)
+  if (inherits(res, "try-error")) return(FALSE)
+  status <- httr::status_code(res)
+  status >= 200 && status < 400
+}
 
 #' Webchem messages
 #'

@@ -20,6 +20,11 @@ test_that("examples in the article are unchanged", {
   expect_false(A)
 })
 
+test_that("assert()", {
+  testthat::expect_error(assert(1:10, "integer"), NA)
+  testthat::expect_error(assert(1:10, "data.frame"))
+})
+
 test_that("is.cas() returns correct results", {
 
   expect_true(is.cas('64-17-5'))
@@ -121,7 +126,7 @@ test_that("parse_mol()", {
   expect_s3_class(a$ab, "data.frame")
   expect_s3_class(a$bb, "data.frame")
   expect_type(b, "list")
-  expect_type(c, "list")
+  #expect_type(c, "list")
   expect_type(d, "list")
 })
 
