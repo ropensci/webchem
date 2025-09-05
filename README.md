@@ -39,6 +39,7 @@ documentation
   Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood’s
   Compendium of Pesticide Common Names)
 - [ChEBI](https://www.ebi.ac.uk/chebi/)
+- [ChEMBL](https://www.ebi.ac.uk/chembl/)
 - [Chemical Identifier Resolver
   (CIR)](https://cactus.nci.nih.gov/chemical/structure)
 - [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
