@@ -163,3 +163,14 @@ test_that("chembl_atc_classes()", {
   expect_equal(o3, NA)
   expect_equal(o3m[2], "Service not available. Returning NA.")
 })
+
+test_that("validate_chembl_version()", {
+  expect_equal(validate_chembl_version(), "35")
+  expect_equal(validate_chembl_version("latest"), "35")
+  expect_equal(validate_chembl_version("34"), "34")
+  expect_equal(validate_chembl_version("24.1"), "24_1")
+  expect_error(validate_chembl_version("19"))
+  expect_error(validate_chembl_version(c("34", "35")))
+  expect_error(validate_chembl_version(NA))
+  expect_error(validate_chembl_version("thirtyfour"))
+})
