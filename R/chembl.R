@@ -1,3 +1,103 @@
+#' Download ChEMBL database
+#'
+#' Download a version of the ChEMBL database for offline access.
+#' @param version character, the database release version.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return Downloads the requested database files.
+#' @note If a checksum file is available for the requested version it will be
+#' used to check data integrity. To save storage space, webchem only retrieves
+#' those files that are used by the package. If you need other files as well,
+#' please download them manually.
+#' @references You can find more information about ChEMBL releases at
+#' \url{https://chembl.gitbook.io/chembl-interface-documentation/downloads}
+#' @examples
+#' db_download_chembl(version = "35", verbose = TRUE)
+#' @export
+db_download_chembl <- function(
+    version = "latest",
+    verbose = getOption("verbose")
+) {
+  # input validation
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  stopifnot(is.logical(verbose), length(verbose) == 1)
+  # get paths
+  paths <- db_files("chembl", version = version)
+  paths$url_exists <- url_exists(paths$url)
+  if (!paths$url_exists[1]) {
+    warning("Checksum file not found. Data integrity will not be checked.")
+  }
+  if (any(!paths$url_exists[-1])) {
+    msg <- paste0(
+      "The following ChEMBL URLs were not found:\n",
+      paste(paths$url[which(!paths$url_exists)], collapse = "\n")
+    )
+    stop(msg)
+  }
+  dir_path <- file.path(
+    wc_cache$cache_path_get(),
+    "chembl",
+    paste0("chembl_", version$version_path)
+  ) |> path.expand()
+  checksum_file <- file.path(
+    dir_path,
+    paths$file[which(paths$type == "checksum")]
+  )
+  # download data
+  for (i in 1:nrow(paths)) {
+    if (verbose) {
+      msg <- paste0("Downloading ", paths$url[i], ". ")
+      message(msg, appendLF = FALSE)
+    }
+    if (!paths$url_exists[i]) {
+      if (verbose) message("URL not found.")
+      next()
+    }
+    download_path <- file.path(dir_path, basename(paths$url[i]))
+    if (file.exists(download_path)) {
+      if (verbose) message("Already downloaded.")
+      next()
+    }
+    # make db dir if not already present
+    if (!dir.exists(dir_path)) dir.create(dir_path, recursive = TRUE)
+    # download data
+    curl::curl_download(paths$url[i], download_path, quiet = TRUE)
+    if (verbose) message("Done.")
+    # check data integrity
+    if (file.exists(checksum_file) && paths$type[i] != "checksum") {
+      if (verbose) message("  Checking data integrity. ", appendLF = FALSE)
+      df <- read.table(checksum_file, skip = 2)
+      names(df) <- c("checksum", "file")
+      if (nchar(df$checksum[1]) != 64) {
+        names(df) <- c("file", "checksum")
+      }
+      sha256sum <- tools::sha256sum(download_path)
+      check <- df$checksum[which(df$file == basename(paths$url[i]))]
+      if (sha256sum != check) {
+        msg <- paste0("Checksum error, data may be corrupted: ", basename(paths$url[i]))
+        stop(msg)
+      }
+      if (verbose) message("Done.")
+    }
+    # post processing
+    if (paths$type[i] == "sqlite") {
+      final_file <- file.path(dir_path, paths$file[i])
+      if (file.exists(final_file)) next()
+      if (verbose) message("  Unzipping SQLite database. ", appendLF = FALSE)
+      utils::untar(download_path, exdir = dir_path)
+      if (verbose) message("Done.")
+      if (verbose) message(
+        "  Checking SQLite database final location. ", appendLF = FALSE)
+      if (!file.exists(final_file)) {
+        warning("Unexpected archive contents. Please raise an issue at https://github.com/ropensci/webchem.")
+        next()
+      }
+      if (verbose) message("Done.")
+    }
+  }
+}
+
 #' Retrieve FTP URL for ChEMBL database files
 #'
 #' @param version character; release version
@@ -61,8 +161,8 @@ chembl_files <- function(version = "latest") {
         paste0("chembl_", version$version_path),
         paste0("chembl_", version$version_path, "_sqlite"),
         paste0("chembl_", version$version_path, ".db")
+      )
     )
-  )
   )
   # override defaults paths
   if (as.numeric(version$version_base) <= 22) {
