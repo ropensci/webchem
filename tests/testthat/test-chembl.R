@@ -1,5 +1,47 @@
 up <- ping_service("chembl")
 
+test_that("chembl_dir_url()", {
+  # latest versions
+  expect_equal(chembl_dir_url(), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
+  expect_equal(chembl_dir_url("latest"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
+  expect_equal(chembl_dir_url("35"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
+  # previous versions
+  expect_equal(chembl_dir_url("34"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_34")
+  expect_equal(chembl_dir_url("24.1"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_24_1")
+  # archived versions
+  expect_equal(chembl_dir_url("24"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_24/archived")
+  expect_equal(chembl_dir_url("22"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_22/archived")
+  # invalid versions
+  expect_error(chembl_dir_url("22.5"))
+  expect_error(chembl_dir_url("19"))
+  expect_error(chembl_dir_url(c("34", "35")))
+  expect_error(chembl_dir_url("taxi"))
+})
+
+test_that("chembl_files()", {
+  # latest versions
+  o1 <- chembl_files()
+  o2 <- chembl_files("latest")
+  o3 <- chembl_files("35")
+  # previous versions
+  for (i in 20:34) {
+    out <- i |> as.character() |> chembl_files() |> suppressWarnings()
+    expect_true(all(url_exists(out$url)[-1]))
+  }
+  o4 <- chembl_files("24.1")
+  o5 <- chembl_files("22.1")
+  o6 <- chembl_files("24")
+  o7 <- chembl_files("22")
+
+  expect_true(all(url_exists(o1$url)))
+  expect_true(all(url_exists(o2$url)))
+  expect_true(all(url_exists(o3$url)))
+  expect_true(all(url_exists(o4$url)))
+  expect_true(all(url_exists(o5$url[-1])))
+  expect_true(all(url_exists(o6$url)))
+  expect_true(all(url_exists(o7$url[-1])))
+})
+
 test_that("chembl_query() examples", {
   skip_on_cran()
   skip_if_not(up, "ChEMBL service is down")
@@ -162,4 +204,17 @@ test_that("chembl_atc_classes()", {
 
   expect_equal(o3, NA)
   expect_equal(o3m[2], "Service not available. Returning NA.")
+})
+
+test_that("validate_chembl_version()", {
+  expect_equal(validate_chembl_version()$version, "35")
+  expect_equal(validate_chembl_version("latest")$version, "35")
+  expect_equal(validate_chembl_version("34")$version, "34")
+  expect_equal(validate_chembl_version("24.1")$version, "24.1")
+  expect_equal(validate_chembl_version("24.1")$version_path, "24_1")
+  expect_equal(validate_chembl_version("24.1")$version_base, "24")
+  expect_error(validate_chembl_version("19"))
+  expect_error(validate_chembl_version(c("34", "35")))
+  expect_error(validate_chembl_version(NA))
+  expect_error(validate_chembl_version("thirtyfour"))
 })

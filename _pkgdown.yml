@@ -33,6 +33,9 @@ reference:
   - nist_ri
   - pc_prop
   - pc_sect
+- title: Download databases for offline use
+- contents:
+  - starts_with("db_download_")
 - title: Molecular structure images
 - contents:
   - ends_with("_img")

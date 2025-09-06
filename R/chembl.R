@@ -1,3 +1,190 @@
+#' Download ChEMBL database
+#'
+#' Download a version of the ChEMBL database for offline access.
+#' @param version character, the database release version.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return Downloads the requested database files.
+#' @note If a checksum file is available for the requested version it will be
+#' used to check data integrity. To save storage space, webchem only retrieves
+#' those files that are used by the package. If you need other files as well,
+#' please download them manually.
+#' @references You can find more information about ChEMBL releases at
+#' \url{https://chembl.gitbook.io/chembl-interface-documentation/downloads}
+#' @examples
+#' \dontrun{
+#' db_download_chembl(version = "35", verbose = TRUE)
+#' }
+#' @export
+db_download_chembl <- function(
+    version = "latest",
+    verbose = getOption("verbose")
+) {
+  # input validation
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  stopifnot(is.logical(verbose), length(verbose) == 1)
+  # get paths
+  paths <- db_files("chembl", version = version)
+  paths$url_exists <- url_exists(paths$url)
+  if (!paths$url_exists[1]) {
+    warning("Checksum file not found. Data integrity will not be checked.")
+  }
+  if (any(!paths$url_exists[-1])) {
+    msg <- paste0(
+      "The following ChEMBL URLs were not found:\n",
+      paste(paths$url[which(!paths$url_exists)], collapse = "\n")
+    )
+    stop(msg)
+  }
+  dir_path <- file.path(
+    wc_cache$cache_path_get(),
+    "chembl",
+    paste0("chembl_", version$version_path)
+  ) |> path.expand()
+  checksum_file <- file.path(
+    dir_path,
+    paths$file[which(paths$type == "checksum")]
+  )
+  # download data
+  for (i in 1:nrow(paths)) {
+    if (verbose) {
+      msg <- paste0("Downloading ", paths$url[i], ". ")
+      message(msg, appendLF = FALSE)
+    }
+    if (!paths$url_exists[i]) {
+      if (verbose) message("URL not found.")
+      next()
+    }
+    download_path <- file.path(dir_path, basename(paths$url[i]))
+    if (file.exists(download_path)) {
+      if (verbose) message("Already downloaded.")
+      next()
+    }
+    # make db dir if not already present
+    if (!dir.exists(dir_path)) dir.create(dir_path, recursive = TRUE)
+    # download data
+    curl::curl_download(paths$url[i], download_path, quiet = TRUE)
+    if (verbose) message("Done.")
+    # check data integrity
+    if (file.exists(checksum_file) && paths$type[i] != "checksum") {
+      if (verbose) message("  Checking data integrity. ", appendLF = FALSE)
+      df <- read.table(checksum_file, skip = 2)
+      names(df) <- c("checksum", "file")
+      if (nchar(df$checksum[1]) != 64) {
+        names(df) <- c("file", "checksum")
+      }
+      sha256sum <- digest::digest(file = download_path, algo = "sha256")
+      check <- df$checksum[which(df$file == basename(paths$url[i]))]
+      if (sha256sum != check) {
+        msg <- paste0("Checksum error, data may be corrupted: ", basename(paths$url[i]))
+        stop(msg)
+      }
+      if (verbose) message("Done.")
+    }
+    # post processing
+    if (paths$type[i] == "sqlite") {
+      final_file <- file.path(dir_path, paths$file[i])
+      if (file.exists(final_file)) next()
+      if (verbose) message("  Unzipping SQLite database. ", appendLF = FALSE)
+      utils::untar(download_path, exdir = dir_path)
+      if (verbose) message("Done.")
+      if (verbose) message(
+        "  Checking SQLite database final location. ", appendLF = FALSE)
+      if (!file.exists(final_file)) {
+        warning("Unexpected archive contents. Please raise an issue at https://github.com/ropensci/webchem.")
+        next()
+      }
+      if (verbose) message("Done.")
+    }
+  }
+}
+
+#' Retrieve FTP URL for ChEMBL database files
+#'
+#' @param version character; release version
+#' @return FTP URL for ChEMBL databas files
+#' @examples {
+#' chembl_dir_url(version = "latest")
+#' chembl_dir_url(version = "34")
+#' chembl_dir_url(version = "24.1")
+#' }
+#' @noRd
+chembl_dir_url <- function(version = "latest") {
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  if (version$version_path %in% c("22", "24")) {
+    url <- paste0(
+      "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_",
+      version$version_path, "/archived"
+    )
+  } else {
+    url <- paste0(
+      "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_",
+      version$version_path
+    )
+  }
+  if (url_exists(url)) {
+    return(url)
+  } else {
+    msg <- paste0("ChEMBL URL not found: ", url)
+    stop(msg)
+  }
+}
+
+#' Retrieve paths for ChEMBL database files
+#'
+#' @param version character; version of the database. Either "latest" (default)
+#' or a specific version number, e.g. "30".
+#' @return a data frame with three columns "url", "file" and "type". "url" is
+#' the download URL. "file" is the final path to the file within the download
+#' directory of the requested database version. "type" is the file type which
+#' guides further processing.
+#' @examples
+#' chembl_files("chembl", version = "latest")
+#' chembl_files("chembl", version = "30")
+#' @noRd
+chembl_files <- function(version = "latest") {
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  dir_url <- chembl_dir_url(version = version)
+  # set default paths
+  path_list <- list(
+    checksum = data.frame(
+      url = file.path(dir_url, "checksums.txt"),
+      file = "checksums.txt"
+    ),
+    sqlite = data.frame(
+      url = file.path(
+        dir_url, paste0("chembl_", version$version_path, "_sqlite.tar.gz")),
+      file = file.path(
+        paste0("chembl_", version$version_path),
+        paste0("chembl_", version$version_path, "_sqlite"),
+        paste0("chembl_", version$version_path, ".db")
+      )
+    )
+  )
+  # override defaults paths
+  if (as.numeric(version$version_base) <= 22) {
+    path_list$sqlite$file <-  file.path(
+      paste0("chembl_", version$version_path, "_sqlite"),
+      paste0("chembl_", version$version_base, ".db")
+    )
+  } else if (version$version == "24.1") {
+    path_list$sqlite$file <-  file.path(
+      paste0("chembl_", version$version_base),
+      paste0("chembl_", version$version_base, "_sqlite"),
+      paste0("chembl_", version$version_base, ".db")
+    )
+  }
+  out <- do.call(rbind, Map(cbind, path_list, type = names(path_list)))
+  rownames(out) <- NULL
+  out <- out |> dplyr::relocate("type", "file", "url")
+  return(out)
+}
+
 #' Query ChEMBL using ChEMBL IDs
 #'
 #' Retrieve ChEMBL data using a vector of ChEMBL IDs.
@@ -390,4 +577,39 @@ format_chembl <- function(cont) {
     cont$molecule_synonyms <- dplyr::bind_rows(cont$molecule_synonyms)
   }
   return(cont)
+}
+
+#' Validate ChEMBL version
+#'
+#' @description Validates the provided ChEMBL version. If "latest" (default),
+#' returns the number of the lastest supported version (as a string). If the
+#' provided version is lower than the earliest supported version, stops with
+#' an error.
+#' @param version character; the ChEMBL version to validate.
+#' @return Validated version number as a string.
+#' @noRd
+validate_chembl_version <- function(version = "latest") {
+  assert(version, "character")
+  stopifnot(length(version) == 1)
+  if (version == "latest") version <- "35"
+  version_num <- suppressWarnings(as.numeric(version))
+  version_base <- as.character(floor(version_num))
+  if (is.na(version_num)) {
+    stop("Version must be 'latest' or coercible to numeric.")
+  }
+  if (version_num < 20) {
+    stop("Version not supported. Try a more recent version.")
+  }
+  if (version_num %% 1 != 0) {
+    version_path <- gsub("\\.", "_", version)
+  } else {
+    version_path <- version
+  }
+  out <- list(
+    version = version,
+    version_path = version_path,
+    version_base = version_base
+  )
+  class(out) <- c("chembl_version", class(version))
+  return(out)
 }

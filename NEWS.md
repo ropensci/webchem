@@ -3,6 +3,7 @@
 ## NEW FEATURES
 
 * Added a new function `chembl_img()` for downloading SVG images from ChEMBL.
+* Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
 
 # webchem 1.3.1
 
