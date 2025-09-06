@@ -74,7 +74,7 @@ db_download_chembl <- function(
       if (nchar(df$checksum[1]) != 64) {
         names(df) <- c("file", "checksum")
       }
-      sha256sum <- tools::sha256sum(download_path)
+      sha256sum <- digest::digest(file = download_path, algo = "sha256")
       check <- df$checksum[which(df$file == basename(paths$url[i]))]
       if (sha256sum != check) {
         msg <- paste0("Checksum error, data may be corrupted: ", basename(paths$url[i]))
