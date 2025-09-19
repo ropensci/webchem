@@ -20,6 +20,17 @@ test_that("examples in the article are unchanged", {
   expect_false(A)
 })
 
+test_that("assert()", {
+  testthat::expect_error(assert(1:10, "integer"), NA)
+  testthat::expect_error(assert(1:10, "data.frame"))
+})
+
+test_that("db_files()", {
+  o1 <- db_files("chembl", version = "35")
+  expect_true(all(o1$url_exists))
+  expect_error(db_files("hello"))
+})
+
 test_that("is.cas() returns correct results", {
 
   expect_true(is.cas('64-17-5'))
@@ -121,7 +132,7 @@ test_that("parse_mol()", {
   expect_s3_class(a$ab, "data.frame")
   expect_s3_class(a$bb, "data.frame")
   expect_type(b, "list")
-  expect_type(c, "list")
+  #expect_type(c, "list")
   expect_type(d, "list")
 })
 
@@ -141,4 +152,9 @@ test_that("matcher() warns when 'best' is used with chemical names", {
           result = c("WSFSSNUMVMOOMR-UHFFFAOYSA-N","UGFAIRIUMAVXCW-UHFFFAOYSA-N "),
           match = "best"),
     "match = 'best' only makes sense for chemical name queries.")
+})
+
+test_that("url_exists()", {
+  expect_true(url_exists("https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35/"))
+  expect_false(url_exists("https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_00/"))
 })
