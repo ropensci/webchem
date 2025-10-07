@@ -7,6 +7,8 @@
 
 [![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
+[![R-multiverse
+status](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcommunity.r-multiverse.org%2Fapi%2Fpackages%2Fwebchem&query=%24.Version&label=r-multiverse)](https://community.r-multiverse.org/webchem)
 [![R build
 status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
 [![Coverage](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://app.codecov.io/gh/ropensci/webchem/branch/master)
