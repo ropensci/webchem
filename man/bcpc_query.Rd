@@ -24,7 +24,7 @@ bcpc_query(
 \item{...}{additional arguments to internal utility functions}
 }
 \value{
-A list of eight entries: common-name, status, preferred IUPAC Name,
+A list of eleven entries: common-name, status, preferred IUPAC Name,
 IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source
 url.
 }
