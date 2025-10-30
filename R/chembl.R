@@ -300,7 +300,7 @@ chembl_query <- function(query,
     stop("To download images, please use chembl_img().")
   }
   if (resource == "status") {
-    stop("To retrieve webservise status, plase use chembl_status().")
+    stop("To retrieve webservise status, please use chembl_status().")
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   foo <- function(query, verbose) {
@@ -753,6 +753,7 @@ get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
 
 chembl_example_query <- function(resource) {
   resource <- match.arg(resource, chembl_resources())
+  resource <- resource[!resource %in% c("image", "status")]
   example_queries <- list(
     activity = "31863",
     assay = "CHEMBL615117",
