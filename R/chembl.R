@@ -612,13 +612,18 @@ chembl_resources <- function() {
 format_chembl <- function(cont) {
   # Names of elements to convert to data frames (using dplyr::bind_cols)
   df_names <- c(
+    "action_type",
     "activity_properties",
+    "assay_classifications",
+    "assay_parameters",
     "atc_classification",
     "biotherapeutic",
+    "biocomponents",
     "chembl_release",
     "cross_references",
     "go_slims",
     "indication_refs",
+    "ligand_efficiency",
     "mechanism_refs",
     "metabolism_refs",
     "molecule_forms",
@@ -632,6 +637,7 @@ format_chembl <- function(cont) {
     "target_component_synonyms",
     "target_component_xrefs",
     "targets",
+    "variant_sequence",
     "warning_refs"
   )
   flat_names <- c(
