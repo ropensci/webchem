@@ -755,13 +755,12 @@ get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
   }
   query <- example_queries[[resource]]
   response <- chembl_query(query, resource = resource, verbose = verbose)[[1]]
-  process_element <- function(res, query, element, parent = NA) {
+  process_element <- function(res, element, parent = NA) {
     value <- res[[element]]
     cls <- class(value)[1]
     out <- tibble::tibble(
       date = Sys.Date(),
       resource = resource,
-      reference = query,
       field = element,
       class = cls,
       parent = parent
@@ -770,7 +769,6 @@ get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
       df_fields <- tibble::tibble(
         date = Sys.Date(),
         resource = resource,
-        reference = query,
         field = names(value),
         class = vapply(value, function(col) class(col)[1], character(1)),
         parent = element
@@ -782,7 +780,6 @@ get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
   result <- lapply(names(response), function(x) {
     process_element(
       res = response,
-      query = query,
       element = x
     )
   }) |> dplyr::bind_rows()
