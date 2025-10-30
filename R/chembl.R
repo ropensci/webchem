@@ -648,3 +648,91 @@ validate_chembl_version <- function(version = "latest") {
   class(out) <- c("chembl_version", class(version))
   return(out)
 }
+
+#' Get ChEMBL Resource Structure
+#'
+#' Query a ChEMBL resource with a representative example and convert the
+#' response into a structured table.
+#' @param resource character; the ChEMBL resource to query. Use
+#' [chembl_resources()] to see all available resources.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return A tibble with columns "name", "value", and "parent" representing the
+#' structure of the response.
+#' @examples
+#' \dontrun{
+#' # Example for the "molecule" resource
+#' get_chembl_str("molecule")
+#' }
+#' @export
+get_chembl_str <- function(resource, verbose = getOption("verbose")) {
+  example_queries <- list(
+    activity = "31863",
+    assay = "CHEMBL615117",
+    atc_class = "A01AA01",
+    binding_site = "2",
+    biotherapeutic = "CHEMBL448105",
+    cell_line = "CHEMBL3307241",
+    chembl_id_lookup = "CHEMBL1",
+    compound_record = "1",
+    compound_structural_alert = "79048021",
+    document = "CHEMBL1158643",
+    document_similarity = "CHEMBL1148466",
+    drug = "CHEMBL2",
+    drug_indication = "22606",
+    drug_warning = "1",
+    go_slim = "GO:0000003",
+    image = "CHEMBL1",
+    mechanism = "13",
+    metabolism = "119",
+    molecule = "CHEMBL1082",
+    molecule_form = "CHEMBL6329",
+    organism = "1",
+    protein_classification = "1",
+    similarity = "CC(=O)Oc1ccccc1C(=O)O/70",
+    source = "1",
+    substructure = "CN(CCCN)c1cccc2ccccc12",
+    target = "CHEMBL2074",
+    target_component = "1",
+    target_relation = "CHEMBL2251",
+    tissue = "CHEMBL3988026",
+    xref_source = "AlphaFoldDB"
+  )
+  resource <- match.arg(resource, chembl_resources())
+  if (!resource %in% names(example_queries)) {
+    stop(paste0("No example query available for this resource: ", resource))
+  }
+  query <- example_queries[[resource]]
+  response <- chembl_query(query, resource = resource, verbose = verbose)[[1]]
+  process_element <- function(res, query, element, parent = NA) {
+    value <- res[[element]]
+    cls <- class(value)[1]
+    out <- tibble::tibble(
+      date = Sys.Date(),
+      resource = resource,
+      reference = query,
+      field = element,
+      class = cls,
+      parent = parent
+    )
+    if (is.data.frame(value)) {
+      df_fields <- tibble::tibble(
+        date = Sys.Date(),
+        resource = resource,
+        reference = query,
+        field = names(value),
+        class = vapply(value, function(col) class(col)[1], character(1)),
+          parent = element
+      )
+      out <- dplyr::bind_rows(out, df_fields)
+    }
+    return(out)
+  }
+  result <- lapply(names(response), function(x) {
+    process_element(
+      res = response,
+      query = query,
+      element = x
+    )
+  }) |> dplyr::bind_rows()
+  return(result)
+}
