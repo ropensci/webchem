@@ -817,7 +817,8 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
   if ("value" %in% names(all)) {
     na_fields <- all$field[is.na(all$value) & all$class != "tbl_df"]
     if (length(na_fields) > 0) {
-      msg <- paste0("Found resource with NA values, add more examples: ", resource, "; ", paste(na_fields, collapse = ", "))
+      warning("Found NA values in atomic fields. Add more example queries.")
+      msg <- paste0("Resource with NA values: ", resource, "; ", paste(na_fields, collapse = ", "))
       print(msg)
     }
   }
@@ -828,16 +829,16 @@ chembl_example_query <- function(resource) {
   resource <- match.arg(resource, chembl_resources())
   resource <- resource[!resource %in% c("image", "status")]
   example_queries <- list(
-    activity = "31863",
-    assay = "CHEMBL615117",
+    activity = c("31863", "32190", "624419", "31910", "31864", "3269724", "17805339"),
+    assay = c("CHEMBL615117", "CHEMBL1061852", "CHEMBL5445082", "CHEMBL5441382", "CHEMBL2184458"),
     atc_class = "A01AA01",
     binding_site = "2",
-    biotherapeutic = "CHEMBL448105",
-    cell_line = "CHEMBL3307241",
+    biotherapeutic = c("CHEMBL8234","CHEMBL448105"),
+    cell_line = c("CHEMBL3307241", "CHEMBL3307242"),
     chembl_id_lookup = "CHEMBL1",
     compound_record = "1",
     compound_structural_alert = "79048021",
-    document = "CHEMBL1158643",
+    document = c("CHEMBL1158643", "CHEMBL1132398", "CHEMBL5303573", "CHEMBL3639173"),
     document_similarity = "CHEMBL1148466",
     drug = "CHEMBL2",
     drug_indication = "22606",
@@ -845,13 +846,13 @@ chembl_example_query <- function(resource) {
     go_slim = "GO:0000003",
     image = "CHEMBL1",
     mechanism = "13",
-    metabolism = "119",
+    metabolism = c("119", "623", "180"),
     molecule = c("CHEMBL1082", "CHEMBL8234"),
     molecule_form = "CHEMBL6329",
     organism = "1",
     protein_classification = "1",
-    similarity = "CC(=O)Oc1ccccc1C(=O)O/70",
-    source = "1",
+    similarity = "CC(=O)Oc1ccccc1C(=O)O",
+    source = c("1", "5"),
     substructure = "CN(CCCN)c1cccc2ccccc12",
     target = "CHEMBL2074",
     target_component = "1",
