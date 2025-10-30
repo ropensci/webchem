@@ -653,6 +653,16 @@ format_chembl <- function(cont) {
 
   # Also flatten top-level if needed
   cont <- flatten_entity(cont)
+
+  # map NULL to NA in R
+  cont <- lapply(cont, function(x) {
+    if (is.null(x)) {
+      return(NA_character_)
+    } else {
+      return(x)
+    }
+  })
+
   return(cont)
 }
 
