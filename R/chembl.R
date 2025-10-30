@@ -299,6 +299,9 @@ chembl_query <- function(query,
   if (resource == "image") {
     stop("To download images, please use chembl_img().")
   }
+  if (resource == "status") {
+    stop("To retrieve webservise status, plase use chembl_status().")
+  }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   foo <- function(query, verbose) {
     if (is.na(query)) {
@@ -423,6 +426,38 @@ chembl_img <- function(
     return(NA)
   }
   out <- lapply(query, function(x) foo(x, verbose = verbose))
+}
+
+#' Retrieve ChEMBL webservice status
+#'
+#' Retrieve status information about the ChEMBL webservice: database version,
+#' release date, status, and count data for various entities.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @param test_service_down logical; for internal testing only.
+#' @export
+chembl_status <- function(
+    verbose = getOption("verbose"),
+    test_service_down = FALSE) {
+  url <- ifelse(test_service_down, "",
+    "https://www.ebi.ac.uk/chembl/api/data/status")
+  webchem_sleep(type = "API")
+  if (verbose) message("Querying ChEMBL status. ", appendLF = FALSE)
+  res <- try(httr::RETRY("GET",
+                         url,
+                         httr::user_agent(webchem_url()),
+                         httr::add_headers(Accept = "application/json"),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
+  if (verbose) message(httr::message_for_status(res))
+  if (res$status_code != 200) {
+    return(NA)
+  } else {
+    return(httr::content(res, type = "application/json"))
+  }
 }
 
 chembl_validate_query <- function(query, resource, verbose) {

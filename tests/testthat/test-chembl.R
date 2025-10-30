@@ -218,3 +218,23 @@ test_that("validate_chembl_version()", {
   expect_error(validate_chembl_version(NA))
   expect_error(validate_chembl_version("thirtyfour"))
 })
+
+test_that("chembl_status()", {
+  skip_on_cran()
+  skip_if_not(up, "ChEMBL service is down")
+
+  o1 <- chembl_status()
+  o2 <- capture_messages(chembl_status(verbose = TRUE))
+
+  expect_true(inherits(o1, "list") & length(o1) == 8)
+  expect_equal(o2[1], "Querying ChEMBL status. ")
+  expect_equal(o2[2], "OK (HTTP 200).")
+
+  #service down
+  o3 <- chembl_status(test_service_down = TRUE)
+  o3m <- capture_messages(
+    chembl_status(test_service_down = TRUE, verbose = TRUE))
+
+  expect_equal(o3, NA)
+  expect_equal(o3m[2], "Service not available. Returning NA.")
+})
