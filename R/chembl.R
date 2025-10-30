@@ -357,6 +357,7 @@ chembl_query <- function(query,
         }
       })
   }
+  names(out) <- query
   return(out)
 }
 
