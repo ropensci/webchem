@@ -8,6 +8,7 @@ chembl_query(
   query,
   resource = "molecule",
   cache_file = NULL,
+  similarity = 70,
   verbose = getOption("verbose"),
   test_service_down = FALSE
 )
@@ -20,6 +21,8 @@ chembl_query(
 
 \item{cache_file}{character; the name of the cache file without the file
 extension. If \code{NULL}, results are not cached.}
+
+\item{similarity}{numeric; similarity threshold for similarity searches.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

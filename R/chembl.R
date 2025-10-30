@@ -194,6 +194,7 @@ chembl_files <- function(version = "latest") {
 #' @param cache_file character; the name of the cache file without the file
 #' extension. If \code{NULL}, results are not cached.
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param similarity numeric; similarity threshold for similarity searches.
 #' @param test_service_down logical; this argument is only used for testing.
 #' @return The function returns a list of lists, where each element of the list
 #' contains a list of respective query results. Results are simplified, if
@@ -293,6 +294,7 @@ chembl_files <- function(version = "latest") {
 chembl_query <- function(query,
                          resource = "molecule",
                          cache_file = NULL,
+                         similarity = 70,
                          verbose = getOption("verbose"),
                          test_service_down = FALSE) {
   resource <- match.arg(resource, chembl_resources())
@@ -302,8 +304,11 @@ chembl_query <- function(query,
   if (resource == "status") {
     stop("To retrieve webservise status, please use chembl_status().")
   }
+  if (resource == "similarity") {
+    warning("Similarity search currently returns no more than 20 results.")
+  }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
-  foo <- function(query, verbose) {
+  foo <- function(query, verbose, similarity) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -311,8 +316,17 @@ chembl_query <- function(query,
     query <- chembl_validate_query(query, resource, verbose)
     if (is.na(query)) return(NA)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
+    if (resource == "similarity") {
     url <- ifelse(
-      test_service_down, "", paste0(stem, "/", resource, "/", query, ".json"))
+      test_service_down, "",
+      paste0(stem, "/", resource, "/", query, "/", similarity, ".json")
+      )
+    } else {
+      url <- ifelse(
+      test_service_down, "",
+      paste0(stem, "/", resource, "/", query, ".json")
+      )
+    }
     webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,
@@ -333,7 +347,9 @@ chembl_query <- function(query,
     return(cont)
   }
   if (is.null(cache_file)) {
-    out <- lapply(query, function(x) foo(x, verbose = verbose))
+    out <- lapply(query, function(x) {
+      foo(x, verbose = verbose, similarity = similarity)
+    })
   } else {
     if (!dir.exists("cache")) dir.create("cache")
     cfpath <- paste0("cache/", cache_file, ".rds")
@@ -348,7 +364,7 @@ chembl_query <- function(query,
         if (verbose) message("Already retrieved.")
         return(query_results[[x]])
       } else {
-        new <- foo(x, verbose = verbose)
+        new <- foo(x, verbose = verbose, similarity = similarity)
         if (!is.na(x)) {
           query_results[[x]] <<- new
           saveRDS(query_results, file = cfpath)
