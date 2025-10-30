@@ -714,13 +714,13 @@ validate_chembl_version <- function(version = "latest") {
 #' @examples
 #' \dontrun{
 #' # Example for the "molecule" resource
-#' get_chembl_str("molecule")
+#' get_chembl_ws_schema("molecule")
 #' }
 #' @noRd
 get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
   # validate resource and get example query
   query <- chembl_example_query(resource)
-  response <- chembl_query(query, resource = resource, verbose = verbose)[[1]]
+  response <- chembl_query(query, resource = resource, verbose = verbose)
   process_element <- function(res, element, parent = NA) {
     value <- res[[element]]
     cls <- class(value)[1]
@@ -731,25 +731,36 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
       class = cls,
       parent = parent
     )
-    if (is.data.frame(value)) {
+    if (is.atomic(value)) {
+      out$value <- as.character(value[1])
+    } else if (is.data.frame(value)) {
       df_fields <- tibble::tibble(
         date = Sys.Date(),
         resource = resource,
         field = names(value),
         class = vapply(value, function(col) class(col)[1], character(1)),
-        parent = element
+        parent = element,
+        value = vapply(value, function(col) as.character(col)[1], character(1))
       )
       out <- dplyr::bind_rows(out, df_fields)
+    } else {
+      stop()
     }
     return(out)
   }
-  result <- lapply(names(response), function(x) {
-    process_element(
-      res = response,
-      element = x
-    )
-  }) |> dplyr::bind_rows()
-  return(result)
+  all <- tibble::tibble()
+  for (i in query) {
+    result <- lapply(names(response[[i]]), function(x) {
+      process_element(
+        res = response[[i]],
+        element = x
+      )
+    }) |> dplyr::bind_rows()
+    result$query <- i
+    result <- result |> dplyr::relocate(.data$query, .after = parent)
+    all <- dplyr::bind_rows(all, result)
+  }
+  return(all)
 }
 
 chembl_example_query <- function(resource) {
