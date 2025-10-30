@@ -593,24 +593,66 @@ chembl_resources <- function() {
 #' @param cont list; json output from \code{chembl_query()}
 #' @noRd
 format_chembl <- function(cont) {
-  if ("atc_classifications" %in% names(cont)) {
-    cont$atc_classifications <- unlist(cont$atc_classifications)
+  # Names of elements to convert to data frames (using dplyr::bind_cols)
+  df_names <- c(
+    "activity_properties",
+    "atc_classification",
+    "chembl_release",
+    "cross_references",
+    "go_slims",
+    "indication_refs",
+    "mechanism_refs",
+    "metabolism_refs",
+    "molecule_forms",
+    "molecule_hierarchy",
+    "molecule_properties",
+    "molecule_structures",
+    "molecule_synonyms",
+    "page_meta",
+    "protein_classifications",
+    "site_components",
+    "target_component_synonyms",
+    "target_component_xrefs",
+    "targets",
+    "warning_refs"
+  )
+  flat_names <- c(
+    "applicants",
+    "atc_classifications",
+    "research_codes",
+    "synonyms"
+  )
+
+  # Helper to flatten a single entity
+  flatten_entity <- function(entity) {
+    for (nm in df_names) {
+      if (nm %in% names(entity)) {
+        entity[[nm]] <- dplyr::bind_rows(entity[[nm]])
+      }
+    }
+    for (nm in flat_names) {
+      if (nm %in% names(entity)) {
+        entity[[nm]] <- unlist(entity[[nm]])
+      }
+    }
+    entity
   }
-  if ("cross_references" %in% names(cont)) {
-    cont$cross_references <- dplyr::bind_rows(cont$cross_references)
+
+  # If 'molecule' is present and is a list, flatten its children
+  if ("molecules" %in% names(cont)) {
+    for (i in 1:length(cont[["molecules"]])) {
+      cont[["molecules"]][[i]] <- flatten_entity(cont[["molecules"]][[i]])
+    }
   }
-  if ("molecule_hierarchy" %in% names(cont)) {
-    cont$molecule_hierarchy <- dplyr::bind_rows(cont$molecule_hierarchy)
+
+  if ("target_components" %in% names(cont)) {
+    for (i in 1:length(cont[["target_components"]])) {
+      cont[["target_components"]][[i]] <- flatten_entity(cont[["target_components"]][[i]])
+    }
   }
-  if ("molecule_properties" %in% names(cont)) {
-    cont$molecule_properties <- dplyr::bind_rows(cont$molecule_properties)
-  }
-  if ("molecule_structures" %in% names(cont)) {
-    cont$molecule_structures <- dplyr::bind_rows(cont$molecule_structures)
-  }
-  if ("molecule_synonyms" %in% names(cont)) {
-    cont$molecule_synonyms <- dplyr::bind_rows(cont$molecule_synonyms)
-  }
+
+  # Also flatten top-level if needed
+  cont <- flatten_entity(cont)
   return(cont)
 }
 
@@ -721,7 +763,7 @@ get_chembl_str <- function(resource, verbose = getOption("verbose")) {
         reference = query,
         field = names(value),
         class = vapply(value, function(col) class(col)[1], character(1)),
-          parent = element
+        parent = element
       )
       out <- dplyr::bind_rows(out, df_fields)
     }
