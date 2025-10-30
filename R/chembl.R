@@ -598,6 +598,7 @@ format_chembl <- function(cont) {
   df_names <- c(
     "activity_properties",
     "atc_classification",
+    "biotherapeutic",
     "chembl_release",
     "cross_references",
     "go_slims",
@@ -757,9 +758,26 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
       )
     }) |> dplyr::bind_rows()
     result$query <- i
-    result <- result |> dplyr::relocate(.data$query, .after = parent)
+    result <- result |> dplyr::relocate(query, .after = parent)
     all <- dplyr::bind_rows(all, result)
   }
+  all <- all |>
+    dplyr::group_by(field, parent) |>
+    dplyr::filter(
+      if (any(!is.na(value))) {
+        dplyr::row_number() == which(!is.na(value))[1]
+      } else {
+        dplyr::row_number() == 1
+      }
+    ) |>
+    dplyr::ungroup()
+  all <- all |>
+    dplyr::mutate(
+      parent_row = match(parent, field),
+      order_index = ifelse(is.na(parent_row), dplyr::row_number(), parent_row + 0.1)
+    ) |>
+    dplyr::arrange(order_index) |>
+    dplyr::select(-parent_row, -order_index)
   return(all)
 }
 
@@ -785,7 +803,7 @@ chembl_example_query <- function(resource) {
     image = "CHEMBL1",
     mechanism = "13",
     metabolism = "119",
-    molecule = "CHEMBL1082",
+    molecule = c("CHEMBL1082", "CHEMBL8234"),
     molecule_form = "CHEMBL6329",
     organism = "1",
     protein_classification = "1",
