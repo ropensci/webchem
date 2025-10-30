@@ -705,8 +705,8 @@ validate_chembl_version <- function(version = "latest") {
 #' # Example for the "molecule" resource
 #' get_chembl_str("molecule")
 #' }
-#' @export
-get_chembl_str <- function(resource, verbose = getOption("verbose")) {
+#' @noRd
+get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
   example_queries <- list(
     activity = "31863",
     assay = "CHEMBL615117",
