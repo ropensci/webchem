@@ -717,6 +717,42 @@ validate_chembl_version <- function(version = "latest") {
 #' }
 #' @noRd
 get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
+  # validate resource and get example query
+  query <- chembl_example_query(resource)
+  response <- chembl_query(query, resource = resource, verbose = verbose)[[1]]
+  process_element <- function(res, element, parent = NA) {
+    value <- res[[element]]
+    cls <- class(value)[1]
+    out <- tibble::tibble(
+      date = Sys.Date(),
+      resource = resource,
+      field = element,
+      class = cls,
+      parent = parent
+    )
+    if (is.data.frame(value)) {
+      df_fields <- tibble::tibble(
+        date = Sys.Date(),
+        resource = resource,
+        field = names(value),
+        class = vapply(value, function(col) class(col)[1], character(1)),
+        parent = element
+      )
+      out <- dplyr::bind_rows(out, df_fields)
+    }
+    return(out)
+  }
+  result <- lapply(names(response), function(x) {
+    process_element(
+      res = response,
+      element = x
+    )
+  }) |> dplyr::bind_rows()
+  return(result)
+}
+
+chembl_example_query <- function(resource) {
+  resource <- match.arg(resource, chembl_resources())
   example_queries <- list(
     activity = "31863",
     assay = "CHEMBL615117",
@@ -749,39 +785,8 @@ get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
     tissue = "CHEMBL3988026",
     xref_source = "AlphaFoldDB"
   )
-  resource <- match.arg(resource, chembl_resources())
   if (!resource %in% names(example_queries)) {
     stop(paste0("No example query available for this resource: ", resource))
   }
-  query <- example_queries[[resource]]
-  response <- chembl_query(query, resource = resource, verbose = verbose)[[1]]
-  process_element <- function(res, element, parent = NA) {
-    value <- res[[element]]
-    cls <- class(value)[1]
-    out <- tibble::tibble(
-      date = Sys.Date(),
-      resource = resource,
-      field = element,
-      class = cls,
-      parent = parent
-    )
-    if (is.data.frame(value)) {
-      df_fields <- tibble::tibble(
-        date = Sys.Date(),
-        resource = resource,
-        field = names(value),
-        class = vapply(value, function(col) class(col)[1], character(1)),
-        parent = element
-      )
-      out <- dplyr::bind_rows(out, df_fields)
-    }
-    return(out)
-  }
-  result <- lapply(names(response), function(x) {
-    process_element(
-      res = response,
-      element = x
-    )
-  }) |> dplyr::bind_rows()
-  return(result)
+  example_queries[[resource]]
 }
