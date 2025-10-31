@@ -246,8 +246,8 @@ chembl_files <- function(version = "latest") {
 #' chembl_query("CHEMBL1", resource = "chembl_id_lookup")
 #' # Resource: compound_record - requires record ID
 #' chembl_query("1", resource = "compound_record")
-#' # Resource: compound_structural_alert - requires compound structural alert ID
-#' chembl_query("79048021", resource = "compound_structural_alert")
+#' # Resource: compound_structural_alert - requires compound ChEMBL ID
+#' chembl_query("CHEMBL266429", resource = "compound_structural_alert")
 #' # Resource: document - requires document ChEMBL ID
 #' chembl_query("CHEMBL1158643", resource = "document")
 #' # Resource: document_similarity - requires document 1 ChEMBL ID
@@ -319,17 +319,16 @@ chembl_query <- function(query,
     query <- chembl_validate_query(query, resource, verbose)
     if (is.na(query)) return(NA)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    if (resource == "similarity") {
-    url <- ifelse(
-      test_service_down, "",
-      paste0(stem, "/", resource, "/", query, "/", similarity, ".json")
-      )
+    if (test_service_down) {
+      url <- ""
+    } else if (resource == "similarity") {
+      url <- paste0(stem, "/", resource, "/", query, "/", similarity, ".json")
+    } else if (resource == "compound_structural_alert") {
+      url <- paste0(stem, "/", resource, ".json?molecule_chembl_id=", query)
     } else {
-      url <- ifelse(
-      test_service_down, "",
-      paste0(stem, "/", resource, "/", query, ".json")
-      )
+      url <- paste0(stem, "/", resource, "/", query, ".json")
     }
+
     webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,
@@ -347,7 +346,7 @@ chembl_query <- function(query,
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
     if (tidy) {
-    cont <- format_chembl(cont)
+      cont <- format_chembl(cont)
     }
     return(cont)
   }
@@ -492,7 +491,6 @@ chembl_validate_query <- function(query, resource, verbose) {
     "activity",
     "binding_site",
     "compund_record",
-    "compound_structural_alert",
     "drug_indication",
     "drug_warning",
     "mechanism",
@@ -510,6 +508,7 @@ chembl_validate_query <- function(query, resource, verbose) {
     "assay",
     "biotherapeutic",
     "chembl_id_lookup",
+    "compound_structural_alert",
     "document",
     "document_similarity",
     "drug",
@@ -625,6 +624,7 @@ format_chembl <- function(cont) {
     "biotherapeutic",
     "biocomponents",
     "chembl_release",
+    "compound_structural_alerts",
     "cross_references",
     "go_slims",
     "indication_refs",
@@ -848,7 +848,7 @@ chembl_example_query <- function(resource) {
     cell_line = c("CHEMBL3307241", "CHEMBL3307242"),
     chembl_id_lookup = "CHEMBL1",
     compound_record = "1",
-    compound_structural_alert = "79048021",
+    compound_structural_alert = "CHEMBL266429",
     document = c("CHEMBL1158643", "CHEMBL1132398", "CHEMBL5303573", "CHEMBL3639173"),
     document_similarity = "CHEMBL1148466",
     drug = "CHEMBL2",

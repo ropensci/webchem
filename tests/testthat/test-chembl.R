@@ -63,8 +63,8 @@ test_that("chembl_query() examples", {
   o7 <- chembl_query("CHEMBL1", resource = "chembl_id_lookup")
   # Resource: compound_record - requires record ID
   o8 <- chembl_query("1", resource = "compound_record")
-  # Resource: compound_structural_alert - requires compound structural alert ID
-  o9 <- chembl_query("79048021", resource = "compound_structural_alert")
+  # Resource: compound_structural_alert - requires compound ChEMBL ID
+  o9 <- chembl_query("CHEMBL266429", resource = "compound_structural_alert", tidy = FALSE)
   # Resource: document - requires document ChEMBL ID
   o10 <- chembl_query("CHEMBL1158643", resource = "document")
   # Resource: document_similarity - requires document 1 ChEMBL ID
@@ -119,7 +119,7 @@ test_that("chembl_query() examples", {
   expect_true(inherits(o6, "list") & length(o6[[1]]) == 11)
   expect_true(inherits(o7, "list") & length(o7[[1]]) == 5)
   expect_true(inherits(o8, "list") & length(o8[[1]]) == 6)
-  #expect_true(inherits(o9, "list") & length(o9[[1]]) == 3)
+  expect_true(inherits(o9, "list") & length(o9[[1]][[1]]) == 7)
   expect_true(inherits(o10, "list") & length(o10[[1]]) == 19)
   expect_true(inherits(o11, "list") & length(o11[[1]]) == 4)
   expect_true(inherits(o12, "list") & length(o12[[1]]) == 30)
