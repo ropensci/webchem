@@ -763,7 +763,10 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
         field = names(value),
         class = vapply(value, function(col) class(col)[1], character(1)),
         parent = element,
-        value = vapply(value, function(col) as.character(col)[1], character(1))
+        value = vapply(value, function(col) {
+          non_na <- col[!is.na(col)]
+          if (length(non_na) > 0) as.character(non_na[1]) else NA_character_
+        }, character(1))
       )
       out <- dplyr::bind_rows(out, df_fields)
     } else {
@@ -774,13 +777,23 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
   all <- tibble::tibble()
   for (i in query) {
     result <- lapply(names(response[[i]]), function(x) {
+      tryCatch(
       process_element(
         res = response[[i]],
         element = x
+        ),
+        error = function(e) {
+          tibble::tibble(resource = resource, query = i, field = x)
+        }
       )
     }) |> dplyr::bind_rows()
     result$query <- i
-    result <- result |> dplyr::relocate(query, .after = parent)
+    result <- try(result |> dplyr::relocate(query, .after = .data$parent))
+    if (inherits(result, "try-error")) {
+      print(query)
+      print(resource)
+      stop()
+    }
     all <- dplyr::bind_rows(all, result)
   }
   all <- all |>
@@ -800,6 +813,14 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
     ) |>
     dplyr::arrange(order_index) |>
     dplyr::select(-parent_row, -order_index)
+
+  if ("value" %in% names(all)) {
+    na_fields <- all$field[is.na(all$value) & all$class != "tbl_df"]
+    if (length(na_fields) > 0) {
+      msg <- paste0("Found resource with NA values, add more examples: ", resource, "; ", paste(na_fields, collapse = ", "))
+      print(msg)
+    }
+  }
   return(all)
 }
 
