@@ -111,7 +111,8 @@ chembl_query("1", resource = "organism")
 # Resource: protein_classification - requires protein class ID
 chembl_query("1", resource = "protein_classification")
 # Resource: similarity - requires SMILES
-chembl_query("CC(=O)Oc1ccccc1C(=O)O/70", resource = "similarity")
+# By default, the function will use 70 as similarity threshold
+chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
 # Resource: source - requires source ID
 chembl_query("1", resource = "source")
 # Resource: substructure - requires SMILES

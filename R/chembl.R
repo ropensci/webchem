@@ -273,7 +273,8 @@ chembl_files <- function(version = "latest") {
 #' # Resource: protein_classification - requires protein class ID
 #' chembl_query("1", resource = "protein_classification")
 #' # Resource: similarity - requires SMILES
-#' chembl_query("CC(=O)Oc1ccccc1C(=O)O/70", resource = "similarity")
+#' # By default, the function will use 70 as similarity threshold
+#' chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
 #' # Resource: source - requires source ID
 #' chembl_query("1", resource = "source")
 #' # Resource: substructure - requires SMILES
@@ -651,7 +652,7 @@ format_chembl <- function(cont) {
   flatten_entity <- function(entity) {
     for (nm in df_names) {
       if (nm %in% names(entity)) {
-        entity[[nm]] <- dplyr::bind_rows(entity[[nm]])
+          entity[[nm]] <- dplyr::bind_rows(entity[[nm]])
       }
     }
     for (nm in flat_names) {

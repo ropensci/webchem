@@ -91,7 +91,7 @@ test_that("chembl_query() examples", {
   # Resource: protein_classification - requires protein class ID
   o22 <- chembl_query("1", resource = "protein_classification")
   # Resource: similarity - requires SMILES
-  o23 <- chembl_query("CC(=O)Oc1ccccc1C(=O)O/70", resource = "similarity")
+  o23 <- chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
   # Resource: source - requires source ID
   o24 <- chembl_query("1", resource = "source")
   # Resource: substructure - requires SMILES
