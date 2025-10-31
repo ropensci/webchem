@@ -7,6 +7,7 @@
 chembl_query(
   query,
   resource = "molecule",
+  tidy = TRUE,
   cache_file = NULL,
   similarity = 70,
   verbose = getOption("verbose"),
@@ -18,6 +19,8 @@ chembl_query(
 
 \item{resource}{character; the ChEMBL resource to query. Use
 [chembl_resources()] to see all available resources.}
+
+\item{tidy}{logical; attempt to convert output to a simpler structure.}
 
 \item{cache_file}{character; the name of the cache file without the file
 extension. If \code{NULL}, results are not cached.}

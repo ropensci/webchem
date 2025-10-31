@@ -191,6 +191,7 @@ chembl_files <- function(version = "latest") {
 #' @param query character; a vector of ChEMBL IDs.
 #' @param resource character; the ChEMBL resource to query. Use
 #' [chembl_resources()] to see all available resources.
+#' @param tidy logical; attempt to convert output to a simpler structure.
 #' @param cache_file character; the name of the cache file without the file
 #' extension. If \code{NULL}, results are not cached.
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -294,6 +295,7 @@ chembl_files <- function(version = "latest") {
 #' @export
 chembl_query <- function(query,
                          resource = "molecule",
+                         tidy = TRUE,
                          cache_file = NULL,
                          similarity = 70,
                          verbose = getOption("verbose"),
@@ -344,7 +346,9 @@ chembl_query <- function(query,
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
+    if (tidy) {
     cont <- format_chembl(cont)
+    }
     return(cont)
   }
   if (is.null(cache_file)) {
