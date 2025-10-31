@@ -651,8 +651,12 @@ format_chembl <- function(cont) {
   # Helper to flatten a single entity
   flatten_entity <- function(entity) {
     for (nm in df_names) {
+      # e.g. activity is sometimes a list sometimes a character string
+      # only flatten if it is a list to prevent error.
       if (nm %in% names(entity)) {
+        if (inherits(entity[[nm]], "list")) {
           entity[[nm]] <- dplyr::bind_rows(entity[[nm]])
+        }
       }
     }
     for (nm in flat_names) {
