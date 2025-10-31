@@ -8,6 +8,7 @@ chembl_query(
   query,
   resource = "molecule",
   cache_file = NULL,
+  similarity = 70,
   verbose = getOption("verbose"),
   test_service_down = FALSE
 )
@@ -20,6 +21,8 @@ chembl_query(
 
 \item{cache_file}{character; the name of the cache file without the file
 extension. If \code{NULL}, results are not cached.}
+
+\item{similarity}{numeric; similarity threshold for similarity searches.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
@@ -108,7 +111,8 @@ chembl_query("1", resource = "organism")
 # Resource: protein_classification - requires protein class ID
 chembl_query("1", resource = "protein_classification")
 # Resource: similarity - requires SMILES
-chembl_query("CC(=O)Oc1ccccc1C(=O)O/70", resource = "similarity")
+# By default, the function will use 70 as similarity threshold
+chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
 # Resource: source - requires source ID
 chembl_query("1", resource = "source")
 # Resource: substructure - requires SMILES
