@@ -2,9 +2,15 @@
 
 ## NEW FEATURES
 
-* `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds
+* Added a new function `chembl_status()` which returns status information about the ChEMBL webservice.
+* `chembl_query()` now works with the "similarity" resource as well.
+* `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds.
 * Added a new function `chembl_img()` for downloading SVG images from ChEMBL.
 * Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
+
+## MINOR IMPROVEMENTS
+
+* `chembl_query()` now returns a named list and uses better formatting for nested output.
 
 # webchem 1.3.1
 
