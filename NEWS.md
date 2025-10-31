@@ -11,6 +11,11 @@
 ## MINOR IMPROVEMENTS
 
 * `chembl_query()` now returns a named list and uses better formatting for nested output.
+* Added new argument `tidy = TRUE` to `chembl_query()` so we can now control whether we want to try to convert the output to a flat format.
+
+## BUG FIXES
+
+* `chembl_query()` did not work with the "compound_structural_alerts" resource. This has been fixed.
 
 # webchem 1.3.1
 
