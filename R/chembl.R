@@ -716,7 +716,7 @@ validate_chembl_version <- function(version = "latest") {
 #' get_chembl_str("molecule")
 #' }
 #' @noRd
-get_chembl_api_schema <- function(resource, verbose = getOption("verbose")) {
+get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
   # validate resource and get example query
   query <- chembl_example_query(resource)
   response <- chembl_query(query, resource = resource, verbose = verbose)[[1]]
