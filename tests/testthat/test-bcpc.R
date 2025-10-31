@@ -25,11 +25,11 @@ test_that("BCPC pesticide compendium, name", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
 
-  comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA)
+  comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA, "Triclopyr-butotyl")
   o1 <- bcpc_query(comps, from = "name")
 
   expect_type(o1, "list")
-  expect_equal(length(o1), 4)
+  expect_equal(length(o1), 5)
   expect_type(o1[[1]], "list")
   expect_type(o1[[2]], "list")
   expect_equal(o1[[3]], NA)
@@ -38,6 +38,7 @@ test_that("BCPC pesticide compendium, name", {
   expect_equal(length(o1[["S-Metolachlor"]]$inchikey), 2)
   expect_equal(length(o1[["S-Metolachlor"]]$inchi), 2)
   expect_equal(length(o1[["Fluazinam"]]), 11)
+  expect_equal(length(o1[["Triclopyr-butotyl"]]), 11)
 })
 
 

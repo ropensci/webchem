@@ -2,6 +2,7 @@
 
 ## NEW FEATURES
 
+* `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds
 * Added a new function `chembl_img()` for downloading SVG images from ChEMBL.
 * Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
 

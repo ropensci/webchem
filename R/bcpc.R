@@ -5,12 +5,12 @@
 #' formerly known as Alan Woods Compendium of Pesticide Common Names
 #' @import xml2
 #'
-#' @param  query character; search string
+#' @param query character; search string
 #' @param from character; type of input ('cas' or 'name')
 #' @param verbose logical; print message during processing to console?
 #' @param ... additional arguments to internal utility functions
 #' @param type deprecated
-#' @return A list of eight entries: common-name, status, preferred IUPAC Name,
+#' @return A list of eleven entries: common-name, status, preferred IUPAC Name,
 #' IUPAC Name, cas, formula, activity, subactivity, inchikey, inchi and source
 #' url.
 #' @note for from = 'cas' only the first matched link is returned.
@@ -196,6 +196,7 @@ build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) 
     if (verbose) message("Building index. ", appendLF = FALSE)
     idx1_url <- "https://pesticidecompendium.bcpc.org/index_rn.html"
     idx4_url <- "https://pesticidecompendium.bcpc.org/index_cn.html"
+    idxd_url <- "https://pesticidecompendium.bcpc.org/derivatives/index-derivatives.html"
     res1 <- try(httr::RETRY("GET",
                            idx1_url,
                            httr::user_agent(webchem_url()),
@@ -225,10 +226,10 @@ build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) 
                              config = httr::config(accept_encoding = "identity"),
                              terminate_on = 404,
                              quiet = TRUE), silent= TRUE)
-    if (inherits(res4, "try-error")) {
-      if (verbose) webchem_message("service_down")
-      return(NA)
-    }
+      if (inherits(res4, "try-error")) {
+        if (verbose) webchem_message("service_down")
+        return(NA)
+      }
       idx4 <- read_html(res4)
       n <- xml_find_all(idx4, "//a")
       names <- xml_text(n)
@@ -238,7 +239,23 @@ build_bcpc_idx <- function(verbose = getOption("verbose"), force_build = FALSE) 
       links <- links[!rm]
       idx4 <- data.frame(names = NA, links = links, linknames = names,
                          source = "cn", stringsAsFactors = FALSE)
-      bcpc_idx <- rbind(bcpc_idx, idx4)
+      resd <- try(httr::RETRY("GET",
+                             idxd_url,
+                             httr::user_agent(webchem_url()),
+                             config = httr::config(accept_encoding = "identity"),
+                             terminate_on = 404,
+                             quiet = TRUE), silent= TRUE)
+      idxd <- read_html(resd)
+      n <- xml_find_all(idxd, "//a")
+      names <- xml_text(n)
+      rm <- names == "" | names == "Index of Ester and Salt Derivatives"
+      names <- names[!rm]
+      links <- xml_attr(n, "href")
+      links <- links[!rm]
+      idxd <- data.frame(names = NA, links = paste0("derivatives/", links), linknames = names,
+                         source = "cn", stringsAsFactors = FALSE)
+
+      bcpc_idx <- rbind(bcpc_idx, idx4, idxd)
 
       # fix encoding
       ln <- bcpc_idx$linknames
