@@ -734,6 +734,8 @@ validate_chembl_version <- function(version = "latest") {
 #'
 #' Query a ChEMBL resource with a representative example and convert the
 #' response into a structured table.
+#'
+#' @importFrom rlang .data
 #' @param resource character; the ChEMBL resource to query. Use
 #' [chembl_resources()] to see all available resources.
 #' @param verbose logical; should verbose messages be printed to the console?
@@ -802,10 +804,10 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
     all <- dplyr::bind_rows(all, result)
   }
   all <- all |>
-    dplyr::group_by(field, parent) |>
+    dplyr::group_by(.data$field, .data$parent) |>
     dplyr::filter(
-      if (any(!is.na(value))) {
-        dplyr::row_number() == which(!is.na(value))[1]
+      if (any(!is.na(.data$value))) {
+        dplyr::row_number() == which(!is.na(.data$value))[1]
       } else {
         dplyr::row_number() == 1
       }
@@ -813,11 +815,11 @@ get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
     dplyr::ungroup()
   all <- all |>
     dplyr::mutate(
-      parent_row = match(parent, field),
-      order_index = ifelse(is.na(parent_row), dplyr::row_number(), parent_row + 0.1)
+      parent_row = match(.data$parent, .data$field),
+      order_index = ifelse(is.na(.data$parent_row), dplyr::row_number(), .data$parent_row + 0.1)
     ) |>
-    dplyr::arrange(order_index) |>
-    dplyr::select(-parent_row, -order_index)
+    dplyr::arrange(.data$order_index) |>
+    dplyr::select(-.data$parent_row, -.data$order_index)
 
   if ("value" %in% names(all)) {
     na_fields <- all$field[is.na(all$value) & all$class != "tbl_df"]
