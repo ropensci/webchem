@@ -247,7 +247,8 @@ chembl_files <- function(version = "latest") {
 #' # Resource: compound_record - requires record ID
 #' chembl_query("1", resource = "compound_record")
 #' # Resource: compound_structural_alert - requires compound ChEMBL ID
-#' chembl_query("CHEMBL266429", resource = "compound_structural_alert")
+#' chembl_query(
+#'   "CHEMBL266429", resource = "compound_structural_alert", tidy = FALSE)
 #' # Resource: document - requires document ChEMBL ID
 #' chembl_query("CHEMBL1158643", resource = "document")
 #' # Resource: document_similarity - requires document 1 ChEMBL ID
