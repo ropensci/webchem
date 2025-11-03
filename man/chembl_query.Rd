@@ -7,6 +7,7 @@
 chembl_query(
   query,
   resource = "molecule",
+  tidy = TRUE,
   cache_file = NULL,
   similarity = 70,
   verbose = getOption("verbose"),
@@ -18,6 +19,8 @@ chembl_query(
 
 \item{resource}{character; the ChEMBL resource to query. Use
 [chembl_resources()] to see all available resources.}
+
+\item{tidy}{logical; attempt to convert output to a simpler structure.}
 
 \item{cache_file}{character; the name of the cache file without the file
 extension. If \code{NULL}, results are not cached.}
@@ -83,8 +86,8 @@ chembl_query("CHEMBL3307241", resource = "cell_line")
 chembl_query("CHEMBL1", resource = "chembl_id_lookup")
 # Resource: compound_record - requires record ID
 chembl_query("1", resource = "compound_record")
-# Resource: compound_structural_alert - requires compound structural alert ID
-chembl_query("79048021", resource = "compound_structural_alert")
+# Resource: compound_structural_alert - requires compound ChEMBL ID
+chembl_query("CHEMBL266429", resource = "compound_structural_alert")
 # Resource: document - requires document ChEMBL ID
 chembl_query("CHEMBL1158643", resource = "document")
 # Resource: document_similarity - requires document 1 ChEMBL ID
