@@ -2,49 +2,58 @@
 % Please edit documentation in R/chembl.R
 \name{chembl_query}
 \alias{chembl_query}
-\title{Query ChEMBL using ChEMBL IDs}
+\title{Query ChEMBL}
 \usage{
 chembl_query(
   query,
   resource = "molecule",
-  tidy = TRUE,
-  cache_file = NULL,
-  similarity = 70,
+  mode = "ws",
   verbose = getOption("verbose"),
-  test_service_down = FALSE
+  options = chembl_options(cache_file = NULL, similarity = 70, tidy = TRUE, version =
+    "latest"),
+  ...
 )
 }
 \arguments{
-\item{query}{character; a vector of ChEMBL IDs.}
+\item{query}{character; a vector of IDs. The type of ID depends on the
+resource. See examples for more information.}
 
 \item{resource}{character; the ChEMBL resource to query. Use
 [chembl_resources()] to see all available resources.}
 
-\item{tidy}{logical; attempt to convert output to a simpler structure.}
-
-\item{cache_file}{character; the name of the cache file without the file
-extension. If \code{NULL}, results are not cached.}
-
-\item{similarity}{numeric; similarity threshold for similarity searches.}
+\item{mode}{character; either "ws" (default) to use the webservice or
+"offline" to use a local ChEMBL database. Note, to use the "offline" mode,
+you need to have a local ChEMBL database. See [db_download_chembl()].}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{test_service_down}{logical; this argument is only used for testing.}
+\item{options}{function; returns a named list for resource- and mode-specific
+options. Supported entries:
+  - cache_file: character or NULL; name of the cache file (without extension)
+    used when mode = "ws". If NULL (default), results are not cached.
+  - similarity: numeric; similarity threshold for similarity searches
+    (default 70).
+  - tidy: logical; attempt to convert output to a simpler structure
+    (default TRUE).
+  - version: character; database version to use in "offline" mode (default
+    "latest").}
+
+\item{...}{additional arguments, only used for internal testing.}
 }
 \value{
 The function returns a list of lists, where each element of the list
-contains a list of respective query results. Results are simplified, if
-possible.
+contains a list of respective query results. If `tidy = TRUE` results are
+simplified, if possible.
 }
 \description{
-Retrieve ChEMBL data using a vector of ChEMBL IDs.
+Retrieve ChEMBL data using a vector of IDs.
 }
 \details{
 Each entry in ChEMBL has a unique ID. Data in ChEMBL is organized in
 databases called resources. An entry may or may not have a record in a
 particular resource. An entry may have a record in more than one resource,
 e.g. a compound may be present in both the "molecule" and the "drug"
-resource. This function queries a vector of ChEMBL IDs from a specific ChEMBL
+resource. This function queries a vector of IDs from a specific ChEMBL
 resource.
 
 If you are unsure which ChEMBL resource contains your ChEMBL ID,
@@ -52,12 +61,11 @@ use this function with the \code{"chembl_id_lookup"} resource to find the
 appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
 not a separate function but a resource used by \code{chembl_query}.
 
-If \code{cache_file} is not \code{NULL} the function creates a
-cache directory in the working directory and a cache file in the cache
-directory. This file is used in subsequent calls of the function. The
-function first tries to retrieve query results from the cache file and only
-accesses the webservice if the ChEMBL ID cannot be found in the cache file.
-The cache file is extended as new ChEMBL ID-s are queried during the session.
+If \code{mode = "ws"} and \code{options$cache_file} is not `NULL`
+the function creates a cache directory in the working directory and a cache
+file in the cache directory. This file is used in subsequent calls of the
+function. The cache file is extended as new ID-s are queried during the
+session.
 }
 \note{
 Links to the webservice documentation:
@@ -70,65 +78,103 @@ Links to the webservice documentation:
 \dontrun{
 # Might fail if API is not available
 
-# Resource: "activity" - requires activity ID
-chembl_query("31863", resource = "activity")
-# Resource: "assay" - requires assay ChEMBL ID
-chembl_query("CHEMBL615117", resource = "assay")
-# Resource: "atc_class" - requires ATC class ID
-chembl_query("A01AA01", resource = "atc_class")
-# Resource: binding_site - requires site ID
-chembl_query(2, resource = "binding_site")
-# Resource: biotherapeutic - requires ChEMBL ID
+# Examples with resources that operate on compounds
+
+# Resource: biotherapeutic - requires compound ChEMBL ID
 chembl_query("CHEMBL448105", resource = "biotherapeutic")
-# Resource: cell_line - requires ChEMBL ID
-chembl_query("CHEMBL3307241", resource = "cell_line")
-# Resource: chembl_id_lookup - requires ChEMBL ID
-chembl_query("CHEMBL1", resource = "chembl_id_lookup")
-# Resource: compound_record - requires record ID
-chembl_query("1", resource = "compound_record")
+
 # Resource: compound_structural_alert - requires compound ChEMBL ID
 chembl_query(
-  "CHEMBL266429", resource = "compound_structural_alert", tidy = FALSE)
-# Resource: document - requires document ChEMBL ID
-chembl_query("CHEMBL1158643", resource = "document")
-# Resource: document_similarity - requires document 1 ChEMBL ID
-chembl_query("CHEMBL1148466", resource = "document_similarity")
-# Resource: drug - requires ChEMBL ID
+  "CHEMBL266429",
+  resource = "compound_structural_alert",
+  options = chembl_options(tidy = FALSE)
+)
+
+# Resource: compound_record - requires compound record ID
+chembl_query("1", resource = "compound_record")
+
+# Resource: drug - requires compound ChEMBL ID
 chembl_query("CHEMBL2", resource = "drug")
-# Resource: drug_indication - requires drug indication ID
-chembl_query("22606", resource = "drug_indication")
-# Resource: drug_warning - requires warning ID
-chembl_query("1", resource = "drug_warning")
-# Resource: go_slim - requires GO ID
-chembl_query("GO:0000003", resource = "go_slim")
-# Resource: mechanism - requires mechanism ID
-chembl_query("13", resource = "mechanism")
-# Resource: metabolism - requires metabolism ID
-chembl_query("119", resource = "metabolism")
-# Resource: molecule - requires ChEMBL ID
+
+# Resource: molecule - requires compound ChEMBL ID
 chembl_query("CHEMBL1082", resource = "molecule")
 chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
-# Resource: molecule_form - requires ChEMBL ID
+
+# Resource: molecule_form - requires compound ChEMBL ID
 chembl_query("CHEMBL6329", resource = "molecule_form")
+
+# Resource: similarity - requires compound SMILES
+# By default, the function will use 70 as similarity threshold
+chembl_query(
+  "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity",
+  options = chembl_options(similarity = 70)
+)
+
+# Resource: substructure - requires compound SMILES
+chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+
+# Other Examples
+
+# Resource: "activity" - requires activity ID
+chembl_query("31863", resource = "activity")
+
+# Resource: "assay" - requires assay ChEMBL ID
+chembl_query("CHEMBL615117", resource = "assay")
+
+# Resource: "atc_class" - requires ATC class ID
+chembl_query("A01AA01", resource = "atc_class")
+
+# Resource: binding_site - requires site ID
+chembl_query(2, resource = "binding_site")
+
+# Resource: cell_line - requires ChEMBL ID
+chembl_query("CHEMBL3307241", resource = "cell_line")
+
+# Resource: chembl_id_lookup - requires ChEMBL ID
+chembl_query("CHEMBL1", resource = "chembl_id_lookup")
+
+# Resource: document - requires document ChEMBL ID
+chembl_query("CHEMBL1158643", resource = "document")
+
+# Resource: document_similarity - requires document 1 ChEMBL ID
+chembl_query("CHEMBL1148466", resource = "document_similarity")
+
+# Resource: drug_indication - requires drug indication ID
+chembl_query("22606", resource = "drug_indication")
+
+# Resource: drug_warning - requires warning ID
+chembl_query("1", resource = "drug_warning")
+
+# Resource: go_slim - requires GO ID
+chembl_query("GO:0000003", resource = "go_slim")
+
+# Resource: mechanism - requires mechanism ID
+chembl_query("13", resource = "mechanism")
+
+# Resource: metabolism - requires metabolism ID
+chembl_query("119", resource = "metabolism")
+
 # Resource: organism - requires organism class ID (not taxid)
 chembl_query("1", resource = "organism")
+
 # Resource: protein_classification - requires protein class ID
 chembl_query("1", resource = "protein_classification")
-# Resource: similarity - requires SMILES
-# By default, the function will use 70 as similarity threshold
-chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
+
 # Resource: source - requires source ID
 chembl_query("1", resource = "source")
-# Resource: substructure - requires SMILES
-chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+
 # Resource: target - requires target ChEMBL ID
 chembl_query("CHEMBL2074", resource = "target")
+
 # Resource: target_component - requires target component ID
 chembl_query("1", resource = "target_component")
+
 # Resource: target_relation - requires target ChEMBL ID
 chembl_query("CHEMBL2251", resource = "target_relation")
+
 # Resource: tissue - requires tissue ChEMBL ID
 chembl_query("CHEMBL3988026", resource = "tissue")
+
 # Resource: xref_source - requires the name of the resource
 chembl_query("AlphaFoldDB", resource = "xref_source")
 }

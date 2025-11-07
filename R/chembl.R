@@ -1,3 +1,29 @@
+#' Control options for ChEMBL queries
+#'
+#' Use this to group resource or mode specific options and pass them via the
+#' `options` argument to `chembl_query()`.
+#' @param cache_file character or NULL
+#' @param similarity numeric
+#' @param tidy logical
+#' @param version character
+#' @return A list with class 'chembl_options'.
+#' @noRd
+chembl_options <- function(
+  cache_file = NULL,
+  similarity = 70,
+  tidy = TRUE,
+  version = "latest"
+) {
+  options <- list(
+    cache_file = cache_file,
+    similarity = similarity,
+    tidy = tidy,
+    version = version
+  )
+  class(options) <- "chembl_options"
+  return(options)
+}
+
 #' Download ChEMBL database
 #'
 #' Download a version of the ChEMBL database for offline access.
@@ -185,37 +211,46 @@ chembl_files <- function(version = "latest") {
   return(out)
 }
 
-#' Query ChEMBL using ChEMBL IDs
+#' Query ChEMBL
 #'
-#' Retrieve ChEMBL data using a vector of ChEMBL IDs.
-#' @param query character; a vector of ChEMBL IDs.
+#' Retrieve ChEMBL data using a vector of IDs.
+#' @param query character; a vector of IDs. The type of ID depends on the
+#' resource. See examples for more information.
 #' @param resource character; the ChEMBL resource to query. Use
 #' [chembl_resources()] to see all available resources.
-#' @param tidy logical; attempt to convert output to a simpler structure.
-#' @param cache_file character; the name of the cache file without the file
-#' extension. If \code{NULL}, results are not cached.
+#' @param mode character; either "ws" (default) to use the webservice or
+#' "offline" to use a local ChEMBL database. Note, to use the "offline" mode,
+#' you need to have a local ChEMBL database. See [db_download_chembl()].
+#' @param options function; returns a named list for resource- and mode-specific
+#' options. Supported entries:
+#'   - cache_file: character or NULL; name of the cache file (without extension)
+#'     used when mode = "ws". If NULL (default), results are not cached.
+#'   - similarity: numeric; similarity threshold for similarity searches
+#'     (default 70).
+#'   - tidy: logical; attempt to convert output to a simpler structure
+#'     (default TRUE).
+#'   - version: character; database version to use in "offline" mode (default
+#'     "latest").
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param similarity numeric; similarity threshold for similarity searches.
-#' @param test_service_down logical; this argument is only used for testing.
+#' @param ... additional arguments, only used for internal testing.
 #' @return The function returns a list of lists, where each element of the list
-#' contains a list of respective query results. Results are simplified, if
-#' possible.
+#' contains a list of respective query results. If `tidy = TRUE` results are
+#' simplified, if possible.
 #' @details Each entry in ChEMBL has a unique ID. Data in ChEMBL is organized in
 #' databases called resources. An entry may or may not have a record in a
 #' particular resource. An entry may have a record in more than one resource,
 #' e.g. a compound may be present in both the "molecule" and the "drug"
-#' resource. This function queries a vector of ChEMBL IDs from a specific ChEMBL
+#' resource. This function queries a vector of IDs from a specific ChEMBL
 #' resource.
 #' @details If you are unsure which ChEMBL resource contains your ChEMBL ID,
 #' use this function with the \code{"chembl_id_lookup"} resource to find the
 #' appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
 #' not a separate function but a resource used by \code{chembl_query}.
-#' @details If \code{cache_file} is not \code{NULL} the function creates a
-#' cache directory in the working directory and a cache file in the cache
-#' directory. This file is used in subsequent calls of the function. The
-#' function first tries to retrieve query results from the cache file and only
-#' accesses the webservice if the ChEMBL ID cannot be found in the cache file.
-#' The cache file is extended as new ChEMBL ID-s are queried during the session.
+#' @details If \code{mode = "ws"} and \code{options$cache_file} is not `NULL`
+#' the function creates a cache directory in the working directory and a cache
+#' file in the cache directory. This file is used in subsequent calls of the
+#' function. The cache file is extended as new ID-s are queried during the
+#' session.
 #' @note
 #' Links to the webservice documentation:
 #' \itemize{
@@ -230,77 +265,121 @@ chembl_files <- function(version = "latest") {
 #' \dontrun{
 #' # Might fail if API is not available
 #'
-#' # Resource: "activity" - requires activity ID
-#' chembl_query("31863", resource = "activity")
-#' # Resource: "assay" - requires assay ChEMBL ID
-#' chembl_query("CHEMBL615117", resource = "assay")
-#' # Resource: "atc_class" - requires ATC class ID
-#' chembl_query("A01AA01", resource = "atc_class")
-#' # Resource: binding_site - requires site ID
-#' chembl_query(2, resource = "binding_site")
-#' # Resource: biotherapeutic - requires ChEMBL ID
+#' # Examples with resources that operate on compounds
+#'
+#' # Resource: biotherapeutic - requires compound ChEMBL ID
 #' chembl_query("CHEMBL448105", resource = "biotherapeutic")
-#' # Resource: cell_line - requires ChEMBL ID
-#' chembl_query("CHEMBL3307241", resource = "cell_line")
-#' # Resource: chembl_id_lookup - requires ChEMBL ID
-#' chembl_query("CHEMBL1", resource = "chembl_id_lookup")
-#' # Resource: compound_record - requires record ID
-#' chembl_query("1", resource = "compound_record")
+#'
 #' # Resource: compound_structural_alert - requires compound ChEMBL ID
 #' chembl_query(
-#'   "CHEMBL266429", resource = "compound_structural_alert", tidy = FALSE)
-#' # Resource: document - requires document ChEMBL ID
-#' chembl_query("CHEMBL1158643", resource = "document")
-#' # Resource: document_similarity - requires document 1 ChEMBL ID
-#' chembl_query("CHEMBL1148466", resource = "document_similarity")
-#' # Resource: drug - requires ChEMBL ID
+#'   "CHEMBL266429",
+#'   resource = "compound_structural_alert",
+#'   options = chembl_options(tidy = FALSE)
+#' )
+#'
+#' # Resource: compound_record - requires compound record ID
+#' chembl_query("1", resource = "compound_record")
+#'
+#' # Resource: drug - requires compound ChEMBL ID
 #' chembl_query("CHEMBL2", resource = "drug")
-#' # Resource: drug_indication - requires drug indication ID
-#' chembl_query("22606", resource = "drug_indication")
-#' # Resource: drug_warning - requires warning ID
-#' chembl_query("1", resource = "drug_warning")
-#' # Resource: go_slim - requires GO ID
-#' chembl_query("GO:0000003", resource = "go_slim")
-#' # Resource: mechanism - requires mechanism ID
-#' chembl_query("13", resource = "mechanism")
-#' # Resource: metabolism - requires metabolism ID
-#' chembl_query("119", resource = "metabolism")
-#' # Resource: molecule - requires ChEMBL ID
+#'
+#' # Resource: molecule - requires compound ChEMBL ID
 #' chembl_query("CHEMBL1082", resource = "molecule")
 #' chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
-#' # Resource: molecule_form - requires ChEMBL ID
+#'
+#' # Resource: molecule_form - requires compound ChEMBL ID
 #' chembl_query("CHEMBL6329", resource = "molecule_form")
+#'
+#' # Resource: similarity - requires compound SMILES
+#' # By default, the function will use 70 as similarity threshold
+#' chembl_query(
+#'   "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity",
+#'   options = chembl_options(similarity = 70)
+#' )
+#'
+#' # Resource: substructure - requires compound SMILES
+#' chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+#'
+#' # Other Examples
+#'
+#' # Resource: "activity" - requires activity ID
+#' chembl_query("31863", resource = "activity")
+#'
+#' # Resource: "assay" - requires assay ChEMBL ID
+#' chembl_query("CHEMBL615117", resource = "assay")
+#'
+#' # Resource: "atc_class" - requires ATC class ID
+#' chembl_query("A01AA01", resource = "atc_class")
+#'
+#' # Resource: binding_site - requires site ID
+#' chembl_query(2, resource = "binding_site")
+#'
+#' # Resource: cell_line - requires ChEMBL ID
+#' chembl_query("CHEMBL3307241", resource = "cell_line")
+#'
+#' # Resource: chembl_id_lookup - requires ChEMBL ID
+#' chembl_query("CHEMBL1", resource = "chembl_id_lookup")
+#'
+#' # Resource: document - requires document ChEMBL ID
+#' chembl_query("CHEMBL1158643", resource = "document")
+#'
+#' # Resource: document_similarity - requires document 1 ChEMBL ID
+#' chembl_query("CHEMBL1148466", resource = "document_similarity")
+#'
+#' # Resource: drug_indication - requires drug indication ID
+#' chembl_query("22606", resource = "drug_indication")
+#'
+#' # Resource: drug_warning - requires warning ID
+#' chembl_query("1", resource = "drug_warning")
+#'
+#' # Resource: go_slim - requires GO ID
+#' chembl_query("GO:0000003", resource = "go_slim")
+#'
+#' # Resource: mechanism - requires mechanism ID
+#' chembl_query("13", resource = "mechanism")
+#'
+#' # Resource: metabolism - requires metabolism ID
+#' chembl_query("119", resource = "metabolism")
+#'
 #' # Resource: organism - requires organism class ID (not taxid)
 #' chembl_query("1", resource = "organism")
+#'
 #' # Resource: protein_classification - requires protein class ID
 #' chembl_query("1", resource = "protein_classification")
-#' # Resource: similarity - requires SMILES
-#' # By default, the function will use 70 as similarity threshold
-#' chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
+#'
 #' # Resource: source - requires source ID
 #' chembl_query("1", resource = "source")
-#' # Resource: substructure - requires SMILES
-#' chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+#'
 #' # Resource: target - requires target ChEMBL ID
 #' chembl_query("CHEMBL2074", resource = "target")
+#'
 #' # Resource: target_component - requires target component ID
 #' chembl_query("1", resource = "target_component")
+#'
 #' # Resource: target_relation - requires target ChEMBL ID
 #' chembl_query("CHEMBL2251", resource = "target_relation")
+#'
 #' # Resource: tissue - requires tissue ChEMBL ID
 #' chembl_query("CHEMBL3988026", resource = "tissue")
+#'
 #' # Resource: xref_source - requires the name of the resource
 #' chembl_query("AlphaFoldDB", resource = "xref_source")
 #' }
-#' @importFrom httr RETRY message_for_status content
+
 #' @export
-chembl_query <- function(query,
-                         resource = "molecule",
-                         tidy = TRUE,
-                         cache_file = NULL,
-                         similarity = 70,
-                         verbose = getOption("verbose"),
-                         test_service_down = FALSE) {
+chembl_query <- function(
+  query,
+  resource = "molecule",
+  mode = "ws",
+  verbose = getOption("verbose"),
+  options = chembl_options(
+    cache_file = NULL,
+    similarity = 70,
+    tidy = TRUE,
+    version = "latest"
+  ),
+  ...
+  ) {
   resource <- match.arg(resource, chembl_resources())
   if (resource == "image") {
     stop("To download images, please use chembl_img().")
@@ -308,10 +387,49 @@ chembl_query <- function(query,
   if (resource == "status") {
     stop("To retrieve webservise status, please use chembl_status().")
   }
+  mode <- match.arg(mode, choices = c("ws", "offline"))
+  if (mode == "ws") {
+    chembl_query_ws(
+      query = query,
+      resource = resource,
+      verbose = verbose,
+      cache_file = options$cache_file,
+      similarity = options$similarity,
+      tidy = options$tidy,
+      ...
+    )
+  } else {
+    chembl_query_offline(
+      query = query,
+      resource = resource,
+      verbose = verbose,
+      similarity = options$similarity,
+      version = options$version
+    )
+  }
+}
+
+#' Query ChEMBL using the webservice
+#' @importFrom httr RETRY message_for_status content
+#' @examples
+#' \dontrun{
+#' chembl_query_ws(query = "CHEMBL1082", resource = "molecule")
+#' }
+#' @noRd
+chembl_query_ws <- function(
+  query,
+  resource = "molecule",
+  verbose = getOption("verbose"),
+  cache_file = NULL,
+  similarity = 70,
+  tidy = TRUE,
+  ...
+  ) {
   if (resource == "similarity") {
     warning("Similarity search currently returns no more than 20 results.")
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
+  opts <- list(...)
   foo <- function(query, verbose, similarity) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
@@ -320,7 +438,7 @@ chembl_query <- function(query,
     query <- chembl_validate_query(query, resource, verbose)
     if (is.na(query)) return(NA)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    if (test_service_down) {
+    if (isTRUE(opts$test_service_down)) {
       url <- ""
     } else if (resource == "similarity") {
       url <- paste0(stem, "/", resource, "/", query, "/", similarity, ".json")
@@ -390,7 +508,7 @@ chembl_query <- function(query,
 #' directory does not exist, it will be created. If `NULL` (default), the
 #' working directory will be used.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @param test_service_down logical; for internal testing only.
+#' @param ... additional arguments, only used for internal testing.
 #' @return Creates the download directory if needed and downloads one or more
 #' SVG files.
 #' @examples
@@ -407,16 +525,17 @@ chembl_img <- function(
   query,
   dir = NULL,
   verbose = getOption("verbose"),
-  test_service_down = FALSE
+  ...
   ) {
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
+  opts <- list(...)
   foo <- function(query, verbose) {
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     query <- chembl_validate_query(query, "image", verbose)
     if (is.na(query)) return(NA)
     webchem_sleep(type = "API")
     url <- ifelse(
-      test_service_down,
+      isTRUE(opts$test_service_down),
       "",
       paste0(stem, "/image/", query)
     )
@@ -455,13 +574,15 @@ chembl_img <- function(
 #' Retrieve status information about the ChEMBL webservice: database version,
 #' release date, status, and count data for various entities.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @param test_service_down logical; for internal testing only.
+#' @param ... additional arguments, only used for internal testing.
 #' @export
-chembl_status <- function(
-    verbose = getOption("verbose"),
-    test_service_down = FALSE) {
-  url <- ifelse(test_service_down, "",
-    "https://www.ebi.ac.uk/chembl/api/data/status")
+chembl_status <- function(verbose = getOption("verbose"), ...) {
+  opts <- list(...)
+  url <- ifelse(
+    isTRUE(opts$test_service_down),
+    "",
+    "https://www.ebi.ac.uk/chembl/api/data/status"
+  )
   webchem_sleep(type = "API")
   if (verbose) message("Querying ChEMBL status. ", appendLF = FALSE)
   res <- try(httr::RETRY("GET",
@@ -532,7 +653,7 @@ chembl_validate_query <- function(query, resource, verbose) {
 #' Retrieve all available classes within the Anatomical Therapeutic Chemical
 #' (ATC) classification system.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param test_service_down logical; this argument is only used for testing.
+#' @param ... additional arguments, only used for internal testing.
 #' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
 #' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
 #' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
@@ -547,15 +668,18 @@ chembl_validate_query <- function(query, resource, verbose) {
 #' @importFrom tibble tibble as_tibble
 #' @importFrom dplyr bind_rows
 #' @export
-chembl_atc_classes <- function(verbose = getOption("verbose"),
-                               test_service_down = FALSE) {
+chembl_atc_classes <- function(verbose = getOption("verbose"), ...) {
   i = 0
   next_page <- "/chembl/api/data/atc_class.json?limit=1000&offset=0"
   atc_classes <- tibble::tibble()
+  opts <- list(...)
   while (!is.null(next_page)) {
     i = i + 1
     url <- ifelse(
-      test_service_down, "", paste0("https://www.ebi.ac.uk", next_page))
+      isTRUE(opts$test_service_down),
+      "",
+      paste0("https://www.ebi.ac.uk", next_page)
+    )
     webchem_sleep(type = "API")
     if (verbose) webchem_message("query", paste0("Page ", i), appendLF = FALSE)
     res <- try(httr::RETRY("GET",
@@ -607,6 +731,38 @@ chembl_resources <- function() {
     "target_relation", "tissue", "xref_source"
   )
   return(resources)
+}
+
+#' Connect local ChEMBL database
+#'
+#' @importFrom rlang .data
+#' @param version character; version of the database. Either "latest" (default)
+#' or a specific version number, e.g. "30".
+#' @param ... Further args passed on to [DBI::dbConnect()]
+#' @return an object of class "SQLiteConnection".
+#' @examples
+#' \dontrun{
+#'   con <- connect_chembl(version = "latest")
+#' }
+#' @noRd
+connect_chembl <- function(version = "latest", ...) {
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  dir_path <- file.path(
+    wc_cache$cache_path_get(),
+    "chembl",
+    paste0("chembl_", version$version_path)
+  ) |> path.expand()
+  file_path <- chembl_files(version = version) |>
+    dplyr::filter(.data$type == "sqlite") |>
+    dplyr::pull(file)
+  full_path <- file.path(dir_path, file_path)
+  if (!file.exists(full_path)) {
+    stop("Database not found. Use db_download_chembl() to download the database.")
+  }
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = full_path, ...)
+  return(con)
 }
 
 #' Format ChEMBL results

@@ -29,6 +29,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     curl,
+    DBI,
     digest,
     hoardr,
     xml2,
@@ -40,6 +41,7 @@ Imports:
     dplyr,
     purrr,
     data.tree,
+    RSQLite,
     tibble,
     base64enc,
     rlang,
