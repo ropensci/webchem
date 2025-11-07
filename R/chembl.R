@@ -1,3 +1,32 @@
+#' Control options for ChEMBL queries
+#'
+#' Use this to group resource or mode specific options and pass them via the
+#' `options` argument to `chembl_query()`.
+#' @param cache_file character or NULL
+#' @param similarity numeric
+#' @param test_service_down logical
+#' @param tidy logical
+#' @param version character
+#' @return A list with class 'chembl_options'.
+#' @noRd
+chembl_options <- function(
+  cache_file = NULL,
+  similarity = 70,
+  test_service_down = FALSE,
+  tidy = TRUE,
+  version = "latest"
+) {
+  options <- list(
+    cache_file = cache_file,
+    similarity = similarity,
+    test_service_down = test_service_down,
+    tidy = tidy,
+    version = version
+  )
+  class(options) <- "chembl_options"
+  return(options)
+}
+
 #' Download ChEMBL database
 #'
 #' Download a version of the ChEMBL database for offline access.
