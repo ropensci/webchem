@@ -286,3 +286,180 @@ chembl_offline_schema <- function(version = "latest") {
   }, x = out$table, y = out$field)
   return(out)
 }
+
+
+#' Compare results from the ChEMBL webservice and offline database.
+#'
+#' Query the ChEMBL webservice and offline database for a given resource using
+#' an example query, to compare their results. List differences.
+#'
+#' @param resource character; ChEMBL resource to query.
+#' @param version character; version of the ChEMBL database.
+#' @param verbose logical; print verbose messages to the console?
+#' @noRd
+chembl_compare_service <- function(
+  resource,
+  version = "latest",
+  verbose = getOption("verbose")
+  ) {
+  # validate resource and get example query
+  query <- chembl_example_query(resource)
+  # Query the webservice
+  ws_result <- tryCatch(
+    chembl_query(
+      query = query,
+      resource = resource,
+      verbose = verbose
+    )[[1]],
+    error = function(e) NA
+  )
+  # Query the offline database
+  offline_result <- tryCatch(
+    chembl_query_offline(
+      query = query,
+      resource = resource,
+      version = version,
+      verbose = verbose
+    )[[1]],
+    error = function(e) NA
+  )
+
+  out <- compare_service_lists(x = ws_result, y = offline_result)
+
+  return(out)
+}
+
+#' Compare Two Service Result Lists
+#'
+#' Compares two lists (typically from a webservice and an offline source) to 
+#' check for differences in their structure and content. The function checks for 
+#' missing or failed queries, ensures both inputs are lists, compares the names 
+#' and order of elements, and checks for differences in atomic elements and 
+#' data frames within the lists.
+#' @param ws list; result from a webservice query.
+#' @param offline list; result from an offline query.
+#' @return A list with the comparison status and any unique elements found in 
+#' either input.
+#' @nord
+compare_service_lists <- function(ws, offline) {
+  if (all(is.na(c(ws, offline)))) {
+    return(list(
+      status = "both failed",
+      ws_unique_element = character(),
+      offline_unique_element = character()
+    ))
+  }
+  if (is.na(ws) && !is.na(offline)) stop("Webservice query failed.")
+  if (!is.na(ws) && is.na(offline)) stop("Offline query failed.")
+  if (!inherits(ws, "list")) stop("Webservice result is not a list.")
+  if (!inherits(offline, "list")) stop("Offline result is not a list.")
+  ws_unique_element <- setdiff(names(ws), names(offline))
+  offline_unique_element <- setdiff(names(offline), names(ws))
+  common_names <- intersect(names(ws), names(offline))
+  ws_common_order <- names(ws)[names(ws) %in% common_names]
+  offline_common_order <- names(offline)[names(offline) %in% common_names]
+  if (!identical(ws_common_order, offline_common_order)) {
+    stop(sprintf(
+      "Names of common elements are not in the same order:\n  x: %s\n  y: %s",
+      paste(x_common_order, collapse = ", "),
+      paste(y_common_order, collapse = ", ")
+    ))
+  }
+  for (n in names(common_names)) {
+    ws_elem <- ws[[n]]
+    off_elem <- offline[[n]]
+    if (!identical(class(ws_elem), class(off_elem))) {
+      stop(sprintf(
+        "Element '%s' has different classes: webservice = %s, offline = %s.",
+        n,
+        paste(class(ws_elem), collapse = ", "),
+        paste(class(off_elem), collapse = ", ")
+      ))
+    }
+    if (is.atomic(ws_elem)) {
+      if (!identical(ws_elem, off_elem)) {
+        stop(sprintf(
+          "Atomic element '%s' differs between webservice and offline.\n",
+          "Webservice value: %s\nOffline value: %s",
+          n,
+          paste0(capture.output(print(ws_elem)), collapse = "\n"),
+          paste0(capture.output(print(off_elem)), collapse = "\n")
+        ))
+      }
+    } else if (is.data.frame(ws_elem)) {
+      element_comparison <- compare_atomic_lists(ws_elem, off_elem)
+      if (length(element_comparison$unique_to_x) > 0) {
+        ws_unique_element = c(ws_unique_element, paste0(
+          n, "$", element_comparison$unique_to_x
+        ))
+      }
+      if (length(element_comparison$unique_to_y) > 0) {
+        offline_unique_element = c(offline_unique_element, paste0(
+          n, "$", element_comparison$unique_to_y
+        ))
+      }
+    } else {
+      stop(sprintf("Element '%s' should be either atomic or a data frame.", n))
+    }
+    return(list(
+      status = "OK",
+      ws_extra = ws_unique_element,
+      offline_extra = offline_unique_element
+    ))
+  }
+}
+
+#' Compare Two Named Lists of Atomic Elements
+#'
+#' Compares two named lists (`x` and `y`) containing atomic elements. The 
+#' function checks for elements unique to each list (by name);  common elements 
+#' with the same names, ensuring their order matches; whether all common 
+#' elements are atomic and identical. If the names of common elements are not 
+#' in the same order, or if any common element is not atomic or differs between 
+#' the lists, the function throws an error.
+#'
+#' @param x list; a named list of atomic elements.
+#' @param y list; a named list of atomic elements.
+#' @return A list with two components:
+#'   \itemize{
+#'     \item{unique_to_x}{Names present only in \code{x}.}
+#'     \item{unique_to_y}{Names present only in \code{y}.}
+#'   }
+#' @examples
+#' x <- list(a = 1, b = 2, c = 3)
+#' y <- list(a = 1, b = 2, d = 4)
+#' compare_atomic_lists(x, y)
+#' @noRd
+compare_atomic_lists <- function(x, y) {
+  unique_a <- setdiff(names(x), names(y))
+  unique_b <- setdiff(names(y), names(x))
+  common_names <- intersect(names(x), names(y))
+  x_common_order <- names(x)[names(x) %in% common_names]
+  y_common_order <- names(y)[names(y) %in% common_names]
+  if (!identical(x_common_order, y_common_order)) {
+    stop(sprintf(
+      "Names of common elements are not in the same order:\n  x: %s\n  y: %s",
+      paste(x_common_order, collapse = ", "),
+      paste(y_common_order, collapse = ", ")
+    ))
+  }
+  for (n in common_names) {
+    elem_a <- x[[n]]
+    elem_b <- y[[n]]
+    if (!is.atomic(elem_a) || !is.atomic(elem_b)) {
+      stop(sprintf("Element '%s' is not atomic in one or both lists.", n))
+    }
+    if (!identical(elem_a, elem_b)) {
+      stop(sprintf(
+        "Element '%s' differs between lists.\nx: %s\ny: %s",
+        n,
+        paste0(capture.output(print(elem_a)), collapse = "\n"),
+        paste0(capture.output(print(elem_b)), collapse = "\n")
+      ))
+    }
+  }
+  return(list(
+    unique_to_x = unique_a,
+    unique_to_y = unique_b
+  ))
+}
