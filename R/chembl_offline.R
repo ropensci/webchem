@@ -570,6 +570,7 @@ chembl_offline_molecule <- function(
     names(out)[i] <- query[i]
     out[[i]] <- out[[i]][sort(names(out[[i]]))]
   }
+  DBI::dbDisconnect(con)
   return(out)
 }
 
