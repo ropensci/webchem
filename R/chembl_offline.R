@@ -25,6 +25,73 @@ chembl_query_offline <- function(
   ))
 }
 
+#' Replicate ChEMBL API activity resource using a local ChEMBL database
+#'
+#' @param query character; Activity ID of the molecule to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_activity("31863")
+#' }
+#' #' @noRd
+chembl_offline_activity <- function(
+    query,
+    version = "latest",
+    verbose = getOption("verbose")) {
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  # connect to local database
+  con <- connect_chembl(version = version)
+  activities <- tbl(con, "activities") |>
+    dplyr::filter(activity_id == query) |>
+    dplyr::select(
+      "action_type",
+      "activity_comment",
+      "activity_id",
+      "assay_id",
+      "bao_endpoint",
+      "data_validity_comment",
+      "doc_id",
+      "molregno",
+      "pchembl_value",
+      "potential_duplicate",
+      "qudt_units",
+      "record_id",
+      "relation",
+      "src_id",
+      "standard_flag",
+      "standard_relation",
+      "standard_text_value",
+      "standard_type",
+      "standard_units",
+      "standard_upper_value",
+      "standard_value",
+      "text_value",
+      "toid",
+      "type",
+      "units",
+      "uo_units",
+      "upper_value",
+      "value"
+    ) |>
+    dplyr::collect()
+  activity_properties
+  assay_chembl_id
+  assay_description
+  # NOTE schema png suggested activities::assay_id - assays::doc_id connection
+  # but activities::assay_id - assays::assay_id seems to be the right connection
+  # I used the variable "assay_id" for checking.
+  assays <- tbl(con, "assays") |>
+    dplyr::filter(assay_id == activities$activity_id) |>
+    dplyr::select(
+
+    ) |>
+    dplyr::collect()
+
+}
+
 #' Replicate ChEMBL API molecule resource using a local ChEMBL database
 #'
 #' @param query character; ChEMBL ID of the molecule to retrieve
