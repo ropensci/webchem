@@ -114,10 +114,13 @@ chembl_offline_molecule <- function(
   # connect to local database
   con <- connect_chembl(version = version)
   # confirm chembl_id
-  entity_type <- tbl(con, "chembl_id_lookup") |>
-    dplyr::filter(.data$chembl_id %in% query) |>
-    dplyr::select("chembl_id", "entity_type") |>
-    dplyr::collect()
+  entity_type <- fetch_table(
+    con = con,
+    table = "chembl_id_lookup",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c("chembl_id", "entity_type")
+  )
   # if missing, verbose message, NA
 
   for (i in 1:nrow(entity_type)) {
@@ -128,13 +131,19 @@ chembl_offline_molecule <- function(
       stop(msg)
     }
   }
-  ids <- tbl(con, "molecule_dictionary") |>
-    dplyr::filter(.data$chembl_id %in% query) |>
-    dplyr::select("chembl_id", "molregno") |>
-    dplyr::collect()
-  molecule_dictionary <- tbl(con, "molecule_dictionary") |>
-    dplyr::filter(.data$chembl_id %in% query) |>
-    dplyr::select(
+  ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c("chembl_id", "molregno")
+  )
+  molecule_dictionary <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
       "availability_type",
       "black_box_warning",
       "chebi_par_id",
@@ -163,12 +172,15 @@ chembl_offline_molecule <- function(
       "usan_substem",
       "usan_year",
       "withdrawn_flag"
-    ) |>
-    dplyr::collect()
-  atc_classifications <- tbl(con, "molecule_atc_classification") |>
-    dplyr::filter(.data$molregno %in% ids$molregno) |>
-    dplyr::select("molregno", "level5") |>
-    collect()
+    )
+  )
+  atc_classifications <- fetch_table(
+    con = con,
+    table = "molecule_atc_classification",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c("molregno", "level5")
+  )
   extract_variable <- function(df, var) {
     if (nrow(df) == 0) {
       return(NULL)
@@ -176,16 +188,27 @@ chembl_offline_molecule <- function(
       return(df[[var]])
     }
   }
-  biotherapeutics <- tbl(con, "biotherapeutics") |>
-    dplyr::filter(.data$molregno %in% ids$molregno) |>
-    dplyr::collect()
+  biotherapeutics <- fetch_table(
+    con = con,
+    table = "biotherapeutics",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = NULL
+  )
   # description, helm notation!
-  molecule_hierarchy_raw <- tbl(con, "molecule_hierarchy") |>
-    dplyr::filter(.data$molregno %in% ids$molregno) |>
-    dplyr::collect()
-  molecule_properties <- tbl(con, "compound_properties") |>
-    dplyr::filter(.data$molregno %in% ids$molregno) |>
-    dplyr::select(
+  molecule_hierarchy_raw <- fetch_table(
+    con = con,
+    table = "molecule_hierarchy",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = NULL
+  )
+  molecule_properties <- fetch_table(
+    con = con,
+    table = "compound_properties",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c(
       "alogp",
       "aromatic_rings",
       "cx_logd",
@@ -210,86 +233,94 @@ chembl_offline_molecule <- function(
       "qed_weighted",
       "ro3_pass",
       "rtb"
-    ) |>
-    dplyr::collect()
-    molecule_structures <- tbl(con, "compound_structures") |>
-      dplyr::filter(.data$molregno %in% ids$molregno) |>
-      dplyr::select(
-        "canonical_smiles",
-        "molfile",
-        "molregno",
-        "standard_inchi",
-        "standard_inchi_key"
-      ) |>
-      dplyr::collect()
-    molecule_synonyms <- tbl(con, "molecule_synonyms") |>
-      dplyr::filter(.data$molregno %in% ids$molregno) |>
-      dplyr::select("molregno", "synonyms","syn_type") |>
-      collect() |>
-      dplyr::rename(molecule_synonym = synonyms) |>
-      dplyr::arrange(molecule_synonym)
-    out <- list()
-    for (i in seq_along(query)) {
-      if (!query[i] %in% ids$chembl_id) {
-        if (verbose) {
-          # Not found
-        }
-        out[i] <- NA_character_
-        next()
+    )
+  )
+  molecule_structures <- fetch_table(
+    con = con,
+    table = "compound_structures",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c(
+      "canonical_smiles",
+      "molfile",
+      "molregno",
+      "standard_inchi",
+      "standard_inchi_key"
+    )
+  )
+  molecule_synonyms <- fetch_table(
+    con = con,
+    table = "molecule_synonyms",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c("molregno", "synonyms","syn_type")
+  )
+  molecule_synonyms <- molecule_synonyms |>
+    dplyr::rename(molecule_synonym = synonyms) |>
+    dplyr::arrange(molecule_synonym)
+
+  out <- list()
+  for (i in seq_along(query)) {
+    if (!query[i] %in% ids$chembl_id) {
+      if (verbose) {
+        # Not found
       }
-      query_molregno <- ids$molregno[which(ids$chembl_id == query[i])]
-      # NULL TO NA CONVERSION!
-      molecule_dictionary2 <- molecule_dictionary |>
-        dplyr::filter(.data$chembl_id == query[i]) |>
-        dplyr::select(-"chembl_id")
-      atc_classifications2 <- atc_classifications |>
-        dplyr::filter(.data$molregno == query_molregno) |>
-        dplyr::pull("level5")
-      biotherapeutics2 <- biotherapeutics |>
-        dplyr::filter(.data$molregno == query_molregno) |>
-        dplyr::select(-"molregno")
-
-
-      molecule_hierarchy_raw2 <- molecule_hierarchy_raw |>
-        dplyr::filter(.data$molregno == query_molregno) |>
-        dplyr::select(-"molregno")
-      molecule_hierarchy <- tibble::tibble(
-        "active_chembl_id" = query[i],
-        "molecule_chembl_id" = query[i],
-        "parent_chembl_id" = tbl(con, "molecule_dictionary") |>
-          dplyr::filter(.data$molregno == molecule_hierarchy_raw2$parent_molregno) |>
-          dplyr::pull(.data$chembl_id)
-      )
-
-      molecule_properties2 <- molecule_properties |>
-        dplyr::filter(.data$molregno == query_molregno) |>
-        dplyr::select(-"molregno")
-
-      molecule_structures2 <- molecule_structures |>
-        dplyr::filter(.data$molregno == query_molregno) |>
-        dplyr::select(-"molregno")
-
-      molecule_synonyms2 <- molecule_synonyms |>
-        dplyr::filter(.data$molregno == query_molregno) |>
-        dplyr::select(-"molregno")
-
-      out[[i]] <- c(
-        molecule_dictionary2,
-        list(
-          "atc_classifications" = atc_classifications2,
-          #"biotherapeutic" = biotherapeutic,
-          #"helm_notation" = helm_notation,
-          "molecule_chembl_id" = query[i],
-          "molecule_hierarchy" = molecule_hierarchy,
-          "molecule_properties" = molecule_properties2,
-          "molecule_structures" = molecule_structures2,
-          "molecule_synonyms" = molecule_synonyms2
-        )
-      )
-      names(out)[i] <- query[i]
-      out[[i]] <- out[[i]][sort(names(out[[i]]))]
+      out[i] <- NA_character_
+      next()
     }
-    return(out)
+    query_molregno <- ids$molregno[which(ids$chembl_id == query[i])]
+    # NULL TO NA CONVERSION!
+    molecule_dictionary2 <- molecule_dictionary |>
+      dplyr::filter(.data$chembl_id == query[i]) |>
+      dplyr::select(-"chembl_id")
+    atc_classifications2 <- atc_classifications |>
+      dplyr::filter(.data$molregno == query_molregno) |>
+      dplyr::pull("level5")
+    biotherapeutics2 <- biotherapeutics |>
+      dplyr::filter(.data$molregno == query_molregno) |>
+      dplyr::select(-"molregno")
+
+
+    molecule_hierarchy_raw2 <- molecule_hierarchy_raw |>
+      dplyr::filter(.data$molregno == query_molregno) |>
+      dplyr::select(-"molregno")
+    molecule_hierarchy <- tibble::tibble(
+      "active_chembl_id" = query[i],
+      "molecule_chembl_id" = query[i],
+      "parent_chembl_id" = tbl(con, "molecule_dictionary") |>
+        dplyr::filter(.data$molregno == molecule_hierarchy_raw2$parent_molregno) |>
+        dplyr::pull(.data$chembl_id)
+    )
+
+    molecule_properties2 <- molecule_properties |>
+      dplyr::filter(.data$molregno == query_molregno) |>
+      dplyr::select(-"molregno")
+
+    molecule_structures2 <- molecule_structures |>
+      dplyr::filter(.data$molregno == query_molregno) |>
+      dplyr::select(-"molregno")
+
+    molecule_synonyms2 <- molecule_synonyms |>
+      dplyr::filter(.data$molregno == query_molregno) |>
+      dplyr::select(-"molregno")
+
+    out[[i]] <- c(
+      molecule_dictionary2,
+      list(
+        "atc_classifications" = atc_classifications2,
+        #"biotherapeutic" = biotherapeutic,
+        #"helm_notation" = helm_notation,
+        "molecule_chembl_id" = query[i],
+        "molecule_hierarchy" = molecule_hierarchy,
+        "molecule_properties" = molecule_properties2,
+        "molecule_structures" = molecule_structures2,
+        "molecule_synonyms" = molecule_synonyms2
+      )
+    )
+    names(out)[i] <- query[i]
+    out[[i]] <- out[[i]][sort(names(out[[i]]))]
+  }
+  return(out)
 }
 
 #' Retrieve schema information from a local ChEMBL database
@@ -507,3 +538,18 @@ compare_atomic_lists <- function(x, y) {
     unique_to_y = unique_b
   ))
 }
+
+fetch_table <- function(
+    con,
+    table,
+    id_col = "molregno",
+    ids,
+    select_cols = NULL
+  ) {
+  out <- tbl(con, table) |> dplyr::filter(.data[[id_col]] %in% ids)
+  if (!is.null(select_cols)) {
+    out <- out |> dplyr::select(dplyr::all_of(select_cols))
+  }
+  out |> dplyr::collect()
+}
+
