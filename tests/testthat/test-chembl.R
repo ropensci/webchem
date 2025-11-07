@@ -64,7 +64,11 @@ test_that("chembl_query() examples", {
   # Resource: compound_record - requires record ID
   o8 <- chembl_query("1", resource = "compound_record")
   # Resource: compound_structural_alert - requires compound ChEMBL ID
-  o9 <- chembl_query("CHEMBL266429", resource = "compound_structural_alert", tidy = FALSE)
+  o9 <- chembl_query(
+    "CHEMBL266429",
+    resource = "compound_structural_alert",
+    options = chembl_options(tidy = FALSE)
+  )
   # Resource: document - requires document ChEMBL ID
   o10 <- chembl_query("CHEMBL1158643", resource = "document")
   # Resource: document_similarity - requires document 1 ChEMBL ID
@@ -161,11 +165,24 @@ test_that("More chembl_query()", {
   expect_equal(o5m[6], "Query must be a ChEMBL ID. Returning NA.\n")
 
   #caching
-  o6 <- chembl_query("CHEMBL1082", resource = "molecule", cache_file = "test")
-  o7m <- capture_messages(chembl_query("CHEMBL1082", resource = "molecule",
-                                       cache_file = "test", verbose = TRUE)
+  o6 <- chembl_query(
+    "CHEMBL1082",
+    resource = "molecule",
+    options = chembl_options(cache_file = "test")
   )
-  o8 <- chembl_query(NA, resource = "molecule", cache_file = "test")
+
+  o7m <- capture_messages(chembl_query(
+    "CHEMBL1082",
+    resource = "molecule",
+    options = chembl_options(cache_file = "test"),
+    verbose = TRUE
+  ))
+
+  o8 <- chembl_query(
+    NA,
+    resource = "molecule",
+    options = chembl_options(cache_file = "test")
+  )
 
   expect_equal(o7m[1], "Querying CHEMBL1082. ")
   expect_equal(o7m[2], "Already retrieved.\n")
@@ -181,9 +198,18 @@ test_that("More chembl_query()", {
   expect_equal(o9[2], "Not Found (HTTP 404).")
 
   #service down
-  o10 <- chembl_query("CHEMBL1082", test_service_down = TRUE)
+  o10 <- chembl_query(
+    "CHEMBL1082",
+    options = chembl_options(test_service_down = TRUE)
+  )
+
   o10m <- capture_messages(
-    chembl_query("CHEMBL1082", test_service_down = TRUE, verbose = TRUE))
+    chembl_query(
+      "CHEMBL1082",
+      options = chembl_options(test_service_down = TRUE),
+      verbose = TRUE
+    )
+  )
 
   expect_equal(o10[[1]], NA)
   expect_equal(o10m[2], "Service not available. Returning NA.")
@@ -232,9 +258,11 @@ test_that("chembl_status()", {
   expect_equal(o2[2], "OK (HTTP 200).")
 
   #service down
-  o3 <- chembl_status(test_service_down = TRUE)
-  o3m <- capture_messages(
-    chembl_status(test_service_down = TRUE, verbose = TRUE))
+  o3 <- chembl_status(options = chembl_options(test_service_down = TRUE))
+  o3m <- capture_messages(chembl_status(
+    options = chembl_options(test_service_down = TRUE),
+    verbose = TRUE)
+  )
 
   expect_equal(o3, NA)
   expect_equal(o3m[2], "Service not available. Returning NA.")
