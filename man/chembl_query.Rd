@@ -2,11 +2,13 @@
 % Please edit documentation in R/chembl.R
 \name{chembl_query}
 \alias{chembl_query}
-\title{Query ChEMBL using ChEMBL IDs}
+\title{Query ChEMBL}
 \usage{
 chembl_query(
   query,
   resource = "molecule",
+  mode = "ws",
+  version = "latest",
   tidy = TRUE,
   cache_file = NULL,
   similarity = 70,
@@ -15,15 +17,21 @@ chembl_query(
 )
 }
 \arguments{
-\item{query}{character; a vector of ChEMBL IDs.}
+\item{query}{character; a vector of IDs. The type of ID depends on the
+resource. See examples for more information.}
 
 \item{resource}{character; the ChEMBL resource to query. Use
 [chembl_resources()] to see all available resources.}
 
+\item{mode}{character; either "ws" (default) to use the webservice or
+"offline" to use a local ChEMBL database. Note, to use the "offline" mode,
+you need to have a local ChEMBL database. See [db_download_chembl()].}
+
 \item{tidy}{logical; attempt to convert output to a simpler structure.}
 
 \item{cache_file}{character; the name of the cache file without the file
-extension. If \code{NULL}, results are not cached.}
+extension. If \code{NULL}, results are not cached. Only used when mode is
+"ws".}
 
 \item{similarity}{numeric; similarity threshold for similarity searches.}
 
@@ -33,18 +41,18 @@ extension. If \code{NULL}, results are not cached.}
 }
 \value{
 The function returns a list of lists, where each element of the list
-contains a list of respective query results. Results are simplified, if
-possible.
+contains a list of respective query results. If `tidy = TRUE` results are
+simplified, if possible.
 }
 \description{
-Retrieve ChEMBL data using a vector of ChEMBL IDs.
+Retrieve ChEMBL data using a vector of IDs.
 }
 \details{
 Each entry in ChEMBL has a unique ID. Data in ChEMBL is organized in
 databases called resources. An entry may or may not have a record in a
 particular resource. An entry may have a record in more than one resource,
 e.g. a compound may be present in both the "molecule" and the "drug"
-resource. This function queries a vector of ChEMBL IDs from a specific ChEMBL
+resource. This function queries a vector of IDs from a specific ChEMBL
 resource.
 
 If you are unsure which ChEMBL resource contains your ChEMBL ID,
@@ -52,12 +60,12 @@ use this function with the \code{"chembl_id_lookup"} resource to find the
 appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
 not a separate function but a resource used by \code{chembl_query}.
 
-If \code{cache_file} is not \code{NULL} the function creates a
-cache directory in the working directory and a cache file in the cache
+If `mode = "ws"` and `cache_file` is not `NULL` the function creates
+a cache directory in the working directory and a cache file in the cache
 directory. This file is used in subsequent calls of the function. The
 function first tries to retrieve query results from the cache file and only
-accesses the webservice if the ChEMBL ID cannot be found in the cache file.
-The cache file is extended as new ChEMBL ID-s are queried during the session.
+accesses the webservice if the ID cannot be found in the cache file. The
+cache file is extended as new ID-s are queried during the session.
 }
 \note{
 Links to the webservice documentation:
@@ -91,6 +99,7 @@ chembl_query("CHEMBL6329", resource = "molecule_form")
 chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
 # Resource: substructure - requires compound SMILES
 chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+
 # Other Examples
 
 # Resource: "activity" - requires activity ID

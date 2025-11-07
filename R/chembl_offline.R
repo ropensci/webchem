@@ -1,11 +1,13 @@
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL1082", resource = "molecule")
 #' }
+#' @noRd
 chembl_query_offline <- function(
     query,
     resource = "molecule",
     version = "latest",
+    similarity = 70,
     verbose = getOption("verbose")
 ) {
   resource <- match.arg(resource, chembl_resources())
@@ -18,11 +20,20 @@ chembl_query_offline <- function(
       "Offline query for resource '", resource, "' is not implemented.")
     stop(msg)
   }
-  do.call(FUN, args = list(
+  if (resource == "similarity") {
+    do.call(FUN, args = list(
+      query = query,
+      version = version,
+      similarity = 70,
+      verbose = verbose
+    ))
+  } else {
+    do.call(FUN, args = list(
     query = query,
     version = version,
     verbose = verbose
-  ))
+    ))
+  }
 }
 
 #' Replicate ChEMBL API activity resource using a local ChEMBL database
@@ -98,7 +109,7 @@ chembl_offline_binding_site <- function(
 }
 
 #' Replicate ChEMBL API biotherapeutic resource using a local ChEMBL database
-#' 
+#'
 #' @param query character; ChEMBL ID of the biotherapeutic to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
@@ -850,7 +861,7 @@ chembl_compare_service <- function(
 #' @param offline list; result from an offline query.
 #' @return A list with the comparison status and any unique elements found in
 #' either input.
-#' @nord
+#' @noRd
 compare_service_lists <- function(ws, offline) {
   ws_na <- length(ws) == 1 && is.na(ws)
   offline_na <- length(offline) == 1 && is.na(offline)
