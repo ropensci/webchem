@@ -247,3 +247,42 @@ chembl_offline_molecule <- function(
     return(out)
 }
 
+
+
+
+#' Retrieve schema information from a local ChEMBL database
+#'
+#' This function connects to a local ChEMBL database and retrieves schema
+#' information: table names, field names, field types, and (non-NA) example
+#' values for each field. This is an internal function to help construct offline
+#' functions that mimic the schema of the web service.
+#' @param version character; version of the ChEMBL database.
+#' @return A data frame with columns: \code{table}, \code{field}, \code{type}
+#' and \code{example}.
+#' @noRd
+chembl_offline_schema <- function(version = "latest") {
+  con <- connect_chembl(version = version)
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
+  tables <- DBI::dbListTables(con)
+  fields <- lapply(tables, function(x) {
+  data.frame(field = DBI::dbListFields(con, x))
+  })
+  names(fields) <- tables
+  out <- dplyr::bind_rows(fields, .id = "table")
+  out$type <- mapply(function(x, y) {
+  res <- DBI::dbSendQuery(
+    con,
+    paste("SELECT", y, "FROM", x, "LIMIT 0", sep = " ")
+  )
+  A <- DBI::dbColumnInfo(res)$type
+  DBI::dbClearResult(res)
+  return(A)
+  }, x = out$table, y = out$field)
+  out$example <- mapply(function(x, y) {
+  query <- sprintf("SELECT %s FROM %s WHERE %s IS NOT NULL LIMIT 1", y, x, y)
+  res <- tryCatch(DBI::dbGetQuery(con, query)[[1]], error = function(e) NA)
+  if (length(res) == 0) return(NA)
+  return(res)
+  }, x = out$table, y = out$field)
+  return(out)
+}
