@@ -70,6 +70,29 @@ Links to the webservice documentation:
 \dontrun{
 # Might fail if API is not available
 
+# Examples with resources that operate on compounds
+
+# Resource: biotherapeutic - requires compound ChEMBL ID
+chembl_query("CHEMBL448105", resource = "biotherapeutic")
+# Resource: compound_structural_alert - requires compound ChEMBL ID
+chembl_query(
+  "CHEMBL266429", resource = "compound_structural_alert", tidy = FALSE)
+# Resource: compound_record - requires compound record ID
+chembl_query("1", resource = "compound_record")
+# Resource: drug - requires compound ChEMBL ID
+chembl_query("CHEMBL2", resource = "drug")
+# Resource: molecule - requires compound ChEMBL ID
+chembl_query("CHEMBL1082", resource = "molecule")
+chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
+# Resource: molecule_form - requires compound ChEMBL ID
+chembl_query("CHEMBL6329", resource = "molecule_form")
+# Resource: similarity - requires compound SMILES
+# By default, the function will use 70 as similarity threshold
+chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
+# Resource: substructure - requires compound SMILES
+chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+# Other Examples
+
 # Resource: "activity" - requires activity ID
 chembl_query("31863", resource = "activity")
 # Resource: "assay" - requires assay ChEMBL ID
@@ -78,23 +101,14 @@ chembl_query("CHEMBL615117", resource = "assay")
 chembl_query("A01AA01", resource = "atc_class")
 # Resource: binding_site - requires site ID
 chembl_query(2, resource = "binding_site")
-# Resource: biotherapeutic - requires ChEMBL ID
-chembl_query("CHEMBL448105", resource = "biotherapeutic")
 # Resource: cell_line - requires ChEMBL ID
 chembl_query("CHEMBL3307241", resource = "cell_line")
 # Resource: chembl_id_lookup - requires ChEMBL ID
 chembl_query("CHEMBL1", resource = "chembl_id_lookup")
-# Resource: compound_record - requires record ID
-chembl_query("1", resource = "compound_record")
-# Resource: compound_structural_alert - requires compound ChEMBL ID
-chembl_query(
-  "CHEMBL266429", resource = "compound_structural_alert", tidy = FALSE)
 # Resource: document - requires document ChEMBL ID
 chembl_query("CHEMBL1158643", resource = "document")
 # Resource: document_similarity - requires document 1 ChEMBL ID
 chembl_query("CHEMBL1148466", resource = "document_similarity")
-# Resource: drug - requires ChEMBL ID
-chembl_query("CHEMBL2", resource = "drug")
 # Resource: drug_indication - requires drug indication ID
 chembl_query("22606", resource = "drug_indication")
 # Resource: drug_warning - requires warning ID
@@ -105,22 +119,12 @@ chembl_query("GO:0000003", resource = "go_slim")
 chembl_query("13", resource = "mechanism")
 # Resource: metabolism - requires metabolism ID
 chembl_query("119", resource = "metabolism")
-# Resource: molecule - requires ChEMBL ID
-chembl_query("CHEMBL1082", resource = "molecule")
-chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
-# Resource: molecule_form - requires ChEMBL ID
-chembl_query("CHEMBL6329", resource = "molecule_form")
 # Resource: organism - requires organism class ID (not taxid)
 chembl_query("1", resource = "organism")
 # Resource: protein_classification - requires protein class ID
 chembl_query("1", resource = "protein_classification")
-# Resource: similarity - requires SMILES
-# By default, the function will use 70 as similarity threshold
-chembl_query("CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
 # Resource: source - requires source ID
 chembl_query("1", resource = "source")
-# Resource: substructure - requires SMILES
-chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
 # Resource: target - requires target ChEMBL ID
 chembl_query("CHEMBL2074", resource = "target")
 # Resource: target_component - requires target component ID
