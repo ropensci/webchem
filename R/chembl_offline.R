@@ -41,7 +41,7 @@ chembl_query_offline <- function(
 #' @param query character; activity ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_activity(query = "31863")
 #' }
@@ -59,7 +59,7 @@ chembl_offline_activity <- function(
 #' @param query character; assay ChEMBL ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_assay(query = "CHEMBL615117")
 #' }
@@ -77,7 +77,7 @@ chembl_offline_assay <- function(
 #' @param query character; ATC class ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_atc_class(query = "A01AA01")
 #' }
@@ -95,7 +95,7 @@ chembl_offline_atc_class <- function(
 #' @param query numeric; site ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_binding_site(query = 2)
 #' }
@@ -113,7 +113,7 @@ chembl_offline_binding_site <- function(
 #' @param query character; ChEMBL ID of the biotherapeutic to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_biotherapeutic(query = "CHEMBL448105")
 #' }
@@ -131,7 +131,7 @@ chembl_offline_biotherapeutic <- function(
 #' @param query character; cell line ChEMBL ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_cell_line(query = "CHEMBL3307241")
 #' }
@@ -149,7 +149,7 @@ chembl_offline_cell_line <- function(
 #' @param query character; ChEMBL ID to lookup
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_chembl_id_lookup(query = "CHEMBL1")
 #' }
@@ -167,7 +167,7 @@ chembl_offline_chembl_id_lookup <- function(
 #' @param query character; compound record ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_compound_record(query = "1")
 #' }
@@ -185,7 +185,7 @@ chembl_offline_compound_record <- function(
 #' @param query character; compound ChEMBL ID to retrieve structural alerts
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_compound_structural_alert(query = "CHEMBL266429")
 #' }
@@ -203,7 +203,7 @@ chembl_offline_compound_structural_alert <- function(
 #' @param query character; document ChEMBL ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_document(query = "CHEMBL1158643")
 #' }
@@ -221,7 +221,7 @@ chembl_offline_document <- function(
 #' @param query character; document ChEMBL ID to retrieve similarity
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_document_similarity(query = "CHEMBL1148466")
 #' }
@@ -239,7 +239,7 @@ chembl_offline_document_similarity <- function(
 #' @param query character; compound ChEMBL ID to retrieve drug info
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_drug(query = "CHEMBL2")
 #' }
@@ -257,7 +257,7 @@ chembl_offline_drug <- function(
 #' @param query character; drug indication ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_drug_indication(query = "22606")
 #' }
@@ -275,7 +275,7 @@ chembl_offline_drug_indication <- function(
 #' @param query character; warning ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_drug_warning(query = "1")
 #' }
@@ -293,7 +293,7 @@ chembl_offline_drug_warning <- function(
 #' @param query character; GO ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_go_slim(query = "GO:0000003")
 #' }
@@ -311,7 +311,7 @@ chembl_offline_go_slim <- function(
 #' @param query character; mechanism ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_mechanism(query = "13")
 #' }
@@ -329,7 +329,7 @@ chembl_offline_mechanism <- function(
 #' @param query character; metabolism ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_metabolism(query = "119")
 #' }
@@ -347,7 +347,7 @@ chembl_offline_metabolism <- function(
 #' @param query character; ChEMBL ID of the molecule to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_molecule(query = "CHEMBL1082")
 #' }
@@ -578,7 +578,7 @@ chembl_offline_molecule <- function(
 #' @param query character; molecule ChEMBL ID to retrieve form
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_molecule_form(query = "CHEMBL6329")
 #' }
@@ -596,7 +596,7 @@ chembl_offline_molecule_form <- function(
 #' @param query character; organism class ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_organism(query = "1")
 #' }
@@ -614,7 +614,7 @@ chembl_offline_organism <- function(
 #' @param query character; protein class ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_protein_classification(query = "1")
 #' }
@@ -632,7 +632,7 @@ chembl_offline_protein_classification <- function(
 #' @param query character; source ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_source(query = "1")
 #' }
@@ -650,7 +650,7 @@ chembl_offline_source <- function(
 #' @param query character; compound SMILES to retrieve similarity results
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_similarity(query = "CC(=O)Oc1ccccc1C(=O)O")
 #' }
@@ -668,7 +668,7 @@ chembl_offline_similarity <- function(
 #' @param query character; compound SMILES to retrieve substructure results
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_substructure(query = "CN(CCCN)c1cccc2ccccc12")
 #' }
@@ -686,7 +686,7 @@ chembl_offline_substructure <- function(
 #' @param query character; target ChEMBL ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_target(query = "CHEMBL2074")
 #' }
@@ -704,7 +704,7 @@ chembl_offline_target <- function(
 #' @param query character; target component ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_target_component(query = "1")
 #' }
@@ -722,7 +722,7 @@ chembl_offline_target_component <- function(
 #' @param query character; target ChEMBL ID to retrieve relations
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_target_relation(query = "CHEMBL2251")
 #' }
@@ -740,7 +740,7 @@ chembl_offline_target_relation <- function(
 #' @param query character; tissue ChEMBL ID to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_tissue(query = "CHEMBL3988026")
 #' }
@@ -758,7 +758,7 @@ chembl_offline_tissue <- function(
 #' @param query character; name of the xref source to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
-#' examples
+#' @examples
 #' \dontrun{
 #' chembl_offline_xref_source(query = "AlphaFoldDB")
 #' }
@@ -883,9 +883,9 @@ compare_service_lists <- function(ws, offline) {
   offline_common_order <- names(offline)[names(offline) %in% common_names]
   if (!identical(ws_common_order, offline_common_order)) {
     stop(sprintf(
-      "Names of common elements are not in the same order:\n  x: %s\n  y: %s",
-      paste(x_common_order, collapse = ", "),
-      paste(y_common_order, collapse = ", ")
+      "Names of common elements are not in the same order:\n  ws: %s\n  offline: %s",
+      paste(ws_common_order, collapse = ", "),
+      paste(offline_common_order, collapse = ", ")
     ))
   }
   for (n in common_names) {
