@@ -609,6 +609,37 @@ chembl_resources <- function() {
   return(resources)
 }
 
+#' Connect local ChEMBL database
+#'
+#' @param version character; version of the database. Either "latest" (default)
+#' or a specific version number, e.g. "30".
+#' @param ... Further args passed on to [DBI::dbConnect()]
+#' @return an object of class "SQLiteConnection".
+#' @examples
+#' \dontrun{
+#'   con <- connect_chembl(version = "latest")
+#' }
+#' @noRd
+connect_chembl <- function(version = "latest", ...) {
+  if (!inherits(version, "chembl_version")) {
+    version <- validate_chembl_version(version = version)
+  }
+  dir_path <- file.path(
+    wc_cache$cache_path_get(),
+    "chembl",
+    paste0("chembl_", version$version_path)
+  ) |> path.expand()
+  file_path <- chembl_files(version = version) |>
+    dplyr::filter(type == "sqlite") |>
+    dplyr::pull(file)
+  full_path <- file.path(dir_path, file_path)
+  if (!file.exists(full_path)) {
+    stop("Database not found. Use db_download_chembl() to download the database.")
+  }
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = full_path, ...)
+  return(con)
+}
+
 #' Format ChEMBL results
 #'
 #' Format ChEMBL results by collapsing nested lists into tibbles.
