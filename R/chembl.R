@@ -232,7 +232,7 @@ chembl_files <- function(version = "latest") {
 #'   - version: character; database version to use in "offline" mode (default
 #'     "latest").
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param ... addition arguments, only used for internal testing.
+#' @param ... additional arguments, only used for internal testing.
 #' @return The function returns a list of lists, where each element of the list
 #' contains a list of respective query results. If `tidy = TRUE` results are
 #' simplified, if possible.
@@ -274,7 +274,7 @@ chembl_files <- function(version = "latest") {
 #' chembl_query(
 #'   "CHEMBL266429",
 #'   resource = "compound_structural_alert",
-#'   options = list(tidy = FALSE)
+#'   options = chembl_options(tidy = FALSE)
 #' )
 #'
 #' # Resource: compound_record - requires compound record ID
@@ -294,7 +294,7 @@ chembl_files <- function(version = "latest") {
 #' # By default, the function will use 70 as similarity threshold
 #' chembl_query(
 #'   "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity",
-#'   options = list(similarity = 70)
+#'   options = chembl_options(similarity = 70)
 #' )
 #'
 #' # Resource: substructure - requires compound SMILES

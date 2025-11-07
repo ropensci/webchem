@@ -38,7 +38,7 @@ options. Supported entries:
   - version: character; database version to use in "offline" mode (default
     "latest").}
 
-\item{...}{addition arguments, only used for internal testing.}
+\item{...}{additional arguments, only used for internal testing.}
 }
 \value{
 The function returns a list of lists, where each element of the list
@@ -87,7 +87,7 @@ chembl_query("CHEMBL448105", resource = "biotherapeutic")
 chembl_query(
   "CHEMBL266429",
   resource = "compound_structural_alert",
-  options = list(tidy = FALSE)
+  options = chembl_options(tidy = FALSE)
 )
 
 # Resource: compound_record - requires compound record ID
@@ -107,7 +107,7 @@ chembl_query("CHEMBL6329", resource = "molecule_form")
 # By default, the function will use 70 as similarity threshold
 chembl_query(
   "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity",
-  options = list(similarity = 70)
+  options = chembl_options(similarity = 70)
 )
 
 # Resource: substructure - requires compound SMILES

@@ -864,6 +864,12 @@ chembl_compare_service <- function(
 #' @return A list with the comparison status and any unique elements found in
 #' either input.
 #' @noRd
+#' @examples
+#' \dontrun{
+#' ws <- chembl_query("CHEMBL1082", resource = "molecule")
+#' off <- chembl_query("CHEMBL1082", resource = "molecule", mode = "offline")
+#' compare_service_lists(ws$CHEMBL1082, off$CHEMBL1082)
+#' }
 compare_service_lists <- function(ws, offline) {
   ws_na <- length(ws) == 1 && is.na(ws)
   offline_na <- length(offline) == 1 && is.na(offline)
@@ -904,8 +910,10 @@ compare_service_lists <- function(ws, offline) {
     if (is.atomic(ws_elem)) {
       if (!identical(ws_elem, off_elem)) {
         stop(sprintf(
-          "Atomic element '%s' differs between webservice and offline.\n",
-          "Webservice value: %s\nOffline value: %s",
+          paste0(
+            "Atomic element '%s' differs between webservice and offline.\n",
+            "Webservice value: %s\nOffline value: %s"
+          ),
           n,
           paste0(utils::capture.output(print(ws_elem)), collapse = "\n"),
           paste0(utils::capture.output(print(off_elem)), collapse = "\n")
@@ -926,12 +934,12 @@ compare_service_lists <- function(ws, offline) {
     } else {
       stop(sprintf("Element '%s' should be either atomic or a data frame.", n))
     }
-    return(list(
-      status = "OK",
-      ws_extra = ws_unique_element,
-      offline_extra = offline_unique_element
-    ))
   }
+  return(list(
+    status = "OK",
+    ws_extra = ws_unique_element,
+    offline_extra = offline_unique_element
+  ))
 }
 
 #' Compare Two Named Lists of Atomic Elements
