@@ -25,6 +25,312 @@ chembl_query_offline <- function(
   ))
 }
 
+#' Replicate ChEMBL API activity resource using a local ChEMBL database
+#'
+#' @param query character; activity ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_activity(query = "31863")
+#' }
+#' @noRd
+chembl_offline_activity <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'activity' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API assay resource using a local ChEMBL database
+#'
+#' @param query character; assay ChEMBL ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_assay(query = "CHEMBL615117")
+#' }
+#' @noRd
+chembl_offline_assay <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'assay' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API atc_class resource using a local ChEMBL database
+#'
+#' @param query character; ATC class ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_atc_class(query = "A01AA01")
+#' }
+#' @noRd
+chembl_offline_atc_class <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'atc_class' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API binding_site resource using a local ChEMBL database
+#'
+#' @param query numeric; site ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_binding_site(query = 2)
+#' }
+#' @noRd
+chembl_offline_binding_site <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'binding_site' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API biotherapeutic resource using a local ChEMBL database
+#' 
+#' @param query character; ChEMBL ID of the biotherapeutic to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_biotherapeutic(query = "CHEMBL448105")
+#' }
+#' @noRd
+chembl_offline_biotherapeutic <- function(
+    query,
+    version = "latest",
+    verbose = getOption("verbose")
+  ){
+  stop("Offline 'biotherapeutic' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API cell_line resource using a local ChEMBL database
+#'
+#' @param query character; cell line ChEMBL ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_cell_line(query = "CHEMBL3307241")
+#' }
+#' @noRd
+chembl_offline_cell_line <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'cell_line' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API chembl_id_lookup resource using a local ChEMBL database
+#'
+#' @param query character; ChEMBL ID to lookup
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_chembl_id_lookup(query = "CHEMBL1")
+#' }
+#' @noRd
+chembl_offline_chembl_id_lookup <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'chembl_id_lookup' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API compound_record resource using a local ChEMBL database
+#'
+#' @param query character; compound record ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_compound_record(query = "1")
+#' }
+#' @noRd
+chembl_offline_compound_record <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'compound_record' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API compound_structural_alert resource using a local ChEMBL database
+#'
+#' @param query character; compound ChEMBL ID to retrieve structural alerts
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_compound_structural_alert(query = "CHEMBL266429")
+#' }
+#' @noRd
+chembl_offline_compound_structural_alert <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'compound_structural_alert' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API document resource using a local ChEMBL database
+#'
+#' @param query character; document ChEMBL ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_document(query = "CHEMBL1158643")
+#' }
+#' @noRd
+chembl_offline_document <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'document' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API document_similarity resource using a local ChEMBL database
+#'
+#' @param query character; document ChEMBL ID to retrieve similarity
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_document_similarity(query = "CHEMBL1148466")
+#' }
+#' @noRd
+chembl_offline_document_similarity <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'document_similarity' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API drug resource using a local ChEMBL database
+#'
+#' @param query character; compound ChEMBL ID to retrieve drug info
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_drug(query = "CHEMBL2")
+#' }
+#' @noRd
+chembl_offline_drug <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'drug' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API drug_indication resource using a local ChEMBL database
+#'
+#' @param query character; drug indication ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_drug_indication(query = "22606")
+#' }
+#' @noRd
+chembl_offline_drug_indication <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'drug_indication' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API drug_warning resource using a local ChEMBL database
+#'
+#' @param query character; warning ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_drug_warning(query = "1")
+#' }
+#' @noRd
+chembl_offline_drug_warning <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'drug_warning' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API go_slim resource using a local ChEMBL database
+#'
+#' @param query character; GO ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_go_slim(query = "GO:0000003")
+#' }
+#' @noRd
+chembl_offline_go_slim <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'go_slim' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API mechanism resource using a local ChEMBL database
+#'
+#' @param query character; mechanism ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_mechanism(query = "13")
+#' }
+#' @noRd
+chembl_offline_mechanism <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'mechanism' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API metabolism resource using a local ChEMBL database
+#'
+#' @param query character; metabolism ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_metabolism(query = "119")
+#' }
+#' @noRd
+chembl_offline_metabolism <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'metabolism' queries are not yet implemented.")
+}
+
 #' Replicate ChEMBL API molecule resource using a local ChEMBL database
 #'
 #' @param query character; ChEMBL ID of the molecule to retrieve
@@ -254,6 +560,204 @@ chembl_offline_molecule <- function(
     out[[i]] <- out[[i]][sort(names(out[[i]]))]
   }
   return(out)
+}
+
+#' Replicate ChEMBL API molecule_form resource using a local ChEMBL database
+#'
+#' @param query character; molecule ChEMBL ID to retrieve form
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_molecule_form(query = "CHEMBL6329")
+#' }
+#' @noRd
+chembl_offline_molecule_form <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'molecule_form' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API organism resource using a local ChEMBL database
+#'
+#' @param query character; organism class ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_organism(query = "1")
+#' }
+#' @noRd
+chembl_offline_organism <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'organism' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API protein_classification resource using a local ChEMBL database
+#'
+#' @param query character; protein class ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_protein_classification(query = "1")
+#' }
+#' @noRd
+chembl_offline_protein_classification <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'protein_classification' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API source resource using a local ChEMBL database
+#'
+#' @param query character; source ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_source(query = "1")
+#' }
+#' @noRd
+chembl_offline_source <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'source' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API similarity resource using a local ChEMBL database
+#'
+#' @param query character; compound SMILES to retrieve similarity results
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_similarity(query = "CC(=O)Oc1ccccc1C(=O)O")
+#' }
+#' @noRd
+chembl_offline_similarity <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'similarity' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API substructure resource using a local ChEMBL database
+#'
+#' @param query character; compound SMILES to retrieve substructure results
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_substructure(query = "CN(CCCN)c1cccc2ccccc12")
+#' }
+#' @noRd
+chembl_offline_substructure <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'substructure' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API target resource using a local ChEMBL database
+#'
+#' @param query character; target ChEMBL ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_target(query = "CHEMBL2074")
+#' }
+#' @noRd
+chembl_offline_target <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'target' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API target_component resource using a local ChEMBL database
+#'
+#' @param query character; target component ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_target_component(query = "1")
+#' }
+#' @noRd
+chembl_offline_target_component <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'target_component' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API target_relation resource using a local ChEMBL database
+#'
+#' @param query character; target ChEMBL ID to retrieve relations
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_target_relation(query = "CHEMBL2251")
+#' }
+#' @noRd
+chembl_offline_target_relation <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'target_relation' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API tissue resource using a local ChEMBL database
+#'
+#' @param query character; tissue ChEMBL ID to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_tissue(query = "CHEMBL3988026")
+#' }
+#' @noRd
+chembl_offline_tissue <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'tissue' queries are not yet implemented.")
+}
+
+#' Replicate ChEMBL API xref_source resource using a local ChEMBL database
+#'
+#' @param query character; name of the xref source to retrieve
+#' @param version character; version of the ChEMBL database
+#' @param verbose logical; print verbose messages to the console?
+#' examples
+#' \dontrun{
+#' chembl_offline_xref_source(query = "AlphaFoldDB")
+#' }
+#' @noRd
+chembl_offline_xref_source <- function(
+  query,
+  version = "latest",
+  verbose = getOption("verbose")
+  ){
+  stop("Offline 'xref_source' queries are not yet implemented.")
 }
 
 #' Retrieve schema information from a local ChEMBL database
