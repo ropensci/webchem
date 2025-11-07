@@ -167,7 +167,8 @@ chembl_offline_molecule <- function(
     dplyr::collect()
   atc_classifications <- tbl(con, "molecule_atc_classification") |>
     dplyr::filter(.data$molregno %in% ids$molregno) |>
-    dplyr::select("molregno", "level5")
+    dplyr::select("molregno", "level5") |>
+    collect()
   extract_variable <- function(df, var) {
     if (nrow(df) == 0) {
       return(NULL)
@@ -180,7 +181,7 @@ chembl_offline_molecule <- function(
     dplyr::collect()
   # description, helm notation!
   molecule_hierarchy_raw <- tbl(con, "molecule_hierarchy") |>
-    dplyr::filter(molregno %in% ids$molregno) |>
+    dplyr::filter(.data$molregno %in% ids$molregno) |>
     dplyr::collect()
   molecule_properties <- tbl(con, "compound_properties") |>
     dplyr::filter(.data$molregno %in% ids$molregno) |>
@@ -243,7 +244,7 @@ chembl_offline_molecule <- function(
         dplyr::select(-"chembl_id")
       atc_classifications2 <- atc_classifications |>
         dplyr::filter(.data$molregno == query_molregno) |>
-        dplyr::select(-"molregno")
+        dplyr::pull("level5")
       biotherapeutics2 <- biotherapeutics |>
         dplyr::filter(.data$molregno == query_molregno) |>
         dplyr::select(-"molregno")
@@ -253,8 +254,8 @@ chembl_offline_molecule <- function(
         dplyr::filter(.data$molregno == query_molregno) |>
         dplyr::select(-"molregno")
       molecule_hierarchy <- tibble::tibble(
-        "active_chembl_id" = query,
-        "molecule_chembl_id" = query,
+        "active_chembl_id" = query[i],
+        "molecule_chembl_id" = query[i],
         "parent_chembl_id" = tbl(con, "molecule_dictionary") |>
           dplyr::filter(.data$molregno == molecule_hierarchy_raw2$parent_molregno) |>
           dplyr::pull(.data$chembl_id)
@@ -365,7 +366,7 @@ chembl_compare_service <- function(
     error = function(e) NA
   )
 
-  out <- compare_service_lists(x = ws_result, y = offline_result)
+  out <- compare_service_lists(ws = ws_result, offline = offline_result)
 
   return(out)
 }
@@ -383,15 +384,17 @@ chembl_compare_service <- function(
 #' either input.
 #' @nord
 compare_service_lists <- function(ws, offline) {
-  if (all(is.na(c(ws, offline)))) {
+  ws_na <- length(ws) == 1 && is.na(ws)
+  offline_na <- length(offline) == 1 && is.na(offline)
+  if (ws_na & offline_na) {
     return(list(
       status = "both failed",
       ws_unique_element = character(),
       offline_unique_element = character()
     ))
   }
-  if (is.na(ws) && !is.na(offline)) stop("Webservice query failed.")
-  if (!is.na(ws) && is.na(offline)) stop("Offline query failed.")
+  if (ws_na) stop("Webservice query failed.")
+  if (offline_na) stop("Offline query failed.")
   if (!inherits(ws, "list")) stop("Webservice result is not a list.")
   if (!inherits(offline, "list")) stop("Offline result is not a list.")
   ws_unique_element <- setdiff(names(ws), names(offline))
@@ -406,7 +409,7 @@ compare_service_lists <- function(ws, offline) {
       paste(y_common_order, collapse = ", ")
     ))
   }
-  for (n in names(common_names)) {
+  for (n in common_names) {
     ws_elem <- ws[[n]]
     off_elem <- offline[[n]]
     if (!identical(class(ws_elem), class(off_elem))) {
