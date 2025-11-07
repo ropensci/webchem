@@ -735,6 +735,7 @@ chembl_resources <- function() {
 
 #' Connect local ChEMBL database
 #'
+#' @importFrom rlang .data
 #' @param version character; version of the database. Either "latest" (default)
 #' or a specific version number, e.g. "30".
 #' @param ... Further args passed on to [DBI::dbConnect()]
@@ -754,7 +755,7 @@ connect_chembl <- function(version = "latest", ...) {
     paste0("chembl_", version$version_path)
   ) |> path.expand()
   file_path <- chembl_files(version = version) |>
-    dplyr::filter(type == "sqlite") |>
+    dplyr::filter(.data$type == "sqlite") |>
     dplyr::pull(file)
   full_path <- file.path(dir_path, file_path)
   if (!file.exists(full_path)) {

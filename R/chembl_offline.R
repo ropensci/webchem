@@ -344,6 +344,7 @@ chembl_offline_metabolism <- function(
 
 #' Replicate ChEMBL API molecule resource using a local ChEMBL database
 #'
+#' @importFrom rlang .data
 #' @param query character; ChEMBL ID of the molecule to retrieve
 #' @param version character; version of the ChEMBL database
 #' @param verbose logical; print verbose messages to the console?
@@ -506,8 +507,8 @@ chembl_offline_molecule <- function(
     select_cols = c("molregno", "synonyms","syn_type")
   )
   molecule_synonyms <- molecule_synonyms |>
-    dplyr::rename(molecule_synonym = synonyms) |>
-    dplyr::arrange(molecule_synonym)
+    dplyr::rename("molecule_synonym" = "synonyms") |>
+    dplyr::arrange(.data$molecule_synonym)
 
   out <- list()
   for (i in seq_along(query)) {
@@ -906,8 +907,8 @@ compare_service_lists <- function(ws, offline) {
           "Atomic element '%s' differs between webservice and offline.\n",
           "Webservice value: %s\nOffline value: %s",
           n,
-          paste0(capture.output(print(ws_elem)), collapse = "\n"),
-          paste0(capture.output(print(off_elem)), collapse = "\n")
+          paste0(utils::capture.output(print(ws_elem)), collapse = "\n"),
+          paste0(utils::capture.output(print(off_elem)), collapse = "\n")
         ))
       }
     } else if (is.data.frame(ws_elem)) {
@@ -977,8 +978,8 @@ compare_atomic_lists <- function(x, y) {
       stop(sprintf(
         "Element '%s' differs between lists.\nx: %s\ny: %s",
         n,
-        paste0(capture.output(print(elem_a)), collapse = "\n"),
-        paste0(capture.output(print(elem_b)), collapse = "\n")
+        paste0(utils::capture.output(print(elem_a)), collapse = "\n"),
+        paste0(utils::capture.output(print(elem_b)), collapse = "\n")
       ))
     }
   }
