@@ -388,11 +388,11 @@ chembl_query <- function(
 chembl_query_ws <- function(
   query,
   resource = "molecule",
-  tidy = TRUE,
+  verbose = getOption("verbose"),
   cache_file = NULL,
   similarity = 70,
-  verbose = getOption("verbose"),
-  test_service_down = FALSE
+  test_service_down = FALSE,
+  tidy = TRUE
   ) {
   if (resource == "similarity") {
     warning("Similarity search currently returns no more than 20 results.")
