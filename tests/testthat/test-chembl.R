@@ -198,18 +198,13 @@ test_that("More chembl_query()", {
   expect_equal(o9[2], "Not Found (HTTP 404).")
 
   #service down
-  o10 <- chembl_query(
-    "CHEMBL1082",
-    options = chembl_options(test_service_down = TRUE)
-  )
+  o10 <- chembl_query("CHEMBL1082", test_service_down = TRUE)
 
-  o10m <- capture_messages(
-    chembl_query(
+  o10m <- capture_messages(chembl_query(
       "CHEMBL1082",
-      options = chembl_options(test_service_down = TRUE),
+      test_service_down = TRUE,
       verbose = TRUE
-    )
-  )
+  ))
 
   expect_equal(o10[[1]], NA)
   expect_equal(o10m[2], "Service not available. Returning NA.")
@@ -258,9 +253,9 @@ test_that("chembl_status()", {
   expect_equal(o2[2], "OK (HTTP 200).")
 
   #service down
-  o3 <- chembl_status(options = chembl_options(test_service_down = TRUE))
+  o3 <- chembl_status(test_service_down = TRUE)
   o3m <- capture_messages(chembl_status(
-    options = chembl_options(test_service_down = TRUE),
+    test_service_down = TRUE,
     verbose = TRUE)
   )
 

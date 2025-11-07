@@ -4,12 +4,12 @@
 \alias{chembl_atc_classes}
 \title{Retrieve all ATC classes}
 \usage{
-chembl_atc_classes(verbose = getOption("verbose"), test_service_down = FALSE)
+chembl_atc_classes(verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
-\item{test_service_down}{logical; this argument is only used for testing.}
+\item{...}{additional arguments, only used for internal testing.}
 }
 \description{
 Retrieve all available classes within the Anatomical Therapeutic Chemical

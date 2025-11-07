@@ -9,8 +9,9 @@ chembl_query(
   resource = "molecule",
   mode = "ws",
   verbose = getOption("verbose"),
-  options = chembl_options(cache_file = NULL, similarity = 70, test_service_down = FALSE,
-    tidy = TRUE, version = "latest")
+  options = chembl_options(cache_file = NULL, similarity = 70, tidy = TRUE, version =
+    "latest"),
+  ...
 )
 }
 \arguments{
@@ -32,11 +33,12 @@ options. Supported entries:
     used when mode = "ws". If NULL (default), results are not cached.
   - similarity: numeric; similarity threshold for similarity searches
     (default 70).
-  - test_service_down: logical; for internal testing only (default FALSE).
   - tidy: logical; attempt to convert output to a simpler structure
     (default TRUE).
   - version: character; database version to use in "offline" mode (default
     "latest").}
+
+\item{...}{addition arguments, only used for internal testing.}
 }
 \value{
 The function returns a list of lists, where each element of the list

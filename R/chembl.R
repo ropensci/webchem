@@ -4,7 +4,6 @@
 #' `options` argument to `chembl_query()`.
 #' @param cache_file character or NULL
 #' @param similarity numeric
-#' @param test_service_down logical
 #' @param tidy logical
 #' @param version character
 #' @return A list with class 'chembl_options'.
@@ -12,14 +11,12 @@
 chembl_options <- function(
   cache_file = NULL,
   similarity = 70,
-  test_service_down = FALSE,
   tidy = TRUE,
   version = "latest"
 ) {
   options <- list(
     cache_file = cache_file,
     similarity = similarity,
-    test_service_down = test_service_down,
     tidy = tidy,
     version = version
   )
@@ -230,12 +227,12 @@ chembl_files <- function(version = "latest") {
 #'     used when mode = "ws". If NULL (default), results are not cached.
 #'   - similarity: numeric; similarity threshold for similarity searches
 #'     (default 70).
-#'   - test_service_down: logical; for internal testing only (default FALSE).
 #'   - tidy: logical; attempt to convert output to a simpler structure
 #'     (default TRUE).
 #'   - version: character; database version to use in "offline" mode (default
 #'     "latest").
 #' @param verbose logical; should a verbose output be printed on the console?
+#' @param ... addition arguments, only used for internal testing.
 #' @return The function returns a list of lists, where each element of the list
 #' contains a list of respective query results. If `tidy = TRUE` results are
 #' simplified, if possible.
@@ -378,10 +375,11 @@ chembl_query <- function(
   options = chembl_options(
     cache_file = NULL,
     similarity = 70,
-    test_service_down = FALSE,
     tidy = TRUE,
     version = "latest"
-  )) {
+  ),
+  ...
+  ) {
   resource <- match.arg(resource, chembl_resources())
   if (resource == "image") {
     stop("To download images, please use chembl_img().")
@@ -398,7 +396,7 @@ chembl_query <- function(
       cache_file = options$cache_file,
       similarity = options$similarity,
       tidy = options$tidy,
-      test_service_down = options$test_service_down
+      ...
     )
   } else {
     chembl_query_offline(
@@ -424,13 +422,14 @@ chembl_query_ws <- function(
   verbose = getOption("verbose"),
   cache_file = NULL,
   similarity = 70,
-  test_service_down = FALSE,
-  tidy = TRUE
+  tidy = TRUE,
+  ...
   ) {
   if (resource == "similarity") {
     warning("Similarity search currently returns no more than 20 results.")
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
+  opts <- list(...)
   foo <- function(query, verbose, similarity) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
@@ -439,7 +438,7 @@ chembl_query_ws <- function(
     query <- chembl_validate_query(query, resource, verbose)
     if (is.na(query)) return(NA)
     if (verbose) webchem_message("query", query, appendLF = FALSE)
-    if (test_service_down) {
+    if (isTRUE(opts$test_service_down)) {
       url <- ""
     } else if (resource == "similarity") {
       url <- paste0(stem, "/", resource, "/", query, "/", similarity, ".json")
@@ -509,7 +508,7 @@ chembl_query_ws <- function(
 #' directory does not exist, it will be created. If `NULL` (default), the
 #' working directory will be used.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @param test_service_down logical; for internal testing only.
+#' @param ... additional arguments, only used for internal testing.
 #' @return Creates the download directory if needed and downloads one or more
 #' SVG files.
 #' @examples
@@ -526,16 +525,17 @@ chembl_img <- function(
   query,
   dir = NULL,
   verbose = getOption("verbose"),
-  test_service_down = FALSE
+  ...
   ) {
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
+  opts <- list(...)
   foo <- function(query, verbose) {
     if (verbose) webchem_message("query", query, appendLF = FALSE)
     query <- chembl_validate_query(query, "image", verbose)
     if (is.na(query)) return(NA)
     webchem_sleep(type = "API")
     url <- ifelse(
-      test_service_down,
+      isTRUE(opts$test_service_down),
       "",
       paste0(stem, "/image/", query)
     )
@@ -574,13 +574,15 @@ chembl_img <- function(
 #' Retrieve status information about the ChEMBL webservice: database version,
 #' release date, status, and count data for various entities.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @param test_service_down logical; for internal testing only.
+#' @param ... additional arguments, only used for internal testing.
 #' @export
-chembl_status <- function(
-    verbose = getOption("verbose"),
-    test_service_down = FALSE) {
-  url <- ifelse(test_service_down, "",
-    "https://www.ebi.ac.uk/chembl/api/data/status")
+chembl_status <- function(verbose = getOption("verbose"), ...) {
+  opts <- list(...)
+  url <- ifelse(
+    isTRUE(opts$test_service_down),
+    "",
+    "https://www.ebi.ac.uk/chembl/api/data/status"
+  )
   webchem_sleep(type = "API")
   if (verbose) message("Querying ChEMBL status. ", appendLF = FALSE)
   res <- try(httr::RETRY("GET",
@@ -651,7 +653,7 @@ chembl_validate_query <- function(query, resource, verbose) {
 #' Retrieve all available classes within the Anatomical Therapeutic Chemical
 #' (ATC) classification system.
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param test_service_down logical; this argument is only used for testing.
+#' @param ... additional arguments, only used for internal testing.
 #' @references Gaulton, A., Bellis, L. J., Bento, A. P., Chambers, J.,
 #' Davies, M., Hersey, A., ... & Overington, J. P. (2012). ChEMBL: a large-scale
 #' bioactivity database for drug discovery. Nucleic acids research, 40(D1),
@@ -666,15 +668,18 @@ chembl_validate_query <- function(query, resource, verbose) {
 #' @importFrom tibble tibble as_tibble
 #' @importFrom dplyr bind_rows
 #' @export
-chembl_atc_classes <- function(verbose = getOption("verbose"),
-                               test_service_down = FALSE) {
+chembl_atc_classes <- function(verbose = getOption("verbose"), ...) {
   i = 0
   next_page <- "/chembl/api/data/atc_class.json?limit=1000&offset=0"
   atc_classes <- tibble::tibble()
+  opts <- list(...)
   while (!is.null(next_page)) {
     i = i + 1
     url <- ifelse(
-      test_service_down, "", paste0("https://www.ebi.ac.uk", next_page))
+      isTRUE(opts$test_service_down),
+      "",
+      paste0("https://www.ebi.ac.uk", next_page)
+    )
     webchem_sleep(type = "API")
     if (verbose) webchem_message("query", paste0("Page ", i), appendLF = FALSE)
     res <- try(httr::RETRY("GET",
