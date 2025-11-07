@@ -107,6 +107,7 @@ chembl_offline_molecule <- function(
     version = "latest",
     verbose = getOption("verbose")
   ){
+  # validate input: if all na, stop, if any na remove, there is also a function.
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
@@ -114,22 +115,30 @@ chembl_offline_molecule <- function(
   con <- connect_chembl(version = version)
   # confirm chembl_id
   entity_type <- tbl(con, "chembl_id_lookup") |>
-    dplyr::filter(chembl_id == query) |>
-    dplyr::collect() |>
-    dplyr::pull(entity_type)
-  if (entity_type != "COMPOUND") {
-    msg <- paste0(query, " is not a COMPOUND. It is a ", entity_type, ".")
-    stop(msg)
+    dplyr::filter(.data$chembl_id %in% query) |>
+    dplyr::select("chembl_id", "entity_type") |>
+    dplyr::collect()
+  # if missing, verbose message, NA
+
+  for (i in 1:nrow(entity_type)) {
+    if (entity_type$entity_type[i] != "COMPOUND") {
+      msg <- paste0(
+        entity_type$chembl_id[i], " is not a COMPOUND. It is a ",
+        entity_type$entity_type[i], ".")
+      stop(msg)
+    }
   }
-  internal_id <- tbl(con, "molecule_dictionary") |>
-    dplyr::filter(chembl_id == query) |>
-    dplyr::pull(molregno)
+  ids <- tbl(con, "molecule_dictionary") |>
+    dplyr::filter(.data$chembl_id %in% query) |>
+    dplyr::select("chembl_id", "molregno") |>
+    dplyr::collect()
   molecule_dictionary <- tbl(con, "molecule_dictionary") |>
-    dplyr::filter(chembl_id == query) |>
+    dplyr::filter(.data$chembl_id %in% query) |>
     dplyr::select(
       "availability_type",
       "black_box_warning",
       "chebi_par_id",
+      "chembl_id",
       "chemical_probe",
       "chirality",
       "dosed_ingredient",
@@ -156,12 +165,9 @@ chembl_offline_molecule <- function(
       "withdrawn_flag"
     ) |>
     dplyr::collect()
-  if (nrow(molecule_dictionary) > 1) {
-    stop("Multiple hits found.")
-  }
   atc_classifications <- tbl(con, "molecule_atc_classification") |>
-    dplyr::filter(molregno == internal_id) |>
-    dplyr::pull(level5)
+    dplyr::filter(.data$molregno %in% ids$molregno) |>
+    dplyr::select("molregno", "level5")
   extract_variable <- function(df, var) {
     if (nrow(df) == 0) {
       return(NULL)
@@ -170,22 +176,14 @@ chembl_offline_molecule <- function(
     }
   }
   biotherapeutics <- tbl(con, "biotherapeutics") |>
-    dplyr::filter(molregno == internal_id) |>
+    dplyr::filter(.data$molregno %in% ids$molregno) |>
     dplyr::collect()
-  biotherapeutic <- extract_variable(biotherapeutics, "description")
-  helm_notation <- extract_variable(biotherapeutics, "helm_notation")
+  # description, helm notation!
   molecule_hierarchy_raw <- tbl(con, "molecule_hierarchy") |>
-    dplyr::filter(molregno == internal_id) |>
+    dplyr::filter(molregno %in% ids$molregno) |>
     dplyr::collect()
-  molecule_hierarchy <- tibble::tibble(
-    "active_chembl_id" = query,
-    "molecule_chembl_id" = query,
-    "parent_chembl_id" = tbl(con, "molecule_dictionary") |>
-      dplyr::filter(molregno == molecule_hierarchy_raw$parent_molregno) |>
-      dplyr::pull(chembl_id)
-  )
   molecule_properties <- tbl(con, "compound_properties") |>
-    dplyr::filter(molregno == internal_id) |>
+    dplyr::filter(.data$molregno %in% ids$molregno) |>
     dplyr::select(
       "alogp",
       "aromatic_rings",
@@ -201,6 +199,7 @@ chembl_offline_molecule <- function(
       "hbd_lipinski",
       "heavy_atoms",
       "molecular_species",
+      "molregno",
       "mw_freebase",
       "mw_monoisotopic",
       "np_likeness_score",
@@ -213,42 +212,84 @@ chembl_offline_molecule <- function(
     ) |>
     dplyr::collect()
     molecule_structures <- tbl(con, "compound_structures") |>
-      dplyr::filter(molregno == internal_id) |>
+      dplyr::filter(.data$molregno %in% ids$molregno) |>
       dplyr::select(
         "canonical_smiles",
         "molfile",
+        "molregno",
         "standard_inchi",
         "standard_inchi_key"
       ) |>
       dplyr::collect()
     molecule_synonyms <- tbl(con, "molecule_synonyms") |>
-      dplyr::filter(molregno == internal_id) |>
-      dplyr::select(
-        "synonyms",
-        "syn_type"
-      ) |>
+      dplyr::filter(.data$molregno %in% ids$molregno) |>
+      dplyr::select("molregno", "synonyms","syn_type") |>
       collect() |>
       dplyr::rename(molecule_synonym = synonyms) |>
       dplyr::arrange(molecule_synonym)
-    out <- c(
-      molecule_dictionary,
-      list(
-        "atc_classifications" = atc_classifications,
-        "biotherapeutic" = biotherapeutic,
-        "helm_notation" = helm_notation,
+    out <- list()
+    for (i in seq_along(query)) {
+      if (!query[i] %in% ids$chembl_id) {
+        if (verbose) {
+          # Not found
+        }
+        out[i] <- NA_character_
+        next()
+      }
+      query_molregno <- ids$molregno[which(ids$chembl_id == query[i])]
+      # NULL TO NA CONVERSION!
+      molecule_dictionary2 <- molecule_dictionary |>
+        dplyr::filter(.data$chembl_id == query[i]) |>
+        dplyr::select(-"chembl_id")
+      atc_classifications2 <- atc_classifications |>
+        dplyr::filter(.data$molregno == query_molregno) |>
+        dplyr::select(-"molregno")
+      biotherapeutics2 <- biotherapeutics |>
+        dplyr::filter(.data$molregno == query_molregno) |>
+        dplyr::select(-"molregno")
+
+
+      molecule_hierarchy_raw2 <- molecule_hierarchy_raw |>
+        dplyr::filter(.data$molregno == query_molregno) |>
+        dplyr::select(-"molregno")
+      molecule_hierarchy <- tibble::tibble(
+        "active_chembl_id" = query,
         "molecule_chembl_id" = query,
-        "molecule_hierarchy" = molecule_hierarchy,
-        "molecule_properties" = molecule_properties,
-        "molecule_structures" = molecule_structures,
-        "molecule_synonyms" = molecule_synonyms
+        "parent_chembl_id" = tbl(con, "molecule_dictionary") |>
+          dplyr::filter(.data$molregno == molecule_hierarchy_raw2$parent_molregno) |>
+          dplyr::pull(.data$chembl_id)
       )
-    )
-    out <- out[sort(names(out))]
+
+      molecule_properties2 <- molecule_properties |>
+        dplyr::filter(.data$molregno == query_molregno) |>
+        dplyr::select(-"molregno")
+
+      molecule_structures2 <- molecule_structures |>
+        dplyr::filter(.data$molregno == query_molregno) |>
+        dplyr::select(-"molregno")
+
+      molecule_synonyms2 <- molecule_synonyms |>
+        dplyr::filter(.data$molregno == query_molregno) |>
+        dplyr::select(-"molregno")
+
+      out[[i]] <- c(
+        molecule_dictionary2,
+        list(
+          "atc_classifications" = atc_classifications2,
+          #"biotherapeutic" = biotherapeutic,
+          #"helm_notation" = helm_notation,
+          "molecule_chembl_id" = query[i],
+          "molecule_hierarchy" = molecule_hierarchy,
+          "molecule_properties" = molecule_properties2,
+          "molecule_structures" = molecule_structures2,
+          "molecule_synonyms" = molecule_synonyms2
+        )
+      )
+      names(out)[i] <- query[i]
+      out[[i]] <- out[[i]][sort(names(out[[i]]))]
+    }
     return(out)
 }
-
-
-
 
 #' Retrieve schema information from a local ChEMBL database
 #'
@@ -331,14 +372,14 @@ chembl_compare_service <- function(
 
 #' Compare Two Service Result Lists
 #'
-#' Compares two lists (typically from a webservice and an offline source) to 
-#' check for differences in their structure and content. The function checks for 
-#' missing or failed queries, ensures both inputs are lists, compares the names 
-#' and order of elements, and checks for differences in atomic elements and 
+#' Compares two lists (typically from a webservice and an offline source) to
+#' check for differences in their structure and content. The function checks for
+#' missing or failed queries, ensures both inputs are lists, compares the names
+#' and order of elements, and checks for differences in atomic elements and
 #' data frames within the lists.
 #' @param ws list; result from a webservice query.
 #' @param offline list; result from an offline query.
-#' @return A list with the comparison status and any unique elements found in 
+#' @return A list with the comparison status and any unique elements found in
 #' either input.
 #' @nord
 compare_service_lists <- function(ws, offline) {
@@ -411,11 +452,11 @@ compare_service_lists <- function(ws, offline) {
 
 #' Compare Two Named Lists of Atomic Elements
 #'
-#' Compares two named lists (`x` and `y`) containing atomic elements. The 
-#' function checks for elements unique to each list (by name);  common elements 
-#' with the same names, ensuring their order matches; whether all common 
-#' elements are atomic and identical. If the names of common elements are not 
-#' in the same order, or if any common element is not atomic or differs between 
+#' Compares two named lists (`x` and `y`) containing atomic elements. The
+#' function checks for elements unique to each list (by name);  common elements
+#' with the same names, ensuring their order matches; whether all common
+#' elements are atomic and identical. If the names of common elements are not
+#' in the same order, or if any common element is not atomic or differs between
 #' the lists, the function throws an error.
 #'
 #' @param x list; a named list of atomic elements.
