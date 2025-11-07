@@ -224,13 +224,18 @@ chembl_files <- function(version = "latest") {
 #' @param mode character; either "ws" (default) to use the webservice or
 #' "offline" to use a local ChEMBL database. Note, to use the "offline" mode,
 #' you need to have a local ChEMBL database. See [db_download_chembl()].
-#' @param tidy logical; attempt to convert output to a simpler structure.
-#' @param cache_file character; the name of the cache file without the file
-#' extension. If \code{NULL}, results are not cached. Only used when mode is
-#' "ws".
+#' @param options function; returns a named list for resource- and mode-specific
+#' options. Supported entries:
+#'   - cache_file: character or NULL; name of the cache file (without extension)
+#'     used when mode = "ws". If NULL (default), results are not cached.
+#'   - similarity: numeric; similarity threshold for similarity searches
+#'     (default 70).
+#'   - test_service_down: logical; for internal testing only (default FALSE).
+#'   - tidy: logical; attempt to convert output to a simpler structure
+#'     (default TRUE).
+#'   - version: character; database version to use in "offline" mode (default
+#'     "latest").
 #' @param verbose logical; should a verbose output be printed on the console?
-#' @param similarity numeric; similarity threshold for similarity searches.
-#' @param test_service_down logical; this argument is only used for testing.
 #' @return The function returns a list of lists, where each element of the list
 #' contains a list of respective query results. If `tidy = TRUE` results are
 #' simplified, if possible.
@@ -244,12 +249,11 @@ chembl_files <- function(version = "latest") {
 #' use this function with the \code{"chembl_id_lookup"} resource to find the
 #' appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
 #' not a separate function but a resource used by \code{chembl_query}.
-#' @details If `mode = "ws"` and `cache_file` is not `NULL` the function creates
-#' a cache directory in the working directory and a cache file in the cache
-#' directory. This file is used in subsequent calls of the function. The
-#' function first tries to retrieve query results from the cache file and only
-#' accesses the webservice if the ID cannot be found in the cache file. The
-#' cache file is extended as new ID-s are queried during the session.
+#' @details If \code{mode = "ws"} and \code{options$cache_file} is not `NULL`
+#' the function creates a cache directory in the working directory and a cache
+#' file in the cache directory. This file is used in subsequent calls of the
+#' function. The cache file is extended as new ID-s are queried during the
+#' session.
 #' @note
 #' Links to the webservice documentation:
 #' \itemize{
@@ -337,13 +341,14 @@ chembl_query <- function(
   query,
   resource = "molecule",
   mode = "ws",
-  version = "latest",
-  tidy = TRUE,
+  verbose = getOption("verbose"),
+  options = chembl_options(
   cache_file = NULL,
   similarity = 70,
-  verbose = getOption("verbose"),
-  test_service_down = FALSE
-  ) {
+    test_service_down = FALSE,
+    tidy = TRUE,
+    version = "latest"
+  )) {
   resource <- match.arg(resource, chembl_resources())
   if (resource == "image") {
     stop("To download images, please use chembl_img().")
@@ -356,16 +361,19 @@ chembl_query <- function(
     chembl_query_ws(
       query = query,
       resource = resource,
-      similarity = similarity,
-      verbose = verbose
+      verbose = verbose,
+      cache_file = options$cache_file,
+      similarity = options$similarity,
+      tidy = options$tidy,
+      test_service_down = options$test_service_down
     )
   } else {
     chembl_query_offline(
       query = query,
       resource = resource,
-      version = version,
-      similarity = similarity,
-      verbose = verbose
+      verbose = verbose,
+      similarity = options$similarity,
+      version = options$version
     )
   }
 }
