@@ -4,12 +4,7 @@
 \alias{chembl_img}
 \title{Download images from ChEMBL}
 \usage{
-chembl_img(
-  query,
-  dir = NULL,
-  verbose = getOption("verbose"),
-  test_service_down = FALSE
-)
+chembl_img(query, dir = NULL, verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{query}{character; a vector of ChEMBL IDs.}
@@ -20,7 +15,7 @@ working directory will be used.}
 
 \item{verbose}{logical; should verbose messages be printed to the console?}
 
-\item{test_service_down}{logical; for internal testing only.}
+\item{...}{additional arguments, only used for internal testing.}
 }
 \value{
 Creates the download directory if needed and downloads one or more

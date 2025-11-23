@@ -2,6 +2,7 @@
 
 ## NEW FEATURES
 
+* `chembl_query()` can now perform both online queries (mode = "ws", default) and offline retrievals (mode = "offline"). Note, offline functionality is currently very limited.
 * Added a new function `chembl_status()` which returns status information about the ChEMBL webservice.
 * `chembl_query()` now works with the "similarity" resource as well.
 * `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds.

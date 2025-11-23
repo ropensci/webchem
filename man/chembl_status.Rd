@@ -4,12 +4,12 @@
 \alias{chembl_status}
 \title{Retrieve ChEMBL webservice status}
 \usage{
-chembl_status(verbose = getOption("verbose"), test_service_down = FALSE)
+chembl_status(verbose = getOption("verbose"), ...)
 }
 \arguments{
 \item{verbose}{logical; should verbose messages be printed to the console?}
 
-\item{test_service_down}{logical; for internal testing only.}
+\item{...}{additional arguments, only used for internal testing.}
 }
 \description{
 Retrieve status information about the ChEMBL webservice: database version,
