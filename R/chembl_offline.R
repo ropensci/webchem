@@ -1,3 +1,9 @@
+#' Replicate ChEMBL resource using a local ChEMBL database
+#'
+#' @param query character; activity ID to retrieve
+#' @param resource character; ChEMBL resource to query
+#' @param verbose logical; print verbose messages to the console?
+#' @param version character; version of the ChEMBL database
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL1082", resource = "molecule")
@@ -36,11 +42,8 @@ chembl_query_offline <- function(
   }
 }
 
-#' Replicate ChEMBL API activity resource using a local ChEMBL database
-#'
-#' @param query character; activity ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
+#' activity resource
+#' 
 #' @examples
 #' \dontrun{
 #' chembl_offline_activity(query = "31863")
@@ -54,11 +57,8 @@ chembl_offline_activity <- function(
   stop("Offline 'activity' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API assay resource using a local ChEMBL database
+#' assay resource
 #'
-#' @param query character; assay ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_assay(query = "CHEMBL615117")
@@ -72,11 +72,8 @@ chembl_offline_assay <- function(
   stop("Offline 'assay' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API atc_class resource using a local ChEMBL database
+#' atc_class resource
 #'
-#' @param query character; ATC class ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_atc_class(query = "A01AA01")
@@ -90,11 +87,8 @@ chembl_offline_atc_class <- function(
   stop("Offline 'atc_class' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API binding_site resource using a local ChEMBL database
+#' binding_site resource
 #'
-#' @param query numeric; site ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_binding_site(query = 2)
@@ -108,11 +102,8 @@ chembl_offline_binding_site <- function(
   stop("Offline 'binding_site' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API biotherapeutic resource using a local ChEMBL database
+#' biotherapeutic resource
 #'
-#' @param query character; ChEMBL ID of the biotherapeutic to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_biotherapeutic(query = "CHEMBL448105")
@@ -126,11 +117,8 @@ chembl_offline_biotherapeutic <- function(
   stop("Offline 'biotherapeutic' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API cell_line resource using a local ChEMBL database
+#' cell_line resource using a local ChEMBL database
 #'
-#' @param query character; cell line ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_cell_line(query = "CHEMBL3307241")
@@ -144,11 +132,8 @@ chembl_offline_cell_line <- function(
   stop("Offline 'cell_line' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API chembl_id_lookup resource using a local ChEMBL database
+#' chembl_id_lookup resource
 #'
-#' @param query character; ChEMBL ID to lookup
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_chembl_id_lookup(query = "CHEMBL1")
@@ -162,11 +147,8 @@ chembl_offline_chembl_id_lookup <- function(
   stop("Offline 'chembl_id_lookup' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API compound_record resource using a local ChEMBL database
+#' compound_record resource
 #'
-#' @param query character; compound record ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_compound_record(query = "1")
@@ -180,11 +162,8 @@ chembl_offline_compound_record <- function(
   stop("Offline 'compound_record' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API compound_structural_alert resource using a local ChEMBL database
+#' compound_structural_alert resource
 #'
-#' @param query character; compound ChEMBL ID to retrieve structural alerts
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_compound_structural_alert(query = "CHEMBL266429")
@@ -198,11 +177,8 @@ chembl_offline_compound_structural_alert <- function(
   stop("Offline 'compound_structural_alert' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API document resource using a local ChEMBL database
+#' document resource
 #'
-#' @param query character; document ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_document(query = "CHEMBL1158643")
@@ -216,11 +192,8 @@ chembl_offline_document <- function(
   stop("Offline 'document' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API document_similarity resource using a local ChEMBL database
+#' document_similarity resource
 #'
-#' @param query character; document ChEMBL ID to retrieve similarity
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_document_similarity(query = "CHEMBL1148466")
@@ -234,11 +207,8 @@ chembl_offline_document_similarity <- function(
   stop("Offline 'document_similarity' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API drug resource using a local ChEMBL database
+#' drug resource
 #'
-#' @param query character; compound ChEMBL ID to retrieve drug info
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_drug(query = "CHEMBL2")
@@ -252,11 +222,8 @@ chembl_offline_drug <- function(
   stop("Offline 'drug' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API drug_indication resource using a local ChEMBL database
+#' drug_indication resource
 #'
-#' @param query character; drug indication ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_drug_indication(query = "22606")
@@ -270,11 +237,8 @@ chembl_offline_drug_indication <- function(
   stop("Offline 'drug_indication' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API drug_warning resource using a local ChEMBL database
+#' drug_warning resource using a local ChEMBL database
 #'
-#' @param query character; warning ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_drug_warning(query = "1")
@@ -288,11 +252,8 @@ chembl_offline_drug_warning <- function(
   stop("Offline 'drug_warning' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API go_slim resource using a local ChEMBL database
+#' go_slim resource
 #'
-#' @param query character; GO ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_go_slim(query = "GO:0000003")
@@ -306,11 +267,8 @@ chembl_offline_go_slim <- function(
   stop("Offline 'go_slim' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API mechanism resource using a local ChEMBL database
+#' mechanism resource
 #'
-#' @param query character; mechanism ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_mechanism(query = "13")
@@ -324,11 +282,8 @@ chembl_offline_mechanism <- function(
   stop("Offline 'mechanism' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API metabolism resource using a local ChEMBL database
+#' metabolism resource
 #'
-#' @param query character; metabolism ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_metabolism(query = "119")
@@ -342,12 +297,9 @@ chembl_offline_metabolism <- function(
   stop("Offline 'metabolism' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API molecule resource using a local ChEMBL database
+#' molecule resource
 #'
 #' @importFrom rlang .data
-#' @param query character; ChEMBL ID of the molecule to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_molecule(query = "CHEMBL1082")
@@ -575,11 +527,8 @@ chembl_offline_molecule <- function(
   return(out)
 }
 
-#' Replicate ChEMBL API molecule_form resource using a local ChEMBL database
+#'molecule_form resource
 #'
-#' @param query character; molecule ChEMBL ID to retrieve form
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_molecule_form(query = "CHEMBL6329")
@@ -593,11 +542,8 @@ chembl_offline_molecule_form <- function(
   stop("Offline 'molecule_form' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API organism resource using a local ChEMBL database
+#' organism resource
 #'
-#' @param query character; organism class ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_organism(query = "1")
@@ -611,11 +557,8 @@ chembl_offline_organism <- function(
   stop("Offline 'organism' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API protein_classification resource using a local ChEMBL database
+#' protein_classification resource
 #'
-#' @param query character; protein class ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_protein_classification(query = "1")
@@ -629,11 +572,8 @@ chembl_offline_protein_classification <- function(
   stop("Offline 'protein_classification' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API source resource using a local ChEMBL database
+#' source resource
 #'
-#' @param query character; source ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_source(query = "1")
@@ -647,11 +587,8 @@ chembl_offline_source <- function(
   stop("Offline 'source' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API similarity resource using a local ChEMBL database
+#' similarity resource
 #'
-#' @param query character; compound SMILES to retrieve similarity results
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_similarity(query = "CC(=O)Oc1ccccc1C(=O)O")
@@ -665,11 +602,8 @@ chembl_offline_similarity <- function(
   stop("Offline 'similarity' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API substructure resource using a local ChEMBL database
+#' substructure resource
 #'
-#' @param query character; compound SMILES to retrieve substructure results
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_substructure(query = "CN(CCCN)c1cccc2ccccc12")
@@ -683,11 +617,8 @@ chembl_offline_substructure <- function(
   stop("Offline 'substructure' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API target resource using a local ChEMBL database
+#' target resource
 #'
-#' @param query character; target ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_target(query = "CHEMBL2074")
@@ -701,11 +632,8 @@ chembl_offline_target <- function(
   stop("Offline 'target' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API target_component resource using a local ChEMBL database
+#' target_component resource
 #'
-#' @param query character; target component ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_target_component(query = "1")
@@ -719,11 +647,8 @@ chembl_offline_target_component <- function(
   stop("Offline 'target_component' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API target_relation resource using a local ChEMBL database
+#' target_relation resource
 #'
-#' @param query character; target ChEMBL ID to retrieve relations
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_target_relation(query = "CHEMBL2251")
@@ -737,11 +662,8 @@ chembl_offline_target_relation <- function(
   stop("Offline 'target_relation' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API tissue resource using a local ChEMBL database
+#' tissue resource
 #'
-#' @param query character; tissue ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_tissue(query = "CHEMBL3988026")
@@ -755,11 +677,8 @@ chembl_offline_tissue <- function(
   stop("Offline 'tissue' queries are not yet implemented.")
 }
 
-#' Replicate ChEMBL API xref_source resource using a local ChEMBL database
+#' xref_source resource
 #'
-#' @param query character; name of the xref source to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
 #' chembl_offline_xref_source(query = "AlphaFoldDB")
