@@ -21,6 +21,7 @@ chembl_query_offline <- function(
     version <- validate_chembl_version(version = version)
   }
   con <- connect_chembl(version = version)
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
   FUN <- paste0("chembl_offline_", resource)
   if (!exists(FUN)) {
     msg <- paste0(
@@ -538,7 +539,6 @@ chembl_offline_molecule <- function(
     names(out)[i] <- query[i]
     out[[i]] <- out[[i]][sort(names(out[[i]]))]
   }
-  DBI::dbDisconnect(con)
   return(out)
 }
 
