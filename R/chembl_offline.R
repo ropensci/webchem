@@ -20,6 +20,7 @@ chembl_query_offline <- function(
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
+  con <- connect_chembl(version = version)
   FUN <- paste0("chembl_offline_", resource)
   if (!exists(FUN)) {
     msg <- paste0(
@@ -31,13 +32,15 @@ chembl_query_offline <- function(
       query = query,
       verbose = verbose,
       similarity = similarity,
-      version = version
+      version = version,
+      con = con
     ))
   } else {
     do.call(FUN, args = list(
       query = query,
       verbose = verbose,
-      version = version
+      version = version,
+      con = con
     ))
   }
 }
@@ -52,7 +55,8 @@ chembl_query_offline <- function(
 chembl_offline_activity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'activity' queries are not yet implemented.")
 }
@@ -67,7 +71,8 @@ chembl_offline_activity <- function(
 chembl_offline_assay <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'assay' queries are not yet implemented.")
 }
@@ -82,7 +87,8 @@ chembl_offline_assay <- function(
 chembl_offline_atc_class <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'atc_class' queries are not yet implemented.")
 }
@@ -97,7 +103,8 @@ chembl_offline_atc_class <- function(
 chembl_offline_binding_site <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'binding_site' queries are not yet implemented.")
 }
@@ -112,7 +119,8 @@ chembl_offline_binding_site <- function(
 chembl_offline_biotherapeutic <- function(
     query,
     verbose = getOption("verbose"),
-    version = "latest"
+    version = "latest",
+    con
   ){
   stop("Offline 'biotherapeutic' queries are not yet implemented.")
 }
@@ -127,7 +135,8 @@ chembl_offline_biotherapeutic <- function(
 chembl_offline_cell_line <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'cell_line' queries are not yet implemented.")
 }
@@ -142,7 +151,8 @@ chembl_offline_cell_line <- function(
 chembl_offline_chembl_id_lookup <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'chembl_id_lookup' queries are not yet implemented.")
 }
@@ -157,7 +167,8 @@ chembl_offline_chembl_id_lookup <- function(
 chembl_offline_compound_record <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'compound_record' queries are not yet implemented.")
 }
@@ -172,7 +183,8 @@ chembl_offline_compound_record <- function(
 chembl_offline_compound_structural_alert <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'compound_structural_alert' queries are not yet implemented.")
 }
@@ -187,7 +199,8 @@ chembl_offline_compound_structural_alert <- function(
 chembl_offline_document <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'document' queries are not yet implemented.")
 }
@@ -202,7 +215,8 @@ chembl_offline_document <- function(
 chembl_offline_document_similarity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'document_similarity' queries are not yet implemented.")
 }
@@ -217,7 +231,8 @@ chembl_offline_document_similarity <- function(
 chembl_offline_drug <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'drug' queries are not yet implemented.")
 }
@@ -232,7 +247,8 @@ chembl_offline_drug <- function(
 chembl_offline_drug_indication <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'drug_indication' queries are not yet implemented.")
 }
@@ -247,7 +263,8 @@ chembl_offline_drug_indication <- function(
 chembl_offline_drug_warning <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'drug_warning' queries are not yet implemented.")
 }
@@ -262,7 +279,8 @@ chembl_offline_drug_warning <- function(
 chembl_offline_go_slim <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'go_slim' queries are not yet implemented.")
 }
@@ -277,7 +295,8 @@ chembl_offline_go_slim <- function(
 chembl_offline_mechanism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'mechanism' queries are not yet implemented.")
 }
@@ -292,7 +311,8 @@ chembl_offline_mechanism <- function(
 chembl_offline_metabolism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'metabolism' queries are not yet implemented.")
 }
@@ -308,14 +328,9 @@ chembl_offline_metabolism <- function(
 chembl_offline_molecule <- function(
     query,
     verbose = getOption("verbose"),
-    version = "latest"
+    version = "latest", 
+    con
   ){
-  # validate input: if all na, stop, if any na remove, there is also a function.
-  if (!inherits(version, "chembl_version")) {
-    version <- validate_chembl_version(version = version)
-  }
-  # connect to local database
-  con <- connect_chembl(version = version)
   # confirm chembl_id
   entity_type <- fetch_table(
     con = con,
@@ -537,7 +552,8 @@ chembl_offline_molecule <- function(
 chembl_offline_molecule_form <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'molecule_form' queries are not yet implemented.")
 }
@@ -552,7 +568,8 @@ chembl_offline_molecule_form <- function(
 chembl_offline_organism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'organism' queries are not yet implemented.")
 }
@@ -567,7 +584,8 @@ chembl_offline_organism <- function(
 chembl_offline_protein_classification <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'protein_classification' queries are not yet implemented.")
 }
@@ -582,7 +600,8 @@ chembl_offline_protein_classification <- function(
 chembl_offline_source <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'source' queries are not yet implemented.")
 }
@@ -597,7 +616,8 @@ chembl_offline_source <- function(
 chembl_offline_similarity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'similarity' queries are not yet implemented.")
 }
@@ -612,7 +632,8 @@ chembl_offline_similarity <- function(
 chembl_offline_substructure <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'substructure' queries are not yet implemented.")
 }
@@ -627,7 +648,8 @@ chembl_offline_substructure <- function(
 chembl_offline_target <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'target' queries are not yet implemented.")
 }
@@ -642,7 +664,8 @@ chembl_offline_target <- function(
 chembl_offline_target_component <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'target_component' queries are not yet implemented.")
 }
@@ -657,7 +680,8 @@ chembl_offline_target_component <- function(
 chembl_offline_target_relation <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'target_relation' queries are not yet implemented.")
 }
@@ -672,7 +696,8 @@ chembl_offline_target_relation <- function(
 chembl_offline_tissue <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'tissue' queries are not yet implemented.")
 }
@@ -687,7 +712,8 @@ chembl_offline_tissue <- function(
 chembl_offline_xref_source <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  con
   ){
   stop("Offline 'xref_source' queries are not yet implemented.")
 }
