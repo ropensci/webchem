@@ -50,7 +50,7 @@ chembl_query_offline <- function(
 #' 
 #' @examples
 #' \dontrun{
-#' chembl_offline_activity(query = "31863")
+#' chembl_query_offline(query = "31863", resource = "activity")
 #' }
 #' @noRd
 chembl_offline_activity <- function(
@@ -66,7 +66,7 @@ chembl_offline_activity <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_assay(query = "CHEMBL615117")
+#' chembl_query_offline(query = "CHEMBL615117", resource = "assay")
 #' }
 #' @noRd
 chembl_offline_assay <- function(
@@ -82,7 +82,7 @@ chembl_offline_assay <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_atc_class(query = "A01AA01")
+#' chembl_query_offline(query = "A01AA01", resource = "atc_class")
 #' }
 #' @noRd
 chembl_offline_atc_class <- function(
@@ -98,7 +98,7 @@ chembl_offline_atc_class <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_binding_site(query = 2)
+#' chembl_query_offline(query = 2, resource = "binding_site")
 #' }
 #' @noRd
 chembl_offline_binding_site <- function(
@@ -114,7 +114,7 @@ chembl_offline_binding_site <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_biotherapeutic(query = "CHEMBL448105")
+#' chembl_query_offline(query = "CHEMBL448105", resource = "biotherapeutic")
 #' }
 #' @noRd
 chembl_offline_biotherapeutic <- function(
@@ -130,7 +130,7 @@ chembl_offline_biotherapeutic <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_cell_line(query = "CHEMBL3307241")
+#' chembl_query_offline(query = "CHEMBL3307241", resource = "cell_line")
 #' }
 #' @noRd
 chembl_offline_cell_line <- function(
@@ -146,7 +146,7 @@ chembl_offline_cell_line <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_chembl_id_lookup(query = "CHEMBL1")
+#' chembl_query_offline(query = "CHEMBL1", resource = "chembl_id_lookup")
 #' }
 #' @noRd
 chembl_offline_chembl_id_lookup <- function(
@@ -162,7 +162,7 @@ chembl_offline_chembl_id_lookup <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_compound_record(query = "1")
+#' chembl_query_offline(query = "1", resource = "compound_record")
 #' }
 #' @noRd
 chembl_offline_compound_record <- function(
@@ -178,7 +178,7 @@ chembl_offline_compound_record <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_compound_structural_alert(query = "CHEMBL266429")
+#' chembl_query_offline(query = "CHEMBL266429", resource = "compound_structural_alert")
 #' }
 #' @noRd
 chembl_offline_compound_structural_alert <- function(
@@ -194,7 +194,7 @@ chembl_offline_compound_structural_alert <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_document(query = "CHEMBL1158643")
+#' chembl_query_offline(query = "CHEMBL1158643", resource = "document")
 #' }
 #' @noRd
 chembl_offline_document <- function(
@@ -210,7 +210,7 @@ chembl_offline_document <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_document_similarity(query = "CHEMBL1148466")
+#' chembl_query_offline(query = "CHEMBL1148466", resource = "document_similarity")
 #' }
 #' @noRd
 chembl_offline_document_similarity <- function(
@@ -226,7 +226,7 @@ chembl_offline_document_similarity <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_drug(query = "CHEMBL2")
+#' chembl_query_offline(query = "CHEMBL2", resource = "drug")
 #' }
 #' @noRd
 chembl_offline_drug <- function(
@@ -242,7 +242,7 @@ chembl_offline_drug <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_drug_indication(query = "22606")
+#' chembl_query_offline(query = "22606", resource = "drug_indication")
 #' }
 #' @noRd
 chembl_offline_drug_indication <- function(
@@ -258,7 +258,7 @@ chembl_offline_drug_indication <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_drug_warning(query = "1")
+#' chembl_query_offline(query = "1", resource = "drug_warning")
 #' }
 #' @noRd
 chembl_offline_drug_warning <- function(
@@ -274,7 +274,7 @@ chembl_offline_drug_warning <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_go_slim(query = "GO:0000003")
+#' chembl_query_offline(query = "GO:0000003", resource = "go_slim")
 #' }
 #' @noRd
 chembl_offline_go_slim <- function(
@@ -290,7 +290,7 @@ chembl_offline_go_slim <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_mechanism(query = "13")
+#' chembl_query_offline(query = "13", resource = "mechanism")
 #' }
 #' @noRd
 chembl_offline_mechanism <- function(
@@ -306,7 +306,7 @@ chembl_offline_mechanism <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_metabolism(query = "119")
+#' chembl_query_offline(query = "119", resource = "metabolism")
 #' }
 #' @noRd
 chembl_offline_metabolism <- function(
@@ -323,7 +323,7 @@ chembl_offline_metabolism <- function(
 #' @importFrom rlang .data
 #' @examples
 #' \dontrun{
-#' chembl_offline_molecule(query = "CHEMBL1082")
+#' chembl_query_offline(query = "CHEMBL1082", resource = "molecule")
 #' }
 #' @noRd
 chembl_offline_molecule <- function(
@@ -546,7 +546,7 @@ chembl_offline_molecule <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_molecule_form(query = "CHEMBL6329")
+#' chembl_query_offline(query = "CHEMBL6329", resource = "molecule_form")
 #' }
 #' @noRd
 chembl_offline_molecule_form <- function(
@@ -562,7 +562,7 @@ chembl_offline_molecule_form <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_organism(query = "1")
+#' chembl_query_offline(query = "1", resource = "organism")
 #' }
 #' @noRd
 chembl_offline_organism <- function(
@@ -578,7 +578,7 @@ chembl_offline_organism <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_protein_classification(query = "1")
+#' chembl_query_offline(query = "1", resource = "protein_classification")
 #' }
 #' @noRd
 chembl_offline_protein_classification <- function(
@@ -594,7 +594,7 @@ chembl_offline_protein_classification <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_source(query = "1")
+#' chembl_query_offline(query = "1", resource = "source")
 #' }
 #' @noRd
 chembl_offline_source <- function(
@@ -610,7 +610,7 @@ chembl_offline_source <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_similarity(query = "CC(=O)Oc1ccccc1C(=O)O")
+#' chembl_query_offline(query = "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
 #' }
 #' @noRd
 chembl_offline_similarity <- function(
@@ -626,7 +626,7 @@ chembl_offline_similarity <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_substructure(query = "CN(CCCN)c1cccc2ccccc12")
+#' chembl_query_offline(query = "CN(CCCN)c1cccc2ccccc12", resource = "substructure")
 #' }
 #' @noRd
 chembl_offline_substructure <- function(
@@ -642,7 +642,7 @@ chembl_offline_substructure <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_target(query = "CHEMBL2074")
+#' chembl_query_offline(query = "CHEMBL2074", resource = "target")
 #' }
 #' @noRd
 chembl_offline_target <- function(
@@ -658,7 +658,7 @@ chembl_offline_target <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_target_component(query = "1")
+#' chembl_query_offline(query = "1", resource = "target_component")
 #' }
 #' @noRd
 chembl_offline_target_component <- function(
@@ -674,7 +674,7 @@ chembl_offline_target_component <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_target_relation(query = "CHEMBL2251")
+#' chembl_query_offline(query = "CHEMBL2251", resource = "target_relation")
 #' }
 #' @noRd
 chembl_offline_target_relation <- function(
@@ -690,7 +690,7 @@ chembl_offline_target_relation <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_tissue(query = "CHEMBL3988026")
+#' chembl_query_offline(query = "CHEMBL3988026", resource = "tissue")
 #' }
 #' @noRd
 chembl_offline_tissue <- function(
@@ -706,7 +706,7 @@ chembl_offline_tissue <- function(
 #'
 #' @examples
 #' \dontrun{
-#' chembl_offline_xref_source(query = "AlphaFoldDB")
+#' chembl_query_offline(query = "AlphaFoldDB", resource = "xref_source")
 #' }
 #' @noRd
 chembl_offline_xref_source <- function(
