@@ -151,11 +151,17 @@ chembl_offline_cell_line <- function(
 #' @noRd
 chembl_offline_chembl_id_lookup <- function(
   query,
+  target,
   verbose = getOption("verbose"),
   version = "latest",
   con
   ){
-  stop("Offline 'chembl_id_lookup' queries are not yet implemented.")
+  fetch_table(
+    con = con,
+    table = "chembl_id_lookup",
+    id_col = "chembl_id",
+    ids = query,
+  )
 }
 
 #' compound_record resource
