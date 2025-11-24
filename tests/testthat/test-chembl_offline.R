@@ -18,3 +18,12 @@ test_that("chembl_offline_chembl_id_lookup works", {
   expect_equal(nrow(b), 2)
   expect_equal(ncol(b), 5)
 })
+
+test_that("informative error when query and resource do not match", {
+  msg <- tryCatch(
+    chembl_query_offline(
+      query = c("CHEMBL1082", "CHEMBL3988026") , resource = "molecule"),
+    error = function(e) e$message
+  )
+  expect_equal(msg, "CHEMBL3988026 is not a COMPOUND. It is a TISSUE.")
+})
