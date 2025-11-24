@@ -76,6 +76,12 @@ chembl_offline_assay <- function(
   con
   ){
   stop("Offline 'assay' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "ASSAY",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' atc_class resource
@@ -124,6 +130,12 @@ chembl_offline_biotherapeutic <- function(
     con
   ){
   stop("Offline 'biotherapeutic' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' cell_line resource using a local ChEMBL database
@@ -194,6 +206,12 @@ chembl_offline_compound_structural_alert <- function(
   con
   ){
   stop("Offline 'compound_structural_alert' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' document resource
@@ -210,6 +228,12 @@ chembl_offline_document <- function(
   con
   ){
   stop("Offline 'document' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "DOCUMENT",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' document_similarity resource
@@ -226,6 +250,12 @@ chembl_offline_document_similarity <- function(
   con
   ){
   stop("Offline 'document_similarity' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "DOCUMENT",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' drug resource
@@ -242,6 +272,12 @@ chembl_offline_drug <- function(
   con
   ){
   stop("Offline 'drug' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' drug_indication resource
@@ -339,10 +375,10 @@ chembl_offline_molecule <- function(
     con
   ){
   chembl_validate_id_offline(
-      query = query,
-      target = "COMPOUND",
-      verbose = verbose,
-      con = con
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
   )
   ids <- fetch_table(
     con = con,
@@ -550,6 +586,12 @@ chembl_offline_molecule_form <- function(
   con
   ){
   stop("Offline 'molecule_form' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' organism resource
@@ -646,6 +688,12 @@ chembl_offline_target <- function(
   con
   ){
   stop("Offline 'target' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "TARGET",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' target_component resource
@@ -694,6 +742,12 @@ chembl_offline_tissue <- function(
   con
   ){
   stop("Offline 'tissue' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "TISSUE",
+    verbose = verbose,
+    con = con
+  )
 }
 
 #' xref_source resource
