@@ -612,7 +612,7 @@ chembl_validate_query <- function(query, resource, verbose) {
   if (resource %in% c(
     "activity",
     "binding_site",
-    "compund_record",
+    "compound_record",
     "drug_indication",
     "drug_warning",
     "mechanism",
