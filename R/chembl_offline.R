@@ -338,24 +338,12 @@ chembl_offline_molecule <- function(
     version = "latest", 
     con
   ){
-  # confirm chembl_id
-  entity_type <- fetch_table(
-    con = con,
-    table = "chembl_id_lookup",
-    id_col = "chembl_id",
-    ids = query,
-    select_cols = c("chembl_id", "entity_type")
+  chembl_validate_id_offline(
+      query = query,
+      target = "COMPOUND",
+      verbose = verbose,
+      con = con
   )
-  # if missing, verbose message, NA
-
-  for (i in 1:nrow(entity_type)) {
-    if (entity_type$entity_type[i] != "COMPOUND") {
-      msg <- paste0(
-        entity_type$chembl_id[i], " is not a COMPOUND. It is a ",
-        entity_type$entity_type[i], ".")
-      stop(msg)
-    }
-  }
   ids <- fetch_table(
     con = con,
     table = "molecule_dictionary",
@@ -960,4 +948,33 @@ fetch_table <- function(
     out <- out |> dplyr::select(dplyr::all_of(select_cols))
   }
   out |> dplyr::collect()
+}
+
+chembl_validate_id_offline <- function(
+   query,
+   target,
+   verbose = getOption("verbose"),
+   con
+) {
+  entity_type <- fetch_table(
+    con = con,
+    table = "chembl_id_lookup",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c("chembl_id", "entity_type")
+  )
+  index <- which(!query %in% entity_type$chembl_id)
+  if (length(index) > 0) {
+    missing_ids <- paste(query[index], collapse = ", ")
+    msg <- paste0("The following ChEMBL IDs were not found: ", missing_ids)
+    stop(msg)
+  }
+  for (i in 1:nrow(entity_type)) {
+    if (entity_type$entity_type[i] != target) {
+      msg <- paste0(
+        entity_type$chembl_id[i], " is not a ", target, ". It is a ",
+        entity_type$entity_type[i], ".")
+      stop(msg)
+    }
+  }
 }
