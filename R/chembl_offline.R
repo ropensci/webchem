@@ -51,7 +51,7 @@ chembl_query_offline <- function(
 }
 
 #' activity resource
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "31863", resource = "activity")
@@ -190,16 +190,7 @@ chembl_offline_cell_line <- function(
     dplyr::rename("cell_chembl_id" = "chembl_id") |>
     dplyr::arrange(.data$cell_chembl_id)
   if (output == "raw") {
-    id_col <- "cell_chembl_id"
-    if (nrow(out) == 0) {
-      return(list())
-    }
-    out <- lapply(seq_len(nrow(out)), function(i) {
-      raw_element <- out[i, , drop = FALSE]
-      raw_element <- as.list(raw_element)
-      raw_element[sort(names(raw_element))]
-    })
-    names(out) <- query
+    out <- chembl_tidy2raw(query = query, df = out)
   }
   return(out)
 }
@@ -432,7 +423,7 @@ chembl_offline_metabolism <- function(
 chembl_offline_molecule <- function(
     query,
     verbose = getOption("verbose"),
-    version = "latest", 
+    version = "latest",
     output = "tidy",
     con
   ){
@@ -720,6 +711,7 @@ chembl_offline_similarity <- function(
   verbose = getOption("verbose"),
   version = "latest",
   output = "tidy",
+  similarity = 70,
   con
   ){
   stop("Offline 'similarity' queries are not yet implemented.")
@@ -1104,4 +1096,24 @@ chembl_validate_id_offline <- function(
       stop(msg)
     }
   }
+}
+
+#' Convert tidy data frame to raw list format
+#' 
+#' @param query character; vector of query IDs.
+#' @param df data.frame; tidy data frame to convert.
+#' @return A named list where each element corresponds to a row in the data
+#' frame, named by the query IDs.
+#' @noRd
+chembl_tidy2raw <- function(query, df) {
+  if (!is.data.frame(df) || nrow(df) == 0) {
+    return(list())
+  }
+  res <- lapply(seq_len(nrow(df)), function(i) {
+    raw_element <- df[i, , drop = FALSE]
+    raw_element <- as.list(raw_element)
+    raw_element[sort(names(raw_element))]
+  })
+  names(res) <- query
+  res
 }
