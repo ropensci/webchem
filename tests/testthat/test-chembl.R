@@ -67,7 +67,7 @@ test_that("chembl_query() examples", {
   o9 <- chembl_query(
     "CHEMBL266429",
     resource = "compound_structural_alert",
-    options = chembl_options(tidy = FALSE)
+    output = "raw"
   )
   # Resource: document - requires document ChEMBL ID
   o10 <- chembl_query("CHEMBL1158643", resource = "document")

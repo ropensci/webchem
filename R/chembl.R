@@ -4,20 +4,17 @@
 #' `options` argument to `chembl_query()`.
 #' @param cache_file character or NULL
 #' @param similarity numeric
-#' @param tidy logical
 #' @param version character
 #' @return A list with class 'chembl_options'.
 #' @noRd
 chembl_options <- function(
   cache_file = NULL,
   similarity = 70,
-  tidy = TRUE,
   version = "latest"
 ) {
   options <- list(
     cache_file = cache_file,
     similarity = similarity,
-    tidy = tidy,
     version = version
   )
   class(options) <- "chembl_options"
@@ -227,8 +224,6 @@ chembl_files <- function(version = "latest") {
 #'     used when mode = "ws". If NULL (default), results are not cached.
 #'   - similarity: numeric; similarity threshold for similarity searches
 #'     (default 70).
-#'   - tidy: logical; attempt to convert output to a simpler structure
-#'     (default TRUE).
 #'   - version: character; database version to use in "offline" mode (default
 #'     "latest").
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -371,16 +366,17 @@ chembl_query <- function(
   query,
   resource = "molecule",
   mode = "ws",
+  output = "raw",
   verbose = getOption("verbose"),
   options = chembl_options(
     cache_file = NULL,
     similarity = 70,
-    tidy = TRUE,
     version = "latest"
   ),
   ...
   ) {
   resource <- match.arg(resource, chembl_resources())
+  output <- match.arg(output, choices = c("raw", "tidy"))
   if (resource == "image") {
     stop("To download images, please use chembl_img().")
   }
@@ -395,7 +391,7 @@ chembl_query <- function(
       verbose = verbose,
       cache_file = options$cache_file,
       similarity = options$similarity,
-      tidy = options$tidy,
+      output = output,
       ...
     )
   } else {
@@ -404,7 +400,8 @@ chembl_query <- function(
       resource = resource,
       verbose = verbose,
       similarity = options$similarity,
-      version = options$version
+      version = options$version,
+      output = output
     )
   }
 }
@@ -422,7 +419,7 @@ chembl_query_ws <- function(
   verbose = getOption("verbose"),
   cache_file = NULL,
   similarity = 70,
-  tidy = TRUE,
+  output = "raw",
   ...
   ) {
   if (resource == "similarity") {
@@ -464,7 +461,7 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    if (tidy) {
+    if (output == "tidy") {
       cont <- format_chembl(cont)
     }
     return(cont)
