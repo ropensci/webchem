@@ -461,6 +461,14 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
+    # map NULL to NA in R
+    cont <- lapply(cont, function(x) {
+      if (is.null(x)) {
+        return(NA_character_)
+      } else {
+        return(x)
+      }
+    })
     if (output == "tidy") {
       cont <- format_chembl(cont)
     }
