@@ -95,6 +95,10 @@ chembl_offline_assay <- function(
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "A01AA01", resource = "atc_class")
+#' chembl_query_offline(query = "A01AA", resource = "atc_class")
+#' chembl_query_offline(query = "A01A", resource = "atc_class")
+#' chembl_query_offline(query = "A01", resource = "atc_class")
+#' chembl_query_offline(query = "A", resource = "atc_class")
 #' }
 #' @noRd
 chembl_offline_atc_class <- function(
@@ -104,7 +108,78 @@ chembl_offline_atc_class <- function(
   output = "tidy",
   con
   ){
-  stop("Offline 'atc_class' queries are not yet implemented.")
+  # determine ATC level field for a given code length
+  len2level <- function(x) {
+    switch(as.character(x),
+      "1" = "level1",
+      "3" = "level2",
+      "4" = "level3",
+      "5" = "level4",
+      "7" = "level5",
+      NULL
+    )
+  }
+  # validate query lengths
+  q_lengths <- nchar(query)
+  invalid_idx <- which(is.na(vapply(q_lengths, len2level, FUN.VALUE = character(1))))
+  if (length(invalid_idx) > 0) {
+    msg <- sprintf(
+      "Invalid ATC code(s): %s. ATC codes must have lengths 1,3,4,5 or 7.", 
+      paste(unique(query[invalid_idx]), collapse = ", ")
+    )
+    stop(msg)
+  }
+  # fetch by groups of same-length queries to use the correct id_col
+  fetched <- lapply(seq_along(q_lengths), function(i) {
+    fetch_table(
+      con = con,
+      table = "atc_classification",
+      id_col = len2level(q_lengths[i]),
+      ids = query[i],
+      select_cols = c(
+        "level1",
+        "level1_description",
+        "level2",
+        "level2_description",
+        "level3",
+        "level3_description",
+        "level4",
+        "level4_description",
+        "level5",
+        "who_name"
+      )
+    )
+  })
+  names(fetched) <- query
+  if (output == "raw") {
+    out <- lapply(fetched, function(df) {
+      if (nrow(df) == 0) {
+      return(NA)
+      }
+      lapply(seq_len(nrow(df)), function(i) {
+      row_list <- as.list(df[i, , drop = FALSE])
+      row_list[sort(names(row_list))]
+      })
+    })
+    if (length(out) == 1) {
+      out <- out[[1]]
+      names(out) <- query
+    }
+  } else {
+    # Ensure all queries have at least one row (with NAs if no results)
+    for (i in seq_along(fetched)) {
+      if (nrow(fetched[[i]]) == 0) {
+        # Create a single row with all NAs
+        fetched[[i]] <- fetched[[i]][1, , drop = FALSE]
+        fetched[[i]][1, ] <- NA
+      }
+    }
+    # Bind rows and add query column
+    out <- dplyr::bind_rows(fetched, .id = "query")
+    # Reorder columns to put query first
+    out <- out |> dplyr::relocate(.data$query)
+  }
+  return(out)
 }
 
 #' binding_site resource

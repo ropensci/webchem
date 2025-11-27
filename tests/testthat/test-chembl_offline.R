@@ -32,7 +32,7 @@ test_that("cell_lines work", {
   ws <- chembl_query(
     query = "CHEMBL3307241", resource = "cell_line", output = "raw")
   off <- chembl_query(
-    query = "CHEMBL3307241", 
+    query = "CHEMBL3307241",
     resource = "cell_line",
     mode = "offline",
     output = "raw"
@@ -40,3 +40,36 @@ test_that("cell_lines work", {
   res <- compare_service_lists(ws$CHEMBL3307241, off$CHEMBL3307241)
   testthat::expect_equal(res$status, "OK")
 })
+
+test_that("atc_class works", {
+  off1 <- chembl_query(
+    query = "A01AA01",
+    resource = "atc_class",
+    mode = "offline",
+    output = "tidy"
+  )
+  off2 <- chembl_query(
+    query = c("A01AA", "A01AB02"),
+    resource = "atc_class",
+    mode = "offline",
+    output = "tidy"
+  )
+  off3 <- chembl_query(
+    query = c("Q","A01AB02"),
+    resource = "atc_class",
+    mode = "offline",
+    output = "tidy"
+  )
+
+  testthat::expect_s3_class(off1, "data.frame")
+  testthat::expect_equal(nrow(off2), 7)
+  testthat::expect_equal(nrow(off3), 2)
+  testthat::expect_true(is.na(off3$level1[1]))
+
+  off <- chembl_query(
+    query = "A01AA01", resource = "atc_class", mode = "offline", output = "raw")
+  ws <- chembl_query(query = "A01AA01", resource = "atc_class", output = "raw")
+  res <- compare_service_lists(ws$A01AA01, off$A01AA01)
+  testthat::expect_equal(res$status, "OK")
+})
+
