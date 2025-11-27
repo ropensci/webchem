@@ -161,7 +161,47 @@ chembl_offline_cell_line <- function(
   output = "tidy",
   con
   ){
-  stop("Offline 'cell_line' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "CELL",
+    verbose = verbose,
+    con = con
+  )
+  cell_line_data <- fetch_table(
+    con = con,
+    table = "cell_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "cell_id",
+      "cell_description",
+      "cell_name",
+      "cell_source_organism",
+      "cell_source_tax_id",
+      "cell_source_tissue",
+      "cellosaurus_id",
+      "chembl_id",
+      "cl_lincs_id",
+      "clo_id",
+      "efo_id"
+    )
+  )
+  out <- cell_line_data |>
+    dplyr::rename("cell_chembl_id" = "chembl_id") |>
+    dplyr::arrange(.data$cell_chembl_id)
+  if (output == "raw") {
+    id_col <- "cell_chembl_id"
+    if (nrow(out) == 0) {
+      return(list())
+    }
+    out <- lapply(seq_len(nrow(out)), function(i) {
+      raw_element <- out[i, , drop = FALSE]
+      raw_element <- as.list(raw_element)
+      raw_element[sort(names(raw_element))]
+    })
+    names(out) <- query
+  }
+  return(out)
 }
 
 #' chembl_id_lookup resource

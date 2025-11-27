@@ -27,3 +27,16 @@ test_that("informative error when query and resource do not match", {
   )
   expect_equal(msg, "CHEMBL3988026 is not a COMPOUND. It is a TISSUE.")
 })
+
+test_that("cell_lines work", {
+  ws <- chembl_query(
+    query = "CHEMBL3307241", resource = "cell_line", output = "raw")
+  off <- chembl_query(
+    query = "CHEMBL3307241", 
+    resource = "cell_line",
+    mode = "offline",
+    output = "raw"
+  )
+  res <- compare_service_lists(ws$CHEMBL3307241, off$CHEMBL3307241)
+  testthat::expect_equal(res$status, "OK")
+})
