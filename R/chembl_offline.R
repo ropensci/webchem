@@ -196,7 +196,71 @@ chembl_offline_binding_site <- function(
   output = "tidy",
   con
   ){
-  stop("Offline 'binding_site' queries are not yet implemented.")
+  # Fetch binding site data
+  binding_sites <- fetch_table(
+    con = con,
+    table = "binding_sites",
+    id_col = "site_id",
+    ids = as.integer(query),
+    select_cols = c("site_id", "site_name")
+  )
+  # Fetch site components
+  site_components <- fetch_table(
+    con = con,
+    table = "site_components",
+    id_col = "site_id",
+    ids = as.integer(query),
+    select_cols = c("sitecomp_id", "site_id", "component_id", "domain_id")
+  )
+  # Fetch domain info
+  domains <- fetch_table(
+    con = con,
+    table = "domains",
+    id_col = "domain_id",
+    ids = unique(site_components$domain_id),
+    select_cols = c(
+      "domain_description",
+      "domain_id",
+      "domain_name",
+      "domain_type",
+      "source_domain_id"
+    )
+  )
+  # Build results for each query
+  out <- lapply(query, function(q) {
+    q_int <- as.integer(q)
+    # Check if binding site exists
+    bs <- binding_sites |> dplyr::filter(.data$site_id == q_int)
+    if (nrow(bs) == 0) return(NA)
+    # Get site components for this query
+    sc <- site_components |> dplyr::filter(.data$site_id == q_int)
+    site_components <- list()
+    for (i in 1:nrow(sc)) {
+      sc_i <- sc[i, ]
+      domain_info <- domains |> dplyr::filter(.data$domain_id == sc_i$domain_id)
+      component_entry <- list(
+        "component_id" = sc_i$component_id,
+        "domain" = if (nrow(domain_info) > 0) {
+          as.list(domain_info[1, , drop = FALSE])
+        } else {
+          NULL
+        }
+      )
+      site_components[[i]] <- component_entry
+    }
+    bs <- binding_sites |> dplyr::filter(.data$site_id == q_int)
+    out <- list(
+      site_compontents = site_components,
+      site_id = bs$site_id,
+      site_name = bs$site_name
+    )
+    return(out)
+  })
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'binding_site' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' biotherapeutic resource
