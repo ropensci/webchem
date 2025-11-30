@@ -494,17 +494,83 @@ chembl_offline_compound_record <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'compound_record' queries are not yet implemented.")
-  # fetch relevant tables from database
-
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch compound records
+  compound_records <- fetch_table(
+    con = con,
+    table = "compound_records",
+    id_col = "record_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "record_id",      # query column
+      "compound_key",   # output column
+      "compound_name",  # output column
+      "molregno",       # link column (molecule_dictionary)
+      "doc_id",         # link column (docs)
+      "src_id"          # link column (source)
+    )
+  )
+  
+  # Fetch molecule dictionary to get molecule_chembl_id
+  molecule_ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(compound_records$molregno),
+    select_cols = c(
+      "molregno",   # link column (compound_records)
+      "chembl_id"   # output column
+    )
+  )
+  
+  # Fetch document info to get document_chembl_id
+  document_ids <- fetch_table(
+    con = con,
+    table = "docs",
+    id_col = "doc_id",
+    ids = unique(compound_records$doc_id),
+    select_cols = c(
+      "doc_id",     # link column (compound_records)
+      "chembl_id"   # output column
+    )
+  )
+  
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    q_int <- as.integer(q)
+    
+    # Get compound record
+    cr <- compound_records |> dplyr::filter(.data$record_id == q_int)
+    if (nrow(cr) == 0) return(NA)
+    
+    # Get molecule_chembl_id
+    mol_chembl <- molecule_ids |> 
+      dplyr::filter(.data$molregno == cr$molregno) |>
+      dplyr::pull(.data$chembl_id)
+    
+    # Get document_chembl_id
+    doc_chembl <- document_ids |>
+      dplyr::filter(.data$doc_id == cr$doc_id) |>
+      dplyr::pull(.data$chembl_id)
+    
+    # Construct output matching webservice format
+    result <- list(
+      compound_key = cr$compound_key,
+      compound_name = cr$compound_name,
+      document_chembl_id = doc_chembl,
+      molecule_chembl_id = mol_chembl,
+      record_id = cr$record_id,
+      src_id = cr$src_id
+    )
+    
+    return(result)
+  })
+  
   names(out) <- query
+  
   if (output == "tidy") {
     stop("Tidy output for 'compound_record' is not yet implemented.")
   }
+  
   return(out)
 }
 
