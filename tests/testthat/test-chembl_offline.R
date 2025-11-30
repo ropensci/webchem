@@ -73,3 +73,11 @@ test_that("atc_class works", {
   testthat::expect_equal(res$status, "OK")
 })
 
+test_that("binding_site works", {
+  ws <- chembl_query(query = 2, resource = "binding_site", output = "raw")
+  off <- chembl_query(
+    query = 2, resource = "binding_site", mode = "offline", output = "raw")
+  res <- compare_service_lists(ws$`2`, off$`2`)
+  testthat::expect_equal(res$status, "OK")
+})
+
