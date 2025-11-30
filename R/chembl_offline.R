@@ -13,7 +13,7 @@
 chembl_query_offline <- function(
     query,
     resource = "molecule",
-    output = "tidy",
+    output = "raw",
     verbose = getOption("verbose"),
     similarity = 70,
     version = "latest"
@@ -61,10 +61,21 @@ chembl_offline_activity <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'activity' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'activity' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' assay resource
@@ -78,7 +89,7 @@ chembl_offline_assay <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'assay' queries are not yet implemented.")
@@ -88,6 +99,17 @@ chembl_offline_assay <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'assay' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' atc_class resource
@@ -105,7 +127,7 @@ chembl_offline_atc_class <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   # determine ATC level field for a given code length
@@ -193,7 +215,7 @@ chembl_offline_binding_site <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   # Fetch binding site data
@@ -274,7 +296,7 @@ chembl_offline_biotherapeutic <- function(
     query,
     verbose = getOption("verbose"),
     version = "latest",
-    output = "tidy",
+    output = "raw",
     con
   ){
   stop("Offline 'biotherapeutic' queries are not yet implemented.")
@@ -284,6 +306,17 @@ chembl_offline_biotherapeutic <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'biotherapeutic' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' cell_line resource using a local ChEMBL database
@@ -297,7 +330,7 @@ chembl_offline_cell_line <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   chembl_validate_id_offline(
@@ -346,7 +379,7 @@ chembl_offline_chembl_id_lookup <- function(
   target,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   fetch_table(
@@ -368,10 +401,21 @@ chembl_offline_compound_record <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'compound_record' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'compound_record' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' compound_structural_alert resource
@@ -385,7 +429,7 @@ chembl_offline_compound_structural_alert <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'compound_structural_alert' queries are not yet implemented.")
@@ -395,6 +439,17 @@ chembl_offline_compound_structural_alert <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'compound_structural_alert' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' document resource
@@ -408,7 +463,7 @@ chembl_offline_document <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'document' queries are not yet implemented.")
@@ -418,6 +473,17 @@ chembl_offline_document <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'document' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' document_similarity resource
@@ -431,7 +497,7 @@ chembl_offline_document_similarity <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'document_similarity' queries are not yet implemented.")
@@ -441,6 +507,17 @@ chembl_offline_document_similarity <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'document_similarity' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' drug resource
@@ -454,7 +531,7 @@ chembl_offline_drug <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'drug' queries are not yet implemented.")
@@ -464,6 +541,17 @@ chembl_offline_drug <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'drug' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' drug_indication resource
@@ -477,10 +565,21 @@ chembl_offline_drug_indication <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'drug_indication' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'drug_indication' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' drug_warning resource using a local ChEMBL database
@@ -494,10 +593,21 @@ chembl_offline_drug_warning <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'drug_warning' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'drug_warning' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' go_slim resource
@@ -511,10 +621,21 @@ chembl_offline_go_slim <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'go_slim' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'go_slim' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' mechanism resource
@@ -528,10 +649,21 @@ chembl_offline_mechanism <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'mechanism' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'mechanism' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' metabolism resource
@@ -545,10 +677,21 @@ chembl_offline_metabolism <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'metabolism' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'metabolism' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' molecule resource
@@ -563,7 +706,7 @@ chembl_offline_molecule <- function(
     query,
     verbose = getOption("verbose"),
     version = "latest",
-    output = "tidy",
+    output = "raw",
     con
   ){
   chembl_validate_id_offline(
@@ -775,7 +918,7 @@ chembl_offline_molecule_form <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'molecule_form' queries are not yet implemented.")
@@ -785,6 +928,17 @@ chembl_offline_molecule_form <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'molecule_form' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' organism resource
@@ -798,10 +952,21 @@ chembl_offline_organism <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'organism' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'organism' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' protein_classification resource
@@ -815,10 +980,21 @@ chembl_offline_protein_classification <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'protein_classification' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'protein_classification' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' source resource
@@ -832,10 +1008,21 @@ chembl_offline_source <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'source' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'source' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' similarity resource
@@ -849,11 +1036,22 @@ chembl_offline_similarity <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   similarity = 70,
   con
   ){
   stop("Offline 'similarity' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'similarity' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' substructure resource
@@ -867,10 +1065,21 @@ chembl_offline_substructure <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'substructure' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'substructure' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' target resource
@@ -884,7 +1093,7 @@ chembl_offline_target <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'target' queries are not yet implemented.")
@@ -894,6 +1103,17 @@ chembl_offline_target <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'target' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' target_component resource
@@ -907,10 +1127,21 @@ chembl_offline_target_component <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'target_component' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'target_component' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' target_relation resource
@@ -924,10 +1155,21 @@ chembl_offline_target_relation <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'target_relation' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'target_relation' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' tissue resource
@@ -941,7 +1183,7 @@ chembl_offline_tissue <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'tissue' queries are not yet implemented.")
@@ -951,6 +1193,17 @@ chembl_offline_tissue <- function(
     verbose = verbose,
     con = con
   )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'tissue' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' xref_source resource
@@ -964,10 +1217,21 @@ chembl_offline_xref_source <- function(
   query,
   verbose = getOption("verbose"),
   version = "latest",
-  output = "tidy",
+  output = "raw",
   con
   ){
   stop("Offline 'xref_source' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'xref_source' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' Retrieve schema information from a local ChEMBL database
