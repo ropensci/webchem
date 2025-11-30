@@ -299,23 +299,112 @@ chembl_offline_biotherapeutic <- function(
     output = "raw",
     con
   ){
-  stop("Offline 'biotherapeutic' queries are not yet implemented.")
   chembl_validate_id_offline(
     query = query,
     target = "COMPOUND",
     verbose = verbose,
     con = con
+  ) 
+  # Fetch molregno for queries
+  ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "chembl_id",  # output column
+      "molregno"    # link column (to biotherapeutics, biotherapeutic_components)
+    )
   )
-  # fetch relevant tables from database
+  
+  # Fetch biotherapeutic data
+  biotherapeutics <- fetch_table(
+    con = con,
+    table = "biotherapeutics",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c(
+      "molregno",        # link column (molecule_dictionary)
+      "description",     # output column
+      "helm_notation"    # output column
+    )
+  )
 
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch biotherapeutic components
+  biotherapeutic_components <- fetch_table(
+    con = con,
+    table = "biotherapeutic_components",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c(
+      "molregno",        # link column (biotherapeutics)
+      "component_id"     # link column (bio_component_sequences)
+    )
+  )
+  
+  # Fetch biocomponent sequences
+  bio_component_sequences <- fetch_table(
+    con = con,
+    table = "bio_component_sequences",
+    id_col = "component_id",
+    ids = biotherapeutic_components$component_id,
+    select_cols = c(
+      "component_id",       # output column
+      "component_type",     # output column
+      "description",        # output column
+      "organism",           # output column
+      "sequence",           # output column
+      "tax_id"              # output column
+    )
+  )
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get molregno for this query
+    q_molregno <- ids$molregno[ids$chembl_id == q]
+    
+    # Check if biotherapeutic data exists
+    bio_data <- biotherapeutics |> dplyr::filter(.data$molregno == q_molregno)
+    if (nrow(bio_data) == 0) return(NA)
+    
+    # Get biotheraputic components for this molecule
+    components <- biotherapeutic_components |>
+      dplyr::filter(.data$molregno == q_molregno)
+    
+    biocomponents_list <- list()
+    if (nrow(components) > 0) {
+      for (i in 1:nrow(components)) {
+        # Filter bio_component_sequences for this component
+        comp <- bio_component_sequences |>
+          dplyr::filter(.data$component_id == components$component_id[i])
+        biocomponents_list[[i]] <- list(
+          component_id = comp$component_id,
+          component_type = comp$component_type,
+          description = comp$description,
+          organism = comp$organism,
+          sequence = comp$sequence,
+          tax_id = comp$tax_id
+        )
+      }
+    }
+    
+    # Build final output structure
+    result <- list(
+      biocomponents = biocomponents_list,
+      description = bio_data$description,
+      helm_notation = bio_data$helm_notation,
+      molecule_chembl_id = q
+    )
+    
+    # Sort by names to match web service
+    result[sort(names(result))]
+  })
+  
   names(out) <- query
+  
   if (output == "tidy") {
     stop("Tidy output for 'biotherapeutic' is not yet implemented.")
   }
+  
   return(out)
 }
 
