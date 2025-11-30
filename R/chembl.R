@@ -1008,7 +1008,7 @@ chembl_example_query <- function(resource) {
     assay = c("CHEMBL615117", "CHEMBL1061852", "CHEMBL5445082", "CHEMBL5441382", "CHEMBL2184458"),
     atc_class = "A01AA01",
     binding_site = "2",
-    biotherapeutic = c("CHEMBL8234","CHEMBL448105"),
+    biotherapeutic = c("CHEMBL8234","CHEMBL448105", "CHEMBL441738"),
     cell_line = c("CHEMBL3307241", "CHEMBL3307242"),
     chembl_id_lookup = "CHEMBL1",
     compound_record = "1",
