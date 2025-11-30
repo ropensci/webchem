@@ -266,13 +266,14 @@ chembl_offline_binding_site <- function(
           as.list(domain_info[1, , drop = FALSE])
         } else {
           NULL
-        }
+        },
+        "sitecomp_id" = sc_i$sitecomp_id
       )
       site_components[[i]] <- component_entry
     }
     bs <- binding_sites |> dplyr::filter(.data$site_id == q_int)
     out <- list(
-      site_compontents = site_components,
+      site_components = site_components,
       site_id = bs$site_id,
       site_name = bs$site_name
     )
