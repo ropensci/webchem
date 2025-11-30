@@ -28,19 +28,6 @@ test_that("informative error when query and resource do not match", {
   expect_equal(msg, "CHEMBL3988026 is not a COMPOUND. It is a TISSUE.")
 })
 
-test_that("cell_lines work", {
-  ws <- chembl_query(
-    query = "CHEMBL3307241", resource = "cell_line", output = "raw")
-  off <- chembl_query(
-    query = "CHEMBL3307241",
-    resource = "cell_line",
-    mode = "offline",
-    output = "raw"
-  )
-  res <- compare_service_lists(ws$CHEMBL3307241, off$CHEMBL3307241)
-  testthat::expect_equal(res$status, "OK")
-})
-
 test_that("atc_class works", {
   off1 <- chembl_query(
     query = "A01AA01",
@@ -73,23 +60,19 @@ test_that("atc_class works", {
   testthat::expect_equal(res$status, "OK")
 })
 
-test_that("binding_site works", {
-  ws <- chembl_query(query = 2, resource = "binding_site", output = "raw")
-  off <- chembl_query(
-    query = 2, resource = "binding_site", mode = "offline", output = "raw")
-  res <- compare_service_lists(ws$`2`, off$`2`)
-  testthat::expect_equal(res$status, "OK")
-})
+implemented <- c(
+  "binding_site",
+  "biotherapeutic",
+  "cell_line"
+)
 
-test_that("biotherapeutic works", {
-  ids <- chembl_example_query("biotherapeutic")
-  ws <- chembl_query(ids, resource = "biotherapeutic")
-  off <- chembl_query(ids, resource = "biotherapeutic", mode = "offline")
-  res1 <- identical(ws[[1]], off[[1]])
-  res2 <- identical(ws[[2]], off[[2]])
-  res3 <- identical(ws[[3]], off[[3]])
+for (i in implemented) {
+  ids <- chembl_example_query(i)
+  ws <- chembl_query(ids, resource = i)
+  off <- chembl_query(ids, resource = i, mode = "offline")
 
-  expect_true(res1)
-  expect_true(res2)
-  #expect_trues(res3)
-})
+  for (j in seq_along(ids)) {
+    if (i == "biotherapeutic" & j == 3) next()
+    expect_true(identical(ws[[j]], off[[j]]))
+  }
+}
