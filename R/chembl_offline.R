@@ -1469,7 +1469,7 @@ compare_service_lists <- function(ws, offline) {
           paste0(utils::capture.output(print(off_elem)), collapse = "\n")
         ))
       }
-    } else if (is.data.frame(ws_elem)) {
+    } else if (is.list(ws_elem)) {
       element_comparison <- compare_atomic_lists(ws_elem, off_elem)
       if (length(element_comparison$unique_to_x) > 0) {
         ws_unique_element = c(ws_unique_element, paste0(
@@ -1482,7 +1482,7 @@ compare_service_lists <- function(ws, offline) {
         ))
       }
     } else {
-      stop(sprintf("Element '%s' should be either atomic or a data frame.", n))
+      stop(sprintf("Element '%s' should be either atomic or a list.", n))
     }
   }
   return(list(
