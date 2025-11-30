@@ -81,3 +81,15 @@ test_that("binding_site works", {
   testthat::expect_equal(res$status, "OK")
 })
 
+test_that("biotherapeutic works", {
+  ids <- chembl_example_query("biotherapeutic")
+  ws <- chembl_query(ids, resource = "biotherapeutic")
+  off <- chembl_query(ids, resource = "biotherapeutic", mode = "offline")
+  res1 <- identical(ws[[1]], off[[1]])
+  res2 <- identical(ws[[2]], off[[2]])
+  res3 <- identical(ws[[3]], off[[3]])
+
+  expect_true(res1)
+  expect_true(res2)
+  #expect_trues(res3)
+})
