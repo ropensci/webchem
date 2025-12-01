@@ -875,7 +875,7 @@ format_chembl <- function(cont) {
 validate_chembl_version <- function(version = "latest") {
   assert(version, "character")
   stopifnot(length(version) == 1)
-  if (version == "latest") version <- "35"
+  if (version == "latest") version <- "36"
   version_num <- suppressWarnings(as.numeric(version))
   version_base <- as.character(floor(version_num))
   if (is.na(version_num)) {

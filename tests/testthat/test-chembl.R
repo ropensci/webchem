@@ -2,8 +2,8 @@ up <- ping_service("chembl")
 
 test_that("chembl_dir_url()", {
   # latest versions
-  expect_equal(chembl_dir_url(), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
-  expect_equal(chembl_dir_url("latest"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
+  expect_equal(chembl_dir_url(), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_36")
+  expect_equal(chembl_dir_url("latest"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_36")
   expect_equal(chembl_dir_url("35"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
   # previous versions
   expect_equal(chembl_dir_url("34"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_34")
@@ -229,8 +229,8 @@ test_that("chembl_atc_classes()", {
 })
 
 test_that("validate_chembl_version()", {
-  expect_equal(validate_chembl_version()$version, "35")
-  expect_equal(validate_chembl_version("latest")$version, "35")
+  expect_equal(validate_chembl_version()$version, "36")
+  expect_equal(validate_chembl_version("latest")$version, "36")
   expect_equal(validate_chembl_version("34")$version, "34")
   expect_equal(validate_chembl_version("24.1")$version, "24.1")
   expect_equal(validate_chembl_version("24.1")$version_path, "24_1")
