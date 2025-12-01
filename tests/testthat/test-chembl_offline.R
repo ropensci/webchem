@@ -63,7 +63,9 @@ test_that("atc_class works", {
 implemented <- c(
   "binding_site",
   "biotherapeutic",
-  "cell_line"
+  "cell_line",
+  "compound_record",
+  "document"
 )
 
 for (i in implemented) {
@@ -73,6 +75,13 @@ for (i in implemented) {
 
   for (j in seq_along(ids)) {
     if (i == "biotherapeutic" & j == 3) next()
+
+    if (i == "document") {
+      # Remove fields not available in offline mode
+      index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
+      ws[[j]] <- ws[[j]][-index]
+    }
+
     expect_true(identical(ws[[j]], off[[j]]))
   }
 }
