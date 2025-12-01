@@ -610,6 +610,9 @@ chembl_offline_compound_structural_alert <- function(
 
 #' document resource
 #'
+#' @note This function does not return exactly the same output as the ChEMBL 
+#' webservice, because I couldn't find all the necessary data in the offline
+#' database schema. The missing fields are: doi_chembl, journal_full_title.
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL1158643", resource = "document")
@@ -622,20 +625,93 @@ chembl_offline_document <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'document' queries are not yet implemented.")
   chembl_validate_id_offline(
     query = query,
     target = "DOCUMENT",
     verbose = verbose,
     con = con
   )
-  # fetch relevant tables from database
+  
+  # Fetch document data
+  docs <- fetch_table(
+    con = con,
+    table = "docs",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "abstract",            # output column
+      "authors",             # output column
+      "chembl_release_id",   # output column (rename to chembl_release)
+      "contact",             # output column
+      "doc_type",            # output column
+      "chembl_id",           # query, output column (rename to document_chembl_id)
+      "doi",                 # output column
+      "first_page",          # output column
+      "issue",               # output column
+      "journal",             # output column
+      "last_page",           # output column
+      "patent_id",           # output column
+      "pubmed_id",           # output column
+      "src_id",              # output column
+      "title",               # output column
+      "volume",              # output column
+      "year"                 # output column
+    )
+  ) |>
+    dplyr::rename(
+      chembl_release = .data$chembl_release_id,
+      document_chembl_id = .data$chembl_id
+    )
+  
+  # Fetch ChEMBL release info
+  chembl_release_info <- fetch_table(
+    con = con,
+    table = "chembl_release",
+    id_col = "chembl_release_id",
+    ids = unique(docs$chembl_release)
+  ) |>
+    dplyr::mutate(
+      creation_date = as.character(as.Date(.data$creation_date))
+    )
+  
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get document data for this query
+    doc <- docs |> dplyr::filter(.data$document_chembl_id == q)
+    if (nrow(doc) == 0) return(NA)  
+    
+    # Get ChEMBL release info
+    chembl_release_info <- chembl_release_info |>
+      dplyr::filter(.data$chembl_release_id == doc$chembl_release) |>
+      dplyr::select(-.data$chembl_release_id)  |>
+      as.list()
 
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+    # Construct output matching webservice format
+    result <- list(
+      abstract = if (is.na(doc$abstract)) "" else doc$abstract,
+      authors = doc$authors,
+      chembl_release = chembl_release_info,
+      contact = doc$contact,
+      doc_type = doc$doc_type,
+      document_chembl_id = doc$document_chembl_id,
+      doi = doc$doi,
+      first_page = doc$first_page,
+      issue = doc$issue,
+      journal = doc$journal,
+      last_page = doc$last_page,
+      patent_id = doc$patent_id,
+      pubmed_id = doc$pubmed_id,
+      src_id = doc$src_id,
+      title = doc$title,
+      volume = doc$volume,
+      year = as.character(doc$year)
+    )
+    
+    return(result)
+  })
+  
   names(out) <- query
+  
   if (output == "tidy") {
     stop("Tidy output for 'document' is not yet implemented.")
   }
