@@ -199,7 +199,7 @@ chembl_offline_atc_class <- function(
     # Bind rows and add query column
     out <- dplyr::bind_rows(fetched, .id = "query")
     # Reorder columns to put query first
-    out <- out |> dplyr::relocate(.data$query)
+    out <- out |> dplyr::relocate("query")
   }
   return(out)
 }
@@ -659,8 +659,8 @@ chembl_offline_document <- function(
     )
   ) |>
     dplyr::rename(
-      chembl_release = .data$chembl_release_id,
-      document_chembl_id = .data$chembl_id
+      chembl_release = "chembl_release_id",
+      document_chembl_id = "chembl_id"
     )
   
   # Fetch ChEMBL release info
@@ -683,7 +683,7 @@ chembl_offline_document <- function(
     # Get ChEMBL release info
     chembl_release_info <- chembl_release_info |>
       dplyr::filter(.data$chembl_release_id == doc$chembl_release) |>
-      dplyr::select(-.data$chembl_release_id)  |>
+      dplyr::select(-"chembl_release_id")  |>
       as.list()
 
     # Construct output matching webservice format
