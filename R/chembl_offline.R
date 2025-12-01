@@ -704,7 +704,7 @@ chembl_offline_document <- function(
       src_id = doc$src_id,
       title = doc$title,
       volume = doc$volume,
-      year = as.character(doc$year)
+      year = doc$year
     )
     
     return(result)
