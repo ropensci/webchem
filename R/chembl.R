@@ -221,6 +221,9 @@ chembl_files <- function(version = "latest") {
 #' @param mode character; either "ws" (default) to use the webservice or
 #' "offline" to use a local ChEMBL database. Note, to use the "offline" mode,
 #' you need to have a local ChEMBL database. See [db_download_chembl()].
+#' @param output character; either "raw" (default) to return the raw results
+#' which is a list of lists, or "tidy" to return simplified results, if
+#' possible.
 #' @param options function; returns a named list for resource- and mode-specific
 #' options. Supported entries:
 #'   - cache_file: character or NULL; name of the cache file (without extension)

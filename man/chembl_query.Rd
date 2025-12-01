@@ -8,9 +8,10 @@ chembl_query(
   query,
   resource = "molecule",
   mode = "ws",
+  output = "raw",
   verbose = getOption("verbose"),
-  options = chembl_options(cache_file = NULL, similarity = 70, tidy = TRUE, version =
-    "latest"),
+  options = chembl_options(replace_nulls = TRUE, cache_file = NULL, similarity = 70,
+    version = "latest"),
   ...
 )
 }
@@ -25,6 +26,10 @@ resource. See examples for more information.}
 "offline" to use a local ChEMBL database. Note, to use the "offline" mode,
 you need to have a local ChEMBL database. See [db_download_chembl()].}
 
+\item{output}{character; either "raw" (default) to return the raw results
+which is a list of lists, or "tidy" to return simplified results, if
+possible.}
+
 \item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{options}{function; returns a named list for resource- and mode-specific
@@ -33,8 +38,6 @@ options. Supported entries:
     used when mode = "ws". If NULL (default), results are not cached.
   - similarity: numeric; similarity threshold for similarity searches
     (default 70).
-  - tidy: logical; attempt to convert output to a simpler structure
-    (default TRUE).
   - version: character; database version to use in "offline" mode (default
     "latest").}
 
