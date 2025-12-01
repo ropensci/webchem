@@ -2,17 +2,20 @@
 #'
 #' Use this to group resource or mode specific options and pass them via the
 #' `options` argument to `chembl_query()`.
+#' @param replace_nulls logical; replace NULL-s with appropriate NA-s?
 #' @param cache_file character or NULL
 #' @param similarity numeric
 #' @param version character
 #' @return A list with class 'chembl_options'.
 #' @noRd
 chembl_options <- function(
+  replace_nulls = TRUE,
   cache_file = NULL,
   similarity = 70,
   version = "latest"
 ) {
   options <- list(
+    replace_nulls = replace_nulls,
     cache_file = cache_file,
     similarity = similarity,
     version = version
@@ -369,6 +372,7 @@ chembl_query <- function(
   output = "raw",
   verbose = getOption("verbose"),
   options = chembl_options(
+    replace_nulls = TRUE,
     cache_file = NULL,
     similarity = 70,
     version = "latest"
@@ -389,6 +393,7 @@ chembl_query <- function(
       query = query,
       resource = resource,
       verbose = verbose,
+      replace_nulls = options$replace_nulls,
       cache_file = options$cache_file,
       similarity = options$similarity,
       output = output,
@@ -417,6 +422,7 @@ chembl_query_ws <- function(
   query,
   resource = "molecule",
   verbose = getOption("verbose"),
+  replace_nulls = TRUE,
   cache_file = NULL,
   similarity = 70,
   output = "raw",
@@ -427,7 +433,14 @@ chembl_query_ws <- function(
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
-  foo <- function(query, verbose, similarity) {
+  if (replace_nulls) {
+    schema <- jsonlite::fromJSON(paste0(
+      "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
+    ))
+  } else {
+    schema <- NULL
+  }
+  foo <- function(query, verbose, similarity, schema) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -461,16 +474,7 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    replace_nulls <- function(x) {
-      if (is.null(x)) {
-        return(NA_character_)
-      }
-      if (is.list(x)) {
-        return(lapply(x, replace_nulls))
-      }
-      x
-    }
-    cont <- replace_nulls(cont)
+    if (replace_nulls) cont <- replace_nulls(cont, schema)
     if (output == "tidy") {
       cont <- format_chembl(cont)
     }
@@ -478,7 +482,7 @@ chembl_query_ws <- function(
   }
   if (is.null(cache_file)) {
     out <- lapply(query, function(x) {
-      foo(x, verbose = verbose, similarity = similarity)
+      foo(x, verbose = verbose, similarity = similarity, schema = schema)
     })
   } else {
     if (!dir.exists("cache")) dir.create("cache")
@@ -494,7 +498,7 @@ chembl_query_ws <- function(
         if (verbose) message("Already retrieved.")
         return(query_results[[x]])
       } else {
-        new <- foo(x, verbose = verbose, similarity = similarity)
+        new <- foo(x, verbose = verbose, similarity = similarity, schema = schema)
         if (!is.na(x)) {
           query_results[[x]] <<- new
           saveRDS(query_results, file = cfpath)
@@ -1039,4 +1043,64 @@ chembl_example_query <- function(resource) {
     stop(paste0("No example query available for this resource: ", resource))
   }
   example_queries[[resource]]
+}
+
+replace_nulls <- function(x, schema) {
+  # link schema types to NA types
+  get_na_type <- function(type) {
+    switch(
+      type,
+      "string" = NA_character_,
+      "integer" = NA_integer_,
+      "float" = NA_real_,
+      "number" = NA_real_,
+      "boolean" = NA,
+      "datetime" = NA_character_,
+      "related" = NA_character_,
+      NA_character_  # default
+    )
+  }
+  # If x is a list, process each element
+  if (!is.list(x)) stop("ChEMBL raw output should be a list.")
+  for (i in seq_along(x)) {
+    field_name <- names(x)[i]
+    # Handle NULL values at this level
+    if (is.null(x[[i]])) {
+      # Look up field in schema
+      if (!is.null(field_name) &&
+          !is.null(schema$fields) &&
+          field_name %in% names(schema$fields)) {
+        field_schema <- schema$fields[[field_name]]
+        # Get type - handle both direct type and nested schema
+        if (!is.null(field_schema$type)) {
+          x[[i]] <- get_na_type(field_schema$type)
+        } else if (!is.null(field_schema$schema)) {
+          # For nested schemas, keep as list structure
+          x[[i]] <- NA_character_
+        } else {
+          x[[i]] <- NA_character_
+        }
+      } else {
+        # If not in schema, default to NA_character_
+        x[[i]] <- NA_character_
+      }
+    } else if (is.list(x[[i]])) {
+      # Recursively process nested lists
+      if (!is.null(field_name) &&
+          !is.null(schema$fields) &&
+          field_name %in% names(schema$fields)) {
+        field_schema <- schema$fields[[field_name]]
+        # Use nested schema if available
+        nested_schema <- if (!is.null(field_schema$schema)) {
+          field_schema$schema
+        } else {
+          schema
+        }
+        x[[i]] <- replace_nulls(x[[i]], nested_schema)
+      } else {
+        x[[i]] <- replace_nulls(x[[i]], schema)
+      }
+    }
+  }
+  return(x)
 }
