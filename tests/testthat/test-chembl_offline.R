@@ -71,7 +71,8 @@ implemented <- c(
   "biotherapeutic",
   "cell_line",
   "compound_record",
-  "document"
+  "document",
+  "drug_indication"
 )
 
 for (i in implemented) {
