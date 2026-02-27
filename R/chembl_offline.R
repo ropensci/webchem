@@ -801,17 +801,93 @@ chembl_offline_drug_indication <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'drug_indication' queries are not yet implemented.")
-  # fetch relevant tables from database
-
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch drug indication data
+  drug_indications <- fetch_table(
+    con = con,
+    table = "drug_indication",
+    id_col = "drugind_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "drugind_id",           # query column
+      "molregno",             # link column (molecule_dictionary)
+      "efo_id",               # output column
+      "efo_term",             # output column
+      "max_phase_for_ind",    # output column
+      "mesh_heading",         # output column
+      "mesh_id"              # output column
+    )
+  )
+  # Fetch indication references
+  indication_refs <- fetch_table(
+    con = con,
+    table = "indication_refs",
+    id_col = "drugind_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "drugind_id",         # link column (drug_indication)
+      "ref_id",             # output column
+      "ref_type",           # output column
+      "ref_url"             # output column
+    )
+  )
+  # Fetch molecule dictionary to get molecule_chembl_id
+  molecule_ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(drug_indications$molregno),
+    select_cols = c(
+      "molregno",   # link column (drug_indication)
+      "chembl_id"   # output column
+    )
+  )
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    q_int <- as.integer(q)
+    # Get drug indication data
+    di <- drug_indications |> dplyr::filter(.data$drugind_id == q_int)
+    if (nrow(di) == 0) return(NA)
+    # Get molecule_chembl_id
+    mol_chembl <- molecule_ids |>
+      dplyr::filter(.data$molregno == di$molregno) |>
+      dplyr::pull(.data$chembl_id)
+    # Get indication refs for this drugind_id
+    indication_refs_data <- indication_refs |>
+      dplyr::filter(.data$drugind_id == q_int)
+    # Build indication_refs list
+    indication_refs_list <- list()
+    if (nrow(indication_refs_data) > 0) {
+      for (j in 1:nrow(indication_refs_data)) {
+        indication_refs_list[[j]] <- list(
+          ref_id = indication_refs_data$ref_id[j],
+          ref_type = indication_refs_data$ref_type[j],
+          ref_url = indication_refs_data$ref_url[j]
+        )
+      }
+    }
+    # Construct output matching webservice format
+    out <- list(
+      drugind_id = di$drugind_id,
+      efo_id = di$efo_id,
+      efo_term = di$efo_term,
+      indication_refs = indication_refs_list,
+      # note, this seems like a custom hack but the table has integer values
+      # for max_phase_for_ind, so we convert to character with ".0" suffix, 
+      # for consistency with webservice output
+      max_phase_for_ind = paste0(as.character(di$max_phase_for_ind), ".0"),
+      mesh_heading = di$mesh_heading,
+      mesh_id = di$mesh_id,
+      molecule_chembl_id = mol_chembl,
+      parent_molecule_chembl_id = mol_chembl
+    )
+    return(out)
+  })
   names(out) <- query
+  
   if (output == "tidy") {
     stop("Tidy output for 'drug_indication' is not yet implemented.")
   }
+  
   return(out)
 }
 
