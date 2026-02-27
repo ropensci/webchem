@@ -905,13 +905,111 @@ chembl_offline_drug_warning <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'drug_warning' queries are not yet implemented.")
-  # fetch relevant tables from database
-
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch drug warning data
+  drug_warnings <- fetch_table(
+    con = con,
+    table = "drug_warning",
+    id_col = "warning_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "warning_id",                  # query column
+      "molregno",                    # link column (molecule_dictionary)
+      "efo_id",                      # output column
+      "efo_id_for_warning_class",    # output column
+      "efo_term",                    # output column
+      "warning_class",               # output column
+      "warning_country",             # output column
+      "warning_description",         # output column
+      "warning_type",                # output column
+      "warning_year"                 # output column
+    )
+  )
+  # Fetch molecule hierarchy to get parent_molecule_chembl_id
+  molecule_hierarchy <- fetch_table(
+    con = con,
+    table = "molecule_hierarchy",
+    id_col = "molregno",
+    ids = unique(drug_warnings$molregno),
+    select_cols = c(
+      "molregno",         # link column (drug_warning)
+      "parent_molregno"   # link column (molecule_dictionary for parent)
+    )
+  )
+  # Fetch molecule dictionary to get molecule_chembl_id and parent_molecule_chembl_id
+  molecule_ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(c(
+      drug_warnings$molregno,
+      molecule_hierarchy$parent_molregno
+    )),
+    select_cols = c(
+      "molregno",   # link column (drug_warning)
+      "chembl_id"   # output column
+    )
+  )
+  # Fetch warning refs
+  warning_refs <- fetch_table(
+    con = con,
+    table = "warning_refs",
+    id_col = "warning_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "warning_id",         # link column (drug_warning)
+      "ref_id",             # output column
+      "ref_type",           # output column
+      "ref_url"             # output column
+    )
+  )
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    q_int <- as.integer(q)   
+    # Get drug warning data
+    dw <- drug_warnings |> dplyr::filter(.data$warning_id == q_int)
+    if (nrow(dw) == 0) return(NA)
+    # Get ChEMBL ID for molecule
+    mol_chembl <- molecule_ids |>
+      dplyr::filter(.data$molregno == dw$molregno) |>
+      dplyr::pull(.data$chembl_id)
+    # Get CHEMBL ID for parent molecule
+    parent_molregno <- molecule_hierarchy |>
+      dplyr::filter(.data$molregno == dw$molregno) |>
+      dplyr::pull(.data$parent_molregno)
+    parent_chembl <- molecule_ids |>
+      dplyr::filter(.data$molregno == parent_molregno) |>
+      dplyr::pull(.data$chembl_id)
+    # Get warning refs for this warning_id
+    warning_refs_data <- warning_refs |>
+      dplyr::filter(.data$warning_id == q_int)
+    # Build warning_refs list
+    warning_refs_list <- list()
+    if (nrow(warning_refs_data) > 0) {
+      for (j in 1:nrow(warning_refs_data)) {
+        warning_refs_list[[j]] <- list(
+          ref_id = warning_refs_data$ref_id[j],
+          ref_type = warning_refs_data$ref_type[j],
+          ref_url = warning_refs_data$ref_url[j]
+        )
+      }
+    }
+    # Construct output matching webservice format
+    out <- list(
+      efo_id = dw$efo_id,
+      efo_id_for_warning_class = dw$efo_id_for_warning_class,
+      efo_term = dw$efo_term,
+      molecule_chembl_id = mol_chembl,
+      parent_molecule_chembl_id = parent_chembl,
+      warning_class = dw$warning_class,
+      warning_country = dw$warning_country,
+      warning_description = dw$warning_description,
+      warning_id = dw$warning_id,
+      warning_refs = warning_refs_list,
+      warning_type = dw$warning_type,
+      warning_year = dw$warning_year
+    )
+    return(out)
+  })
   names(out) <- query
   if (output == "tidy") {
     stop("Tidy output for 'drug_warning' is not yet implemented.")

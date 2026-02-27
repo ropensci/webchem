@@ -72,7 +72,8 @@ implemented <- c(
   "cell_line",
   "compound_record",
   "document",
-  "drug_indication"
+  "drug_indication",
+  "drug_warning"
 )
 
 for (i in implemented) {
