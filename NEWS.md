@@ -2,21 +2,29 @@
 
 ## NEW FEATURES
 
-* `chembl_query()` can now perform both online queries (mode = "ws", default) and offline retrievals (mode = "offline"). Note, offline functionality is currently very limited.
-* Added a new function `chembl_status()` which returns status information about the ChEMBL webservice.
-* `chembl_query()` now works with the "similarity" resource as well.
+### OFFLINE ACCESS
+
+* `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, and `document`.
+* Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
+
+### OTHER
+
+* Added a new function `chembl_status()` which returns status information about the ChEMBL webservice (database version, release date, and entity counts).
+* Added a new function `chembl_atc_classes()` to retrieve all available ATC classifications from ChEMBL.
+* `chembl_query()` now works with the "similarity" resource (note: currently limited to 20 results).
 * `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds.
 * Added a new function `chembl_img()` for downloading SVG images from ChEMBL.
-* Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
 
 ## MINOR IMPROVEMENTS
 
-* `chembl_query()` now returns a named list and uses better formatting for nested output.
-* Added new argument `tidy = TRUE` to `chembl_query()` so we can now control whether we want to try to convert the output to a flat format.
+* `chembl_query()` now returns a named list with improved formatting for nested output.
+* Added new argument `output` to `chembl_query()` (values: "raw" or "tidy") to control output format. Raw format returns the full nested structure; tidy format attempts to flatten the results.
+* Added new `options` argument to `chembl_query()` for passing resource- and mode-specific options (cache file name, similarity threshold, database version, etc.).
+* `chembl_query()` can now replace NULL values with typed NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field schema when `replace_nulls = TRUE` in options.
 
 ## BUG FIXES
 
-* `chembl_query()` did not work with the "compound_structural_alerts" resource. This has been fixed.
+* `chembl_query()` did not work with the "compound_structural_alert" resource. This has been fixed.
 
 # webchem 1.3.1
 

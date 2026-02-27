@@ -1,3 +1,10 @@
+#' Replicate ChEMBL resource using a local ChEMBL database
+#'
+#' @param query character; activity ID to retrieve
+#' @param resource character; ChEMBL resource to query
+#' @param verbose logical; print verbose messages to the console?
+#' @param version character; version of the ChEMBL database
+#' @param output character; either "raw" or "tidy"
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL1082", resource = "molecule")
@@ -6,6 +13,7 @@
 chembl_query_offline <- function(
     query,
     resource = "molecule",
+    output = "raw",
     verbose = getOption("verbose"),
     similarity = 70,
     version = "latest"
@@ -14,6 +22,8 @@ chembl_query_offline <- function(
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
+  con <- connect_chembl(version = version)
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
   FUN <- paste0("chembl_offline_", resource)
   if (!exists(FUN)) {
     msg <- paste0(
@@ -25,363 +35,919 @@ chembl_query_offline <- function(
       query = query,
       verbose = verbose,
       similarity = similarity,
-      version = version
+      version = version,
+      output = output,
+      con = con
     ))
   } else {
     do.call(FUN, args = list(
       query = query,
       verbose = verbose,
-      version = version
+      version = version,
+      output = output,
+      con = con
     ))
   }
 }
 
-#' Replicate ChEMBL API activity resource using a local ChEMBL database
+#' activity resource
 #'
-#' @param query character; activity ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_activity(query = "31863")
+#' chembl_query_offline(query = "31863", resource = "activity")
 #' }
 #' @noRd
 chembl_offline_activity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'activity' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'activity' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API assay resource using a local ChEMBL database
+#' assay resource
 #'
-#' @param query character; assay ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_assay(query = "CHEMBL615117")
+#' chembl_query_offline(query = "CHEMBL615117", resource = "assay")
 #' }
 #' @noRd
 chembl_offline_assay <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'assay' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "ASSAY",
+    verbose = verbose,
+    con = con
+  )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'assay' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API atc_class resource using a local ChEMBL database
+#' atc_class resource
 #'
-#' @param query character; ATC class ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_atc_class(query = "A01AA01")
+#' chembl_query_offline(query = "A01AA01", resource = "atc_class")
+#' chembl_query_offline(query = "A01AA", resource = "atc_class")
+#' chembl_query_offline(query = "A01A", resource = "atc_class")
+#' chembl_query_offline(query = "A01", resource = "atc_class")
+#' chembl_query_offline(query = "A", resource = "atc_class")
 #' }
 #' @noRd
 chembl_offline_atc_class <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
-  stop("Offline 'atc_class' queries are not yet implemented.")
+  # determine ATC level field for a given code length
+  len2level <- function(x) {
+    switch(as.character(x),
+      "1" = "level1",
+      "3" = "level2",
+      "4" = "level3",
+      "5" = "level4",
+      "7" = "level5",
+      NA
+    )
+  }
+  # validate query lengths
+  q_lengths <- nchar(query)
+  levels <- sapply(q_lengths, len2level)
+  invalid_idx <- which(is.na(levels))
+  if (length(invalid_idx) > 0) {
+    msg <- sprintf(
+      "Invalid ATC code(s): %s. ATC codes must have lengths 1,3,4,5 or 7.", 
+      paste(unique(query[invalid_idx]), collapse = ", ")
+    )
+    stop(msg)
+  }
+  # fetch by groups of same-length queries to use the correct id_col
+  fetched <- lapply(seq_along(q_lengths), function(i) {
+    fetch_table(
+      con = con,
+      table = "atc_classification",
+      id_col = len2level(q_lengths[i]),
+      ids = query[i],
+      select_cols = c(
+        "level1",
+        "level1_description",
+        "level2",
+        "level2_description",
+        "level3",
+        "level3_description",
+        "level4",
+        "level4_description",
+        "level5",
+        "who_name"
+      )
+    )
+  })
+  names(fetched) <- query
+  if (output == "raw") {
+    out <- lapply(fetched, function(df) {
+      if (nrow(df) == 0) return(NA)
+      lapply(seq_len(nrow(df)), function(i) {
+        row_list <- as.list(df[i, , drop = FALSE])
+        row_list[sort(names(row_list))]
+      })
+    })
+    if (length(out) == 1) {
+      out <- out[[1]]
+      names(out) <- query
+    }
+  } else {
+    # Ensure all queries have at least one row (with NAs if no results)
+    for (i in seq_along(fetched)) {
+      if (nrow(fetched[[i]]) == 0) {
+        # Create a single row with all NAs
+        fetched[[i]] <- fetched[[i]][1, , drop = FALSE]
+        fetched[[i]][1, ] <- NA
+      }
+    }
+    # Bind rows and add query column
+    out <- dplyr::bind_rows(fetched, .id = "query")
+    # Reorder columns to put query first
+    out <- out |> dplyr::relocate("query")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API binding_site resource using a local ChEMBL database
+#' binding_site resource
 #'
-#' @param query numeric; site ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_binding_site(query = 2)
+#' chembl_query_offline(query = 2, resource = "binding_site")
 #' }
 #' @noRd
 chembl_offline_binding_site <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
-  stop("Offline 'binding_site' queries are not yet implemented.")
+  # Fetch binding site data
+  binding_sites <- fetch_table(
+    con = con,
+    table = "binding_sites",
+    id_col = "site_id",
+    ids = as.integer(query),
+    select_cols = c("site_id", "site_name")
+  )
+  # Fetch site components
+  site_components <- fetch_table(
+    con = con,
+    table = "site_components",
+    id_col = "site_id",
+    ids = as.integer(query),
+    select_cols = c("sitecomp_id", "site_id", "component_id", "domain_id")
+  )
+  # Fetch domain info
+  domains <- fetch_table(
+    con = con,
+    table = "domains",
+    id_col = "domain_id",
+    ids = unique(site_components$domain_id),
+    select_cols = c(
+      "domain_description",
+      "domain_id",
+      "domain_name",
+      "domain_type",
+      "source_domain_id"
+    )
+  )
+  # Build results for each query
+  out <- lapply(query, function(q) {
+    q_int <- as.integer(q)
+    # Check if binding site exists
+    bs <- binding_sites |> dplyr::filter(.data$site_id == q_int)
+    if (nrow(bs) == 0) return(NA)
+    # Get site components for this query
+    sc <- site_components |> dplyr::filter(.data$site_id == q_int)
+    site_components_list <- list()
+    for (i in seq_len(nrow(sc))) {
+      sc_i <- sc[i, ]
+      domain_info <- domains |> dplyr::filter(.data$domain_id == sc_i$domain_id)
+      component_entry <- list(
+        "component_id" = sc_i$component_id,
+        "domain" = if (nrow(domain_info) > 0) {
+          as.list(domain_info[1, , drop = FALSE])
+        } else {
+          NULL
+        },
+        "sitecomp_id" = sc_i$sitecomp_id
+      )
+      site_components_list[[i]] <- component_entry
+    }
+    out <- list(
+      site_components = site_components_list,
+      site_id = bs$site_id,
+      site_name = bs$site_name
+    )
+    return(out)
+  })
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'binding_site' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API biotherapeutic resource using a local ChEMBL database
+#' biotherapeutic resource
 #'
-#' @param query character; ChEMBL ID of the biotherapeutic to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_biotherapeutic(query = "CHEMBL448105")
+#' chembl_query_offline(query = "CHEMBL448105", resource = "biotherapeutic")
 #' }
 #' @noRd
 chembl_offline_biotherapeutic <- function(
     query,
     verbose = getOption("verbose"),
-    version = "latest"
+    version = "latest",
+    output = "raw",
+    con
   ){
-  stop("Offline 'biotherapeutic' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  ) 
+  # Fetch molregno for queries
+  ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "chembl_id",  # output column
+      "molregno"    # link column (to biotherapeutics, biotherapeutic_components)
+    )
+  )
+  
+  # Fetch biotherapeutic data
+  biotherapeutics <- fetch_table(
+    con = con,
+    table = "biotherapeutics",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c(
+      "molregno",        # link column (molecule_dictionary)
+      "description",     # output column
+      "helm_notation"    # output column
+    )
+  )
+
+  # Fetch biotherapeutic components
+  biotherapeutic_components <- fetch_table(
+    con = con,
+    table = "biotherapeutic_components",
+    id_col = "molregno",
+    ids = ids$molregno,
+    select_cols = c(
+      "molregno",        # link column (biotherapeutics)
+      "component_id"     # link column (bio_component_sequences)
+    )
+  )
+  
+  # Fetch biocomponent sequences
+  bio_component_sequences <- fetch_table(
+    con = con,
+    table = "bio_component_sequences",
+    id_col = "component_id",
+    ids = biotherapeutic_components$component_id,
+    select_cols = c(
+      "component_id",       # output column
+      "component_type",     # output column
+      "description",        # output column
+      "organism",           # output column
+      "sequence",           # output column
+      "tax_id"              # output column
+    )
+  )
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get molregno for this query
+    q_molregno <- ids$molregno[ids$chembl_id == q]
+    
+    # Check if biotherapeutic data exists
+    bio_data <- biotherapeutics |> dplyr::filter(.data$molregno == q_molregno)
+    if (nrow(bio_data) == 0) return(NA)
+    
+    # Get biotherapeutic components for this molecule
+    components <- biotherapeutic_components |>
+      dplyr::filter(.data$molregno == q_molregno)
+    
+    biocomponents_list <- list()
+    if (nrow(components) > 0) {
+      for (i in seq_len(nrow(components))) {
+        # Filter bio_component_sequences for this component
+        comp <- bio_component_sequences |>
+          dplyr::filter(.data$component_id == components$component_id[i])
+        biocomponents_list[[i]] <- list(
+          component_id = comp$component_id,
+          component_type = comp$component_type,
+          description = comp$description,
+          organism = comp$organism,
+          sequence = comp$sequence,
+          tax_id = comp$tax_id
+        )
+      }
+    }
+    
+    # Build final output structure
+    result <- list(
+      biocomponents = biocomponents_list,
+      description = bio_data$description,
+      helm_notation = bio_data$helm_notation,
+      molecule_chembl_id = q
+    )
+    
+    # Sort by names to match web service
+    result[sort(names(result))]
+  })
+  
+  names(out) <- query
+  
+  if (output == "tidy") {
+    stop("Tidy output for 'biotherapeutic' is not yet implemented.")
+  }
+  
+  return(out)
 }
 
-#' Replicate ChEMBL API cell_line resource using a local ChEMBL database
+#' cell_line resource using a local ChEMBL database
 #'
-#' @param query character; cell line ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_cell_line(query = "CHEMBL3307241")
+#' chembl_query_offline(query = "CHEMBL3307241", resource = "cell_line")
 #' }
 #' @noRd
 chembl_offline_cell_line <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
-  stop("Offline 'cell_line' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "CELL",
+    verbose = verbose,
+    con = con
+  )
+  cell_line_data <- fetch_table(
+    con = con,
+    table = "cell_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "cell_id",
+      "cell_description",
+      "cell_name",
+      "cell_source_organism",
+      "cell_source_tax_id",
+      "cell_source_tissue",
+      "cellosaurus_id",
+      "chembl_id",
+      "cl_lincs_id",
+      "clo_id",
+      "efo_id"
+    )
+  )
+  out <- cell_line_data |>
+    dplyr::rename("cell_chembl_id" = "chembl_id") |>
+    dplyr::arrange(.data$cell_chembl_id)
+  if (output == "raw") {
+    out <- chembl_tidy2raw(query = query, df = out)
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API chembl_id_lookup resource using a local ChEMBL database
+#' chembl_id_lookup resource
 #'
-#' @param query character; ChEMBL ID to lookup
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_chembl_id_lookup(query = "CHEMBL1")
+#' chembl_query_offline(query = "CHEMBL1", resource = "chembl_id_lookup")
 #' }
 #' @noRd
 chembl_offline_chembl_id_lookup <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
-  stop("Offline 'chembl_id_lookup' queries are not yet implemented.")
+  out <- fetch_table(
+    con = con,
+    table = "chembl_id_lookup",
+    id_col = "chembl_id",
+    ids = query,
+  )
+  if (output == "raw") {
+    out <- chembl_tidy2raw(query = query, df = out)
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API compound_record resource using a local ChEMBL database
+#' compound_record resource
 #'
-#' @param query character; compound record ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_compound_record(query = "1")
+#' chembl_query_offline(query = "1", resource = "compound_record")
 #' }
 #' @noRd
 chembl_offline_compound_record <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
-  stop("Offline 'compound_record' queries are not yet implemented.")
+  # Fetch compound records
+  compound_records <- fetch_table(
+    con = con,
+    table = "compound_records",
+    id_col = "record_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "record_id",      # query column
+      "compound_key",   # output column
+      "compound_name",  # output column
+      "molregno",       # link column (molecule_dictionary)
+      "doc_id",         # link column (docs)
+      "src_id"          # link column (source)
+    )
+  )
+  
+  # Fetch molecule dictionary to get molecule_chembl_id
+  molecule_ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(compound_records$molregno),
+    select_cols = c(
+      "molregno",   # link column (compound_records)
+      "chembl_id"   # output column
+    )
+  )
+  
+  # Fetch document info to get document_chembl_id
+  document_ids <- fetch_table(
+    con = con,
+    table = "docs",
+    id_col = "doc_id",
+    ids = unique(compound_records$doc_id),
+    select_cols = c(
+      "doc_id",     # link column (compound_records)
+      "chembl_id"   # output column
+    )
+  )
+  
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    q_int <- as.integer(q)
+    
+    # Get compound record
+    cr <- compound_records |> dplyr::filter(.data$record_id == q_int)
+    if (nrow(cr) == 0) return(NA)
+    
+    # Get molecule_chembl_id
+    mol_chembl <- molecule_ids |> 
+      dplyr::filter(.data$molregno == cr$molregno) |>
+      dplyr::pull(.data$chembl_id)
+    
+    # Get document_chembl_id
+    doc_chembl <- document_ids |>
+      dplyr::filter(.data$doc_id == cr$doc_id) |>
+      dplyr::pull(.data$chembl_id)
+    
+    # Construct output matching webservice format
+    result <- list(
+      compound_key = cr$compound_key,
+      compound_name = cr$compound_name,
+      document_chembl_id = doc_chembl,
+      molecule_chembl_id = mol_chembl,
+      record_id = cr$record_id,
+      src_id = cr$src_id
+    )
+    
+    return(result)
+  })
+  
+  names(out) <- query
+  
+  if (output == "tidy") {
+    stop("Tidy output for 'compound_record' is not yet implemented.")
+  }
+  
+  return(out)
 }
 
-#' Replicate ChEMBL API compound_structural_alert resource using a local ChEMBL database
+#' compound_structural_alert resource
 #'
-#' @param query character; compound ChEMBL ID to retrieve structural alerts
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_compound_structural_alert(query = "CHEMBL266429")
+#' chembl_query_offline(query = "CHEMBL266429", resource = "compound_structural_alert")
 #' }
 #' @noRd
 chembl_offline_compound_structural_alert <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'compound_structural_alert' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'compound_structural_alert' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API document resource using a local ChEMBL database
+#' document resource
 #'
-#' @param query character; document ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
+#' @note This function does not return exactly the same output as the ChEMBL 
+#' webservice, because I couldn't find all the necessary data in the offline
+#' database schema. The missing fields are: doi_chembl, journal_full_title.
 #' @examples
 #' \dontrun{
-#' chembl_offline_document(query = "CHEMBL1158643")
+#' chembl_query_offline(query = "CHEMBL1158643", resource = "document")
 #' }
 #' @noRd
 chembl_offline_document <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
-  stop("Offline 'document' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "DOCUMENT",
+    verbose = verbose,
+    con = con
+  )
+  
+  # Fetch document data
+  docs <- fetch_table(
+    con = con,
+    table = "docs",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "abstract",            # output column
+      "authors",             # output column
+      "chembl_release_id",   # output column (rename to chembl_release)
+      "contact",             # output column
+      "doc_type",            # output column
+      "chembl_id",           # query, output column (rename to document_chembl_id)
+      "doi",                 # output column
+      "first_page",          # output column
+      "issue",               # output column
+      "journal",             # output column
+      "last_page",           # output column
+      "patent_id",           # output column
+      "pubmed_id",           # output column
+      "src_id",              # output column
+      "title",               # output column
+      "volume",              # output column
+      "year"                 # output column
+    )
+  ) |>
+    dplyr::rename(
+      chembl_release = "chembl_release_id",
+      document_chembl_id = "chembl_id"
+    )
+  
+  # Fetch ChEMBL release info
+  chembl_release_info <- fetch_table(
+    con = con,
+    table = "chembl_release",
+    id_col = "chembl_release_id",
+    ids = unique(docs$chembl_release)
+  ) |>
+    dplyr::mutate(
+      creation_date = as.character(as.Date(.data$creation_date))
+    )
+  
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get document data for this query
+    doc <- docs |> dplyr::filter(.data$document_chembl_id == q)
+    if (nrow(doc) == 0) return(NA)  
+    
+    # Get ChEMBL release info
+    chembl_release_info <- chembl_release_info |>
+      dplyr::filter(.data$chembl_release_id == doc$chembl_release) |>
+      dplyr::select(-"chembl_release_id")  |>
+      as.list()
+
+    # Construct output matching webservice format
+    result <- list(
+      abstract = if (is.na(doc$abstract)) "" else doc$abstract,
+      authors = doc$authors,
+      chembl_release = chembl_release_info,
+      contact = doc$contact,
+      doc_type = doc$doc_type,
+      document_chembl_id = doc$document_chembl_id,
+      doi = doc$doi,
+      first_page = doc$first_page,
+      issue = doc$issue,
+      journal = doc$journal,
+      last_page = doc$last_page,
+      patent_id = doc$patent_id,
+      pubmed_id = doc$pubmed_id,
+      src_id = doc$src_id,
+      title = doc$title,
+      volume = doc$volume,
+      year = doc$year
+    )
+    
+    return(result)
+  })
+  
+  names(out) <- query
+  
+  if (output == "tidy") {
+    stop("Tidy output for 'document' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API document_similarity resource using a local ChEMBL database
+#' document_similarity resource
 #'
-#' @param query character; document ChEMBL ID to retrieve similarity
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_document_similarity(query = "CHEMBL1148466")
+#' chembl_query_offline(query = "CHEMBL1148466", resource = "document_similarity")
 #' }
 #' @noRd
 chembl_offline_document_similarity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'document_similarity' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "DOCUMENT",
+    verbose = verbose,
+    con = con
+  )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'document_similarity' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API drug resource using a local ChEMBL database
+#' drug resource
 #'
-#' @param query character; compound ChEMBL ID to retrieve drug info
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_drug(query = "CHEMBL2")
+#' chembl_query_offline(query = "CHEMBL2", resource = "drug")
 #' }
 #' @noRd
 chembl_offline_drug <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'drug' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'drug' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API drug_indication resource using a local ChEMBL database
+#' drug_indication resource
 #'
-#' @param query character; drug indication ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_drug_indication(query = "22606")
+#' chembl_query_offline(query = "22606", resource = "drug_indication")
 #' }
 #' @noRd
 chembl_offline_drug_indication <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'drug_indication' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'drug_indication' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API drug_warning resource using a local ChEMBL database
+#' drug_warning resource using a local ChEMBL database
 #'
-#' @param query character; warning ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_drug_warning(query = "1")
+#' chembl_query_offline(query = "1", resource = "drug_warning")
 #' }
 #' @noRd
 chembl_offline_drug_warning <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'drug_warning' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'drug_warning' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API go_slim resource using a local ChEMBL database
+#' go_slim resource
 #'
-#' @param query character; GO ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_go_slim(query = "GO:0000003")
+#' chembl_query_offline(query = "GO:0000003", resource = "go_slim")
 #' }
 #' @noRd
 chembl_offline_go_slim <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'go_slim' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'go_slim' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API mechanism resource using a local ChEMBL database
+#' mechanism resource
 #'
-#' @param query character; mechanism ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_mechanism(query = "13")
+#' chembl_query_offline(query = "13", resource = "mechanism")
 #' }
 #' @noRd
 chembl_offline_mechanism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'mechanism' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'mechanism' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API metabolism resource using a local ChEMBL database
+#' metabolism resource
 #'
-#' @param query character; metabolism ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_metabolism(query = "119")
+#' chembl_query_offline(query = "119", resource = "metabolism")
 #' }
 #' @noRd
 chembl_offline_metabolism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'metabolism' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'metabolism' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API molecule resource using a local ChEMBL database
+#' molecule resource
 #'
 #' @importFrom rlang .data
-#' @param query character; ChEMBL ID of the molecule to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_molecule(query = "CHEMBL1082")
+#' chembl_query_offline(query = "CHEMBL1082", resource = "molecule")
 #' }
 #' @noRd
 chembl_offline_molecule <- function(
     query,
     verbose = getOption("verbose"),
-    version = "latest"
+    version = "latest",
+    output = "raw",
+    con
   ){
-  # validate input: if all na, stop, if any na remove, there is also a function.
-  if (!inherits(version, "chembl_version")) {
-    version <- validate_chembl_version(version = version)
-  }
-  # connect to local database
-  con <- connect_chembl(version = version)
-  # confirm chembl_id
-  entity_type <- fetch_table(
-    con = con,
-    table = "chembl_id_lookup",
-    id_col = "chembl_id",
-    ids = query,
-    select_cols = c("chembl_id", "entity_type")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
   )
-  # if missing, verbose message, NA
-
-  for (i in 1:nrow(entity_type)) {
-    if (entity_type$entity_type[i] != "COMPOUND") {
-      msg <- paste0(
-        entity_type$chembl_id[i], " is not a COMPOUND. It is a ",
-        entity_type$entity_type[i], ".")
-      stop(msg)
-    }
-  }
   ids <- fetch_table(
     con = con,
     table = "molecule_dictionary",
@@ -571,206 +1137,334 @@ chembl_offline_molecule <- function(
     names(out)[i] <- query[i]
     out[[i]] <- out[[i]][sort(names(out[[i]]))]
   }
-  DBI::dbDisconnect(con)
   return(out)
 }
 
-#' Replicate ChEMBL API molecule_form resource using a local ChEMBL database
+#'molecule_form resource
 #'
-#' @param query character; molecule ChEMBL ID to retrieve form
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_molecule_form(query = "CHEMBL6329")
+#' chembl_query_offline(query = "CHEMBL6329", resource = "molecule_form")
 #' }
 #' @noRd
 chembl_offline_molecule_form <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'molecule_form' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "COMPOUND",
+    verbose = verbose,
+    con = con
+  )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'molecule_form' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API organism resource using a local ChEMBL database
+#' organism resource
 #'
-#' @param query character; organism class ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_organism(query = "1")
+#' chembl_query_offline(query = "1", resource = "organism")
 #' }
 #' @noRd
 chembl_offline_organism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'organism' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'organism' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API protein_classification resource using a local ChEMBL database
+#' protein_classification resource
 #'
-#' @param query character; protein class ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_protein_classification(query = "1")
+#' chembl_query_offline(query = "1", resource = "protein_classification")
 #' }
 #' @noRd
 chembl_offline_protein_classification <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'protein_classification' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'protein_classification' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API source resource using a local ChEMBL database
+#' source resource
 #'
-#' @param query character; source ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_source(query = "1")
+#' chembl_query_offline(query = "1", resource = "source")
 #' }
 #' @noRd
 chembl_offline_source <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'source' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'source' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API similarity resource using a local ChEMBL database
+#' similarity resource
 #'
-#' @param query character; compound SMILES to retrieve similarity results
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_similarity(query = "CC(=O)Oc1ccccc1C(=O)O")
+#' chembl_query_offline(query = "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity")
 #' }
 #' @noRd
 chembl_offline_similarity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  similarity = 70,
+  con
   ){
   stop("Offline 'similarity' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'similarity' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API substructure resource using a local ChEMBL database
+#' substructure resource
 #'
-#' @param query character; compound SMILES to retrieve substructure results
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_substructure(query = "CN(CCCN)c1cccc2ccccc12")
+#' chembl_query_offline(query = "CN(CCCN)c1cccc2ccccc12", resource = "substructure")
 #' }
 #' @noRd
 chembl_offline_substructure <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'substructure' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'substructure' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API target resource using a local ChEMBL database
+#' target resource
 #'
-#' @param query character; target ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_target(query = "CHEMBL2074")
+#' chembl_query_offline(query = "CHEMBL2074", resource = "target")
 #' }
 #' @noRd
 chembl_offline_target <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'target' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "TARGET",
+    verbose = verbose,
+    con = con
+  )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'target' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API target_component resource using a local ChEMBL database
+#' target_component resource
 #'
-#' @param query character; target component ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_target_component(query = "1")
+#' chembl_query_offline(query = "1", resource = "target_component")
 #' }
 #' @noRd
 chembl_offline_target_component <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'target_component' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'target_component' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API target_relation resource using a local ChEMBL database
+#' target_relation resource
 #'
-#' @param query character; target ChEMBL ID to retrieve relations
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_target_relation(query = "CHEMBL2251")
+#' chembl_query_offline(query = "CHEMBL2251", resource = "target_relation")
 #' }
 #' @noRd
 chembl_offline_target_relation <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'target_relation' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'target_relation' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API tissue resource using a local ChEMBL database
+#' tissue resource
 #'
-#' @param query character; tissue ChEMBL ID to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_tissue(query = "CHEMBL3988026")
+#' chembl_query_offline(query = "CHEMBL3988026", resource = "tissue")
 #' }
 #' @noRd
 chembl_offline_tissue <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'tissue' queries are not yet implemented.")
+  chembl_validate_id_offline(
+    query = query,
+    target = "TISSUE",
+    verbose = verbose,
+    con = con
+  )
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'tissue' is not yet implemented.")
+  }
+  return(out)
 }
 
-#' Replicate ChEMBL API xref_source resource using a local ChEMBL database
+#' xref_source resource
 #'
-#' @param query character; name of the xref source to retrieve
-#' @param version character; version of the ChEMBL database
-#' @param verbose logical; print verbose messages to the console?
 #' @examples
 #' \dontrun{
-#' chembl_offline_xref_source(query = "AlphaFoldDB")
+#' chembl_query_offline(query = "AlphaFoldDB", resource = "xref_source")
 #' }
 #' @noRd
 chembl_offline_xref_source <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest"
+  version = "latest",
+  output = "raw",
+  con
   ){
   stop("Offline 'xref_source' queries are not yet implemented.")
+  # fetch relevant tables from database
+
+  # loop through the queries and assemble raw output
+  out <- unname(lapply(query, function(x) {
+    # implementation here
+  }))
+  names(out) <- query
+  if (output == "tidy") {
+    stop("Tidy output for 'xref_source' is not yet implemented.")
+  }
+  return(out)
 }
 
 #' Retrieve schema information from a local ChEMBL database
@@ -919,20 +1613,20 @@ compare_service_lists <- function(ws, offline) {
           paste0(utils::capture.output(print(off_elem)), collapse = "\n")
         ))
       }
-    } else if (is.data.frame(ws_elem)) {
+    } else if (is.list(ws_elem)) {
       element_comparison <- compare_atomic_lists(ws_elem, off_elem)
       if (length(element_comparison$unique_to_x) > 0) {
-        ws_unique_element = c(ws_unique_element, paste0(
+        ws_unique_element <- c(ws_unique_element, paste0(
           n, "$", element_comparison$unique_to_x
         ))
       }
       if (length(element_comparison$unique_to_y) > 0) {
-        offline_unique_element = c(offline_unique_element, paste0(
+        offline_unique_element <- c(offline_unique_element, paste0(
           n, "$", element_comparison$unique_to_y
         ))
       }
     } else {
-      stop(sprintf("Element '%s' should be either atomic or a data frame.", n))
+      stop(sprintf("Element '%s' should be either atomic or a list.", n))
     }
   }
   return(list(
@@ -1009,4 +1703,54 @@ fetch_table <- function(
     out <- out |> dplyr::select(dplyr::all_of(select_cols))
   }
   out |> dplyr::collect()
+}
+
+chembl_validate_id_offline <- function(
+   query,
+   target,
+   verbose = getOption("verbose"),
+   con
+) {
+  entity_type <- fetch_table(
+    con = con,
+    table = "chembl_id_lookup",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c("chembl_id", "entity_type")
+  )
+  index <- which(!query %in% entity_type$chembl_id)
+  if (length(index) > 0) {
+    missing_ids <- paste(query[index], collapse = ", ")
+    msg <- paste0("The following ChEMBL IDs were not found: ", missing_ids)
+    stop(msg)
+  }
+  for (i in seq_len(nrow(entity_type))) {
+    if (entity_type$entity_type[i] != target) {
+      msg <- paste0(
+        entity_type$chembl_id[i], " is not a ", target, ". It is a ",
+        entity_type$entity_type[i], ".")
+      stop(msg)
+    }
+  }
+}
+
+#' Convert tidy data frame to raw list format
+#' 
+#' @param query character; vector of query IDs.
+#' @param df data.frame; tidy data frame to convert.
+#' @return A named list where each element corresponds to a row in the data
+#' frame, named by the query IDs.
+#' @noRd
+chembl_tidy2raw <- function(query, df) {
+  if (!is.data.frame(df) || nrow(df) == 0) {
+    return(list())
+  }
+  # TODO handle pontential mismatch between query length and df rows
+  res <- lapply(seq_len(nrow(df)), function(i) {
+    raw_element <- df[i, , drop = FALSE]
+    raw_element <- as.list(raw_element)
+    raw_element[sort(names(raw_element))]
+  })
+  names(res) <- query
+  res
 }

@@ -2,22 +2,24 @@
 #'
 #' Use this to group resource or mode specific options and pass them via the
 #' `options` argument to `chembl_query()`.
+#' @param replace_nulls logical; if TRUE, replaces JSON NULL values with typed
+#' NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field's
+#' schema type.
 #' @param cache_file character or NULL
 #' @param similarity numeric
-#' @param tidy logical
 #' @param version character
 #' @return A list with class 'chembl_options'.
 #' @noRd
 chembl_options <- function(
+  replace_nulls = TRUE,
   cache_file = NULL,
   similarity = 70,
-  tidy = TRUE,
   version = "latest"
 ) {
   options <- list(
+    replace_nulls = replace_nulls,
     cache_file = cache_file,
     similarity = similarity,
-    tidy = tidy,
     version = version
   )
   class(options) <- "chembl_options"
@@ -221,14 +223,15 @@ chembl_files <- function(version = "latest") {
 #' @param mode character; either "ws" (default) to use the webservice or
 #' "offline" to use a local ChEMBL database. Note, to use the "offline" mode,
 #' you need to have a local ChEMBL database. See [db_download_chembl()].
+#' @param output character; either "raw" (default) to return the raw results
+#' which is a list of lists, or "tidy" to return simplified results, if
+#' possible.
 #' @param options function; returns a named list for resource- and mode-specific
 #' options. Supported entries:
 #'   - cache_file: character or NULL; name of the cache file (without extension)
 #'     used when mode = "ws". If NULL (default), results are not cached.
 #'   - similarity: numeric; similarity threshold for similarity searches
 #'     (default 70).
-#'   - tidy: logical; attempt to convert output to a simpler structure
-#'     (default TRUE).
 #'   - version: character; database version to use in "offline" mode (default
 #'     "latest").
 #' @param verbose logical; should a verbose output be printed on the console?
@@ -371,16 +374,18 @@ chembl_query <- function(
   query,
   resource = "molecule",
   mode = "ws",
+  output = "raw",
   verbose = getOption("verbose"),
   options = chembl_options(
+    replace_nulls = TRUE,
     cache_file = NULL,
     similarity = 70,
-    tidy = TRUE,
     version = "latest"
   ),
   ...
   ) {
   resource <- match.arg(resource, chembl_resources())
+  output <- match.arg(output, choices = c("raw", "tidy"))
   if (resource == "image") {
     stop("To download images, please use chembl_img().")
   }
@@ -393,9 +398,10 @@ chembl_query <- function(
       query = query,
       resource = resource,
       verbose = verbose,
+      replace_nulls = options$replace_nulls,
       cache_file = options$cache_file,
       similarity = options$similarity,
-      tidy = options$tidy,
+      output = output,
       ...
     )
   } else {
@@ -404,7 +410,8 @@ chembl_query <- function(
       resource = resource,
       verbose = verbose,
       similarity = options$similarity,
-      version = options$version
+      version = options$version,
+      output = output
     )
   }
 }
@@ -420,9 +427,10 @@ chembl_query_ws <- function(
   query,
   resource = "molecule",
   verbose = getOption("verbose"),
+  replace_nulls = TRUE,
   cache_file = NULL,
   similarity = 70,
-  tidy = TRUE,
+  output = "raw",
   ...
   ) {
   if (resource == "similarity") {
@@ -430,7 +438,16 @@ chembl_query_ws <- function(
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
-  foo <- function(query, verbose, similarity) {
+  if (replace_nulls) {
+    if (verbose) message("Retrieving schema to replace NULLs.")
+    # TODO retrieve once per session and cache
+    schema <- jsonlite::fromJSON(paste0(
+      "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
+    ))
+  } else {
+    schema <- NULL
+  }
+  foo <- function(query, verbose, similarity, schema) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -464,14 +481,15 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    if (tidy) {
+    if (replace_nulls) cont <- replace_nulls(cont, schema)
+    if (output == "tidy") {
       cont <- format_chembl(cont)
     }
     return(cont)
   }
   if (is.null(cache_file)) {
     out <- lapply(query, function(x) {
-      foo(x, verbose = verbose, similarity = similarity)
+      foo(x, verbose = verbose, similarity = similarity, schema = schema)
     })
   } else {
     if (!dir.exists("cache")) dir.create("cache")
@@ -487,7 +505,7 @@ chembl_query_ws <- function(
         if (verbose) message("Already retrieved.")
         return(query_results[[x]])
       } else {
-        new <- foo(x, verbose = verbose, similarity = similarity)
+        new <- foo(x, verbose = verbose, similarity = similarity, schema = schema)
         if (!is.na(x)) {
           query_results[[x]] <<- new
           saveRDS(query_results, file = cfpath)
@@ -612,7 +630,7 @@ chembl_validate_query <- function(query, resource, verbose) {
   if (resource %in% c(
     "activity",
     "binding_site",
-    "compund_record",
+    "compound_record",
     "drug_indication",
     "drug_warning",
     "mechanism",
@@ -868,7 +886,7 @@ format_chembl <- function(cont) {
 validate_chembl_version <- function(version = "latest") {
   assert(version, "character")
   stopifnot(length(version) == 1)
-  if (version == "latest") version <- "35"
+  if (version == "latest") version <- "36"
   version_num <- suppressWarnings(as.numeric(version))
   version_base <- as.character(floor(version_num))
   if (is.na(version_num)) {
@@ -1001,7 +1019,7 @@ chembl_example_query <- function(resource) {
     assay = c("CHEMBL615117", "CHEMBL1061852", "CHEMBL5445082", "CHEMBL5441382", "CHEMBL2184458"),
     atc_class = "A01AA01",
     binding_site = "2",
-    biotherapeutic = c("CHEMBL8234","CHEMBL448105"),
+    biotherapeutic = c("CHEMBL8234", "CHEMBL448105", "CHEMBL441738"),
     cell_line = c("CHEMBL3307241", "CHEMBL3307242"),
     chembl_id_lookup = "CHEMBL1",
     compound_record = "1",
@@ -1032,4 +1050,68 @@ chembl_example_query <- function(resource) {
     stop(paste0("No example query available for this resource: ", resource))
   }
   example_queries[[resource]]
+}
+
+#' Replace NULLs in ChEMBL webservice response
+#'
+#' Recursively replace NULL values in the ChEMBL webservice response with NA
+#' values of the appropriate type based on the provided schema.
+#' @param res list; the ChEMBL webservice response to process.
+#' @param schema list; the schema for the ChEMBL resource.
+#' @noRd
+
+replace_nulls <- function(res, schema) {
+  # link schema types to NA types
+  get_na_type <- function(type) {
+    switch(
+      type,
+      "string" = NA_character_,
+      "integer" = NA_integer_,
+      "float" = NA_real_,
+      "number" = NA_real_,
+      "boolean" = NA,
+      "datetime" = NA_character_,
+      "related" = NA_character_,
+      NA_character_  # default
+    )
+  }
+  
+  # If res is not a list, stop with an error
+  if (!is.list(res)) stop("ChEMBL raw output should be a list.")
+  
+  # Internal recursive function with depth tracking
+  foo <- function(x, field_name, depth = 0) {
+    if (depth > 10) {
+      stop("Exceeded maximum recursion depth while replacing NULLs.")
+    }
+    # if x is NULL, replace with appropriate NA based on schema
+    if (is.null(x)) {
+      if (!is.null(field_name) &&
+          !is.null(schema$fields) &&
+          field_name %in% names(schema$fields)) {
+        field_schema <- schema$fields[[field_name]]
+        if (!is.null(field_schema$type)) {
+          return(get_na_type(field_schema$type))
+        } else {
+          return(NA_character_)
+        }
+      } else {
+        return(NA_character_)
+      }
+    }
+    # if x is a list, recursively apply foo to its elements
+    if (is.list(x)) {
+      for (i in seq_along(x)) {
+        x[[i]] <- foo(x[[i]], names(x)[i], depth + 1)
+      }
+    }
+    return(x)
+  }
+  
+  # Apply foo to each element at the top level
+  result <- lapply(seq_along(res), function(i) {
+    foo(res[[i]], names(res)[i])
+  })
+  names(result) <- names(res)
+  return(result)
 }

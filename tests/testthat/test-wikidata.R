@@ -15,7 +15,7 @@ test_that("get_wdid returns correct results", {
   expect_s3_class(o3, 'data.frame')
   expect_s3_class(o4, 'data.frame')
 
-  expect_equal(o1$wdid, c("Q163648", "Q20987744", NA, 'Q47512'),
+  expect_equal(o1$wdid, c("Q163648", "Q10420388", NA, 'Q47512'),
                ignore_attr = TRUE)
   expect_true(all(c("Q163648", "Q949424") %in% o2$wdid))
 })
