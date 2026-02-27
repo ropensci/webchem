@@ -138,12 +138,13 @@ chembl_offline_atc_class <- function(
       "4" = "level3",
       "5" = "level4",
       "7" = "level5",
-      NULL
+      NA
     )
   }
   # validate query lengths
   q_lengths <- nchar(query)
-  invalid_idx <- which(is.na(vapply(q_lengths, len2level, FUN.VALUE = character(1))))
+  levels <- sapply(q_lengths, len2level)
+  invalid_idx <- which(is.na(levels))
   if (length(invalid_idx) > 0) {
     msg <- sprintf(
       "Invalid ATC code(s): %s. ATC codes must have lengths 1,3,4,5 or 7.", 
@@ -175,12 +176,10 @@ chembl_offline_atc_class <- function(
   names(fetched) <- query
   if (output == "raw") {
     out <- lapply(fetched, function(df) {
-      if (nrow(df) == 0) {
-      return(NA)
-      }
+      if (nrow(df) == 0) return(NA)
       lapply(seq_len(nrow(df)), function(i) {
-      row_list <- as.list(df[i, , drop = FALSE])
-      row_list[sort(names(row_list))]
+        row_list <- as.list(df[i, , drop = FALSE])
+        row_list[sort(names(row_list))]
       })
     })
     if (length(out) == 1) {
@@ -256,8 +255,8 @@ chembl_offline_binding_site <- function(
     if (nrow(bs) == 0) return(NA)
     # Get site components for this query
     sc <- site_components |> dplyr::filter(.data$site_id == q_int)
-    site_components <- list()
-    for (i in 1:nrow(sc)) {
+    site_components_list <- list()
+    for (i in seq_len(nrow(sc))) {
       sc_i <- sc[i, ]
       domain_info <- domains |> dplyr::filter(.data$domain_id == sc_i$domain_id)
       component_entry <- list(
@@ -269,11 +268,10 @@ chembl_offline_binding_site <- function(
         },
         "sitecomp_id" = sc_i$sitecomp_id
       )
-      site_components[[i]] <- component_entry
+      site_components_list[[i]] <- component_entry
     }
-    bs <- binding_sites |> dplyr::filter(.data$site_id == q_int)
     out <- list(
-      site_components = site_components,
+      site_components = site_components_list,
       site_id = bs$site_id,
       site_name = bs$site_name
     )
@@ -367,13 +365,13 @@ chembl_offline_biotherapeutic <- function(
     bio_data <- biotherapeutics |> dplyr::filter(.data$molregno == q_molregno)
     if (nrow(bio_data) == 0) return(NA)
     
-    # Get biotheraputic components for this molecule
+    # Get biotherapeutic components for this molecule
     components <- biotherapeutic_components |>
       dplyr::filter(.data$molregno == q_molregno)
     
     biocomponents_list <- list()
     if (nrow(components) > 0) {
-      for (i in 1:nrow(components)) {
+      for (i in seq_len(nrow(components))) {
         # Filter bio_component_sequences for this component
         comp <- bio_component_sequences |>
           dplyr::filter(.data$component_id == components$component_id[i])
@@ -466,18 +464,21 @@ chembl_offline_cell_line <- function(
 #' @noRd
 chembl_offline_chembl_id_lookup <- function(
   query,
-  target,
   verbose = getOption("verbose"),
   version = "latest",
   output = "raw",
   con
   ){
-  fetch_table(
+  out <- fetch_table(
     con = con,
     table = "chembl_id_lookup",
     id_col = "chembl_id",
     ids = query,
   )
+  if (output == "raw") {
+    out <- chembl_tidy2raw(query = query, df = out)
+  }
+  return(out)
 }
 
 #' compound_record resource
@@ -1615,12 +1616,12 @@ compare_service_lists <- function(ws, offline) {
     } else if (is.list(ws_elem)) {
       element_comparison <- compare_atomic_lists(ws_elem, off_elem)
       if (length(element_comparison$unique_to_x) > 0) {
-        ws_unique_element = c(ws_unique_element, paste0(
+        ws_unique_element <- c(ws_unique_element, paste0(
           n, "$", element_comparison$unique_to_x
         ))
       }
       if (length(element_comparison$unique_to_y) > 0) {
-        offline_unique_element = c(offline_unique_element, paste0(
+        offline_unique_element <- c(offline_unique_element, paste0(
           n, "$", element_comparison$unique_to_y
         ))
       }
