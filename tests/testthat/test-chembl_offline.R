@@ -73,7 +73,8 @@ implemented <- c(
   "compound_record",
   "document",
   "drug_indication",
-  "drug_warning"
+  "drug_warning",
+  "go_slim"
 )
 
 for (i in implemented) {

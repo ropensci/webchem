@@ -1052,17 +1052,48 @@ chembl_offline_go_slim <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'go_slim' queries are not yet implemented.")
-  # fetch relevant tables from database
-
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch GO Slim classification data
+  go_classification <- fetch_table(
+    con = con,
+    table = "go_classification",
+    id_col = "go_id",
+    ids = query,
+    select_cols = c(
+      "go_id",              # query column, output column
+      "pref_name",          # output column
+      "class_level",        # output column
+      "aspect",             # output column
+      "path",               # output column
+      "parent_go_id"        # output column
+    )
+  )
+  
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get GO classification for this query
+    go_data <- go_classification |> dplyr::filter(.data$go_id == q)
+    
+    if (nrow(go_data) == 0) return(NA)
+    
+    # Construct output matching webservice format
+    result <- list(
+      aspect = go_data$aspect,
+      class_level = go_data$class_level,
+      go_id = go_data$go_id,
+      parent_go_id = go_data$parent_go_id,
+      path = go_data$path,
+      pref_name = go_data$pref_name
+    )
+    
+    return(result)
+  })
+  
   names(out) <- query
+  
   if (output == "tidy") {
     stop("Tidy output for 'go_slim' is not yet implemented.")
   }
+  
   return(out)
 }
 
