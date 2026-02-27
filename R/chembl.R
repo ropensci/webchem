@@ -1048,7 +1048,7 @@ chembl_example_query <- function(resource) {
   example_queries[[resource]]
 }
 
-replace_nulls <- function(x, schema) {
+replace_nulls <- function(x, schema, depth = NULL) {
   # link schema types to NA types
   get_na_type <- function(type) {
     switch(
@@ -1089,6 +1089,14 @@ replace_nulls <- function(x, schema) {
       }
     } else if (is.list(x[[i]])) {
       # Recursively process nested lists
+      if (is.null(depth)) {
+        depth <- 1
+      } else {
+        depth <- depth + 1
+      }
+      if (depth > 10) {
+        stop("Exceeded maximum recursion depth while replacing NULLs.")
+      }
       if (!is.null(field_name) &&
           !is.null(schema$fields) &&
           field_name %in% names(schema$fields)) {
@@ -1099,9 +1107,9 @@ replace_nulls <- function(x, schema) {
         } else {
           schema
         }
-        x[[i]] <- replace_nulls(x[[i]], nested_schema)
+        x[[i]] <- replace_nulls(x[[i]], nested_schema, depth)
       } else {
-        x[[i]] <- replace_nulls(x[[i]], schema)
+        x[[i]] <- replace_nulls(x[[i]], schema, depth)
       }
     }
   }
