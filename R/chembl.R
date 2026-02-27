@@ -2,9 +2,9 @@
 #'
 #' Use this to group resource or mode specific options and pass them via the
 #' `options` argument to `chembl_query()`.
-#' @param replace_nulls logical; if TRUE, replaces JSON NULL values with typed 
-#' NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field's 
-#' schema type. 
+#' @param replace_nulls logical; if TRUE, replaces JSON NULL values with typed
+#' NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field's
+#' schema type.
 #' @param cache_file character or NULL
 #' @param similarity numeric
 #' @param version character
@@ -464,7 +464,7 @@ chembl_query_ws <- function(
     } else {
       url <- paste0(stem, "/", resource, "/", query, ".json")
     }
-    
+
     webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,
@@ -1052,7 +1052,14 @@ chembl_example_query <- function(resource) {
   example_queries[[resource]]
 }
 
-replace_nulls <- function(x, schema, depth = NULL) {
+#' Replace NULLs in ChEMBL webservice response
+#'
+#' Recursively replace NULL values in the ChEMBL webservice response with NA
+#' values of the appropriate type based on the provided schema.
+#' @param res list; the ChEMBL webservice response to process.
+#' @param schema list; the schema for the ChEMBL resource.
+
+replace_nulls <- function(res, schema) {
   # link schema types to NA types
   get_na_type <- function(type) {
     switch(
@@ -1067,55 +1074,43 @@ replace_nulls <- function(x, schema, depth = NULL) {
       NA_character_  # default
     )
   }
-  # If x is a list, process each element
-  if (!is.list(x)) stop("ChEMBL raw output should be a list.")
-  for (i in seq_along(x)) {
-    field_name <- names(x)[i]
-    # Handle NULL values at this level
-    if (is.null(x[[i]])) {
-      # Look up field in schema
+  
+  # If res is not a list, stop with an error
+  if (!is.list(res)) stop("ChEMBL raw output should be a list.")
+  
+  # Internal recursive function with depth tracking
+  foo <- function(x, field_name, depth = 0) {
+    if (depth > 10) {
+      stop("Exceeded maximum recursion depth while replacing NULLs.")
+    }
+    # if x is NULL, replace with appropriate NA based on schema
+    if (is.null(x)) {
       if (!is.null(field_name) &&
           !is.null(schema$fields) &&
           field_name %in% names(schema$fields)) {
         field_schema <- schema$fields[[field_name]]
-        # Get type - handle both direct type and nested schema
         if (!is.null(field_schema$type)) {
-          x[[i]] <- get_na_type(field_schema$type)
-        } else if (!is.null(field_schema$schema)) {
-          # For nested schemas, keep as list structure
-          x[[i]] <- NA_character_
+          return(get_na_type(field_schema$type))
         } else {
-          x[[i]] <- NA_character_
+          return(NA_character_)
         }
       } else {
-        # If not in schema, default to NA_character_
-        x[[i]] <- NA_character_
-      }
-    } else if (is.list(x[[i]])) {
-      # Recursively process nested lists
-      if (is.null(depth)) {
-        depth <- 1
-      } else {
-        depth <- depth + 1
-      }
-      if (depth > 10) {
-        stop("Exceeded maximum recursion depth while replacing NULLs.")
-      }
-      if (!is.null(field_name) &&
-          !is.null(schema$fields) &&
-          field_name %in% names(schema$fields)) {
-        field_schema <- schema$fields[[field_name]]
-        # Use nested schema if available
-        nested_schema <- if (!is.null(field_schema$schema)) {
-          field_schema$schema
-        } else {
-          schema
-        }
-        x[[i]] <- replace_nulls(x[[i]], nested_schema, depth)
-      } else {
-        x[[i]] <- replace_nulls(x[[i]], schema, depth)
+        return(NA_character_)
       }
     }
+    # if x is a list, recursively apply foo to its elements
+    if (is.list(x)) {
+      for (i in seq_along(x)) {
+        x[[i]] <- foo(x[[i]], names(x)[i], depth + 1)
+      }
+    }
+    return(x)
   }
-  return(x)
+  
+  # Apply foo to each element at the top level
+  result <- lapply(seq_along(res), function(i) {
+    foo(res[[i]], names(res)[i])
+  })
+  names(result) <- names(res)
+  return(result)
 }
