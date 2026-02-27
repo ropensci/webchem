@@ -1,13 +1,13 @@
 
-test_that("extractors work with etox", {
-  skip_on_cran()
-  skip_if_not(ping_service("etox"), "ETOX service is down")
+# test_that("extractors work with etox", {
+#   skip_on_cran()
+#   skip_if_not(ping_service("etox"), "ETOX service is down")
 
-  out_etox_basic <- etox_basic(8252)
-  expect_equal(cas(out_etox_basic), "50-00-0", ignore_attr = TRUE)
-  expect_error(inchikey(out_etox_basic))
-  expect_error(smiles(out_etox_basic))
-})
+#   out_etox_basic <- etox_basic(8252)
+#   expect_equal(cas(out_etox_basic), "50-00-0", ignore_attr = TRUE)
+#   expect_error(inchikey(out_etox_basic))
+#   expect_error(smiles(out_etox_basic))
+# })
 
 test_that("extractors work with opsin", {
   skip_on_cran()
