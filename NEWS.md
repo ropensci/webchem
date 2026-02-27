@@ -20,7 +20,7 @@
 * `chembl_query()` now returns a named list with improved formatting for nested output.
 * Added new argument `output` to `chembl_query()` (values: "raw" or "tidy") to control output format. Raw format returns the full nested structure; tidy format attempts to flatten the results.
 * Added new `options` argument to `chembl_query()` for passing resource- and mode-specific options (cache file name, similarity threshold, database version, etc.).
-* `chembl_query()` can now replace NULL values with typed NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field schema when `replace_nulls = TRUE` in options.
+* `chembl_query()` can now replace NULL values with typed NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field schema when `replace_nulls = TRUE` in options. For this, the schema is retrieved from ChEMBL and cached for the session.
 
 ## BUG FIXES
 

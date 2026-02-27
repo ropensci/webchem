@@ -439,11 +439,16 @@ chembl_query_ws <- function(
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
   if (replace_nulls) {
-    if (verbose) message("Retrieving schema to replace NULLs.")
-    # TODO retrieve once per session and cache
-    schema <- jsonlite::fromJSON(paste0(
-      "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
-    ))
+    if (exists(resource, envir = .chembl_schema_cache, inherits = FALSE)) {
+      if (verbose) message("Using cached schema.")
+      schema <- get(resource, envir = .chembl_schema_cache)
+    } else {
+      if (verbose) message("Retrieving schema to replace NULLs.")
+      schema <- jsonlite::fromJSON(paste0(
+        "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
+      ))
+      assign(resource, schema, envir = .chembl_schema_cache)
+    }
   } else {
     schema <- NULL
   }
