@@ -830,12 +830,26 @@ chembl_offline_drug_indication <- function(
       "ref_url"             # output column
     )
   )
-  # Fetch molecule dictionary to get molecule_chembl_id
+  # Fetch molecule hierarchy to get parent_molecule_chembl_id
+  molecule_hierarchy <- fetch_table(
+    con = con,
+    table = "molecule_hierarchy",
+    id_col = "molregno",
+    ids = unique(drug_indications$molregno),
+    select_cols = c(
+      "molregno",         # link column (drug_indication)
+      "parent_molregno"   # link column (molecule_dictionary for parent)
+    )
+  )
+  # Fetch molecule dictionary to get molecule_chembl_id and parent_molecule_chembl_id
   molecule_ids <- fetch_table(
     con = con,
     table = "molecule_dictionary",
     id_col = "molregno",
-    ids = unique(drug_indications$molregno),
+    ids = unique(c(
+      drug_indications$molregno,
+      molecule_hierarchy$parent_molregno
+    )),
     select_cols = c(
       "molregno",   # link column (drug_indication)
       "chembl_id"   # output column
@@ -850,6 +864,13 @@ chembl_offline_drug_indication <- function(
     # Get molecule_chembl_id
     mol_chembl <- molecule_ids |>
       dplyr::filter(.data$molregno == di$molregno) |>
+      dplyr::pull(.data$chembl_id)
+    # Get CHEMBL ID for parent molecule
+    parent_molregno <- molecule_hierarchy |>
+      dplyr::filter(.data$molregno == di$molregno) |>
+      dplyr::pull(.data$parent_molregno)
+    parent_chembl <- molecule_ids |>
+      dplyr::filter(.data$molregno == parent_molregno) |>
       dplyr::pull(.data$chembl_id)
     # Get indication refs for this drugind_id
     indication_refs_data <- indication_refs |>
@@ -878,7 +899,7 @@ chembl_offline_drug_indication <- function(
       mesh_heading = di$mesh_heading,
       mesh_id = di$mesh_id,
       molecule_chembl_id = mol_chembl,
-      parent_molecule_chembl_id = mol_chembl
+      parent_molecule_chembl_id = parent_chembl
     )
     return(out)
   })
