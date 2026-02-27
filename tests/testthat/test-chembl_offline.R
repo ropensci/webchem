@@ -6,9 +6,15 @@ skip_on_ci()
 db_download_chembl(version = "35", verbose = FALSE)
 
 test_that("chembl_offline_chembl_id_lookup works", {
-  a <- chembl_query_offline(query = "CHEMBL1", resource = "chembl_id_lookup")
+  a <- chembl_query_offline(
+    query = "CHEMBL1",
+    resource = "chembl_id_lookup",
+    output = "tidy"
+  )
   b <- chembl_query_offline(
-    query = c("CHEMBL1", "CHEMBL1082"), resource = "chembl_id_lookup"
+    query = c("CHEMBL1", "CHEMBL1082"),
+    resource = "chembl_id_lookup",
+    output = "tidy"
   )
 
   expect_s3_class(a, "data.frame")
@@ -74,7 +80,6 @@ for (i in implemented) {
   off <- chembl_query(ids, resource = i, mode = "offline")
 
   for (j in seq_along(ids)) {
-    if (i == "biotherapeutic" & j == 3) next()
 
     if (i == "document") {
       # Remove fields not available in offline mode
