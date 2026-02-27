@@ -2,7 +2,9 @@
 #'
 #' Use this to group resource or mode specific options and pass them via the
 #' `options` argument to `chembl_query()`.
-#' @param replace_nulls logical; replace NULL-s with appropriate NA-s?
+#' @param replace_nulls logical; if TRUE, replaces JSON NULL values with typed 
+#' NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field's 
+#' schema type. 
 #' @param cache_file character or NULL
 #' @param similarity numeric
 #' @param version character
@@ -437,6 +439,8 @@ chembl_query_ws <- function(
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
   if (replace_nulls) {
+    if (verbose) message("Retrieving schema to replace NULLs.")
+    # TODO retrieve once per session and cache
     schema <- jsonlite::fromJSON(paste0(
       "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
     ))
@@ -460,7 +464,7 @@ chembl_query_ws <- function(
     } else {
       url <- paste0(stem, "/", resource, "/", query, ".json")
     }
-
+    
     webchem_sleep(type = "API")
     res <- try(httr::RETRY("GET",
                            url,
@@ -1015,7 +1019,7 @@ chembl_example_query <- function(resource) {
     assay = c("CHEMBL615117", "CHEMBL1061852", "CHEMBL5445082", "CHEMBL5441382", "CHEMBL2184458"),
     atc_class = "A01AA01",
     binding_site = "2",
-    biotherapeutic = c("CHEMBL8234","CHEMBL448105", "CHEMBL441738"),
+    biotherapeutic = c("CHEMBL8234", "CHEMBL448105", "CHEMBL441738"),
     cell_line = c("CHEMBL3307241", "CHEMBL3307242"),
     chembl_id_lookup = "CHEMBL1",
     compound_record = "1",
