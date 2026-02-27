@@ -147,7 +147,7 @@ test_that("chembl_query() examples", {
   expect_true(inherits(o29, "list") & length(o29[[1]]) == 6)
   expect_true(inherits(o30, "list") & length(o30[[1]]) == 4)
 
-  expect_equal(o18m[2], "OK (HTTP 200).")
+  expect_equal(o18m[3], "OK (HTTP 200).")
 })
 
 test_that("More chembl_query()", {
@@ -161,8 +161,8 @@ test_that("More chembl_query()", {
   )
 
   expect_equal(length(o5), 4)
-  expect_equal(o5m[4], capture_messages(webchem_message("na"))[1])
-  expect_equal(o5m[6], "Query must be a ChEMBL ID. Returning NA.\n")
+  expect_equal(o5m[5], capture_messages(webchem_message("na"))[1])
+  expect_equal(o5m[7], "Query must be a ChEMBL ID. Returning NA.\n")
 
   #caching
   o6 <- chembl_query(
@@ -184,8 +184,8 @@ test_that("More chembl_query()", {
     options = chembl_options(cache_file = "test")
   )
 
-  expect_equal(o7m[1], "Querying CHEMBL1082. ")
-  expect_equal(o7m[2], "Already retrieved.\n")
+  expect_equal(o7m[2], "Querying CHEMBL1082. ")
+  expect_equal(o7m[3], "Already retrieved.\n")
   expect_equal(o8[[1]], NA)
 
   if (file.exists("./cache/test.rds")) file.remove("./cache/test.rds")
@@ -195,7 +195,7 @@ test_that("More chembl_query()", {
   o9 <- capture_messages(
     chembl_query("CHEMBL12345678", resource = "molecule", verbose = TRUE))
 
-  expect_equal(o9[2], "Not Found (HTTP 404).")
+  expect_equal(o9[3], "Not Found (HTTP 404).")
 
   #service down
   o10 <- chembl_query("CHEMBL1082", test_service_down = TRUE)
@@ -207,7 +207,7 @@ test_that("More chembl_query()", {
   ))
 
   expect_equal(o10[[1]], NA)
-  expect_equal(o10m[2], "Service not available. Returning NA.")
+  expect_equal(o10m[3], "Service not available. Returning NA.")
 })
 
 test_that("chembl_atc_classes()", {

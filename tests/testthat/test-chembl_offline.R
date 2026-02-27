@@ -81,6 +81,8 @@ for (i in implemented) {
 
   for (j in seq_along(ids)) {
 
+    if (i == "biotherapeutic" & j == 3) next()
+
     if (i == "document") {
       # Remove fields not available in offline mode
       index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
