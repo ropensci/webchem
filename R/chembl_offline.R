@@ -1724,7 +1724,7 @@ chembl_validate_id_offline <- function(
     msg <- paste0("The following ChEMBL IDs were not found: ", missing_ids)
     stop(msg)
   }
-  for (i in 1:nrow(entity_type)) {
+  for (i in seq_len(nrow(entity_type))) {
     if (entity_type$entity_type[i] != target) {
       msg <- paste0(
         entity_type$chembl_id[i], " is not a ", target, ". It is a ",
@@ -1745,6 +1745,7 @@ chembl_tidy2raw <- function(query, df) {
   if (!is.data.frame(df) || nrow(df) == 0) {
     return(list())
   }
+  # TODO handle pontential mismatch between query length and df rows
   res <- lapply(seq_len(nrow(df)), function(i) {
     raw_element <- df[i, , drop = FALSE]
     raw_element <- as.list(raw_element)
