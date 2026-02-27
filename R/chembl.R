@@ -1058,6 +1058,7 @@ chembl_example_query <- function(resource) {
 #' values of the appropriate type based on the provided schema.
 #' @param res list; the ChEMBL webservice response to process.
 #' @param schema list; the schema for the ChEMBL resource.
+#' @noRd
 
 replace_nulls <- function(res, schema) {
   # link schema types to NA types
