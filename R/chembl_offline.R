@@ -2109,6 +2109,8 @@ chembl_compare_service <- function(
 #' data frames within the lists.
 #' @param ws list; result from a webservice query.
 #' @param offline list; result from an offline query.
+#' @param max_depth integer; maximum recursion depth to prevent infinite loops.
+#' @param current_depth integer; current recursion depth (for internal use).
 #' @return A list with the comparison status and any unique elements found in
 #' either input.
 #' @noRd
@@ -2118,7 +2120,12 @@ chembl_compare_service <- function(
 #' off <- chembl_query("CHEMBL1082", resource = "molecule", mode = "offline")
 #' compare_service_lists(ws$CHEMBL1082, off$CHEMBL1082)
 #' }
-compare_service_lists <- function(ws, offline) {
+compare_service_lists <- function(ws, offline, max_depth = 10, current_depth = 0) {
+  # Check recursion depth
+  if (current_depth > max_depth) {
+    stop("Maximum recursion depth exceeded in compare_service_lists")
+  }
+  
   ws_na <- length(ws) == 1 && is.na(ws)
   offline_na <- length(offline) == 1 && is.na(offline)
   if (ws_na & offline_na) {
@@ -2132,11 +2139,13 @@ compare_service_lists <- function(ws, offline) {
   if (offline_na) stop("Offline query failed.")
   if (!inherits(ws, "list")) stop("Webservice result is not a list.")
   if (!inherits(offline, "list")) stop("Offline result is not a list.")
+  
   ws_unique_element <- setdiff(names(ws), names(offline))
   offline_unique_element <- setdiff(names(offline), names(ws))
   common_names <- intersect(names(ws), names(offline))
   ws_common_order <- names(ws)[names(ws) %in% common_names]
   offline_common_order <- names(offline)[names(offline) %in% common_names]
+  
   if (!identical(ws_common_order, offline_common_order)) {
     stop(sprintf(
       "Names of common elements are not in the same order:\n  ws: %s\n  offline: %s",
@@ -2144,9 +2153,11 @@ compare_service_lists <- function(ws, offline) {
       paste(offline_common_order, collapse = ", ")
     ))
   }
+  
   for (n in common_names) {
     ws_elem <- ws[[n]]
     off_elem <- offline[[n]]
+    
     if (!identical(class(ws_elem), class(off_elem))) {
       stop(sprintf(
         "Element '%s' has different classes: webservice = %s, offline = %s.",
@@ -2155,6 +2166,7 @@ compare_service_lists <- function(ws, offline) {
         paste(class(off_elem), collapse = ", ")
       ))
     }
+    
     if (is.atomic(ws_elem)) {
       if (!identical(ws_elem, off_elem)) {
         stop(sprintf(
@@ -2168,21 +2180,58 @@ compare_service_lists <- function(ws, offline) {
         ))
       }
     } else if (is.list(ws_elem)) {
-      element_comparison <- compare_atomic_lists(ws_elem, off_elem)
-      if (length(element_comparison$unique_to_x) > 0) {
-        ws_unique_element <- c(ws_unique_element, paste0(
-          n, "$", element_comparison$unique_to_x
-        ))
-      }
-      if (length(element_comparison$unique_to_y) > 0) {
-        offline_unique_element <- c(offline_unique_element, paste0(
-          n, "$", element_comparison$unique_to_y
-        ))
+      # Check if this is a list of lists (nested structure)
+      ws_is_nested <- length(ws_elem) > 0 && all(sapply(ws_elem, is.list))
+      off_is_nested <- length(off_elem) > 0 && all(sapply(off_elem, is.list))
+      
+      if (ws_is_nested || off_is_nested) {
+        # Handle list of lists - compare each element recursively
+        if (length(ws_elem) != length(off_elem)) {
+          stop(sprintf(
+            "Element '%s' has different lengths: webservice = %d, offline = %d",
+            n, length(ws_elem), length(off_elem)
+          ))
+        }
+        
+        # Recursively compare each nested list
+        for (i in seq_along(ws_elem)) {
+          nested_comparison <- compare_service_lists(
+            ws_elem[[i]], 
+            off_elem[[i]], 
+            max_depth = max_depth,
+            current_depth = current_depth + 1
+          )
+          
+          if (length(nested_comparison$ws_extra) > 0) {
+            ws_unique_element <- c(ws_unique_element, paste0(
+              n, "[[", i, "]]$", nested_comparison$ws_extra
+            ))
+          }
+          if (length(nested_comparison$offline_extra) > 0) {
+            offline_unique_element <- c(offline_unique_element, paste0(
+              n, "[[", i, "]]$", nested_comparison$offline_extra
+            ))
+          }
+        }
+      } else {
+        # Handle flat list of atomic elements
+        element_comparison <- compare_atomic_lists(ws_elem, off_elem)
+        if (length(element_comparison$unique_to_x) > 0) {
+          ws_unique_element <- c(ws_unique_element, paste0(
+            n, "$", element_comparison$unique_to_x
+          ))
+        }
+        if (length(element_comparison$unique_to_y) > 0) {
+          offline_unique_element <- c(offline_unique_element, paste0(
+            n, "$", element_comparison$unique_to_y
+          ))
+        }
       }
     } else {
       stop(sprintf("Element '%s' should be either atomic or a list.", n))
     }
   }
+  
   return(list(
     status = "OK",
     ws_extra = ws_unique_element,
