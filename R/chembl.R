@@ -2,22 +2,17 @@
 #'
 #' Use this to group resource or mode specific options and pass them via the
 #' `options` argument to `chembl_query()`.
-#' @param replace_missing logical; if TRUE, replaces JSON NULL values and empty 
-#' lists with typed NA values (`NA_character_`, `NA_integer_`, `NA_real_`) 
-#' based on the field's schema type.
 #' @param cache_file character or NULL
 #' @param similarity numeric
 #' @param version character
 #' @return A list with class 'chembl_options'.
 #' @noRd
 chembl_options <- function(
-  replace_missing = TRUE,
   cache_file = NULL,
   similarity = 70,
   version = "latest"
 ) {
   options <- list(
-    replace_missing = replace_missing,
     cache_file = cache_file,
     similarity = similarity,
     version = version
@@ -377,13 +372,11 @@ chembl_query <- function(
   output = "raw",
   verbose = getOption("verbose"),
   options = chembl_options(
-    replace_missing = TRUE,
     cache_file = NULL,
     similarity = 70,
     version = "latest"
   ),
-  ...
-  ) {
+  ...) {
   resource <- match.arg(resource, chembl_resources())
   output <- match.arg(output, choices = c("raw", "tidy"))
   if (resource == "image") {
@@ -398,7 +391,6 @@ chembl_query <- function(
       query = query,
       resource = resource,
       verbose = verbose,
-      replace_missing = options$replace_missing,
       cache_file = options$cache_file,
       similarity = options$similarity,
       output = output,
@@ -427,30 +419,25 @@ chembl_query_ws <- function(
   query,
   resource = "molecule",
   verbose = getOption("verbose"),
-  replace_missing = TRUE,
   cache_file = NULL,
   similarity = 70,
   output = "raw",
-  ...
-  ) {
+  ...) {
   if (resource == "similarity") {
     warning("Similarity search currently returns no more than 20 results.")
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
-  if (replace_missing) {
-    if (exists(resource, envir = .chembl_schema_cache, inherits = FALSE)) {
-      if (verbose) message("Using cached schema.")
-      schema <- get(resource, envir = .chembl_schema_cache)
-    } else {
-      if (verbose) message("Retrieving schema to replace NULLs.")
-      schema <- jsonlite::fromJSON(paste0(
-        "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
-      ))
-      assign(resource, schema, envir = .chembl_schema_cache)
-    }
+  # Retrieve and cache schema for type enforcement
+  if (exists(resource, envir = .chembl_schema_cache, inherits = FALSE)) {
+    if (verbose) message("Using cached schema.")
+    schema <- get(resource, envir = .chembl_schema_cache)
   } else {
-    schema <- NULL
+    if (verbose) message("Retrieving schema to enforce data types.")
+    schema <- jsonlite::fromJSON(paste0(
+      "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
+    ))
+    assign(resource, schema, envir = .chembl_schema_cache)
   }
   foo <- function(query, verbose, similarity, schema) {
     if (is.na(query)) {
@@ -486,7 +473,7 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    if (replace_missing) cont <- replace_missing(cont, schema)
+    cont <- force_schema(cont, schema)
     if (output == "tidy") {
       cont <- format_chembl(cont)
     }
@@ -1057,16 +1044,16 @@ chembl_example_query <- function(resource) {
   example_queries[[resource]]
 }
 
-#' Replace missing values in ChEMBL webservice response with NA
+#' Force ChEMBL webservice response to conform to schema
 #'
-#' When a field is empty ChEMBL webservice sometimes returns NULL, sometimes an 
-#' empty list. This function replaces these missing values with NA of the 
-#' appropriate type based on the provided schema.
+#' Enforces schema-based type coercion and replaces missing values (NULL, empty
+#' lists, "NA" strings) with appropriately typed NA values. This ensures
+#' consistency between webservice and offline query results.
 #' @param res list; the ChEMBL webservice response to process.
 #' @param schema list; the schema for the ChEMBL resource.
 #' @noRd
 
-replace_missing <- function(res, schema) {
+force_schema <- function(res, schema) {
   # link schema types to NA types
   get_na_type <- function(type) {
     switch(
@@ -1081,17 +1068,53 @@ replace_missing <- function(res, schema) {
       NA_character_  # default
     )
   }
-  
-  # If res is not a list, stop with an error
-  if (!is.list(res)) stop("ChEMBL raw output should be a list.")
-  
+
+  # Coerce value to match schema type
+  coerce_to_schema_type <- function(value, schema_type) {
+    # Don't coerce if already NA
+    if (length(value) == 1 && is.na(value)) {
+      return(get_na_type(schema_type))
+    }
+
+    # Don't coerce lists (handled recursively)
+    if (is.list(value)) {
+      return(value)
+    }
+
+    # Coerce based on schema type
+    tryCatch({
+      switch(
+        schema_type,
+        "string"   = as.character(value),
+        "integer"  = as.integer(value),
+        "float"    = as.numeric(value),
+        "number"   = as.numeric(value),
+        "boolean"  = as.logical(value),
+        "datetime" = as.character(value),
+        "related"  = as.character(value),
+        value
+      )
+    }, error = function(e) {
+      warning(sprintf(
+        "Failed to coerce value '%s' to schema_type '%s': %s",
+        value, schema_type, e$message
+      ))
+      value
+    })
+  }
   # Internal recursive function with depth tracking
   foo <- function(x, field_name, depth = 0) {
     if (depth > 10) {
-      stop("Exceeded maximum recursion depth while replacing NULLs.")
+      stop("Exceeded maximum recursion depth in force_schema().")
     }
-    # if x is NULL or empty list, replace with appropriate NA based on schema
-    if (is.null(x) || (is.list(x) && length(x) == 0)) {
+
+    # Check if x is NULL, empty list, or "NA" string (missing values)
+    is_missing <- is.null(x) ||
+                  (is.list(x) && length(x) == 0) ||
+                  (is.character(x) && length(x) == 1 && x == "NA")
+
+    if (is_missing) {
+      # Replace with appropriate NA based on schema
       if (!is.null(field_name) &&
           !is.null(schema$fields) &&
           field_name %in% names(schema$fields)) {
@@ -1105,15 +1128,28 @@ replace_missing <- function(res, schema) {
         return(NA_character_)
       }
     }
-    # if x is a non-empty list, recursively apply foo to its elements
+    # If x is a non-empty list, recursively apply foo to its elements
     if (is.list(x)) {
       for (i in seq_along(x)) {
         x[[i]] <- foo(x[[i]], names(x)[i], depth + 1)
       }
+      return(x)
+    }
+    # Coerce atomic values to match schema type
+    if (!is.null(field_name) &&
+        !is.null(schema$fields) &&
+        field_name %in% names(schema$fields)) {
+      field_schema <- schema$fields[[field_name]]
+      if (!is.null(field_schema$type)) {
+        x <- coerce_to_schema_type(x, field_schema$type)
+      }
     }
     return(x)
   }
-  
+
+  # If res is not a list, stop with an error
+  if (!is.list(res)) stop("ChEMBL raw output should be a list.")
+
   # Apply foo to each element at the top level
   result <- lapply(seq_along(res), function(i) {
     foo(res[[i]], names(res)[i])
