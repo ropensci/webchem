@@ -10,7 +10,7 @@ chembl_query(
   mode = "ws",
   output = "raw",
   verbose = getOption("verbose"),
-  options = chembl_options(replace_nulls = TRUE, cache_file = NULL, similarity = 70,
+  options = chembl_options(replace_missing = TRUE, cache_file = NULL, similarity = 70,
     version = "latest"),
   ...
 )
