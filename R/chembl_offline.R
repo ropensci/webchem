@@ -92,20 +92,348 @@ chembl_offline_assay <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'assay' queries are not yet implemented.")
   chembl_validate_id_offline(
     query = query,
     target = "ASSAY",
     verbose = verbose,
     con = con
   )
-  # fetch relevant tables from database
+  assays <- fetch_table(
+    con = con,
+    table = "assays",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "assay_id",                     # link column (assay_parameters, docs, cell_dictionary, tissue_dictionary, target_dictionary)
+      "aidx",                         # output column
+      "assay_category",               # output column
+      "assay_cell_type",              # output column
+      "assay_group",                  # output column
+      "assay_organism",               # output column
+      "assay_strain",                 # output column
+      "assay_subcellular_fraction",   # output column
+      "assay_tax_id",                 # output column
+      "assay_test_type",              # output column
+      "assay_tissue",                 # output column
+      "assay_type",                   # output column
+      "bao_format",                   # output column
+      "cell_id",                      # link column (cell_dictionary)
+      "chembl_id",                    # query column, output column (rename to assay_chembl_id)
+      "confidence_score",             # output column
+      "description",                  # output column
+      "doc_id",                       # link column (docs)
+      "relationship_type",            # output column
+      "src_assay_id",                 # output column
+      "src_id",                       # output column
+      "tid",                          # link column (target_dictionary)
+      "tissue_id",                    # link column (tissue_dictionary)
+      "variant_id"                    # link column (variant_sequences)
+    )
+  )
 
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch assay class map to link assays to classifications
+  assay_class_map <- fetch_table(
+    con = con,
+    table = "assay_class_map",
+    id_col = "assay_id",
+    ids = unique(assays$assay_id),
+    select_cols = c(
+      "assay_id",        # link column (assays)
+      "assay_class_id"   # link column (assay_classification)
+    )
+  )
+
+  # Fetch assay classifications
+  assay_classifications <- fetch_table(
+    con = con,
+    table = "assay_classification",
+    id_col = "assay_class_id",
+    ids = unique(assay_class_map$assay_class_id),
+    select_cols = c(
+      "assay_class_id",  # link column (assay_class_map)
+      "l1",              # output column
+      "l2",              # output column
+      "l3",              # output column
+      "class_type",      # output column
+      "source"           # output column
+    )
+  )
+  
+  # Fetch assay parameters
+  assay_parameters <- fetch_table(
+    con = con,
+    table = "assay_parameters",
+    id_col = "assay_id",
+    ids = unique(assays$assay_id),
+    select_cols = c(
+      "assay_id",           # link column (assays)
+      "comments",           # output column
+      "relation",           # output column
+      "standard_type",      # output column
+      "standard_units",     # output column
+      "standard_value",     # output column
+      "text_value",         # output column
+      "type"                # output column
+      # NOTE: 'active' field does not exist in database
+    )
+  )
+  
+  # Fetch assay type descriptions
+  assay_type <- fetch_table(
+    con = con,
+    table = "assay_type",
+    id_col = "assay_type",
+    ids = unique(assays$assay_type),
+    select_cols = c(
+      "assay_type",         # link column (assays)
+      "assay_desc"          # output column (rename to assay_type_description)
+    )
+  )
+  
+  # Fetch BAO format labels
+  bioassay_ontology <- fetch_table(
+    con = con,
+    table = "bioassay_ontology",
+    id_col = "bao_id",
+    ids = unique(assays$bao_format),
+    select_cols = c(
+      "bao_id",             # link column (assays)
+      "label"               # output column (rename to bao_label)
+    )
+  )
+  
+  # Fetch cell ChEMBL IDs
+  cell_dictionary <- fetch_table(
+    con = con,
+    table = "cell_dictionary",
+    id_col = "cell_id",
+    ids = unique(assays$cell_id[!is.na(assays$cell_id)]),
+    select_cols = c(
+      "cell_id",            # link column (assays)
+      "chembl_id"           # output column (rename to cell_chembl_id)
+    )
+  )
+  
+  # Fetch confidence descriptions
+  confidence_score_lookup <- fetch_table(
+    con = con,
+    table = "confidence_score_lookup",
+    id_col = "confidence_score",
+    ids = unique(assays$confidence_score),
+    select_cols = c(
+      "confidence_score",   # link column (assays)
+      "description"         # output column (rename to confidence_description)
+    )
+  )
+  
+  # Fetch document ChEMBL IDs
+  docs <- fetch_table(
+    con = con,
+    table = "docs",
+    id_col = "doc_id",
+    ids = unique(assays$doc_id),
+    select_cols = c(
+      "doc_id",             # link column (assays)
+      "chembl_id"           # output column (rename to document_chembl_id)
+    )
+  )
+  
+  # Fetch relationship descriptions
+  relationship_type <- fetch_table(
+    con = con,
+    table = "relationship_type",
+    id_col = "relationship_type",
+    ids = unique(assays$relationship_type),
+    select_cols = c(
+      "relationship_type",  # link column (assays)
+      "relationship_desc"   # output column (rename to relationship_description)
+    )
+  )
+  
+  # Fetch target ChEMBL IDs
+  target_dictionary <- fetch_table(
+    con = con,
+    table = "target_dictionary",
+    id_col = "tid",
+    ids = unique(assays$tid),
+    select_cols = c(
+      "tid",                # link column (assays)
+      "chembl_id"           # output column (rename to target_chembl_id)
+    )
+  )
+  
+  # Fetch tissue ChEMBL IDs
+  tissue_dictionary <- fetch_table(
+    con = con,
+    table = "tissue_dictionary",
+    id_col = "tissue_id",
+    ids = unique(assays$tissue_id[!is.na(assays$tissue_id)]),
+    select_cols = c(
+      "tissue_id",          # link column (assays)
+      "chembl_id"           # output column (rename to tissue_chembl_id)
+    )
+  )
+  
+  # Fetch variant sequences
+  variant_sequences <- fetch_table(
+    con = con,
+    table = "variant_sequences",
+    id_col = "variant_id",
+    ids = unique(assays$variant_id[!is.na(assays$variant_id)]),
+    select_cols = c(
+      "variant_id",         # link column (assays)
+      "mutation",           # output column
+      "organism",           # output column
+      "sequence",           # output column (rename to variant_sequence)
+      "tax_id",             # output column
+      "version"             # output column
+    )
+  )
+  
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get assay data
+    assay <- assays |> dplyr::filter(.data$chembl_id == q)
+    if (nrow(assay) == 0) return(NA)
+    
+    # Get assay classifications for this assay
+    class_map <- assay_class_map |> dplyr::filter(.data$assay_id == assay$assay_id)
+    assay_class_list <- if (nrow(class_map) > 0) {
+      lapply(seq_len(nrow(class_map)), function(i) {
+        class_data <- assay_classifications |> 
+          dplyr::filter(.data$assay_class_id == class_map$assay_class_id[i])
+        if (nrow(class_data) > 0) {
+          list(
+            assay_class_id = class_data$assay_class_id,
+            class_type = class_data$class_type,
+            l1 = class_data$l1,
+            l2 = class_data$l2,
+            l3 = class_data$l3,
+            source = class_data$source
+          )
+        } else {
+          NA_character_
+        }
+      })
+    } else {
+      NA_character_
+    }
+    
+    # Get assay parameters
+    assay_params <- assay_parameters |>
+      dplyr::filter(.data$assay_id == assay$assay_id)
+    assay_params_list <- if (nrow(assay_params) > 0) {
+      lapply(seq_len(nrow(assay_params)), function(i) {
+        list(
+          comments = assay_params$comments[i],
+          relation = assay_params$relation[i],
+          standard_type = assay_params$standard_type[i],
+          standard_units = assay_params$standard_units[i],
+          standard_value = ifelse(
+            is.na(assay_params$standard_value[i]),
+            NA_character_, 
+            sprintf("%.1f", assay_params$standard_value[i])
+          ),
+          text_value = assay_params$text_value[i],
+          type = assay_params$type[i]
+        )
+      })
+    } else {
+      NA_character_
+    }
+    
+    # Get variant sequence
+    variant_seq <- if (!is.na(assay$variant_id)) {
+      vs <- variant_sequences |> 
+        dplyr::filter(.data$variant_id == assay$variant_id)
+      if (nrow(vs) > 0) vs$sequence else NA_character_
+    } else {
+      NA_character_
+    }
+
+    assay_type_df <- assay_type |> 
+      dplyr::filter(.data$assay_type == assay$assay_type)
+
+    bao_label_df <- bioassay_ontology |> 
+      dplyr::filter(.data$bao_id == assay$bao_format)
+
+    cell_df <- cell_dictionary |> dplyr::filter(.data$cell_id == assay$cell_id)
+
+    confidence_score_df <- confidence_score_lookup |> 
+      dplyr::filter(.data$confidence_score == assay$confidence_score)
+
+    docs_df <- docs |> dplyr::filter(.data$doc_id == assay$doc_id)
+
+    relationship_type_df <- relationship_type |> 
+      dplyr::filter(.data$relationship_type == assay$relationship_type)
+
+    target_dictionary_df <- target_dictionary |> 
+      dplyr::filter(.data$tid == assay$tid)
+
+    tissue_dictionary_df <- tissue_dictionary |> 
+      dplyr::filter(.data$tissue_id == assay$tissue_id)
+    
+    # Build result
+    result <- list(
+      aidx = assay$aidx,
+      assay_category = assay$assay_category,
+      assay_cell_type = assay$assay_cell_type,
+      assay_chembl_id = assay$chembl_id,
+      assay_classifications = assay_class_list,
+      assay_group = assay$assay_group,
+      assay_organism = assay$assay_organism,
+      assay_parameters = assay_params_list,
+      assay_strain = assay$assay_strain,
+      assay_subcellular_fraction = assay$assay_subcellular_fraction,
+      assay_tax_id = assay$assay_tax_id,
+      assay_test_type = assay$assay_test_type,
+      assay_tissue = assay$assay_tissue,
+      assay_type = assay$assay_type,
+      assay_type_description = if (nrow(assay_type_df) > 0) {
+        assay_type_df$assay_desc
+      } else {
+        NA_character_
+      },
+      bao_format = assay$bao_format,
+      bao_label = if (nrow(bao_label_df) > 0) {
+        bao_label_df$label
+      } else {
+        NA_character_
+      },
+      cell_chembl_id = if (!is.na(assay$cell_id) && nrow(cell_df) > 0) {
+        cell_df$chembl_id
+      } else {
+        NA_character_
+      },
+      confidence_description = if (nrow(confidence_score_df) > 0) {
+        confidence_score_df$description
+      } else {
+        NA_character_
+      },
+      confidence_score = assay$confidence_score,
+      description = assay$description,
+      document_chembl_id = docs_df$chembl_id,
+      relationship_description = if (nrow(relationship_type_df) > 0) {
+        relationship_type_df$relationship_desc
+      } else {
+        NA_character_
+      },
+      relationship_type = assay$relationship_type,
+      src_assay_id = assay$src_assay_id,
+      src_id = assay$src_id,
+      target_chembl_id = target_dictionary_df$chembl_id,
+      tissue_chembl_id = if (!is.na(assay$tissue_id) && nrow(tissue_dictionary_df) > 0) {
+        tissue_dictionary_df$chembl_id
+      } else {
+        NA_character_
+      },
+      variant_sequence = variant_seq
+    )
+    return(result)
+  })
+  
   names(out) <- query
+  
   if (output == "tidy") {
     stop("Tidy output for 'assay' is not yet implemented.")
   }
