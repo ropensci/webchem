@@ -158,7 +158,7 @@ chembl_offline_assay <- function(
       "source"           # output column
     )
   )
-  
+
   # Fetch assay parameters
   assay_parameters <- fetch_table(
     con = con,
@@ -177,7 +177,7 @@ chembl_offline_assay <- function(
       # NOTE: 'active' field does not exist in database
     )
   )
-  
+
   # Fetch assay type descriptions
   assay_type <- fetch_table(
     con = con,
@@ -189,7 +189,7 @@ chembl_offline_assay <- function(
       "assay_desc"          # output column (rename to assay_type_description)
     )
   )
-  
+
   # Fetch BAO format labels
   bioassay_ontology <- fetch_table(
     con = con,
@@ -201,7 +201,7 @@ chembl_offline_assay <- function(
       "label"               # output column (rename to bao_label)
     )
   )
-  
+
   # Fetch cell ChEMBL IDs
   cell_dictionary <- fetch_table(
     con = con,
@@ -213,7 +213,7 @@ chembl_offline_assay <- function(
       "chembl_id"           # output column (rename to cell_chembl_id)
     )
   )
-  
+
   # Fetch confidence descriptions
   confidence_score_lookup <- fetch_table(
     con = con,
@@ -225,7 +225,7 @@ chembl_offline_assay <- function(
       "description"         # output column (rename to confidence_description)
     )
   )
-  
+
   # Fetch document ChEMBL IDs
   docs <- fetch_table(
     con = con,
@@ -237,7 +237,7 @@ chembl_offline_assay <- function(
       "chembl_id"           # output column (rename to document_chembl_id)
     )
   )
-  
+
   # Fetch relationship descriptions
   relationship_type <- fetch_table(
     con = con,
@@ -249,7 +249,7 @@ chembl_offline_assay <- function(
       "relationship_desc"   # output column (rename to relationship_description)
     )
   )
-  
+
   # Fetch target ChEMBL IDs
   target_dictionary <- fetch_table(
     con = con,
@@ -261,7 +261,7 @@ chembl_offline_assay <- function(
       "chembl_id"           # output column (rename to target_chembl_id)
     )
   )
-  
+
   # Fetch tissue ChEMBL IDs
   tissue_dictionary <- fetch_table(
     con = con,
@@ -273,7 +273,7 @@ chembl_offline_assay <- function(
       "chembl_id"           # output column (rename to tissue_chembl_id)
     )
   )
-  
+
   # Fetch variant sequences
   variant_sequences <- fetch_table(
     con = con,
@@ -289,18 +289,18 @@ chembl_offline_assay <- function(
       "version"             # output column
     )
   )
-  
+
   # Build output for each query
   out <- lapply(query, function(q) {
     # Get assay data
     assay <- assays |> dplyr::filter(.data$chembl_id == q)
     if (nrow(assay) == 0) return(NA)
-    
+
     # Get assay classifications for this assay
     class_map <- assay_class_map |> dplyr::filter(.data$assay_id == assay$assay_id)
     assay_class_list <- if (nrow(class_map) > 0) {
       lapply(seq_len(nrow(class_map)), function(i) {
-        class_data <- assay_classifications |> 
+        class_data <- assay_classifications |>
           dplyr::filter(.data$assay_class_id == class_map$assay_class_id[i])
         if (nrow(class_data) > 0) {
           list(
@@ -318,7 +318,7 @@ chembl_offline_assay <- function(
     } else {
       NA_character_
     }
-    
+
     # Get assay parameters
     assay_params <- assay_parameters |>
       dplyr::filter(.data$assay_id == assay$assay_id)
@@ -331,7 +331,7 @@ chembl_offline_assay <- function(
           standard_units = assay_params$standard_units[i],
           standard_value = ifelse(
             is.na(assay_params$standard_value[i]),
-            NA_character_, 
+            NA_character_,
             sprintf("%.1f", assay_params$standard_value[i])
           ),
           text_value = assay_params$text_value[i],
@@ -341,38 +341,38 @@ chembl_offline_assay <- function(
     } else {
       NA_character_
     }
-    
+
     # Get variant sequence
     variant_seq <- if (!is.na(assay$variant_id)) {
-      vs <- variant_sequences |> 
+      vs <- variant_sequences |>
         dplyr::filter(.data$variant_id == assay$variant_id)
       if (nrow(vs) > 0) vs$sequence else NA_character_
     } else {
       NA_character_
     }
 
-    assay_type_df <- assay_type |> 
+    assay_type_df <- assay_type |>
       dplyr::filter(.data$assay_type == assay$assay_type)
 
-    bao_label_df <- bioassay_ontology |> 
+    bao_label_df <- bioassay_ontology |>
       dplyr::filter(.data$bao_id == assay$bao_format)
 
     cell_df <- cell_dictionary |> dplyr::filter(.data$cell_id == assay$cell_id)
 
-    confidence_score_df <- confidence_score_lookup |> 
+    confidence_score_df <- confidence_score_lookup |>
       dplyr::filter(.data$confidence_score == assay$confidence_score)
 
     docs_df <- docs |> dplyr::filter(.data$doc_id == assay$doc_id)
 
-    relationship_type_df <- relationship_type |> 
+    relationship_type_df <- relationship_type |>
       dplyr::filter(.data$relationship_type == assay$relationship_type)
 
-    target_dictionary_df <- target_dictionary |> 
+    target_dictionary_df <- target_dictionary |>
       dplyr::filter(.data$tid == assay$tid)
 
-    tissue_dictionary_df <- tissue_dictionary |> 
+    tissue_dictionary_df <- tissue_dictionary |>
       dplyr::filter(.data$tissue_id == assay$tissue_id)
-    
+
     # Build result
     result <- list(
       aidx = assay$aidx,
@@ -431,9 +431,9 @@ chembl_offline_assay <- function(
     )
     return(result)
   })
-  
+
   names(out) <- query
-  
+
   if (output == "tidy") {
     stop("Tidy output for 'assay' is not yet implemented.")
   }
@@ -475,7 +475,7 @@ chembl_offline_atc_class <- function(
   invalid_idx <- which(is.na(levels))
   if (length(invalid_idx) > 0) {
     msg <- sprintf(
-      "Invalid ATC code(s): %s. ATC codes must have lengths 1,3,4,5 or 7.", 
+      "Invalid ATC code(s): %s. ATC codes must have lengths 1,3,4,5 or 7.",
       paste(unique(query[invalid_idx]), collapse = ", ")
     )
     stop(msg)
@@ -631,7 +631,7 @@ chembl_offline_biotherapeutic <- function(
     target = "COMPOUND",
     verbose = verbose,
     con = con
-  ) 
+  )
   # Fetch molregno for queries
   ids <- fetch_table(
     con = con,
@@ -643,7 +643,7 @@ chembl_offline_biotherapeutic <- function(
       "molregno"    # link column (to biotherapeutics, biotherapeutic_components)
     )
   )
-  
+
   # Fetch biotherapeutic data
   biotherapeutics <- fetch_table(
     con = con,
@@ -668,7 +668,7 @@ chembl_offline_biotherapeutic <- function(
       "component_id"     # link column (bio_component_sequences)
     )
   )
-  
+
   # Fetch biocomponent sequences
   bio_component_sequences <- fetch_table(
     con = con,
@@ -688,15 +688,15 @@ chembl_offline_biotherapeutic <- function(
   out <- lapply(query, function(q) {
     # Get molregno for this query
     q_molregno <- ids$molregno[ids$chembl_id == q]
-    
+
     # Check if biotherapeutic data exists
     bio_data <- biotherapeutics |> dplyr::filter(.data$molregno == q_molregno)
     if (nrow(bio_data) == 0) return(NA)
-    
+
     # Get biotherapeutic components for this molecule
     components <- biotherapeutic_components |>
       dplyr::filter(.data$molregno == q_molregno)
-    
+
     biocomponents_list <- list()
     if (nrow(components) > 0) {
       for (i in seq_len(nrow(components))) {
@@ -713,7 +713,7 @@ chembl_offline_biotherapeutic <- function(
         )
       }
     }
-    
+
     # Build final output structure
     result <- list(
       biocomponents = biocomponents_list,
@@ -721,17 +721,17 @@ chembl_offline_biotherapeutic <- function(
       helm_notation = bio_data$helm_notation,
       molecule_chembl_id = q
     )
-    
+
     # Sort by names to match web service
     result[sort(names(result))]
   })
-  
+
   names(out) <- query
-  
+
   if (output == "tidy") {
     stop("Tidy output for 'biotherapeutic' is not yet implemented.")
   }
-  
+
   return(out)
 }
 
@@ -838,7 +838,7 @@ chembl_offline_compound_record <- function(
       "src_id"          # link column (source)
     )
   )
-  
+
   # Fetch molecule dictionary to get molecule_chembl_id
   molecule_ids <- fetch_table(
     con = con,
@@ -850,7 +850,7 @@ chembl_offline_compound_record <- function(
       "chembl_id"   # output column
     )
   )
-  
+
   # Fetch document info to get document_chembl_id
   document_ids <- fetch_table(
     con = con,
@@ -862,25 +862,25 @@ chembl_offline_compound_record <- function(
       "chembl_id"   # output column
     )
   )
-  
+
   # Build output for each query
   out <- lapply(query, function(q) {
     q_int <- as.integer(q)
-    
+
     # Get compound record
     cr <- compound_records |> dplyr::filter(.data$record_id == q_int)
     if (nrow(cr) == 0) return(NA)
-    
+
     # Get molecule_chembl_id
-    mol_chembl <- molecule_ids |> 
+    mol_chembl <- molecule_ids |>
       dplyr::filter(.data$molregno == cr$molregno) |>
       dplyr::pull(.data$chembl_id)
-    
+
     # Get document_chembl_id
     doc_chembl <- document_ids |>
       dplyr::filter(.data$doc_id == cr$doc_id) |>
       dplyr::pull(.data$chembl_id)
-    
+
     # Construct output matching webservice format
     result <- list(
       compound_key = cr$compound_key,
@@ -890,16 +890,16 @@ chembl_offline_compound_record <- function(
       record_id = cr$record_id,
       src_id = cr$src_id
     )
-    
+
     return(result)
   })
-  
+
   names(out) <- query
-  
+
   if (output == "tidy") {
     stop("Tidy output for 'compound_record' is not yet implemented.")
   }
-  
+
   return(out)
 }
 
@@ -939,7 +939,7 @@ chembl_offline_compound_structural_alert <- function(
 
 #' document resource
 #'
-#' @note This function does not return exactly the same output as the ChEMBL 
+#' @note This function does not return exactly the same output as the ChEMBL
 #' webservice, because I couldn't find all the necessary data in the offline
 #' database schema. The missing fields are: doi_chembl, journal_full_title.
 #' @examples
@@ -960,7 +960,7 @@ chembl_offline_document <- function(
     verbose = verbose,
     con = con
   )
-  
+
   # Fetch document data
   docs <- fetch_table(
     con = con,
@@ -991,7 +991,7 @@ chembl_offline_document <- function(
       chembl_release = "chembl_release_id",
       document_chembl_id = "chembl_id"
     )
-  
+
   # Fetch ChEMBL release info
   chembl_release_info <- fetch_table(
     con = con,
@@ -1002,13 +1002,13 @@ chembl_offline_document <- function(
     dplyr::mutate(
       creation_date = as.character(as.Date(.data$creation_date))
     )
-  
+
   # Build output for each query
   out <- lapply(query, function(q) {
     # Get document data for this query
     doc <- docs |> dplyr::filter(.data$document_chembl_id == q)
-    if (nrow(doc) == 0) return(NA)  
-    
+    if (nrow(doc) == 0) return(NA)
+
     # Get ChEMBL release info
     chembl_release_info <- chembl_release_info |>
       dplyr::filter(.data$chembl_release_id == doc$chembl_release) |>
@@ -1035,12 +1035,12 @@ chembl_offline_document <- function(
       volume = doc$volume,
       year = doc$year
     )
-    
+
     return(result)
   })
-  
+
   names(out) <- query
-  
+
   if (output == "tidy") {
     stop("Tidy output for 'document' is not yet implemented.")
   }
@@ -1221,7 +1221,7 @@ chembl_offline_drug_indication <- function(
       efo_term = di$efo_term,
       indication_refs = indication_refs_list,
       # note, this seems like a custom hack but the table has integer values
-      # for max_phase_for_ind, so we convert to character with ".0" suffix, 
+      # for max_phase_for_ind, so we convert to character with ".0" suffix,
       # for consistency with webservice output
       max_phase_for_ind = paste0(as.character(di$max_phase_for_ind), ".0"),
       mesh_heading = di$mesh_heading,
@@ -1232,11 +1232,11 @@ chembl_offline_drug_indication <- function(
     return(out)
   })
   names(out) <- query
-  
+
   if (output == "tidy") {
     stop("Tidy output for 'drug_indication' is not yet implemented.")
   }
-  
+
   return(out)
 }
 
@@ -1313,7 +1313,7 @@ chembl_offline_drug_warning <- function(
   )
   # Build output for each query
   out <- lapply(query, function(q) {
-    q_int <- as.integer(q)   
+    q_int <- as.integer(q)
     # Get drug warning data
     dw <- drug_warnings |> dplyr::filter(.data$warning_id == q_int)
     if (nrow(dw) == 0) return(NA)
@@ -1395,14 +1395,14 @@ chembl_offline_go_slim <- function(
       "parent_go_id"        # output column
     )
   )
-  
+
   # Build output for each query
   out <- lapply(query, function(q) {
     # Get GO classification for this query
     go_data <- go_classification |> dplyr::filter(.data$go_id == q)
-    
+
     if (nrow(go_data) == 0) return(NA)
-    
+
     # Construct output matching webservice format
     result <- list(
       aspect = go_data$aspect,
@@ -1412,16 +1412,16 @@ chembl_offline_go_slim <- function(
       path = go_data$path,
       pref_name = go_data$pref_name
     )
-    
+
     return(result)
   })
-  
+
   names(out) <- query
-  
+
   if (output == "tidy") {
     stop("Tidy output for 'go_slim' is not yet implemented.")
   }
-  
+
   return(out)
 }
 
@@ -2095,203 +2095,9 @@ chembl_compare_service <- function(
     error = function(e) NA
   )
 
-  out <- compare_service_lists(ws = ws_result, offline = offline_result)
+  out <- all.equal(ws = ws_result, offline = offline_result)
 
   return(out)
-}
-
-#' Compare Two Service Result Lists
-#'
-#' Compares two lists (typically from a webservice and an offline source) to
-#' check for differences in their structure and content. The function checks for
-#' missing or failed queries, ensures both inputs are lists, compares the names
-#' and order of elements, and checks for differences in atomic elements and
-#' data frames within the lists.
-#' @param ws list; result from a webservice query.
-#' @param offline list; result from an offline query.
-#' @param max_depth integer; maximum recursion depth to prevent infinite loops.
-#' @param current_depth integer; current recursion depth (for internal use).
-#' @return A list with the comparison status and any unique elements found in
-#' either input.
-#' @noRd
-#' @examples
-#' \dontrun{
-#' ws <- chembl_query("CHEMBL1082", resource = "molecule")
-#' off <- chembl_query("CHEMBL1082", resource = "molecule", mode = "offline")
-#' compare_service_lists(ws$CHEMBL1082, off$CHEMBL1082)
-#' }
-compare_service_lists <- function(ws, offline, max_depth = 10, current_depth = 0) {
-  # Check recursion depth
-  if (current_depth > max_depth) {
-    stop("Maximum recursion depth exceeded in compare_service_lists")
-  }
-  
-  ws_na <- length(ws) == 1 && is.na(ws)
-  offline_na <- length(offline) == 1 && is.na(offline)
-  if (ws_na & offline_na) {
-    return(list(
-      status = "both failed",
-      ws_unique_element = character(),
-      offline_unique_element = character()
-    ))
-  }
-  if (ws_na) stop("Webservice query failed.")
-  if (offline_na) stop("Offline query failed.")
-  if (!inherits(ws, "list")) stop("Webservice result is not a list.")
-  if (!inherits(offline, "list")) stop("Offline result is not a list.")
-  
-  ws_unique_element <- setdiff(names(ws), names(offline))
-  offline_unique_element <- setdiff(names(offline), names(ws))
-  common_names <- intersect(names(ws), names(offline))
-  ws_common_order <- names(ws)[names(ws) %in% common_names]
-  offline_common_order <- names(offline)[names(offline) %in% common_names]
-  
-  if (!identical(ws_common_order, offline_common_order)) {
-    stop(sprintf(
-      "Names of common elements are not in the same order:\n  ws: %s\n  offline: %s",
-      paste(ws_common_order, collapse = ", "),
-      paste(offline_common_order, collapse = ", ")
-    ))
-  }
-  
-  for (n in common_names) {
-    ws_elem <- ws[[n]]
-    off_elem <- offline[[n]]
-    
-    if (!identical(class(ws_elem), class(off_elem))) {
-      stop(sprintf(
-        "Element '%s' has different classes: webservice = %s, offline = %s.",
-        n,
-        paste(class(ws_elem), collapse = ", "),
-        paste(class(off_elem), collapse = ", ")
-      ))
-    }
-    
-    if (is.atomic(ws_elem)) {
-      if (!identical(ws_elem, off_elem)) {
-        stop(sprintf(
-          paste0(
-            "Atomic element '%s' differs between webservice and offline.\n",
-            "Webservice value: %s\nOffline value: %s"
-          ),
-          n,
-          paste0(utils::capture.output(print(ws_elem)), collapse = "\n"),
-          paste0(utils::capture.output(print(off_elem)), collapse = "\n")
-        ))
-      }
-    } else if (is.list(ws_elem)) {
-      # Check if this is a list of lists (nested structure)
-      ws_is_nested <- length(ws_elem) > 0 && all(sapply(ws_elem, is.list))
-      off_is_nested <- length(off_elem) > 0 && all(sapply(off_elem, is.list))
-      
-      if (ws_is_nested || off_is_nested) {
-        # Handle list of lists - compare each element recursively
-        if (length(ws_elem) != length(off_elem)) {
-          stop(sprintf(
-            "Element '%s' has different lengths: webservice = %d, offline = %d",
-            n, length(ws_elem), length(off_elem)
-          ))
-        }
-        
-        # Recursively compare each nested list
-        for (i in seq_along(ws_elem)) {
-          nested_comparison <- compare_service_lists(
-            ws_elem[[i]], 
-            off_elem[[i]], 
-            max_depth = max_depth,
-            current_depth = current_depth + 1
-          )
-          
-          if (length(nested_comparison$ws_extra) > 0) {
-            ws_unique_element <- c(ws_unique_element, paste0(
-              n, "[[", i, "]]$", nested_comparison$ws_extra
-            ))
-          }
-          if (length(nested_comparison$offline_extra) > 0) {
-            offline_unique_element <- c(offline_unique_element, paste0(
-              n, "[[", i, "]]$", nested_comparison$offline_extra
-            ))
-          }
-        }
-      } else {
-        # Handle flat list of atomic elements
-        element_comparison <- compare_atomic_lists(ws_elem, off_elem)
-        if (length(element_comparison$unique_to_x) > 0) {
-          ws_unique_element <- c(ws_unique_element, paste0(
-            n, "$", element_comparison$unique_to_x
-          ))
-        }
-        if (length(element_comparison$unique_to_y) > 0) {
-          offline_unique_element <- c(offline_unique_element, paste0(
-            n, "$", element_comparison$unique_to_y
-          ))
-        }
-      }
-    } else {
-      stop(sprintf("Element '%s' should be either atomic or a list.", n))
-    }
-  }
-  
-  return(list(
-    status = "OK",
-    ws_extra = ws_unique_element,
-    offline_extra = offline_unique_element
-  ))
-}
-
-#' Compare Two Named Lists of Atomic Elements
-#'
-#' Compares two named lists (`x` and `y`) containing atomic elements. The
-#' function checks for elements unique to each list (by name);  common elements
-#' with the same names, ensuring their order matches; whether all common
-#' elements are atomic and identical. If the names of common elements are not
-#' in the same order, or if any common element is not atomic or differs between
-#' the lists, the function throws an error.
-#'
-#' @param x list; a named list of atomic elements.
-#' @param y list; a named list of atomic elements.
-#' @return A list with two components:
-#'   \itemize{
-#'     \item{unique_to_x}{Names present only in \code{x}.}
-#'     \item{unique_to_y}{Names present only in \code{y}.}
-#'   }
-#' @examples
-#' x <- list(a = 1, b = 2, c = 3)
-#' y <- list(a = 1, b = 2, d = 4)
-#' compare_atomic_lists(x, y)
-#' @noRd
-compare_atomic_lists <- function(x, y) {
-  unique_a <- setdiff(names(x), names(y))
-  unique_b <- setdiff(names(y), names(x))
-  common_names <- intersect(names(x), names(y))
-  x_common_order <- names(x)[names(x) %in% common_names]
-  y_common_order <- names(y)[names(y) %in% common_names]
-  if (!identical(x_common_order, y_common_order)) {
-    stop(sprintf(
-      "Names of common elements are not in the same order:\n  x: %s\n  y: %s",
-      paste(x_common_order, collapse = ", "),
-      paste(y_common_order, collapse = ", ")
-    ))
-  }
-  for (n in common_names) {
-    elem_a <- x[[n]]
-    elem_b <- y[[n]]
-    if (!is.atomic(elem_a) || !is.atomic(elem_b)) {
-      stop(sprintf("Element '%s' is not atomic in one or both lists.", n))
-    }
-    if (!identical(elem_a, elem_b)) {
-      stop(sprintf(
-        "Element '%s' differs between lists.\nx: %s\ny: %s",
-        n,
-        paste0(utils::capture.output(print(elem_a)), collapse = "\n"),
-        paste0(utils::capture.output(print(elem_b)), collapse = "\n")
-      ))
-    }
-  }
-  return(list(
-    unique_to_x = unique_a,
-    unique_to_y = unique_b
-  ))
 }
 
 fetch_table <- function(
@@ -2338,7 +2144,7 @@ chembl_validate_id_offline <- function(
 }
 
 #' Convert tidy data frame to raw list format
-#' 
+#'
 #' @param query character; vector of query IDs.
 #' @param df data.frame; tidy data frame to convert.
 #' @return A named list where each element corresponds to a row in the data

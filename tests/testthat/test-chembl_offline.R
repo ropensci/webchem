@@ -62,7 +62,7 @@ test_that("atc_class works", {
   off <- chembl_query(
     query = "A01AA01", resource = "atc_class", mode = "offline", output = "raw")
   ws <- chembl_query(query = "A01AA01", resource = "atc_class", output = "raw")
-  res <- compare_service_lists(ws$A01AA01, off$A01AA01)
+  res <- all.equal(ws$A01AA01, off$A01AA01)
   testthat::expect_equal(res$status, "OK")
 })
 
@@ -92,6 +92,6 @@ for (i in implemented) {
       ws[[j]] <- ws[[j]][-index]
     }
 
-    expect_true(identical(ws[[j]], off[[j]]))
+    expect_true(all.equal(ws[[j]], off[[j]]))
   }
 }
