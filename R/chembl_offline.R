@@ -2073,31 +2073,20 @@ chembl_compare_service <- function(
   version = "latest",
   verbose = getOption("verbose")
   ) {
-  # validate resource and get example query
   query <- chembl_example_query(resource)
-  # Query the webservice
-  ws_result <- tryCatch(
-    chembl_query(
-      query = query,
-      resource = resource,
-      verbose = verbose
-    )[[1]],
-    error = function(e) NA
+  ws_result <- chembl_query(
+    query = query,
+    resource = resource,
+    mode = "ws",
+    verbose = verbose
   )
-  # Query the offline database
-  offline_result <- tryCatch(
-    chembl_query_offline(
-      query = query,
-      resource = resource,
-      version = version,
-      verbose = verbose
-    )[[1]],
-    error = function(e) NA
+  offline_result <- chembl_query(
+    query = query,
+    resource = resource,
+    mode = "offline",
+    verbose = verbose
   )
-
-  out <- all.equal(ws = ws_result, offline = offline_result)
-
-  return(out)
+  all.equal(ws_result, offline_result)
 }
 
 fetch_table <- function(
