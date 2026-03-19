@@ -66,32 +66,37 @@ test_that("atc_class works", {
   testthat::expect_equal(res$status, "OK")
 })
 
-implemented <- c(
-  "binding_site",
-  "biotherapeutic",
-  "cell_line",
-  "compound_record",
-  "document",
-  "drug_indication",
-  "drug_warning",
-  "go_slim"
-)
+test_that("fully implemented resources work", {
+  full <- c(
+    "binding_site",
+    "cell_line",
+    "compound_record",
+    "drug_indication",
+    "drug_warning",
+    "go_slim"
+  )
 
-for (i in implemented) {
-  ids <- chembl_example_query(i)
-  ws <- chembl_query(ids, resource = i)
-  off <- chembl_query(ids, resource = i, mode = "offline")
+  for (i in full) expect_true(chembl_compare_service(i))
+})
 
-  for (j in seq_along(ids)) {
+test_that("partially implemented resources work", {
+  partial = c(
+    "biotherapeutic",
+    "document"
+  )
 
-    if (i == "biotherapeutic" & j == 3) next()
-
-    if (i == "document") {
-      # Remove fields not available in offline mode
-      index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
-      ws[[j]] <- ws[[j]][-index]
+  for (i in partial) {
+    ids <- chembl_example_query(i)
+    ws <- chembl_query(ids, resource = i, mode = "ws")
+    off <- chembl_query(ids, resource = i, mode = "offline")
+    for (j in seq_along(ids)) {
+      if (i == "biotherapeutic" & j == 3) next()
+      if (i == "document") {
+        # Remove fields not available in offline mode
+        index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
+        ws[[j]] <- ws[[j]][-index]
+      }
+      expect_true(all.equal(ws[[j]], off[[j]]))
     }
-
-    expect_true(all.equal(ws[[j]], off[[j]]))
   }
-}
+})
