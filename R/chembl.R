@@ -1157,3 +1157,36 @@ force_schema <- function(res, schema) {
   names(result) <- names(res)
   return(result)
 }
+
+#' Simplify schema to field names and R classes
+#'
+#' Converts a ChEMBL schema into a simple nested list containing only class
+#' information. This simplified schema is used for enforcing structure on query
+#' responses.
+#' @param schema list; the ChEMBL schema with full metadata.
+#' @return A simplified nested list all fields and their classes. Scalar fields 
+#' are converted to character strings e.g., `"character"`. Nested fields are 
+#' converted to lists of fields.
+#' @noRd
+simplify_schema <- function(schema) {
+  map_type <- function(schema_type) {
+    if (schema_type == "boolean") return("logical")
+    if (schema_type %in% c(
+      "integer", "float", "decimal", "number"
+    )) return("numeric")
+    if (schema_type %in% c(
+      "string", "date", "datetime"
+    )) return("character")
+    stop(paste0("Unknown schema_type: '", schema_type, "'."))
+  }
+  foo <- function(x) {
+    if (is.null(x$type)) {
+      stop("Schema field is missing 'type' information.")
+    } else if (x$type == "related") {
+      lapply(x$schema$fields, foo)
+    } else {
+      map_type(x$type)
+    }
+  }
+  lapply(schema$fields, foo)
+}

@@ -262,3 +262,14 @@ test_that("chembl_status()", {
   expect_equal(o3, NA)
   expect_equal(o3m[2], "Service not available. Returning NA.")
 })
+
+test_that("each schema can be simplified", {
+  resources <- chembl_resources()
+  resources <- resources[-which(resources == "status")]
+  for (i in resources) {
+    schema <- jsonlite::fromJSON(
+      paste0("https://www.ebi.ac.uk/chembl/api/data/", i, "/schema.json"
+    ))
+    expect_no_error(simplify_schema(schema))
+  }
+})
