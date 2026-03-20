@@ -1054,65 +1054,45 @@ chembl_example_query <- function(resource) {
 #' @noRd
 
 force_schema <- function(res, schema) {
+  simple_schema <- simplify_schema(schema)
   # link schema types to NA types
-  get_na_type <- function(type) {
+  get_na_type <- function(schema_type) {
     switch(
       type,
-      "string" = NA_character_,
-      "integer" = NA_integer_,
-      "float" = NA_real_,
-      "number" = NA_real_,
-      "boolean" = NA,
-      "datetime" = NA_character_,
-      "related" = NA_character_,
-      NA_character_  # default
+      "character" = NA_character_,
+      "numeric" = NA_real_,
+      "logical" = NA,
+      stop(paste0("Unknown schema_type: '", schema_type, "'."))
     )
   }
-
-  # Coerce value to match schema type
+  # coerce value to match schema type
   coerce_to_schema_type <- function(value, schema_type) {
     # Don't coerce if already NA
     if (length(value) == 1 && is.na(value)) {
       return(get_na_type(schema_type))
     }
-
     # Don't coerce lists (handled recursively)
     if (is.list(value)) {
       return(value)
     }
-
     # Coerce based on schema type
-    tryCatch({
-      switch(
+    switch(
         schema_type,
-        "string"   = as.character(value),
-        "integer"  = as.integer(value),
-        "float"    = as.numeric(value),
-        "number"   = as.numeric(value),
-        "boolean"  = as.logical(value),
-        "datetime" = as.character(value),
-        "related"  = as.character(value),
-        value
+        "character"   = as.character(value),
+        "numeric"   = as.numeric(value),
+        "logical"  = as.logical(value),
+        stop(paste0("Unknown schema_type: '", schema_type, "'."))
       )
-    }, error = function(e) {
-      warning(sprintf(
-        "Failed to coerce value '%s' to schema_type '%s': %s",
-        value, schema_type, e$message
-      ))
-      value
-    })
   }
   # Internal recursive function with depth tracking
   foo <- function(x, field_name, depth = 0) {
     if (depth > 10) {
       stop("Exceeded maximum recursion depth in force_schema().")
     }
-
     # Check if x is NULL, empty list, or "NA" string (missing values)
     is_missing <- is.null(x) ||
                   (is.list(x) && length(x) == 0) ||
                   (is.character(x) && length(x) == 1 && x == "NA")
-
     if (is_missing) {
       # Replace with appropriate NA based on schema
       if (!is.null(field_name) &&
