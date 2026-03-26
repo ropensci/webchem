@@ -895,108 +895,6 @@ validate_chembl_version <- function(version = "latest") {
   return(out)
 }
 
-#' Get ChEMBL Resource Structure
-#'
-#' Query a ChEMBL resource with a representative example and convert the
-#' response into a structured table.
-#'
-#' @importFrom rlang .data
-#' @param resource character; the ChEMBL resource to query. Use
-#' [chembl_resources()] to see all available resources.
-#' @param verbose logical; should verbose messages be printed to the console?
-#' @return A tibble with columns "name", "value", and "parent" representing the
-#' structure of the response.
-#' @examples
-#' \dontrun{
-#' # Example for the "molecule" resource
-#' get_chembl_ws_schema("molecule")
-#' }
-#' @noRd
-get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
-  # validate resource and get example query
-  query <- chembl_example_query(resource)
-  response <- chembl_query(query, resource = resource, verbose = verbose)
-  process_element <- function(res, element, parent = NA) {
-    value <- res[[element]]
-    cls <- class(value)[1]
-    out <- tibble::tibble(
-      date = Sys.Date(),
-      resource = resource,
-      field = element,
-      class = cls,
-      parent = parent
-    )
-    if (is.atomic(value)) {
-      out$value <- as.character(value[1])
-    } else if (is.data.frame(value)) {
-      df_fields <- tibble::tibble(
-        date = Sys.Date(),
-        resource = resource,
-        field = names(value),
-        class = vapply(value, function(col) class(col)[1], character(1)),
-        parent = element,
-        value = vapply(value, function(col) {
-          non_na <- col[!is.na(col)]
-          if (length(non_na) > 0) as.character(non_na[1]) else NA_character_
-        }, character(1))
-      )
-      out <- dplyr::bind_rows(out, df_fields)
-    } else {
-      stop()
-    }
-    return(out)
-  }
-  all <- tibble::tibble()
-  for (i in query) {
-    result <- lapply(names(response[[i]]), function(x) {
-      tryCatch(
-      process_element(
-        res = response[[i]],
-        element = x
-        ),
-        error = function(e) {
-          tibble::tibble(resource = resource, query = i, field = x)
-        }
-      )
-    }) |> dplyr::bind_rows()
-    result$query <- i
-    result <- try(result |> dplyr::relocate(query, .after = .data$parent))
-    if (inherits(result, "try-error")) {
-      print(query)
-      print(resource)
-      stop()
-    }
-    all <- dplyr::bind_rows(all, result)
-  }
-  all <- all |>
-    dplyr::group_by(.data$field, .data$parent) |>
-    dplyr::filter(
-      if (any(!is.na(.data$value))) {
-        dplyr::row_number() == which(!is.na(.data$value))[1]
-      } else {
-        dplyr::row_number() == 1
-      }
-    ) |>
-    dplyr::ungroup()
-  all <- all |>
-    dplyr::mutate(
-      parent_row = match(.data$parent, .data$field),
-      order_index = ifelse(is.na(.data$parent_row), dplyr::row_number(), .data$parent_row + 0.1)
-    ) |>
-    dplyr::arrange(.data$order_index) |>
-    dplyr::select(-.data$parent_row, -.data$order_index)
-
-  if ("value" %in% names(all)) {
-    na_fields <- all$field[is.na(all$value) & all$class != "tbl_df"]
-    if (length(na_fields) > 0) {
-      warning("Found NA values in atomic fields. Add more example queries.")
-      msg <- paste0("Resource with NA values: ", resource, "; ", paste(na_fields, collapse = ", "))
-      print(msg)
-    }
-  }
-  return(all)
-}
-
 chembl_example_query <- function(resource) {
   resource <- match.arg(resource, chembl_resources())
   resource <- resource[!resource %in% c("image", "status")]
@@ -1046,9 +944,7 @@ chembl_example_query <- function(resource) {
 #' @param res list; the ChEMBL webservice response to process.
 #' @param schema list; the schema for the ChEMBL resource.
 #' @noRd
-
 force_schema <- function(res, schema) {
-  simple_schema <- simplify_schema(schema)
   # link schema types to NA types
   get_na_type <- function(schema_type) {
     switch(
