@@ -428,17 +428,11 @@ chembl_query_ws <- function(
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
-  # Retrieve and cache schema for type enforcement
-  if (exists(resource, envir = .chembl_schema_cache, inherits = FALSE)) {
-    if (verbose) message("Using cached schema.")
-    schema <- get(resource, envir = .chembl_schema_cache)
-  } else {
-    if (verbose) message("Retrieving schema to enforce data types.")
-    schema <- jsonlite::fromJSON(paste0(
-      "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
-    ))
-    assign(resource, schema, envir = .chembl_schema_cache)
-  }
+  schema <- get_chembl_ws_schema(
+    resource = resource, 
+    simplify = FALSE,
+    verbose = verbose
+  )
   foo <- function(query, verbose, similarity, schema) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
@@ -1138,17 +1132,34 @@ force_schema <- function(res, schema) {
   return(result)
 }
 
-#' Simplify schema to field names and R classes
+
+#' Get ChEMBL webservice schema
 #'
-#' Converts a ChEMBL schema into a simple nested list containing only class
-#' information. This simplified schema is used for enforcing structure on query
-#' responses.
-#' @param schema list; the ChEMBL schema with full metadata.
-#' @return A simplified nested list all fields and their classes. Scalar fields 
-#' are converted to character strings e.g., `"character"`. Nested fields are 
-#' converted to lists of fields.
+#' Retrieve ChEMBL webserice schema and optionally convert it to a nested list
+#' of field classes. Note, each schema is retrieved once per session.
+#' @param resource character; the ChEMBL resource.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return Webservice schema as a list. If `simplify = TRUE`, a nested list of 
+#' field classes is returned instead.
 #' @noRd
-simplify_schema <- function(schema) {
+get_chembl_ws_schema <- function(
+  resource,
+  simplify = FALSE,
+  verbose = getOption("verbose")
+  ) {
+  resource <- match.arg(resource, chembl_resources())
+  # Retrieve and cache schema for type enforcement
+  if (exists(resource, envir = .chembl_schema_cache, inherits = FALSE)) {
+    if (verbose) message("Using cached schema.")
+    schema <- get(resource, envir = .chembl_schema_cache)
+  } else {
+    if (verbose) message("Retrieving schema to enforce data types.")
+    schema <- jsonlite::fromJSON(paste0(
+      "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
+    ))
+    assign(resource, schema, envir = .chembl_schema_cache)
+  }
+  if (simplify == FALSE) return(schema)
   map_type <- function(schema_type) {
     if (schema_type == "boolean") return("logical")
     if (schema_type %in% c(
