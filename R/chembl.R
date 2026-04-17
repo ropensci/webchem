@@ -428,11 +428,6 @@ chembl_query_ws <- function(
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
-  schema <- get_chembl_ws_schema(
-    resource = resource, 
-    simplify = FALSE,
-    verbose = verbose
-  )
   foo <- function(query, verbose, similarity, schema) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
@@ -467,7 +462,7 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    cont <- force_schema(cont, schema)
+    cont <- force_schema(cont)
     if (output == "tidy") {
       cont <- format_chembl(cont)
     }
@@ -501,6 +496,14 @@ chembl_query_ws <- function(
       })
   }
   names(out) <- query
+  class(out) <- c(
+    ifelse(
+      output == "raw", 
+      paste0("chembl_", resource, "_raw"), 
+      paste0("chembl_", resource, "_tidy")
+    ),
+    class(out)
+  )
   return(out)
 }
 
@@ -944,7 +947,16 @@ chembl_example_query <- function(resource) {
 #' @param res list; the ChEMBL webservice response to process.
 #' @param schema list; the schema for the ChEMBL resource.
 #' @noRd
-force_schema <- function(res, schema) {
+force_schema <- function(res) {
+  # validate input class
+  valid_classes <- paste0("chembl_", chembl_resources(), "_raw")
+  if (!inherits(res, valid_classes)) {
+    stop("force_schema() should only be applied to raw webservice output.")
+  }
+  resclass <- class(res)[which(class(res) %in% valid_classes)[1]]
+  resource <- strsplit(resclass, "_")[[1]][2]
+  # get schema
+  schema <- get_chembl_ws_schema(resource, simplify = TRUE)
   # link schema types to NA types
   get_na_type <- function(schema_type) {
     switch(
