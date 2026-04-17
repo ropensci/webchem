@@ -462,7 +462,7 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    cont <- force_schema(cont)
+    cont <- force_schema(cont, resource)
     if (output == "tidy") {
       cont <- format_chembl(cont)
     }
@@ -945,16 +945,11 @@ chembl_example_query <- function(resource) {
 #' lists, "NA" strings) with appropriately typed NA values. This ensures
 #' consistency between webservice and offline query results.
 #' @param res list; the ChEMBL webservice response to process.
+#' @param resource character; the ChEMBL resource.
 #' @param schema list; the schema for the ChEMBL resource.
 #' @noRd
-force_schema <- function(res) {
-  # validate input class
-  valid_classes <- paste0("chembl_", chembl_resources(), "_raw")
-  if (!inherits(res, valid_classes)) {
-    stop("force_schema() should only be applied to raw webservice output.")
-  }
-  resclass <- class(res)[which(class(res) %in% valid_classes)[1]]
-  resource <- strsplit(resclass, "_")[[1]][2]
+force_schema <- function(res, resource) {
+  resource <- match.arg(resource, chembl_resources())
   # get schema
   schema <- get_chembl_ws_schema(resource, simplify = FALSE)
   # map schema types to R types
@@ -1087,6 +1082,7 @@ force_schema <- function(res) {
   }
   result <- lapply(res, foo)
   names(result) <- names(res)
+  class(result) <- class(res)
   return(result)
 }
 
