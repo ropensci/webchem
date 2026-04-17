@@ -957,34 +957,28 @@ force_schema <- function(res) {
   resource <- strsplit(resclass, "_")[[1]][2]
   # get schema
   schema <- get_chembl_ws_schema(resource, simplify = TRUE)
-  # link schema types to NA types
-  get_na_type <- function(schema_type) {
+  # coerce atomic values to match schema type
+  coerce_to_schema_type <- function(value, schema_type) {
+    if (!is.atomic(value)) {
+      stop(paste0("Unsupported value type: ", class(value)))
+    }
+    if (length(value) == 1 && is.na(value)) {
     switch(
-      type,
+        schema_type,
       "character" = NA_character_,
       "numeric" = NA_real_,
       "logical" = NA,
-      stop(paste0("Unknown schema_type: '", schema_type, "'."))
-    )
-  }
-  # coerce value to match schema type
-  coerce_to_schema_type <- function(value, schema_type) {
-    # Don't coerce if already NA
-    if (length(value) == 1 && is.na(value)) {
-      return(get_na_type(schema_type))
-    }
-    # Don't coerce lists (handled recursively)
-    if (is.list(value)) {
-      return(value)
-    }
-    # Coerce based on schema type
+        NA_character_
+      )
+    } else {
     switch(
         schema_type,
-        "character"   = as.character(value),
-        "numeric"   = as.numeric(value),
-        "logical"  = as.logical(value),
-        stop(paste0("Unknown schema_type: '", schema_type, "'."))
+        "character" = as.character(value),
+        "numeric" = as.numeric(value),
+        "logical" = as.logical(value),
+        value
       )
+    }
   }
   # Internal recursive function with depth tracking
   foo <- function(x, field_name, depth = 0) {
