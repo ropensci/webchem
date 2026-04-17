@@ -498,8 +498,8 @@ chembl_query_ws <- function(
   names(out) <- query
   class(out) <- c(
     ifelse(
-      output == "raw", 
-      paste0("chembl_", resource, "_raw"), 
+      output == "raw",
+      paste0("chembl_", resource, "_raw"),
       paste0("chembl_", resource, "_tidy")
     ),
     class(out)
@@ -956,84 +956,139 @@ force_schema <- function(res) {
   resclass <- class(res)[which(class(res) %in% valid_classes)[1]]
   resource <- strsplit(resclass, "_")[[1]][2]
   # get schema
-  schema <- get_chembl_ws_schema(resource, simplify = TRUE)
-  # coerce atomic values to match schema type
-  coerce_to_schema_type <- function(value, schema_type) {
+  schema <- get_chembl_ws_schema(resource, simplify = FALSE)
+  # map schema types to R types
+  map_type <- function(schema_type) {
+    if (schema_type == "boolean") return("logical")
+    if (schema_type %in% c(
+      "integer", "float", "decimal", "number"
+    )) return("numeric")
+    if (schema_type %in% c(
+      "string", "date", "datetime"
+    )) return("character")
+    stop(paste0("Unknown schema_type: '", schema_type, "'."))
+  }
+  # return a typed NA for a given R type
+  typed_na <- function(r_type) {
+    switch(
+      r_type,
+      "character" = NA_character_,
+      "numeric"   = NA_real_,
+      "logical"   = NA,
+      NA_character_
+    )
+  }
+  # coerce an atomic value to the appropriate R type;
+  coerce_to_type <- function(value, r_type) {
+    if (is.null(value) || (is.atomic(value) && length(value) == 1 && is.na(value))) {
+      return(typed_na(r_type))
+    }
     if (!is.atomic(value)) {
       stop(paste0("Unsupported value type: ", class(value)))
     }
-    if (length(value) == 1 && is.na(value)) {
     switch(
-        schema_type,
-      "character" = NA_character_,
-      "numeric" = NA_real_,
-      "logical" = NA,
-        NA_character_
-      )
-    } else {
-    switch(
-        schema_type,
-        "character" = as.character(value),
-        "numeric" = as.numeric(value),
-        "logical" = as.logical(value),
-        value
-      )
-    }
+      r_type,
+      "character" = as.character(value),
+      "numeric"   = as.numeric(value),
+      "logical"   = as.logical(value),
+      value
+    )
   }
-  # Internal recursive function with depth tracking
-  foo <- function(x, field_name, depth = 0) {
-    if (depth > 10) {
-      stop("Exceeded maximum recursion depth in force_schema().")
-    }
-    # Check if x is NULL, empty list, or "NA" string (missing values)
-    is_missing <- is.null(x) ||
-                  (is.list(x) && length(x) == 0) ||
-                  (is.character(x) && length(x) == 1 && x == "NA")
-    if (is_missing) {
-      # Replace with appropriate NA based on schema
-      if (!is.null(field_name) &&
-          !is.null(schema$fields) &&
-          field_name %in% names(schema$fields)) {
-        field_schema <- schema$fields[[field_name]]
-        if (!is.null(field_schema$type)) {
-          return(get_na_type(field_schema$type))
-        } else {
-          return(NA_character_)
+  # build a schema-conforming named list of typed NAs for a set of sub-fields;
+  # always returns a plain named list — wrapping in list() for to_many is the
+  # caller's responsibility
+  make_na_record <- function(fields) {
+    lapply(fields, function(sf) {
+      if (!exists("type", sf)) stop("Schema field is missing 'type' information.")
+      if (sf$type == "related") {
+        if (!exists("related_type", sf)) {
+          stop("Schema for related field is missing 'related_type' information.")
         }
+        if (!exists("schema", sf) || !exists("fields", sf$schema)) {
+          stop("Schema for related field is missing 'schema$fields' information.")
+        }
+        inner <- make_na_record(sf$schema$fields)
+        if (sf$related_type == "to_one") inner else list(inner)
       } else {
-        return(NA_character_)
+        typed_na(map_type(sf$type))
       }
+    })
+  }
+  # recursively coerce a value according to its field schema entry;
+  # handles to_one (named list) and to_many (list of named lists) at any depth
+  coerce_by_schema <- function(x, field_schema) {
+    if (!exists("type", field_schema)) {
+      stop("Schema field is missing 'type' information.")
     }
-    # If x is a non-empty list, recursively apply foo to its elements
-    if (is.list(x)) {
-      for (i in seq_along(x)) {
-        x[[i]] <- foo(x[[i]], names(x)[i], depth + 1)
+    if (field_schema$type != "related") {
+      return(coerce_to_type(x, map_type(field_schema$type)))
+    }
+    # field is a nested structure
+    if (!exists("related_type", field_schema)) {
+      stop("Schema for related field is missing 'related_type' information.")
+    }
+    if (!exists("schema", field_schema) || !exists("fields", field_schema$schema)) {
+      stop("Schema for related field is missing 'schema$fields' information.")
+    }
+    sub_fields <- field_schema$schema$fields
+    # NULL means the nested object is absent — return schema-shaped NAs
+    if (is.null(x)) {
+      if (field_schema$related_type == "to_one") return(make_na_record(sub_fields))
+      if (field_schema$related_type == "to_many") return(list(make_na_record(sub_fields)))
+    }
+    if (field_schema$related_type == "to_one") {
+      # empty list means the nested object is absent — return schema-shaped NAs
+      if (length(x) == 0) return(make_na_record(sub_fields))
+      for (subfield in names(x)) {
+        if (!subfield %in% names(sub_fields)) {
+          stop(paste0("Subfield '", subfield, "' not found in schema."))
+        }
+        x[[subfield]] <- coerce_by_schema(x[[subfield]], sub_fields[[subfield]])
       }
       return(x)
-    }
-    # Coerce atomic values to match schema type
-    if (!is.null(field_name) &&
-        !is.null(schema$fields) &&
-        field_name %in% names(schema$fields)) {
-      field_schema <- schema$fields[[field_name]]
-      if (!is.null(field_schema$type)) {
-        x <- coerce_to_schema_type(x, field_schema$type)
+    } else if (field_schema$related_type == "to_many") {
+      # empty list means no observations — return one NA record to preserve schema
+      if (length(x) == 0) return(list(make_na_record(sub_fields)))
+      return(lapply(x, function(item) {
+        if (is.null(item) || !is.list(item)) {
+          warning(
+            "Schema violation in 'to_many' field: expected a named list with fields: ",
+            paste(names(sub_fields), collapse = ", "),
+            "; received: '", paste(item, collapse = ", "), "'. ",
+            "Value returned as-is. This may cause issues in downstream operations like merging)."
+          )
+          return(item)
+        }
+      for (subfield in names(item)) {
+        if (!subfield %in% names(sub_fields)) {
+          stop(paste0("Subfield '", subfield, "' not found in schema."))
+        }
+        item[[subfield]] <- coerce_by_schema(item[[subfield]], sub_fields[[subfield]])
       }
+      item
+      }))
+    } else {
+      stop(paste0("Unknown related_type: '", field_schema$related_type, "'."))
     }
-    return(x)
   }
-
-  # If res is not a list, stop with an error
-  if (!is.list(res)) stop("ChEMBL raw output should be a list.")
-
-  # Apply foo to each element at the top level
-  result <- lapply(seq_along(res), function(i) {
-    foo(res[[i]], names(res)[i])
-  })
+  # apply schema-based coercion to each top-level field of a single entity
+  foo <- function(x) {
+    if (!exists("fields", schema)) {
+      stop("Schema is missing 'fields' information.")
+    }
+    for (field in names(x)) {
+      if (!field %in% names(schema$fields)) {
+        stop(paste0("Field '", field, "' not found in schema."))
+      }
+      x[[field]] <- coerce_by_schema(x[[field]], schema$fields[[field]])
+    }
+    # map any remaining NULL to NA
+    lapply(x, function(v) if (is.null(v)) NA_character_ else v)
+  }
+  result <- lapply(res, foo)
   names(result) <- names(res)
   return(result)
 }
-
 
 #' Get ChEMBL webservice schema
 #'
@@ -1041,7 +1096,7 @@ force_schema <- function(res) {
 #' of field classes. Note, each schema is retrieved once per session.
 #' @param resource character; the ChEMBL resource.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @return Webservice schema as a list. If `simplify = TRUE`, a nested list of 
+#' @return Webservice schema as a list. If `simplify = TRUE`, a nested list of
 #' field classes is returned instead.
 #' @noRd
 get_chembl_ws_schema <- function(
