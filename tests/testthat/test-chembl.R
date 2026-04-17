@@ -263,6 +263,17 @@ test_that("chembl_status()", {
   expect_equal(o3m[2], "Service not available. Returning NA.")
 })
 
+test_that("force_schema() works everywhere", {
+  for (resource in chembl_resources()) {
+    if (resource %in% c("image", "status")) next()
+    resource |>
+      chembl_example_query() |>
+      chembl_query(mode = "ws", output = "raw") |>
+      suppressWarnings() |>
+      expect_no_error()
+  }
+})
+
 test_that("each schema can be simplified", {
   resources <- chembl_resources()
   resources <- resources[-which(resources == "status")]
