@@ -951,7 +951,7 @@ chembl_example_query <- function(resource) {
 force_schema <- function(res, resource) {
   resource <- match.arg(resource, chembl_resources())
   # get schema
-  schema <- get_chembl_ws_schema(resource, simplify = FALSE)
+  schema <- get_chembl_ws_schema(resource)
   # map schema types to R types
   map_type <- function(schema_type) {
     if (schema_type == "boolean") return("logical")
@@ -1092,12 +1092,10 @@ force_schema <- function(res, resource) {
 #' of field classes. Note, each schema is retrieved once per session.
 #' @param resource character; the ChEMBL resource.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @return Webservice schema as a list. If `simplify = TRUE`, a nested list of
-#' field classes is returned instead.
+#' @return Webservice schema as a list.
 #' @noRd
 get_chembl_ws_schema <- function(
   resource,
-  simplify = FALSE,
   verbose = getOption("verbose")
   ) {
   resource <- match.arg(resource, chembl_resources())
@@ -1112,25 +1110,5 @@ get_chembl_ws_schema <- function(
     ))
     assign(resource, schema, envir = .chembl_schema_cache)
   }
-  if (simplify == FALSE) return(schema)
-  map_type <- function(schema_type) {
-    if (schema_type == "boolean") return("logical")
-    if (schema_type %in% c(
-      "integer", "float", "decimal", "number"
-    )) return("numeric")
-    if (schema_type %in% c(
-      "string", "date", "datetime"
-    )) return("character")
-    stop(paste0("Unknown schema_type: '", schema_type, "'."))
-  }
-  foo <- function(x) {
-    if (is.null(x$type)) {
-      stop("Schema field is missing 'type' information.")
-    } else if (x$type == "related") {
-      lapply(x$schema$fields, foo)
-    } else {
-      map_type(x$type)
-    }
-  }
-  lapply(schema$fields, foo)
+  return(schema)
 }
