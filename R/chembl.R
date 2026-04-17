@@ -1080,7 +1080,7 @@ force_schema <- function(res, resource) {
     # map any remaining NULL to NA
     lapply(x, function(v) if (is.null(v)) NA_character_ else v)
   }
-  result <- lapply(res, foo)
+  result <- foo(res)
   names(result) <- names(res)
   class(result) <- class(res)
   return(result)
