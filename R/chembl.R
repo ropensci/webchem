@@ -950,6 +950,13 @@ chembl_example_query <- function(resource) {
 #' @noRd
 force_schema <- function(res, resource) {
   resource <- match.arg(resource, chembl_resources())
+  if (resource == "compound_structural_alert") {
+    warning(
+      "The 'compound_structural_alert' schema appears inconsistent with the ",
+      "webservice response. Schema enforcement skipped; returning result as-is."
+    )
+    return(res)
+  }
   # get schema
   schema <- get_chembl_ws_schema(resource)
   # map schema types to R types
