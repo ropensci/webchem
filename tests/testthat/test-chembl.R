@@ -269,7 +269,8 @@ test_that("force_schema() works everywhere", {
     if (resource %in% c("image", "status")) next()
     resource |>
       chembl_example_query() |>
-      chembl_query(mode = "ws", output = "raw") |>
+      chembl_query(mode = "ws", resource = resource, output = "raw") |>
+      # TODO fix these messages, probably contact chembl maintainers
       suppressWarnings() |>
       expect_no_error()
   }
