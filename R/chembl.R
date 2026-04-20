@@ -1056,7 +1056,12 @@ force_schema <- function(res, resource) {
       if (length(x) == 0) return(make_na_record(sub_fields))
       for (subfield in names(x)) {
         if (!subfield %in% names(sub_fields)) {
-          stop(paste0("Subfield '", subfield, "' not found in schema."))
+          warning(
+            "Subfield '", subfield, "' not found in schema for field '", field_name,
+            "'. Schema may be inconsistent with the webservice response. ",
+            "Subfield returned as-is."
+          )
+          next
         }
         x[[subfield]] <- coerce_by_schema(x[[subfield]], subfield, sub_fields[[subfield]])
       }
@@ -1075,11 +1080,16 @@ force_schema <- function(res, resource) {
           return(item)
         }
       for (subfield in names(item)) {
-        if (!subfield %in% names(sub_fields)) {
-          stop(paste0("Subfield '", subfield, "' not found in schema."))
+          if (!subfield %in% names(sub_fields)) {
+            warning(
+              "Subfield '", subfield, "' not found in schema for field '", field_name,
+              "'. Schema may be inconsistent with the webservice response. ",
+              "Subfield returned as-is."
+            )
+            next
+          }
+          item[[subfield]] <- coerce_by_schema(item[[subfield]], subfield, sub_fields[[subfield]])
         }
-        item[[subfield]] <- coerce_by_schema(item[[subfield]], subfield, sub_fields[[subfield]])
-      }
       item
       }))
     } else {
@@ -1093,7 +1103,12 @@ force_schema <- function(res, resource) {
     }
     for (field in names(x)) {
       if (!field %in% names(schema$fields)) {
-        stop(paste0("Field '", field, "' not found in schema."))
+        warning(
+          "Field '", field, "' not found in schema. ",
+          "Schema may be inconsistent with the webservice response. ",
+          "Field returned as-is."
+        )
+        next
       }
       x[[field]] <- coerce_by_schema(x[[field]], field, schema$fields[[field]])
     }
