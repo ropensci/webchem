@@ -981,12 +981,12 @@ force_schema <- function(res, resource) {
     )
   }
   # coerce an atomic value to the appropriate R type;
-  coerce_to_type <- function(value, r_type) {
+  coerce_to_type <- function(value, r_type, field_name) {
     if (is.null(value) || (is.atomic(value) && length(value) == 1 && is.na(value))) {
       return(typed_na(r_type))
     }
     if (!is.atomic(value)) {
-      stop(paste0("Unsupported value type: ", class(value)))
+      stop(paste0("Unsupported value type: ", field_name, "; ", class(value)))
     }
     switch(
       r_type,
@@ -1018,12 +1018,12 @@ force_schema <- function(res, resource) {
   }
   # recursively coerce a value according to its field schema entry;
   # handles to_one (named list) and to_many (list of named lists) at any depth
-  coerce_by_schema <- function(x, field_schema) {
+  coerce_by_schema <- function(x, field_name, field_schema) {
     if (!exists("type", field_schema)) {
       stop("Schema field is missing 'type' information.")
     }
     if (field_schema$type != "related") {
-      return(coerce_to_type(x, map_type(field_schema$type)))
+      return(coerce_to_type(x, map_type(field_schema$type), field_name))
     }
     # field is a nested structure
     if (!exists("related_type", field_schema)) {
@@ -1045,7 +1045,7 @@ force_schema <- function(res, resource) {
         if (!subfield %in% names(sub_fields)) {
           stop(paste0("Subfield '", subfield, "' not found in schema."))
         }
-        x[[subfield]] <- coerce_by_schema(x[[subfield]], sub_fields[[subfield]])
+        x[[subfield]] <- coerce_by_schema(x[[subfield]], subfield, sub_fields[[subfield]])
       }
       return(x)
     } else if (field_schema$related_type == "to_many") {
@@ -1065,7 +1065,7 @@ force_schema <- function(res, resource) {
         if (!subfield %in% names(sub_fields)) {
           stop(paste0("Subfield '", subfield, "' not found in schema."))
         }
-        item[[subfield]] <- coerce_by_schema(item[[subfield]], sub_fields[[subfield]])
+        item[[subfield]] <- coerce_by_schema(item[[subfield]], subfield, sub_fields[[subfield]])
       }
       item
       }))
@@ -1082,7 +1082,7 @@ force_schema <- function(res, resource) {
       if (!field %in% names(schema$fields)) {
         stop(paste0("Field '", field, "' not found in schema."))
       }
-      x[[field]] <- coerce_by_schema(x[[field]], schema$fields[[field]])
+      x[[field]] <- coerce_by_schema(x[[field]], field, schema$fields[[field]])
     }
     # map any remaining NULL to NA
     lapply(x, function(v) if (is.null(v)) NA_character_ else v)
