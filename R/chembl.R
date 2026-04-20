@@ -985,6 +985,19 @@ force_schema <- function(res, resource) {
     if (is.null(value) || (is.atomic(value) && length(value) == 1 && is.na(value))) {
       return(typed_na(r_type))
     }
+    # Schema declares a scalar type but webservice returned a list:
+    # unlist if all elements are atomic (e.g. a list of strings), otherwise error.
+    if (is.list(value)) {
+      if (all(vapply(value, is.atomic, logical(1)))) {
+        value <- unlist(value)
+      } else {
+        stop(paste0(
+          "Field '", field_name, "' has schema type '", r_type,
+          "' but received a list containing non-atomic elements. ",
+          "Cannot coerce to scalar type."
+        ))
+      }
+    }
     if (!is.atomic(value)) {
       stop(paste0("Unsupported value type: ", field_name, "; ", class(value)))
     }
