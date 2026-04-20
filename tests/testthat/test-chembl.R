@@ -68,13 +68,13 @@ test_that("chembl_query() examples", {
     "CHEMBL266429",
     resource = "compound_structural_alert",
     output = "raw"
-  )
+  ) |> suppressWarnings()
   # Resource: document - requires document ChEMBL ID
   o10 <- chembl_query("CHEMBL1158643", resource = "document")
   # Resource: document_similarity - requires document 1 ChEMBL ID
   o11 <- chembl_query("CHEMBL1148466", resource = "document_similarity")
   # Resource: drug - requires ChEMBL ID
-  o12 <- chembl_query("CHEMBL2", resource = "drug")
+  o12 <- chembl_query("CHEMBL2", resource = "drug") |> suppressWarnings()
   # Resource: drug_indication - requires drug indication ID
   o13 <- chembl_query("22606", resource = "drug_indication")
   # Resource: drug_warning - requires warning ID
@@ -86,10 +86,12 @@ test_that("chembl_query() examples", {
   # Resource: metabolism - requires metabolism ID
   o17 <- chembl_query("119", resource = "metabolism")
   # Resource: molecule - requires ChEMBL ID
-  o18 <- chembl_query("CHEMBL1082", resource = "molecule")
-  o19 <- chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
+  o18 <- chembl_query("CHEMBL1082", resource = "molecule") |> suppressWarnings()
+  o19 <- chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule") |>
+    suppressWarnings()
   # Resource: molecule_form - requires ChEMBL ID
-  o20 <- chembl_query("CHEMBL6329", resource = "molecule_form")
+  o20 <- chembl_query("CHEMBL6329", resource = "molecule_form") |>
+    suppressWarnings()
   # Resource: organism - requires organism class ID (not taxid)
   o21 <- chembl_query("1", resource = "organism")
   # Resource: protein_classification - requires protein class ID
@@ -100,7 +102,8 @@ test_that("chembl_query() examples", {
   # Resource: source - requires source ID
   o24 <- chembl_query("1", resource = "source")
   # Resource: substructure - requires SMILES
-  o25 <- chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+  o25 <- chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure") |>
+    suppressWarnings()
   # Resource: target - requires target ChEMBL ID
   o26 <- chembl_query("CHEMBL2074", resource = "target")
   # Resource: target_component - requires target component ID
@@ -114,7 +117,8 @@ test_that("chembl_query() examples", {
 
   # verbose message
   o18m <- capture_messages(
-    chembl_query("CHEMBL1082", resource = "molecule", verbose = TRUE))
+    chembl_query("CHEMBL1082", resource = "molecule", verbose = TRUE)) |>
+    suppressWarnings()
 
   expect_true(inherits(o1, "list") & length(o1[[1]]) == 46)
   expect_true(inherits(o2, "list") & length(o2[[1]]) == 29)
@@ -147,7 +151,7 @@ test_that("chembl_query() examples", {
   expect_true(inherits(o29, "list") & length(o29[[1]]) == 6)
   expect_true(inherits(o30, "list") & length(o30[[1]]) == 4)
 
-  expect_equal(o18m[3], "OK (HTTP 200).")
+  expect_equal(o18m[2], "OK (HTTP 200).")
 })
 
 test_that("More chembl_query()", {
