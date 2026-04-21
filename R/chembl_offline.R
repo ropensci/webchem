@@ -504,17 +504,15 @@ chembl_offline_atc_class <- function(
   })
   names(fetched) <- query
   if (output == "raw") {
-    out <- lapply(fetched, function(df) {
+    out <- lapply(query, function(q) {
+      df <- fetched[[q]]
       if (nrow(df) == 0) return(NA)
       lapply(seq_len(nrow(df)), function(i) {
         row_list <- as.list(df[i, , drop = FALSE])
         row_list[sort(names(row_list))]
       })
     })
-    if (length(out) == 1) {
-      out <- out[[1]]
-      names(out) <- query
-    }
+    names(out) <- query
     class(out) <- c("chembl_atc_class_raw", class(out))
   } else {
     # Ensure all queries have at least one row (with NAs if no results)

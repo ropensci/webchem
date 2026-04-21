@@ -423,6 +423,9 @@ chembl_query_ws <- function(
   similarity = 70,
   output = "raw",
   ...) {
+  if (resource == "atc_class") {
+    warning("The 'atc_class' resource currently returns no more than 20 results.")
+  }
   if (resource == "similarity") {
     warning("Similarity search currently returns no more than 20 results.")
   }
@@ -462,7 +465,21 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    cont <- force_schema(cont, resource)
+    
+    # If there are multiple results, the results will be paginated.
+    # If the results are paginated, the data will be in the "atc" field.
+    # The "atc" field is not part of the schema.
+    if (resource == "atc_class") {
+      if ("atc" %in% names(cont)) {
+        cont <- cont$atc
+      } else {
+        cont <- list(cont)
+      }
+      cont <- lapply(cont, function(entry) {
+        force_schema(entry, resource)
+      })
+    }
+    
     if (output == "tidy") {
       cont <- format_chembl(cont)
     }
@@ -904,7 +921,7 @@ chembl_example_query <- function(resource) {
   example_queries <- list(
     activity = c("31863", "32190", "624419", "31910", "31864", "3269724", "17805339"),
     assay = c("CHEMBL615117", "CHEMBL1061852", "CHEMBL5445082", "CHEMBL5441382", "CHEMBL2184458"),
-    atc_class = "A01AA01",
+    atc_class = c("A01AA01", "A01AA"),
     binding_site = "2",
     biotherapeutic = c("CHEMBL8234", "CHEMBL448105", "CHEMBL441738"),
     cell_line = c("CHEMBL3307241", "CHEMBL3307242"),
