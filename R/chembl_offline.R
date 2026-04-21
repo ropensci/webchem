@@ -433,6 +433,7 @@ chembl_offline_assay <- function(
   })
 
   names(out) <- query
+  class(out) <- c("chembl_assay_raw", class(out))
 
   if (output == "tidy") {
     stop("Tidy output for 'assay' is not yet implemented.")
@@ -514,6 +515,7 @@ chembl_offline_atc_class <- function(
       out <- out[[1]]
       names(out) <- query
     }
+    class(out) <- c("chembl_atc_class_raw", class(out))
   } else {
     # Ensure all queries have at least one row (with NAs if no results)
     for (i in seq_along(fetched)) {
@@ -527,6 +529,7 @@ chembl_offline_atc_class <- function(
     out <- dplyr::bind_rows(fetched, .id = "query")
     # Reorder columns to put query first
     out <- out |> dplyr::relocate("query")
+    class(out) <- c("chembl_atc_class_tidy", class(out))
   }
   return(out)
 }
@@ -606,6 +609,7 @@ chembl_offline_binding_site <- function(
     return(out)
   })
   names(out) <- query
+  class(out) <- c("chembl_binding_site_raw", class(out))
   if (output == "tidy") {
     stop("Tidy output for 'binding_site' is not yet implemented.")
   }
@@ -727,6 +731,7 @@ chembl_offline_biotherapeutic <- function(
   })
 
   names(out) <- query
+  class(out) <- c("chembl_biotherapeutic_raw", class(out))
 
   if (output == "tidy") {
     stop("Tidy output for 'biotherapeutic' is not yet implemented.")
@@ -778,7 +783,9 @@ chembl_offline_cell_line <- function(
     dplyr::rename("cell_chembl_id" = "chembl_id") |>
     dplyr::arrange(.data$cell_chembl_id)
   if (output == "raw") {
-    out <- chembl_tidy2raw(query = query, df = out)
+    out <- chembl_tidy2raw(query = query, df = out, resource = "cell_line")
+  } else {
+    class(out) <- c("chembl_cell_line_tidy", class(out))
   }
   return(out)
 }
@@ -804,7 +811,9 @@ chembl_offline_chembl_id_lookup <- function(
     ids = query,
   )
   if (output == "raw") {
-    out <- chembl_tidy2raw(query = query, df = out)
+    out <- chembl_tidy2raw(query = query, df = out, resource = "chembl_id_lookup")
+  } else {
+    class(out) <- c("chembl_chembl_id_lookup_tidy", class(out))
   }
   return(out)
 }
@@ -895,6 +904,7 @@ chembl_offline_compound_record <- function(
   })
 
   names(out) <- query
+  class(out) <- c("chembl_compound_record_raw", class(out))
 
   if (output == "tidy") {
     stop("Tidy output for 'compound_record' is not yet implemented.")
@@ -1040,6 +1050,7 @@ chembl_offline_document <- function(
   })
 
   names(out) <- query
+  class(out) <- c("chembl_document_raw", class(out))
 
   if (output == "tidy") {
     stop("Tidy output for 'document' is not yet implemented.")
@@ -1232,6 +1243,7 @@ chembl_offline_drug_indication <- function(
     return(out)
   })
   names(out) <- query
+  class(out) <- c("chembl_drug_indication_raw", class(out))
 
   if (output == "tidy") {
     stop("Tidy output for 'drug_indication' is not yet implemented.")
@@ -1360,6 +1372,8 @@ chembl_offline_drug_warning <- function(
     return(out)
   })
   names(out) <- query
+  class(out) <- c("chembl_drug_warning_raw", class(out))
+
   if (output == "tidy") {
     stop("Tidy output for 'drug_warning' is not yet implemented.")
   }
@@ -1417,6 +1431,7 @@ chembl_offline_go_slim <- function(
   })
 
   names(out) <- query
+  class(out) <- c("chembl_go_slim_raw", class(out))
 
   if (output == "tidy") {
     stop("Tidy output for 'go_slim' is not yet implemented.")
@@ -1691,6 +1706,9 @@ chembl_offline_molecule <- function(
     names(out)[i] <- query[i]
     out[[i]] <- out[[i]][sort(names(out[[i]]))]
   }
+
+  # TODO: add class and tidy output method
+  # TODO: fix error with example query
   return(out)
 }
 
@@ -2139,7 +2157,7 @@ chembl_validate_id_offline <- function(
 #' @return A named list where each element corresponds to a row in the data
 #' frame, named by the query IDs.
 #' @noRd
-chembl_tidy2raw <- function(query, df) {
+chembl_tidy2raw <- function(query, df, resource) {
   if (!is.data.frame(df) || nrow(df) == 0) {
     return(list())
   }
@@ -2150,5 +2168,6 @@ chembl_tidy2raw <- function(query, df) {
     raw_element[sort(names(raw_element))]
   })
   names(res) <- query
+  class(res) <- c(paste0("chembl_", resource, "_raw"), class(res))
   res
 }
