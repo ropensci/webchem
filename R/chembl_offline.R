@@ -1229,10 +1229,7 @@ chembl_offline_drug_indication <- function(
       efo_id = di$efo_id,
       efo_term = di$efo_term,
       indication_refs = indication_refs_list,
-      # note, this seems like a custom hack but the table has integer values
-      # for max_phase_for_ind, so we convert to character with ".0" suffix,
-      # for consistency with webservice output
-      max_phase_for_ind = paste0(as.character(di$max_phase_for_ind), ".0"),
+      max_phase_for_ind = as.numeric(di$max_phase_for_ind),
       mesh_heading = di$mesh_heading,
       mesh_id = di$mesh_id,
       molecule_chembl_id = mol_chembl,
