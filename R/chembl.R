@@ -478,6 +478,8 @@ chembl_query_ws <- function(
       cont <- lapply(cont, function(entry) {
         force_schema(entry, resource)
       })
+    } else {
+      cont <- force_schema(cont, resource)
     }
     
     if (output == "tidy") {
