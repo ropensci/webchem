@@ -38,6 +38,7 @@ test_that("fully implemented resources work", {
   full <- c(
     "atc_class",
     "binding_site",
+    "biotherapeutic",
     "cell_line",
     "compound_record",
     "drug_indication",
@@ -61,17 +62,13 @@ test_that("fully implemented resources work", {
 })
 
 test_that("partially implemented resources work", {
-  partial = c(
-    "biotherapeutic",
-    "document"
-  )
+  partial = "document"
 
   for (i in partial) {
     ids <- chembl_example_query(i)
     ws <- chembl_query(ids, resource = i, mode = "ws")
     off <- chembl_query(ids, resource = i, mode = "offline")
     for (j in seq_along(ids)) {
-      if (i == "biotherapeutic" & j == 3) next()
       if (i == "document") {
         # Remove fields not available in offline mode
         index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))

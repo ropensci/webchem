@@ -699,13 +699,27 @@ chembl_offline_biotherapeutic <- function(
     components <- biotherapeutic_components |>
       dplyr::filter(.data$molregno == q_molregno)
 
-    biocomponents_list <- list()
-    if (nrow(components) > 0) {
-      for (i in seq_len(nrow(components))) {
+    # to_many field fallback record (schema-shaped, no schema lookup)
+    na_biocomponent_record <- list(
+      component_id = NA_real_,
+      component_type = NA_character_,
+      description = NA_character_,
+      organism = NA_character_,
+      sequence = NA_character_,
+      tax_id = NA_real_
+    )
+
+    biocomponents_list <- if (nrow(components) > 0) {
+      lapply(seq_len(nrow(components)), function(i) {
         # Filter bio_component_sequences for this component
         comp <- bio_component_sequences |>
           dplyr::filter(.data$component_id == components$component_id[i])
-        biocomponents_list[[i]] <- list(
+
+        if (nrow(comp) == 0) {
+          return(na_biocomponent_record)
+        }
+
+        list(
           component_id = comp$component_id,
           component_type = comp$component_type,
           description = comp$description,
@@ -713,7 +727,9 @@ chembl_offline_biotherapeutic <- function(
           sequence = comp$sequence,
           tax_id = comp$tax_id
         )
-      }
+      })
+    } else {
+      list(na_biocomponent_record)
     }
 
     # Build final output structure
