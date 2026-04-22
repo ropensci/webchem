@@ -2085,11 +2085,11 @@ chembl_offline_schema <- function(version = "latest") {
 #' @param verbose logical; print verbose messages to the console?
 #' @noRd
 chembl_compare_service <- function(
+  query,
   resource,
   version = "latest",
   verbose = getOption("verbose")
   ) {
-  query <- chembl_example_query(resource)
   ws_result <- chembl_query(
     query = query,
     resource = resource,

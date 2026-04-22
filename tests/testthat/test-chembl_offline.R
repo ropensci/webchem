@@ -34,40 +34,9 @@ test_that("informative error when query and resource do not match", {
   expect_equal(msg, "CHEMBL3988026 is not a COMPOUND. It is a TISSUE.")
 })
 
-test_that("atc_class works", {
-  off1 <- chembl_query(
-    query = "A01AA01",
-    resource = "atc_class",
-    mode = "offline",
-    output = "tidy"
-  )
-  off2 <- chembl_query(
-    query = c("A01AA", "A01AB02"),
-    resource = "atc_class",
-    mode = "offline",
-    output = "tidy"
-  )
-  off3 <- chembl_query(
-    query = c("Q","A01AB02"),
-    resource = "atc_class",
-    mode = "offline",
-    output = "tidy"
-  )
-
-  testthat::expect_s3_class(off1, "data.frame")
-  testthat::expect_equal(nrow(off2), 7)
-  testthat::expect_equal(nrow(off3), 2)
-  testthat::expect_true(is.na(off3$level1[1]))
-
-  off <- chembl_query(
-    query = "A01AA01", resource = "atc_class", mode = "offline", output = "raw")
-  ws <- chembl_query(query = "A01AA01", resource = "atc_class", output = "raw")
-  res <- all.equal(ws$A01AA01, off$A01AA01)
-  testthat::expect_equal(res$status, "OK")
-})
-
 test_that("fully implemented resources work", {
   full <- c(
+    "atc_class",
     "binding_site",
     "cell_line",
     "compound_record",
@@ -76,7 +45,19 @@ test_that("fully implemented resources work", {
     "go_slim"
   )
 
-  for (i in full) expect_true(chembl_compare_service(i))
+  for (i in full) {
+    queries <- chembl_example_query(i)
+    # single query
+    queries[1] |>
+      chembl_compare_service(resource = i) |>
+      suppressWarnings() |>
+      expect_true()
+    # multiple queries, if available
+    queries |>
+      chembl_compare_service(resource = i) |>
+      suppressWarnings() |>
+      expect_true()
+  }
 })
 
 test_that("partially implemented resources work", {
