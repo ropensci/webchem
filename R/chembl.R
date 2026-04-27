@@ -431,7 +431,7 @@ chembl_query_ws <- function(
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
-  foo <- function(query, verbose, similarity, schema) {
+  foo <- function(query, verbose, similarity) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -489,7 +489,7 @@ chembl_query_ws <- function(
   }
   if (is.null(cache_file)) {
     out <- lapply(query, function(x) {
-      foo(x, verbose = verbose, similarity = similarity, schema = schema)
+      foo(x, verbose = verbose, similarity = similarity)
     })
   } else {
     if (!dir.exists("cache")) dir.create("cache")
@@ -505,7 +505,7 @@ chembl_query_ws <- function(
         if (verbose) message("Already retrieved.")
         return(query_results[[x]])
       } else {
-        new <- foo(x, verbose = verbose, similarity = similarity, schema = schema)
+        new <- foo(x, verbose = verbose, similarity = similarity)
         if (!is.na(x)) {
           query_results[[x]] <<- new
           saveRDS(query_results, file = cfpath)

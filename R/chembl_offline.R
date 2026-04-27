@@ -1684,7 +1684,7 @@ chembl_offline_molecule <- function(
     molecule_hierarchy <- tibble::tibble(
       "active_chembl_id" = query[i],
       "molecule_chembl_id" = query[i],
-      "parent_chembl_id" = tbl(con, "molecule_dictionary") |>
+      "parent_chembl_id" = dplyr::tbl(con, "molecule_dictionary") |>
         dplyr::filter(.data$molregno == molecule_hierarchy_raw2$parent_molregno) |>
         dplyr::pull(.data$chembl_id)
     )
@@ -2125,7 +2125,7 @@ fetch_table <- function(
     ids,
     select_cols = NULL
   ) {
-  out <- tbl(con, table) |> dplyr::filter(.data[[id_col]] %in% ids)
+  out <- dplyr::tbl(con, table) |> dplyr::filter(.data[[id_col]] %in% ids)
   if (!is.null(select_cols)) {
     out <- out |> dplyr::select(dplyr::all_of(select_cols))
   }
