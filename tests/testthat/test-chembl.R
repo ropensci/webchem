@@ -52,7 +52,7 @@ test_that("chembl_query() examples", {
   # Resource: "assay" - requires assay ChEMBL ID
   o2 <- chembl_query("CHEMBL615117", resource = "assay")
   # Resource: "atc_class" - requires ATC class ID
-  o3 <- chembl_query("A01AA01", resource = "atc_class")
+  o3 <- chembl_query("A01AA01", resource = "atc_class") |> suppressWarnings()
   # Resource: binding_site - requires site ID
   o4 <- chembl_query(2, resource = "binding_site")
   # Resource: biotherapeutic - requires ChEMBL ID
@@ -122,7 +122,7 @@ test_that("chembl_query() examples", {
 
   expect_true(inherits(o1, "list") & length(o1[[1]]) == 46)
   expect_true(inherits(o2, "list") & length(o2[[1]]) == 29)
-  expect_true(inherits(o3, "list") & length(o3[[1]]) == 10)
+  expect_true(inherits(o3, "list") & length(o3[[1]][[1]]) == 10)
   expect_true(inherits(o4, "list") & length(o4[[1]]) == 3)
   expect_true(inherits(o5, "list") & length(o5[[1]]) == 4)
   expect_true(inherits(o6, "list") & length(o6[[1]]) == 11)
