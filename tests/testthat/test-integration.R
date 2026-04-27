@@ -36,6 +36,9 @@ test_that("with_cts() translates", {
 
 
 test_that("find_db() function works", {
+  #disable because of possible etox schema change
+  #https://github.com/ropensci/webchem/issues/453
+  skip()
   skip_on_cran()
   skip_if_not(fn_up)
   skip_if_not(etox_up)
@@ -47,7 +50,5 @@ test_that("find_db() function works", {
   df <- tibble(query = c("triclosan", NA, "balloon"),
                etox = c(TRUE, FALSE, FALSE),
                fn = c(FALSE, FALSE, FALSE))
-  #disable because of possible etox schema change
-  #https://github.com/ropensci/webchem/issues/453
-  #expect_equal(out, df, ignore_attr = TRUE)
+  expect_equal(out, df, ignore_attr = TRUE)
 })
