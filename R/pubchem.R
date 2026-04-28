@@ -467,7 +467,7 @@ pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...)
         return(data.frame())
       }
       out <- cont$PropertyTable[[1]]
-      out <- out |> dplyr::mutate(CID = x) |> dplyr::relocate(CID)
+      out <- out |> dplyr::mutate("CID" = x) |> dplyr::relocate("CID")
       return(out)
     } else {
       return(data.frame())
