@@ -541,23 +541,22 @@ pc_synonyms <- function(query,
 
   if (!missing("choices"))
     stop("'choices' is deprecated. Use 'match' instead.")
-  foo <- function(query, from, verbose, ...) {
-    if (is.na(query)) {
+  foo <- function(x, from, verbose, ...) {
+    if (is.na(x)) {
       if (verbose) webchem_message("na")
       return(NA)
     }
     prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
-    input <- paste0("/compound/", from)
+    input <- paste0("/compound/", from, "/")
     output <- "/synonyms/JSON"
     if (!is.null(arg))
       arg <- paste0("?", arg)
-    qurl <- paste0(prolog, input, output, arg)
-    if (verbose) webchem_message("query", query, appendLF = FALSE)
+    qurl <- paste0(prolog, input, utils::URLencode(x), output, arg)
+    if (verbose) webchem_message("query", x, appendLF = FALSE)
     webchem_sleep(type = 'API')
-    res <- try(httr::RETRY("POST",
+    res <- try(httr::RETRY("GET",
                            qurl,
                            httr::user_agent(webchem_url()),
-                           body = paste0(from, "=", query),
                            terminate_on = 404,
                            quiet = TRUE), silent = TRUE)
     if (inherits(res, "try-error")) {
