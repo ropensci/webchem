@@ -180,34 +180,45 @@ get_cid <-
       }
       if (verbose) webchem_message("query", query, appendLF = FALSE)
       if (from %in% structure_search) {
-        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain,
-                      from,
-                      URLencode(as.character(query), reserved = TRUE),
-                      "json",
-                      sep = "/")
+        qurl <- paste(
+          "https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+          domain,
+          from,
+          URLencode(as.character(query), reserved = TRUE),
+          "json",
+          sep = "/"
+        )
+      } else if (from == "smiles") {
+        qurl <- paste0(
+          "https://pubchem.ncbi.nlm.nih.gov/rest/pug/",
+          domain, "/",
+          from, "/",
+          "cids/JSON?smiles=",
+          URLencode(as.character(query), reserved = TRUE)
+        )
+      } else if (from == "inchi") {
+        qurl <- paste(
+          "https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+          domain,
+          from,
+          "cids",
+          "json",
+          sep = "/"
+          )
       } else {
-        if (from == "smiles") {
-          qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug/",
-                         domain, "/",
-                         from, "/",
-                         "cids/JSON?smiles=",
-                         URLencode(as.character(query), reserved = TRUE))
-        } else {
-          qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                        domain,
-                        from,
-                        URLencode(as.character(query), reserved = TRUE),
-                        "cids",
-                        "json",
-                        sep = "/")
-        }
+        qurl <- paste(
+          "https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+          domain,
+          from,
+          URLencode(as.character(query), reserved = TRUE),
+          "cids",
+          "json",
+          sep = "/"
+        )
       }
       if (!is.null(arg)) qurl <- paste0(qurl, "?", arg)
       webchem_sleep(type = 'API')
       if (from == "inchi") {
-        qurl <- paste("https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-                      domain, from, "cids", "json", sep = "/")
         res <- try(httr::RETRY("POST",
                                qurl,
                                user_agent(webchem_url()),
@@ -215,7 +226,7 @@ get_cid <-
                                terminate_on = 404,
                                quiet = TRUE), silent = TRUE)
       } else {
-        res <- try(httr::RETRY("POST",
+        res <- try(httr::RETRY("GET",
                                qurl,
                                user_agent(webchem_url()),
                                terminate_on = c(202, 404),
@@ -233,7 +244,7 @@ get_cid <-
                         "listkey", listkey, "cids", "json", sep = "/")
           while (res$status_code == 202) {
             webchem_sleep(time = 5)
-            res <- try(httr::RETRY("POST",
+            res <- try(httr::RETRY("GET",
                                    qurl,
                                    user_agent(webchem_url()),
                                    terminate_on = 404,
