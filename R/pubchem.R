@@ -699,7 +699,7 @@ pc_page <- function(id,
                    domain, "/", id, "/JSON?heading=", section)
     if (verbose) webchem_message("query", id, appendLF = FALSE)
     webchem_sleep(type = 'API')
-    res <- try(httr::RETRY("POST",
+    res <- try(httr::RETRY("GET",
                            qurl,
                            user_agent(webchem_url()),
                            terminate_on = 404,
