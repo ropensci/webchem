@@ -338,142 +338,154 @@ pc_prop <- function(cid, properties = NULL, verbose = getOption("verbose"), ...)
   if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   cid_o <- cid
-
-  if (verbose) message("Coercing queries to positive integers. ", appendLF = FALSE)
-
   cid <- suppressWarnings(as.integer(cid))
 
+  invalid <- is.na(cid) | cid <= 0
+  cid[invalid] <- NA_integer_
+
   if (verbose) {
-    index <- which(is.na(cid) & !is.na(cid_o))
+    message("Coercing queries to positive integers. ", appendLF = FALSE)
+    index <- which(invalid & !is.na(cid_o))
     if (length(index) > 0) {
       for (i in index) {
-        message(paste0(cid_o[index], " coerced to NA. "), appendLF = FALSE)
+        message(paste0(cid_o[i], " coerced to NA. "), appendLF = FALSE)
       }
     }
+    message("Done.")
   }
 
-  if (any(cid <= 0, na.rm = TRUE)) {
-    index <- which(cid <= 0)
-    cid[index] <- NA
-    if (verbose) {
-      for (i in index) {
-        message(paste0(cid_o[index], " coerced to NA. "), appendLF = FALSE)
-      }
-    }
-  }
+  vcids <- tibble::tibble(
+    query = cid_o,
+    cid = cid
+  )
 
-  if (verbose) message("Done.")
-
-  if (mean(is.na(cid)) == 1) {
+  if (mean(is.na(vcids$cid)) == 1) {
     if (verbose) webchem_message("na")
     return(NA)
   }
 
-  napos <- which(is.na(cid))
-  cid <- cid[!is.na(cid)]
+  cid <- vcids$cid[!is.na(vcids$cid)]
   prolog <- "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
-  input <- "/compound/cid"
-  if (is.null(properties))
-    properties <- c(
-      "MolecularFormula",
-      "MolecularWeight",
-      "SMILES",
-      "ConnectivitySMILES",
-      "InChI",
-      "InChIKey",
-      "IUPACName",
-      "Title",
-      "XLogP",
-      "ExactMass",
-      "MonoisotopicMass",
-      "TPSA",
-      "Complexity",
-      "Charge",
-      "HBondDonorCount",
-      "HBondAcceptorCount",
-      "RotatableBondCount",
-      "HeavyAtomCount",
-      "IsotopeAtomCount",
-      "AtomStereoCount",
-      "DefinedAtomStereoCount",
-      "UndefinedAtomStereoCount",
-      "BondStereoCount",
-      "DefinedBondStereoCount",
-      "UndefinedBondStereoCount",
-      "CovalentUnitCount",
-      "PatentCount",
-      "PatentFamilyCount",
-      "AnnotationTypes",
-      "AnnotationTypeCount",
-      "SourceCategories",
-      "LiteratureCount",
-      "Volume3D",
-      "XStericQuadrupole3D",
-      "YStericQuadrupole3D",
-      "ZStericQuadrupole3D",
-      "FeatureCount3D",
-      "FeatureAcceptorCount3D",
-      "FeatureDonorCount3D",
-      "FeatureAnionCount3D",
-      "FeatureCationCount3D",
-      "FeatureRingCount3D",
-      "FeatureHydrophobeCount3D",
-      "ConformerModelRMSD3D",
-      "EffectiveRotorCount3D",
-      "ConformerCount3D",
-      "Fingerprint2D"
-    )
+  input <- "/compound/cid/"
+  all_properties <- c(
+    "MolecularFormula",
+    "MolecularWeight",
+    "SMILES",
+    "ConnectivitySMILES",
+    "InChI",
+    "InChIKey",
+    "IUPACName",
+    "Title",
+    "XLogP",
+    "ExactMass",
+    "MonoisotopicMass",
+    "TPSA",
+    "Complexity",
+    "Charge",
+    "HBondDonorCount",
+    "HBondAcceptorCount",
+    "RotatableBondCount",
+    "HeavyAtomCount",
+    "IsotopeAtomCount",
+    "AtomStereoCount",
+    "DefinedAtomStereoCount",
+    "UndefinedAtomStereoCount",
+    "BondStereoCount",
+    "DefinedBondStereoCount",
+    "UndefinedBondStereoCount",
+    "CovalentUnitCount",
+    "PatentCount",
+    "PatentFamilyCount",
+    "AnnotationTypes",
+    "AnnotationTypeCount",
+    "SourceCategories",
+    "LiteratureCount",
+    "Volume3D",
+    "XStericQuadrupole3D",
+    "YStericQuadrupole3D",
+    "ZStericQuadrupole3D",
+    "FeatureCount3D",
+    "FeatureAcceptorCount3D",
+    "FeatureDonorCount3D",
+    "FeatureAnionCount3D",
+    "FeatureCationCount3D",
+    "FeatureRingCount3D",
+    "FeatureHydrophobeCount3D",
+    "ConformerModelRMSD3D",
+    "EffectiveRotorCount3D",
+    "ConformerCount3D",
+    "Fingerprint2D"
+  )
+  if (is.null(properties)) {
+    properties <- all_properties
+  } else {
+    invalid_props <- setdiff(properties, all_properties)
+    if (length(invalid_props) > 0) {
+      stop(
+        "Invalid properties: ",
+        paste(invalid_props, collapse = ", "),
+        ". Valid properties: ",
+        all_properties |> sort() |> paste(collapse = ", "),
+        call. = FALSE
+      )
+    }
+  }
   properties <- paste(properties, collapse = ",")
   output <- paste0("/property/", properties, "/JSON")
 
-  qurl <- paste0(prolog, input, output)
-  if (verbose) webchem_message("query_all", appendLF = FALSE)
-  webchem_sleep(type = 'API')
-  res <- try(httr::RETRY("POST",
-                         qurl,
-                         httr::user_agent(webchem_url()),
-                         body = list("cid" = paste(cid, collapse = ",")),
-                         terminate_on = 404,
-                         quiet = TRUE), silent = TRUE)
-  if (inherits(res, "try-error")) {
-    if (verbose) webchem_message("service_down")
-    return(NA)
-  }
-  if (verbose) message(httr::message_for_status(res))
-  if (res$status_code == 200) {
-    cont <- jsonlite::fromJSON(rawToChar(res$content))
-    if (names(cont) == "Fault") {
-      if (verbose) {
-        message(cont$Fault$Message, ". ", cont$Fault$Details, ". Returning NA.")
-      }
-      return(NA)
+  foo <- function(x) {
+    qurl <- paste0(prolog, input, x, output)
+    if (verbose) webchem_message("query", x, appendLF = FALSE)
+    webchem_sleep(type = 'API')
+    res <- try(httr::RETRY("GET",
+                           qurl,
+                           httr::user_agent(webchem_url()),
+                           terminate_on = 404,
+                           quiet = TRUE), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      if (verbose) webchem_message("service_down")
+      return(data.frame())
     }
-    out <- cont$PropertyTable[[1]]
-    # insert NA rows
-    narow <- rep(NA, ncol(out))
-    for (i in seq_along(napos)) {
-      #capture NAs at beginning
-      firstnna <- min(which(!is.na(cid_o)))
-      if (napos[i] <  firstnna) {
-        out <- rbind(narow, out)
-      } else {
-        # capture NAs at end
-        if (napos[i] > nrow(out)) {
-          # print(napos[i])
-          out <- rbind(out, narow)
-        } else {
-          out <- rbind(out[1:(napos[i] - 1), ], narow, out[napos[i]:nrow(out), ])
+    if (verbose) message(httr::message_for_status(res))
+    if (res$status_code == 200) {
+      cont <- jsonlite::fromJSON(rawToChar(res$content))
+      if (names(cont) == "Fault") {
+        if (verbose) {
+          message(cont$Fault$Message, ". ", cont$Fault$Details, ". Returning NA.")
         }
-      }}
-    rownames(out) <- NULL
-    out$CID <- cid_o
-    out <- tibble::as_tibble(out)
-    class(out) <- c("pc_prop", class(out))
-    return(out)
+        return(data.frame())
+      }
+      out <- cont$PropertyTable[[1]]
+      out <- out |> dplyr::mutate(CID = x) |> dplyr::relocate(CID)
+      return(out)
+    } else {
+      return(data.frame())
+    }
   }
-  else {
-    return(NA)
-  }
+  out <- lapply(cid, foo) |> dplyr::bind_rows()
+
+  if (nrow(out) == 0) return(NA)
+
+  na_row <- as.data.frame(as.list(rep(NA, ncol(out))))
+  names(na_row) <- names(out)
+  out_list <- lapply(seq_len(nrow(vcids)), function(i) {
+    if (is.na(vcids$cid[i])) {
+      na_row$CID <- vcids$query[i]
+      return(na_row)
+    } else {
+      hit <- out[which(out$CID == vcids$query[i]),]
+      if (nrow(hit) == 0) {
+        na_row$CID <- vcids$query[i]
+        return(na_row)
+      } else {
+        return(hit)
+      }
+    }
+  })
+  out <- do.call(rbind, out_list)
+  out <- tibble::as_tibble(out)
+  class(out) <- c("pc_prop", class(out))
+  return(out)
 }
 
 #' Search synonyms in pubchem

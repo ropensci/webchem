@@ -102,7 +102,7 @@ test_that("pc_prop", {
   skip_if_not(up, "PubChem service is down")
 
   b <- suppressWarnings(pc_prop("xxx", properties = "SMILES"))
-  c <- pc_prop("5564", properties = c("SMILES", "InChiKey"))
+  c <- pc_prop("5564", properties = c("SMILES", "InChIKey"))
   expect_true(is.na(b))
   expect_equal(ncol(c), 3)
 
@@ -117,10 +117,13 @@ test_that("pc_prop", {
   expect_true(all(
     d1m == c(
     "Coercing queries to positive integers. ",
-    "balloon coerced to NA. ",
     "-1 coerced to NA. ",
+    "balloon coerced to NA. ",
     "Done.\n",
-    "Querying. ",
+    "Querying 5564. ",
+    "OK (HTTP 200).",
+    "\n",
+    "Querying 2244. ",
     "OK (HTTP 200).",
     "\n"
   )))
