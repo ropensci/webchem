@@ -36,6 +36,9 @@ test_that("with_cts() translates", {
 
 
 test_that("find_db() function works", {
+  #disable because of possible etox schema change
+  #https://github.com/ropensci/webchem/issues/453
+  skip()
   skip_on_cran()
   skip_if_not(fn_up)
   skip_if_not(etox_up)

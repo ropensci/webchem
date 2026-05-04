@@ -4,7 +4,8 @@
 
 ### OFFLINE ACCESS
 
-* `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, and `document`.
+* `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `assay`, `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, `document`, `drug_indication`, `drug_warning`, `go_slim`.
+* Results for online and offline queries are identical for most resources. If there are differences, the offline version throws informative warnings.
 * Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
 
 ### OTHER
@@ -17,7 +18,7 @@
 
 ## MINOR IMPROVEMENTS
 
-* `chembl_query()` now returns a named list with improved formatting for nested output.
+* `chembl_query()` now returns a named list with improved formatting for nested output when `output = "tidy"`.
 * Added new argument `output` to `chembl_query()` (values: "raw" or "tidy") to control output format. Raw format returns the full nested structure; tidy format attempts to flatten the results.
 * Added new `options` argument to `chembl_query()` for passing resource- and mode-specific options (cache file name, similarity threshold, database version, etc.).
 * `chembl_query()` can now replace NULL values with typed NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field schema when `replace_nulls = TRUE` in options. For this, the schema is retrieved from ChEMBL and cached for the session.

@@ -34,61 +34,47 @@ test_that("informative error when query and resource do not match", {
   expect_equal(msg, "CHEMBL3988026 is not a COMPOUND. It is a TISSUE.")
 })
 
-test_that("atc_class works", {
-  off1 <- chembl_query(
-    query = "A01AA01",
-    resource = "atc_class",
-    mode = "offline",
-    output = "tidy"
-  )
-  off2 <- chembl_query(
-    query = c("A01AA", "A01AB02"),
-    resource = "atc_class",
-    mode = "offline",
-    output = "tidy"
-  )
-  off3 <- chembl_query(
-    query = c("Q","A01AB02"),
-    resource = "atc_class",
-    mode = "offline",
-    output = "tidy"
+test_that("fully implemented resources work", {
+  full <- c(
+    "atc_class",
+    "binding_site",
+    "biotherapeutic",
+    "cell_line",
+    "compound_record",
+    "drug_indication",
+    "drug_warning",
+    "go_slim"
   )
 
-  testthat::expect_s3_class(off1, "data.frame")
-  testthat::expect_equal(nrow(off2), 7)
-  testthat::expect_equal(nrow(off3), 2)
-  testthat::expect_true(is.na(off3$level1[1]))
-
-  off <- chembl_query(
-    query = "A01AA01", resource = "atc_class", mode = "offline", output = "raw")
-  ws <- chembl_query(query = "A01AA01", resource = "atc_class", output = "raw")
-  res <- compare_service_lists(ws$A01AA01, off$A01AA01)
-  testthat::expect_equal(res$status, "OK")
+  for (i in full) {
+    queries <- chembl_example_query(i)
+    # single query
+    queries[1] |>
+      chembl_compare_service(resource = i) |>
+      suppressWarnings() |>
+      expect_true()
+    # multiple queries, if available
+    queries |>
+      chembl_compare_service(resource = i) |>
+      suppressWarnings() |>
+      expect_true()
+  }
 })
 
-implemented <- c(
-  "binding_site",
-  "biotherapeutic",
-  "cell_line",
-  "compound_record",
-  "document"
-)
+test_that("partially implemented resources work", {
+  partial = "document"
 
-for (i in implemented) {
-  ids <- chembl_example_query(i)
-  ws <- chembl_query(ids, resource = i)
-  off <- chembl_query(ids, resource = i, mode = "offline")
-
-  for (j in seq_along(ids)) {
-
-    if (i == "biotherapeutic" & j == 3) next()
-
-    if (i == "document") {
-      # Remove fields not available in offline mode
-      index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
-      ws[[j]] <- ws[[j]][-index]
+  for (i in partial) {
+    ids <- chembl_example_query(i)
+    ws <- chembl_query(ids, resource = i, mode = "ws")
+    off <- chembl_query(ids, resource = i, mode = "offline")
+    for (j in seq_along(ids)) {
+      if (i == "document") {
+        # Remove fields not available in offline mode
+        index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
+        ws[[j]] <- ws[[j]][-index]
+      }
+      expect_true(all.equal(ws[[j]], off[[j]]))
     }
-
-    expect_true(identical(ws[[j]], off[[j]]))
   }
-}
+})

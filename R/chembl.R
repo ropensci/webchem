@@ -2,22 +2,17 @@
 #'
 #' Use this to group resource or mode specific options and pass them via the
 #' `options` argument to `chembl_query()`.
-#' @param replace_nulls logical; if TRUE, replaces JSON NULL values with typed
-#' NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field's
-#' schema type.
 #' @param cache_file character or NULL
 #' @param similarity numeric
 #' @param version character
 #' @return A list with class 'chembl_options'.
 #' @noRd
 chembl_options <- function(
-  replace_nulls = TRUE,
   cache_file = NULL,
   similarity = 70,
   version = "latest"
 ) {
   options <- list(
-    replace_nulls = replace_nulls,
     cache_file = cache_file,
     similarity = similarity,
     version = version
@@ -377,13 +372,11 @@ chembl_query <- function(
   output = "raw",
   verbose = getOption("verbose"),
   options = chembl_options(
-    replace_nulls = TRUE,
     cache_file = NULL,
     similarity = 70,
     version = "latest"
   ),
-  ...
-  ) {
+  ...) {
   resource <- match.arg(resource, chembl_resources())
   output <- match.arg(output, choices = c("raw", "tidy"))
   if (resource == "image") {
@@ -398,7 +391,6 @@ chembl_query <- function(
       query = query,
       resource = resource,
       verbose = verbose,
-      replace_nulls = options$replace_nulls,
       cache_file = options$cache_file,
       similarity = options$similarity,
       output = output,
@@ -427,32 +419,19 @@ chembl_query_ws <- function(
   query,
   resource = "molecule",
   verbose = getOption("verbose"),
-  replace_nulls = TRUE,
   cache_file = NULL,
   similarity = 70,
   output = "raw",
-  ...
-  ) {
+  ...) {
+  if (resource == "atc_class") {
+    warning("The 'atc_class' resource currently returns no more than 20 results.")
+  }
   if (resource == "similarity") {
     warning("Similarity search currently returns no more than 20 results.")
   }
   stem <- "https://www.ebi.ac.uk/chembl/api/data"
   opts <- list(...)
-  if (replace_nulls) {
-    if (exists(resource, envir = .chembl_schema_cache, inherits = FALSE)) {
-      if (verbose) message("Using cached schema.")
-      schema <- get(resource, envir = .chembl_schema_cache)
-    } else {
-      if (verbose) message("Retrieving schema to replace NULLs.")
-      schema <- jsonlite::fromJSON(paste0(
-        "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
-      ))
-      assign(resource, schema, envir = .chembl_schema_cache)
-    }
-  } else {
-    schema <- NULL
-  }
-  foo <- function(query, verbose, similarity, schema) {
+  foo <- function(query, verbose, similarity) {
     if (is.na(query)) {
       if (verbose) webchem_message("na")
       return(NA)
@@ -486,7 +465,23 @@ chembl_query_ws <- function(
     }
     if (verbose) message(httr::message_for_status(res))
     cont <- httr::content(res, type = "application/json")
-    if (replace_nulls) cont <- replace_nulls(cont, schema)
+    
+    # If there are multiple results, the results will be paginated.
+    # If the results are paginated, the data will be in the "atc" field.
+    # The "atc" field is not part of the schema.
+    if (resource == "atc_class") {
+      if ("atc" %in% names(cont)) {
+        cont <- cont$atc
+      } else {
+        cont <- list(cont)
+      }
+      cont <- lapply(cont, function(entry) {
+        force_schema(entry, resource)
+      })
+    } else {
+      cont <- force_schema(cont, resource)
+    }
+    
     if (output == "tidy") {
       cont <- format_chembl(cont)
     }
@@ -494,7 +489,7 @@ chembl_query_ws <- function(
   }
   if (is.null(cache_file)) {
     out <- lapply(query, function(x) {
-      foo(x, verbose = verbose, similarity = similarity, schema = schema)
+      foo(x, verbose = verbose, similarity = similarity)
     })
   } else {
     if (!dir.exists("cache")) dir.create("cache")
@@ -510,7 +505,7 @@ chembl_query_ws <- function(
         if (verbose) message("Already retrieved.")
         return(query_results[[x]])
       } else {
-        new <- foo(x, verbose = verbose, similarity = similarity, schema = schema)
+        new <- foo(x, verbose = verbose, similarity = similarity)
         if (!is.na(x)) {
           query_results[[x]] <<- new
           saveRDS(query_results, file = cfpath)
@@ -520,6 +515,14 @@ chembl_query_ws <- function(
       })
   }
   names(out) <- query
+  class(out) <- c(
+    ifelse(
+      output == "raw",
+      paste0("chembl_", resource, "_raw"),
+      paste0("chembl_", resource, "_tidy")
+    ),
+    class(out)
+  )
   return(out)
 }
 
@@ -914,115 +917,13 @@ validate_chembl_version <- function(version = "latest") {
   return(out)
 }
 
-#' Get ChEMBL Resource Structure
-#'
-#' Query a ChEMBL resource with a representative example and convert the
-#' response into a structured table.
-#'
-#' @importFrom rlang .data
-#' @param resource character; the ChEMBL resource to query. Use
-#' [chembl_resources()] to see all available resources.
-#' @param verbose logical; should verbose messages be printed to the console?
-#' @return A tibble with columns "name", "value", and "parent" representing the
-#' structure of the response.
-#' @examples
-#' \dontrun{
-#' # Example for the "molecule" resource
-#' get_chembl_ws_schema("molecule")
-#' }
-#' @noRd
-get_chembl_ws_schema <- function(resource, verbose = getOption("verbose")) {
-  # validate resource and get example query
-  query <- chembl_example_query(resource)
-  response <- chembl_query(query, resource = resource, verbose = verbose)
-  process_element <- function(res, element, parent = NA) {
-    value <- res[[element]]
-    cls <- class(value)[1]
-    out <- tibble::tibble(
-      date = Sys.Date(),
-      resource = resource,
-      field = element,
-      class = cls,
-      parent = parent
-    )
-    if (is.atomic(value)) {
-      out$value <- as.character(value[1])
-    } else if (is.data.frame(value)) {
-      df_fields <- tibble::tibble(
-        date = Sys.Date(),
-        resource = resource,
-        field = names(value),
-        class = vapply(value, function(col) class(col)[1], character(1)),
-        parent = element,
-        value = vapply(value, function(col) {
-          non_na <- col[!is.na(col)]
-          if (length(non_na) > 0) as.character(non_na[1]) else NA_character_
-        }, character(1))
-      )
-      out <- dplyr::bind_rows(out, df_fields)
-    } else {
-      stop()
-    }
-    return(out)
-  }
-  all <- tibble::tibble()
-  for (i in query) {
-    result <- lapply(names(response[[i]]), function(x) {
-      tryCatch(
-      process_element(
-        res = response[[i]],
-        element = x
-        ),
-        error = function(e) {
-          tibble::tibble(resource = resource, query = i, field = x)
-        }
-      )
-    }) |> dplyr::bind_rows()
-    result$query <- i
-    result <- try(result |> dplyr::relocate(query, .after = .data$parent))
-    if (inherits(result, "try-error")) {
-      print(query)
-      print(resource)
-      stop()
-    }
-    all <- dplyr::bind_rows(all, result)
-  }
-  all <- all |>
-    dplyr::group_by(.data$field, .data$parent) |>
-    dplyr::filter(
-      if (any(!is.na(.data$value))) {
-        dplyr::row_number() == which(!is.na(.data$value))[1]
-      } else {
-        dplyr::row_number() == 1
-      }
-    ) |>
-    dplyr::ungroup()
-  all <- all |>
-    dplyr::mutate(
-      parent_row = match(.data$parent, .data$field),
-      order_index = ifelse(is.na(.data$parent_row), dplyr::row_number(), .data$parent_row + 0.1)
-    ) |>
-    dplyr::arrange(.data$order_index) |>
-    dplyr::select(-.data$parent_row, -.data$order_index)
-
-  if ("value" %in% names(all)) {
-    na_fields <- all$field[is.na(all$value) & all$class != "tbl_df"]
-    if (length(na_fields) > 0) {
-      warning("Found NA values in atomic fields. Add more example queries.")
-      msg <- paste0("Resource with NA values: ", resource, "; ", paste(na_fields, collapse = ", "))
-      print(msg)
-    }
-  }
-  return(all)
-}
-
 chembl_example_query <- function(resource) {
   resource <- match.arg(resource, chembl_resources())
   resource <- resource[!resource %in% c("image", "status")]
   example_queries <- list(
     activity = c("31863", "32190", "624419", "31910", "31864", "3269724", "17805339"),
     assay = c("CHEMBL615117", "CHEMBL1061852", "CHEMBL5445082", "CHEMBL5441382", "CHEMBL2184458"),
-    atc_class = "A01AA01",
+    atc_class = c("A01AA01", "A01AA"),
     binding_site = "2",
     biotherapeutic = c("CHEMBL8234", "CHEMBL448105", "CHEMBL441738"),
     cell_line = c("CHEMBL3307241", "CHEMBL3307242"),
@@ -1057,66 +958,211 @@ chembl_example_query <- function(resource) {
   example_queries[[resource]]
 }
 
-#' Replace NULLs in ChEMBL webservice response
+#' Force ChEMBL webservice response to conform to schema
 #'
-#' Recursively replace NULL values in the ChEMBL webservice response with NA
-#' values of the appropriate type based on the provided schema.
+#' Enforces schema-based type coercion and replaces missing values (NULL, empty
+#' lists, "NA" strings) with appropriately typed NA values. This ensures
+#' consistency between webservice and offline query results.
 #' @param res list; the ChEMBL webservice response to process.
+#' @param resource character; the ChEMBL resource.
 #' @param schema list; the schema for the ChEMBL resource.
 #' @noRd
-
-replace_nulls <- function(res, schema) {
-  # link schema types to NA types
-  get_na_type <- function(type) {
+force_schema <- function(res, resource) {
+  resource <- match.arg(resource, chembl_resources())
+  if (resource == "compound_structural_alert") {
+    warning(
+      "The 'compound_structural_alert' schema appears inconsistent with the ",
+      "webservice response. Schema enforcement skipped; returning result as-is."
+    )
+    return(res)
+  }
+  # get schema
+  schema <- get_chembl_ws_schema(resource)
+  # map schema types to R types
+  map_type <- function(schema_type) {
+    if (schema_type == "boolean") return("logical")
+    if (schema_type %in% c(
+      "integer", "float", "decimal", "number"
+    )) return("numeric")
+    if (schema_type %in% c(
+      "string", "date", "datetime"
+    )) return("character")
+    stop(paste0("Unknown schema_type: '", schema_type, "'."))
+  }
+  # return a typed NA for a given R type
+  typed_na <- function(r_type) {
     switch(
-      type,
-      "string" = NA_character_,
-      "integer" = NA_integer_,
-      "float" = NA_real_,
-      "number" = NA_real_,
-      "boolean" = NA,
-      "datetime" = NA_character_,
-      "related" = NA_character_,
-      NA_character_  # default
+      r_type,
+      "character" = NA_character_,
+      "numeric"   = NA_real_,
+      "logical"   = NA,
+      NA_character_
     )
   }
-  
-  # If res is not a list, stop with an error
-  if (!is.list(res)) stop("ChEMBL raw output should be a list.")
-  
-  # Internal recursive function with depth tracking
-  foo <- function(x, field_name, depth = 0) {
-    if (depth > 10) {
-      stop("Exceeded maximum recursion depth while replacing NULLs.")
+  # coerce an atomic value to the appropriate R type;
+  coerce_to_type <- function(value, r_type, field_name) {
+    if (is.null(value) || (is.atomic(value) && length(value) == 1 && is.na(value))) {
+      return(typed_na(r_type))
     }
-    # if x is NULL, replace with appropriate NA based on schema
-    if (is.null(x)) {
-      if (!is.null(field_name) &&
-          !is.null(schema$fields) &&
-          field_name %in% names(schema$fields)) {
-        field_schema <- schema$fields[[field_name]]
-        if (!is.null(field_schema$type)) {
-          return(get_na_type(field_schema$type))
-        } else {
-          return(NA_character_)
-        }
+    # Schema declares a scalar type but webservice returned a list:
+    # unlist if all elements are atomic (e.g. a list of strings), otherwise error.
+    if (is.list(value)) {
+      if (all(vapply(value, is.atomic, logical(1)))) {
+        value <- unlist(value)
       } else {
-        return(NA_character_)
+        stop(paste0(
+          "Field '", field_name, "' has schema type '", r_type,
+          "' but received a list containing non-atomic elements. ",
+          "Cannot coerce to scalar type."
+        ))
       }
     }
-    # if x is a list, recursively apply foo to its elements
-    if (is.list(x)) {
-      for (i in seq_along(x)) {
-        x[[i]] <- foo(x[[i]], names(x)[i], depth + 1)
-      }
+    if (!is.atomic(value)) {
+      stop(paste0("Unsupported value type: ", field_name, "; ", class(value)))
     }
-    return(x)
+    switch(
+      r_type,
+      "character" = as.character(value),
+      "numeric"   = as.numeric(value),
+      "logical"   = as.logical(value),
+      value
+    )
   }
-  
-  # Apply foo to each element at the top level
-  result <- lapply(seq_along(res), function(i) {
-    foo(res[[i]], names(res)[i])
-  })
+  # build a schema-conforming named list of typed NAs for a set of sub-fields;
+  # always returns a plain named list — wrapping in list() for to_many is the
+  # caller's responsibility
+  make_na_record <- function(fields) {
+    lapply(fields, function(sf) {
+      if (!exists("type", sf)) stop("Schema field is missing 'type' information.")
+      if (sf$type == "related") {
+        if (!exists("related_type", sf)) {
+          stop("Schema for related field is missing 'related_type' information.")
+        }
+        if (!exists("schema", sf) || !exists("fields", sf$schema)) {
+          stop("Schema for related field is missing 'schema$fields' information.")
+        }
+        inner <- make_na_record(sf$schema$fields)
+        if (sf$related_type == "to_one") inner else list(inner)
+      } else {
+        typed_na(map_type(sf$type))
+      }
+    })
+  }
+  # recursively coerce a value according to its field schema entry;
+  # handles to_one (named list) and to_many (list of named lists) at any depth
+  coerce_by_schema <- function(x, field_name, field_schema) {
+    if (!exists("type", field_schema)) {
+      stop("Schema field is missing 'type' information.")
+    }
+    if (field_schema$type != "related") {
+      return(coerce_to_type(x, map_type(field_schema$type), field_name))
+    }
+    # field is a nested structure
+    if (!exists("related_type", field_schema)) {
+      stop("Schema for related field is missing 'related_type' information.")
+    }
+    if (!exists("schema", field_schema) || !exists("fields", field_schema$schema)) {
+      stop("Schema for related field is missing 'schema$fields' information.")
+    }
+    sub_fields <- field_schema$schema$fields
+    # NULL means the nested object is absent — return schema-shaped NAs
+    if (is.null(x)) {
+      if (field_schema$related_type == "to_one") return(make_na_record(sub_fields))
+      if (field_schema$related_type == "to_many") return(list(make_na_record(sub_fields)))
+    }
+    if (field_schema$related_type == "to_one") {
+      # empty list means the nested object is absent — return schema-shaped NAs
+      if (length(x) == 0) return(make_na_record(sub_fields))
+      for (subfield in names(x)) {
+        if (!subfield %in% names(sub_fields)) {
+          warning(
+            "Subfield '", subfield, "' not found in schema for field '", field_name,
+            "'. Schema may be inconsistent with the webservice response. ",
+            "Subfield returned as-is."
+          )
+          next
+        }
+        x[[subfield]] <- coerce_by_schema(x[[subfield]], subfield, sub_fields[[subfield]])
+      }
+      return(x)
+    } else if (field_schema$related_type == "to_many") {
+      # empty list means no observations — return one NA record to preserve schema
+      if (length(x) == 0) return(list(make_na_record(sub_fields)))
+      return(lapply(x, function(item) {
+        if (is.null(item) || !is.list(item)) {
+          warning(
+            "Schema violation in 'to_many' field: expected a named list with fields: ",
+            paste(names(sub_fields), collapse = ", "),
+            "; received: '", paste(item, collapse = ", "), "'. ",
+            "Value returned as-is. This may cause issues in downstream operations like merging)."
+          )
+          return(item)
+        }
+      for (subfield in names(item)) {
+          if (!subfield %in% names(sub_fields)) {
+            warning(
+              "Subfield '", subfield, "' not found in schema for field '", field_name,
+              "'. Schema may be inconsistent with the webservice response. ",
+              "Subfield returned as-is."
+            )
+            next
+          }
+          item[[subfield]] <- coerce_by_schema(item[[subfield]], subfield, sub_fields[[subfield]])
+        }
+      item
+      }))
+    } else {
+      stop(paste0("Unknown related_type: '", field_schema$related_type, "'."))
+    }
+  }
+  # apply schema-based coercion to each top-level field of a single entity
+  foo <- function(x) {
+    if (!exists("fields", schema)) {
+      stop("Schema is missing 'fields' information.")
+    }
+    for (field in names(x)) {
+      if (!field %in% names(schema$fields)) {
+        warning(
+          "Field '", field, "' not found in schema. ",
+          "Schema may be inconsistent with the webservice response. ",
+          "Field returned as-is."
+        )
+        next
+      }
+      x[[field]] <- coerce_by_schema(x[[field]], field, schema$fields[[field]])
+    }
+    # map any remaining NULL to NA
+    lapply(x, function(v) if (is.null(v)) NA_character_ else v)
+  }
+  result <- foo(res)
   names(result) <- names(res)
+  class(result) <- class(res)
   return(result)
+}
+
+#' Get ChEMBL webservice schema
+#'
+#' Retrieve ChEMBL webserice schema and optionally convert it to a nested list
+#' of field classes. Note, each schema is retrieved once per session.
+#' @param resource character; the ChEMBL resource.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return Webservice schema as a list.
+#' @noRd
+get_chembl_ws_schema <- function(
+  resource,
+  verbose = getOption("verbose")
+  ) {
+  resource <- match.arg(resource, chembl_resources())
+  # Retrieve and cache schema for type enforcement
+  if (exists(resource, envir = .chembl_schema_cache, inherits = FALSE)) {
+    if (verbose) message("Using cached schema.")
+    schema <- get(resource, envir = .chembl_schema_cache)
+  } else {
+    if (verbose) message("Retrieving schema to enforce data types.")
+    schema <- jsonlite::fromJSON(paste0(
+      "https://www.ebi.ac.uk/chembl/api/data/", resource, "/schema.json"
+    ))
+    assign(resource, schema, envir = .chembl_schema_cache)
+  }
+  return(schema)
 }

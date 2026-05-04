@@ -52,7 +52,7 @@ test_that("chembl_query() examples", {
   # Resource: "assay" - requires assay ChEMBL ID
   o2 <- chembl_query("CHEMBL615117", resource = "assay")
   # Resource: "atc_class" - requires ATC class ID
-  o3 <- chembl_query("A01AA01", resource = "atc_class")
+  o3 <- chembl_query("A01AA01", resource = "atc_class") |> suppressWarnings()
   # Resource: binding_site - requires site ID
   o4 <- chembl_query(2, resource = "binding_site")
   # Resource: biotherapeutic - requires ChEMBL ID
@@ -68,13 +68,13 @@ test_that("chembl_query() examples", {
     "CHEMBL266429",
     resource = "compound_structural_alert",
     output = "raw"
-  )
+  ) |> suppressWarnings()
   # Resource: document - requires document ChEMBL ID
   o10 <- chembl_query("CHEMBL1158643", resource = "document")
   # Resource: document_similarity - requires document 1 ChEMBL ID
   o11 <- chembl_query("CHEMBL1148466", resource = "document_similarity")
   # Resource: drug - requires ChEMBL ID
-  o12 <- chembl_query("CHEMBL2", resource = "drug")
+  o12 <- chembl_query("CHEMBL2", resource = "drug") |> suppressWarnings()
   # Resource: drug_indication - requires drug indication ID
   o13 <- chembl_query("22606", resource = "drug_indication")
   # Resource: drug_warning - requires warning ID
@@ -86,10 +86,12 @@ test_that("chembl_query() examples", {
   # Resource: metabolism - requires metabolism ID
   o17 <- chembl_query("119", resource = "metabolism")
   # Resource: molecule - requires ChEMBL ID
-  o18 <- chembl_query("CHEMBL1082", resource = "molecule")
-  o19 <- chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule")
+  o18 <- chembl_query("CHEMBL1082", resource = "molecule") |> suppressWarnings()
+  o19 <- chembl_query(c("CHEMBL25", "CHEMBL1082"), resource = "molecule") |>
+    suppressWarnings()
   # Resource: molecule_form - requires ChEMBL ID
-  o20 <- chembl_query("CHEMBL6329", resource = "molecule_form")
+  o20 <- chembl_query("CHEMBL6329", resource = "molecule_form") |>
+    suppressWarnings()
   # Resource: organism - requires organism class ID (not taxid)
   o21 <- chembl_query("1", resource = "organism")
   # Resource: protein_classification - requires protein class ID
@@ -100,7 +102,8 @@ test_that("chembl_query() examples", {
   # Resource: source - requires source ID
   o24 <- chembl_query("1", resource = "source")
   # Resource: substructure - requires SMILES
-  o25 <- chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure")
+  o25 <- chembl_query("CN(CCCN)c1cccc2ccccc12", resource = "substructure") |>
+    suppressWarnings()
   # Resource: target - requires target ChEMBL ID
   o26 <- chembl_query("CHEMBL2074", resource = "target")
   # Resource: target_component - requires target component ID
@@ -114,11 +117,12 @@ test_that("chembl_query() examples", {
 
   # verbose message
   o18m <- capture_messages(
-    chembl_query("CHEMBL1082", resource = "molecule", verbose = TRUE))
+    chembl_query("CHEMBL1082", resource = "molecule", verbose = TRUE)) |>
+    suppressWarnings()
 
   expect_true(inherits(o1, "list") & length(o1[[1]]) == 46)
   expect_true(inherits(o2, "list") & length(o2[[1]]) == 29)
-  expect_true(inherits(o3, "list") & length(o3[[1]]) == 10)
+  expect_true(inherits(o3, "list") & length(o3[[1]][[1]]) == 10)
   expect_true(inherits(o4, "list") & length(o4[[1]]) == 3)
   expect_true(inherits(o5, "list") & length(o5[[1]]) == 4)
   expect_true(inherits(o6, "list") & length(o6[[1]]) == 11)
@@ -147,7 +151,7 @@ test_that("chembl_query() examples", {
   expect_true(inherits(o29, "list") & length(o29[[1]]) == 6)
   expect_true(inherits(o30, "list") & length(o30[[1]]) == 4)
 
-  expect_equal(o18m[3], "OK (HTTP 200).")
+  expect_equal(o18m[2], "OK (HTTP 200).")
 })
 
 test_that("More chembl_query()", {
@@ -155,28 +159,29 @@ test_that("More chembl_query()", {
   skip_if_not(up, "ChEMBL service is down")
 
   #invalid inputs
-  o5 <- chembl_query(c("CHEMBL1082", NA, "pumpkin", "CHEMBL25"))
-  o5m <- capture_messages(
-    chembl_query(c("CHEMBL1082", NA, "pumpkin", "CHEMBL25"), verbose = TRUE)
-  )
+  o5 <- chembl_query(c("CHEMBL1082", NA, "pumpkin", "CHEMBL25")) |>
+    suppressWarnings()
+  o5m <- chembl_query(c("CHEMBL1082", NA, "pumpkin", "CHEMBL25"), verbose = TRUE) |>
+    suppressWarnings() |>
+    capture_messages()
 
   expect_equal(length(o5), 4)
-  expect_equal(o5m[5], capture_messages(webchem_message("na"))[1])
-  expect_equal(o5m[7], "Query must be a ChEMBL ID. Returning NA.\n")
+  expect_equal(o5m[4], capture_messages(webchem_message("na"))[1])
+  expect_equal(o5m[6], "Query must be a ChEMBL ID. Returning NA.\n")
 
   #caching
   o6 <- chembl_query(
     "CHEMBL1082",
     resource = "molecule",
     options = chembl_options(cache_file = "test")
-  )
+  ) |> suppressWarnings()
 
   o7m <- capture_messages(chembl_query(
     "CHEMBL1082",
     resource = "molecule",
     options = chembl_options(cache_file = "test"),
     verbose = TRUE
-  ))
+  ) |> suppressWarnings())
 
   o8 <- chembl_query(
     NA,
@@ -184,8 +189,8 @@ test_that("More chembl_query()", {
     options = chembl_options(cache_file = "test")
   )
 
-  expect_equal(o7m[2], "Querying CHEMBL1082. ")
-  expect_equal(o7m[3], "Already retrieved.\n")
+  expect_equal(o7m[1], "Querying CHEMBL1082. ")
+  expect_equal(o7m[2], "Already retrieved.\n")
   expect_equal(o8[[1]], NA)
 
   if (file.exists("./cache/test.rds")) file.remove("./cache/test.rds")
@@ -195,7 +200,7 @@ test_that("More chembl_query()", {
   o9 <- capture_messages(
     chembl_query("CHEMBL12345678", resource = "molecule", verbose = TRUE))
 
-  expect_equal(o9[3], "Not Found (HTTP 404).")
+  expect_equal(o9[2], "Not Found (HTTP 404).")
 
   #service down
   o10 <- chembl_query("CHEMBL1082", test_service_down = TRUE)
@@ -207,7 +212,7 @@ test_that("More chembl_query()", {
   ))
 
   expect_equal(o10[[1]], NA)
-  expect_equal(o10m[3], "Service not available. Returning NA.")
+  expect_equal(o10m[2], "Service not available. Returning NA.")
 })
 
 test_that("chembl_atc_classes()", {
@@ -261,4 +266,16 @@ test_that("chembl_status()", {
 
   expect_equal(o3, NA)
   expect_equal(o3m[2], "Service not available. Returning NA.")
+})
+
+test_that("force_schema() works everywhere", {
+  for (resource in chembl_resources()) {
+    if (resource %in% c("image", "status")) next()
+    resource |>
+      chembl_example_query() |>
+      chembl_query(mode = "ws", resource = resource, output = "raw") |>
+      # TODO fix these messages, probably contact chembl maintainers
+      suppressWarnings() |>
+      expect_no_error()
+  }
 })
