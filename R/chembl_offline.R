@@ -64,14 +64,397 @@ chembl_offline_activity <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'activity' queries are not yet implemented.")
-  # fetch relevant tables from database
+  # Fetch main activities table
+  activities <- fetch_table(
+    con = con,
+    table = "activities",
+    id_col = "activity_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "activity_id",           # query column
+      "assay_id",              # link column (assays)
+      "doc_id",                # link column (docs)
+      "record_id",             # output column
+      "molregno",              # link column (molecule_dictionary)
+      "standard_relation",     # output column
+      "standard_value",        # output column
+      "standard_units",        # output column
+      "standard_flag",         # output column
+      "standard_type",         # output column
+      "activity_comment",      # output column
+      "data_validity_comment", # link column (data_validity_lookup)
+      "potential_duplicate",   # output column
+      "pchembl_value",         # output column
+      "bao_endpoint",          # output column
+      "uo_units",              # output column
+      "qudt_units",            # output column
+      "toid",                  # output column
+      "upper_value",           # output column
+      "standard_upper_value",  # output column
+      "src_id",                # output column
+      "type",                  # output column
+      "relation",              # output column
+      "value",                 # output column
+      "units",                 # output column
+      "text_value",            # output column
+      "standard_text_value",   # output column
+      "action_type"            # link column (action_type)
+    )
+  )
 
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch assay data
+  assays <- fetch_table(
+    con = con,
+    table = "assays",
+    id_col = "assay_id",
+    ids = unique(activities$assay_id),
+    select_cols = c(
+      "assay_id",       # query column
+      "chembl_id",      # output column (assay_chembl_id)
+      "description",    # output column (assay_description)
+      "assay_type",     # output column
+      "bao_format",     # link column (bioassay_ontology)
+      "variant_id",     # link column (variant_sequences)
+      "tid"             # link column (target_dictionary)
+    )
+  )
+
+  # Fetch document data
+  docs <- fetch_table(
+    con = con,
+    table = "docs",
+    id_col = "doc_id",
+    ids = unique(activities$doc_id),
+    select_cols = c(
+      "doc_id",     # query column
+      "chembl_id",  # output column (document_chembl_id)
+      "journal",    # output column (document_journal)
+      "year"        # output column (document_year)
+    )
+  )
+
+  # Fetch molecule data
+  molecule_dictionary <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(activities$molregno),
+    select_cols = c(
+      "molregno",   # query column
+      "chembl_id",  # output column (molecule_chembl_id)
+      "pref_name"   # output column (molecule_pref_name)
+    )
+  )
+
+  # Fetch molecule hierarchy for parent molecules
+  molecule_hierarchy <- fetch_table(
+    con = con,
+    table = "molecule_hierarchy",
+    id_col = "molregno",
+    ids = unique(activities$molregno),
+    select_cols = c(
+      "molregno",        # query column
+      "parent_molregno"  # link column (molecule_dictionary)
+    )
+  )
+
+  # Fetch parent molecule dictionary
+  parent_molecule_dictionary <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(molecule_hierarchy$parent_molregno),
+    select_cols = c(
+      "molregno",  # query column
+      "chembl_id"  # output column (parent_molecule_chembl_id)
+    )
+  )
+
+  # Fetch data validity lookup
+  data_validity_lookup <- fetch_table(
+    con = con,
+    table = "data_validity_lookup",
+    id_col = "data_validity_comment",
+    ids = unique(activities$data_validity_comment[!is.na(activities$data_validity_comment)]),
+    select_cols = c(
+      "data_validity_comment", # query column
+      "description"            # output column (data_validity_description)
+    )
+  )
+
+  # Fetch activity properties
+  activity_properties <- fetch_table(
+    con = con,
+    table = "activity_properties",
+    id_col = "activity_id",
+    ids = unique(activities$activity_id),
+    select_cols = c(
+      "activity_id",           # query column
+      "comments",              # output column
+      "relation",              # output column
+      "result_flag",           # output column
+      "standard_relation",     # output column
+      "standard_text_value",   # output column
+      "standard_type",         # output column
+      "standard_units",        # output column
+      "standard_value",        # output column
+      "text_value",            # output column
+      "type",                  # output column
+      "units",                 # output column
+      "value"                  # output column
+    )
+  )
+
+  # Fetch action type lookup
+  action_type_lookup <- fetch_table(
+    con = con,
+    table = "action_type",
+    id_col = "action_type",
+    ids = unique(activities$action_type[!is.na(activities$action_type)]),
+    select_cols = c(
+      "action_type",  # query column
+      "description",  # output column
+      "parent_type"   # output column
+    )
+  )
+
+  # Fetch ligand efficiency
+  ligand_efficiency <- fetch_table(
+    con = con,
+    table = "ligand_eff",
+    id_col = "activity_id",
+    ids = unique(activities$activity_id),
+    select_cols = c(
+      "activity_id",  # query column
+      "bei",          # output column
+      "le",           # output column
+      "lle",          # output column
+      "sei"           # output column
+    )
+  )
+
+  # Fetch variant sequences
+  variant_sequences <- fetch_table(
+    con = con,
+    table = "variant_sequences",
+    id_col = "variant_id",
+    ids = unique(assays$variant_id[!is.na(assays$variant_id)]),
+    select_cols = c(
+      "variant_id",  # query column
+      "mutation",    # output column (assay_variant_mutation)
+      "accession"    # output column (assay_variant_accession)
+    )
+  )
+
+  # Fetch target dictionary
+  target_dictionary <- fetch_table(
+    con = con,
+    table = "target_dictionary",
+    id_col = "tid",
+    ids = unique(assays$tid),
+    select_cols = c(
+      "tid",        # query column
+      "chembl_id",  # output column (target_chembl_id)
+      "organism",   # output column (target_organism)
+      "pref_name",  # output column (target_pref_name)
+      "tax_id"      # output column (target_tax_id)
+    )
+  )
+
+  # Fetch molecule structures
+  molecule_structures <- fetch_table(
+    con = con,
+    table = "compound_structures",
+    id_col = "molregno",
+    ids = unique(activities$molregno),
+    select_cols = c(
+      "molregno",         # query column
+      "canonical_smiles"  # output column
+    )
+  )
+
+  # Fetch bioassay ontology for BAO labels
+  bioassay_ontology <- fetch_table(
+    con = con,
+    table = "bioassay_ontology",
+    id_col = "bao_id",
+    ids = unique(assays$bao_format),
+    select_cols = c(
+      "bao_id",  # query column
+      "label"    # output column (bao_label)
+    )
+  )
+
+  # Build output for each query
+  out <- lapply(query, function(x) {
+    activity_id <- as.integer(x)
+    activity <- activities |>
+      dplyr::filter(.data$activity_id == !!activity_id) |>
+      dplyr::slice(1)
+    if (nrow(activity) == 0) {
+      warning(sprintf("Activity ID %s was not found in the offline database.", x))
+      return(NA)
+    }
+
+    # Get related data
+    assay <- assays |> dplyr::filter(.data$assay_id == !!activity$assay_id)
+    doc <- docs |> dplyr::filter(.data$doc_id == !!activity$doc_id)
+    molecule <- molecule_dictionary |>
+      dplyr::filter(.data$molregno == !!activity$molregno)
+
+    parent_molregno <- molecule_hierarchy |>
+      dplyr::filter(.data$molregno == !!activity$molregno) |>
+      dplyr::pull(.data$parent_molregno)
+
+    parent_molecule <- parent_molecule_dictionary |>
+      dplyr::filter(.data$molregno == !!parent_molregno)
+
+    data_validity <- data_validity_lookup |>
+      dplyr::filter(.data$data_validity_comment == !!activity$data_validity_comment)
+
+    # Get action type - return NA list if NULL in database
+    action_type <- if (is.na(activity$action_type)) {
+      list(action_type = NA_character_, description = NA_character_, parent_type = NA_character_)
+    } else {
+      action_type_row <- action_type_lookup |>
+        dplyr::filter(.data$action_type == !!activity$action_type)
+      if (nrow(action_type_row) == 0) {
+        list(action_type = NA_character_, description = NA_character_, parent_type = NA_character_)
+      } else {
+        list(
+          action_type = as.character(action_type_row$action_type),
+          description = as.character(action_type_row$description),
+          parent_type = as.character(action_type_row$parent_type)
+        )
+      }
+    }
+
+    # Get ligand efficiency
+    ligand_efficiency_row <- ligand_efficiency |>
+      dplyr::filter(.data$activity_id == !!activity$activity_id)
+    ligand_efficiency_out <- if (nrow(ligand_efficiency_row) == 0) {
+      list(bei = NA_real_, le = NA_real_, lle = NA_real_, sei = NA_real_)
+    } else {
+      list(
+        bei = as.numeric(ligand_efficiency_row$bei),
+        le = as.numeric(ligand_efficiency_row$le),
+        lle = as.numeric(ligand_efficiency_row$lle),
+        sei = as.numeric(ligand_efficiency_row$sei)
+      )
+    }
+
+    # Get activity properties
+    activity_props <- activity_properties |>
+      dplyr::filter(.data$activity_id == !!activity$activity_id)
+
+    activity_properties_list <- if (nrow(activity_props) == 0) {
+      list(list(
+        comments = NA_character_, relation = NA_character_, result_flag = NA_real_,
+        standard_relation = NA_character_, standard_text_value = NA_character_,
+        standard_type = NA_character_, standard_units = NA_character_,
+        standard_value = NA_real_, text_value = NA_character_, type = NA_character_,
+        units = NA_character_, value = NA_real_
+      ))
+    } else {
+      lapply(seq_len(nrow(activity_props)), function(i) {
+        list(
+          comments = activity_props$comments[i],
+          relation = activity_props$relation[i],
+          result_flag = as.numeric(activity_props$result_flag[i]),
+          standard_relation = activity_props$standard_relation[i],
+          standard_text_value = activity_props$standard_text_value[i],
+          standard_type = activity_props$standard_type[i],
+          standard_units = activity_props$standard_units[i],
+          standard_value = as.numeric(activity_props$standard_value[i]),
+          text_value = activity_props$text_value[i],
+          type = activity_props$type[i],
+          units = activity_props$units[i],
+          value = as.numeric(activity_props$value[i])
+        )
+      })
+    }
+
+    # Get variant data
+    variant_data <- if (nrow(assay) > 0 && !is.na(assay$variant_id)) {
+      variant_sequences |>
+        dplyr::filter(.data$variant_id == !!assay$variant_id)
+    } else {
+      NULL
+    }
+
+    # Get target info
+    target <- if (nrow(assay) > 0) {
+      target_dictionary |> dplyr::filter(.data$tid == !!assay$tid)
+    } else {
+      data.frame()
+    }
+
+    # Get molecule structure
+    mol_struct <- molecule_structures |>
+      dplyr::filter(.data$molregno == !!activity$molregno)
+
+    # Get BAO label
+    bao_label_df <- if (nrow(assay) > 0 && !is.na(assay$bao_format)) {
+      bioassay_ontology |> dplyr::filter(.data$bao_id == !!assay$bao_format)
+    } else {
+      data.frame()
+    }
+
+    # Construct result with numeric activity_id to match webservice
+    result <- list(
+      action_type = action_type,
+      activity_comment = as.character(activity$activity_comment),
+      activity_id = as.numeric(activity$activity_id),
+      activity_properties = activity_properties_list,
+      assay_chembl_id = if (nrow(assay) > 0) as.character(assay$chembl_id) else NA_character_,
+      assay_description = if (nrow(assay) > 0) as.character(assay$description) else NA_character_,
+      assay_type = if (nrow(assay) > 0) as.character(assay$assay_type) else NA_character_,
+      assay_variant_accession = if (!is.null(variant_data) && nrow(variant_data) > 0) as.character(variant_data$accession) else NA_character_,
+      assay_variant_mutation = if (!is.null(variant_data) && nrow(variant_data) > 0) as.character(variant_data$mutation) else NA_character_,
+      bao_endpoint = as.character(activity$bao_endpoint),
+      bao_format = if (nrow(assay) > 0) as.character(assay$bao_format) else NA_character_,
+      bao_label = if (nrow(bao_label_df) > 0) as.character(bao_label_df$label) else NA_character_,
+      canonical_smiles = if (nrow(mol_struct) > 0) as.character(mol_struct$canonical_smiles) else NA_character_,
+      data_validity_comment = as.character(activity$data_validity_comment),
+      data_validity_description = if (nrow(data_validity) > 0) as.character(data_validity$description) else NA_character_,
+      document_chembl_id = if (nrow(doc) > 0) as.character(doc$chembl_id) else NA_character_,
+      document_journal = if (nrow(doc) > 0) as.character(doc$journal) else NA_character_,
+      document_year = if (nrow(doc) > 0) as.numeric(doc$year) else NA_real_,
+      ligand_efficiency = ligand_efficiency_out,
+      molecule_chembl_id = if (nrow(molecule) > 0) as.character(molecule$chembl_id) else NA_character_,
+      molecule_pref_name = if (nrow(molecule) > 0) as.character(molecule$pref_name) else NA_character_,
+      parent_molecule_chembl_id = if (nrow(parent_molecule) > 0) as.character(parent_molecule$chembl_id) else NA_character_,
+      pchembl_value = as.numeric(activity$pchembl_value),
+      potential_duplicate = as.numeric(activity$potential_duplicate),
+      qudt_units = as.character(activity$qudt_units),
+      record_id = as.numeric(activity$record_id),
+      relation = as.character(activity$relation),
+      src_id = as.numeric(activity$src_id),
+      standard_flag = as.numeric(activity$standard_flag),
+      standard_relation = as.character(activity$standard_relation),
+      standard_text_value = as.character(activity$standard_text_value),
+      standard_type = as.character(activity$standard_type),
+      standard_units = as.character(activity$standard_units),
+      standard_upper_value = as.numeric(activity$standard_upper_value),
+      standard_value = as.numeric(activity$standard_value),
+      target_chembl_id = if (nrow(target) > 0) as.character(target$chembl_id) else NA_character_,
+      target_organism = if (nrow(target) > 0) as.character(target$organism) else NA_character_,
+      target_pref_name = if (nrow(target) > 0) as.character(target$pref_name) else NA_character_,
+      target_tax_id = if (nrow(target) > 0) as.character(target$tax_id) else NA_character_,
+      text_value = as.character(activity$text_value),
+      toid = as.numeric(activity$toid),
+      type = as.character(activity$type),
+      units = as.character(activity$units),
+      uo_units = as.character(activity$uo_units),
+      upper_value = as.numeric(activity$upper_value),
+      value = as.numeric(activity$value)
+    )
+
+    result[sort(names(result))]
+  })
+
   names(out) <- query
+  class(out) <- c("chembl_activity_raw", class(out))
   if (output == "tidy") {
     stop("Tidy output for 'activity' is not yet implemented.")
   }

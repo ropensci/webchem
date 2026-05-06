@@ -36,6 +36,7 @@ test_that("informative error when query and resource do not match", {
 
 test_that("fully implemented resources work", {
   full <- c(
+    "activity",
     "atc_class",
     "binding_site",
     "biotherapeutic",
