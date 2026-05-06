@@ -173,20 +173,20 @@ test_that("More chembl_query()", {
   o6 <- chembl_query(
     "CHEMBL1082",
     resource = "molecule",
-    options = chembl_options(cache_file = "test")
+    cache_file = "test"
   ) |> suppressWarnings()
 
   o7m <- capture_messages(chembl_query(
     "CHEMBL1082",
     resource = "molecule",
-    options = chembl_options(cache_file = "test"),
+    cache_file = "test",
     verbose = TRUE
   ) |> suppressWarnings())
 
   o8 <- chembl_query(
     NA,
     resource = "molecule",
-    options = chembl_options(cache_file = "test")
+    cache_file = "test"
   )
 
   expect_equal(o7m[1], "Querying CHEMBL1082. ")

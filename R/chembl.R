@@ -1,26 +1,3 @@
-#' Control options for ChEMBL queries
-#'
-#' Use this to group resource or mode specific options and pass them via the
-#' `options` argument to `chembl_query()`.
-#' @param cache_file character or NULL
-#' @param similarity numeric
-#' @param version character
-#' @return A list with class 'chembl_options'.
-#' @noRd
-chembl_options <- function(
-  cache_file = NULL,
-  similarity = 70,
-  version = "latest"
-) {
-  options <- list(
-    cache_file = cache_file,
-    similarity = similarity,
-    version = version
-  )
-  class(options) <- "chembl_options"
-  return(options)
-}
-
 #' Download ChEMBL database
 #'
 #' Download a version of the ChEMBL database for offline access.
@@ -221,14 +198,12 @@ chembl_files <- function(version = "latest") {
 #' @param output character; either "raw" (default) to return the raw results
 #' which is a list of lists, or "tidy" to return simplified results, if
 #' possible.
-#' @param options function; returns a named list for resource- and mode-specific
-#' options. Supported entries:
-#'   - cache_file: character or NULL; name of the cache file (without extension)
-#'     used when mode = "ws". If NULL (default), results are not cached.
-#'   - similarity: numeric; similarity threshold for similarity searches
-#'     (default 70).
-#'   - version: character; database version to use in "offline" mode (default
-#'     "latest").
+#' @param cache_file character or NULL; name of the cache file (without extension)
+#'   used when mode = "ws". If NULL (default), results are not cached.
+#' @param similarity numeric; similarity threshold for similarity searches
+#'   (default 70).
+#' @param version character; database version to use in "offline" mode (default
+#'   "latest").
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... additional arguments, only used for internal testing.
 #' @return The function returns a list of lists, where each element of the list
@@ -244,7 +219,7 @@ chembl_files <- function(version = "latest") {
 #' use this function with the \code{"chembl_id_lookup"} resource to find the
 #' appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
 #' not a separate function but a resource used by \code{chembl_query}.
-#' @details If \code{mode = "ws"} and \code{options$cache_file} is not `NULL`
+#' @details If \code{mode = "ws"} and \code{cache_file} is not `NULL`
 #' the function creates a cache directory in the working directory and a cache
 #' file in the cache directory. This file is used in subsequent calls of the
 #' function. The cache file is extended as new ID-s are queried during the
@@ -271,8 +246,7 @@ chembl_files <- function(version = "latest") {
 #' # Resource: compound_structural_alert - requires compound ChEMBL ID
 #' chembl_query(
 #'   "CHEMBL266429",
-#'   resource = "compound_structural_alert",
-#'   options = chembl_options(tidy = FALSE)
+#'   resource = "compound_structural_alert"
 #' )
 #'
 #' # Resource: compound_record - requires compound record ID
@@ -292,7 +266,7 @@ chembl_files <- function(version = "latest") {
 #' # By default, the function will use 70 as similarity threshold
 #' chembl_query(
 #'   "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity",
-#'   options = chembl_options(similarity = 70)
+#'   similarity = 70
 #' )
 #'
 #' # Resource: substructure - requires compound SMILES
@@ -370,12 +344,10 @@ chembl_query <- function(
   resource = "molecule",
   mode = "ws",
   output = "raw",
+  cache_file = NULL,
+  similarity = 70,
+  version = "latest",
   verbose = getOption("verbose"),
-  options = chembl_options(
-    cache_file = NULL,
-    similarity = 70,
-    version = "latest"
-  ),
   ...) {
   resource <- match.arg(resource, chembl_resources())
   output <- match.arg(output, choices = c("raw", "tidy"))
@@ -391,8 +363,8 @@ chembl_query <- function(
       query = query,
       resource = resource,
       verbose = verbose,
-      cache_file = options$cache_file,
-      similarity = options$similarity,
+      cache_file = cache_file,
+      similarity = similarity,
       output = output,
       ...
     )
@@ -401,8 +373,8 @@ chembl_query <- function(
       query = query,
       resource = resource,
       verbose = verbose,
-      similarity = options$similarity,
-      version = options$version,
+      similarity = similarity,
+      version = version,
       output = output
     )
   }
