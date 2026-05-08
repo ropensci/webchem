@@ -63,18 +63,32 @@ test_that("fully implemented resources work", {
 })
 
 test_that("partially implemented resources work", {
-  partial = "document"
+  partial = c(
+    "document",
+    "drug"
+  )
 
   for (i in partial) {
     ids <- chembl_example_query(i)
     ws <- chembl_query(ids, resource = i, mode = "ws")
     off <- chembl_query(ids, resource = i, mode = "offline")
     for (j in seq_along(ids)) {
+      # Remove fields not available in offline mode
       if (i == "document") {
-        # Remove fields not available in offline mode
         index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
-        ws[[j]] <- ws[[j]][-index]
+      } else if (i == "drug") {
+        index <- which(names(ws[[j]]) %in% c(
+          "applicants",
+          "black_box",
+          "drug_type",
+          "ob_patent",
+          "research_codes",
+          "rule_of_five",
+          "sc_patent",
+          "synonyms"
+        ))
       }
+      ws[[j]] <- ws[[j]][-index]
       expect_true(all.equal(ws[[j]], off[[j]]))
     }
   }
