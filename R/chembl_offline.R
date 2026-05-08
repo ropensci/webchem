@@ -1478,13 +1478,6 @@ chembl_offline_document_similarity <- function(
   return(out)
 }
 
-#' drug resource
-#'
-#' @examples
-#' \dontrun{
-#' chembl_query_offline(query = "CHEMBL2", resource = "drug")
-#' }
-#' @noRd
 chembl_offline_drug <- function(
   query,
   verbose = getOption("verbose"),
@@ -1492,23 +1485,254 @@ chembl_offline_drug <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'drug' queries are not yet implemented.")
   chembl_validate_id_offline(
     query = query,
     target = "COMPOUND",
     verbose = verbose,
     con = con
   )
-  # fetch relevant tables from database
 
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch molecule dictionary data
+  molecule_dictionary <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "chembl_id",              # query column, output column (rename to molecule_chembl_id)
+      "molregno",               # link column (drug_mechanism, drug_indication, drug_warning, molecule_hierarchy)
+      "availability_type",      # output column
+      "black_box_warning",      # output column
+      "chirality",              # output column
+      "first_approval",         # output column
+      "first_in_class",         # output column
+      "max_phase",              # output column
+      "oral",                   # output column
+      "parenteral",             # output column
+      "prodrug",                # output column
+      "topical",                # output column
+      "usan_stem",              # output column
+      "usan_stem_definition",   # output column
+      "usan_substem",           # output column
+      "usan_year",              # output column
+      "withdrawn_flag"          # output column
+    )
+  )
+
+  # Fetch level5 atc classification ID for molecules
+  molecule_atc_classification <- fetch_table(
+    con = con,
+    table = "molecule_atc_classification",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c(
+      "molregno",               # query column
+      "level5"                  # link column (atc_classification)
+    )
+  )
+
+  # Fetch atc classifications
+  atc_classification <- fetch_table(
+    con = con,
+    table = "atc_classification",
+    id_col = "level5",
+    ids = molecule_atc_classification$level5,
+    select_cols = c(
+      "level5",                  # query column (atc_code)
+      "level1_description",      # output column (needs post-processing)
+      "level2_description",      # output column (needs post-processing)
+      "level3_description",      # output column (needs post-processing)
+      "level4_description"       # output column (needs post-processing)
+    )
+  )  |> dplyr::mutate(
+    description = paste(
+      level1_description,
+      level2_description,
+      level3_description,
+      level4_description,
+      sep = ": "
+    )
+  ) |>
+    dplyr::right_join(molecule_atc_classification, by = "level5") |>
+    dplyr::select(molregno, level5, description) |>
+    dplyr::rename(code = level5)
+  
+  # Fetch molecule properties
+  molecule_properties <- fetch_table(
+    con = con,
+    table = "compound_properties",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c(
+      "alogp",
+      "aromatic_rings",
+      "full_molformula",
+      "full_mwt",
+      "hba",
+      "hbd",
+      "heavy_atoms",
+      "molregno",
+      "mw_freebase",
+      "np_likeness_score",
+      "num_ro5_violations",
+      "psa",
+      "qed_weighted",
+      "ro3_pass",
+      "rtb"
+    )
+  )
+
+  # Fetch molecule structures
+  molecule_structures <- fetch_table(
+    con = con,
+    table = "compound_structures",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c(
+      "canonical_smiles",  # output column
+      "molfile",           # output column
+      "molregno",          # query column
+      "standard_inchi",    # output column
+      "standard_inchi_key" # output column
+    )
+  )
+
+  # Fetch molecule synonyms
+  molecule_synonyms <- fetch_table(
+    con = con,
+    table = "molecule_synonyms",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c("molregno", "synonyms","syn_type")
+  ) |> 
+    dplyr::rename("molecule_synonym" = "synonyms") |>
+    dplyr::arrange(.data$molecule_synonym) |>
+    dplyr::mutate("synonyms" = toupper(.data$molecule_synonym))
+
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get molecule data for this query
+    mol <- molecule_dictionary |> dplyr::filter(.data$chembl_id == q)
+    mol_rows <- nrow(mol)
+    atc <- atc_classification |> dplyr::filter(.data$molregno == mol$molregno)
+    molprop <- molecule_properties |> dplyr::filter(.data$molregno == mol$molregno)
+    molprop_rows <- nrow(molprop)
+    molstruct <- molecule_structures |> dplyr::filter(.data$molregno == mol$molregno)
+    molstruct_rows <- nrow(molstruct)
+    molsyn <- molecule_synonyms |> dplyr::filter(.data$molregno == mol$molregno)
+
+    out <- list(
+      # applicants = NA, # NOT FOUND IN OFFLINE SCHEMA
+      atc_classification = if (nrow(atc) == 0) {
+        list(list(
+          code = NA_character_,
+          description = NA_character_
+        ))
+      } else {
+        lapply(seq_len(nrow(atc)), function(i) {
+          list(
+            code = atc$code[i],
+            description = atc$description[i]
+          )
+        })
+      },
+      availability_type = ifelse(mol_rows != 0, as.numeric(mol$availability_type), NA_real_),
+      biotherapeutic = chembl_offline_biotherapeutic(
+        query = q,
+        verbose = verbose,
+        version = version,
+        output = "raw",
+        nested = TRUE,
+        con = con
+      )[[1]] |> unclass(),
+      # lack_box = NA, # NOT FOUND IN OFFLINE SCHEMA
+      black_box_warning = ifelse(mol_rows != 0, as.character(mol$black_box_warning), NA_character_),
+      chirality = ifelse(mol_rows != 0, as.numeric(mol$chirality), NA_real_),
+      # drug_type = NA, # NOT FOUND IN OFFLINE SCHEMA
+      first_approval = ifelse(mol_rows != 0, as.numeric(mol$first_approval), NA_real_),
+      first_in_class = ifelse(mol_rows != 0, as.numeric(mol$first_in_class), NA_real_),
+      helm_notation = NA, # placeholder, will be filled in after biotherapeutic call
+      max_phase = ifelse(mol_rows != 0, as.numeric(mol$max_phase), NA_real_),
+      molecule_chembl_id = q,
+      molecule_properties = list(
+        alogp = ifelse(molprop_rows != 0, molprop$alogp, NA_real_),
+        aromatic_rings = ifelse(molprop_rows != 0, as.numeric(molprop$aromatic_rings), NA_real_),
+        full_molformula = ifelse(molprop_rows != 0, molprop$full_molformula, NA_character_),
+        full_mwt = ifelse(molprop_rows != 0, molprop$full_mwt, NA_real_),
+        hba = ifelse(molprop_rows != 0, as.numeric(molprop$hba), NA_real_),
+        hbd = ifelse(molprop_rows != 0, as.numeric(molprop$hbd), NA_real_),
+        heavy_atoms = ifelse(molprop_rows != 0, as.numeric(molprop$heavy_atoms), NA_real_),
+        mw_freebase = ifelse(molprop_rows != 0, molprop$mw_freebase, NA_real_),
+        np_likeness_score = ifelse(molprop_rows != 0, molprop$np_likeness_score, NA_real_),
+        num_ro5_violations = ifelse(molprop_rows != 0, as.numeric(molprop$num_ro5_violations), NA_real_),
+        psa = ifelse(molprop_rows != 0, molprop$psa, NA_real_),
+        qed_weighted = ifelse(molprop_rows != 0, molprop$qed_weighted, NA_real_),
+        ro3_pass = ifelse(molprop_rows != 0, molprop$ro3_pass, NA_character_),
+        rtb = ifelse(molprop_rows != 0, as.numeric(molprop$rtb), NA_real_)
+      ),
+      molecule_structures = list(
+        canonical_smiles = ifelse(molstruct_rows != 0, molstruct$canonical_smiles, NA_character_),
+        molfile = ifelse(molstruct_rows != 0, molstruct$molfile, NA_character_),
+        standard_inchi = ifelse(molstruct_rows != 0, molstruct$standard_inchi, NA_character_),
+        standard_inchi_key = ifelse(molstruct_rows != 0, molstruct$standard_inchi_key, NA_character_)
+      ),
+      molecule_synonyms = if (nrow(molsyn) == 0) {
+        list(list(
+          molecule_synonym = NA_character_,
+          syn_type = NA_character_,
+          synonyms = NA_character_
+        ))
+      } else {
+        lapply(seq_len(nrow(molsyn)), function(i) {
+          list(
+            molecule_synonym = molsyn$molecule_synonym[i],
+            syn_type = molsyn$syn_type[i],
+            synonyms = molsyn$synonyms[i]
+          )
+        })
+      },
+      # ob_patent = NA, # NOT FOUND IN OFFLINE SCHEMA
+      oral = ifelse(mol_rows != 0, as.numeric(mol$oral), NA_real_),
+      parenteral = ifelse(mol_rows != 0, as.numeric(mol$parenteral), NA_real_),
+      prodrug = ifelse(mol_rows != 0, as.numeric(mol$prodrug), NA_real_),
+      # research_codes = NA, # NOT FOUND IN OFFLINE SCHEMA
+      # rule_of_five = NA, # NOT FOUND IN OFFLINE SCHEMA
+      # sc_patent = NA, # NOT FOUND IN OFFLINE SCHEMA
+      # synonyms = NA, # NOT FOUND IN OFFLINE SCHEMA
+      topical = ifelse(mol_rows != 0, as.numeric(mol$topical), NA_real_),
+      usan_stem = ifelse(mol_rows != 0, mol$usan_stem, NA_character_),
+      usan_stem_definition = ifelse(mol_rows != 0, mol$usan_stem_definition, NA_character_),
+      usan_stem_substem = ifelse(mol_rows != 0, paste0(mol$usan_stem, "(", mol$usan_substem, ")"), NA_character_),
+      usan_year = ifelse(mol_rows != 0, as.numeric(mol$usan_year), NA_real_),
+      withdrawn_flag = ifelse(mol_rows != 0, as.character(mol$withdrawn_flag), NA_character_)
+    )
+    out$helm_notation <- out$biotherapeutic$helm_notation
+    return(out)
+  })
+
   names(out) <- query
+  class(out) <- c("chembl_drug_raw", class(out))
+
+  not_found <- c(
+    "applicants",
+    "black_box",
+    "drug_type",
+    "ob_patent",
+    "research_codes",
+    "rule_of_five",
+    "sc_patent",
+    "synonyms"
+  )
+
+  warning(
+    "The following fields were not found in the offline ChEMBL database: ",
+    paste(not_found, collapse = ", ")
+  )
+
   if (output == "tidy") {
     stop("Tidy output for 'drug' is not yet implemented.")
   }
+
   return(out)
 }
 
