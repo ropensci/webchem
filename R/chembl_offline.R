@@ -998,7 +998,7 @@ chembl_offline_binding_site <- function(
 }
 
 #' biotherapeutic resource
-#'
+#' 
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL448105", resource = "biotherapeutic")
@@ -1009,6 +1009,7 @@ chembl_offline_biotherapeutic <- function(
     verbose = getOption("verbose"),
     version = "latest",
     output = "raw",
+    nested = FALSE,
     con
   ){
   chembl_validate_id_offline(
@@ -1024,42 +1025,42 @@ chembl_offline_biotherapeutic <- function(
     id_col = "chembl_id",
     ids = query,
     select_cols = c(
-      "chembl_id",  # output column
-      "molregno"    # link column (to biotherapeutics, biotherapeutic_components)
+      "chembl_id",  # query column, output column
+      "molregno"    # link column (biotherapeutics, biotherapeutic_component_ids)
     )
   )
 
-  # Fetch biotherapeutic data
+  # Fetch biotherapeutics data
   biotherapeutics <- fetch_table(
     con = con,
     table = "biotherapeutics",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "molregno",        # link column (molecule_dictionary)
+      "molregno",        # query column
       "description",     # output column
       "helm_notation"    # output column
     )
   )
 
-  # Fetch biotherapeutic components
-  biotherapeutic_components <- fetch_table(
+  # Fetch component ids
+  biotherapeutic_component_ids <- fetch_table(
     con = con,
     table = "biotherapeutic_components",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "molregno",        # link column (biotherapeutics)
-      "component_id"     # link column (bio_component_sequences)
+      "molregno",        # query column
+      "component_id"     # link column (biotherapeutic_component_data)
     )
   )
 
-  # Fetch biocomponent sequences
-  bio_component_sequences <- fetch_table(
+  # Fetch component data
+  biotherapeutic_component_data <- fetch_table(
     con = con,
     table = "bio_component_sequences",
     id_col = "component_id",
-    ids = biotherapeutic_components$component_id,
+    ids = biotherapeutic_component_ids$component_id,
     select_cols = c(
       "component_id",       # output column
       "component_type",     # output column
@@ -1068,63 +1069,51 @@ chembl_offline_biotherapeutic <- function(
       "sequence",           # output column
       "tax_id"              # output column
     )
-  )
+  ) |>
+    dplyr::right_join(
+      biotherapeutic_component_ids,
+      by = "component_id"
+    )
+
   # Build output for each query
   out <- lapply(query, function(q) {
     # Get molregno for this query
     q_molregno <- ids$molregno[ids$chembl_id == q]
-
-    # Check if biotherapeutic data exists
-    bio_data <- biotherapeutics |> dplyr::filter(.data$molregno == q_molregno)
-    if (nrow(bio_data) == 0) return(NA)
-
-    # Get biotherapeutic components for this molecule
-    components <- biotherapeutic_components |>
+    # Filter biotherapeutics for this molecule
+    bio <- biotherapeutics |>
       dplyr::filter(.data$molregno == q_molregno)
-
-    # to_many field fallback record (schema-shaped, no schema lookup)
-    na_biocomponent_record <- list(
-      component_id = NA_real_,
-      component_type = NA_character_,
-      description = NA_character_,
-      organism = NA_character_,
-      sequence = NA_character_,
-      tax_id = NA_real_
-    )
-
-    biocomponents_list <- if (nrow(components) > 0) {
-      lapply(seq_len(nrow(components)), function(i) {
-        # Filter bio_component_sequences for this component
-        comp <- bio_component_sequences |>
-          dplyr::filter(.data$component_id == components$component_id[i])
-
-        if (nrow(comp) == 0) {
-          return(na_biocomponent_record)
-        }
-
-        list(
-          component_id = comp$component_id,
+    # If the function was top level call so not nested inside another resource
+    # and the query could not be found, return NA to conform with webservice.
+    if (nested == FALSE) if (nrow(bio) == 0) return(NA)
+    # Filter biotherapeutic components for this molecule
+    comp <- biotherapeutic_component_data |>
+      dplyr::filter(.data$molregno == q_molregno)
+    out <- list(
+      biocomponents = if (nrow(comp) == 0) {
+        list(list(
+          component_id = NA_real_,
+          component_type = NA_character_,
+          description = NA_character_,
+          organism = NA_character_,
+          sequence = NA_character_,
+          tax_id = NA_real_
+        ))
+      } else {
+        lapply(seq_len(nrow(comp)), function(i) {
+          list(
+          component_id = as.numeric(comp$component_id),
           component_type = comp$component_type,
           description = comp$description,
           organism = comp$organism,
           sequence = comp$sequence,
-          tax_id = comp$tax_id
+          tax_id = as.numeric(comp$tax_id)
         )
-      })
-    } else {
-      list(na_biocomponent_record)
-    }
-
-    # Build final output structure
-    result <- list(
-      biocomponents = biocomponents_list,
-      description = bio_data$description,
-      helm_notation = bio_data$helm_notation,
-      molecule_chembl_id = q
+        })
+      },
+      description = if (nrow(bio) > 0) bio$description else NA_character_,
+      helm_notation = if (nrow(bio) > 0) bio$helm_notation else NA_character_,
+      molecule_chembl_id = if(nrow(bio) > 0) q else NA_character_
     )
-
-    # Sort by names to match web service
-    result[sort(names(result))]
   })
 
   names(out) <- query
