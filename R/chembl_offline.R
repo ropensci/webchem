@@ -998,7 +998,7 @@ chembl_offline_binding_site <- function(
 }
 
 #' biotherapeutic resource
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL448105", resource = "biotherapeutic")
@@ -1478,6 +1478,14 @@ chembl_offline_document_similarity <- function(
   return(out)
 }
 
+#' drug resource
+#' 
+#' @importFrom rlang .data
+#' @examples
+#' \dontrun{
+#' chembl_query_offline(query = "CHEMBL2", resource = "drug")
+#' }
+#' @noRd
 chembl_offline_drug <- function(
   query,
   verbose = getOption("verbose"),
@@ -1546,17 +1554,17 @@ chembl_offline_drug <- function(
     )
   )  |> dplyr::mutate(
     description = paste(
-      level1_description,
-      level2_description,
-      level3_description,
-      level4_description,
+      .data$level1_description,
+      .data$level2_description,
+      .data$level3_description,
+      .data$level4_description,
       sep = ": "
     )
   ) |>
     dplyr::right_join(molecule_atc_classification, by = "level5") |>
-    dplyr::select(molregno, level5, description) |>
-    dplyr::rename(code = level5)
-  
+    dplyr::select(.data$molregno, .data$level5, .data$description) |>
+    dplyr::rename(code = .data$level5)
+
   # Fetch molecule properties
   molecule_properties <- fetch_table(
     con = con,
@@ -1604,7 +1612,7 @@ chembl_offline_drug <- function(
     id_col = "molregno",
     ids = unique(molecule_dictionary$molregno),
     select_cols = c("molregno", "synonyms","syn_type")
-  ) |> 
+  ) |>
     dplyr::rename("molecule_synonym" = "synonyms") |>
     dplyr::arrange(.data$molecule_synonym) |>
     dplyr::mutate("synonyms" = toupper(.data$molecule_synonym))
