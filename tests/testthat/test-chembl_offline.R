@@ -65,7 +65,8 @@ test_that("fully implemented resources work", {
 test_that("partially implemented resources work", {
   partial = c(
     "document",
-    "drug"
+    "drug",
+    "molecule"
   )
 
   for (i in partial) {
@@ -87,6 +88,20 @@ test_that("partially implemented resources work", {
           "sc_patent",
           "synonyms"
         ))
+      } else if (i == "molecule") {
+        # cross_references could not be found in offline schema
+        # molecule_synonyms sorting is ambiguous on webservice
+        # molecule_structures$molfile has minimal diff
+        index <- which(names(ws[[j]])%in% c(
+          "cross_references",
+          "molecule_structures",
+          "molecule_synonyms"
+        ))
+        index_off <- which(names(off[[j]]) %in% c(
+          "molecule_structures",
+          "molecule_synonyms"
+        ))
+        off[[j]] <- off[[j]][-index_off]
       }
       ws[[j]] <- ws[[j]][-index]
       expect_true(all.equal(ws[[j]], off[[j]]))
