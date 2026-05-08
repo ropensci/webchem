@@ -2105,7 +2105,6 @@ chembl_offline_metabolism <- function(
 
 #' molecule resource
 #'
-#' @importFrom rlang .data
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL1082", resource = "molecule")
@@ -2124,6 +2123,8 @@ chembl_offline_molecule <- function(
     verbose = verbose,
     con = con
   )
+
+  # Fetch molregno for queries
   ids <- fetch_table(
     con = con,
     table = "molecule_dictionary",
@@ -2131,193 +2132,296 @@ chembl_offline_molecule <- function(
     ids = query,
     select_cols = c("chembl_id", "molregno")
   )
+
+  # Fetch molecule dictionary data
   molecule_dictionary <- fetch_table(
     con = con,
     table = "molecule_dictionary",
     id_col = "chembl_id",
     ids = query,
     select_cols = c(
-      "availability_type",
-      "black_box_warning",
-      "chebi_par_id",
-      "chembl_id",
-      "chemical_probe",
-      "chirality",
-      "dosed_ingredient",
-      "first_approval",
-      "first_in_class",
-      "indication_class",
-      "inorganic_flag",
-      "max_phase",
-      "molecule_type",
-      "natural_product",
-      "oral",
-      "orphan",
-      "parenteral",
-      "polymer_flag",
-      "pref_name",
-      "prodrug",
-      "structure_type",
-      "therapeutic_flag",
-      "topical",
-      "usan_stem",
-      "usan_stem_definition",
-      "usan_substem",
-      "usan_year",
-      "withdrawn_flag"
+      "availability_type",    # output column
+      "black_box_warning",    # output column
+      "chemical_probe",       # output column
+      "chembl_id",            # query column, output column (rename to molecule_chembl_id)
+      "chirality",            # output column
+      "dosed_ingredient",     # output column
+      "first_approval",       # output column
+      "first_in_class",       # output column
+      "inorganic_flag",       # output column
+      "max_phase",            # output column
+      "molecule_type",        # output column
+      "natural_product",      # output column
+      "oral",                 # output column
+      "orphan",               # output column
+      "parenteral",           # output column
+      "polymer_flag",         # output column
+      "pref_name",            # output column
+      "prodrug",              # output column
+      "structure_type",       # output column
+      "therapeutic_flag",     # output column
+      "topical",              # output column
+      "usan_stem",            # output column
+      "usan_stem_definition", # output column
+      "usan_substem",         # output column
+      "usan_year",            # output column
+      "veterinary",           # output column
+      "withdrawn_flag"        # output column
     )
   )
-  atc_classifications <- fetch_table(
+
+  # Fetch ATC classification level5 codes
+  molecule_atc_classification <- fetch_table(
     con = con,
     table = "molecule_atc_classification",
     id_col = "molregno",
     ids = ids$molregno,
-    select_cols = c("molregno", "level5")
+    select_cols = c(
+      "molregno",  # link column
+      "level5"     # output column (atc_classifications)
+    )
   )
-  extract_variable <- function(df, var) {
-    if (nrow(df) == 0) {
-      return(NULL)
-    } else {
-      return(df[[var]])
-    }
-  }
-  biotherapeutics <- fetch_table(
-    con = con,
-    table = "biotherapeutics",
-    id_col = "molregno",
-    ids = ids$molregno,
-    select_cols = NULL
-  )
-  # description, helm notation!
+
+  # Fetch molecule hierarchy
   molecule_hierarchy_raw <- fetch_table(
     con = con,
     table = "molecule_hierarchy",
     id_col = "molregno",
     ids = ids$molregno,
-    select_cols = NULL
+    select_cols = c(
+      "molregno",          # link column
+      "parent_molregno",   # link column (molecule_dictionary for parent_chembl_id)
+      "active_molregno"    # link column (molecule_dictionary for active_chembl_id)
+    )
   )
+
+  # Fetch molecule dictionary for parent and active ChEMBL IDs
+  hierarchy_molregnos <- unique(c(
+    molecule_hierarchy_raw$parent_molregno,
+    molecule_hierarchy_raw$active_molregno
+  ))
+  hierarchy_molecule_ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = hierarchy_molregnos,
+    select_cols = c(
+      "molregno",  # link column
+      "chembl_id"  # output column
+    )
+  )
+
+  # Fetch molecule properties
   molecule_properties <- fetch_table(
     con = con,
     table = "compound_properties",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "alogp",
-      "aromatic_rings",
-      "cx_logd",
-      "cx_logp",
-      "cx_most_apka",
-      "cx_most_bpka",
-      "full_molformula",
-      "full_mwt",
-      "hba",
-      "hba_lipinski",
-      "hbd",
-      "hbd_lipinski",
-      "heavy_atoms",
-      "molecular_species",
-      "molregno",
-      "mw_freebase",
-      "mw_monoisotopic",
-      "np_likeness_score",
-      "num_lipinski_ro5_violations",
-      "num_ro5_violations",
-      "psa",
-      "qed_weighted",
-      "ro3_pass",
-      "rtb"
+      "alogp",              # output column
+      "aromatic_rings",     # output column
+      "full_molformula",    # output column
+      "full_mwt",           # output column
+      "hba",                # output column
+      "hbd",                # output column
+      "heavy_atoms",        # output column
+      "molregno",           # link column
+      "mw_freebase",        # output column
+      "np_likeness_score",  # output column
+      "num_ro5_violations", # output column
+      "psa",                # output column
+      "qed_weighted",       # output column
+      "ro3_pass",           # output column
+      "rtb"                 # output column
     )
   )
+
+  # Fetch molecule structures
   molecule_structures <- fetch_table(
     con = con,
     table = "compound_structures",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "canonical_smiles",
-      "molfile",
-      "molregno",
-      "standard_inchi",
-      "standard_inchi_key"
+      "canonical_smiles",   # output column
+      "molfile",            # output column
+      "molregno",           # link column
+      "standard_inchi",     # output column
+      "standard_inchi_key"  # output column
     )
   )
+
+  # Fetch molecule synonyms
   molecule_synonyms <- fetch_table(
     con = con,
     table = "molecule_synonyms",
     id_col = "molregno",
     ids = ids$molregno,
-    select_cols = c("molregno", "synonyms","syn_type")
-  )
-  molecule_synonyms <- molecule_synonyms |>
+    select_cols = c(
+      "molregno",   # link column
+      "synonyms",   # output column (rename to molecule_synonym)
+      "syn_type"    # output column
+    )
+  ) |>
     dplyr::rename("molecule_synonym" = "synonyms") |>
     dplyr::arrange(.data$molecule_synonym)
 
-  out <- list()
-  for (i in seq_along(query)) {
-    if (!query[i] %in% ids$chembl_id) {
-      if (verbose) {
-        # Not found
-      }
-      out[i] <- NA_character_
-      next()
-    }
-    query_molregno <- ids$molregno[which(ids$chembl_id == query[i])]
-    # NULL TO NA CONVERSION!
-    molecule_dictionary2 <- molecule_dictionary |>
-      dplyr::filter(.data$chembl_id == query[i]) |>
-      dplyr::select(-"chembl_id")
-    atc_classifications2 <- atc_classifications |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::pull("level5")
-    biotherapeutics2 <- biotherapeutics |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get molecule data for this query
+    mol <- molecule_dictionary |> dplyr::filter(.data$chembl_id == q)
+    mol_rows <- nrow(mol)
+    q_molregno <- ids$molregno[ids$chembl_id == q]
 
+    atc <- molecule_atc_classification |>
+      dplyr::filter(.data$molregno == q_molregno) |>
+      dplyr::pull(.data$level5) |>
+      as.list()
 
-    molecule_hierarchy_raw2 <- molecule_hierarchy_raw |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
-    molecule_hierarchy <- tibble::tibble(
-      "active_chembl_id" = query[i],
-      "molecule_chembl_id" = query[i],
-      "parent_chembl_id" = dplyr::tbl(con, "molecule_dictionary") |>
-        dplyr::filter(.data$molregno == molecule_hierarchy_raw2$parent_molregno) |>
+    hier_raw <- molecule_hierarchy_raw |>
+      dplyr::filter(.data$molregno == q_molregno)
+
+    active_chembl_id <- if (nrow(hier_raw) > 0) {
+      hierarchy_molecule_ids |>
+        dplyr::filter(.data$molregno == hier_raw$active_molregno) |>
         dplyr::pull(.data$chembl_id)
+    } else {
+      NA_character_
+    }
+    parent_chembl_id <- if (nrow(hier_raw) > 0) {
+      hierarchy_molecule_ids |>
+        dplyr::filter(.data$molregno == hier_raw$parent_molregno) |>
+        dplyr::pull(.data$chembl_id)
+    } else {
+      NA_character_
+    }
+
+    molprop <- molecule_properties |> dplyr::filter(.data$molregno == q_molregno)
+    molprop_rows <- nrow(molprop)
+
+    molstruct <- molecule_structures |> dplyr::filter(.data$molregno == q_molregno)
+    molstruct_rows <- nrow(molstruct)
+
+    molsyn <- molecule_synonyms |> dplyr::filter(.data$molregno == q_molregno)
+
+    result <- list(
+      atc_classifications = if (length(atc) == 0) {
+        list(list(
+          level1 = NA_character_,
+          level1_description = NA_character_,
+          level2 = NA_character_,
+          level2_description = NA_character_,
+          level3 = NA_character_,
+          level3_description = NA_character_,
+          level4 = NA_character_,
+          level4_description = NA_character_,
+          level5 = NA_character_,
+          who_name = NA_character_
+        ))
+      } else atc,
+      availability_type = ifelse(mol_rows != 0, as.numeric(mol$availability_type), NA_real_),
+      biotherapeutic = chembl_offline_biotherapeutic(
+        query = q,
+        verbose = verbose,
+        version = version,
+        output = "raw",
+        nested = TRUE,
+        con = con
+      )[[1]] |> unclass(),
+      black_box_warning = ifelse(mol_rows != 0, as.numeric(mol$black_box_warning), NA_real_),
+      chemical_probe = ifelse(mol_rows != 0, as.numeric(mol$chemical_probe), NA_real_),
+      chirality = ifelse(mol_rows != 0, as.numeric(mol$chirality), NA_real_),
+      dosed_ingredient = ifelse(mol_rows != 0, as.logical(mol$dosed_ingredient), NA_real_),
+      first_approval = ifelse(mol_rows != 0, as.numeric(mol$first_approval), NA_real_),
+      first_in_class = ifelse(mol_rows != 0, as.numeric(mol$first_in_class), NA_real_),
+      helm_notation = NA, # placeholder, will be filled in after biotherapeutic call
+      inorganic_flag = ifelse(mol_rows != 0, as.numeric(mol$inorganic_flag), NA_real_),
+      max_phase = ifelse(mol_rows != 0, as.numeric(mol$max_phase), NA_real_),
+      molecule_chembl_id = q,
+      molecule_hierarchy = list(
+        active_chembl_id = if (length(active_chembl_id) == 0) NA_character_ else active_chembl_id,
+        molecule_chembl_id = q,
+        parent_chembl_id = if (length(parent_chembl_id) == 0) NA_character_ else parent_chembl_id
+      ),
+      molecule_properties = list(
+        alogp = ifelse(molprop_rows != 0, molprop$alogp, NA_real_),
+        aromatic_rings = ifelse(molprop_rows != 0, as.numeric(molprop$aromatic_rings), NA_real_),
+        full_molformula = ifelse(molprop_rows != 0, molprop$full_molformula, NA_character_),
+        full_mwt = ifelse(molprop_rows != 0, molprop$full_mwt, NA_real_),
+        hba = ifelse(molprop_rows != 0, as.numeric(molprop$hba), NA_real_),
+        hbd = ifelse(molprop_rows != 0, as.numeric(molprop$hbd), NA_real_),
+        heavy_atoms = ifelse(molprop_rows != 0, as.numeric(molprop$heavy_atoms), NA_real_),
+        mw_freebase = ifelse(molprop_rows != 0, molprop$mw_freebase, NA_real_),
+        np_likeness_score = ifelse(molprop_rows != 0, molprop$np_likeness_score, NA_real_),
+        num_ro5_violations = ifelse(molprop_rows != 0, as.numeric(molprop$num_ro5_violations), NA_real_),
+        psa = ifelse(molprop_rows != 0, molprop$psa, NA_real_),
+        qed_weighted = ifelse(molprop_rows != 0, molprop$qed_weighted, NA_real_),
+        ro3_pass = ifelse(molprop_rows != 0, molprop$ro3_pass, NA_character_),
+        rtb = ifelse(molprop_rows != 0, as.numeric(molprop$rtb), NA_real_)
+      ),
+      molecule_structures = list(
+        canonical_smiles = ifelse(molstruct_rows != 0, molstruct$canonical_smiles, NA_character_),
+        molfile = ifelse(molstruct_rows != 0, molstruct$molfile, NA_character_),
+        standard_inchi = ifelse(molstruct_rows != 0, molstruct$standard_inchi, NA_character_),
+        standard_inchi_key = ifelse(molstruct_rows != 0, molstruct$standard_inchi_key, NA_character_)
+      ),
+      molecule_synonyms = if (nrow(molsyn) == 0) {
+        list(list(
+          molecule_synonym = NA_character_,
+          syn_type = NA_character_,
+          synonyms = NA_character_
+        ))
+      } else {
+        lapply(seq_len(nrow(molsyn)), function(i) {
+          list(
+            molecule_synonym = molsyn$molecule_synonym[i],
+            syn_type = molsyn$syn_type[i],
+            synonyms = toupper(molsyn$molecule_synonym[i])
+          )
+        })
+      },
+      molecule_type = ifelse(mol_rows != 0, mol$molecule_type, NA_character_),
+      natural_product = ifelse(mol_rows != 0, as.numeric(mol$natural_product), NA_real_),
+      oral = ifelse(mol_rows != 0, as.logical(mol$oral), NA_real_),
+      orphan = ifelse(mol_rows != 0, as.numeric(mol$orphan), NA_real_),
+      parenteral = ifelse(mol_rows != 0, as.logical(mol$parenteral), NA_real_),
+      polymer_flag = ifelse(mol_rows != 0, as.numeric(mol$polymer_flag), NA_real_),
+      pref_name = ifelse(mol_rows != 0, mol$pref_name, NA_character_),
+      prodrug = ifelse(mol_rows != 0, as.numeric(mol$prodrug), NA_real_),
+      structure_type = ifelse(mol_rows != 0, mol$structure_type, NA_character_),
+      therapeutic_flag = ifelse(mol_rows != 0, as.logical(mol$therapeutic_flag), NA_real_),
+      topical = ifelse(mol_rows != 0, as.logical(mol$topical), NA_real_),
+      usan_stem = ifelse(mol_rows != 0, mol$usan_stem, NA_character_),
+      usan_stem_definition = ifelse(mol_rows != 0, mol$usan_stem_definition, NA_character_),
+      usan_substem = ifelse(mol_rows != 0, mol$usan_substem, NA_character_),
+      usan_year = ifelse(mol_rows != 0, as.numeric(mol$usan_year), NA_real_),
+      veterinary = ifelse(mol_rows != 0, as.numeric(mol$veterinary), NA_real_),
+      withdrawn_flag = ifelse(mol_rows != 0, as.logical(mol$withdrawn_flag), NA_real_)
     )
+    result$helm_notation <- result$biotherapeutic$helm_notation
 
-    molecule_properties2 <- molecule_properties |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+    result[sort(names(result))]
+  })
 
-    molecule_structures2 <- molecule_structures |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+  names(out) <- query
+  class(out) <- c("chembl_molecule_raw", class(out))
 
-    molecule_synonyms2 <- molecule_synonyms |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+  not_found <- c(
+    "cross_references"
+  )
 
-    out[[i]] <- c(
-      molecule_dictionary2,
-      list(
-        "atc_classifications" = atc_classifications2,
-        #"biotherapeutic" = biotherapeutic,
-        #"helm_notation" = helm_notation,
-        "molecule_chembl_id" = query[i],
-        "molecule_hierarchy" = molecule_hierarchy,
-        "molecule_properties" = molecule_properties2,
-        "molecule_structures" = molecule_structures2,
-        "molecule_synonyms" = molecule_synonyms2
-      )
-    )
-    names(out)[i] <- query[i]
-    out[[i]] <- out[[i]][sort(names(out[[i]]))]
+  warning(
+    "The following fields were not found in the offline ChEMBL database: ",
+    paste(not_found, collapse = ", ")
+  )
+
+  if (output == "tidy") {
+    stop("Tidy output for 'molecule' is not yet implemented.")
   }
 
-  # TODO: add class and tidy output method
-  # TODO: fix error with example query
   return(out)
 }
+
 
 #'molecule_form resource
 #'
