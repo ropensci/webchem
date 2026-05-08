@@ -4,7 +4,7 @@
 
 ### OFFLINE ACCESS
 
-* `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `assay`, `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, `document`, `drug_indication`, `drug_warning`, `go_slim`.
+* `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `activity`, `assay`, `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, `document`, `drug`,`drug_indication`, `drug_warning`, `go_slim`, `molecule`.
 * Results for online and offline queries are identical for most resources. If there are differences, the offline version throws informative warnings.
 * Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
 
