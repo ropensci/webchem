@@ -453,6 +453,11 @@ chembl_query_ws <- function(
     } else {
       cont <- force_schema(cont, resource)
     }
+
+    # harmonise ordering between webservice and offline results
+    if (resource == "molecule") {
+      cont$molecule_synonyms <- cont$molecule_synonyms[order(sapply(cont$molecule_synonyms, function(x) x$molecule_synonym))]
+    }
     
     if (output == "tidy") {
       cont <- format_chembl(cont)
