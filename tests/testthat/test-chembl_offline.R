@@ -3,7 +3,7 @@ skip_on_cran()
 skip_on_ci()
 
 # Download ChEMBL database if not already downloaded
-db_download_chembl(version = "35", verbose = FALSE)
+db_download_chembl(version = "36", verbose = TRUE)
 
 test_that("chembl_offline_chembl_id_lookup works", {
   a <- chembl_query_offline(
@@ -36,6 +36,7 @@ test_that("informative error when query and resource do not match", {
 
 test_that("fully implemented resources work", {
   full <- c(
+    "activity",
     "atc_class",
     "binding_site",
     "biotherapeutic",
@@ -62,18 +63,47 @@ test_that("fully implemented resources work", {
 })
 
 test_that("partially implemented resources work", {
-  partial = "document"
+  partial = c(
+    "document",
+    "drug",
+    "molecule"
+  )
 
   for (i in partial) {
     ids <- chembl_example_query(i)
-    ws <- chembl_query(ids, resource = i, mode = "ws")
-    off <- chembl_query(ids, resource = i, mode = "offline")
+    ws <- chembl_query(ids, resource = i, mode = "ws") |> suppressWarnings()
+    off <- chembl_query(ids, resource = i, mode = "offline") |> suppressWarnings()
     for (j in seq_along(ids)) {
+      # Remove fields not available in offline mode
       if (i == "document") {
-        # Remove fields not available in offline mode
         index <- which(names(ws[[j]]) %in% c("doi_chembl", "journal_full_title"))
-        ws[[j]] <- ws[[j]][-index]
+      } else if (i == "drug") {
+        index <- which(names(ws[[j]]) %in% c(
+          "applicants",
+          "black_box",
+          "drug_type",
+          "ob_patent",
+          "research_codes",
+          "rule_of_five",
+          "sc_patent",
+          "synonyms"
+        ))
+      } else if (i == "molecule") {
+        # cross_references could not be found in offline schema
+        # molecule_synonyms sorting is ambiguous on webservice
+        # molecule_structures$molfile has minimal diff
+        index <- which(names(ws[[j]])%in% c(
+          "cross_references",
+          "molecule_structures",
+          "molecule_synonyms"
+        ))
+        index_off <- which(names(off[[j]]) %in% c(
+          "molecule_structures",
+          "molecule_synonyms"
+        ))
+        off[[j]] <- off[[j]][-index_off]
       }
+      ws[[j]] <- ws[[j]][-index]
       expect_true(all.equal(ws[[j]], off[[j]]))
     }
   }

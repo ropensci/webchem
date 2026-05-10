@@ -64,14 +64,397 @@ chembl_offline_activity <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'activity' queries are not yet implemented.")
-  # fetch relevant tables from database
+  # Fetch main activities table
+  activities <- fetch_table(
+    con = con,
+    table = "activities",
+    id_col = "activity_id",
+    ids = as.integer(query),
+    select_cols = c(
+      "activity_id",           # query column
+      "assay_id",              # link column (assays)
+      "doc_id",                # link column (docs)
+      "record_id",             # output column
+      "molregno",              # link column (molecule_dictionary)
+      "standard_relation",     # output column
+      "standard_value",        # output column
+      "standard_units",        # output column
+      "standard_flag",         # output column
+      "standard_type",         # output column
+      "activity_comment",      # output column
+      "data_validity_comment", # link column (data_validity_lookup)
+      "potential_duplicate",   # output column
+      "pchembl_value",         # output column
+      "bao_endpoint",          # output column
+      "uo_units",              # output column
+      "qudt_units",            # output column
+      "toid",                  # output column
+      "upper_value",           # output column
+      "standard_upper_value",  # output column
+      "src_id",                # output column
+      "type",                  # output column
+      "relation",              # output column
+      "value",                 # output column
+      "units",                 # output column
+      "text_value",            # output column
+      "standard_text_value",   # output column
+      "action_type"            # link column (action_type)
+    )
+  )
 
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch assay data
+  assays <- fetch_table(
+    con = con,
+    table = "assays",
+    id_col = "assay_id",
+    ids = unique(activities$assay_id),
+    select_cols = c(
+      "assay_id",       # query column
+      "chembl_id",      # output column (assay_chembl_id)
+      "description",    # output column (assay_description)
+      "assay_type",     # output column
+      "bao_format",     # link column (bioassay_ontology)
+      "variant_id",     # link column (variant_sequences)
+      "tid"             # link column (target_dictionary)
+    )
+  )
+
+  # Fetch document data
+  docs <- fetch_table(
+    con = con,
+    table = "docs",
+    id_col = "doc_id",
+    ids = unique(activities$doc_id),
+    select_cols = c(
+      "doc_id",     # query column
+      "chembl_id",  # output column (document_chembl_id)
+      "journal",    # output column (document_journal)
+      "year"        # output column (document_year)
+    )
+  )
+
+  # Fetch molecule data
+  molecule_dictionary <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(activities$molregno),
+    select_cols = c(
+      "molregno",   # query column
+      "chembl_id",  # output column (molecule_chembl_id)
+      "pref_name"   # output column (molecule_pref_name)
+    )
+  )
+
+  # Fetch molecule hierarchy for parent molecules
+  molecule_hierarchy <- fetch_table(
+    con = con,
+    table = "molecule_hierarchy",
+    id_col = "molregno",
+    ids = unique(activities$molregno),
+    select_cols = c(
+      "molregno",        # query column
+      "parent_molregno"  # link column (molecule_dictionary)
+    )
+  )
+
+  # Fetch parent molecule dictionary
+  parent_molecule_dictionary <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = unique(molecule_hierarchy$parent_molregno),
+    select_cols = c(
+      "molregno",  # query column
+      "chembl_id"  # output column (parent_molecule_chembl_id)
+    )
+  )
+
+  # Fetch data validity lookup
+  data_validity_lookup <- fetch_table(
+    con = con,
+    table = "data_validity_lookup",
+    id_col = "data_validity_comment",
+    ids = unique(activities$data_validity_comment[!is.na(activities$data_validity_comment)]),
+    select_cols = c(
+      "data_validity_comment", # query column
+      "description"            # output column (data_validity_description)
+    )
+  )
+
+  # Fetch activity properties
+  activity_properties <- fetch_table(
+    con = con,
+    table = "activity_properties",
+    id_col = "activity_id",
+    ids = unique(activities$activity_id),
+    select_cols = c(
+      "activity_id",           # query column
+      "comments",              # output column
+      "relation",              # output column
+      "result_flag",           # output column
+      "standard_relation",     # output column
+      "standard_text_value",   # output column
+      "standard_type",         # output column
+      "standard_units",        # output column
+      "standard_value",        # output column
+      "text_value",            # output column
+      "type",                  # output column
+      "units",                 # output column
+      "value"                  # output column
+    )
+  )
+
+  # Fetch action type lookup
+  action_type_lookup <- fetch_table(
+    con = con,
+    table = "action_type",
+    id_col = "action_type",
+    ids = unique(activities$action_type[!is.na(activities$action_type)]),
+    select_cols = c(
+      "action_type",  # query column
+      "description",  # output column
+      "parent_type"   # output column
+    )
+  )
+
+  # Fetch ligand efficiency
+  ligand_efficiency <- fetch_table(
+    con = con,
+    table = "ligand_eff",
+    id_col = "activity_id",
+    ids = unique(activities$activity_id),
+    select_cols = c(
+      "activity_id",  # query column
+      "bei",          # output column
+      "le",           # output column
+      "lle",          # output column
+      "sei"           # output column
+    )
+  )
+
+  # Fetch variant sequences
+  variant_sequences <- fetch_table(
+    con = con,
+    table = "variant_sequences",
+    id_col = "variant_id",
+    ids = unique(assays$variant_id[!is.na(assays$variant_id)]),
+    select_cols = c(
+      "variant_id",  # query column
+      "mutation",    # output column (assay_variant_mutation)
+      "accession"    # output column (assay_variant_accession)
+    )
+  )
+
+  # Fetch target dictionary
+  target_dictionary <- fetch_table(
+    con = con,
+    table = "target_dictionary",
+    id_col = "tid",
+    ids = unique(assays$tid),
+    select_cols = c(
+      "tid",        # query column
+      "chembl_id",  # output column (target_chembl_id)
+      "organism",   # output column (target_organism)
+      "pref_name",  # output column (target_pref_name)
+      "tax_id"      # output column (target_tax_id)
+    )
+  )
+
+  # Fetch molecule structures
+  molecule_structures <- fetch_table(
+    con = con,
+    table = "compound_structures",
+    id_col = "molregno",
+    ids = unique(activities$molregno),
+    select_cols = c(
+      "molregno",         # query column
+      "canonical_smiles"  # output column
+    )
+  )
+
+  # Fetch bioassay ontology for BAO labels
+  bioassay_ontology <- fetch_table(
+    con = con,
+    table = "bioassay_ontology",
+    id_col = "bao_id",
+    ids = unique(assays$bao_format),
+    select_cols = c(
+      "bao_id",  # query column
+      "label"    # output column (bao_label)
+    )
+  )
+
+  # Build output for each query
+  out <- lapply(query, function(x) {
+    activity_id <- as.integer(x)
+    activity <- activities |>
+      dplyr::filter(.data$activity_id == !!activity_id) |>
+      dplyr::slice(1)
+    if (nrow(activity) == 0) {
+      warning(sprintf("Activity ID %s was not found in the offline database.", x))
+      return(NA)
+    }
+
+    # Get related data
+    assay <- assays |> dplyr::filter(.data$assay_id == !!activity$assay_id)
+    doc <- docs |> dplyr::filter(.data$doc_id == !!activity$doc_id)
+    molecule <- molecule_dictionary |>
+      dplyr::filter(.data$molregno == !!activity$molregno)
+
+    parent_molregno <- molecule_hierarchy |>
+      dplyr::filter(.data$molregno == !!activity$molregno) |>
+      dplyr::pull(.data$parent_molregno)
+
+    parent_molecule <- parent_molecule_dictionary |>
+      dplyr::filter(.data$molregno == !!parent_molregno)
+
+    data_validity <- data_validity_lookup |>
+      dplyr::filter(.data$data_validity_comment == !!activity$data_validity_comment)
+
+    # Get action type - return NA list if NULL in database
+    action_type <- if (is.na(activity$action_type)) {
+      list(action_type = NA_character_, description = NA_character_, parent_type = NA_character_)
+    } else {
+      action_type_row <- action_type_lookup |>
+        dplyr::filter(.data$action_type == !!activity$action_type)
+      if (nrow(action_type_row) == 0) {
+        list(action_type = NA_character_, description = NA_character_, parent_type = NA_character_)
+      } else {
+        list(
+          action_type = as.character(action_type_row$action_type),
+          description = as.character(action_type_row$description),
+          parent_type = as.character(action_type_row$parent_type)
+        )
+      }
+    }
+
+    # Get ligand efficiency
+    ligand_efficiency_row <- ligand_efficiency |>
+      dplyr::filter(.data$activity_id == !!activity$activity_id)
+    ligand_efficiency_out <- if (nrow(ligand_efficiency_row) == 0) {
+      list(bei = NA_real_, le = NA_real_, lle = NA_real_, sei = NA_real_)
+    } else {
+      list(
+        bei = as.numeric(ligand_efficiency_row$bei),
+        le = as.numeric(ligand_efficiency_row$le),
+        lle = as.numeric(ligand_efficiency_row$lle),
+        sei = as.numeric(ligand_efficiency_row$sei)
+      )
+    }
+
+    # Get activity properties
+    activity_props <- activity_properties |>
+      dplyr::filter(.data$activity_id == !!activity$activity_id)
+
+    activity_properties_list <- if (nrow(activity_props) == 0) {
+      list(list(
+        comments = NA_character_, relation = NA_character_, result_flag = NA_real_,
+        standard_relation = NA_character_, standard_text_value = NA_character_,
+        standard_type = NA_character_, standard_units = NA_character_,
+        standard_value = NA_real_, text_value = NA_character_, type = NA_character_,
+        units = NA_character_, value = NA_real_
+      ))
+    } else {
+      lapply(seq_len(nrow(activity_props)), function(i) {
+        list(
+          comments = activity_props$comments[i],
+          relation = activity_props$relation[i],
+          result_flag = as.numeric(activity_props$result_flag[i]),
+          standard_relation = activity_props$standard_relation[i],
+          standard_text_value = activity_props$standard_text_value[i],
+          standard_type = activity_props$standard_type[i],
+          standard_units = activity_props$standard_units[i],
+          standard_value = as.numeric(activity_props$standard_value[i]),
+          text_value = activity_props$text_value[i],
+          type = activity_props$type[i],
+          units = activity_props$units[i],
+          value = as.numeric(activity_props$value[i])
+        )
+      })
+    }
+
+    # Get variant data
+    variant_data <- if (nrow(assay) > 0 && !is.na(assay$variant_id)) {
+      variant_sequences |>
+        dplyr::filter(.data$variant_id == !!assay$variant_id)
+    } else {
+      NULL
+    }
+
+    # Get target info
+    target <- if (nrow(assay) > 0) {
+      target_dictionary |> dplyr::filter(.data$tid == !!assay$tid)
+    } else {
+      data.frame()
+    }
+
+    # Get molecule structure
+    mol_struct <- molecule_structures |>
+      dplyr::filter(.data$molregno == !!activity$molregno)
+
+    # Get BAO label
+    bao_label_df <- if (nrow(assay) > 0 && !is.na(assay$bao_format)) {
+      bioassay_ontology |> dplyr::filter(.data$bao_id == !!assay$bao_format)
+    } else {
+      data.frame()
+    }
+
+    # Construct result with numeric activity_id to match webservice
+    result <- list(
+      action_type = action_type,
+      activity_comment = as.character(activity$activity_comment),
+      activity_id = as.numeric(activity$activity_id),
+      activity_properties = activity_properties_list,
+      assay_chembl_id = if (nrow(assay) > 0) as.character(assay$chembl_id) else NA_character_,
+      assay_description = if (nrow(assay) > 0) as.character(assay$description) else NA_character_,
+      assay_type = if (nrow(assay) > 0) as.character(assay$assay_type) else NA_character_,
+      assay_variant_accession = if (!is.null(variant_data) && nrow(variant_data) > 0) as.character(variant_data$accession) else NA_character_,
+      assay_variant_mutation = if (!is.null(variant_data) && nrow(variant_data) > 0) as.character(variant_data$mutation) else NA_character_,
+      bao_endpoint = as.character(activity$bao_endpoint),
+      bao_format = if (nrow(assay) > 0) as.character(assay$bao_format) else NA_character_,
+      bao_label = if (nrow(bao_label_df) > 0) as.character(bao_label_df$label) else NA_character_,
+      canonical_smiles = if (nrow(mol_struct) > 0) as.character(mol_struct$canonical_smiles) else NA_character_,
+      data_validity_comment = as.character(activity$data_validity_comment),
+      data_validity_description = if (nrow(data_validity) > 0) as.character(data_validity$description) else NA_character_,
+      document_chembl_id = if (nrow(doc) > 0) as.character(doc$chembl_id) else NA_character_,
+      document_journal = if (nrow(doc) > 0) as.character(doc$journal) else NA_character_,
+      document_year = if (nrow(doc) > 0) as.numeric(doc$year) else NA_real_,
+      ligand_efficiency = ligand_efficiency_out,
+      molecule_chembl_id = if (nrow(molecule) > 0) as.character(molecule$chembl_id) else NA_character_,
+      molecule_pref_name = if (nrow(molecule) > 0) as.character(molecule$pref_name) else NA_character_,
+      parent_molecule_chembl_id = if (nrow(parent_molecule) > 0) as.character(parent_molecule$chembl_id) else NA_character_,
+      pchembl_value = as.numeric(activity$pchembl_value),
+      potential_duplicate = as.numeric(activity$potential_duplicate),
+      qudt_units = as.character(activity$qudt_units),
+      record_id = as.numeric(activity$record_id),
+      relation = as.character(activity$relation),
+      src_id = as.numeric(activity$src_id),
+      standard_flag = as.numeric(activity$standard_flag),
+      standard_relation = as.character(activity$standard_relation),
+      standard_text_value = as.character(activity$standard_text_value),
+      standard_type = as.character(activity$standard_type),
+      standard_units = as.character(activity$standard_units),
+      standard_upper_value = as.numeric(activity$standard_upper_value),
+      standard_value = as.numeric(activity$standard_value),
+      target_chembl_id = if (nrow(target) > 0) as.character(target$chembl_id) else NA_character_,
+      target_organism = if (nrow(target) > 0) as.character(target$organism) else NA_character_,
+      target_pref_name = if (nrow(target) > 0) as.character(target$pref_name) else NA_character_,
+      target_tax_id = if (nrow(target) > 0) as.character(target$tax_id) else NA_character_,
+      text_value = as.character(activity$text_value),
+      toid = as.numeric(activity$toid),
+      type = as.character(activity$type),
+      units = as.character(activity$units),
+      uo_units = as.character(activity$uo_units),
+      upper_value = as.numeric(activity$upper_value),
+      value = as.numeric(activity$value)
+    )
+
+    result[sort(names(result))]
+  })
+
   names(out) <- query
+  class(out) <- c("chembl_activity_raw", class(out))
   if (output == "tidy") {
     stop("Tidy output for 'activity' is not yet implemented.")
   }
@@ -626,6 +1009,7 @@ chembl_offline_biotherapeutic <- function(
     verbose = getOption("verbose"),
     version = "latest",
     output = "raw",
+    nested = FALSE,
     con
   ){
   chembl_validate_id_offline(
@@ -641,42 +1025,42 @@ chembl_offline_biotherapeutic <- function(
     id_col = "chembl_id",
     ids = query,
     select_cols = c(
-      "chembl_id",  # output column
-      "molregno"    # link column (to biotherapeutics, biotherapeutic_components)
+      "chembl_id",  # query column, output column
+      "molregno"    # link column (biotherapeutics, biotherapeutic_component_ids)
     )
   )
 
-  # Fetch biotherapeutic data
+  # Fetch biotherapeutics data
   biotherapeutics <- fetch_table(
     con = con,
     table = "biotherapeutics",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "molregno",        # link column (molecule_dictionary)
+      "molregno",        # query column
       "description",     # output column
       "helm_notation"    # output column
     )
   )
 
-  # Fetch biotherapeutic components
-  biotherapeutic_components <- fetch_table(
+  # Fetch component ids
+  biotherapeutic_component_ids <- fetch_table(
     con = con,
     table = "biotherapeutic_components",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "molregno",        # link column (biotherapeutics)
-      "component_id"     # link column (bio_component_sequences)
+      "molregno",        # query column
+      "component_id"     # link column (biotherapeutic_component_data)
     )
   )
 
-  # Fetch biocomponent sequences
-  bio_component_sequences <- fetch_table(
+  # Fetch component data
+  biotherapeutic_component_data <- fetch_table(
     con = con,
     table = "bio_component_sequences",
     id_col = "component_id",
-    ids = biotherapeutic_components$component_id,
+    ids = biotherapeutic_component_ids$component_id,
     select_cols = c(
       "component_id",       # output column
       "component_type",     # output column
@@ -685,63 +1069,51 @@ chembl_offline_biotherapeutic <- function(
       "sequence",           # output column
       "tax_id"              # output column
     )
-  )
+  ) |>
+    dplyr::right_join(
+      biotherapeutic_component_ids,
+      by = "component_id"
+    )
+
   # Build output for each query
   out <- lapply(query, function(q) {
     # Get molregno for this query
     q_molregno <- ids$molregno[ids$chembl_id == q]
-
-    # Check if biotherapeutic data exists
-    bio_data <- biotherapeutics |> dplyr::filter(.data$molregno == q_molregno)
-    if (nrow(bio_data) == 0) return(NA)
-
-    # Get biotherapeutic components for this molecule
-    components <- biotherapeutic_components |>
+    # Filter biotherapeutics for this molecule
+    bio <- biotherapeutics |>
       dplyr::filter(.data$molregno == q_molregno)
-
-    # to_many field fallback record (schema-shaped, no schema lookup)
-    na_biocomponent_record <- list(
-      component_id = NA_real_,
-      component_type = NA_character_,
-      description = NA_character_,
-      organism = NA_character_,
-      sequence = NA_character_,
-      tax_id = NA_real_
-    )
-
-    biocomponents_list <- if (nrow(components) > 0) {
-      lapply(seq_len(nrow(components)), function(i) {
-        # Filter bio_component_sequences for this component
-        comp <- bio_component_sequences |>
-          dplyr::filter(.data$component_id == components$component_id[i])
-
-        if (nrow(comp) == 0) {
-          return(na_biocomponent_record)
-        }
-
-        list(
-          component_id = comp$component_id,
+    # If the function was top level call so not nested inside another resource
+    # and the query could not be found, return NA to conform with webservice.
+    if (nested == FALSE) if (nrow(bio) == 0) return(NA)
+    # Filter biotherapeutic components for this molecule
+    comp <- biotherapeutic_component_data |>
+      dplyr::filter(.data$molregno == q_molregno)
+    out <- list(
+      biocomponents = if (nrow(comp) == 0) {
+        list(list(
+          component_id = NA_real_,
+          component_type = NA_character_,
+          description = NA_character_,
+          organism = NA_character_,
+          sequence = NA_character_,
+          tax_id = NA_real_
+        ))
+      } else {
+        lapply(seq_len(nrow(comp)), function(i) {
+          list(
+          component_id = as.numeric(comp$component_id),
           component_type = comp$component_type,
           description = comp$description,
           organism = comp$organism,
           sequence = comp$sequence,
-          tax_id = comp$tax_id
+          tax_id = as.numeric(comp$tax_id)
         )
-      })
-    } else {
-      list(na_biocomponent_record)
-    }
-
-    # Build final output structure
-    result <- list(
-      biocomponents = biocomponents_list,
-      description = bio_data$description,
-      helm_notation = bio_data$helm_notation,
-      molecule_chembl_id = q
+        })
+      },
+      description = if (nrow(bio) > 0) bio$description else NA_character_,
+      helm_notation = if (nrow(bio) > 0) bio$helm_notation else NA_character_,
+      molecule_chembl_id = if(nrow(bio) > 0) q else NA_character_
     )
-
-    # Sort by names to match web service
-    result[sort(names(result))]
   })
 
   names(out) <- query
@@ -1107,7 +1479,8 @@ chembl_offline_document_similarity <- function(
 }
 
 #' drug resource
-#'
+#' 
+#' @importFrom rlang .data
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL2", resource = "drug")
@@ -1120,23 +1493,254 @@ chembl_offline_drug <- function(
   output = "raw",
   con
   ){
-  stop("Offline 'drug' queries are not yet implemented.")
   chembl_validate_id_offline(
     query = query,
     target = "COMPOUND",
     verbose = verbose,
     con = con
   )
-  # fetch relevant tables from database
 
-  # loop through the queries and assemble raw output
-  out <- unname(lapply(query, function(x) {
-    # implementation here
-  }))
+  # Fetch molecule dictionary data
+  molecule_dictionary <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "chembl_id",
+    ids = query,
+    select_cols = c(
+      "chembl_id",              # query column, output column (rename to molecule_chembl_id)
+      "molregno",               # link column (drug_mechanism, drug_indication, drug_warning, molecule_hierarchy)
+      "availability_type",      # output column
+      "black_box_warning",      # output column
+      "chirality",              # output column
+      "first_approval",         # output column
+      "first_in_class",         # output column
+      "max_phase",              # output column
+      "oral",                   # output column
+      "parenteral",             # output column
+      "prodrug",                # output column
+      "topical",                # output column
+      "usan_stem",              # output column
+      "usan_stem_definition",   # output column
+      "usan_substem",           # output column
+      "usan_year",              # output column
+      "withdrawn_flag"          # output column
+    )
+  )
+
+  # Fetch level5 atc classification ID for molecules
+  molecule_atc_classification <- fetch_table(
+    con = con,
+    table = "molecule_atc_classification",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c(
+      "molregno",               # query column
+      "level5"                  # link column (atc_classification)
+    )
+  )
+
+  # Fetch atc classifications
+  atc_classification <- fetch_table(
+    con = con,
+    table = "atc_classification",
+    id_col = "level5",
+    ids = molecule_atc_classification$level5,
+    select_cols = c(
+      "level5",                  # query column (atc_code)
+      "level1_description",      # output column (needs post-processing)
+      "level2_description",      # output column (needs post-processing)
+      "level3_description",      # output column (needs post-processing)
+      "level4_description"       # output column (needs post-processing)
+    )
+  )  |> dplyr::mutate(
+    description = paste(
+      .data$level1_description,
+      .data$level2_description,
+      .data$level3_description,
+      .data$level4_description,
+      sep = ": "
+    )
+  ) |>
+    dplyr::right_join(molecule_atc_classification, by = "level5") |>
+    dplyr::select(.data$molregno, .data$level5, .data$description) |>
+    dplyr::rename(code = .data$level5)
+
+  # Fetch molecule properties
+  molecule_properties <- fetch_table(
+    con = con,
+    table = "compound_properties",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c(
+      "alogp",
+      "aromatic_rings",
+      "full_molformula",
+      "full_mwt",
+      "hba",
+      "hbd",
+      "heavy_atoms",
+      "molregno",
+      "mw_freebase",
+      "np_likeness_score",
+      "num_ro5_violations",
+      "psa",
+      "qed_weighted",
+      "ro3_pass",
+      "rtb"
+    )
+  )
+
+  # Fetch molecule structures
+  molecule_structures <- fetch_table(
+    con = con,
+    table = "compound_structures",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c(
+      "canonical_smiles",  # output column
+      "molfile",           # output column
+      "molregno",          # query column
+      "standard_inchi",    # output column
+      "standard_inchi_key" # output column
+    )
+  )
+
+  # Fetch molecule synonyms
+  molecule_synonyms <- fetch_table(
+    con = con,
+    table = "molecule_synonyms",
+    id_col = "molregno",
+    ids = unique(molecule_dictionary$molregno),
+    select_cols = c("molregno", "synonyms","syn_type")
+  ) |>
+    dplyr::rename("molecule_synonym" = "synonyms") |>
+    dplyr::arrange(.data$molecule_synonym) |>
+    dplyr::mutate("synonyms" = toupper(.data$molecule_synonym))
+
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get molecule data for this query
+    mol <- molecule_dictionary |> dplyr::filter(.data$chembl_id == q)
+    mol_rows <- nrow(mol)
+    atc <- atc_classification |> dplyr::filter(.data$molregno == mol$molregno)
+    molprop <- molecule_properties |> dplyr::filter(.data$molregno == mol$molregno)
+    molprop_rows <- nrow(molprop)
+    molstruct <- molecule_structures |> dplyr::filter(.data$molregno == mol$molregno)
+    molstruct_rows <- nrow(molstruct)
+    molsyn <- molecule_synonyms |> dplyr::filter(.data$molregno == mol$molregno)
+
+    out <- list(
+      # applicants = NA, # NOT FOUND IN OFFLINE SCHEMA
+      atc_classification = if (nrow(atc) == 0) {
+        list(list(
+          code = NA_character_,
+          description = NA_character_
+        ))
+      } else {
+        lapply(seq_len(nrow(atc)), function(i) {
+          list(
+            code = atc$code[i],
+            description = atc$description[i]
+          )
+        })
+      },
+      availability_type = ifelse(mol_rows != 0, as.numeric(mol$availability_type), NA_real_),
+      biotherapeutic = chembl_offline_biotherapeutic(
+        query = q,
+        verbose = verbose,
+        version = version,
+        output = "raw",
+        nested = TRUE,
+        con = con
+      )[[1]] |> unclass(),
+      # lack_box = NA, # NOT FOUND IN OFFLINE SCHEMA
+      black_box_warning = ifelse(mol_rows != 0, as.character(mol$black_box_warning), NA_character_),
+      chirality = ifelse(mol_rows != 0, as.numeric(mol$chirality), NA_real_),
+      # drug_type = NA, # NOT FOUND IN OFFLINE SCHEMA
+      first_approval = ifelse(mol_rows != 0, as.numeric(mol$first_approval), NA_real_),
+      first_in_class = ifelse(mol_rows != 0, as.numeric(mol$first_in_class), NA_real_),
+      helm_notation = NA, # placeholder, will be filled in after biotherapeutic call
+      max_phase = ifelse(mol_rows != 0, as.numeric(mol$max_phase), NA_real_),
+      molecule_chembl_id = q,
+      molecule_properties = list(
+        alogp = ifelse(molprop_rows != 0, molprop$alogp, NA_real_),
+        aromatic_rings = ifelse(molprop_rows != 0, as.numeric(molprop$aromatic_rings), NA_real_),
+        full_molformula = ifelse(molprop_rows != 0, molprop$full_molformula, NA_character_),
+        full_mwt = ifelse(molprop_rows != 0, molprop$full_mwt, NA_real_),
+        hba = ifelse(molprop_rows != 0, as.numeric(molprop$hba), NA_real_),
+        hbd = ifelse(molprop_rows != 0, as.numeric(molprop$hbd), NA_real_),
+        heavy_atoms = ifelse(molprop_rows != 0, as.numeric(molprop$heavy_atoms), NA_real_),
+        mw_freebase = ifelse(molprop_rows != 0, molprop$mw_freebase, NA_real_),
+        np_likeness_score = ifelse(molprop_rows != 0, molprop$np_likeness_score, NA_real_),
+        num_ro5_violations = ifelse(molprop_rows != 0, as.numeric(molprop$num_ro5_violations), NA_real_),
+        psa = ifelse(molprop_rows != 0, molprop$psa, NA_real_),
+        qed_weighted = ifelse(molprop_rows != 0, molprop$qed_weighted, NA_real_),
+        ro3_pass = ifelse(molprop_rows != 0, molprop$ro3_pass, NA_character_),
+        rtb = ifelse(molprop_rows != 0, as.numeric(molprop$rtb), NA_real_)
+      ),
+      molecule_structures = list(
+        canonical_smiles = ifelse(molstruct_rows != 0, molstruct$canonical_smiles, NA_character_),
+        molfile = ifelse(molstruct_rows != 0, molstruct$molfile, NA_character_),
+        standard_inchi = ifelse(molstruct_rows != 0, molstruct$standard_inchi, NA_character_),
+        standard_inchi_key = ifelse(molstruct_rows != 0, molstruct$standard_inchi_key, NA_character_)
+      ),
+      molecule_synonyms = if (nrow(molsyn) == 0) {
+        list(list(
+          molecule_synonym = NA_character_,
+          syn_type = NA_character_,
+          synonyms = NA_character_
+        ))
+      } else {
+        lapply(seq_len(nrow(molsyn)), function(i) {
+          list(
+            molecule_synonym = molsyn$molecule_synonym[i],
+            syn_type = molsyn$syn_type[i],
+            synonyms = molsyn$synonyms[i]
+          )
+        })
+      },
+      # ob_patent = NA, # NOT FOUND IN OFFLINE SCHEMA
+      oral = ifelse(mol_rows != 0, as.numeric(mol$oral), NA_real_),
+      parenteral = ifelse(mol_rows != 0, as.numeric(mol$parenteral), NA_real_),
+      prodrug = ifelse(mol_rows != 0, as.numeric(mol$prodrug), NA_real_),
+      # research_codes = NA, # NOT FOUND IN OFFLINE SCHEMA
+      # rule_of_five = NA, # NOT FOUND IN OFFLINE SCHEMA
+      # sc_patent = NA, # NOT FOUND IN OFFLINE SCHEMA
+      # synonyms = NA, # NOT FOUND IN OFFLINE SCHEMA
+      topical = ifelse(mol_rows != 0, as.numeric(mol$topical), NA_real_),
+      usan_stem = ifelse(mol_rows != 0, mol$usan_stem, NA_character_),
+      usan_stem_definition = ifelse(mol_rows != 0, mol$usan_stem_definition, NA_character_),
+      usan_stem_substem = ifelse(mol_rows != 0, paste0(mol$usan_stem, "(", mol$usan_substem, ")"), NA_character_),
+      usan_year = ifelse(mol_rows != 0, as.numeric(mol$usan_year), NA_real_),
+      withdrawn_flag = ifelse(mol_rows != 0, as.character(mol$withdrawn_flag), NA_character_)
+    )
+    out$helm_notation <- out$biotherapeutic$helm_notation
+    return(out)
+  })
+
   names(out) <- query
+  class(out) <- c("chembl_drug_raw", class(out))
+
+  not_found <- c(
+    "applicants",
+    "black_box",
+    "drug_type",
+    "ob_patent",
+    "research_codes",
+    "rule_of_five",
+    "sc_patent",
+    "synonyms"
+  )
+
+  warning(
+    "The following fields were not found in the offline ChEMBL database: ",
+    paste(not_found, collapse = ", ")
+  )
+
   if (output == "tidy") {
     stop("Tidy output for 'drug' is not yet implemented.")
   }
+
   return(out)
 }
 
@@ -1509,7 +2113,6 @@ chembl_offline_metabolism <- function(
 
 #' molecule resource
 #'
-#' @importFrom rlang .data
 #' @examples
 #' \dontrun{
 #' chembl_query_offline(query = "CHEMBL1082", resource = "molecule")
@@ -1528,6 +2131,8 @@ chembl_offline_molecule <- function(
     verbose = verbose,
     con = con
   )
+
+  # Fetch molregno for queries
   ids <- fetch_table(
     con = con,
     table = "molecule_dictionary",
@@ -1535,193 +2140,296 @@ chembl_offline_molecule <- function(
     ids = query,
     select_cols = c("chembl_id", "molregno")
   )
+
+  # Fetch molecule dictionary data
   molecule_dictionary <- fetch_table(
     con = con,
     table = "molecule_dictionary",
     id_col = "chembl_id",
     ids = query,
     select_cols = c(
-      "availability_type",
-      "black_box_warning",
-      "chebi_par_id",
-      "chembl_id",
-      "chemical_probe",
-      "chirality",
-      "dosed_ingredient",
-      "first_approval",
-      "first_in_class",
-      "indication_class",
-      "inorganic_flag",
-      "max_phase",
-      "molecule_type",
-      "natural_product",
-      "oral",
-      "orphan",
-      "parenteral",
-      "polymer_flag",
-      "pref_name",
-      "prodrug",
-      "structure_type",
-      "therapeutic_flag",
-      "topical",
-      "usan_stem",
-      "usan_stem_definition",
-      "usan_substem",
-      "usan_year",
-      "withdrawn_flag"
+      "availability_type",    # output column
+      "black_box_warning",    # output column
+      "chemical_probe",       # output column
+      "chembl_id",            # query column, output column (rename to molecule_chembl_id)
+      "chirality",            # output column
+      "dosed_ingredient",     # output column
+      "first_approval",       # output column
+      "first_in_class",       # output column
+      "inorganic_flag",       # output column
+      "max_phase",            # output column
+      "molecule_type",        # output column
+      "natural_product",      # output column
+      "oral",                 # output column
+      "orphan",               # output column
+      "parenteral",           # output column
+      "polymer_flag",         # output column
+      "pref_name",            # output column
+      "prodrug",              # output column
+      "structure_type",       # output column
+      "therapeutic_flag",     # output column
+      "topical",              # output column
+      "usan_stem",            # output column
+      "usan_stem_definition", # output column
+      "usan_substem",         # output column
+      "usan_year",            # output column
+      "veterinary",           # output column
+      "withdrawn_flag"        # output column
     )
   )
-  atc_classifications <- fetch_table(
+
+  # Fetch ATC classification level5 codes
+  molecule_atc_classification <- fetch_table(
     con = con,
     table = "molecule_atc_classification",
     id_col = "molregno",
     ids = ids$molregno,
-    select_cols = c("molregno", "level5")
+    select_cols = c(
+      "molregno",  # link column
+      "level5"     # output column (atc_classifications)
+    )
   )
-  extract_variable <- function(df, var) {
-    if (nrow(df) == 0) {
-      return(NULL)
-    } else {
-      return(df[[var]])
-    }
-  }
-  biotherapeutics <- fetch_table(
-    con = con,
-    table = "biotherapeutics",
-    id_col = "molregno",
-    ids = ids$molregno,
-    select_cols = NULL
-  )
-  # description, helm notation!
+
+  # Fetch molecule hierarchy
   molecule_hierarchy_raw <- fetch_table(
     con = con,
     table = "molecule_hierarchy",
     id_col = "molregno",
     ids = ids$molregno,
-    select_cols = NULL
+    select_cols = c(
+      "molregno",          # link column
+      "parent_molregno",   # link column (molecule_dictionary for parent_chembl_id)
+      "active_molregno"    # link column (molecule_dictionary for active_chembl_id)
+    )
   )
+
+  # Fetch molecule dictionary for parent and active ChEMBL IDs
+  hierarchy_molregnos <- unique(c(
+    molecule_hierarchy_raw$parent_molregno,
+    molecule_hierarchy_raw$active_molregno
+  ))
+  hierarchy_molecule_ids <- fetch_table(
+    con = con,
+    table = "molecule_dictionary",
+    id_col = "molregno",
+    ids = hierarchy_molregnos,
+    select_cols = c(
+      "molregno",  # link column
+      "chembl_id"  # output column
+    )
+  )
+
+  # Fetch molecule properties
   molecule_properties <- fetch_table(
     con = con,
     table = "compound_properties",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "alogp",
-      "aromatic_rings",
-      "cx_logd",
-      "cx_logp",
-      "cx_most_apka",
-      "cx_most_bpka",
-      "full_molformula",
-      "full_mwt",
-      "hba",
-      "hba_lipinski",
-      "hbd",
-      "hbd_lipinski",
-      "heavy_atoms",
-      "molecular_species",
-      "molregno",
-      "mw_freebase",
-      "mw_monoisotopic",
-      "np_likeness_score",
-      "num_lipinski_ro5_violations",
-      "num_ro5_violations",
-      "psa",
-      "qed_weighted",
-      "ro3_pass",
-      "rtb"
+      "alogp",              # output column
+      "aromatic_rings",     # output column
+      "full_molformula",    # output column
+      "full_mwt",           # output column
+      "hba",                # output column
+      "hbd",                # output column
+      "heavy_atoms",        # output column
+      "molregno",           # link column
+      "mw_freebase",        # output column
+      "np_likeness_score",  # output column
+      "num_ro5_violations", # output column
+      "psa",                # output column
+      "qed_weighted",       # output column
+      "ro3_pass",           # output column
+      "rtb"                 # output column
     )
   )
+
+  # Fetch molecule structures
   molecule_structures <- fetch_table(
     con = con,
     table = "compound_structures",
     id_col = "molregno",
     ids = ids$molregno,
     select_cols = c(
-      "canonical_smiles",
-      "molfile",
-      "molregno",
-      "standard_inchi",
-      "standard_inchi_key"
+      "canonical_smiles",   # output column
+      "molfile",            # output column
+      "molregno",           # link column
+      "standard_inchi",     # output column
+      "standard_inchi_key"  # output column
     )
   )
+
+  # Fetch molecule synonyms
   molecule_synonyms <- fetch_table(
     con = con,
     table = "molecule_synonyms",
     id_col = "molregno",
     ids = ids$molregno,
-    select_cols = c("molregno", "synonyms","syn_type")
-  )
-  molecule_synonyms <- molecule_synonyms |>
+    select_cols = c(
+      "molregno",   # link column
+      "synonyms",   # output column (rename to molecule_synonym)
+      "syn_type"    # output column
+    )
+  ) |>
     dplyr::rename("molecule_synonym" = "synonyms") |>
     dplyr::arrange(.data$molecule_synonym)
 
-  out <- list()
-  for (i in seq_along(query)) {
-    if (!query[i] %in% ids$chembl_id) {
-      if (verbose) {
-        # Not found
-      }
-      out[i] <- NA_character_
-      next()
-    }
-    query_molregno <- ids$molregno[which(ids$chembl_id == query[i])]
-    # NULL TO NA CONVERSION!
-    molecule_dictionary2 <- molecule_dictionary |>
-      dplyr::filter(.data$chembl_id == query[i]) |>
-      dplyr::select(-"chembl_id")
-    atc_classifications2 <- atc_classifications |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::pull("level5")
-    biotherapeutics2 <- biotherapeutics |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+  # Build output for each query
+  out <- lapply(query, function(q) {
+    # Get molecule data for this query
+    mol <- molecule_dictionary |> dplyr::filter(.data$chembl_id == q)
+    mol_rows <- nrow(mol)
+    q_molregno <- ids$molregno[ids$chembl_id == q]
 
+    atc <- molecule_atc_classification |>
+      dplyr::filter(.data$molregno == q_molregno) |>
+      dplyr::pull(.data$level5) |>
+      as.list()
 
-    molecule_hierarchy_raw2 <- molecule_hierarchy_raw |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
-    molecule_hierarchy <- tibble::tibble(
-      "active_chembl_id" = query[i],
-      "molecule_chembl_id" = query[i],
-      "parent_chembl_id" = dplyr::tbl(con, "molecule_dictionary") |>
-        dplyr::filter(.data$molregno == molecule_hierarchy_raw2$parent_molregno) |>
+    hier_raw <- molecule_hierarchy_raw |>
+      dplyr::filter(.data$molregno == q_molregno)
+
+    active_chembl_id <- if (nrow(hier_raw) > 0) {
+      hierarchy_molecule_ids |>
+        dplyr::filter(.data$molregno == hier_raw$active_molregno) |>
         dplyr::pull(.data$chembl_id)
+    } else {
+      NA_character_
+    }
+    parent_chembl_id <- if (nrow(hier_raw) > 0) {
+      hierarchy_molecule_ids |>
+        dplyr::filter(.data$molregno == hier_raw$parent_molregno) |>
+        dplyr::pull(.data$chembl_id)
+    } else {
+      NA_character_
+    }
+
+    molprop <- molecule_properties |> dplyr::filter(.data$molregno == q_molregno)
+    molprop_rows <- nrow(molprop)
+
+    molstruct <- molecule_structures |> dplyr::filter(.data$molregno == q_molregno)
+    molstruct_rows <- nrow(molstruct)
+
+    molsyn <- molecule_synonyms |> dplyr::filter(.data$molregno == q_molregno)
+
+    result <- list(
+      atc_classifications = if (length(atc) == 0) {
+        list(list(
+          level1 = NA_character_,
+          level1_description = NA_character_,
+          level2 = NA_character_,
+          level2_description = NA_character_,
+          level3 = NA_character_,
+          level3_description = NA_character_,
+          level4 = NA_character_,
+          level4_description = NA_character_,
+          level5 = NA_character_,
+          who_name = NA_character_
+        ))
+      } else atc,
+      availability_type = ifelse(mol_rows != 0, as.numeric(mol$availability_type), NA_real_),
+      biotherapeutic = chembl_offline_biotherapeutic(
+        query = q,
+        verbose = verbose,
+        version = version,
+        output = "raw",
+        nested = TRUE,
+        con = con
+      )[[1]] |> unclass(),
+      black_box_warning = ifelse(mol_rows != 0, as.numeric(mol$black_box_warning), NA_real_),
+      chemical_probe = ifelse(mol_rows != 0, as.numeric(mol$chemical_probe), NA_real_),
+      chirality = ifelse(mol_rows != 0, as.numeric(mol$chirality), NA_real_),
+      dosed_ingredient = ifelse(mol_rows != 0, as.logical(mol$dosed_ingredient), NA_real_),
+      first_approval = ifelse(mol_rows != 0, as.numeric(mol$first_approval), NA_real_),
+      first_in_class = ifelse(mol_rows != 0, as.numeric(mol$first_in_class), NA_real_),
+      helm_notation = NA, # placeholder, will be filled in after biotherapeutic call
+      inorganic_flag = ifelse(mol_rows != 0, as.numeric(mol$inorganic_flag), NA_real_),
+      max_phase = ifelse(mol_rows != 0, as.numeric(mol$max_phase), NA_real_),
+      molecule_chembl_id = q,
+      molecule_hierarchy = list(
+        active_chembl_id = if (length(active_chembl_id) == 0) NA_character_ else active_chembl_id,
+        molecule_chembl_id = q,
+        parent_chembl_id = if (length(parent_chembl_id) == 0) NA_character_ else parent_chembl_id
+      ),
+      molecule_properties = list(
+        alogp = ifelse(molprop_rows != 0, molprop$alogp, NA_real_),
+        aromatic_rings = ifelse(molprop_rows != 0, as.numeric(molprop$aromatic_rings), NA_real_),
+        full_molformula = ifelse(molprop_rows != 0, molprop$full_molformula, NA_character_),
+        full_mwt = ifelse(molprop_rows != 0, molprop$full_mwt, NA_real_),
+        hba = ifelse(molprop_rows != 0, as.numeric(molprop$hba), NA_real_),
+        hbd = ifelse(molprop_rows != 0, as.numeric(molprop$hbd), NA_real_),
+        heavy_atoms = ifelse(molprop_rows != 0, as.numeric(molprop$heavy_atoms), NA_real_),
+        mw_freebase = ifelse(molprop_rows != 0, molprop$mw_freebase, NA_real_),
+        np_likeness_score = ifelse(molprop_rows != 0, molprop$np_likeness_score, NA_real_),
+        num_ro5_violations = ifelse(molprop_rows != 0, as.numeric(molprop$num_ro5_violations), NA_real_),
+        psa = ifelse(molprop_rows != 0, molprop$psa, NA_real_),
+        qed_weighted = ifelse(molprop_rows != 0, molprop$qed_weighted, NA_real_),
+        ro3_pass = ifelse(molprop_rows != 0, molprop$ro3_pass, NA_character_),
+        rtb = ifelse(molprop_rows != 0, as.numeric(molprop$rtb), NA_real_)
+      ),
+      molecule_structures = list(
+        canonical_smiles = ifelse(molstruct_rows != 0, molstruct$canonical_smiles, NA_character_),
+        molfile = ifelse(molstruct_rows != 0, molstruct$molfile, NA_character_),
+        standard_inchi = ifelse(molstruct_rows != 0, molstruct$standard_inchi, NA_character_),
+        standard_inchi_key = ifelse(molstruct_rows != 0, molstruct$standard_inchi_key, NA_character_)
+      ),
+      molecule_synonyms = if (nrow(molsyn) == 0) {
+        list(list(
+          molecule_synonym = NA_character_,
+          syn_type = NA_character_,
+          synonyms = NA_character_
+        ))
+      } else {
+        lapply(seq_len(nrow(molsyn)), function(i) {
+          list(
+            molecule_synonym = molsyn$molecule_synonym[i],
+            syn_type = molsyn$syn_type[i],
+            synonyms = toupper(molsyn$molecule_synonym[i])
+          )
+        })
+      },
+      molecule_type = ifelse(mol_rows != 0, mol$molecule_type, NA_character_),
+      natural_product = ifelse(mol_rows != 0, as.numeric(mol$natural_product), NA_real_),
+      oral = ifelse(mol_rows != 0, as.logical(mol$oral), NA_real_),
+      orphan = ifelse(mol_rows != 0, as.numeric(mol$orphan), NA_real_),
+      parenteral = ifelse(mol_rows != 0, as.logical(mol$parenteral), NA_real_),
+      polymer_flag = ifelse(mol_rows != 0, as.numeric(mol$polymer_flag), NA_real_),
+      pref_name = ifelse(mol_rows != 0, mol$pref_name, NA_character_),
+      prodrug = ifelse(mol_rows != 0, as.numeric(mol$prodrug), NA_real_),
+      structure_type = ifelse(mol_rows != 0, mol$structure_type, NA_character_),
+      therapeutic_flag = ifelse(mol_rows != 0, as.logical(mol$therapeutic_flag), NA_real_),
+      topical = ifelse(mol_rows != 0, as.logical(mol$topical), NA_real_),
+      usan_stem = ifelse(mol_rows != 0, mol$usan_stem, NA_character_),
+      usan_stem_definition = ifelse(mol_rows != 0, mol$usan_stem_definition, NA_character_),
+      usan_substem = ifelse(mol_rows != 0, mol$usan_substem, NA_character_),
+      usan_year = ifelse(mol_rows != 0, as.numeric(mol$usan_year), NA_real_),
+      veterinary = ifelse(mol_rows != 0, as.numeric(mol$veterinary), NA_real_),
+      withdrawn_flag = ifelse(mol_rows != 0, as.logical(mol$withdrawn_flag), NA_real_)
     )
+    result$helm_notation <- result$biotherapeutic$helm_notation
 
-    molecule_properties2 <- molecule_properties |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+    result[sort(names(result))]
+  })
 
-    molecule_structures2 <- molecule_structures |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+  names(out) <- query
+  class(out) <- c("chembl_molecule_raw", class(out))
 
-    molecule_synonyms2 <- molecule_synonyms |>
-      dplyr::filter(.data$molregno == query_molregno) |>
-      dplyr::select(-"molregno")
+  not_found <- c(
+    "cross_references"
+  )
 
-    out[[i]] <- c(
-      molecule_dictionary2,
-      list(
-        "atc_classifications" = atc_classifications2,
-        #"biotherapeutic" = biotherapeutic,
-        #"helm_notation" = helm_notation,
-        "molecule_chembl_id" = query[i],
-        "molecule_hierarchy" = molecule_hierarchy,
-        "molecule_properties" = molecule_properties2,
-        "molecule_structures" = molecule_structures2,
-        "molecule_synonyms" = molecule_synonyms2
-      )
-    )
-    names(out)[i] <- query[i]
-    out[[i]] <- out[[i]][sort(names(out[[i]]))]
+  warning(
+    "The following fields were not found in the offline ChEMBL database: ",
+    paste(not_found, collapse = ", ")
+  )
+
+  if (output == "tidy") {
+    stop("Tidy output for 'molecule' is not yet implemented.")
   }
 
-  # TODO: add class and tidy output method
-  # TODO: fix error with example query
   return(out)
 }
+
 
 #'molecule_form resource
 #'

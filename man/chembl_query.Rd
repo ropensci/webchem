@@ -9,8 +9,10 @@ chembl_query(
   resource = "molecule",
   mode = "ws",
   output = "raw",
+  cache_file = NULL,
+  similarity = 70,
+  version = "latest",
   verbose = getOption("verbose"),
-  options = chembl_options(cache_file = NULL, similarity = 70, version = "latest"),
   ...
 )
 }
@@ -29,16 +31,16 @@ you need to have a local ChEMBL database. See [db_download_chembl()].}
 which is a list of lists, or "tidy" to return simplified results, if
 possible.}
 
-\item{verbose}{logical; should a verbose output be printed on the console?}
+\item{cache_file}{character or NULL; name of the cache file (without extension)
+used when mode = "ws". If NULL (default), results are not cached.}
 
-\item{options}{function; returns a named list for resource- and mode-specific
-options. Supported entries:
-  - cache_file: character or NULL; name of the cache file (without extension)
-    used when mode = "ws". If NULL (default), results are not cached.
-  - similarity: numeric; similarity threshold for similarity searches
-    (default 70).
-  - version: character; database version to use in "offline" mode (default
-    "latest").}
+\item{similarity}{numeric; similarity threshold for similarity searches
+(default 70).}
+
+\item{version}{character; database version to use in "offline" mode (default
+"latest").}
+
+\item{verbose}{logical; should a verbose output be printed on the console?}
 
 \item{...}{additional arguments, only used for internal testing.}
 }
@@ -63,7 +65,7 @@ use this function with the \code{"chembl_id_lookup"} resource to find the
 appropriate resource for a ChEMBL ID. Note that \code{"chembl_id_lookup"} is
 not a separate function but a resource used by \code{chembl_query}.
 
-If \code{mode = "ws"} and \code{options$cache_file} is not `NULL`
+If \code{mode = "ws"} and \code{cache_file} is not `NULL`
 the function creates a cache directory in the working directory and a cache
 file in the cache directory. This file is used in subsequent calls of the
 function. The cache file is extended as new ID-s are queried during the
@@ -88,8 +90,7 @@ chembl_query("CHEMBL448105", resource = "biotherapeutic")
 # Resource: compound_structural_alert - requires compound ChEMBL ID
 chembl_query(
   "CHEMBL266429",
-  resource = "compound_structural_alert",
-  options = chembl_options(tidy = FALSE)
+  resource = "compound_structural_alert"
 )
 
 # Resource: compound_record - requires compound record ID
@@ -109,7 +110,7 @@ chembl_query("CHEMBL6329", resource = "molecule_form")
 # By default, the function will use 70 as similarity threshold
 chembl_query(
   "CC(=O)Oc1ccccc1C(=O)O", resource = "similarity",
-  options = chembl_options(similarity = 70)
+  similarity = 70
 )
 
 # Resource: substructure - requires compound SMILES
