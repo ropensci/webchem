@@ -38,7 +38,7 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
   json_files <- list.files(json_dir, pattern = "\\.json$", full.names = TRUE)
   sqlite_path <- file.path(dir_path, "foodb_v1.sqlite")
   con <- DBI::dbConnect(RSQLite::SQLite(), sqlite_path)
-  on.exit(DBI::dbDisconnect(con), add = TRUE)
+  on.exit(DBI::dbDisconnect(con))
   for (f in json_files) {
     table_name <- tools::file_path_sans_ext(basename(f))
     if (DBI::dbExistsTable(con, table_name)) {
@@ -50,18 +50,36 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
     if (verbose) {
       message("  Converting table '", table_name, "'. ", appendLF = FALSE)
     }
+    chunk_size <- 10000L
+    rows_processed <- 0L
+    table_exists <- FALSE
     con_file <- file(f, open = "rb")
-    df <- jsonlite::stream_in(con_file, verbose = FALSE)
-    close(con_file)
-    if (!inherits(df, "data.frame")) {
-      stop("Expected a data frame from JSON file: ", f)
-    }
-    if (nrow(df) == 0) {
+    tryCatch({
+      jsonlite::stream_in(con_file, handler = function(df_chunk) {
+        if (!inherits(df_chunk, "data.frame")) {
+          stop("Expected a data frame from JSON file: ", f)
+        }
+        if (nrow(df_chunk) == 0) return(NULL)
+        if (!table_exists) {
+          DBI::dbWriteTable(con, table_name, df_chunk, overwrite = TRUE)
+          table_exists <<- TRUE
+        } else {
+          DBI::dbWriteTable(con, table_name, df_chunk, append = TRUE)
+        }
+        rows_processed <<- rows_processed + nrow(df_chunk)
+        NULL
+      }, pagesize = chunk_size, verbose = FALSE)
+    },
+    finally = {
+      if (isOpen(con_file)) {
+        close(con_file)
+      }
+    })
+    if (rows_processed == 0) {
       if (verbose) message("Empty file. Moving on.")
-      next
+    } else {
+      if (verbose) message("Done.")
     }
-    DBI::dbWriteTable(con, table_name, df, overwrite = TRUE)
-    if (verbose) message("Done.")
   }
   if (verbose) message("SQLite database written to: ", sqlite_path)
   invisible(sqlite_path)
