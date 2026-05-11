@@ -84,6 +84,25 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
   if (verbose) message("SQLite database written to: ", sqlite_path)
   invisible(sqlite_path)
 }
+
+#' Connect local FooDB database
+#'
+#' @importFrom rlang .data
+#' @param ... Further args passed on to [DBI::dbConnect()]
+#' @return an object of class "SQLiteConnection".
+#' @examples
+#' \dontrun{
+#'   con <- connect_foodb(
+#' }
+#' @noRd
+connect_foodb <- function(...) {
+  db_path <- file.path(
+    wc_cache$cache_path_get(),
+    "foodb/foodb_v1.sqlite"
+  ) |> path.expand()
+  if (!file.exists(db_path)) {
+    stop("Database not found. Use db_download_foodb() to download the database.")
   }
-  invisible(NULL)
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = db_path, ...)
+  return(con)
 }
