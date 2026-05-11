@@ -106,3 +106,86 @@ connect_foodb <- function(...) {
   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = db_path, ...)
   return(con)
 }
+
+#' Convert compound identifiers in the local FooDB database
+#' 
+#' @param query A character vector of compound identifiers to convert.
+#' @param from The type of identifier provided in \code{query}. See Details for 
+#' allowed values.
+#' @param to The type of identifier to convert to. See Details for allowed 
+#' values.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return A character vector of converted identifiers, in the same order as
+#' the input \code{query}. If an identifier could not be converted, the
+#' corresponding output will be \code{NA}.
+#' @details Allowed values for \code{from} and \code{to} are:
+#' \itemize{
+#'   \item \code{id}: internal numeric ID in the FooDB database
+#'   \item \code{public_id}: public numeric ID in the FooDB database
+#'   \item \code{name}: compound name
+#'   \item \code{cas_number}: CAS number
+#'   \item \code{moldb_smiles}: SMILES string
+#'   \item \code{moldb_inchi}: InChI string
+#'   \item \code{moldb_inchikey}: InChIKey string
+#'   \item \code{moldb_iupac}: IUPAC name
+#' }
+#' @examples
+#' \dontrun{
+#' foodb_convert("4", from = "id", to = "name")
+#' foodb_convert("FDB000004", from = "public_id", to = "cas_number")
+#' }
+foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
+  con <- connect_foodb()
+  on.exit(DBI::dbDisconnect(con))
+  compound_ids <- c(
+    "id", 
+    "public_id", 
+    "name", 
+    "cas_number", 
+    "moldb_smiles", 
+    "moldb_inchi", 
+    "moldb_inchikey", 
+    "moldb_iupac"
+  )
+  from <- match.arg(from, compound_ids)
+  to <- match.arg(to, compound_ids)
+  compound <- fetch_table(
+    con = con,
+    table = "Compound",
+    id_col = from,
+    ids = query,
+    select_cols = c(from, to)
+  )
+  foo <- function(x) {
+    if (from == "moldb_inchikey") {
+      if (!is.inchikey(x, type = "format")) {
+        if (verbose) message("Invalid InChIKey format: ", x)
+        return(NA_character_)
+      } 
+    } else if (from == "cas_number") { 
+      if (!is.cas(x)) {
+        if (verbose) message("Invalid CAS number format: ", x)
+        return(NA_character_)
+      }
+    } else if (from == "moldb_smiles") {
+      if (!is.smiles(x)) {
+        if (verbose) message("Invalid SMILES format: ", x)
+        return(NA_character_)
+      }
+    }
+    out <- compound[[to]][which(compound[[from]] == x)]
+    if (length(out) == 0) {
+      if (verbose) message("No match found for identifier: ", x)
+      return(NA_character_)
+    }
+    if (length(out) == 1) {
+      return(out)
+    }
+    if (length(out) > 1) {
+      stop("Multiple matches found for identifier: ", x)
+    }
+  }
+  out <- unname(sapply(query, foo))
+  # TODO - add class
+  return(out)
+}
