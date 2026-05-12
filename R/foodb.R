@@ -189,3 +189,54 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
   # TODO - add class
   return(out)
 }
+
+foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
+  con <- connect_foodb()
+  on.exit(DBI::dbDisconnect(con))
+  if (all(is.na(query))) {
+    if (verbose) message("No valid identifiers provided.")
+    return(NA_character_)
+  }
+  harmonised_names <- data.frame(
+    query = query,
+    foodb_name = NA_character_
+  )
+  foodb_names <- foodb_list_compounds("name", verbose = verbose)
+  index_harmonised <- which(query %in% foodb_names)
+  if (length(index_harmonised) > 0) {
+    harmonised_names$foodb_name[index_harmonised] <- query[index_harmonised]
+  }
+  query_na <- harmonised_names$query[which(is.na(harmonised_names$foodb_name))]
+  synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
+    dplyr::filter(!!rlang::sym("synonym") %in% query_na) |>
+    dplyr::select(!!rlang::sym("synonym"), !!rlang::sym("source_id")) |>
+    dplyr::collect() |>
+    dplyr::mutate(
+      foodb_name = foodb_convert(
+        !!rlang::sym("source_id"),
+        from = "id",
+        to = "name",
+        verbose = verbose
+        )
+    )
+  foo <- function(i) {
+    if (!is.na(harmonised_names$foodb_name[i])) {
+      return(harmonised_names[i,])
+    }
+    hit <- synonyms[which(synonyms$synonym == harmonised_names$query[i]),]
+    if (nrow(hit) == 0) {
+      if (verbose) message("No match found for query: ", harmonised_names$query[i])
+      return(harmonised_names[i,])
+    }
+    if (nrow(hit) == 1) {
+      out <- harmonised_names[i,]
+      out$foodb_name <- hit$foodb_name
+      return(out)
+    }
+    if (nrow(hit) > 1) {
+      stop("Multiple matches found for query: ", harmonised_names$query[i])
+    }
+  }
+  out <- lapply(seq_len(nrow(harmonised_names)), foo) |> dplyr::bind_rows()
+  return(out)
+}
