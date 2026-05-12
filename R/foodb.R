@@ -275,3 +275,85 @@ foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
     ))
   }
 }
+
+foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
+  con <- connect_foodb()
+  on.exit(DBI::dbDisconnect(con))
+  id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
+  content <- dplyr::tbl(con, "Content") |>
+    dplyr::filter(!!rlang::sym("source_id") %in% !!id) |>
+    dplyr::select(
+      !!rlang::sym("source_id"),
+      !!rlang::sym("food_id"),
+      !!rlang::sym("orig_food_part"),
+      !!rlang::sym("preparation_type"),
+      !!rlang::sym("standard_content"),
+      !!rlang::sym("orig_content"),
+      !!rlang::sym("orig_min"),
+      !!rlang::sym("orig_max"),
+      !!rlang::sym("orig_unit"),
+      !!rlang::sym("orig_unit_expression"),
+      !!rlang::sym("orig_method"),
+      !!rlang::sym("orig_content")
+    ) |>
+    dplyr::mutate(
+      standard_content = as.numeric(!!rlang::sym("standard_content")),
+      orig_content = as.numeric(!!rlang::sym("orig_content")),
+      orig_min = as.numeric(!!rlang::sym("orig_min")),
+      orig_max = as.numeric(!!rlang::sym("orig_max"))
+    ) |> 
+    dplyr::collect()
+  food <- dplyr::tbl(con, "Food") |>
+    dplyr::filter(!!rlang::sym("id") %in% content$food_id) |>
+    dplyr::select(
+      !!rlang::sym("id"),
+      !!rlang::sym("name"),
+      !!rlang::sym("name_scientific"),
+      !!rlang::sym("description"),
+      !!rlang::sym("food_group"),
+      !!rlang::sym("food_subgroup"),
+      !!rlang::sym("food_type")
+    ) |>
+    dplyr::collect()
+  foo <- function(i) {
+    q <- query[i]
+    content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == id[i])
+    if (nrow(content_q) == 0) {
+      if (verbose) message("No content data found for query: ", q)
+      return(NA_character_)
+    }
+    food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
+    if (nrow(food_q) == 0) {
+      food_q <- data.frame(
+        id = content_q$food_id,
+        name = NA_character_,
+        name_scientific = NA_character_,
+        description = NA_character_,
+        food_group = NA_character_,
+        food_subgroup = NA_character_,
+        food_type = NA_character_
+      )
+    }
+    out <- dplyr::left_join(
+      content_q,
+      food_q,
+      by = c("food_id" = "id")
+    ) |>
+      dplyr::relocate(
+        dplyr::all_of(c(
+          "name",
+          "name_scientific",
+          "description",
+          "food_group",
+          "food_subgroup",
+          "food_type"
+        )),
+        .after = !!rlang::sym("food_id")
+      ) |>
+      dplyr::select(-!!rlang::sym("food_id"))
+    return(out)
+  }
+  out <- lapply(seq_along(query), foo)
+  names(out) <- query
+  return(out)
+}
