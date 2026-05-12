@@ -107,6 +107,20 @@ connect_foodb <- function(...) {
   return(con)
 }
 
+foodb_compound_idtypes <- function() {
+  idtypes <- c(
+    "id",
+    "public_id",
+    "name",
+    "cas_number",
+    "moldb_smiles",
+    "moldb_inchi",
+    "moldb_inchikey",
+    "moldb_iupac"
+  )
+  return(idtypes)
+}
+
 #' Convert compound identifiers in the local FooDB database
 #' 
 #' @param query A character vector of compound identifiers to convert.
