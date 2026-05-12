@@ -249,3 +249,14 @@ foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
   out <- lapply(seq_len(nrow(harmonised_names)), foo) |> dplyr::bind_rows()
   return(out)
 }
+
+foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
+  idtype <- match.arg(idtype, foodb_compound_idtypes(), several.ok = FALSE)
+  con <- connect_foodb()
+  on.exit(DBI::dbDisconnect(con))
+  compounds <- dplyr::tbl(con, "Compound") |>
+    dplyr::select(idtype) |>
+    dplyr::distinct() |>
+    dplyr::pull()
+  return(compounds)
+}
