@@ -357,3 +357,53 @@ foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
   names(out) <- query
   return(out)
 }
+
+foodb_synonyms <- function(
+  query,
+  from = "name",
+  verbose = getOption("verbose")) {
+  con <- connect_foodb()
+  on.exit(DBI::dbDisconnect(con))
+  from <- match.arg(from, foodb_compound_idtypes(), several.ok = FALSE)
+  if (from != "id") {
+    query_id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
+  } else {
+    query_id <- query
+  }
+  query_nona <- query_id[!is.na(query_id)]
+  if (length(query_nona) == 0) {
+    if (verbose) message("No valid identifiers provided.")
+    return(NA_character_)
+  }
+  synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
+    dplyr::filter(!!rlang::sym("source_id") %in% query_nona) |>
+    dplyr::select(!!rlang::sym("source_id"), !!rlang::sym("synonym")) |>
+    dplyr::collect()
+
+  foo <- function(i) {
+    q <- query[i]
+    id <- query_id[i]
+    if (is.na(id)) {
+      data.frame(
+        query = q,
+        synonym = NA_character_
+      )
+    } else {
+      query_synonyms <- synonyms[synonyms$source_id == id, "synonym", drop = TRUE]
+      if (length(query_synonyms) == 0) {
+        data.frame(
+          query = q,
+          synonym = NA_character_
+        )
+      } else {
+        data.frame(
+          query = q,
+          synonym = query_synonyms
+        )
+      }
+    }
+  }
+  out <- lapply(seq_along(query), foo) |> dplyr::bind_rows()
+  return(out)
+}
+
