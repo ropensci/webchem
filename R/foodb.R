@@ -260,3 +260,18 @@ foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
     dplyr::pull()
   return(compounds)
 }
+
+foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
+  resource <- match.arg(resource, choices = "content")
+  FUN <- paste0("foodb_query_", resource)
+  if (!exists(FUN)) {
+    stop("Resource '", resource, "' is not implemented.")
+  }
+  else {
+    do.call(FUN, args = list(
+      query = query,
+      from = from,
+      verbose = verbose
+    ))
+  }
+}
