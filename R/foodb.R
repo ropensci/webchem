@@ -122,11 +122,11 @@ foodb_compound_idtypes <- function() {
 }
 
 #' Convert compound identifiers in the local FooDB database
-#' 
+#'
 #' @param query A character vector of compound identifiers to convert.
-#' @param from The type of identifier provided in \code{query}. See Details for 
+#' @param from The type of identifier provided in \code{query}. See Details for
 #' allowed values.
-#' @param to The type of identifier to convert to. See Details for allowed 
+#' @param to The type of identifier to convert to. See Details for allowed
 #' values.
 #' @param verbose logical; should verbose messages be printed to the console?
 #' @return A character vector of converted identifiers, in the same order as
@@ -148,21 +148,16 @@ foodb_compound_idtypes <- function() {
 #' foodb_convert("4", from = "id", to = "name")
 #' foodb_convert("FDB000004", from = "public_id", to = "cas_number")
 #' }
+#' @export
 foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
-  compound_ids <- c(
-    "id", 
-    "public_id", 
-    "name", 
-    "cas_number", 
-    "moldb_smiles", 
-    "moldb_inchi", 
-    "moldb_inchikey", 
-    "moldb_iupac"
-  )
-  from <- match.arg(from, compound_ids)
-  to <- match.arg(to, compound_ids)
+  from <- match.arg(from, foodb_compound_idtypes(), several.ok = FALSE)
+  to <- match.arg(to, foodb_compound_idtypes(), several.ok = FALSE)
+  if (from == "name") {
+    if (verbose) message("Harmonising compound names to match FooDB entries.")
+    query <- foodb_harmonise_name(query, verbose = verbose)$foodb_name
+  }
   compound <- fetch_table(
     con = con,
     table = "Compound",
@@ -175,8 +170,8 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
       if (!is.inchikey(x, type = "format")) {
         if (verbose) message("Invalid InChIKey format: ", x)
         return(NA_character_)
-      } 
-    } else if (from == "cas_number") { 
+      }
+    } else if (from == "cas_number") {
       if (!is.cas(x)) {
         if (verbose) message("Invalid CAS number format: ", x)
         return(NA_character_)
