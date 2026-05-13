@@ -479,6 +479,70 @@ foodb_fetch_Food <- function(con, food_ids) {
     dplyr::collect()
 }
 
+#' Build content output for a single compound query
+#'
+#' Combines content and food data for a single compound ID, handling joins
+#' and NA cases.
+#'
+#' @param id The compound ID for which to build the content output
+#' @param content A data frame with content data
+#' @param food A data frame with food details for all compounds
+#'
+#' @return A tibble with content and food information, or a schema-conforming
+#'   tibble of NAs if no content data exists
+#' @noRd
+foodb_build_content_output <- function(id, content, food) {
+  content |> dplyr::filter(!!rlang::sym("source_id") == id)
+  if (nrow(content_q) > 0) {
+    food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
+    if (nrow(food_q) == 0) {
+      food_q <- data.frame(
+        id = content_q$food_id,
+        name = NA_character_,
+        name_scientific = NA_character_,
+        description = NA_character_,
+        food_group = NA_character_,
+        food_subgroup = NA_character_,
+        food_type = NA_character_
+      )
+    }
+    content_out <- content_q |>
+      dplyr::left_join(food_q, by = c("food_id" = "id")) |>
+      dplyr::relocate(
+        dplyr::all_of(c(
+          "name",
+          "name_scientific",
+          "description",
+          "food_group",
+          "food_subgroup",
+          "food_type"
+        )),
+        .after = !!rlang::sym("food_id")
+      ) |>
+      dplyr::select(-!!rlang::sym("food_id"))
+  } else {
+    content_out <- tibble::tibble(
+      source_id = NA_integer_,
+      orig_food_part = NA_character_,
+      preparation_type = NA_character_,
+      standard_content = NA_real_,
+      orig_content = NA_real_,
+      orig_min = NA_real_,
+      orig_max = NA_real_,
+      orig_unit = NA_character_,
+      orig_unit_expression = NA_character_,
+      orig_method = NA_character_,
+      name = NA_character_,
+      name_scientific = NA_character_,
+      description = NA_character_,
+      food_group = NA_character_,
+      food_subgroup = NA_character_,
+      food_type = NA_character_
+    )
+  }
+  return(content_out)
+}
+
 #' Harmonise compound names to match FooDB entries
 #'
 #' @param query A character vector of compound names to harmonise.
@@ -658,56 +722,7 @@ foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
       dplyr::pull(!!rlang::sym("pathway_id")) |>
       (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
     
-    # Build content output for this query
-    content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == id_q)
-    if (nrow(content_q) > 0) {
-      food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
-      if (nrow(food_q) == 0) {
-        food_q <- data.frame(
-          id = content_q$food_id,
-          name = NA_character_,
-          name_scientific = NA_character_,
-          description = NA_character_,
-          food_group = NA_character_,
-          food_subgroup = NA_character_,
-          food_type = NA_character_
-        )
-      }
-      content_out <- content_q |>
-        dplyr::left_join(food_q, by = c("food_id" = "id")) |>
-        dplyr::relocate(
-          dplyr::all_of(c(
-            "name",
-            "name_scientific",
-            "description",
-            "food_group",
-            "food_subgroup",
-            "food_type"
-          )),
-          .after = !!rlang::sym("food_id")
-        ) |>
-        dplyr::select(-!!rlang::sym("food_id"))
-    } else {
-      content_out <- tibble::tibble(
-        source_id = NA_integer_,
-        orig_food_part = NA_character_,
-        preparation_type = NA_character_,
-        standard_content = NA_real_,
-        orig_content = NA_real_,
-        orig_min = NA_real_,
-        orig_max = NA_real_,
-        orig_unit = NA_character_,
-        orig_unit_expression = NA_character_,
-        orig_method = NA_character_,
-        name = NA_character_,
-        name_scientific = NA_character_,
-        description = NA_character_,
-        food_group = NA_character_,
-        food_subgroup = NA_character_,
-        food_type = NA_character_
-      )
-    }
-    
+    # Build content output for this query  
     out <- list(
       public_id = compound_q$public_id,
       name = compound_q$name,
@@ -788,7 +803,7 @@ foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
           name = NA_character_
         )
       },
-      content = content_out,
+      content = foodb_build_content_output(id_q, content, food),
       synonyms = foodb_query_synonyms(
         query = q,
         from = from,
