@@ -624,10 +624,6 @@ foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
 }
 
 foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
-  foodb_query_compound(query, from, verbose = verbose)
-}
-
-foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
   id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
