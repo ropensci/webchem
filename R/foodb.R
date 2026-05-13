@@ -553,6 +553,7 @@ foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
   on.exit(DBI::dbDisconnect(con))
   id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
   content <- dplyr::tbl(con, "Content") |>
+    dplyr::filter(!!rlang::sym("source_type") == "Compound") |>
     dplyr::filter(!!rlang::sym("source_id") %in% !!id) |>
     dplyr::select(
       !!rlang::sym("source_id"),
@@ -575,6 +576,10 @@ foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
       orig_max = as.numeric(!!rlang::sym("orig_max"))
     ) |> 
     dplyr::collect()
+  if (nrow(content) == 0) {
+    if (verbose) message("No content data found.")
+    return(NA_character_)
+  }
   food <- dplyr::tbl(con, "Food") |>
     dplyr::filter(!!rlang::sym("id") %in% content$food_id) |>
     dplyr::select(
@@ -606,11 +611,8 @@ foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
         food_type = NA_character_
       )
     }
-    out <- dplyr::left_join(
-      content_q,
-      food_q,
-      by = c("food_id" = "id")
-    ) |>
+    out <- content_q |>
+      dplyr::left_join(food_q, by = c("food_id" = "id")) |>
       dplyr::relocate(
         dplyr::all_of(c(
           "name",
