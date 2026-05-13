@@ -436,6 +436,7 @@ foodb_fetch_Content <- function(con, ids) {
     dplyr::filter(!!rlang::sym("source_type") == "Compound") |>
     dplyr::filter(!!rlang::sym("source_id") %in% !!ids) |>
     dplyr::select(
+      "id",
       "source_id",
       "food_id",
       "orig_food_part",
@@ -519,10 +520,16 @@ foodb_build_content_output <- function(id, content, food) {
         )),
         .after = !!rlang::sym("food_id")
       ) |>
-      dplyr::select(-!!rlang::sym("food_id"))
+      dplyr::select(-c("source_id", "food_id"))
   } else {
     content_out <- tibble::tibble(
-      source_id = NA_integer_,
+      id = NA_integer_,
+      name = NA_character_,
+      name_scientific = NA_character_,
+      description = NA_character_,
+      food_group = NA_character_,
+      food_subgroup = NA_character_,
+      food_type = NA_character_,
       orig_food_part = NA_character_,
       preparation_type = NA_character_,
       standard_content = NA_real_,
@@ -531,13 +538,7 @@ foodb_build_content_output <- function(id, content, food) {
       orig_max = NA_real_,
       orig_unit = NA_character_,
       orig_unit_expression = NA_character_,
-      orig_method = NA_character_,
-      name = NA_character_,
-      name_scientific = NA_character_,
-      description = NA_character_,
-      food_group = NA_character_,
-      food_subgroup = NA_character_,
-      food_type = NA_character_
+      orig_method = NA_character_
     )
   }
   return(content_out)
@@ -904,6 +905,7 @@ foodb_query <- function(query, from, verbose = getOption("verbose")) {
       dplyr::filter(!!rlang::sym("id") == id_q)
     
     out <- list(
+      id =  id_q,
       public_id = compound_q$public_id,
       name = compound_q$name,
       state = compound_q$state,
