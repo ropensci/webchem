@@ -801,7 +801,11 @@ foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
     query = query,
     foodb_name = NA_character_
   )
-  foodb_names <- foodb_list_compounds("name", verbose = verbose)
+  foodb_names <- foodb_list_compounds(
+    "name", 
+    include_synonyms = FALSE, 
+    verbose = verbose
+  )
   index_harmonised <- which(query %in% foodb_names)
   if (length(index_harmonised) > 0) {
     harmonised_names$foodb_name[index_harmonised] <- query[index_harmonised]
@@ -841,7 +845,11 @@ foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
   return(out)
 }
 
-foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
+foodb_list_compounds <- function(
+  idtype, 
+  include_synonyms = TRUE, 
+  verbose = getOption("verbose")
+) {
   idtype <- match.arg(idtype, foodb_compound_idtypes(), several.ok = FALSE)
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
@@ -849,6 +857,13 @@ foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
     dplyr::select(idtype) |>
     dplyr::distinct() |>
     dplyr::pull()
+  if (idtype == "name" && include_synonyms) {
+    synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
+      dplyr::select("synonym") |>
+      dplyr::distinct() |>
+      dplyr::pull()
+    compounds <- unique(c(compounds, synonyms))
+  }
   return(compounds)
 }
 
