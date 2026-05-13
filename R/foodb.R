@@ -424,6 +424,61 @@ foodb_fetch_Pathway <- function(con, pathway_ids) {
     dplyr::collect()
 }
 
+#' Fetch content data from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of compound IDs
+#'
+#' @return A data frame with content data
+#' @noRd
+foodb_fetch_Content <- function(con, ids) {
+  dplyr::tbl(con, "Content") |>
+    dplyr::filter(!!rlang::sym("source_type") == "Compound") |>
+    dplyr::filter(!!rlang::sym("source_id") %in% !!ids) |>
+    dplyr::select(
+      "source_id",
+      "food_id",
+      "orig_food_part",
+      "preparation_type",
+      "standard_content",
+      "orig_content",
+      "orig_min",
+      "orig_max",
+      "orig_unit",
+      "orig_unit_expression",
+      "orig_method"
+    ) |>
+    dplyr::mutate(
+      standard_content = as.numeric(!!rlang::sym("standard_content")),
+      orig_content = as.numeric(!!rlang::sym("orig_content")),
+      orig_min = as.numeric(!!rlang::sym("orig_min")),
+      orig_max = as.numeric(!!rlang::sym("orig_max"))
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch food data from FooDB
+#'
+#' @param con A database connection
+#' @param food_ids Character or numeric vector of food IDs
+#'
+#' @return A data frame with food details
+#' @noRd
+foodb_fetch_Food <- function(con, food_ids) {
+  dplyr::tbl(con, "Food") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!food_ids) |>
+    dplyr::select(
+      "id",
+      "name",
+      "name_scientific",
+      "description",
+      "food_group",
+      "food_subgroup",
+      "food_type"
+    ) |>
+    dplyr::collect()
+}
+
 #' Harmonise compound names to match FooDB entries
 #'
 #' @param query A character vector of compound names to harmonise.
@@ -538,6 +593,14 @@ foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
   
   compound_pathway <- foodb_fetch_CompoundsPathway(con, id)
   pathway <- foodb_fetch_Pathway(con, compound_pathway$pathway_id)
+
+  # Fetch content and food data
+  content <- foodb_fetch_Content(con, id)
+  food <- if (nrow(content) > 0) {
+    foodb_fetch_Food(con, content$food_id)
+  } else {
+    data.frame()
+  }
   
   # Combine data into a single output for each query
   foo <- function(i) {
@@ -594,6 +657,57 @@ foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
       dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
       dplyr::pull(!!rlang::sym("pathway_id")) |>
       (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
+    
+    # Build content output for this query
+    content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == id_q)
+    if (nrow(content_q) > 0) {
+      food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
+      if (nrow(food_q) == 0) {
+        food_q <- data.frame(
+          id = content_q$food_id,
+          name = NA_character_,
+          name_scientific = NA_character_,
+          description = NA_character_,
+          food_group = NA_character_,
+          food_subgroup = NA_character_,
+          food_type = NA_character_
+        )
+      }
+      content_out <- content_q |>
+        dplyr::left_join(food_q, by = c("food_id" = "id")) |>
+        dplyr::relocate(
+          dplyr::all_of(c(
+            "name",
+            "name_scientific",
+            "description",
+            "food_group",
+            "food_subgroup",
+            "food_type"
+          )),
+          .after = !!rlang::sym("food_id")
+        ) |>
+        dplyr::select(-!!rlang::sym("food_id"))
+    } else {
+      content_out <- tibble::tibble(
+        source_id = NA_integer_,
+        orig_food_part = NA_character_,
+        preparation_type = NA_character_,
+        standard_content = NA_real_,
+        orig_content = NA_real_,
+        orig_min = NA_real_,
+        orig_max = NA_real_,
+        orig_unit = NA_character_,
+        orig_unit_expression = NA_character_,
+        orig_method = NA_character_,
+        name = NA_character_,
+        name_scientific = NA_character_,
+        description = NA_character_,
+        food_group = NA_character_,
+        food_subgroup = NA_character_,
+        food_type = NA_character_
+      )
+    }
+    
     out <- list(
       public_id = compound_q$public_id,
       name = compound_q$name,
@@ -669,106 +783,18 @@ foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
       } else {
         tibble::tibble(
           id = NA_integer_,
-          smpd_id = NA_character_,
+          smpdb_id = NA_character_,
           kegg_map_id = NA_character_,
           name = NA_character_
         )
       },
-      content <- foodb_query_content(
-        query = q,
-        from = from,
-        verbose = verbose
-      ),
+      content = content_out,
       synonyms = foodb_query_synonyms(
         query = q,
         from = from,
         verbose = verbose
       )
     )
-    return(out)
-  }
-  out <- lapply(seq_along(query), foo)
-  names(out) <- query
-  return(out)
-}
-
-foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
-  con <- connect_foodb()
-  on.exit(DBI::dbDisconnect(con))
-  id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
-  content <- dplyr::tbl(con, "Content") |>
-    dplyr::filter(!!rlang::sym("source_type") == "Compound") |>
-    dplyr::filter(!!rlang::sym("source_id") %in% !!id) |>
-    dplyr::select(
-      "source_id",
-      "food_id",
-      "orig_food_part",
-      "preparation_type",
-      "standard_content",
-      "orig_content",
-      "orig_min",
-      "orig_max",
-      "orig_unit",
-      "orig_unit_expression",
-      "orig_method",
-      "orig_content"
-    ) |>
-    dplyr::mutate(
-      standard_content = as.numeric(!!rlang::sym("standard_content")),
-      orig_content = as.numeric(!!rlang::sym("orig_content")),
-      orig_min = as.numeric(!!rlang::sym("orig_min")),
-      orig_max = as.numeric(!!rlang::sym("orig_max"))
-    ) |> 
-    dplyr::collect()
-  if (nrow(content) == 0) {
-    if (verbose) message("No content data found.")
-    return(NA_character_)
-  }
-  food <- dplyr::tbl(con, "Food") |>
-    dplyr::filter(!!rlang::sym("id") %in% content$food_id) |>
-    dplyr::select(
-      "id",
-      "name",
-      "name_scientific",
-      "description",
-      "food_group",
-      "food_subgroup",
-      "food_type"
-    ) |>
-    dplyr::collect()
-  foo <- function(i) {
-    q <- query[i]
-    content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == id[i])
-    if (nrow(content_q) == 0) {
-      if (verbose) message("No content data found for query: ", q)
-      return(NA_character_)
-    }
-    food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
-    if (nrow(food_q) == 0) {
-      food_q <- data.frame(
-        id = content_q$food_id,
-        name = NA_character_,
-        name_scientific = NA_character_,
-        description = NA_character_,
-        food_group = NA_character_,
-        food_subgroup = NA_character_,
-        food_type = NA_character_
-      )
-    }
-    out <- content_q |>
-      dplyr::left_join(food_q, by = c("food_id" = "id")) |>
-      dplyr::relocate(
-        dplyr::all_of(c(
-          "name",
-          "name_scientific",
-          "description",
-          "food_group",
-          "food_subgroup",
-          "food_type"
-        )),
-        .after = !!rlang::sym("food_id")
-      ) |>
-      dplyr::select(-!!rlang::sym("food_id"))
     return(out)
   }
   out <- lapply(seq_along(query), foo)
