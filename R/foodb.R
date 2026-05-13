@@ -242,7 +242,7 @@ foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
   query_na <- harmonised_names$query[which(is.na(harmonised_names$foodb_name))]
   synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
     dplyr::filter(!!rlang::sym("synonym") %in% query_na) |>
-    dplyr::select(!!rlang::sym("synonym"), !!rlang::sym("source_id")) |>
+    dplyr::select("synonym", "source_id") |>
     dplyr::collect() |>
     dplyr::mutate(
       foodb_name = foodb_convert(
@@ -560,18 +560,18 @@ foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
     dplyr::filter(!!rlang::sym("source_type") == "Compound") |>
     dplyr::filter(!!rlang::sym("source_id") %in% !!id) |>
     dplyr::select(
-      !!rlang::sym("source_id"),
-      !!rlang::sym("food_id"),
-      !!rlang::sym("orig_food_part"),
-      !!rlang::sym("preparation_type"),
-      !!rlang::sym("standard_content"),
-      !!rlang::sym("orig_content"),
-      !!rlang::sym("orig_min"),
-      !!rlang::sym("orig_max"),
-      !!rlang::sym("orig_unit"),
-      !!rlang::sym("orig_unit_expression"),
-      !!rlang::sym("orig_method"),
-      !!rlang::sym("orig_content")
+      "source_id",
+      "food_id",
+      "orig_food_part",
+      "preparation_type",
+      "standard_content",
+      "orig_content",
+      "orig_min",
+      "orig_max",
+      "orig_unit",
+      "orig_unit_expression",
+      "orig_method",
+      "orig_content"
     ) |>
     dplyr::mutate(
       standard_content = as.numeric(!!rlang::sym("standard_content")),
@@ -587,13 +587,13 @@ foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
   food <- dplyr::tbl(con, "Food") |>
     dplyr::filter(!!rlang::sym("id") %in% content$food_id) |>
     dplyr::select(
-      !!rlang::sym("id"),
-      !!rlang::sym("name"),
-      !!rlang::sym("name_scientific"),
-      !!rlang::sym("description"),
-      !!rlang::sym("food_group"),
-      !!rlang::sym("food_subgroup"),
-      !!rlang::sym("food_type")
+      "id",
+      "name",
+      "name_scientific",
+      "description",
+      "food_group",
+      "food_subgroup",
+      "food_type"
     ) |>
     dplyr::collect()
   foo <- function(i) {
@@ -655,7 +655,7 @@ foodb_query_synonyms <- function(
   }
   synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
     dplyr::filter(!!rlang::sym("source_id") %in% query_nona) |>
-    dplyr::select(!!rlang::sym("source_id"), !!rlang::sym("synonym")) |>
+    dplyr::select("source_id", "synonym") |>
     dplyr::collect()
 
   foo <- function(i) {
