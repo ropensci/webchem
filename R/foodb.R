@@ -286,22 +286,7 @@ foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
 }
 
 foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
-  resource <- match.arg(
-    resource, 
-    choices = c("compound", "content", "synonyms"), 
-    several.ok = FALSE
-  )
-  FUN <- paste0("foodb_query_", resource)
-  if (!exists(FUN)) {
-    stop("Resource '", resource, "' is not implemented.")
-  }
-  else {
-    do.call(FUN, args = list(
-      query = query,
-      from = from,
-      verbose = verbose
-    ))
-  }
+  foodb_query_compound(query, from, verbose = verbose)
 }
 
 foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
@@ -543,7 +528,17 @@ foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
           kegg_map_id = NA_character_,
           name = NA_character_
         )
-      }
+      },
+      content <- foodb_query_content(
+        query = q,
+        from = from,
+        verbose = verbose
+      ),
+      synonyms = foodb_query_synonyms(
+        query = q,
+        from = from,
+        verbose = verbose
+      )
     )
     return(out)
   }
