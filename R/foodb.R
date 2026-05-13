@@ -300,6 +300,254 @@ foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
   }
 }
 
+foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
+  con <- connect_foodb()
+  on.exit(DBI::dbDisconnect(con))
+  id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
+  compound <- dplyr::tbl(con, "Compound") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!id) |>
+    dplyr::collect()
+  if (nrow(compound) == 0) {
+    if (verbose) message("No compound data found.")
+    return(NA_character_)
+  }
+  compound_external <- dplyr::tbl(con, "CompoundExternalDescriptor") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
+    dplyr::select("id", "external_id") |>
+    dplyr::collect()
+  compound_ontology_term <- dplyr::tbl(con, "CompoundOntologyTerm") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
+    dplyr::select("compound_id", "ontology_term_id") |>
+    dplyr::collect()
+  expanded_ontology_term_ids <- foodb_expand_ontology_terms(
+    df = dplyr::tbl(con, "OntologyTerm"),
+    seed = compound_ontology_term$ontology_term_id |> unique()
+  )
+  ontology_term <- dplyr::tbl(con, "OntologyTerm") |>
+    dplyr::filter(!!rlang::sym("id") %in% expanded_ontology_term_ids) |>
+    dplyr::select(
+      "id",
+      "term",
+      "definition",
+      "external_id",
+      "external_source",
+      "comment",
+      "parent_id",
+      "level"
+    ) |>
+    dplyr::collect()
+  compound_enzyme <- dplyr::tbl(con, "CompoundsEnzyme") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
+    dplyr::select(
+      "compound_id",
+      "enzyme_id",
+      "citations"
+    ) |>
+    dplyr::collect()
+  enzyme <- dplyr::tbl(con, "Enzyme") |>
+    dplyr::filter(!!rlang::sym("id") %in% compound_enzyme$enzyme_id) |>
+    dplyr::select(
+      "id",
+      "name",
+      "gene_name",
+      "uniprot_id"
+    ) |>
+    dplyr::collect()
+  compound_flavor <- dplyr::tbl(con, "CompoundsFlavor") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
+    dplyr::select(
+      "compound_id",
+      "flavor_id",
+      "citations"
+    ) |>
+    dplyr::collect()
+  flavor <- dplyr::tbl(con, "Flavor") |>
+    dplyr::filter(!!rlang::sym("id") %in% compound_flavor$flavor_id) |>
+    dplyr::select(
+      "id",
+      "name",
+      "flavor_group",
+      "category"
+    ) |>
+    dplyr::collect()
+  compound_he <- dplyr::tbl(con, "CompoundsHealthEffect") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
+    dplyr::collect() |>
+    dplyr::select(
+      "compound_id",
+      "health_effect_id",
+      "citation",
+      "citation_type"
+    )
+  health_effect <- dplyr::tbl(con, "HealthEffect") |>
+    dplyr::filter(!!rlang::sym("id") %in% compound_he$health_effect_id) |>
+    dplyr::select(
+      "id",
+      "name",
+      "description",
+      "chebi_name",
+      "chebi_id",
+      "chebi_definition"
+    ) |>
+    dplyr::collect()
+  compound_pathway <- dplyr::tbl(con, "CompoundsPathway") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
+    dplyr::select(
+      "compound_id",
+      "pathway_id"
+    ) |>
+    dplyr::collect()
+  pathway <- dplyr::tbl(con, "Pathway") |>
+    dplyr::filter(!!rlang::sym("id") %in% compound_pathway$pathway_id) |>
+    dplyr::select(
+      "id",
+      "smpdb_id",
+      "kegg_map_id",
+      "name"
+    ) |>
+    dplyr::collect()
+  foo <- function(i) {
+    q <- query[i]
+    id_q <- id[i]
+    compound_q <- compound |> 
+      dplyr::filter(!!rlang::sym("id") == id_q)
+    if (nrow(compound_q) == 0) {
+      if (verbose) message("No compound data found for query: ", q)
+      return(NA_character_)
+    }
+    compound_external_q <- compound_external |> 
+      dplyr::filter(!!rlang::sym("id") == id_q)
+    ontology_terms_q <- ontology_term |>
+      dplyr::filter(!!rlang::sym("id") %in% foodb_expand_ontology_terms(
+        df = ontology_term,
+        seed = compound_ontology_term$ontology_term_id[which(compound_ontology_term$compound_id == id_q)]
+      ))
+    enzymes_q <- compound_enzyme |>
+      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
+      dplyr::left_join(
+        enzyme,
+        by = c("enzyme_id" = "id")
+      ) |>
+      dplyr::select(-"compound_id") |>
+      dplyr::relocate(
+        "citations",
+        .after = dplyr::last_col()
+      )
+    flavor_q <- compound_flavor |>
+      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
+      dplyr::left_join(
+        flavor,
+        by = c("flavor_id" = "id")
+      ) |>
+      dplyr::select(-"compound_id") |>
+      dplyr::relocate(
+        "citations",
+        .after = dplyr::last_col()
+      )
+    health_effect_q <- compound_he |>
+      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
+      dplyr::left_join(
+        health_effect,
+        by = c("health_effect_id" = "id")
+      ) |>
+      dplyr::select(-"compound_id") |>
+      dplyr::relocate(
+        "citation",
+        "citation_type",
+        .after = dplyr::last_col()
+      )
+    pathway_q <- compound_pathway |>
+      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
+      dplyr::pull(!!rlang::sym("pathway_id")) |>
+      (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
+    out <- list(
+      public_id = compound_q$public_id,
+      name = compound_q$name,
+      state = compound_q$state,
+      annotation_quality = compound_q$annotation_quality,
+      description = compound_q$description,
+      cas_number = compound_q$cas_number,
+      moldb_smiles = compound_q$moldb_smiles,
+      moldb_mono_mass = compound_q$moldb_mono_mass,
+      moldb_inchikey = compound_q$moldb_inchikey,
+      moldb_iupac = compound_q$moldb_iupac,
+      kingdom = compound_q$kingdom,
+      superklass = compound_q$superklass,
+      klass = compound_q$klass,
+      subklass = compound_q$subklass,
+      external_descriptors = if (nrow(compound_external_q) > 0) {
+        compound_external_q$external_id
+      } else {
+        NA_character_
+      },
+      ontology_terms = if (nrow(ontology_terms_q) > 0) {
+        ontology_terms_q
+      } else {
+        tibble::tibble(
+          id = NA_integer_,
+          term = NA_character_,
+          definition = NA_character_,
+          external_id = NA_character_,
+          external_source = NA_character_,
+          comment = NA_character_,
+          parent_id = NA_integer_,
+          level = NA_integer_
+        )
+      },
+      enzymes = if (nrow(enzymes_q) > 0) {
+        enzymes_q
+      } else {
+        tibble::tibble(
+          id = NA_integer_,
+          name = NA_character_,
+          gene_name = NA_character_,
+          uniprot_id = NA_character_,
+          citations = NA_character_
+        )
+      },
+      flavor = if (nrow(flavor_q) > 0) {
+        flavor_q
+      } else {
+        tibble::tibble(
+          flavor_id = NA_integer_,
+          name = NA_character_,
+          flavor_group = NA_character_,
+          category = NA_character_,
+          citations = NA_character_
+        )
+      },
+      health_effect = if (nrow(health_effect_q) > 0) {
+        health_effect_q
+      } else {
+        tibble::tibble(
+          health_effect_id = NA_integer_,
+          name = NA_character_,
+          description = NA_character_,
+          chebi_name = NA_character_,
+          chebi_id = NA_character_,
+          chebi_definition = NA_character_,
+          citation = NA_character_,
+          citation_type = NA_character_
+        )
+      },
+      pathway = if (nrow(pathway_q) > 0) {
+        pathway_q
+      } else {
+        tibble::tibble(
+          id = NA_integer_,
+          smpd_id = NA_character_,
+          kegg_map_id = NA_character_,
+          name = NA_character_
+        )
+      }
+    )
+    return(out)
+  }
+  out <- lapply(seq_along(query), foo)
+  names(out) <- query
+  return(out)
+}
+
 foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
