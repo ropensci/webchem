@@ -260,7 +260,7 @@ foodb_fetch_CompoundOntologyTerm <- function(con, ids) {
 #' @noRd
 foodb_fetch_OntologyTerm <- function(con, ids) {
   dplyr::tbl(con, "OntologyTerm") |>
-    dplyr::filter(!!rlang::sym("id") %in% !!ontology_term_ids) |>
+    dplyr::filter(!!rlang::sym("id") %in% !!ids) |>
     dplyr::select(
       "id",
       "term",
@@ -492,7 +492,7 @@ foodb_fetch_Food <- function(con, food_ids) {
 #'   tibble of NAs if no content data exists
 #' @noRd
 foodb_build_content_output <- function(id, content, food) {
-  content |> dplyr::filter(!!rlang::sym("source_id") == id)
+  content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == id)
   if (nrow(content_q) > 0) {
     food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
     if (nrow(food_q) == 0) {
@@ -543,6 +543,189 @@ foodb_build_content_output <- function(id, content, food) {
   return(content_out)
 }
 
+#' Build ontology terms output for a single compound query
+#'
+#' Filters ontology terms to those associated with a compound ID,
+#' expanding to parent terms, and returns a schema-conforming NA tibble if empty.
+#'
+#' @param id The compound ID
+#' @param compound_ontology_term A data frame with compound-ontology associations
+#' @param ontology_term A data frame with ontology term details
+#'
+#' @return A tibble with ontology term information
+#' @noRd
+foodb_build_ontology_terms_output <- function(id, compound_ontology_term, ontology_term) {
+  seed_ids <- compound_ontology_term$ontology_term_id[
+    which(compound_ontology_term$compound_id == id)
+  ]
+  ontology_terms_q <- ontology_term |>
+    dplyr::filter(!!rlang::sym("id") %in% foodb_expand_ontology_terms(
+      df = ontology_term,
+      seed = seed_ids
+    ))
+  
+  if (nrow(ontology_terms_q) > 0) {
+    ontology_terms_q
+  } else {
+    tibble::tibble(
+      id = NA_integer_,
+      term = NA_character_,
+      definition = NA_character_,
+      external_id = NA_character_,
+      external_source = NA_character_,
+      comment = NA_character_,
+      parent_id = NA_integer_,
+      level = NA_integer_
+    )
+  }
+}
+
+#' Build enzymes output for a single compound query
+#'
+#' Combines compound-enzyme and enzyme data for a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_enzyme A data frame with compound-enzyme associations
+#' @param enzyme A data frame with enzyme details
+#'
+#' @return A tibble with enzyme information
+#' @noRd
+foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
+  enzymes_q <- compound_enzyme |>
+    dplyr::filter(!!rlang::sym("compound_id") == id) |>
+    dplyr::left_join(
+      enzyme,
+      by = c("enzyme_id" = "id")
+    ) |>
+    dplyr::select(-"compound_id") |>
+    dplyr::relocate(
+      "citations",
+      .after = dplyr::last_col()
+    )
+  
+  if (nrow(enzymes_q) > 0) {
+    enzymes_q
+  } else {
+    tibble::tibble(
+      enzyme_id = NA_integer_,
+      id = NA_integer_,
+      name = NA_character_,
+      gene_name = NA_character_,
+      uniprot_id = NA_character_,
+      citations = NA_character_
+    )
+  }
+}
+
+#' Build flavor output for a single compound query
+#'
+#' Combines compound-flavor and flavor data for a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_flavor A data frame with compound-flavor associations
+#' @param flavor A data frame with flavor details
+#'
+#' @return A tibble with flavor information
+#' @noRd
+foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
+  flavor_q <- compound_flavor |>
+    dplyr::filter(!!rlang::sym("compound_id") == id) |>
+    dplyr::left_join(
+      flavor,
+      by = c("flavor_id" = "id")
+    ) |>
+    dplyr::select(-"compound_id") |>
+    dplyr::relocate(
+      "citations",
+      .after = dplyr::last_col()
+    )
+  
+  if (nrow(flavor_q) > 0) {
+    flavor_q
+  } else {
+    tibble::tibble(
+      flavor_id = NA_integer_,
+      id = NA_integer_,
+      name = NA_character_,
+      flavor_group = NA_character_,
+      category = NA_character_,
+      citations = NA_character_
+    )
+  }
+}
+
+#' Build health effect output for a single compound query
+#'
+#' Combines compound-health effect and health effect data for a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_he A data frame with compound-health effect associations
+#' @param health_effect A data frame with health effect details
+#'
+#' @return A tibble with health effect information
+#' @noRd
+foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
+  health_effect_q <- compound_he |>
+    dplyr::filter(!!rlang::sym("compound_id") == id) |>
+    dplyr::left_join(
+      health_effect,
+      by = c("health_effect_id" = "id")
+    ) |>
+    dplyr::select(-"compound_id") |>
+    dplyr::relocate(
+      "citation",
+      "citation_type",
+      .after = dplyr::last_col()
+    )
+  
+  if (nrow(health_effect_q) > 0) {
+    health_effect_q
+  } else {
+    tibble::tibble(
+      health_effect_id = NA_integer_,
+      id = NA_integer_,
+      name = NA_character_,
+      description = NA_character_,
+      chebi_name = NA_character_,
+      chebi_id = NA_character_,
+      chebi_definition = NA_character_,
+      citation = NA_character_,
+      citation_type = NA_character_
+    )
+  }
+}
+
+#' Build pathway output for a single compound query
+#'
+#' Filters pathways to those associated with a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_pathway A data frame with compound-pathway associations
+#' @param pathway A data frame with pathway details
+#'
+#' @return A tibble with pathway information
+#' @noRd
+foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
+  pathway_q <- compound_pathway |>
+    dplyr::filter(!!rlang::sym("compound_id") == id) |>
+    dplyr::pull(!!rlang::sym("pathway_id")) |>
+    (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
+  
+  if (nrow(pathway_q) > 0) {
+    pathway_q
+  } else {
+    tibble::tibble(
+      id = NA_integer_,
+      smpdb_id = NA_character_,
+      kegg_map_id = NA_character_,
+      name = NA_character_
+    )
+  }
+}
 #' Harmonise compound names to match FooDB entries
 #'
 #' @param query A character vector of compound names to harmonise.
@@ -623,7 +806,7 @@ foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
   return(compounds)
 }
 
-foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
+foodb_query <- function(query, from, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
   id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
@@ -639,7 +822,9 @@ foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
   compound_external <- foodb_fetch_CompoundExternalDescriptor(con, id)
 
   compound_ontology_term <- foodb_fetch_CompoundOntologyTerm(con, id)
-  expanded_ontology_term_ids <- foodb_expand_ontology_terms(con, id)
+  expanded_ontology_term_ids <- foodb_expand_ontology_terms(
+    dplyr::tbl(con, "OntologyTerm"), compound_ontology_term$ontology_term_id
+  )
   ontology_term <- foodb_fetch_OntologyTerm(con, expanded_ontology_term_ids)
   
   compound_enzyme <- foodb_fetch_CompoundsEnzyme(con, id)
@@ -656,11 +841,7 @@ foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
 
   # Fetch content and food data
   content <- foodb_fetch_Content(con, id)
-  food <- if (nrow(content) > 0) {
-    foodb_fetch_Food(con, content$food_id)
-  } else {
-    data.frame()
-  }
+  food <- foodb_fetch_Food(con, content$food_id)
   
   # Combine data into a single output for each query
   foo <- function(i) {
@@ -674,51 +855,7 @@ foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
     }
     compound_external_q <- compound_external |> 
       dplyr::filter(!!rlang::sym("id") == id_q)
-    ontology_terms_q <- ontology_term |>
-      dplyr::filter(!!rlang::sym("id") %in% foodb_expand_ontology_terms(
-        df = ontology_term,
-        seed = compound_ontology_term$ontology_term_id[which(compound_ontology_term$compound_id == id_q)]
-      ))
-    enzymes_q <- compound_enzyme |>
-      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
-      dplyr::left_join(
-        enzyme,
-        by = c("enzyme_id" = "id")
-      ) |>
-      dplyr::select(-"compound_id") |>
-      dplyr::relocate(
-        "citations",
-        .after = dplyr::last_col()
-      )
-    flavor_q <- compound_flavor |>
-      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
-      dplyr::left_join(
-        flavor,
-        by = c("flavor_id" = "id")
-      ) |>
-      dplyr::select(-"compound_id") |>
-      dplyr::relocate(
-        "citations",
-        .after = dplyr::last_col()
-      )
-    health_effect_q <- compound_he |>
-      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
-      dplyr::left_join(
-        health_effect,
-        by = c("health_effect_id" = "id")
-      ) |>
-      dplyr::select(-"compound_id") |>
-      dplyr::relocate(
-        "citation",
-        "citation_type",
-        .after = dplyr::last_col()
-      )
-    pathway_q <- compound_pathway |>
-      dplyr::filter(!!rlang::sym("compound_id") == id_q) |>
-      dplyr::pull(!!rlang::sym("pathway_id")) |>
-      (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
     
-    # Build content output for this query  
     out <- list(
       public_id = compound_q$public_id,
       name = compound_q$name,
@@ -739,66 +876,15 @@ foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
       } else {
         NA_character_
       },
-      ontology_terms = if (nrow(ontology_terms_q) > 0) {
-        ontology_terms_q
-      } else {
-        tibble::tibble(
-          id = NA_integer_,
-          term = NA_character_,
-          definition = NA_character_,
-          external_id = NA_character_,
-          external_source = NA_character_,
-          comment = NA_character_,
-          parent_id = NA_integer_,
-          level = NA_integer_
-        )
-      },
-      enzymes = if (nrow(enzymes_q) > 0) {
-        enzymes_q
-      } else {
-        tibble::tibble(
-          id = NA_integer_,
-          name = NA_character_,
-          gene_name = NA_character_,
-          uniprot_id = NA_character_,
-          citations = NA_character_
-        )
-      },
-      flavor = if (nrow(flavor_q) > 0) {
-        flavor_q
-      } else {
-        tibble::tibble(
-          flavor_id = NA_integer_,
-          name = NA_character_,
-          flavor_group = NA_character_,
-          category = NA_character_,
-          citations = NA_character_
-        )
-      },
-      health_effect = if (nrow(health_effect_q) > 0) {
-        health_effect_q
-      } else {
-        tibble::tibble(
-          health_effect_id = NA_integer_,
-          name = NA_character_,
-          description = NA_character_,
-          chebi_name = NA_character_,
-          chebi_id = NA_character_,
-          chebi_definition = NA_character_,
-          citation = NA_character_,
-          citation_type = NA_character_
-        )
-      },
-      pathway = if (nrow(pathway_q) > 0) {
-        pathway_q
-      } else {
-        tibble::tibble(
-          id = NA_integer_,
-          smpdb_id = NA_character_,
-          kegg_map_id = NA_character_,
-          name = NA_character_
-        )
-      },
+      ontology_terms = foodb_build_ontology_terms_output(
+        id_q, compound_ontology_term, ontology_term
+      ),
+      enzymes = foodb_build_enzymes_output(id_q, compound_enzyme, enzyme),
+      flavor = foodb_build_flavor_output(id_q, compound_flavor, flavor),
+      health_effect = foodb_build_health_effect_output(
+        id_q, compound_he, health_effect
+      ),
+      pathway = foodb_build_pathway_output(id_q, compound_pathway, pathway),
       content = foodb_build_content_output(id_q, content, food),
       synonyms = foodb_query_synonyms(
         query = q,
