@@ -632,7 +632,7 @@ foodb_query_content <- function(query, from, verbose = getOption("verbose")) {
   return(out)
 }
 
-foodb_synonyms <- function(
+foodb_query_synonyms <- function(
   query,
   from = "name",
   verbose = getOption("verbose")) {
@@ -658,21 +658,31 @@ foodb_synonyms <- function(
     q <- query[i]
     id <- query_id[i]
     if (is.na(id)) {
+      if (verbose) message("Query not found in database: ", q)
       data.frame(
         query = q,
-        synonym = NA_character_
+        synonym = NA_character_,
+        foodb_name = NA_character_
       )
     } else {
       query_synonyms <- synonyms[synonyms$source_id == id, "synonym", drop = TRUE]
       if (length(query_synonyms) == 0) {
+        if (verbose) message("No synonyms found for query: ", q)
         data.frame(
           query = q,
-          synonym = NA_character_
+          synonym = NA_character_,
+          foodb_name = q
         )
       } else {
         data.frame(
           query = q,
-          synonym = query_synonyms
+          synonym = query_synonyms,
+          foodb_name = foodb_convert(
+            id, 
+            from = "id", 
+            to = "name", 
+            verbose = FALSE
+          )
         )
       }
     }
