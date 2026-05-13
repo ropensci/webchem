@@ -286,7 +286,11 @@ foodb_list_compounds <- function(idtype, verbose = getOption("verbose")) {
 }
 
 foodb_query <- function(query, from, resource, verbose = getOption("verbose")) {
-  resource <- match.arg(resource, choices = "content")
+  resource <- match.arg(
+    resource, 
+    choices = c("compound", "content", "synonyms"), 
+    several.ok = FALSE
+  )
   FUN <- paste0("foodb_query_", resource)
   if (!exists(FUN)) {
     stop("Resource '", resource, "' is not implemented.")
