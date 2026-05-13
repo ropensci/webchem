@@ -726,6 +726,51 @@ foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
     )
   }
 }
+
+#' Fetch compound synonyms from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character or numeric vector of compound IDs
+#'
+#' @return A data frame with compound synonyms
+#' @noRd
+foodb_fetch_CompoundSynonym <- function(con, ids) {
+  dplyr::tbl(con, "CompoundSynonym") |>
+    dplyr::filter(!!rlang::sym("source_id") %in% !!ids) |>
+    dplyr::select("source_id", "synonym") |>
+    dplyr::collect()
+}
+
+#' Build synonyms output for a single compound query
+#'
+#' Combines compound ID and synonym data for a single query,
+#' and returns a schema-conforming NA tibble if no synonyms exist.
+#'
+#' @param query The original query string
+#' @param id The compound ID corresponding to the query
+#' @param synonyms A vector of synonyms, including the original query and its 
+#' harmomised name, if applicable
+#'
+#' @return A vector of unique, sorted synonyms for the compound.
+#' @noRd
+foodb_build_synonyms_output <- function(query, id, synonyms) {
+  foodb_name <- foodb_convert(
+    id,
+    from = "id",
+    to = "name",
+    verbose = FALSE
+  )
+  synonyms_q <- synonyms |> 
+    dplyr::filter(!!rlang::sym("source_id") == id) |>
+    dplyr::pull("synonym")
+  if (length(synonyms_q) > 0) {
+    synonyms_q <- c(query, foodb_name, synonyms_q) |> unique() |> sort()
+  } else {
+    synonyms_q <- foodb_name
+  }
+  return(synonyms_q)
+}
+
 #' Harmonise compound names to match FooDB entries
 #'
 #' @param query A character vector of compound names to harmonise.
@@ -839,6 +884,8 @@ foodb_query <- function(query, from, verbose = getOption("verbose")) {
   compound_pathway <- foodb_fetch_CompoundsPathway(con, id)
   pathway <- foodb_fetch_Pathway(con, compound_pathway$pathway_id)
 
+  synonyms <- foodb_fetch_CompoundSynonym(con, id)
+
   # Fetch content and food data
   content <- foodb_fetch_Content(con, id)
   food <- foodb_fetch_Food(con, content$food_id)
@@ -886,75 +933,12 @@ foodb_query <- function(query, from, verbose = getOption("verbose")) {
       ),
       pathway = foodb_build_pathway_output(id_q, compound_pathway, pathway),
       content = foodb_build_content_output(id_q, content, food),
-      synonyms = foodb_query_synonyms(
-        query = q,
-        from = from,
-        verbose = verbose
-      )
+      synonyms = foodb_build_synonyms_output(q, id_q, synonyms)
     )
     return(out)
   }
   out <- lapply(seq_along(query), foo)
   names(out) <- query
-  return(out)
-}
-
-foodb_query_synonyms <- function(
-  query,
-  from = "name",
-  verbose = getOption("verbose")) {
-  con <- connect_foodb()
-  on.exit(DBI::dbDisconnect(con))
-  from <- match.arg(from, foodb_compound_idtypes(), several.ok = FALSE)
-  if (from != "id") {
-    query_id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
-  } else {
-    query_id <- query
-  }
-  query_nona <- query_id[!is.na(query_id)]
-  if (length(query_nona) == 0) {
-    if (verbose) message("No valid identifiers provided.")
-    return(NA_character_)
-  }
-  synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
-    dplyr::filter(!!rlang::sym("source_id") %in% query_nona) |>
-    dplyr::select("source_id", "synonym") |>
-    dplyr::collect()
-
-  foo <- function(i) {
-    q <- query[i]
-    id <- query_id[i]
-    if (is.na(id)) {
-      if (verbose) message("Query not found in database: ", q)
-      data.frame(
-        query = q,
-        synonym = NA_character_,
-        foodb_name = NA_character_
-      )
-    } else {
-      query_synonyms <- synonyms[synonyms$source_id == id, "synonym", drop = TRUE]
-      if (length(query_synonyms) == 0) {
-        if (verbose) message("No synonyms found for query: ", q)
-        data.frame(
-          query = q,
-          synonym = NA_character_,
-          foodb_name = q
-        )
-      } else {
-        data.frame(
-          query = q,
-          synonym = query_synonyms,
-          foodb_name = foodb_convert(
-            id, 
-            from = "id", 
-            to = "name", 
-            verbose = FALSE
-          )
-        )
-      }
-    }
-  }
-  out <- lapply(seq_along(query), foo) |> dplyr::bind_rows()
   return(out)
 }
 
