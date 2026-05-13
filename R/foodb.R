@@ -199,6 +199,30 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
   return(out)
 }
 
+foodb_expand_ontology_terms <- function(df, seed) {
+  if (inherits(df, "tbl_SQLiteConnection")) {
+    con <- connect_foodb()
+    on.exit(DBI::dbDisconnect(con))
+  }
+  out <- seed
+  parent_ids <- seed
+  max_iterations <- 100L
+  for (i in seq_len(max_iterations)) {
+    parent_ids <- df |>
+      dplyr::filter(!!rlang::sym("id") %in% parent_ids) |>
+      dplyr::pull(!!rlang::sym("parent_id")) |>
+      unique() |>
+      (\(x) x[!is.na(x)])()
+    
+    if (length(parent_ids) == 0) break
+    out <- unique(c(out, parent_ids))
+  }
+  if (i == max_iterations) {
+    warning("Maximum iterations (", max_iterations, ") reached.")
+  }
+  return(out)
+}
+
 foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
