@@ -1,3 +1,25 @@
+#' Connect local FooDB database
+#'
+#' @importFrom rlang .data
+#' @param ... Further args passed on to [DBI::dbConnect()]
+#' @return an object of class "SQLiteConnection".
+#' @examples
+#' \dontrun{
+#'   con <- connect_foodb(
+#' }
+#' @noRd
+connect_foodb <- function(...) {
+  db_path <- file.path(
+    wc_cache$cache_path_get(),
+    "foodb/foodb_v1.sqlite"
+  ) |> path.expand()
+  if (!file.exists(db_path)) {
+    stop("Database not found. Use db_download_foodb() to download the database.")
+  }
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = db_path, ...)
+  return(con)
+}
+
 #' Download FooDB database
 #'
 #' Download the FooDB database for offline access.
@@ -85,26 +107,282 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
   invisible(sqlite_path)
 }
 
-#' Connect local FooDB database
+#' Build content output for a single compound query
 #'
-#' @importFrom rlang .data
-#' @param ... Further args passed on to [DBI::dbConnect()]
-#' @return an object of class "SQLiteConnection".
-#' @examples
-#' \dontrun{
-#'   con <- connect_foodb(
-#' }
+#' Combines content and food data for a single compound ID, handling joins
+#' and NA cases.
+#'
+#' @param id The compound ID for which to build the content output
+#' @param content A data frame with content data
+#' @param food A data frame with food details for all compounds
+#'
+#' @return A tibble with content and food information, or a schema-conforming
+#'   tibble of NAs if no content data exists
 #' @noRd
-connect_foodb <- function(...) {
-  db_path <- file.path(
-    wc_cache$cache_path_get(),
-    "foodb/foodb_v1.sqlite"
-  ) |> path.expand()
-  if (!file.exists(db_path)) {
-    stop("Database not found. Use db_download_foodb() to download the database.")
+foodb_build_content_output <- function(id, content, food) {
+  content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == !!id)
+  if (nrow(content_q) > 0) {
+    food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
+    if (nrow(food_q) == 0) {
+      food_q <- data.frame(
+        id = content_q$food_id,
+        name = NA_character_,
+        name_scientific = NA_character_,
+        description = NA_character_,
+        food_group = NA_character_,
+        food_subgroup = NA_character_,
+        food_type = NA_character_
+      )
+    }
+    content_out <- content_q |>
+      dplyr::left_join(food_q, by = c("food_id" = "id")) |>
+      dplyr::relocate(
+        dplyr::all_of(c(
+          "name",
+          "name_scientific",
+          "description",
+          "food_group",
+          "food_subgroup",
+          "food_type"
+        )),
+        .after = !!rlang::sym("food_id")
+      ) |>
+      dplyr::select(-c("source_id", "food_id"))
+  } else {
+    content_out <- tibble::tibble(
+      id = NA_integer_,
+      name = NA_character_,
+      name_scientific = NA_character_,
+      description = NA_character_,
+      food_group = NA_character_,
+      food_subgroup = NA_character_,
+      food_type = NA_character_,
+      orig_food_part = NA_character_,
+      preparation_type = NA_character_,
+      standard_content = NA_real_,
+      orig_content = NA_real_,
+      orig_min = NA_real_,
+      orig_max = NA_real_,
+      orig_unit = NA_character_,
+      orig_unit_expression = NA_character_,
+      orig_method = NA_character_
+    )
   }
-  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = db_path, ...)
-  return(con)
+  return(content_out)
+}
+
+#' Build enzymes output for a single compound query
+#'
+#' Combines compound-enzyme and enzyme data for a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_enzyme A data frame with compound-enzyme associations
+#' @param enzyme A data frame with enzyme details
+#'
+#' @return A tibble with enzyme information
+#' @noRd
+foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
+  enzymes_q <- compound_enzyme |>
+    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
+    dplyr::left_join(
+      enzyme,
+      by = c("enzyme_id" = "id")
+    ) |>
+    dplyr::select(-"compound_id") |>
+    dplyr::relocate(
+      "citations",
+      .after = dplyr::last_col()
+    )
+  
+  if (nrow(enzymes_q) > 0) {
+    enzymes_q
+  } else {
+    tibble::tibble(
+      enzyme_id = NA_integer_,
+      id = NA_integer_,
+      name = NA_character_,
+      gene_name = NA_character_,
+      uniprot_id = NA_character_,
+      citations = NA_character_
+    )
+  }
+}
+
+#' Build flavor output for a single compound query
+#'
+#' Combines compound-flavor and flavor data for a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_flavor A data frame with compound-flavor associations
+#' @param flavor A data frame with flavor details
+#'
+#' @return A tibble with flavor information
+#' @noRd
+foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
+  flavor_q <- compound_flavor |>
+    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
+    dplyr::left_join(
+      flavor,
+      by = c("flavor_id" = "id")
+    ) |>
+    dplyr::select(-"compound_id") |>
+    dplyr::relocate(
+      "citations",
+      .after = dplyr::last_col()
+    )
+  
+  if (nrow(flavor_q) > 0) {
+    flavor_q
+  } else {
+    tibble::tibble(
+      flavor_id = NA_integer_,
+      id = NA_integer_,
+      name = NA_character_,
+      flavor_group = NA_character_,
+      category = NA_character_,
+      citations = NA_character_
+    )
+  }
+}
+
+#' Build health effect output for a single compound query
+#'
+#' Combines compound-health effect and health effect data for a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_he A data frame with compound-health effect associations
+#' @param health_effect A data frame with health effect details
+#'
+#' @return A tibble with health effect information
+#' @noRd
+foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
+  health_effect_q <- compound_he |>
+    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
+    dplyr::left_join(
+      health_effect,
+      by = c("health_effect_id" = "id")
+    ) |>
+    dplyr::select(-"compound_id") |>
+    dplyr::relocate(
+      "citation",
+      "citation_type",
+      .after = dplyr::last_col()
+    )
+  
+  if (nrow(health_effect_q) > 0) {
+    health_effect_q
+  } else {
+    tibble::tibble(
+      health_effect_id = NA_integer_,
+      id = NA_integer_,
+      name = NA_character_,
+      description = NA_character_,
+      chebi_name = NA_character_,
+      chebi_id = NA_character_,
+      chebi_definition = NA_character_,
+      citation = NA_character_,
+      citation_type = NA_character_
+    )
+  }
+}
+
+#' Build ontology terms output for a single compound query
+#'
+#' Filters ontology terms to those associated with a compound ID,
+#' expanding to parent terms, and returns a schema-conforming NA tibble if empty.
+#'
+#' @param id The compound ID
+#' @param compound_ontology_term A data frame with compound-ontology associations
+#' @param ontology_term A data frame with ontology term details
+#'
+#' @return A tibble with ontology term information
+#' @noRd
+foodb_build_ontology_terms_output <- function(id, compound_ontology_term, ontology_term) {
+  seed_ids <- compound_ontology_term |>
+    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
+    dplyr::pull(!!rlang::sym("ontology_term_id"))
+  ontology_terms_q <- ontology_term |>
+    dplyr::filter(!!rlang::sym("id") %in% foodb_expand_ontology_terms(
+      df = ontology_term,
+      seed = seed_ids
+    ))
+  
+  if (nrow(ontology_terms_q) > 0) {
+    ontology_terms_q
+  } else {
+    tibble::tibble(
+      id = NA_integer_,
+      term = NA_character_,
+      definition = NA_character_,
+      external_id = NA_character_,
+      external_source = NA_character_,
+      comment = NA_character_,
+      parent_id = NA_integer_,
+      level = NA_integer_
+    )
+  }
+}
+
+#' Build pathway output for a single compound query
+#'
+#' Filters pathways to those associated with a compound ID,
+#' and returns a schema-conforming NA tibble if no data exists.
+#'
+#' @param id The compound ID
+#' @param compound_pathway A data frame with compound-pathway associations
+#' @param pathway A data frame with pathway details
+#'
+#' @return A tibble with pathway information
+#' @noRd
+foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
+  pathway_q <- compound_pathway |>
+    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
+    dplyr::pull(!!rlang::sym("pathway_id")) |>
+    (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
+  
+  if (nrow(pathway_q) > 0) {
+    pathway_q
+  } else {
+    tibble::tibble(
+      id = NA_integer_,
+      smpdb_id = NA_character_,
+      kegg_map_id = NA_character_,
+      name = NA_character_
+    )
+  }
+}
+
+#' Build synonyms output for a single compound query
+#'
+#' Combines compound ID and synonym data for a single query,
+#' and returns a schema-conforming NA tibble if no synonyms exist.
+#'
+#' @param query The original query string
+#' @param id The compound ID corresponding to the query
+#' @param synonyms A vector of synonyms, including the original query and its 
+#' harmomised name, if applicable
+#'
+#' @return A vector of unique, sorted synonyms for the compound.
+#' @noRd
+foodb_build_synonyms_output <- function(query, id, synonyms) {
+  foodb_name <- foodb_convert(
+    id,
+    from = "id",
+    to = "name",
+    verbose = FALSE
+  )
+  synonyms_q <- synonyms |> 
+    dplyr::filter(!!rlang::sym("source_id") == !!id) |>
+    dplyr::pull("synonym")
+  if (length(synonyms_q) > 0) {
+    synonyms_q <- c(query, foodb_name, synonyms_q) |> unique() |> sort()
+  } else {
+    synonyms_q <- foodb_name
+  }
+  return(synonyms_q)
 }
 
 foodb_compound_idtypes <- function() {
@@ -251,26 +529,17 @@ foodb_fetch_CompoundOntologyTerm <- function(con, ids) {
     dplyr::collect()
 }
 
-#' Fetch ontology terms from FooDB
+#' Fetch compound synonyms from FooDB
 #'
 #' @param con A database connection
-#' @param ids Character vector of ontology term IDs
+#' @param ids Character or numeric vector of compound IDs
 #'
-#' @return A data frame with ontology term details
+#' @return A data frame with compound synonyms
 #' @noRd
-foodb_fetch_OntologyTerm <- function(con, ids) {
-  dplyr::tbl(con, "OntologyTerm") |>
-    dplyr::filter(!!rlang::sym("id") %in% !!ids) |>
-    dplyr::select(
-      "id",
-      "term",
-      "definition",
-      "external_id",
-      "external_source",
-      "comment",
-      "parent_id",
-      "level"
-    ) |>
+foodb_fetch_CompoundSynonym <- function(con, ids) {
+  dplyr::tbl(con, "CompoundSynonym") |>
+    dplyr::filter(!!rlang::sym("source_id") %in% !!ids) |>
+    dplyr::select("source_id", "synonym") |>
     dplyr::collect()
 }
 
@@ -292,25 +561,6 @@ foodb_fetch_CompoundsEnzyme <- function(con, ids) {
     dplyr::collect()
 }
 
-#' Fetch enzyme data from FooDB
-#'
-#' @param con A database connection
-#' @param enzyme_ids Character vector of enzyme IDs
-#'
-#' @return A data frame with enzyme details
-#' @noRd
-foodb_fetch_Enzyme <- function(con, enzyme_ids) {
-  dplyr::tbl(con, "Enzyme") |>
-    dplyr::filter(!!rlang::sym("id") %in% !!enzyme_ids) |>
-    dplyr::select(
-      "id",
-      "name",
-      "gene_name",
-      "uniprot_id"
-    ) |>
-    dplyr::collect()
-}
-
 #' Fetch flavor IDs associations from FooDB
 #'
 #' @param con A database connection
@@ -325,25 +575,6 @@ foodb_fetch_CompoundsFlavor <- function(con, ids) {
       "compound_id",
       "flavor_id",
       "citations"
-    ) |>
-    dplyr::collect()
-}
-
-#' Fetch flavor data from FooDB
-#'
-#' @param con A database connection
-#' @param flavor_ids Character vector of flavor IDs
-#'
-#' @return A data frame with flavor details
-#' @noRd
-foodb_fetch_Flavor <- function(con, flavor_ids) {
-  dplyr::tbl(con, "Flavor") |>
-    dplyr::filter(!!rlang::sym("id") %in% !!flavor_ids) |>
-    dplyr::select(
-      "id",
-      "name",
-      "flavor_group",
-      "category"
     ) |>
     dplyr::collect()
 }
@@ -367,27 +598,6 @@ foodb_fetch_CompoundsHealthEffect <- function(con, ids) {
     dplyr::collect()
 }
 
-#' Fetch health effect data from FooDB
-#'
-#' @param con A database connection
-#' @param health_effect_ids Character vector of health effect IDs
-#'
-#' @return A data frame with health effect details
-#' @noRd
-foodb_fetch_HealthEffect <- function(con, health_effect_ids) {
-  dplyr::tbl(con, "HealthEffect") |>
-    dplyr::filter(!!rlang::sym("id") %in% !!health_effect_ids) |>
-    dplyr::select(
-      "id",
-      "name",
-      "description",
-      "chebi_name",
-      "chebi_id",
-      "chebi_definition"
-    ) |>
-    dplyr::collect()
-}
-
 #' Fetch pathway IDs from FooDB
 #'
 #' @param con A database connection
@@ -401,25 +611,6 @@ foodb_fetch_CompoundsPathway <- function(con, ids) {
     dplyr::select(
       "compound_id",
       "pathway_id"
-    ) |>
-    dplyr::collect()
-}
-
-#' Fetch pathway data from FooDB
-#'
-#' @param con A database connection
-#' @param pathway_ids Character vector of pathway IDs
-#'
-#' @return A data frame with pathway details
-#' @noRd
-foodb_fetch_Pathway <- function(con, pathway_ids) {
-  dplyr::tbl(con, "Pathway") |>
-    dplyr::filter(!!rlang::sym("id") %in% !!pathway_ids) |>
-    dplyr::select(
-      "id",
-      "smpdb_id",
-      "kegg_map_id",
-      "name"
     ) |>
     dplyr::collect()
 }
@@ -458,6 +649,44 @@ foodb_fetch_Content <- function(con, ids) {
     dplyr::collect()
 }
 
+#' Fetch enzyme data from FooDB
+#'
+#' @param con A database connection
+#' @param enzyme_ids Character vector of enzyme IDs
+#'
+#' @return A data frame with enzyme details
+#' @noRd
+foodb_fetch_Enzyme <- function(con, enzyme_ids) {
+  dplyr::tbl(con, "Enzyme") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!enzyme_ids) |>
+    dplyr::select(
+      "id",
+      "name",
+      "gene_name",
+      "uniprot_id"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch flavor data from FooDB
+#'
+#' @param con A database connection
+#' @param flavor_ids Character vector of flavor IDs
+#'
+#' @return A data frame with flavor details
+#' @noRd
+foodb_fetch_Flavor <- function(con, flavor_ids) {
+  dplyr::tbl(con, "Flavor") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!flavor_ids) |>
+    dplyr::select(
+      "id",
+      "name",
+      "flavor_group",
+      "category"
+    ) |>
+    dplyr::collect()
+}
+
 #' Fetch food data from FooDB
 #'
 #' @param con A database connection
@@ -480,296 +709,67 @@ foodb_fetch_Food <- function(con, food_ids) {
     dplyr::collect()
 }
 
-#' Build content output for a single compound query
-#'
-#' Combines content and food data for a single compound ID, handling joins
-#' and NA cases.
-#'
-#' @param id The compound ID for which to build the content output
-#' @param content A data frame with content data
-#' @param food A data frame with food details for all compounds
-#'
-#' @return A tibble with content and food information, or a schema-conforming
-#'   tibble of NAs if no content data exists
-#' @noRd
-foodb_build_content_output <- function(id, content, food) {
-  content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == !!id)
-  if (nrow(content_q) > 0) {
-    food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
-    if (nrow(food_q) == 0) {
-      food_q <- data.frame(
-        id = content_q$food_id,
-        name = NA_character_,
-        name_scientific = NA_character_,
-        description = NA_character_,
-        food_group = NA_character_,
-        food_subgroup = NA_character_,
-        food_type = NA_character_
-      )
-    }
-    content_out <- content_q |>
-      dplyr::left_join(food_q, by = c("food_id" = "id")) |>
-      dplyr::relocate(
-        dplyr::all_of(c(
-          "name",
-          "name_scientific",
-          "description",
-          "food_group",
-          "food_subgroup",
-          "food_type"
-        )),
-        .after = !!rlang::sym("food_id")
-      ) |>
-      dplyr::select(-c("source_id", "food_id"))
-  } else {
-    content_out <- tibble::tibble(
-      id = NA_integer_,
-      name = NA_character_,
-      name_scientific = NA_character_,
-      description = NA_character_,
-      food_group = NA_character_,
-      food_subgroup = NA_character_,
-      food_type = NA_character_,
-      orig_food_part = NA_character_,
-      preparation_type = NA_character_,
-      standard_content = NA_real_,
-      orig_content = NA_real_,
-      orig_min = NA_real_,
-      orig_max = NA_real_,
-      orig_unit = NA_character_,
-      orig_unit_expression = NA_character_,
-      orig_method = NA_character_
-    )
-  }
-  return(content_out)
-}
-
-#' Build ontology terms output for a single compound query
-#'
-#' Filters ontology terms to those associated with a compound ID,
-#' expanding to parent terms, and returns a schema-conforming NA tibble if empty.
-#'
-#' @param id The compound ID
-#' @param compound_ontology_term A data frame with compound-ontology associations
-#' @param ontology_term A data frame with ontology term details
-#'
-#' @return A tibble with ontology term information
-#' @noRd
-foodb_build_ontology_terms_output <- function(id, compound_ontology_term, ontology_term) {
-  seed_ids <- compound_ontology_term |>
-    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
-    dplyr::pull(!!rlang::sym("ontology_term_id"))
-  ontology_terms_q <- ontology_term |>
-    dplyr::filter(!!rlang::sym("id") %in% foodb_expand_ontology_terms(
-      df = ontology_term,
-      seed = seed_ids
-    ))
-  
-  if (nrow(ontology_terms_q) > 0) {
-    ontology_terms_q
-  } else {
-    tibble::tibble(
-      id = NA_integer_,
-      term = NA_character_,
-      definition = NA_character_,
-      external_id = NA_character_,
-      external_source = NA_character_,
-      comment = NA_character_,
-      parent_id = NA_integer_,
-      level = NA_integer_
-    )
-  }
-}
-
-#' Build enzymes output for a single compound query
-#'
-#' Combines compound-enzyme and enzyme data for a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
-#' @param compound_enzyme A data frame with compound-enzyme associations
-#' @param enzyme A data frame with enzyme details
-#'
-#' @return A tibble with enzyme information
-#' @noRd
-foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
-  enzymes_q <- compound_enzyme |>
-    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
-    dplyr::left_join(
-      enzyme,
-      by = c("enzyme_id" = "id")
-    ) |>
-    dplyr::select(-"compound_id") |>
-    dplyr::relocate(
-      "citations",
-      .after = dplyr::last_col()
-    )
-  
-  if (nrow(enzymes_q) > 0) {
-    enzymes_q
-  } else {
-    tibble::tibble(
-      enzyme_id = NA_integer_,
-      id = NA_integer_,
-      name = NA_character_,
-      gene_name = NA_character_,
-      uniprot_id = NA_character_,
-      citations = NA_character_
-    )
-  }
-}
-
-#' Build flavor output for a single compound query
-#'
-#' Combines compound-flavor and flavor data for a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
-#' @param compound_flavor A data frame with compound-flavor associations
-#' @param flavor A data frame with flavor details
-#'
-#' @return A tibble with flavor information
-#' @noRd
-foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
-  flavor_q <- compound_flavor |>
-    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
-    dplyr::left_join(
-      flavor,
-      by = c("flavor_id" = "id")
-    ) |>
-    dplyr::select(-"compound_id") |>
-    dplyr::relocate(
-      "citations",
-      .after = dplyr::last_col()
-    )
-  
-  if (nrow(flavor_q) > 0) {
-    flavor_q
-  } else {
-    tibble::tibble(
-      flavor_id = NA_integer_,
-      id = NA_integer_,
-      name = NA_character_,
-      flavor_group = NA_character_,
-      category = NA_character_,
-      citations = NA_character_
-    )
-  }
-}
-
-#' Build health effect output for a single compound query
-#'
-#' Combines compound-health effect and health effect data for a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
-#' @param compound_he A data frame with compound-health effect associations
-#' @param health_effect A data frame with health effect details
-#'
-#' @return A tibble with health effect information
-#' @noRd
-foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
-  health_effect_q <- compound_he |>
-    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
-    dplyr::left_join(
-      health_effect,
-      by = c("health_effect_id" = "id")
-    ) |>
-    dplyr::select(-"compound_id") |>
-    dplyr::relocate(
-      "citation",
-      "citation_type",
-      .after = dplyr::last_col()
-    )
-  
-  if (nrow(health_effect_q) > 0) {
-    health_effect_q
-  } else {
-    tibble::tibble(
-      health_effect_id = NA_integer_,
-      id = NA_integer_,
-      name = NA_character_,
-      description = NA_character_,
-      chebi_name = NA_character_,
-      chebi_id = NA_character_,
-      chebi_definition = NA_character_,
-      citation = NA_character_,
-      citation_type = NA_character_
-    )
-  }
-}
-
-#' Build pathway output for a single compound query
-#'
-#' Filters pathways to those associated with a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
-#' @param compound_pathway A data frame with compound-pathway associations
-#' @param pathway A data frame with pathway details
-#'
-#' @return A tibble with pathway information
-#' @noRd
-foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
-  pathway_q <- compound_pathway |>
-    dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
-    dplyr::pull(!!rlang::sym("pathway_id")) |>
-    (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
-  
-  if (nrow(pathway_q) > 0) {
-    pathway_q
-  } else {
-    tibble::tibble(
-      id = NA_integer_,
-      smpdb_id = NA_character_,
-      kegg_map_id = NA_character_,
-      name = NA_character_
-    )
-  }
-}
-
-#' Fetch compound synonyms from FooDB
+#' Fetch health effect data from FooDB
 #'
 #' @param con A database connection
-#' @param ids Character or numeric vector of compound IDs
+#' @param health_effect_ids Character vector of health effect IDs
 #'
-#' @return A data frame with compound synonyms
+#' @return A data frame with health effect details
 #' @noRd
-foodb_fetch_CompoundSynonym <- function(con, ids) {
-  dplyr::tbl(con, "CompoundSynonym") |>
-    dplyr::filter(!!rlang::sym("source_id") %in% !!ids) |>
-    dplyr::select("source_id", "synonym") |>
+foodb_fetch_HealthEffect <- function(con, health_effect_ids) {
+  dplyr::tbl(con, "HealthEffect") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!health_effect_ids) |>
+    dplyr::select(
+      "id",
+      "name",
+      "description",
+      "chebi_name",
+      "chebi_id",
+      "chebi_definition"
+    ) |>
     dplyr::collect()
 }
 
-#' Build synonyms output for a single compound query
+#' Fetch ontology terms from FooDB
 #'
-#' Combines compound ID and synonym data for a single query,
-#' and returns a schema-conforming NA tibble if no synonyms exist.
+#' @param con A database connection
+#' @param ids Character vector of ontology term IDs
 #'
-#' @param query The original query string
-#' @param id The compound ID corresponding to the query
-#' @param synonyms A vector of synonyms, including the original query and its 
-#' harmomised name, if applicable
-#'
-#' @return A vector of unique, sorted synonyms for the compound.
+#' @return A data frame with ontology term details
 #' @noRd
-foodb_build_synonyms_output <- function(query, id, synonyms) {
-  foodb_name <- foodb_convert(
-    id,
-    from = "id",
-    to = "name",
-    verbose = FALSE
-  )
-  synonyms_q <- synonyms |> 
-    dplyr::filter(!!rlang::sym("source_id") == !!id) |>
-    dplyr::pull("synonym")
-  if (length(synonyms_q) > 0) {
-    synonyms_q <- c(query, foodb_name, synonyms_q) |> unique() |> sort()
-  } else {
-    synonyms_q <- foodb_name
-  }
-  return(synonyms_q)
+foodb_fetch_OntologyTerm <- function(con, ids) {
+  dplyr::tbl(con, "OntologyTerm") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!ids) |>
+    dplyr::select(
+      "id",
+      "term",
+      "definition",
+      "external_id",
+      "external_source",
+      "comment",
+      "parent_id",
+      "level"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch pathway data from FooDB
+#'
+#' @param con A database connection
+#' @param pathway_ids Character vector of pathway IDs
+#'
+#' @return A data frame with pathway details
+#' @noRd
+foodb_fetch_Pathway <- function(con, pathway_ids) {
+  dplyr::tbl(con, "Pathway") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!pathway_ids) |>
+    dplyr::select(
+      "id",
+      "smpdb_id",
+      "kegg_map_id",
+      "name"
+    ) |>
+    dplyr::collect()
 }
 
 #' Harmonise compound names to match FooDB entries
