@@ -223,6 +223,225 @@ foodb_expand_ontology_terms <- function(df, seed) {
   return(out)
 }
 
+#' Fetch external IDs from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of compound IDs
+#'
+#' @return A data frame with external IDs
+#' @noRd
+foodb_fetch_CompoundExternalDescriptor <- function(con, ids) {
+  dplyr::tbl(con, "CompoundExternalDescriptor") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!ids) |>
+    dplyr::select("id", "external_id") |>
+    dplyr::collect()
+}
+
+#' Fetch ontology IDs from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of compound IDs
+#'
+#' @return A data frame with ontology IDs
+#' @noRd
+foodb_fetch_CompoundOntologyTerm <- function(con, ids) {
+  dplyr::tbl(con, "CompoundOntologyTerm") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!ids) |>
+    dplyr::select("compound_id", "ontology_term_id") |>
+    dplyr::collect()
+}
+
+#' Fetch ontology terms from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of ontology term IDs
+#'
+#' @return A data frame with ontology term details
+#' @noRd
+foodb_fetch_OntologyTerm <- function(con, ids) {
+  dplyr::tbl(con, "OntologyTerm") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!ontology_term_ids) |>
+    dplyr::select(
+      "id",
+      "term",
+      "definition",
+      "external_id",
+      "external_source",
+      "comment",
+      "parent_id",
+      "level"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch enzyme IDs from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of compound IDs
+#'
+#' @return A data frame with enzyme IDs
+#' @noRd
+foodb_fetch_CompoundsEnzyme <- function(con, ids) {
+  dplyr::tbl(con, "CompoundsEnzyme") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!ids) |>
+    dplyr::select(
+      "compound_id",
+      "enzyme_id",
+      "citations"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch enzyme data from FooDB
+#'
+#' @param con A database connection
+#' @param enzyme_ids Character vector of enzyme IDs
+#'
+#' @return A data frame with enzyme details
+#' @noRd
+foodb_fetch_Enzyme <- function(con, enzyme_ids) {
+  dplyr::tbl(con, "Enzyme") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!enzyme_ids) |>
+    dplyr::select(
+      "id",
+      "name",
+      "gene_name",
+      "uniprot_id"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch flavor IDs associations from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of compound IDs
+#'
+#' @return A data frame with flavor IDs
+#' @noRd
+foodb_fetch_CompoundsFlavor <- function(con, ids) {
+  dplyr::tbl(con, "CompoundsFlavor") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!ids) |>
+    dplyr::select(
+      "compound_id",
+      "flavor_id",
+      "citations"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch flavor data from FooDB
+#'
+#' @param con A database connection
+#' @param flavor_ids Character vector of flavor IDs
+#'
+#' @return A data frame with flavor details
+#' @noRd
+foodb_fetch_Flavor <- function(con, flavor_ids) {
+  dplyr::tbl(con, "Flavor") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!flavor_ids) |>
+    dplyr::select(
+      "id",
+      "name",
+      "flavor_group",
+      "category"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch health effect IDs from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of compound IDs
+#'
+#' @return A data frame with health effect IDs
+#' @noRd
+foodb_fetch_CompoundsHealthEffect <- function(con, ids) {
+  dplyr::tbl(con, "CompoundsHealthEffect") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!ids) |>
+    dplyr::select(
+      "compound_id",
+      "health_effect_id",
+      "citation",
+      "citation_type"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch health effect data from FooDB
+#'
+#' @param con A database connection
+#' @param health_effect_ids Character vector of health effect IDs
+#'
+#' @return A data frame with health effect details
+#' @noRd
+foodb_fetch_HealthEffect <- function(con, health_effect_ids) {
+  dplyr::tbl(con, "HealthEffect") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!health_effect_ids) |>
+    dplyr::select(
+      "id",
+      "name",
+      "description",
+      "chebi_name",
+      "chebi_id",
+      "chebi_definition"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch pathway IDs from FooDB
+#'
+#' @param con A database connection
+#' @param ids Character vector of compound IDs
+#'
+#' @return A data frame with pathway IDs
+#' @noRd
+foodb_fetch_CompoundsPathway <- function(con, ids) {
+  dplyr::tbl(con, "CompoundsPathway") |>
+    dplyr::filter(!!rlang::sym("compound_id") %in% !!ids) |>
+    dplyr::select(
+      "compound_id",
+      "pathway_id"
+    ) |>
+    dplyr::collect()
+}
+
+#' Fetch pathway data from FooDB
+#'
+#' @param con A database connection
+#' @param pathway_ids Character vector of pathway IDs
+#'
+#' @return A data frame with pathway details
+#' @noRd
+foodb_fetch_Pathway <- function(con, pathway_ids) {
+  dplyr::tbl(con, "Pathway") |>
+    dplyr::filter(!!rlang::sym("id") %in% !!pathway_ids) |>
+    dplyr::select(
+      "id",
+      "smpdb_id",
+      "kegg_map_id",
+      "name"
+    ) |>
+    dplyr::collect()
+}
+
+#' Harmonise compound names to match FooDB entries
+#'
+#' @param query A character vector of compound names to harmonise.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return A data frame with two columns: `query` and `foodb_name`. The
+#' `foodb_name` column contains the harmonised compound names. If a compound
+#' name could not be harmonised, the corresponding `foodb_name` will be `NA`.
+#' @details This function attempts to harmonise compound names in the input
+#' `query` to match the names used in the FooDB database. It does this by
+#' checking for exact matches first, and if none are found, it looks up
+#' synonyms in the database. If multiple synonyms are found, the function will
+#' stop with an error.
+#' @examples
+#' \dontrun{
+#' foodb_harmonise_name("glucose")
+#' foodb_harmonise_name(c("glucose", "fructose"))
+#' }
+#' @export
 foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
@@ -300,101 +519,27 @@ foodb_query_compound <- function(query, from, verbose = getOption("verbose")) {
     if (verbose) message("No compound data found.")
     return(NA_character_)
   }
-  compound_external <- dplyr::tbl(con, "CompoundExternalDescriptor") |>
-    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
-    dplyr::select("id", "external_id") |>
-    dplyr::collect()
-  compound_ontology_term <- dplyr::tbl(con, "CompoundOntologyTerm") |>
-    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
-    dplyr::select("compound_id", "ontology_term_id") |>
-    dplyr::collect()
-  expanded_ontology_term_ids <- foodb_expand_ontology_terms(
-    df = dplyr::tbl(con, "OntologyTerm"),
-    seed = compound_ontology_term$ontology_term_id |> unique()
-  )
-  ontology_term <- dplyr::tbl(con, "OntologyTerm") |>
-    dplyr::filter(!!rlang::sym("id") %in% expanded_ontology_term_ids) |>
-    dplyr::select(
-      "id",
-      "term",
-      "definition",
-      "external_id",
-      "external_source",
-      "comment",
-      "parent_id",
-      "level"
-    ) |>
-    dplyr::collect()
-  compound_enzyme <- dplyr::tbl(con, "CompoundsEnzyme") |>
-    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
-    dplyr::select(
-      "compound_id",
-      "enzyme_id",
-      "citations"
-    ) |>
-    dplyr::collect()
-  enzyme <- dplyr::tbl(con, "Enzyme") |>
-    dplyr::filter(!!rlang::sym("id") %in% compound_enzyme$enzyme_id) |>
-    dplyr::select(
-      "id",
-      "name",
-      "gene_name",
-      "uniprot_id"
-    ) |>
-    dplyr::collect()
-  compound_flavor <- dplyr::tbl(con, "CompoundsFlavor") |>
-    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
-    dplyr::select(
-      "compound_id",
-      "flavor_id",
-      "citations"
-    ) |>
-    dplyr::collect()
-  flavor <- dplyr::tbl(con, "Flavor") |>
-    dplyr::filter(!!rlang::sym("id") %in% compound_flavor$flavor_id) |>
-    dplyr::select(
-      "id",
-      "name",
-      "flavor_group",
-      "category"
-    ) |>
-    dplyr::collect()
-  compound_he <- dplyr::tbl(con, "CompoundsHealthEffect") |>
-    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
-    dplyr::collect() |>
-    dplyr::select(
-      "compound_id",
-      "health_effect_id",
-      "citation",
-      "citation_type"
-    )
-  health_effect <- dplyr::tbl(con, "HealthEffect") |>
-    dplyr::filter(!!rlang::sym("id") %in% compound_he$health_effect_id) |>
-    dplyr::select(
-      "id",
-      "name",
-      "description",
-      "chebi_name",
-      "chebi_id",
-      "chebi_definition"
-    ) |>
-    dplyr::collect()
-  compound_pathway <- dplyr::tbl(con, "CompoundsPathway") |>
-    dplyr::filter(!!rlang::sym("compound_id") %in% !!id) |>
-    dplyr::select(
-      "compound_id",
-      "pathway_id"
-    ) |>
-    dplyr::collect()
-  pathway <- dplyr::tbl(con, "Pathway") |>
-    dplyr::filter(!!rlang::sym("id") %in% compound_pathway$pathway_id) |>
-    dplyr::select(
-      "id",
-      "smpdb_id",
-      "kegg_map_id",
-      "name"
-    ) |>
-    dplyr::collect()
+
+  # Fetch all data using helper functions
+  compound_external <- foodb_fetch_CompoundExternalDescriptor(con, id)
+
+  compound_ontology_term <- foodb_fetch_CompoundOntologyTerm(con, id)
+  expanded_ontology_term_ids <- foodb_expand_ontology_terms(con, id)
+  ontology_term <- foodb_fetch_OntologyTerm(con, expanded_ontology_term_ids)
+  
+  compound_enzyme <- foodb_fetch_CompoundsEnzyme(con, id)
+  enzyme <- foodb_fetch_Enzyme(con, compound_enzyme$enzyme_id)
+  
+  compound_flavor <- foodb_fetch_CompoundsFlavor(con, id)
+  flavor <- foodb_fetch_Flavor(con, compound_flavor$flavor_id)
+  
+  compound_he <- foodb_fetch_CompoundsHealthEffect(con, id)
+  health_effect <- foodb_fetch_HealthEffect(con, compound_he$health_effect_id)
+  
+  compound_pathway <- foodb_fetch_CompoundsPathway(con, id)
+  pathway <- foodb_fetch_Pathway(con, compound_pathway$pathway_id)
+  
+  # Combine data into a single output for each query
   foo <- function(i) {
     q <- query[i]
     id_q <- id[i]
