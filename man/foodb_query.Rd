@@ -4,14 +4,13 @@
 \alias{foodb_query}
 \title{Query the local FooDB database for compound information}
 \usage{
-foodb_query(query, from, verbose = getOption("verbose"))
+foodb_query(query, from = "name", verbose = getOption("verbose"))
 }
 \arguments{
 \item{query}{character; a vector of compound identifiers to query.}
 
 \item{from}{character; the type of identifier provided in `query`. Allowed 
-values are: "id", "public_id", "name", "cas_number", "moldb_smiles", 
-"moldb_inchi", "moldb_inchikey", "moldb_iupac".}
+values are: "id", "public_id", "name".}
 
 \item{verbose}{logical; should verbose messages be printed to the console?}
 }
@@ -23,13 +22,17 @@ in the database, the corresponding output will be `NA`.
 \description{
 Query the local FooDB database for compound information
 }
+\note{
+When using ID types not supported by \code{foodb_query()} 
+(e.g., CAS number or InChIKey), first convert them to a supported ID type 
+using \code{foodb_convert()} before querying with \code{foodb_query()}.
+}
 \examples{
 \dontrun{
 # single query
-foodb_query("Biotin", from = "name")
-foodb_query("YBJHBAHKTGYVGT-UHFFFAOYSA-N", from = "moldb_inchikey")
+foodb_query("Biotin")
 
 # multiple queries
-foodb_query(c("Biotin", "Folic acid"), from = "name")
+foodb_query(c("Biotin", "Folic acid"))
 }
 }

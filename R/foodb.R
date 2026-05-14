@@ -369,7 +369,7 @@ foodb_build_synonyms_output <- function(query, id, synonyms) {
     from = "id",
     to = "name",
     verbose = FALSE
-  )
+  )$name
   synonyms_q <- synonyms |> 
     dplyr::filter(!!rlang::sym("source_id") == !!id) |>
     dplyr::pull("synonym")
@@ -407,9 +407,10 @@ foodb_compound_idtypes <- function() {
 #' @param to The type of identifier to convert to. See Details for allowed
 #' values.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @return A character vector of converted identifiers, in the same order as
+#' @return A data frame of converted identifiers, in the same order as
 #' the input \code{query}. If an identifier could not be converted, the
-#' corresponding output will be \code{NA}.
+#' corresponding output will be \code{NA}. If multiple matches are found for a 
+#' query, all matches will be returned in separate rows.
 #' @details Allowed values for \code{from} and \code{to} are:
 #' \itemize{
 #'   \item \code{id}: internal numeric ID in the FooDB database
@@ -432,9 +433,15 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
   on.exit(DBI::dbDisconnect(con))
   from <- match.arg(from, foodb_compound_idtypes(), several.ok = FALSE)
   to <- match.arg(to, foodb_compound_idtypes(), several.ok = FALSE)
+  if (from == to) {
+    stop("From and to identifier types must be different.")
+  }
+  query_orig <- query
   if (from == "name") {
     if (verbose) message("Harmonising compound names to match FooDB entries.")
     query <- foodb_harmonise_name(query, verbose = verbose)$foodb_name
+  } else {
+    query <- query_orig
   }
   compound <- fetch_table(
     con = con,
@@ -443,37 +450,55 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
     ids = query,
     select_cols = c(from, to)
   )
-  foo <- function(x) {
+  foo <- function(i) {
+    qo <- query_orig[i]
+    q <- query[i]
+    if (is.na(q)) {
+      return(data.frame(setNames(
+        list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
+        c(from, to)
+      )))
+    }
     if (from == "moldb_inchikey") {
-      if (!is.inchikey(x, type = "format")) {
-        if (verbose) message("Invalid InChIKey format: ", x)
-        return(NA_character_)
+      if (!is.inchikey(qo, type = "format")) {
+        if (verbose) message("Invalid InChIKey format: ", qo)
+        return(data.frame(setNames(
+          list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
+          c(from, to)
+        )))
       }
     } else if (from == "cas_number") {
-      if (!is.cas(x)) {
-        if (verbose) message("Invalid CAS number format: ", x)
-        return(NA_character_)
+      if (!is.cas(qo)) {
+        if (verbose) message("Invalid CAS number format: ", qo)
+        return(data.frame(setNames(
+          list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
+          c(from, to)
+        )))
       }
     } else if (from == "moldb_smiles") {
-      if (!is.smiles(x)) {
-        if (verbose) message("Invalid SMILES format: ", x)
-        return(NA_character_)
+      if (!is.smiles(qo)) {
+        if (verbose) message("Invalid SMILES format: ", qo)
+        return(data.frame(setNames(
+          list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
+          c(from, to)
+        )))
       }
     }
-    out <- compound[[to]][which(compound[[from]] == x)]
-    if (length(out) == 0) {
-      if (verbose) message("No match found for identifier: ", x)
-      return(NA_character_)
-    }
-    if (length(out) == 1) {
+    out <- compound[which(compound[[from]] == q),]
+    if (nrow(out) == 0) {
+      if (verbose) message("No match found for identifier: ", qo)
+      return(data.frame(setNames(
+        list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
+        c(from, to)
+      )))
+    } else {
+      if (nrow(out) > 1) {
+        if (verbose) message("Multiple matches found for identifier: ", qo)
+      }
       return(out)
     }
-    if (length(out) > 1) {
-      stop("Multiple matches found for identifier: ", x)
-    }
   }
-  out <- unname(sapply(query, foo))
-  # TODO - add class
+  out <- lapply(seq_along(query_orig), foo) |> dplyr::bind_rows()
   return(out)
 }
 
@@ -797,18 +822,22 @@ foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
     harmonised_names$foodb_name[index_harmonised] <- query[index_harmonised]
   }
   query_na <- harmonised_names$query[which(is.na(harmonised_names$foodb_name))]
+  if (length(query_na) == 0) return(harmonised_names)
   synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
     dplyr::filter(!!rlang::sym("synonym") %in% query_na) |>
     dplyr::select("synonym", "source_id") |>
-    dplyr::collect() |>
-    dplyr::mutate(
-      foodb_name = foodb_convert(
-        !!rlang::sym("source_id"),
-        from = "id",
-        to = "name",
-        verbose = verbose
-        )
-    )
+    dplyr::collect()
+  if (nrow(synonyms) > 0) {
+    synonyms <- synonyoms |>
+      dplyr::mutate(
+        foodb_name = foodb_convert(
+          !!rlang::sym("source_id"),
+          from = "id",
+          to = "name",
+          verbose = verbose
+        )$name
+      )
+  } 
   foo <- function(i) {
     if (!is.na(harmonised_names$foodb_name[i])) {
       return(harmonised_names[i,])
@@ -873,27 +902,34 @@ foodb_list_compounds <- function(
 #' 
 #' @param query character; a vector of compound identifiers to query.
 #' @param from character; the type of identifier provided in `query`. Allowed 
-#' values are: "id", "public_id", "name", "cas_number", "moldb_smiles", 
-#' "moldb_inchi", "moldb_inchikey", "moldb_iupac".
+#' values are: "id", "public_id", "name".
 #' @param verbose logical; should verbose messages be printed to the console?
 #' @return A nested list of fields for each compound query, with available 
 #' information from the FooDB database. If a query does not match any compound 
 #' in the database, the corresponding output will be `NA`.
+#' @note When using ID types not supported by \code{foodb_query()} 
+#' (e.g., CAS number or InChIKey), first convert them to a supported ID type 
+#' using \code{foodb_convert()} before querying with \code{foodb_query()}.
 #' @examples
 #' \dontrun{
 #' # single query
-#' foodb_query("Biotin", from = "name")
-#' foodb_query("YBJHBAHKTGYVGT-UHFFFAOYSA-N", from = "moldb_inchikey")
+#' foodb_query("Biotin")
 #' 
 #' # multiple queries
-#' foodb_query(c("Biotin", "Folic acid"), from = "name")
+#' foodb_query(c("Biotin", "Folic acid"))
 #' }
 #' @export
-foodb_query <- function(query, from, verbose = getOption("verbose")) {
+foodb_query <- function(query, from = "name", verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
-  from <- match.arg(from, foodb_compound_idtypes(), several.ok = FALSE)
-  id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
+  from <- match.arg(
+    from, choices = c("id", "public_id", "name"), several.ok = FALSE
+  )
+  if (from != "id") {
+    id <- foodb_convert(query, from = from, to = "id", verbose = verbose)$id
+  } else {
+    id = query
+  }
   compound <- dplyr::tbl(con, "Compound") |>
     dplyr::filter(!!rlang::sym("id") %in% !!id) |>
     dplyr::collect()

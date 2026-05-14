@@ -18,9 +18,10 @@ values.}
 \item{verbose}{logical; should verbose messages be printed to the console?}
 }
 \value{
-A character vector of converted identifiers, in the same order as
+A data frame of converted identifiers, in the same order as
 the input \code{query}. If an identifier could not be converted, the
-corresponding output will be \code{NA}.
+corresponding output will be \code{NA}. If multiple matches are found for a 
+query, all matches will be returned in separate rows.
 }
 \description{
 Convert compound identifiers in the local FooDB database
