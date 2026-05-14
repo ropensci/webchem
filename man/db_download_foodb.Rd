@@ -24,7 +24,7 @@ file path to the existing database.
 }
 \note{
 The SQLite database does not include spectra downloads. See
-\url(https://foodb.ca/downloads) for more information on these data files.
+\url{https://foodb.ca/downloads} for more information on these data files.
 }
 \examples{
 \dontrun{

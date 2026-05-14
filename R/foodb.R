@@ -30,7 +30,7 @@ connect_foodb <- function(...) {
 #' function will skip the download and conversion steps and simply return the 
 #' file path to the existing database.
 #' @note The SQLite database does not include spectra downloads. See
-#' \url(https://foodb.ca/downloads) for more information on these data files.
+#' \url{https://foodb.ca/downloads} for more information on these data files.
 #' @examples
 #' \dontrun{
 #' db_download_foodb(verbose = TRUE)
