@@ -1,11 +1,10 @@
 #' Connect local FooDB database
 #'
-#' @importFrom rlang .data
 #' @param ... Further args passed on to [DBI::dbConnect()]
 #' @return an object of class "SQLiteConnection".
 #' @examples
 #' \dontrun{
-#'   con <- connect_foodb(
+#'   con <- connect_foodb()
 #' }
 #' @noRd
 connect_foodb <- function(...) {
@@ -24,12 +23,14 @@ connect_foodb <- function(...) {
 #'
 #' Download the FooDB database for offline access.
 #' @param verbose logical; should verbose messages be printed to the console?
-#' @return Downloads the FooDB database file.
-#' @note FooDB is a static database with a single release. To save storage space,
-#' webchem only retrieves the JSON file. If you need other files as well,
-#' please download them manually.
-#' @references You can find more information about FooDB at
-#' \url{https://foodb.ca/}
+#' @return Invisibly returns the file path to the processed SQLite database.
+#' @details FooDB is a static database with a single release. 
+#' \code{db_download_foodb()} downloads the data set in JSON format and converts 
+#' it to SQLite. If the database has already been downloaded and processed, the 
+#' function will skip the download and conversion steps and simply return the 
+#' file path to the existing database.
+#' @note The SQLite database does not include spectra downloads. See
+#' \url(https://foodb.ca/downloads) for more information on these data files.
 #' @examples
 #' \dontrun{
 #' db_download_foodb(verbose = TRUE)
@@ -108,16 +109,11 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
 }
 
 #' Build content output for a single compound query
-#'
-#' Combines content and food data for a single compound ID, handling joins
-#' and NA cases.
-#'
-#' @param id The compound ID for which to build the content output
-#' @param content A data frame with content data
-#' @param food A data frame with food details for all compounds
-#'
-#' @return A tibble with content and food information, or a schema-conforming
-#'   tibble of NAs if no content data exists
+
+#' @param id A single compound ID for which to build the output.
+#' @param content A data frame with content data.
+#' @param food A data frame with food details.
+#' @return A tibble with content data for the compound.
 #' @noRd
 foodb_build_content_output <- function(id, content, food) {
   content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == !!id)
@@ -173,14 +169,10 @@ foodb_build_content_output <- function(id, content, food) {
 
 #' Build enzymes output for a single compound query
 #'
-#' Combines compound-enzyme and enzyme data for a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
-#' @param compound_enzyme A data frame with compound-enzyme associations
-#' @param enzyme A data frame with enzyme details
-#'
-#' @return A tibble with enzyme information
+#' @param id A single compound ID for which to build the output.
+#' @param compound_enzyme A data frame with compound-enzyme associations.
+#' @param enzyme A data frame with enzyme details.
+#' @return A tibble with enzyme data for the compound.
 #' @noRd
 foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
   enzymes_q <- compound_enzyme |>
@@ -211,14 +203,10 @@ foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
 
 #' Build flavor output for a single compound query
 #'
-#' Combines compound-flavor and flavor data for a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
+#' @param id A single compound ID for which to build the output.
 #' @param compound_flavor A data frame with compound-flavor associations
-#' @param flavor A data frame with flavor details
-#'
-#' @return A tibble with flavor information
+#' @param flavor A data frame with flavor details.
+#' @return A tibble with flavor data for the compound.
 #' @noRd
 foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
   flavor_q <- compound_flavor |>
@@ -249,14 +237,10 @@ foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
 
 #' Build health effect output for a single compound query
 #'
-#' Combines compound-health effect and health effect data for a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
-#' @param compound_he A data frame with compound-health effect associations
-#' @param health_effect A data frame with health effect details
-#'
-#' @return A tibble with health effect information
+#' @param id A single compound ID for which to build the output.
+#' @param compound_he A data frame with compound-health effect associations.
+#' @param health_effect A data frame with health effect details.
+#' @return A tibble with health effect data for the compound.
 #' @noRd
 foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
   health_effect_q <- compound_he |>
@@ -291,14 +275,10 @@ foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
 
 #' Build ontology terms output for a single compound query
 #'
-#' Filters ontology terms to those associated with a compound ID,
-#' expanding to parent terms, and returns a schema-conforming NA tibble if empty.
-#'
-#' @param id The compound ID
-#' @param compound_ontology_term A data frame with compound-ontology associations
-#' @param ontology_term A data frame with ontology term details
-#'
-#' @return A tibble with ontology term information
+#' @param idA single compound ID for which to build the output.
+#' @param co_term A data frame with compound-ontology associations.
+#' @param ontology_term A data frame with ontology term details.
+#' @return A tibble with ontology terms for the compound.
 #' @noRd
 foodb_build_ontology_terms_output <- function(id, compound_ontology_term, ontology_term) {
   seed_ids <- compound_ontology_term |>
@@ -328,14 +308,10 @@ foodb_build_ontology_terms_output <- function(id, compound_ontology_term, ontolo
 
 #' Build pathway output for a single compound query
 #'
-#' Filters pathways to those associated with a compound ID,
-#' and returns a schema-conforming NA tibble if no data exists.
-#'
-#' @param id The compound ID
-#' @param compound_pathway A data frame with compound-pathway associations
-#' @param pathway A data frame with pathway details
-#'
-#' @return A tibble with pathway information
+#' @param id A single compound ID for which to build the output.
+#' @param compound_pathway A data frame with compound-pathway associations.
+#' @param pathway A data frame with pathway details.
+#' @return A tibble with pathway data for the compound.
 #' @noRd
 foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
   pathway_q <- compound_pathway |>
@@ -357,14 +333,9 @@ foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
 
 #' Build synonyms output for a single compound query
 #'
-#' Combines compound ID and synonym data for a single query,
-#' and returns a schema-conforming NA tibble if no synonyms exist.
-#'
-#' @param query The original query string
-#' @param id The compound ID corresponding to the query
-#' @param synonyms A vector of synonyms, including the original query and its 
-#' harmomised name, if applicable
-#'
+#' @param query The original query string for a single compound.
+#' @param id The compound ID corresponding to the query.
+#' @param synonyms A data frame of synonyms.
 #' @return A vector of unique, sorted synonyms for the compound.
 #' @noRd
 foodb_build_synonyms_output <- function(query, id, synonyms) {
@@ -401,7 +372,7 @@ foodb_compound_idtypes <- function() {
 
 #' Convert compound identifiers in the local FooDB database
 #'
-#' @param query A character vector of compound identifiers to convert.
+#' @param query character; a character of compound identifiers to convert.
 #' @param from The type of identifier provided in \code{query}. See Details for
 #' allowed values.
 #' @param to The type of identifier to convert to. See Details for allowed
@@ -477,6 +448,16 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
   return(out)
 }
 
+#' Expand ontology terms
+#' 
+#' Given a data frame of ontology terms with parent-child relationships, and a 
+#' vector of seed term IDs, iteratively find all ancestor terms until no new 
+#' parents are found or a maximum number of iterations is reached.
+#' @param df A data frame containing ontology terms.
+#' @param seed A character vector of ontology term IDs to start from.
+#' @return A character vector of ontology term IDs including the seed and all 
+#' ancestors.
+#' @noRd
 foodb_expand_ontology_terms <- function(df, seed) {
   if (inherits(df, "tbl_SQLiteConnection")) {
     con <- connect_foodb()
@@ -503,10 +484,9 @@ foodb_expand_ontology_terms <- function(df, seed) {
 
 #' Fetch external IDs from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of compound IDs
-#'
-#' @return A data frame with external IDs
+#' @param con A database connection.
+#' @param ids Character vector of compound IDs.
+#' @return A data frame with external IDs.
 #' @noRd
 foodb_fetch_CompoundExternalDescriptor <- function(con, ids) {
   dplyr::tbl(con, "CompoundExternalDescriptor") |>
@@ -517,10 +497,9 @@ foodb_fetch_CompoundExternalDescriptor <- function(con, ids) {
 
 #' Fetch ontology IDs from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of compound IDs
-#'
-#' @return A data frame with ontology IDs
+#' @param con A database connection.
+#' @param ids Character vector of compound IDs.
+#' @return A data frame with ontology IDs.
 #' @noRd
 foodb_fetch_CompoundOntologyTerm <- function(con, ids) {
   dplyr::tbl(con, "CompoundOntologyTerm") |>
@@ -531,10 +510,9 @@ foodb_fetch_CompoundOntologyTerm <- function(con, ids) {
 
 #' Fetch compound synonyms from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character or numeric vector of compound IDs
-#'
-#' @return A data frame with compound synonyms
+#' @param con A database connection.
+#' @param ids Character or numeric vector of compound IDs.
+#' @return A data frame with compound synonyms.
 #' @noRd
 foodb_fetch_CompoundSynonym <- function(con, ids) {
   dplyr::tbl(con, "CompoundSynonym") |>
@@ -545,10 +523,9 @@ foodb_fetch_CompoundSynonym <- function(con, ids) {
 
 #' Fetch enzyme IDs from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of compound IDs
-#'
-#' @return A data frame with enzyme IDs
+#' @param con A database connection.
+#' @param ids Character vector of compound IDs.
+#' @return A data frame with enzyme IDs.
 #' @noRd
 foodb_fetch_CompoundsEnzyme <- function(con, ids) {
   dplyr::tbl(con, "CompoundsEnzyme") |>
@@ -563,10 +540,9 @@ foodb_fetch_CompoundsEnzyme <- function(con, ids) {
 
 #' Fetch flavor IDs associations from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of compound IDs
-#'
-#' @return A data frame with flavor IDs
+#' @param con A database connection.
+#' @param ids Character vector of compound IDs.
+#' @return A data frame with flavor IDs.
 #' @noRd
 foodb_fetch_CompoundsFlavor <- function(con, ids) {
   dplyr::tbl(con, "CompoundsFlavor") |>
@@ -581,10 +557,9 @@ foodb_fetch_CompoundsFlavor <- function(con, ids) {
 
 #' Fetch health effect IDs from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of compound IDs
-#'
-#' @return A data frame with health effect IDs
+#' @param con A database connection.
+#' @param ids Character vector of compound IDs.
+#' @return A data frame with health effect IDs.
 #' @noRd
 foodb_fetch_CompoundsHealthEffect <- function(con, ids) {
   dplyr::tbl(con, "CompoundsHealthEffect") |>
@@ -600,10 +575,9 @@ foodb_fetch_CompoundsHealthEffect <- function(con, ids) {
 
 #' Fetch pathway IDs from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of compound IDs
-#'
-#' @return A data frame with pathway IDs
+#' @param con A database connection.
+#' @param ids Character vector of compound IDs.
+#' @return A data frame with pathway IDs.
 #' @noRd
 foodb_fetch_CompoundsPathway <- function(con, ids) {
   dplyr::tbl(con, "CompoundsPathway") |>
@@ -617,10 +591,9 @@ foodb_fetch_CompoundsPathway <- function(con, ids) {
 
 #' Fetch content data from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of compound IDs
-#'
-#' @return A data frame with content data
+#' @param con A database connection.
+#' @param ids Character vector of compound IDs.
+#' @return A data frame with content data.
 #' @noRd
 foodb_fetch_Content <- function(con, ids) {
   dplyr::tbl(con, "Content") |>
@@ -651,10 +624,9 @@ foodb_fetch_Content <- function(con, ids) {
 
 #' Fetch enzyme data from FooDB
 #'
-#' @param con A database connection
-#' @param enzyme_ids Character vector of enzyme IDs
-#'
-#' @return A data frame with enzyme details
+#' @param con A database connection.
+#' @param enzyme_ids Character vector of enzyme IDs.
+#' @return A data frame with enzyme details.
 #' @noRd
 foodb_fetch_Enzyme <- function(con, enzyme_ids) {
   dplyr::tbl(con, "Enzyme") |>
@@ -670,10 +642,9 @@ foodb_fetch_Enzyme <- function(con, enzyme_ids) {
 
 #' Fetch flavor data from FooDB
 #'
-#' @param con A database connection
-#' @param flavor_ids Character vector of flavor IDs
-#'
-#' @return A data frame with flavor details
+#' @param con A database connection.
+#' @param flavor_ids Character vector of flavor IDs.
+#' @return A data frame with flavor details.
 #' @noRd
 foodb_fetch_Flavor <- function(con, flavor_ids) {
   dplyr::tbl(con, "Flavor") |>
@@ -689,10 +660,9 @@ foodb_fetch_Flavor <- function(con, flavor_ids) {
 
 #' Fetch food data from FooDB
 #'
-#' @param con A database connection
-#' @param food_ids Character or numeric vector of food IDs
-#'
-#' @return A data frame with food details
+#' @param con A database connection.
+#' @param food_ids Character or numeric vector of food IDs.
+#' @return A data frame with food details.
 #' @noRd
 foodb_fetch_Food <- function(con, food_ids) {
   dplyr::tbl(con, "Food") |>
@@ -711,10 +681,9 @@ foodb_fetch_Food <- function(con, food_ids) {
 
 #' Fetch health effect data from FooDB
 #'
-#' @param con A database connection
-#' @param health_effect_ids Character vector of health effect IDs
-#'
-#' @return A data frame with health effect details
+#' @param con A database connection,
+#' @param health_effect_ids Character vector of health effect IDs,
+#' @return A data frame with health effect details,
 #' @noRd
 foodb_fetch_HealthEffect <- function(con, health_effect_ids) {
   dplyr::tbl(con, "HealthEffect") |>
@@ -732,10 +701,9 @@ foodb_fetch_HealthEffect <- function(con, health_effect_ids) {
 
 #' Fetch ontology terms from FooDB
 #'
-#' @param con A database connection
-#' @param ids Character vector of ontology term IDs
-#'
-#' @return A data frame with ontology term details
+#' @param con A database connection.
+#' @param ids Character vector of ontology term IDs.
+#' @return A data frame with ontology term details.
 #' @noRd
 foodb_fetch_OntologyTerm <- function(con, ids) {
   dplyr::tbl(con, "OntologyTerm") |>
@@ -755,10 +723,9 @@ foodb_fetch_OntologyTerm <- function(con, ids) {
 
 #' Fetch pathway data from FooDB
 #'
-#' @param con A database connection
-#' @param pathway_ids Character vector of pathway IDs
-#'
-#' @return A data frame with pathway details
+#' @param con A database connection.
+#' @param pathway_ids Character vector of pathway IDs.
+#' @return A data frame with pathway details.
 #' @noRd
 foodb_fetch_Pathway <- function(con, pathway_ids) {
   dplyr::tbl(con, "Pathway") |>
@@ -778,18 +745,8 @@ foodb_fetch_Pathway <- function(con, pathway_ids) {
 #' @param verbose logical; should verbose messages be printed to the console?
 #' @return A data frame with two columns: `query` and `foodb_name`. The
 #' `foodb_name` column contains the harmonised compound names. If a compound
-#' name could not be harmonised, the corresponding `foodb_name` will be `NA`.
-#' @details This function attempts to harmonise compound names in the input
-#' `query` to match the names used in the FooDB database. It does this by
-#' checking for exact matches first, and if none are found, it looks up
-#' synonyms in the database. If multiple synonyms are found, the function will
-#' stop with an error.
-#' @examples
-#' \dontrun{
-#' foodb_harmonise_name("glucose")
-#' foodb_harmonise_name(c("glucose", "fructose"))
-#' }
-#' @export
+#' cannot be found in the database, the corresponding `foodb_name` will be `NA`.
+#' @noRd
 foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
@@ -845,6 +802,22 @@ foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
   return(out)
 }
 
+#' List available compound identifiers in the local FooDB database
+#' 
+#' @param idtype character; the type of identifier to list. Allowed values are:
+#' "id", "public_id", "name", "cas_number", "moldb_smiles", "moldb_inchi", 
+#' "moldb_inchikey", "moldb_iupac".
+#' @param include_synonyms logical; should compound name synonyms also be 
+#' included in the output? Only used if `idtype` is "name". Default is `TRUE`.
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return A character vector of unique identifiers of the specified type that 
+#' are present in the FooDB database.
+#' @examples
+#' \dontrun{
+#' foodb_list_compounds("name")
+#' foodb_list_compounds("cas_number")
+#' }
+#' @export
 foodb_list_compounds <- function(
   idtype, 
   include_synonyms = TRUE, 
@@ -867,6 +840,26 @@ foodb_list_compounds <- function(
   return(compounds)
 }
 
+#' Query the local FooDB database for compound information
+#' 
+#' @param query character; a vector of compound identifiers to query.
+#' @param from character; the type of identifier provided in `query`. Allowed 
+#' values are: "id", "public_id", "name", "cas_number", "moldb_smiles", 
+#' "moldb_inchi", "moldb_inchikey", "moldb_iupac".
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return A nested list of fields for each compound query, with available 
+#' information from the FooDB database. If a query does not match any compound 
+#' in the database, the corresponding output will be `NA`.
+#' @examples
+#' \dontrun{
+#' # single query
+#' foodb_query("Biotin", from = "name")
+#' foodb_query("YBJHBAHKTGYVGT-UHFFFAOYSA-N", from = "moldb_inchikey")
+#' 
+#' # multiple queries
+#' foodb_query(c("Biotin", "Folic acid"), from = "name")
+#' }
+#' @export
 foodb_query <- function(query, from, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
