@@ -46,24 +46,34 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
     "foodb"
   ) |> path.expand()
   download_path <- file.path(dir_path, file_name)
+  if (verbose) message("Downloading FooDB. ", appendLF = FALSE)
   if (file.exists(download_path)) {
     if (verbose) message("Already downloaded.")
   } else {
     if (!dir.exists(dir_path)) dir.create(dir_path, recursive = TRUE)
-    if (verbose) message("Downloading FooDB. ", appendLF = FALSE)
     curl::curl_download(url, download_path, quiet = TRUE)
     if (verbose) message("Done.")
   }
   # Convert to SQLite
-  if (verbose) message("Converting to SQLite.")
-  utils::unzip(download_path, exdir = dir_path)
   json_dir <- file.path(dir_path, tools::file_path_sans_ext(file_name))
+  if (!dir.exists(json_dir)) utils::unzip(download_path, exdir = dir_path)
   json_files <- list.files(json_dir, pattern = "\\.json$", full.names = TRUE)
   sqlite_path <- file.path(dir_path, "foodb_v1.sqlite")
+  if (verbose) message("Converting to SQLite.")
   con <- DBI::dbConnect(RSQLite::SQLite(), sqlite_path)
   on.exit(DBI::dbDisconnect(con))
+  # Cleanup orphaned temp tables from interrupted runs
+  existing_tables <- DBI::dbListTables(con)
+  tmp_tables <- grep("__tmp$", existing_tables, value = TRUE)
+  for (tmp in tmp_tables) {
+    if (verbose) {
+      message("Removing incomplete temporary table '", tmp, "'.")
+    }
+    DBI::dbRemoveTable(con, tmp)
+  }
   for (f in json_files) {
     table_name <- tools::file_path_sans_ext(basename(f))
+    tmp_table <- paste0(table_name, "__tmp")
     if (DBI::dbExistsTable(con, table_name)) {
       if (verbose) {
         message("  Skipping table '", table_name, "'. Already converted.")
@@ -84,14 +94,26 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
         }
         if (nrow(df_chunk) == 0) return(NULL)
         if (!table_exists) {
-          DBI::dbWriteTable(con, table_name, df_chunk, overwrite = TRUE)
+          DBI::dbWriteTable(con, tmp_table, df_chunk, overwrite = TRUE)
           table_exists <<- TRUE
         } else {
-          DBI::dbWriteTable(con, table_name, df_chunk, append = TRUE)
+          DBI::dbWriteTable(con, tmp_table, df_chunk, append = TRUE)
         }
         rows_processed <<- rows_processed + nrow(df_chunk)
         NULL
       }, pagesize = chunk_size, verbose = FALSE)
+      # Promote temp table to final table
+      # Note, if a json file was empty, the temp table won't exist
+      if (table_exists) {
+        DBI::dbExecute(
+          con,
+          paste(
+            "ALTER TABLE", 
+            DBI::dbQuoteIdentifier(con, tmp_table),
+            "RENAME TO", DBI::dbQuoteIdentifier(con, table_name)
+          )
+        )
+      }
     },
     finally = {
       if (isOpen(con_file)) {
