@@ -940,6 +940,7 @@ foodb_query <- function(query, from, verbose = getOption("verbose")) {
       description = compound_q$description,
       cas_number = compound_q$cas_number,
       moldb_smiles = compound_q$moldb_smiles,
+      moldb_inchi = compound_q$moldb_inchi,
       moldb_mono_mass = compound_q$moldb_mono_mass,
       moldb_inchikey = compound_q$moldb_inchikey,
       moldb_iupac = compound_q$moldb_iupac,
