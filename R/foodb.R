@@ -210,7 +210,6 @@ foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
       "citations",
       .after = dplyr::last_col()
     )
-  
   if (nrow(enzymes_q) > 0) {
     enzymes_q
   } else {
@@ -245,7 +244,6 @@ foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
       "citations",
       .after = dplyr::last_col()
     )
-  
   if (nrow(flavor_q) > 0) {
     flavor_q
   } else {
@@ -281,7 +279,6 @@ foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
       "citation_type",
       .after = dplyr::last_col()
     )
-  
   if (nrow(health_effect_q) > 0) {
     health_effect_q
   } else {
@@ -316,7 +313,6 @@ foodb_build_ontology_terms_output <- function(id, co_term, ontology_term) {
       df = ontology_term,
       seed = seed_ids
     ))
-  
   if (nrow(ontology_terms_q) > 0) {
     ontology_terms_q
   } else {
@@ -346,7 +342,6 @@ foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
     dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
     dplyr::pull(!!rlang::sym("pathway_id")) |>
     (\(x) pathway |> dplyr::filter(!!rlang::sym("id") %in% x))()
-  
   if (nrow(pathway_q) > 0) {
     pathway_q
   } else {
@@ -386,6 +381,10 @@ foodb_build_synonyms_output <- function(query, id, synonyms) {
   return(synonyms_q)
 }
 
+#' List available compound identifier types in the local FooDB database
+#' 
+#' @return A character vector of available compound identifier types in FooDB.
+#' @noRd
 foodb_compound_idtypes <- function() {
   idtypes <- c(
     "id",
@@ -902,34 +901,24 @@ foodb_query <- function(query, from, verbose = getOption("verbose")) {
     if (verbose) message("No compound data found.")
     return(NA_character_)
   }
-
   # Fetch all data using helper functions
   compound_external <- foodb_fetch_CompoundExternalDescriptor(con, id)
-
   compound_ontology_term <- foodb_fetch_CompoundOntologyTerm(con, id)
   expanded_ontology_term_ids <- foodb_expand_ontology_terms(
     dplyr::tbl(con, "OntologyTerm"), compound_ontology_term$ontology_term_id
   )
   ontology_term <- foodb_fetch_OntologyTerm(con, expanded_ontology_term_ids)
-  
   compound_enzyme <- foodb_fetch_CompoundsEnzyme(con, id)
   enzyme <- foodb_fetch_Enzyme(con, compound_enzyme$enzyme_id)
-  
   compound_flavor <- foodb_fetch_CompoundsFlavor(con, id)
   flavor <- foodb_fetch_Flavor(con, compound_flavor$flavor_id)
-  
   compound_he <- foodb_fetch_CompoundsHealthEffect(con, id)
   health_effect <- foodb_fetch_HealthEffect(con, compound_he$health_effect_id)
-  
   compound_pathway <- foodb_fetch_CompoundsPathway(con, id)
   pathway <- foodb_fetch_Pathway(con, compound_pathway$pathway_id)
-
   synonyms <- foodb_fetch_CompoundSynonym(con, id)
-
-  # Fetch content and food data
   content <- foodb_fetch_Content(con, id)
   food <- foodb_fetch_Food(con, content$food_id)
-  
   # Combine data into a single output for each query
   foo <- function(i) {
     q <- query[i]
@@ -942,7 +931,6 @@ foodb_query <- function(query, from, verbose = getOption("verbose")) {
     }
     compound_external_q <- compound_external |> 
       dplyr::filter(!!rlang::sym("id") == id_q)
-    
     out <- list(
       id =  id_q,
       public_id = compound_q$public_id,
