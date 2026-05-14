@@ -520,7 +520,7 @@ foodb_expand_ontology_terms <- function(df, seed) {
 foodb_fetch_CompoundExternalDescriptor <- function(con, ids) {
   dplyr::tbl(con, "CompoundExternalDescriptor") |>
     dplyr::filter(!!rlang::sym("compound_id") %in% !!ids) |>
-    dplyr::select("id", "external_id") |>
+    dplyr::select("compound_id", "external_id") |>
     dplyr::collect()
 }
 
@@ -930,7 +930,7 @@ foodb_query <- function(query, from, verbose = getOption("verbose")) {
       return(NA_character_)
     }
     compound_external_q <- compound_external |> 
-      dplyr::filter(!!rlang::sym("id") == id_q)
+      dplyr::filter(!!rlang::sym("compound_id") == id_q)
     out <- list(
       id =  id_q,
       public_id = compound_q$public_id,
