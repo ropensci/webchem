@@ -138,6 +138,7 @@ db_download_foodb <- function(verbose = getOption("verbose")) {
 #' @return A tibble with content data for the compound.
 #' @noRd
 foodb_build_content_output <- function(id, content, food) {
+  stopifnot(length(id) == 1)
   content_q <- content |> dplyr::filter(!!rlang::sym("source_id") == !!id)
   if (nrow(content_q) > 0) {
     food_q <- food |> dplyr::filter(!!rlang::sym("id") %in% content_q$food_id)
@@ -197,6 +198,7 @@ foodb_build_content_output <- function(id, content, food) {
 #' @return A tibble with enzyme data for the compound.
 #' @noRd
 foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
+  stopifnot(length(id) == 1)
   enzymes_q <- compound_enzyme |>
     dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
     dplyr::left_join(
@@ -231,6 +233,7 @@ foodb_build_enzymes_output <- function(id, compound_enzyme, enzyme) {
 #' @return A tibble with flavor data for the compound.
 #' @noRd
 foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
+  stopifnot(length(id) == 1)
   flavor_q <- compound_flavor |>
     dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
     dplyr::left_join(
@@ -265,6 +268,7 @@ foodb_build_flavor_output <- function(id, compound_flavor, flavor) {
 #' @return A tibble with health effect data for the compound.
 #' @noRd
 foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
+  stopifnot(length(id) == 1)
   health_effect_q <- compound_he |>
     dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
     dplyr::left_join(
@@ -302,8 +306,9 @@ foodb_build_health_effect_output <- function(id, compound_he, health_effect) {
 #' @param ontology_term A data frame with ontology term details.
 #' @return A tibble with ontology terms for the compound.
 #' @noRd
-foodb_build_ontology_terms_output <- function(id, compound_ontology_term, ontology_term) {
-  seed_ids <- compound_ontology_term |>
+foodb_build_ontology_terms_output <- function(id, co_term, ontology_term) {
+  stopifnot(length(id) == 1)
+  seed_ids <- co_term |>
     dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
     dplyr::pull(!!rlang::sym("ontology_term_id"))
   ontology_terms_q <- ontology_term |>
@@ -336,6 +341,7 @@ foodb_build_ontology_terms_output <- function(id, compound_ontology_term, ontolo
 #' @return A tibble with pathway data for the compound.
 #' @noRd
 foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
+  stopifnot(length(id) == 1)
   pathway_q <- compound_pathway |>
     dplyr::filter(!!rlang::sym("compound_id") == !!id) |>
     dplyr::pull(!!rlang::sym("pathway_id")) |>
@@ -361,6 +367,8 @@ foodb_build_pathway_output <- function(id, compound_pathway, pathway) {
 #' @return A vector of unique, sorted synonyms for the compound.
 #' @noRd
 foodb_build_synonyms_output <- function(query, id, synonyms) {
+  stopifnot(length(query) == 1)
+  stopifnot(length(id) == 1)
   foodb_name <- foodb_convert(
     id,
     from = "id",
@@ -885,6 +893,7 @@ foodb_list_compounds <- function(
 foodb_query <- function(query, from, verbose = getOption("verbose")) {
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
+  from <- match.arg(from, foodb_compound_idtypes(), several.ok = FALSE)
   id <- foodb_convert(query, from = from, to = "id", verbose = verbose)
   compound <- dplyr::tbl(con, "Compound") |>
     dplyr::filter(!!rlang::sym("id") %in% !!id) |>
