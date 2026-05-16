@@ -76,7 +76,7 @@ databases <- tibble::tribble(
   "[ChEMBL](https://www.ebi.ac.uk/chembl/)", "✅", "✅",
   "[Chemical Identifier Resolver (CIR)](https://cactus.nci.nih.gov/chemical/structure)", "✅", "❌",
   "[Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)", "✅", "❌",
-  "[ChemSpider](https://www.chemspider.com/)\n(requires an [API token](https://developer.rsc.org/))", "✅", "❌",
+  "[ChemSpider](https://www.chemspider.com/) (requires an [API token](https://developer.rsc.org/))", "✅", "❌",
   "[ETOX](http://webetox.uba.de/webETOX/index.do)", "✅", "❌",
   "[Flavornet](http://www.flavornet.org)", "✅", "❌",
   "[FooDB](https://foodb.ca/)", "❌", "✅",
@@ -92,7 +92,7 @@ knitr::kable(databases)
 
 #### Offline access
 
-For databases that support it (marked ✅ in the Offline column), `webchem` can download the database locally and then query it without an internet connection. Offline queries are faster, work without a network connection, and return the same results every time, making your analyses more reproducible.
+For databases that support it (marked ✅ in the Offline column), `webchem` can download the database and then query it locally. Offline queries are faster, work without an internet connection, and return the same results every time, making your analyses more reproducible.
 
 #### API keys
 
