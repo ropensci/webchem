@@ -49,8 +49,7 @@ documentation
 | [ETOX](http://webetox.uba.de/webETOX/index.do) | ✅ | ❌ |
 | [Flavornet](http://www.flavornet.org) | ✅ | ❌ |
 | [FooDB](https://foodb.ca/) | ❌ | ✅ |
-| [NIST](https://webbook.nist.gov) |  |  |
-| (currently gas chromatography retention indices only) | ✅ | ❌ |
+| [NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only) | ✅ | ❌ |
 | [OPSIN](https://www.ebi.ac.uk/opsin/) | ✅ | ❌ |
 | [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | ✅ | ❌ |
 | [U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/) | ✅ | ❌ |
