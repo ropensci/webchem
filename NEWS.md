@@ -2,6 +2,11 @@
 
 ## NEW FEATURES
 
+### NEW FEATURES
+
+* `webchem` can now access FooDB (https://foodb.ca/), a database of food constituents, chemistry and biology, implemented in offline mode. 
+* Added `db_download_foodb()` to download the database, `foodb_list_compounds()` to list all compounds, and `foodb_convert()` to convert between IDs and `foodb_query()` to query the database.
+
 ### OFFLINE ACCESS
 
 * `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `activity`, `assay`, `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, `document`, `drug`,`drug_indication`, `drug_warning`, `go_slim`, `molecule`.
