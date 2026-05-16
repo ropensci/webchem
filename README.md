@@ -37,25 +37,24 @@ At least some of the data in the following sources is accesible through
 documentation
 [here](https://docs.ropensci.org/webchem/reference/index.html).
 
-- [BCPC Compendium of Pesticide Common
-  Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood’s
-  Compendium of Pesticide Common Names)
-- [ChEBI](https://www.ebi.ac.uk/chebi/)
-- [ChEMBL](https://www.ebi.ac.uk/chembl/)
-- [Chemical Identifier Resolver
-  (CIR)](https://cactus.nci.nih.gov/chemical/structure)
-- [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-- [ChemSpider](https://www.chemspider.com/) (requires an [API
-  token](https://developer.rsc.org/))
-- [ETOX](http://webetox.uba.de/webETOX/index.do)
-- [Flavornet](http://www.flavornet.org)
-- [NIST](https://webbook.nist.gov) (currently gas chromatography
-  retention indices only)
-- [OPSIN](https://www.ebi.ac.uk/opsin/)
-- [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
-- [U.S. EPA Substance Registry Service
-  (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
-- [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)
+| Database | Webservice | Offline |
+|:---|:---|:---|
+| [BCPC Compendium of Pesticide Common Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood’s Compendium of Pesticide Common Names) | ✅ | ❌ |
+| [ChEBI](https://www.ebi.ac.uk/chebi/) | ✅ | ❌ |
+| [ChEMBL](https://www.ebi.ac.uk/chembl/) | ✅ | ✅ |
+| [Chemical Identifier Resolver (CIR)](https://cactus.nci.nih.gov/chemical/structure) | ✅ | ❌ |
+| [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | ✅ | ❌ |
+| [ChemSpider](https://www.chemspider.com/) |  |  |
+| (requires an [API token](https://developer.rsc.org/)) | ✅ | ❌ |
+| [ETOX](http://webetox.uba.de/webETOX/index.do) | ✅ | ❌ |
+| [Flavornet](http://www.flavornet.org) | ✅ | ❌ |
+| [FooDB](https://foodb.ca/) | ❌ | ✅ |
+| [NIST](https://webbook.nist.gov) |  |  |
+| (currently gas chromatography retention indices only) | ✅ | ❌ |
+| [OPSIN](https://www.ebi.ac.uk/opsin/) | ✅ | ❌ |
+| [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | ✅ | ❌ |
+| [U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/) | ✅ | ❌ |
+| [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | ✅ | ❌ |
 
 #### API keys
 
