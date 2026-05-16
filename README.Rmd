@@ -90,6 +90,9 @@ databases <- tibble::tribble(
 knitr::kable(databases)
 ```
 
+#### Offline access
+
+For databases that support it (marked ✅ in the Offline column), `webchem` can download the database locally and then query it without an internet connection. Offline queries are faster, work without a network connection, and return the same results every time, making your analyses more reproducible.
 
 #### API keys
 

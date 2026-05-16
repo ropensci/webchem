@@ -55,6 +55,14 @@ documentation
 | [U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/) | ✅ | ❌ |
 | [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | ✅ | ❌ |
 
+#### Offline access
+
+For databases that support it (marked ✅ in the Offline column),
+`webchem` can download the database locally and then query it without an
+internet connection. Offline queries are faster, work without a network
+connection, and return the same results every time, making your analyses
+more reproducible.
+
 #### API keys
 
 Some ChemSpider functions require an API key. Please register at RSC
