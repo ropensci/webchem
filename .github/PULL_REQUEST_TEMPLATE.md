@@ -33,5 +33,6 @@ Brief description of the PR
 PR task list:
 - [ ] Update NEWS
 - [ ] Add tests (if appropriate)
+- [ ] Knit README.Rmd to update test coverage badge
 - [ ] Update documentation with `devtools::document()`
 - [ ] Check package passed

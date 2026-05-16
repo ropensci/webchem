@@ -11,7 +11,7 @@
 status](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcommunity.r-multiverse.org%2Fapi%2Fpackages%2Fwebchem&query=%24.Version&label=r-multiverse)](https://community.r-multiverse.org/webchem)
 [![R build
 status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
-[![Coverage](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://app.codecov.io/gh/ropensci/webchem/branch/master)
+[![Coverage](https://img.shields.io/badge/coverage-68.5%25-orange)](#test-coverage)
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
