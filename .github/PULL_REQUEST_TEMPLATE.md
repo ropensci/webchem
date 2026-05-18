@@ -33,5 +33,6 @@ Brief description of the PR
 PR task list:
 - [ ] Update NEWS
 - [ ] Add tests (if appropriate)
+- [ ] Knit README.Rmd to update test coverage badge (optional, requires ~40 GB of local databases; if skipped, a maintainer will knit and commit the updated README before merge)
 - [ ] Update documentation with `devtools::document()`
 - [ ] Check package passed

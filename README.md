@@ -11,7 +11,7 @@
 status](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcommunity.r-multiverse.org%2Fapi%2Fpackages%2Fwebchem&query=%24.Version&label=r-multiverse)](https://community.r-multiverse.org/webchem)
 [![R build
 status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
-[![Coverage](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://app.codecov.io/gh/ropensci/webchem/branch/master)
+[![Coverage](https://img.shields.io/badge/coverage-68.5%25-orange)](#test-coverage)
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
@@ -37,25 +37,29 @@ At least some of the data in the following sources is accesible through
 documentation
 [here](https://docs.ropensci.org/webchem/reference/index.html).
 
-- [BCPC Compendium of Pesticide Common
-  Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood’s
-  Compendium of Pesticide Common Names)
-- [ChEBI](https://www.ebi.ac.uk/chebi/)
-- [ChEMBL](https://www.ebi.ac.uk/chembl/)
-- [Chemical Identifier Resolver
-  (CIR)](https://cactus.nci.nih.gov/chemical/structure)
-- [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-- [ChemSpider](https://www.chemspider.com/) (requires an [API
-  token](https://developer.rsc.org/))
-- [ETOX](http://webetox.uba.de/webETOX/index.do)
-- [Flavornet](http://www.flavornet.org)
-- [NIST](https://webbook.nist.gov) (currently gas chromatography
-  retention indices only)
-- [OPSIN](https://www.ebi.ac.uk/opsin/)
-- [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
-- [U.S. EPA Substance Registry Service
-  (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
-- [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)
+| Database | Webservice | Offline |
+|:---|:---|:---|
+| [BCPC Compendium of Pesticide Common Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood’s Compendium of Pesticide Common Names) | ✅ | ❌ |
+| [ChEBI](https://www.ebi.ac.uk/chebi/) | ✅ | ❌ |
+| [ChEMBL](https://www.ebi.ac.uk/chembl/) | ✅ | ✅ |
+| [Chemical Identifier Resolver (CIR)](https://cactus.nci.nih.gov/chemical/structure) | ✅ | ❌ |
+| [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | ✅ | ❌ |
+| [ChemSpider](https://www.chemspider.com/) (requires an [API token](https://developer.rsc.org/)) | ✅ | ❌ |
+| [ETOX](http://webetox.uba.de/webETOX/index.do) | ✅ | ❌ |
+| [Flavornet](http://www.flavornet.org) | ✅ | ❌ |
+| [FooDB](https://foodb.ca/) | ❌ | ✅ |
+| [NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only) | ✅ | ❌ |
+| [OPSIN](https://www.ebi.ac.uk/opsin/) | ✅ | ❌ |
+| [PubChem](https://pubchem.ncbi.nlm.nih.gov/) | ✅ | ❌ |
+| [U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/) | ✅ | ❌ |
+| [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry) | ✅ | ❌ |
+
+#### Offline access
+
+For databases that support it (marked ✅ in the Offline column),
+`webchem` can download the database and then query it locally. Offline
+queries are faster, work without an internet connection, and return the
+same results every time, making your analyses more reproducible.
 
 #### API keys
 

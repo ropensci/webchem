@@ -18,13 +18,39 @@ knitr::opts_chunk$set(
 ```
 # Webchem
 
+```{r coverage, echo=FALSE}
+Sys.setenv(NOT_CRAN = "true")
+cov <- covr::package_coverage()
+pct <- covr::percent_coverage(cov)
+pct_label <- sprintf("%.1f%%", pct)
+  
+# Choose badge color based on coverage
+col <- if (pct >= 90) {
+  "brightgreen"
+  } else if (pct >= 75) {
+    "yellow"
+  } else if (pct >= 50) {
+    "orange"
+  } else {
+    "red"
+  }
+  
+badge_url <- sprintf(
+  "https://img.shields.io/badge/coverage-%s-%s",
+  URLencode(pct_label),
+  col
+)
+```
+
 <!-- badges: start -->
 
 [![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN](https://www.r-pkg.org/badges/version/webchem)](https://CRAN.R-project.org/package=webchem)
 [![R-multiverse status](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcommunity.r-multiverse.org%2Fapi%2Fpackages%2Fwebchem&query=%24.Version&label=r-multiverse)](https://community.r-multiverse.org/webchem) 
 [![R build status](https://github.com/ropensci/webchem/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/webchem/actions)
-[![Coverage](https://codecov.io/github/ropensci/webchem/coverage.svg?branch=master)](https://app.codecov.io/gh/ropensci/webchem/branch/master) 
+```{r coverage-badge, echo=FALSE, results='asis'}
+cat(sprintf("[![Coverage](%s)](#test-coverage)\n\n", badge_url))
+```
 [![Downloads](https://cranlogs.r-pkg.org/badges/webchem)](https://cran.r-project.org/package=webchem)
 [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/webchem?color=blue)](https://cran.r-project.org/package=webchem)
 [![DOI](https://img.shields.io/badge/DOI-10.18637%2Fjss.v093.i13-blue)](https://doi.org/10.18637/jss.v093.i13)
@@ -41,19 +67,32 @@ They follow the format of `source_functionality`, with the exception of function
 
 At least some of the data in the following sources is accesible through `webchem` functions.  To learn more about what is available, browse the documentation [here](https://docs.ropensci.org/webchem/reference/index.html).
 
-- [BCPC Compendium of Pesticide Common Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood's Compendium of Pesticide Common Names)
-- [ChEBI](https://www.ebi.ac.uk/chebi/)
-- [ChEMBL](https://www.ebi.ac.uk/chembl/)
-- [Chemical Identifier Resolver (CIR)](https://cactus.nci.nih.gov/chemical/structure)
-- [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)
-- [ChemSpider](https://www.chemspider.com/) (requires an [API token](https://developer.rsc.org/))
-- [ETOX](http://webetox.uba.de/webETOX/index.do)
-- [Flavornet](http://www.flavornet.org) 
-- [NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only)
-- [OPSIN](https://www.ebi.ac.uk/opsin/)
-- [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
-- [U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)
-- [Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)
+
+```{r databases-table, echo=FALSE, results='asis'}
+databases <- tibble::tribble(
+  ~Database, ~Webservice, ~Offline,
+  "[BCPC Compendium of Pesticide Common Names](https://pesticidecompendium.bcpc.org) (formerly Alan Wood's Compendium of Pesticide Common Names)", "✅", "❌",
+  "[ChEBI](https://www.ebi.ac.uk/chebi/)", "✅", "❌",
+  "[ChEMBL](https://www.ebi.ac.uk/chembl/)", "✅", "✅",
+  "[Chemical Identifier Resolver (CIR)](https://cactus.nci.nih.gov/chemical/structure)", "✅", "❌",
+  "[Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/)", "✅", "❌",
+  "[ChemSpider](https://www.chemspider.com/) (requires an [API token](https://developer.rsc.org/))", "✅", "❌",
+  "[ETOX](http://webetox.uba.de/webETOX/index.do)", "✅", "❌",
+  "[Flavornet](http://www.flavornet.org)", "✅", "❌",
+  "[FooDB](https://foodb.ca/)", "❌", "✅",
+  "[NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only)", "✅", "❌",
+  "[OPSIN](https://www.ebi.ac.uk/opsin/)", "✅", "❌",
+  "[PubChem](https://pubchem.ncbi.nlm.nih.gov/)", "✅", "❌",
+  "[U.S. EPA Substance Registry Service (SRS)](https://cdxnodengn.epa.gov/cdx-srs-rest/)", "✅", "❌",
+  "[Wikidata](https://www.wikidata.org/wiki/Wikidata:WikiProject_Chemistry)", "✅", "❌"
+)
+
+knitr::kable(databases)
+```
+
+#### Offline access
+
+For databases that support it (marked ✅ in the Offline column), `webchem` can download the database and then query it locally. Offline queries are faster, work without an internet connection, and return the same results every time, making your analyses more reproducible.
 
 #### API keys
 
