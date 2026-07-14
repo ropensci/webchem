@@ -454,7 +454,7 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
     qo <- query_orig[i]
     q <- query[i]
     if (is.na(q)) {
-      return(data.frame(setNames(
+      return(data.frame(stats::setNames(
         list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
         c(from, to)
       )))
@@ -462,7 +462,7 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
     if (from == "moldb_inchikey") {
       if (!is.inchikey(qo, type = "format")) {
         if (verbose) message("Invalid InChIKey format: ", qo)
-        return(data.frame(setNames(
+        return(data.frame(stats::setNames(
           list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
           c(from, to)
         )))
@@ -470,7 +470,7 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
     } else if (from == "cas_number") {
       if (!is.cas(qo)) {
         if (verbose) message("Invalid CAS number format: ", qo)
-        return(data.frame(setNames(
+        return(data.frame(stats::setNames(
           list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
           c(from, to)
         )))
@@ -478,7 +478,7 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
     } else if (from == "moldb_smiles") {
       if (!is.smiles(qo)) {
         if (verbose) message("Invalid SMILES format: ", qo)
-        return(data.frame(setNames(
+        return(data.frame(stats::setNames(
           list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
           c(from, to)
         )))
@@ -487,7 +487,7 @@ foodb_convert <- function(query, from, to, verbose = getOption("verbose")) {
     out <- compound[which(compound[[from]] == q),]
     if (nrow(out) == 0) {
       if (verbose) message("No match found for identifier: ", qo)
-      return(data.frame(setNames(
+      return(data.frame(stats::setNames(
         list(qo, ifelse(to == "id", NA_integer_, NA_character_)), 
         c(from, to)
       )))
@@ -828,7 +828,7 @@ foodb_harmonise_name <- function(query, verbose = getOption("verbose")) {
     dplyr::select("synonym", "source_id") |>
     dplyr::collect()
   if (nrow(synonyms) > 0) {
-    synonyms <- synonyoms |>
+    synonyms <- synonyms |>
       dplyr::mutate(
         foodb_name = foodb_convert(
           !!rlang::sym("source_id"),
