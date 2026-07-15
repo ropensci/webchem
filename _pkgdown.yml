@@ -13,6 +13,8 @@ reference:
   - cs_convert
   - cts_from
   - cts_to
+  - foodb_convert
+  - foodb_list_compounds
   - with_cts
   - wd_ident
   - pc_synonyms
