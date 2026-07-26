@@ -60,10 +60,7 @@ test_that("informative error when query and resource do not match", {
 })
 
 test_that("fully implemented resources work", {
-  skip_if_not(
-    db_exists(version = version),
-    message = "Offline database not available"
-  )
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   full <- c(
     "activity",
@@ -93,10 +90,7 @@ test_that("fully implemented resources work", {
 })
 
 test_that("partially implemented resources work", {
-  skip_if_not(
-    db_exists(version = version),
-    message = "Offline database not available"
-  )
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   partial = c(
     "document",
