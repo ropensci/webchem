@@ -17,8 +17,8 @@ We will try to be responsive and provide feedback.
 
 ## Testing
 
-You can test the package using `devtools::test()`. 
-Tests are disable in the `master` branch (commented out in `~tests\testthat.R`).
+You can test the package using `devtools::test()`. Remember to set the environment variable `RUN_ONLINE_TESTS` to "true" if you want to run tests that interact with online resources.
+Tests are disabled in the `master` branch (commented out in `~tests\testthat.R`).
 For local testing you can uncomment, or run `test_check("webchem")`.
 Please do not include changes to `~tests\testthat.R` in your PR.
 
@@ -33,6 +33,12 @@ Brief description of the PR
 PR task list:
 - [ ] Update NEWS
 - [ ] Add tests (if appropriate)
-- [ ] Knit README.Rmd to update test coverage badge (optional, requires ~40 GB of local databases; if skipped, a maintainer will knit and commit the updated README before merge)
 - [ ] Update documentation with `devtools::document()`
 - [ ] Check package passed
+
+Extra tasks (more for maintainers, but feel free to do them if you want):
+
+- [ ] Set the environment variable `RUN_ONLINE_TESTS` to "true"
+- [ ] Test package locally (requires ~40 GB of local databases)
+- [ ] Update README with `devtools::build_readme()` to update test coverage badge
+
