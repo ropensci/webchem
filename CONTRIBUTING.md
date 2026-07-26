@@ -64,6 +64,8 @@ Some consistency guidelines:
 
 16. If an API is no longer available defunct all the exported functions interacting with it.
 
+17. When adding tests, tests that interact with online resources should only run if the environment variable `RUN_ONLINE_TESTS` is set to "true".
+
 ### Data Sources
 
 You might think all webscraping is perfectly legal but it is unfortunately not that simple.
