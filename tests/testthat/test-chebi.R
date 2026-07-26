@@ -1,7 +1,9 @@
-up <- ping_service("chebi")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("chebi"), TRUE)
+
 test_that("examples in the article are unchanged", {
   skip_on_cran()
   skip_if_not(up, "CHEBI service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   utils::data("lc50", package = "webchem")
   cas_rns <- lc50[order(lc50$value)[1:3], "cas"]
@@ -28,6 +30,8 @@ test_that("examples in the article are unchanged", {
 test_that("chebi returns correct results", {
   skip_on_cran()
   skip_if_not(up, "CHEBI service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   a <- get_chebiid("Glyphosate", from = "all")
   b <- get_chebiid(c("triclosan", "glyphosate", "balloon", NA))
   A <- chebi_comp_entity("CHEBI:27744")
@@ -49,6 +53,7 @@ test_that("chebi returns correct results", {
 test_that("get_chebiid() handles special characters in SMILES",{
   skip_on_cran()
   skip_if_not(up, "CHEBI service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_equal(get_chebiid("C#C", from = "smiles", match = "first")$chebiid, "CHEBI:35328")
 })

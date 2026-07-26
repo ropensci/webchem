@@ -1,7 +1,9 @@
-up <- ping_service("cir")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("cir"), TRUE)
+
 test_that("cir_query()", {
   skip_on_cran()
   skip_if_not(up, "CIR server is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_equal(cir_query('Triclosan', 'mw')$mw[1], 289.5451)
   expect_equal(cir_query('xxxxxxx', 'mw')$mw[1], NA)
@@ -19,6 +21,7 @@ test_that("cir_query()", {
 test_that("cir_query() doesn't mistake NA for sodium", {
   skip_on_cran()
   skip_if_not(up, "CIR server is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_true(is.na(cir_query(as.character(NA), 'cas')$cas))
 })
@@ -34,6 +37,7 @@ test_that("cir_query() handles special characters in SMILES", {
 test_that("cir_query() handles NA queries and queries that return NA", {
   skip_on_cran()
   skip_if_not(up, "CIR server is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_identical(
     cir_query(c("Triclosan", "pumpkin", NA), representation = "cas",match = "first"),
@@ -45,6 +49,7 @@ test_that("cir_query() handles NA queries and queries that return NA", {
 test_that("cir_img()", {
   skip_on_cran()
   skip_if_not(up, "CIR server is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_true(is.null(cir_img('CCO', tempdir())))
   fl <- file.path(tempdir(), 'CCO.png')

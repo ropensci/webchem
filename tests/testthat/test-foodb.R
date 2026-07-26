@@ -2,10 +2,28 @@
 skip_on_cran()
 skip_on_ci()
 
-# Download database if not already downloaded
-db_download_foodb(verbose = TRUE)
+if (Sys.getenv("RUN_ONLINE_TESTS") == "true") {
+  # Download database if not already downloaded
+  db_download_foodb(verbose = TRUE)
+}
+
+db_exists <- function() {
+  tryCatch(
+    {
+      con <- connect_foodb()
+      on.exit(DBI::dbDisconnect(con))
+      TRUE
+    },
+    error = function(e) FALSE
+  )
+}
 
 test_that("database ids are unique", {
+  skip_if_not(
+    db_exists(),
+    message = "Offline database not available"
+  )
+
   con <- connect_foodb()
   compounds <- dplyr::tbl(con, "Compound") |>
     dplyr::select(c(
@@ -23,6 +41,11 @@ test_that("database ids are unique", {
 })
 
 test_that("foodb_list_compounds() works", {
+  skip_if_not(
+    db_exists(),
+    message = "Offline database not available"
+  )
+
   harmonised <- foodb_list_compounds(idtype = "name", include_synonyms = FALSE)
   syns <- foodb_list_compounds(idtype = "name", include_synonyms = TRUE)
 
@@ -32,6 +55,11 @@ test_that("foodb_list_compounds() works", {
 })
 
 test_that("foodb_convert() works", {
+  skip_if_not(
+    db_exists(),
+    message = "Offline database not available"
+  )
+
   # Single query
   qA <- foodb_convert("4", from = "id", to = "public_id")
   qB <- foodb_convert("FDB000004", from = "public_id", to = "name")
@@ -62,6 +90,11 @@ test_that("foodb_convert() works", {
 })
 
 test_that("foodb_query() works", {
+  skip_if_not(
+    db_exists(),
+    message = "Offline database not available"
+  )
+
   # single query
   qA <- foodb_query("Biotin")$Biotin
   qB <- foodb_query("3,7-Dimethylquercetin")$`3,7-Dimethylquerceti`

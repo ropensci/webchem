@@ -1,6 +1,10 @@
-up <- ping_service("chembl")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("chembl"), TRUE)
 
 test_that("chembl_dir_url()", {
+  skip_on_cran()
+  skip_if_not(up, "ChEMBL service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   # latest versions
   expect_equal(chembl_dir_url(), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_36")
   expect_equal(chembl_dir_url("latest"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_36")
@@ -45,6 +49,7 @@ test_that("chembl_files()", {
 test_that("chembl_query() examples", {
   skip_on_cran()
   skip_if_not(up, "ChEMBL service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   #examples
   # Resource: "activity" - requires activity ID
@@ -157,6 +162,7 @@ test_that("chembl_query() examples", {
 test_that("More chembl_query()", {
   skip_on_cran()
   skip_if_not(up, "ChEMBL service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   #invalid inputs
   o5 <- chembl_query(c("CHEMBL1082", NA, "pumpkin", "CHEMBL25")) |>
@@ -216,6 +222,10 @@ test_that("More chembl_query()", {
 })
 
 test_that("chembl_atc_classes()", {
+  skip_on_cran()
+  skip_if_not(up, "ChEMBL service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   o1 <- chembl_atc_classes()
   o2 <- capture_messages(chembl_atc_classes(verbose = TRUE))
 
@@ -249,6 +259,7 @@ test_that("validate_chembl_version()", {
 test_that("chembl_status()", {
   skip_on_cran()
   skip_if_not(up, "ChEMBL service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   o1 <- chembl_status()
   o2 <- capture_messages(chembl_status(verbose = TRUE))
@@ -269,6 +280,10 @@ test_that("chembl_status()", {
 })
 
 test_that("force_schema() works everywhere", {
+  skip_on_cran()
+  skip_if_not(up, "ChEMBL service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   for (resource in chembl_resources()) {
     if (resource %in% c("image", "status")) next()
     resource |>

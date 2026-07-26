@@ -1,4 +1,5 @@
-up <- ping_service("cs_web")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("cs_web"), TRUE)
+
 test_that("examples in the article are unchanged", {
   expect_false(is.inchikey("BQJCRHHNABKAKU-KBQPJGBKS-AN"))
   # The default value for verbose has changed and it now requires verbose = TRUE
@@ -26,6 +27,10 @@ test_that("assert()", {
 })
 
 test_that("db_files()", {
+  skip_on_cran()
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   o1 <- db_files("chembl", version = "35")
   expect_true(all(o1$url_exists))
   expect_error(db_files("hello"))
@@ -62,6 +67,7 @@ test_that("is.inchikey() returns correct results", {
   skip_on_cran()
   skip_on_ci()
   skip_if_not(up, "ChemSpider service is down, skipping tests")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   vcr::use_cassette("is_inchikey_cs_2", {
     g <- is.inchikey('BQJCRHHNABKAKU-KBQPJGBKSA-N', type = 'chemspider')
