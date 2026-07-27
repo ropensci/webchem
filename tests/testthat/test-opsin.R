@@ -1,7 +1,9 @@
-up <- ping_service("opsin")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("opsin"), TRUE)
+
 test_that("opsin_query()", {
   skip_on_cran()
   skip_if_not(up, "OPSIN service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   o1 <- opsin_query(c('Cyclopropane', 'Octane'))
   o2 <- suppressWarnings(opsin_query(c('xxxx')))

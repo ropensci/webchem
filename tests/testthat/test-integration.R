@@ -1,14 +1,15 @@
 # These all might occasionally fail because cts_translate() is currently
 # somewhat unreliable.
 
-etox_up <- ping_service("etox")
-fn_up <- ping_service("fn")
-up <- ping_service("cts")
+etox_up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("etox"), TRUE)
+fn_up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("fn"), TRUE)
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("cts"), TRUE)
 
 test_that("with_cts() works when no translation needed", {
   skip_on_cran()
   skip_if_not(etox_up, "ETOX down!")
   skip_if_not(up, "CTS service down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   CASs <- c("75-07-0",  "64-17-5")
   a <-
@@ -27,6 +28,7 @@ test_that("with_cts() translates", {
   skip_on_cran()
   skip_if_not(etox_up, "ETOX down!")
   skip_if_not(up, "CTS service down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   x <-
     with_cts(query = "XDDAORKBJWWYJS-UHFFFAOYSA-N", from = "inchikey", .f = "get_etoxid")
@@ -43,6 +45,7 @@ test_that("find_db() function works", {
   skip_if_not(fn_up)
   skip_if_not(etox_up)
   skip_if_not(up, "CTS service down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   out <- find_db(c("triclosan", NA, "balloon"),
                         from = "name",

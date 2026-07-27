@@ -1,7 +1,10 @@
-up <- ping_service("pc")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("pc"), TRUE)
+
 test_that("examples in the article are unchanged", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   #values come from test-etox
   cas <- c("105-67-9", "1570-64-5", NA, "1912-24-9", "71-43-2", "6190-65-4")
   cids <- get_cid(cas, from = "xref/rn", match = "first")
@@ -20,6 +23,7 @@ test_that("examples in the article are unchanged", {
 test_that("get_cid()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   #from name
   expect_true("5564" %in% get_cid("Triclosan")$cid)
@@ -93,6 +97,7 @@ test_that("get_cid()", {
 test_that("get_cid() handles special characters in SMILES", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_equal(get_cid("C#C", from = "smiles")$cid, "6326")
 })
@@ -100,6 +105,7 @@ test_that("get_cid() handles special characters in SMILES", {
 test_that("pc_prop", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   b <- suppressWarnings(pc_prop("xxx", properties = "SMILES"))
   c <- pc_prop("5564", properties = c("SMILES", "InChIKey"))
@@ -132,6 +138,8 @@ test_that("pc_prop", {
 test_that("pc_synonyms", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   expect_equal(pc_synonyms(NA), list(NA), ignore_attr = TRUE)
   expect_equal(pc_synonyms("Acetyl Salicylic Acid")[[1]][1], "aspirin")
   expect_equal(length(pc_synonyms(c("Triclosan", "Aspirin"))), 2)
@@ -143,6 +151,7 @@ test_that("pc_synonyms", {
 test_that("cid integration tests", {
   skip_on_cran()
   skip_if_not(ping_pubchem(), "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_equal(pc_prop(get_cid("Triclosan")$cid[1],
                        properties = "SMILES")$SMILES,
@@ -154,6 +163,7 @@ test_that("cid integration tests", {
 test_that("pc_page()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   a <- pc_page(c(311, 176, 1118, "balloon", NA), "Dissociation Constants")
 
@@ -168,6 +178,7 @@ test_that("pc_page()", {
 test_that("pc_sect()", {
   skip_on_cran()
   skip_if_not(up, "PubChem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   a <- pc_sect(c(311, 176, 1118, "balloon", NA), "Dissociation Constants")
   expect_s3_class(a, c("tbl_df", "tbl", "data.frame"))
@@ -175,6 +186,7 @@ test_that("pc_sect()", {
   expect_equal(mean(c("2.79", "4.76 (at 25 °C)", NA) %in% a$Result), 1)
   expect_equal(mean(c("DrugBank", NA) %in% a$SourceName), 1)
   expect_equal(mean(c("DB04272", "DB03166", NA) %in% a$SourceID), 1)
+
   b <- pc_sect(2231, "depositor-supplied synonyms", "substance")
   expect_s3_class(b, c("tbl_df", "tbl", "data.frame"))
   expect_equal(names(b), c("SID", "Name", "Result", "SourceName", "SourceID"))

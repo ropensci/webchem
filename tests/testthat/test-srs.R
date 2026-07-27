@@ -1,8 +1,9 @@
-up <- ping_service("srs")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("srs"), TRUE)
 
 test_that("SRS returns correct results", {
   skip_on_cran()
   skip_if_not(up, "SRS is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   a <- srs_query(NA)
   b <- srs_query("balloon")

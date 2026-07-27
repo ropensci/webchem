@@ -1,9 +1,11 @@
-
 library(robotstxt)
-up <- ping_service("nist")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("nist"), TRUE)
+
 test_that("NIST webbook is still OK with being scraped", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   expect_true(
     paths_allowed("https://webbook.nist.gov/cgi/cbook.cgi",
                   user_agent = 'webchem (https://github.com/ropensci/webchem)')
@@ -13,6 +15,7 @@ test_that("NIST webbook is still OK with being scraped", {
 test_that("nist_ri() works when only one row of data", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   testdf <- nist_ri("78-70-6", from = "cas",
                     type = "alkane",
@@ -35,6 +38,7 @@ test_that("nist_ri() works when only one row of data", {
 test_that("nist_ri() works with inchikey query", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   testdf <- nist_ri(
     "UHEPJGULSIKKTP-UHFFFAOYSA-N",
@@ -50,6 +54,7 @@ test_that("nist_ri() works with inchikey query", {
 test_that("nist_ri() works with inchi query", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   testdf <- nist_ri(
     "1S/C8H14O/c1-7(2)5-4-6-8(3)9/h5H,4,6H2,1-3H3",
@@ -65,6 +70,7 @@ test_that("nist_ri() works with inchi query", {
 test_that("nist_ri() works with name query", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   testdf <- nist_ri(
     "myrcene",
@@ -80,6 +86,7 @@ test_that("nist_ri() works with name query", {
 test_that("nist_ri() works with multiple queries", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   myRIs <-
     nist_ri(
@@ -96,6 +103,7 @@ test_that("nist_ri() works with multiple queries", {
 test_that("nist_ri() can return multiple types", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   out <- nist_ri("78-70-6", type = c("kovats","linear"), polarity="non-polar",
                  temp_prog = "custom")
@@ -110,6 +118,7 @@ test_that("nist_ri() can return multiple types", {
 test_that("cas =  is deprecated gently", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   expect_warning(
     nist_ri(cas = "78-70-6"),
@@ -121,6 +130,7 @@ test_that("cas =  is deprecated gently", {
 test_that("nist_ri works with NAs", {
   skip_on_cran()
   skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   test <- nist_ri("107-86-8",
                   from = "cas",
@@ -140,6 +150,10 @@ test_that("nist_ri works with NAs", {
 })
 
 test_that("a name returns CAS", {
+  skip_on_cran()
+  skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   test1 <- nist_ri("α-methyl-Benzenepropanamine", from = "name", type="kovats")
   expect_equal(test1[[1,"cas"]], "22374-89-6")
   test2 <- nist_ri("α-methyl-Benzenepropanamine", from = "name", type="lee")
@@ -148,12 +162,20 @@ test_that("a name returns CAS", {
 })
 
 test_that("a record with no CAS number returns expected output", {
+  skip_on_cran()
+  skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   test <- nist_ri("(Z,Z)-alpha-Farnesene", from="name", type = "linear", polarity="polar")
   expect_equal(test$query, "(Z,Z)-α-Farnesene")
   expect_equal(test$cas, NA)
 })
 
 test_that("a query with spaces returns the expected output", {
+  skip_on_cran()
+  skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   test <- nist_ri(query = "methyl glyoxal", from="name",temp_prog = "ramp")
   expect_equal(test$query, "methyl glyoxal")
   expect_equal(test$cas, "78-98-8")
@@ -161,6 +183,10 @@ test_that("a query with spaces returns the expected output", {
 })
 
 test_that("nist_ri() can deal appropriately with a mixture of queries", {
+  skip_on_cran()
+  skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   test <- nist_ri(query=c(NA, "baloon", "methane", "deuterium", "hexanol"), from = "name",
                   type=c("kovats","linear"), polarity="polar",
                   temp_prog = "ramp")
@@ -183,6 +209,10 @@ test_that("nist_ri() can deal appropriately with a mixture of queries", {
 })
 
 test_that("nist_ri() works with multiple temperature program arguments",{
+  skip_on_cran()
+  skip_if_not(up, "NIST Web Book is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   df_ramp <- nist_ri("78-70-6", from = "cas", type = c("kovats"), polarity="polar",
                         temp_prog = "ramp")
   df_iso <- nist_ri("78-70-6", type = c("kovats"), polarity="polar",

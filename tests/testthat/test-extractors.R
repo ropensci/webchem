@@ -10,8 +10,10 @@
 # })
 
 test_that("extractors work with opsin", {
+  up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("opsin"), TRUE)
   skip_on_cran()
-  skip_if_not(ping_service("opsin"), "OPSIN service is down")
+  skip_if_not(up, "OPSIN service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   out_opsin_query <- opsin_query(c('Cyclopropane', 'Octane'))
   expect_error(cas(out_opsin_query), "CAS is not returned by this datasource!")
@@ -23,8 +25,10 @@ test_that("extractors work with opsin", {
 })
 
 test_that("extractors work with BCPC compendium", {
+  up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("bcpc"), TRUE)
   skip_on_cran()
-  skip_if_not(ping_service("bcpc"), "BCPC compendium not reachable")
+  skip_if_not(up, "BCPC compendium not reachable")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   out_bcpc_query <- bcpc_query(c('Fluazinam', 'Diclofop'), from = 'name')
   expect_equal(cas(out_bcpc_query), c("79622-59-6", "40843-25-2"),
@@ -37,8 +41,10 @@ test_that("extractors work with BCPC compendium", {
 })
 
 test_that("extractors work with Wikidata", {
+  up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("wd"), TRUE)
   skip_on_cran()
-  skip_if_not(ping_service("wd"), "Wikidata service is down")
+  skip_if_not(up, "Wikidata service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   id <- c("Q408646", "Q18216")
   out_wd_ident <- wd_ident(id)
@@ -52,8 +58,10 @@ test_that("extractors work with Wikidata", {
 })
 
 test_that("extractors work with pubchem", {
+  up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("pc"), TRUE)
   skip_on_cran()
-  skip_if_not(ping_service("pc"), "Pubchem service is down")
+  skip_if_not(up, "Pubchem service is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   out_pc_prop <- pc_prop(c(5564, 2244))
   out_pc_prop2 <- pc_prop(5564, properties = c('MolecularFormula',

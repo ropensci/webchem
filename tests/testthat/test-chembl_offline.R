@@ -2,10 +2,30 @@
 skip_on_cran()
 skip_on_ci()
 
-# Download ChEMBL database if not already downloaded
-db_download_chembl(version = "36", verbose = TRUE)
+version = "36"
+if (Sys.getenv("RUN_ONLINE_TESTS") == "true") {
+  # Download ChEMBL database if not already downloaded
+  db_download_chembl(version = version, verbose = TRUE)
+}
+
+db_exists <- function(version) {
+  version <- validate_chembl_version(version)
+  tryCatch(
+    {
+      con <- connect_chembl(version = version)
+      on.exit(DBI::dbDisconnect(con))
+      TRUE
+    },
+    error = function(e) FALSE
+  )
+}
 
 test_that("chembl_offline_chembl_id_lookup works", {
+  skip_if_not(
+    db_exists(version = version),
+    message = "Offline database not available"
+  )
+
   a <- chembl_query_offline(
     query = "CHEMBL1",
     resource = "chembl_id_lookup",
@@ -26,6 +46,11 @@ test_that("chembl_offline_chembl_id_lookup works", {
 })
 
 test_that("informative error when query and resource do not match", {
+  skip_if_not(
+    db_exists(version = version),
+    message = "Offline database not available"
+  )
+
   msg <- tryCatch(
     chembl_query_offline(
       query = c("CHEMBL1082", "CHEMBL3988026") , resource = "molecule"),
@@ -35,6 +60,8 @@ test_that("informative error when query and resource do not match", {
 })
 
 test_that("fully implemented resources work", {
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   full <- c(
     "activity",
     "atc_class",
@@ -63,6 +90,8 @@ test_that("fully implemented resources work", {
 })
 
 test_that("partially implemented resources work", {
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
+
   partial = c(
     "document",
     "drug",

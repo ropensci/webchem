@@ -1,7 +1,10 @@
-up <- ping_service("wd")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("wd"), TRUE)
+
 test_that("get_wdid returns correct results", {
   skip_on_cran()
   skip_if_not(up, "Wikidata service is down")
+
+
   # test general
   comps <- c('DDT', 'Aspirin', 'xdewrwdcadsr4w', 'acetic acid')
   o1 <- get_wdid(comps, match = 'best')

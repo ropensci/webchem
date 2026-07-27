@@ -1,7 +1,9 @@
-up <- ping_service("bcpc")
+up <- ifelse(Sys.getenv("RUN_ONLINE_TESTS") == "true", ping_service("bcpc"), TRUE)
+
 test_that("examples in the article are unchanged as far as it can be reasonably expected", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   utils::data("lc50", package = "webchem")
   expect_warning(
@@ -24,6 +26,7 @@ test_that("examples in the article are unchanged as far as it can be reasonably 
 test_that("BCPC pesticide compendium, name", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   comps <- c("Fluazinam", "S-Metolachlor", "balloon", NA, "Triclopyr-butotyl")
   o1 <- bcpc_query(comps, from = "name")
@@ -45,6 +48,7 @@ test_that("BCPC pesticide compendium, name", {
 test_that("BCPC pesticide compendium, invalid input", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   comps <- c("balloon", NA)
   o1 <- bcpc_query(comps)
@@ -56,6 +60,7 @@ test_that("BCPC pesticide compendium, invalid input", {
 test_that("BCPC pesticide compendium, build_index", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   idx <- suppressWarnings(webchem:::build_bcpc_idx(force_build = TRUE))
   expect_s3_class(idx, "data.frame")
@@ -68,6 +73,7 @@ test_that("BCPC pesticide compendium, build_index", {
 test_that("BCPC pesticide compendium, activity", {
   skip_on_cran()
   skip_if_not(up, "BCPC pesticide compendium is down")
+  skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   comps <- c("atrazine", "2,4-D", "Copper hydroxide", "ziram")
   o1 <- bcpc_query(comps)
