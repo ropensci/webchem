@@ -263,11 +263,11 @@ pc_find_section <- function(pg, section) {
 }
 
 #' Normalise values from PubChem content pages
-#' 
+#'
 #' PubChem pages are retrieved as deeply nested lists. The information of
-#' interes in ofter stored in an "Information" field which contains a list.
-#' Each list element contains a "Value" field but the structure of the "Value" 
-#' field can vary. This function attempts to normalise the "Value" field into a 
+#' interest is often stored in an "Information" field which contains a list.
+#' Each list element contains a "Value" field but the structure of the "Value"
+#' field can vary. This function attempts to normalise the "Value" field into a
 #' single string.
 #' @param value list; a "Value" field from a PubChem content page.
 #' @return A character string containing the normalised value, or NA if the
@@ -282,6 +282,8 @@ pc_parse_value <- function(value) {
     out <- paste(out, values)
   } else if (!is.null(value$Number)) {
     out <- paste(out, value$Number)
+  } else if (!is.null(value$ExternalDataURL)) {
+    out <- paste(out, value$ExternalDataURL)
   }
   if (!is.null(value$Unit)) {
     out <- paste(out, value$Unit)
