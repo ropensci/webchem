@@ -87,8 +87,11 @@ pc_sect <- function(
 #' pc_decompose_pointer("collection=chemidplus&query_type=sid&query=134972565")
 #' @noRd
 pc_decompose_pointer <- function(pointer) {
-  pointers <- strsplit(pointer, "&")[[1]]
-  setNames(
+  if (length(pointer) == 1 && !grepl("=", pointer, fixed = TRUE)) {
+    return(list(collection = pointer))
+  }
+  pointers <- strsplit(pointer, "&",fixed = TRUE)[[1]]
+  stats::setNames(
     as.list(sub("^[^=]+=", "", pointers)),
     sub("=.*$", "", pointers)
   )
