@@ -232,3 +232,36 @@ pc_extract <- function(page, section) {
   names(info)[1] <- attr(page, "id")
   return(info)
 }
+
+
+#' Find a section in a PubChem content page
+#' 
+#' This function searches for a specific section in a PubChem content page and
+#' returns the content of that section.
+#' @param pg list; a PubChem content page.
+#' @param section character; the name of the section to be found. Not case 
+#' sensitive
+#' @return A list containing the content of the specified section, or NA if
+#' the section is not found.
+#' @noRd
+pc_find_section <- function(pg, section) {
+  if (is.na(pg)) return(NULL)
+  search_sections <- function(section_list, target) {
+    if (!is.list(section_list)) return(NULL)
+    for (i in seq_along(section_list)) {
+      item <- section_list[[i]]
+      if (is.list(item) && !is.null(item$TOCHeading)) {
+        if (tolower(item$TOCHeading) == tolower(target)) {
+          return(item)
+        }
+        if (!is.null(item$Section)) {
+          result <- search_sections(item$Section, target)
+          if (!is.null(result)) return(result)
+        }
+      }
+    }
+    return(NULL)
+  }
+  result <- search_sections(pg$Record$Section, section)
+  return(result)
+}
