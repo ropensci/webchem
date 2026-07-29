@@ -69,12 +69,17 @@ pc_sect <- function(
   }
   res <- lapply(id, function(x) pc_page(x, section, domain, verbose))
   PARSEFUN <- paste0("pc_parse_", parser)
-  out <- lapply(res, function(x) {
+  out <- Map(function(x, i) {
     do.call(PARSEFUN, args = list(
       pg = x,
+      id = i,
+      domain = domain,
       section = section,
       form = form
     ))
+  }, res, id)
+  out <- lapply(out, function(x) {
+    dplyr::mutate(x, dplyr::across(everything(), as.character))
   })
   out <- dplyr::bind_rows(out)
   return(out)
@@ -143,9 +148,17 @@ pc_page <- function(
 
   domain <- match.arg(domain)
   section <- tolower(section)
+
+  empty_row <- tibble::tibble(
+    Section = section,
+    Domain = domain,
+    ID = id
+  )
+  class(empty_row) <- c("empty_row", class(empty_row))
+
   if (is.na(id)) {
     if (verbose) webchem_message("na")
-    return(NA)
+    return(empty_row)
   }
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
                  domain, "/", id, "/JSON?heading=", gsub(" +", "+", section))
@@ -158,20 +171,20 @@ pc_page <- function(
                          quiet = TRUE), silent = TRUE)
   if (inherits(res, "try-error")) {
     if (verbose) webchem_message("service_down")
-    return(NA)
+    return(empty_row)
   }
   if (verbose) message(httr::message_for_status(res))
   if (res$status_code == 200) {
     cont <- httr::content(res, type = "text", encoding = "UTF-8")
     # Intercepting any NA cont before it gets to fromJSON.
     if(is.na(cont)) {
-      return(NA)
+      return(empty_row)
     }
     cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
     return(cont)
   }
   else {
-    return(NA)
+    return(empty_row)
   }
 
 }
@@ -318,24 +331,24 @@ pc_parse_information_element <- function(x, id, domain) {
 #' @return A tibble containing the parsed data from the specified section of the
 #' PubChem content page.
 #' @noRd
-pc_parse_all <- function(pg, section, form) {
-  if (is.na(pg)) return(NA)
+pc_parse_all <- function(pg, id, domain, section, form) {
+  if (inherits(pg, "empty_row")) return(pg)
   name <- pg$Record$RecordTitle
-  id <- pg$Record$RecordNumber
-  if (!is.null(id)) {
-    id <- as.character(id)
+  id_internal <- pg$Record$RecordNumber
+  if (!is.null(id_internal)) {
+    id_internal <- as.character(id_internal)
   } else {
-    id <- pg$Record$RecordAccession
+    id_internal <- pg$Record$RecordAccession
   }
-  if (is.null(id)) {
-    id <- NA_character_
+  if (is.null(id_internal)) {
+    id_internal <- NA_character_
   }
-  domain <- pg$Record$RecordType
+  domain_internal <- pg$Record$RecordType
   sect <- pc_find_section(pg, section)
-  if (is.null(sect)) return(NA)
-  if (is.null(sect$Information)) return(NA)
+  if (is.null(sect)) stop("Unhandled exception. Please open an issue.")
+  if (is.null(sect$Information)) stop("Unhandled exception. Please open an issue.")
   info <- lapply(sect$Information, function(x) {
-    pc_parse_information_element(x, id, domain)
+    pc_parse_information_element(x, id_internal, domain_internal)
   }) |> dplyr::bind_rows()
   if (pc_needs_pivot_wider(info, form)) {
     info <- info |>
@@ -360,13 +373,16 @@ pc_parse_all <- function(pg, section, form) {
     dplyr::select(-rlang::sym("refnum")) |>
     dplyr::mutate(
       Section = section,
+      Domain = domain,
       ID = id,
       Name = name
     ) |>
     dplyr::relocate(
-      !!rlang::sym("Section"), !!rlang::sym("ID"), !!rlang::sym("Name")
+      !!rlang::sym("Section"), 
+      !!rlang::sym("Domain"),
+      !!rlang::sym("ID"), 
+      !!rlang::sym("Name")
     )
-  names(out)[2] <- domain
   return(out)
 }
 
