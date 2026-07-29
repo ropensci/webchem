@@ -294,7 +294,7 @@ pc_parse_value <- function(value) {
 }
 
 #' Parse data from a PubChem content page section into a tibble
-#' 
+#'
 #' Extracts tabular data from a PubChem content page section by retrieving
 #' values, reference numbers, and source information from the "Information"
 #' field. Returns a tibble with NA values if the section is not found or
@@ -302,62 +302,55 @@ pc_parse_value <- function(value) {
 #' @param pg list; a PubChem content page.
 #' @param section character; the name of the section from which to extract the
 #' table. Not case sensitive.
-#' @return A tibble containing the ID, name, result value, source name, and 
-#' source ID for each piece of information found in the specified section, or a 
+#' @return A tibble containing the ID, name, result value, source name, and
+#' source ID for each piece of information found in the specified section, or a
 #' tibble with NA values if the section is not found or contains no information.
 #' @noRd
 pc_parse_table <- function(pg, section) {
+  if (is.na(pg)) return(NA)
   name <- pg$Record$RecordTitle
   id <- pg$Record$RecordNumber |> as.integer()
   domain <- pg$Record$RecordType
-  empty_row <- data.frame(
-    ID = id,
-    Name = name,
-    Result = NA_character_,
-    SourceName = NA_character_,
-    SourceID = NA_character_
-  )
-  names(empty_row)[1] <- domain
   sect <- pc_find_section(pg, section)
-  if (is.null(sect)) return(empty_row)
-  if (!is.null(sect$Information)) {
-    info <- lapply(sect$Information, function(x) {
-      refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
-      values <- pc_parse_value(x$Value)
-      data.frame(value  = values, refnum = refnum)
-    })
-    info <- do.call(rbind, info)
-    if (!is.null(pg$Record$Reference)) {
-      refs <- lapply(pg$Record$Reference, function(x) {
-        data.frame(
-          ReferenceNumber = x$ReferenceNumber,
-          SourceName = x$SourceName,
-          SourceID = x$SourceID
-        )
-      })
-      refs <- do.call(rbind, refs)
-      info <- dplyr::left_join(
-        info,
-        refs,
-        by = c("refnum" = "ReferenceNumber")
-      )
-    } else {
-      info$SourceName <- NA_character_
-      info$SourceID <- NA_character_
-    }
-    info <- info[, -which(names(info) == "refnum")]
-    out <- tibble::tibble(
-      ID = id,
-      Name = name,
-      Result = info$value,
-      SourceName = info$SourceName,
-      SourceID = info$SourceID
-    )
-    names(out)[1] <- domain
-    return(out)
+  if (is.null(sect)) return(NA)
+  if (is.null(sect$Information)) return(NA)
+  if (!is.null(sect$DisplayControls)) {
+    vars <- sect$DisplayControls$CreateTable$ColumnContents
+    varnames <- sect$DisplayControls$CreateTable$ColumnHeadings
   } else {
-    return(empty_row)
+    stop("Could not find display controls. Try another parser.")
   }
+  info <- lapply(sect$Information, function(x) {
+    names <- if (!is.null(x$Name)) x$Name else "noname"
+    values <- pc_parse_value(x$Value)
+    refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
+    tibble::tibble(name = names, value = values, refnum = refnum)
+  })
+  info <- dplyr::bind_rows(info) |>
+    dplyr::group_by(refnum) |>
+    tidyr::pivot_wider(
+      names_from = name,
+      values_from = value
+    ) |>
+    dplyr::ungroup()
+  if (!is.null(pg$Record$Reference)) {
+    refs <- lapply(pg$Record$Reference, as.data.frame) |> dplyr::bind_rows()
+    info <- dplyr::left_join(
+      info,
+      refs,
+      by = c("refnum" = "ReferenceNumber")
+    )
+  }
+  out <- info |>
+    dplyr::select(-rlang::sym("refnum")) |>
+    dplyr::mutate(
+      Section = section,
+      ID = id,
+      Name = name
+    ) |>
+    dplyr::relocate(Section, ID, Name)
+  names(out)[2] <- domain
+  return(out)
 }
 
 #' Parse sequence data from a PubChem content page
