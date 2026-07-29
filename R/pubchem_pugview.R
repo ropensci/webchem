@@ -372,7 +372,7 @@ pc_parse_table <- function(pg, section) {
     stop("Could not find display controls. Try another parser.")
   }
   info <- lapply(sect$Information, function(x) {
-    names <- if (!is.null(x$Name)) x$Name else "noname"
+    names <- if (!is.null(x$Name)) x$Name else "Result"
     values <- pc_parse_information_element(x)
     refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
     tibble::tibble(name = names, value = values, refnum = refnum)
