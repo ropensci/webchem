@@ -53,10 +53,11 @@ pc_sect <- function(
   verbose = getOption("verbose")
 ) {
   domain <- match.arg(domain)
-  section <- tolower(gsub(" +", "+", section))
-  if (section %in% c("standard non-polar",
-                     "Semi-standard non-polar",
-                     "Standard polar")) {
+  section <- tolower(section)
+  if (section %in% c(
+    "standard non-polar",
+    "semi-standard non-polar",
+    "standard polar")) {
     stop("use nist_ri() to obtain more information on this.")
   }
   res <- lapply(id, function(x) pc_page(x, section, domain, verbose))
@@ -104,13 +105,13 @@ pc_page <- function(
   if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   domain <- match.arg(domain)
-  section <- tolower(gsub(" +", "+", section))
+  section <- tolower(section)
   if (is.na(id)) {
     if (verbose) webchem_message("na")
     return(NA)
   }
   qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
-                 domain, "/", id, "/JSON?heading=", section)
+                 domain, "/", id, "/JSON?heading=", gsub(" +", "+", section))
   if (verbose) webchem_message("query", id, appendLF = FALSE)
   webchem_sleep(type = 'API')
   res <- try(httr::RETRY("GET",
