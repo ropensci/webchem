@@ -58,7 +58,12 @@ pc_sect <- function(id,
                      "Standard polar")) {
     stop("use nist_ri() to obtain more information on this.")
   }
-  res <- lapply(id, function(x) pc_page(x, section, domain, verbose))
+  res <- lapply(id, function(x) {
+    cont <- pc_page(x, section, domain, verbose)
+    tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
+    tree$Do(function(node) node$name <- tolower(node$name))
+    return(tree)
+  })
   names(res) <- id
   attr(res, "id") <- switch(
     domain,
@@ -138,9 +143,7 @@ pc_page <- function(
       return(NA)
     }
     cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
-    tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
-    tree$Do(function(node) node$name <- tolower(node$name))
-    return(tree)
+    return(cont)
   }
   else {
     return(NA)
