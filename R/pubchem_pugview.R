@@ -285,17 +285,10 @@ pc_parse_information_element <- function(x, id, domain) {
   } else if ("ExternalDataURL" %in% names(x$Value)) {
     out <- x$Value$ExternalDataURL
   } else if ("ExternalTableName" %in% names(x$Value)) {
-    pointer <- pc_decompose_pointer(x$Value$ExternalTableName)
-    if (!"collection" %in% names(pointer)) {
-      stop(sprintf(
-        "'ExternalTableName' not implemented for '%s'. Please open an issue.", 
-        x$Value$ExternalTableName
-      ))
-    }
     out <- pc_sdq_query(
-      collection = pointer$collection,
-      idtype = ifelse(!is.null(pointer$query_type), pointer$query_type, domain),
-      query = ifelse(!is.null(pointer$query), pointer$query, id)
+      pointer = x$Value$ExternalTableName, 
+      idtype = domain, 
+      query = id
     )
   } else {
     stop("Unknown value type: ", names(x$Value))
@@ -383,34 +376,39 @@ pc_parse_all <- function(pg, section, form) {
 #' contain the data itself, only a pointer to the data. This function constructs
 #' a json query that can be used to retrive the data using PubChem's SDQ
 #' (Structured Data Query) service.
-#' @param collection character; the collection to query (e.g., "chemidplus").
+#' @param pointer character; a pointer string from a PubChem content page.
 #' @param idtype character; the type of identifier to query (e.g., "cid", "sid").
 #' @param query character; the identifier value to query.
-#' @param limit numeric; the maximum number of results to return (default is 10000000).
 #' @return A JSON string representing the SDQ query.
 #' @noRd
-pc_build_sdq_query <- function(
-    collection,
-    idtype,
-    query,
-    limit = 10000000
-) {
-  where_clause <- list()
-  where_clause[[idtype]] <- query
+pc_build_sdq_query <- function(pointer, idtype, query) {
+  pointer_list <- pc_decompose_pointer(pointer)
+  if (!"collection" %in% names(pointer_list)) {
+      stop(sprintf(
+        "'ExternalTableName' not implemented for '%s'. Please open an issue.", 
+        pointer
+      ))
+    }
+  if (!"query_type" %in% names(pointer_list)) {
+    pointer_list$query_type <- idtype
+  }
+  if (!"query" %in% names(pointer_list)) {
+    pointer_list$query <- query
+  }
+  if (is.null(pointer_list$query_type) || is.null(pointer_list$query)) {
+    stop("Both 'idtype' and 'query' must be supplied.")
+  }
+  pointer_list[[pointer_list$query_type]] <- pointer_list$query
+  pointer_list$query_type <- NULL
+  pointer_list$query <- NULL
+  where_clause <- pointer_list[setdiff(names(pointer_list), "collection")]
   sdq <- list(
     download = "*",
-    collection = collection,
+    collection = pointer_list$collection,
     order = list("relevancescore,desc"),
     start = 1,
-    limit = limit,
-    downloadfilename = paste0(
-      "pubchem_",
-      idtype,
-      "_",
-      query,
-      "_",
-      collection
-    ),
+    limit = 10000000,
+    downloadfilename = tempfile(),
     where = list(
       ands = list(
         where_clause
@@ -429,25 +427,14 @@ pc_build_sdq_query <- function(
 #' contain the data itself, only a pointer to the data. This function sends a
 #' query to PubChem's SDQ (Structured Data Query) service and retrieves the
 #' results in CSV format.
-#' @param collection character; the collection to query (e.g., "chemidplus").
+#' @param pointer character; a pointer string from a PubChem content page.
 #' @param idtype character; the type of identifier to query (e.g., "cid", "sid").
 #' @param query character; the identifier value to query.
-#' @param limit numeric; the maximum number of results to return (default is 10000000).
 #' @return A tibble containing the results of the SDQ query.
 #' @noRd
-pc_sdq_query <- function(
-    collection,
-    idtype,
-    query,
-    limit = 10000000
-) {
+pc_sdq_query <- function(pointer, idtype, query) {
   base_url <- "https://pubchem.ncbi.nlm.nih.gov/sdq/sphinxql.cgi"
-  sdq_json <- pc_build_sdq_query(
-    collection,
-    idtype,
-    query,
-    limit
-  )
+  sdq_json <- pc_build_sdq_query(pointer, idtype = idtype, query = query)
   response <- httr::GET(
     base_url,
     query = list(
