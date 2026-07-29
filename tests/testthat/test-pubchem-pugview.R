@@ -205,3 +205,59 @@ test_that("Collision Cross Section", {
   res <- pc_sect(1983, "Collision Cross Section", parser = "string")
   expect_false(length(res$Result) == 1 && is.na(res$Result))
 })
+
+test_that("1D NMR Spectra", {
+  res <- pc_sect(1983, "1D NMR Spectra", parser = "table")
+  expect_equal(
+    res$`1D NMR Spectra`[1],
+    "http://nmrshiftdb.nmr.uni-koeln.de/portal/js_pane/P-Results/nmrshiftdbaction/showDetailsFromHome/molNumber/89614"
+  )
+})
+
+test_that("1H NMR Spectra", {
+  res <- pc_sect(1983, "1H NMR Spectra", parser = "table")
+  expect_equal(
+    res$`Shifts [ppm]:Intensity`[1],
+    "9.63:20.93, 6.67:40.69, 6.65:35.56, 1.97:100.00, 7.31:35.75, 7.33:37.16, 9.11:34.80"
+  )
+})
+
+test_that("GC-MS", {
+  res <- pc_sect(1983, "GC-MS", parser = "table")
+  expect_equal(
+    res$`Top 5 Peaks`[1],
+    "109.0:99.99, 151.0:34.59, 80.0:9.49, 110.0:7.64, 108.0:7.14"
+  )
+})
+
+test_that("MS-MS", {
+  res <- pc_sect(1983, "MS-MS", parser = "table")
+  expect_equal(
+    res$`Top 5 Peaks`[1],
+    "152.349:100, 109.615:81.87, 111.118:68.32, 111.745:66.47, 151.471:56.21"
+  )
+})
+
+test_that("LC-MS", {
+  res <- pc_sect(1983, "LC-MS", parser = "table")
+  expect_equal(res$`Collision Energy`[1], "Ramp 20%-70% (nominal)")
+})
+
+test_that("Other MS", {
+  res <- pc_sect(1983, "Other MS", parser = "table")
+  expect_true(nrow(res) > 5)
+})
+
+test_that("Raman Spectra", {
+  res <- pc_sect(1983, "Raman Spectra", parser = "table")
+  expect_true(nrow(res) > 3)
+})
+
+test_that("Other Spectra", {
+  res <- pc_sect(1983, "Other Spectra", parser = "string")
+  expect_false(length(res$Result) == 1 && is.na(res$Result))
+  expect_equal(
+    res$Result[1],
+    "Intense mass spectral peaks: 80 m/z, 109 m/z, 151 m/z"
+  )
+})
