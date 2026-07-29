@@ -43,13 +43,14 @@
 #' pc_sect(2231, "depositor-supplied synonyms", "substance")
 #' pc_sect(780286, "modify date", "assay")
 #' pc_sect(9023, "Ensembl ID", "gene")
-#' pc_sect("1ZHY_A", "Sequence", "protein")
+#' pc_sect("1ZHY_A", "Sequence", "protein", parser = "sequence")
 #' }
 #' @export
 pc_sect <- function(
   id,
   section,
   domain = c("compound", "substance", "assay", "gene", "protein", "patent"),
+  parser = c("table", "sequence"),
   verbose = getOption("verbose")
 ) {
   domain <- match.arg(domain)
@@ -61,7 +62,13 @@ pc_sect <- function(
     stop("use nist_ri() to obtain more information on this.")
   }
   res <- lapply(id, function(x) pc_page(x, section, domain, verbose))
-  out <- lapply(res, function(x) pc_parse_table(x, section))
+  PARSEFUN <- paste0("pc_parse_", match.arg(parser))
+  out <- lapply(res, function(x) {
+    do.call(PARSEFUN, args = list(
+      pg = x,
+      section = section
+    ))
+  })
   out <- dplyr::bind_rows(out)
   return(out)
 }
