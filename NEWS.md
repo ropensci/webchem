@@ -2,24 +2,24 @@
 
 ## NEW FEATURES
 
-### NEW FEATURES
-
 * `webchem` can now access FooDB (https://foodb.ca/), a database of food constituents, chemistry and biology, implemented in offline mode. 
 * Added `db_download_foodb()` to download the database, `foodb_list_compounds()` to list all compounds, and `foodb_convert()` to convert between IDs and `foodb_query()` to query the database.
+* `pc_sect()` can now retrieve data from previously inaccessible PubChem sections including spectral data and data that come from separate subsystems.
 
-### OFFLINE ACCESS
+## OFFLINE ACCESS
 
 * `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `activity`, `assay`, `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, `document`, `drug`,`drug_indication`, `drug_warning`, `go_slim`, `molecule`.
 * Results for online and offline queries are identical for most resources. If there are differences, the offline version throws informative warnings.
 * Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
 
-### OTHER
+## OTHER
 
 * Added a new function `chembl_status()` which returns status information about the ChEMBL webservice (database version, release date, and entity counts).
 * Added a new function `chembl_atc_classes()` to retrieve all available ATC classifications from ChEMBL.
 * `chembl_query()` now works with the "similarity" resource (note: currently limited to 20 results).
 * `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds.
 * Added a new function `chembl_img()` for downloading SVG images from ChEMBL.
+* Added a new vignette about retrieving data from PubChem pages.
 
 ## MINOR IMPROVEMENTS
 
