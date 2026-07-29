@@ -282,6 +282,26 @@ pc_find_section <- function(pg, section) {
   return(result)
 }
 
+#' Determine if a data frame needs to be pivoted wider
+#' 
+#' This function checks if a data frame needs to be pivoted wider based on the 
+#' specified form and the structure of the data frame.
+#' @param df data frame; the data frame to check.
+#' @param form character; the form of the output. Can be one of \code{"auto"}, 
+#' \code{"long"} or \code{"wide"}. If \code{"auto"}, the function will determine 
+#' if pivoting is necessary based on the structure of the data frame.
+#' @return logical; TRUE if the data frame needs to be pivoted wider, FALSE otherwise.
+#' @noRd
+pc_needs_pivot_wider <- function(df, form) {
+  if (form == "long") return(FALSE)
+  if (form == "wide") return(TRUE)
+  if (ncol(df) != 3) return(FALSE)
+  if (any(!c("Result", "Name", "refnum") %in% names(df))) return(FALSE)
+  if (any(is.na(df$Name))) return(FALSE)
+  if (any(df$Name == "")) return(FALSE)
+  return(TRUE)
+}
+
 #' Normalise values from PubChem content pages
 #'
 #' PubChem pages are retrieved as deeply nested lists. However, there is always
