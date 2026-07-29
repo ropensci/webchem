@@ -261,6 +261,35 @@ pc_find_section <- function(pg, section) {
   return(result)
 }
 
+#' Normalise values from PubChem content pages
+#' 
+#' PubChem pages are retrieved as deeply nested lists. The information of
+#' interes in ofter stored in an "Information" field which contains a list.
+#' Each list element contains a "Value" field but the structure of the "Value" 
+#' field can vary. This function attempts to normalise the "Value" field into a 
+#' single string.
+#' @param value list; a "Value" field from a PubChem content page.
+#' @return A character string containing the normalised value, or NA if the
+#' input is NULL or contains no information.
+#' @noRd
+pc_parse_value <- function(value) {
+  if (is.null(value)) return(NA_character_)
+  out <- ""
+  if (!is.null(value$StringWithMarkup)) {
+    markup <- value$StringWithMarkup
+    values <- sapply(markup, function(x) x$String)
+    out <- paste(out, values)
+  } else if (!is.null(value$Number)) {
+    out <- paste(out, value$Number)
+  }
+  if (!is.null(value$Unit)) {
+    out <- paste(out, value$Unit)
+  }
+  out <- trimws(out)
+  if (length(out) == 1 && out == "") return(NA_character_)
+  return(out)
+}
+
 #' Parse data from a PubChem content page section into a tibble
 #' 
 #' Extracts tabular data from a PubChem content page section by retrieving
@@ -291,11 +320,7 @@ pc_parse_table <- function(pg, section) {
   if (!is.null(sect$Information)) {
     info <- lapply(sect$Information, function(x) {
       refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
-      if (!is.null(x$Value$StringWithMarkup)) {
-        values <- sapply(x$Value$StringWithMarkup, function(y) y$String)
-      } else {
-        values <- NA_character_
-      }
+      values <- pc_parse_value(x$Value)
       data.frame(value  = values, refnum = refnum)
     })
     info <- do.call(rbind, info)
