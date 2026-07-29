@@ -308,17 +308,26 @@ pc_needs_pivot_wider <- function(df, form) {
 #' Normalise values from PubChem content pages
 #'
 #' PubChem pages are retrieved as deeply nested lists. However, there is always
-#' an "Information" field which contains one or more elements. Each element is 
-#' itself a list. This function attempts to the data in an "Information" element 
-#' into a single string, which is easier to work with.
+#' an "Information" field which contains one or more elements. Each element is
+#' itself a list. This function parses the data in an "Information" element
+#' into a flat data frame which is easier to work with.
 #' @param x list; an "Information" element from a PubChem content page.
 #' @return A character string containing the normalised value, or NA if the
 #' input is NULL or contains no information.
+#' @examples
+#' \dontrun{
+#' pg <- pc_page(176, "Dissociation Constants")
+#' sect <- pc_find_section(pg, "Dissociation Constants")
+#' pc_parse_information_element(sect$Information[[1]], 176, "cid")
+#' }
 #' @noRd
-pc_parse_information_element <- function(x) {
+pc_parse_information_element <- function(x, id, domain) {
+  domain <- tolower(domain)
   if (is.null(x$Value)) return(NA_character_)
   if ("Number" %in% names(x$Value)) {
     out <- x$Value$Number
+  } else if ("DateISO8601" %in% names(x$Value)) {
+    out <- x$Value$DateISO8601
   } else if ("StringWithMarkup" %in% names(x$Value)) {
     if (!is.null(x$Name) && x$Name == "Top 5 Peaks") {
       out <- lapply(x$Value$StringWithMarkup, function(A) {
@@ -340,17 +349,46 @@ pc_parse_information_element <- function(x) {
       out <- lapply(x$Value$StringWithMarkup, function(A) {
         A$String
       }) |> unlist()
+      is_sequence <- length(out) == 2 &&
+        grepl(">", out[1]) &&
+        all(strsplit(out[2], "")[[1]] %in% LETTERS)
+      if (is_sequence) {
+        out <- data.frame(Header = out[1], Sequence = out[2])
+      }
       if (!is.null(x$Value$Unit)) {
         out <- paste(out, x$Value$Unit)
       }
     }
   } else if ("ExternalDataURL" %in% names(x$Value)) {
     out <- x$Value$ExternalDataURL
+  } else if ("ExternalTableName" %in% names(x$Value)) {
+    pointer <- pc_decompose_pointer(x$Value$ExternalTableName)
+    if (!"collection" %in% names(pointer)) {
+      stop(sprintf(
+        "'ExternalTableName' not implemented for '%s'. Please open an issue.", 
+        x$Value$ExternalTableName
+      ))
+    }
+    out <- pc_sdq_query(
+      collection = pointer$collection,
+      idtype = ifelse(!is.null(pointer$query_type), pointer$query_type, domain),
+      query = ifelse(!is.null(pointer$query), pointer$query, id)
+    )
   } else {
     stop("Unknown value type: ", names(x$Value))
   }
   if (length(out) == 1 && out == "") out <- NA_character_
-  out <- as.character(out)
+  out <- tibble::as_tibble(out)
+  if (ncol(out) == 1 && names(out) == "value") {
+    out$value <- as.character(out$value)
+    names(out) <- "Result"
+  }
+  if (!is.null(x$Name)) out$Name <- x$Name
+  if (!is.null(x$ReferenceNumber)) {
+    out$refnum <- x$ReferenceNumber
+  } else {
+    out$refnum <- NA_integer_
+  }
   return(out)
 }
 
