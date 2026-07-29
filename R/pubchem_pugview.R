@@ -50,7 +50,7 @@ pc_sect <- function(
   id,
   section,
   domain = c("compound", "substance", "assay", "gene", "protein", "patent"),
-  parser = c("table", "sequence"),
+  parser = c("string", "table", "sequence"),
   verbose = getOption("verbose")
 ) {
   domain <- match.arg(domain)
@@ -290,6 +290,39 @@ pc_parse_value <- function(value) {
   }
   out <- trimws(out)
   if (length(out) == 1 && out == "") return(NA_character_)
+  return(out)
+}
+
+pc_parse_string <- function(pg, section) {
+  if (is.na(pg)) return(NA)
+  name <- pg$Record$RecordTitle
+  id <- pg$Record$RecordNumber |> as.integer()
+  domain <- pg$Record$RecordType
+  sect <- pc_find_section(pg, section)
+  if (is.null(sect)) return(NA)
+  if (is.null(sect$Information)) return(NA)
+  info <- lapply(sect$Information, function(x) {
+    values <- pc_parse_value(x$Value)
+    refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
+    tibble::tibble(Result = values, refnum = refnum)
+  }) |> dplyr::bind_rows()
+  if (!is.null(pg$Record$Reference)) {
+    refs <- lapply(pg$Record$Reference, as.data.frame) |> dplyr::bind_rows()
+    info <- dplyr::left_join(
+      info,
+      refs,
+      by = c("refnum" = "ReferenceNumber")
+    )
+  }
+  out <- info |>
+    dplyr::select(-rlang::sym("refnum")) |>
+    dplyr::mutate(
+      Section = section,
+      ID = id,
+      Name = name
+    ) |>
+    dplyr::relocate(Section, ID, Name)
+  names(out)[2] <- domain
   return(out)
 }
 
