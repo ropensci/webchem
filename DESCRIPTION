@@ -43,6 +43,7 @@ Imports:
     data.tree,
     RSQLite,
     tibble,
+    tidyr,
     base64enc,
     rlang,
     utils

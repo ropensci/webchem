@@ -1,4 +1,3 @@
-
 #' Retrieve data from PubChem content pages
 #'
 #' When you search for an entity at \url{https://pubchem.ncbi.nlm.nih.gov/},
@@ -45,7 +44,7 @@
 #' pc_sect(2231, "depositor-supplied synonyms", "substance")
 #' pc_sect(780286, "modify date", "assay")
 #' pc_sect(9023, "Ensembl ID", "gene")
-#' pc_sect("1ZHY_A", "Sequence", "protein", parser = "sequence")
+#' pc_sect("1ZHY_A", "Sequence", "protein")
 #' }
 #' @export
 pc_sect <- function(
@@ -178,11 +177,11 @@ pc_page <- function(
 }
 
 #' Find a section in a PubChem content page
-#' 
+#'
 #' This function searches for a specific section in a PubChem content page and
 #' returns the content of that section.
 #' @param pg list; a PubChem content page.
-#' @param section character; the name of the section to be found. Not case 
+#' @param section character; the name of the section to be found. Not case
 #' sensitive
 #' @return A list containing the content of the specified section, or NA if
 #' the section is not found.
