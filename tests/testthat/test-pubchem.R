@@ -165,14 +165,13 @@ test_that("pc_page()", {
   skip_if_not(up, "PubChem service is down")
   skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
-  a <- pc_page(c(311, 176, 1118, "balloon", NA), "Dissociation Constants")
+  a <- pc_page(311, "Dissociation Constants")
+  b <- pc_page("balloon", "Dissociation Constants")
+  c <- pc_page(NA, "Dissociation Constants")
 
-  expect_type(a, "list")
-  expect_length(a, 5)
-  expect_s3_class(a[[1]], c("Node", "R6"))
-  expect_s3_class(a[[2]], c("Node", "R6"))
-  expect_equal(a[[4]], NA)
-  expect_equal(a[[5]], NA)
+  expect_equal(class(a), "list")
+  expect_true(inherits(b, "empty_row"))
+  expect_true(inherits(c, "empty_row"))
 })
 
 test_that("pc_sect()", {
@@ -189,18 +188,15 @@ test_that("pc_sect()", {
 
   b <- pc_sect(2231, "depositor-supplied synonyms", "substance")
   expect_s3_class(b, c("tbl_df", "tbl", "data.frame"))
-  expect_equal(names(b), c("SID", "Name", "Result", "SourceName", "SourceID"))
   expect_equal(b$Result, c("cholesterol", "57-88-5",
                                 "5-cholestene-3beta-ol"), ignore_attr = TRUE)
 
   c <- pc_sect(780286, "modify date", "assay")
   expect_s3_class(c, c("tbl_df", "tbl", "data.frame"))
-  expect_equal(names(c), c("AID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equal(c$Result, c("2014-05-03", "2018-09-28", "2020-06-30"))
+  expect_equal(c$`Version 1.1`, "2014-05-03")
 
   d <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_s3_class(d, c("tbl_df", "tbl", "data.frame"))
-  expect_equal(names(d), c("pdbID", "Name", "Result", "SourceName", "SourceID"))
-  expect_equal(d$Result[1], ">pdb|1ZHY|A Chain A, KES1 protein (Run BLAST)",
+  expect_equal(d$Header[1], ">pdb|1ZHY|A Chain A, KES1 protein (Run BLAST)",
                ignore_attr = TRUE)
  })

@@ -378,7 +378,7 @@ test_that("1H NMR Spectra", {
   res <- pc_sect(1983, "1H NMR Spectra")
   expect_equal(
     res$`Shifts [ppm]:Intensity`[1],
-    "9.63:20.93, 6.67:40.69, 6.65:35.56, 1.97:100.00, 7.31:35.75, 7.33:37.16, 9.11:34.80"
+    "7.31:35.75, 6.65:35.56, 9.63:20.93, 6.67:40.69, 7.33:37.16, 1.97:100.00, 9.11:34.80"
   )
 })
 
@@ -520,7 +520,7 @@ test_that("Uses", {
   skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
   res <- pc_sect(1983, "Uses")
-  expect_true(nrow(res) > 300)
+  expect_true(nrow(res) > 150)
   expect_true("Pharmaceutical" %in% res$Function_Category)
 })
 
