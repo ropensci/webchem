@@ -56,6 +56,7 @@ pc_sect <- function(
   domain <- match.arg(domain)
   section <- tolower(section)
   if (section %in% c(
+    "kovats retention index",
     "standard non-polar",
     "semi-standard non-polar",
     "standard polar")) {
