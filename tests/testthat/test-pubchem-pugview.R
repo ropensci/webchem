@@ -302,6 +302,16 @@ test_that("Uses", {
   expect_true("Pharmaceutical" %in% res$Function_Category)
 })
 
+test_that("Lethal Concentration", {
+  res <- pc_sect(1983, "Lethal Concentration")
+  expect_true(all(res$Type == "LC50"))
+})
+
+test_that("Lethal Dose", {
+  res <- pc_sect(1983, "Lethal Dose")
+  expect_true(all(res$Type == "LD50"))
+})
+
 test_that("protein sequences", {
   A <- pc_sect("1ZHY_A", "Sequence", "protein")
   expect_equal(
