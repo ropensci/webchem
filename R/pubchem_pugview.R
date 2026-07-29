@@ -264,32 +264,50 @@ pc_find_section <- function(pg, section) {
 
 #' Normalise values from PubChem content pages
 #'
-#' PubChem pages are retrieved as deeply nested lists. The information of
-#' interest is often stored in an "Information" field which contains a list.
-#' Each list element contains a "Value" field but the structure of the "Value"
-#' field can vary. This function attempts to normalise the "Value" field into a
-#' single string.
-#' @param value list; a "Value" field from a PubChem content page.
+#' PubChem pages are retrieved as deeply nested lists. However, there is always
+#' an "Information" field which contains one or more elements. Each element is 
+#' itself a list. This function attempts to the data in an "Information" element 
+#' into a single string, which is easier to work with.
+#' @param x list; an "Information" element from a PubChem content page.
 #' @return A character string containing the normalised value, or NA if the
 #' input is NULL or contains no information.
 #' @noRd
-pc_parse_value <- function(value) {
-  if (is.null(value)) return(NA_character_)
-  out <- ""
-  if (!is.null(value$StringWithMarkup)) {
-    markup <- value$StringWithMarkup
-    values <- sapply(markup, function(x) x$String)
-    out <- paste(out, values)
-  } else if (!is.null(value$Number)) {
-    out <- paste(out, value$Number)
-  } else if (!is.null(value$ExternalDataURL)) {
-    out <- paste(out, value$ExternalDataURL)
+pc_parse_information_element <- function(x) {
+  if (is.null(x$Value)) return(NA_character_)
+  if ("Number" %in% names(x$Value)) {
+    out <- x$Value$Number
+  } else if ("StringWithMarkup" %in% names(x$Value)) {
+    if (!is.null(x$Name) && x$Name == "Top 5 Peaks") {
+      out <- lapply(x$Value$StringWithMarkup, function(A) {
+        gsub(" ", ":", A$String)
+      }) |> unlist() |> paste(collapse = ", ")
+    } else if (!is.null(x$Name) && x$Name == "1D NMR Spectra") {
+      if (length(x$Value$StringWithMarkup) > 1) {
+        stop("This case is not yet supported. Please open an issue.")
+      }
+      aux <- x$Value$StringWithMarkup[[1]]
+      if (!"Markup" %in% names(aux)) {
+        stop("This case is not yet supported. Please open an issue.")
+      }
+      if (length(aux$Markup) > 1) {
+        stop("This case is not yet supported. Please open an issue.")
+      }
+      out <- aux$Markup[[1]]$URL
+    } else {
+      out <- lapply(x$Value$StringWithMarkup, function(A) {
+        A$String
+      }) |> unlist()
+      if (!is.null(x$Value$Unit)) {
+        out <- paste(out, x$Value$Unit)
+      }
+    }
+  } else if ("ExternalDataURL" %in% names(x$Value)) {
+    out <- x$Value$ExternalDataURL
+  } else {
+    stop("Unknown value type: ", names(x$Value))
   }
-  if (!is.null(value$Unit)) {
-    out <- paste(out, value$Unit)
-  }
-  out <- trimws(out)
-  if (length(out) == 1 && out == "") return(NA_character_)
+  if (length(out) == 1 && out == "") out <- NA_character_
+  out <- as.character(out)
   return(out)
 }
 
@@ -302,7 +320,7 @@ pc_parse_string <- function(pg, section) {
   if (is.null(sect)) return(NA)
   if (is.null(sect$Information)) return(NA)
   info <- lapply(sect$Information, function(x) {
-    values <- pc_parse_value(x$Value)
+    values <- pc_parse_information_element(x)
     refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
     tibble::tibble(Result = values, refnum = refnum)
   }) |> dplyr::bind_rows()
@@ -355,7 +373,7 @@ pc_parse_table <- function(pg, section) {
   }
   info <- lapply(sect$Information, function(x) {
     names <- if (!is.null(x$Name)) x$Name else "noname"
-    values <- pc_parse_value(x$Value)
+    values <- pc_parse_information_element(x)
     refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
     tibble::tibble(name = names, value = values, refnum = refnum)
   })
