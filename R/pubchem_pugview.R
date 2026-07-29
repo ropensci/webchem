@@ -57,6 +57,8 @@ pc_sect <- function(
 ) {
   domain <- match.arg(domain)
   section <- tolower(section)
+  section <- gsub(" +\\/", "/", section)
+  section <- gsub("\\/ +", "/", section)
   form <- match.arg(form)
   if (section %in% c(
     "kovats retention index",
