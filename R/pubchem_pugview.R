@@ -74,6 +74,26 @@ pc_sect <- function(
   return(out)
 }
 
+#' Decompose a pointer from PubChem content pages
+#'
+#' Some resources are accessible through PubChem, but the PUG-View page does not
+#' contain the data itself, only a pointer to the data. The pointer contains
+#' instructions that can be used to build a query to PubChem's SDQ
+#' (Structured Data Query) service. This function decomposes a pointer into its
+#' components.
+#' @param pointer character; a pointer string from a PubChem content page.
+#' @return A named list containing the components of the pointer.
+#' @examples
+#' pc_decompose_pointer("collection=chemidplus&query_type=sid&query=134972565")
+#' @noRd
+pc_decompose_pointer <- function(pointer) {
+  pointers <- strsplit(pointer, "&")[[1]]
+  setNames(
+    as.list(sub("^[^=]+=", "", pointers)),
+    sub("=.*$", "", pointers)
+  )
+}
+
 #' Import PubChem content pages
 #'
 #' @importFrom jsonlite fromJSON
