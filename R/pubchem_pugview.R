@@ -447,81 +447,86 @@ pc_parse_table <- function(pg, section) {
   return(out)
 }
 
-#' Parse sequence data from a PubChem content page
-#' 
-#' Extracts sequence data from a PubChem content page section.
-#' @param pg list; a PubChem content page.
-#' @param section character; the name of the section from which to extract the
-#' table. Not case sensitive.
-#' @return A tibble containing the ID, name, sequence name, sequence, 
-#' source name, and source ID for each piece of information found in the 
-#' specified section, or a  tibble with NA values if the section is not found or
-#' contains no information.
+#' Build a SDQ query for PubChem
+#'
+#' Some resources are accessible through PubChem, but the PUG-View page does not
+#' contain the data itself, only a pointer to the data. This function constructs
+#' a json query that can be used to retrive the data using PubChem's SDQ
+#' (Structured Data Query) service.
+#' @param collection character; the collection to query (e.g., "chemidplus").
+#' @param idtype character; the type of identifier to query (e.g., "cid", "sid").
+#' @param query character; the identifier value to query.
+#' @param limit numeric; the maximum number of results to return (default is 10000000).
+#' @return A JSON string representing the SDQ query.
 #' @noRd
-pc_parse_sequence <- function(pg, section) {
-  name <- pg$Record$RecordTitle
-  id <- pg$Record$RecordAccession
-  domain <- pg$Record$RecordType
-  empty_row <- data.frame(
-    ID = id,
-    Name = name,
-    Header = NA_character_,
-    Sequence = NA_character_,
-    SourceName = NA_character_,
-    SourceID = NA_character_
-  )
-  names(empty_row)[1] <- domain
-  sect <- pc_find_section(pg, section)
-  if (is.null(sect)) return(empty_row)
-  if (!is.null(sect$Information)) {
-    info <- lapply(sect$Information, function(x) {
-      refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
-      if (!is.null(x$Value$StringWithMarkup)) {
-        values <- sapply(x$Value$StringWithMarkup, function(y) y$String)
-        if (length(values) == 2 & grepl(">", values[1])) {
-          header <- values[1]
-          sequence <- values[2]
-        } else {
-          header <- NA_character_
-          sequence <- NA_character_
-        }
-      } else {
-        header <- NA_character_
-        sequence <- NA_character_
-      }
-      data.frame(header = header, sequence = sequence, refnum = refnum)
-    })
-    info <- do.call(rbind, info)
-    if (!is.null(pg$Record$Reference)) {
-      refs <- lapply(pg$Record$Reference, function(x) {
-        data.frame(
-          ReferenceNumber = x$ReferenceNumber,
-          SourceName = x$SourceName,
-          SourceID = x$SourceID
-        )
-      })
-      refs <- do.call(rbind, refs)
-      info <- dplyr::left_join(
-        info,
-        refs,
-        by = c("refnum" = "ReferenceNumber")
+pc_build_sdq_query <- function(
+    collection,
+    idtype,
+    query,
+    limit = 10000000
+) {
+  where_clause <- list()
+  where_clause[[idtype]] <- query
+  sdq <- list(
+    download = "*",
+    collection = collection,
+    order = list("relevancescore,desc"),
+    start = 1,
+    limit = limit,
+    downloadfilename = paste0(
+      "pubchem_",
+      idtype,
+      "_",
+      query,
+      "_",
+      collection
+    ),
+    where = list(
+      ands = list(
+        where_clause
       )
-    } else {
-      info$SourceName <- NA_character_
-      info$SourceID <- NA_character_
-    }
-    info <- info[, -which(names(info) == "refnum")]
-    out <- tibble::tibble(
-      ID = id,
-      Name = name,
-      Header = info$header,
-      Sequence = info$sequence,
-      SourceName = info$SourceName,
-      SourceID = info$SourceID
     )
-    names(out)[1] <- domain
-    return(out)
-  } else {
-    return(empty_row)
-  }
+  )
+  jsonlite::toJSON(
+    sdq,
+    auto_unbox = TRUE
+  )
+}
+
+#' Query PubChem SDQ service
+#'
+#' Some resources are accessible through PubChem, but the PUG-View page does not
+#' contain the data itself, only a pointer to the data. This function sends a
+#' query to PubChem's SDQ (Structured Data Query) service and retrieves the
+#' results in CSV format.
+#' @param collection character; the collection to query (e.g., "chemidplus").
+#' @param idtype character; the type of identifier to query (e.g., "cid", "sid").
+#' @param query character; the identifier value to query.
+#' @param limit numeric; the maximum number of results to return (default is 10000000).
+#' @return A tibble containing the results of the SDQ query.
+#' @noRd
+pc_sdq_query <- function(
+    collection,
+    idtype,
+    query,
+    limit = 10000000
+) {
+  base_url <- "https://pubchem.ncbi.nlm.nih.gov/sdq/sphinxql.cgi"
+  sdq_json <- pc_build_sdq_query(
+    collection,
+    idtype,
+    query,
+    limit
+  )
+  response <- httr::GET(
+    base_url,
+    query = list(
+      infmt = "json",
+      outfmt = "csv",
+      query = sdq_json,
+      showcolumndisplayname = 1
+    )
+  )
+  httr::stop_for_status(response)
+  utils::read.csv(text = content(response, "text")) |> tibble::as_tibble()
 }
