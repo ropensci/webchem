@@ -14,6 +14,8 @@
 #' @param domain character; the query domain. Can be one of \code{"compound"},
 #' \code{"substance"}, \code{"assay"}, \code{"gene"}, \code{"protein"} or
 #' \code{"patent"}.
+#' @param form character; the form of the output. Can be one of \code{"auto"},
+#' \code{"long"} or \code{"wide"}.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return Returns a tibble of query results. In the returned tibble,
 #' \code{SourceName} is the name of the depositor, and \code{SourceID} is the
@@ -50,11 +52,12 @@ pc_sect <- function(
   id,
   section,
   domain = c("compound", "substance", "assay", "gene", "protein", "patent"),
-  parser = c("string", "table", "sequence"),
+  form = c("auto", "long", "wide"),
   verbose = getOption("verbose")
 ) {
   domain <- match.arg(domain)
   section <- tolower(section)
+  form <- match.arg(form)
   if (section %in% c(
     "kovats retention index",
     "standard non-polar",
@@ -67,7 +70,8 @@ pc_sect <- function(
   out <- lapply(res, function(x) {
     do.call(PARSEFUN, args = list(
       pg = x,
-      section = section
+      section = section,
+      form = form
     ))
   })
   out <- dplyr::bind_rows(out)
