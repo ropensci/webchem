@@ -58,7 +58,17 @@ pc_sect <- function(id,
                      "Standard polar")) {
     stop("use nist_ri() to obtain more information on this.")
   }
-  res <- pc_page(id, section, domain, verbose)
+  res <- lapply(id, function(x) pc_page(x, section, domain, verbose))
+  names(res) <- id
+  attr(res, "id") <- switch(
+    domain,
+    compound = "CID",
+    substance = "SID",
+    assay = "AID",
+    gene = "GeneID",
+    protein = "pdbID",
+    patent = "PatentID"
+  )
   out <- pc_extract(res, section)
   return(out)
 }
@@ -88,61 +98,54 @@ pc_sect <- function(id,
 #' @examples
 #' # might fail if API is not available
 #' \dontrun{
-#' pc_page(c(176, 311), "Dissociation Constants")
+#' pc_page(176, "Dissociation Constants")
 #' pc_page(49854366, "external id", domain = "substance")
 #' }
 #' @noRd
-pc_page <- function(id,
-                    section,
-                    domain = c("compound", "substance", "assay", "gene",
-                               "protein", "patent"),
-                    verbose = getOption("verbose")) {
+pc_page <- function(
+  id,
+  section,
+  domain = c("compound", "substance", "assay", "gene", "protein", "patent"),
+  verbose = getOption("verbose")
+) {
 
   if (!ping_service("pc")) stop(webchem_message("service_down"))
 
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))
-  foo <- function(id, section, domain) {
-    if (is.na(id)) {
-      if (verbose) webchem_message("na")
-      return(NA)
-    }
-    qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
-                   domain, "/", id, "/JSON?heading=", section)
-    if (verbose) webchem_message("query", id, appendLF = FALSE)
-    webchem_sleep(type = 'API')
-    res <- try(httr::RETRY("GET",
-                           qurl,
-                           user_agent(webchem_url()),
-                           terminate_on = 404,
-                           quiet = TRUE), silent = TRUE)
-    if (inherits(res, "try-error")) {
-      if (verbose) webchem_message("service_down")
-      return(NA)
-    }
-    if (verbose) message(httr::message_for_status(res))
-    if (res$status_code == 200) {
-      cont <- httr::content(res, type = "text", encoding = "UTF-8")
-      # Intercepting any NA cont before it gets to fromJSON.
-      if(is.na(cont)) {
-        return(NA)
-      }
-      cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
-      tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
-      tree$Do(function(node) node$name <- tolower(node$name))
-      return(tree)
-    }
-    else {
-      return(NA)
-    }
+  if (is.na(id)) {
+    if (verbose) webchem_message("na")
+    return(NA)
   }
-  cont <- lapply(id, function(x) foo(x, section, domain))
-  names(cont) <- id
-  attr(cont, "domain") <- domain
-  attr(cont, "id") <- switch(domain, compound = "CID", substance = "SID",
-                             assay = "AID", gene = "GeneID", protein = "pdbID",
-                             patent = "PatentID")
-  return(cont)
+  qurl <- paste0("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/",
+                 domain, "/", id, "/JSON?heading=", section)
+  if (verbose) webchem_message("query", id, appendLF = FALSE)
+  webchem_sleep(type = 'API')
+  res <- try(httr::RETRY("GET",
+                         qurl,
+                         user_agent(webchem_url()),
+                         terminate_on = 404,
+                         quiet = TRUE), silent = TRUE)
+  if (inherits(res, "try-error")) {
+    if (verbose) webchem_message("service_down")
+    return(NA)
+  }
+  if (verbose) message(httr::message_for_status(res))
+  if (res$status_code == 200) {
+    cont <- httr::content(res, type = "text", encoding = "UTF-8")
+    # Intercepting any NA cont before it gets to fromJSON.
+    if(is.na(cont)) {
+      return(NA)
+    }
+    cont <- jsonlite::fromJSON(cont, simplifyDataFrame = FALSE)
+    tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
+    tree$Do(function(node) node$name <- tolower(node$name))
+    return(tree)
+  }
+  else {
+    return(NA)
+  }
+
 }
 
 #' Extract data from PubChem content pages
