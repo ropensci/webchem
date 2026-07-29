@@ -60,6 +60,7 @@ pc_sect <- function(
   section <- gsub(" +\\/", "/", section)
   section <- gsub("\\/ +", "/", section)
   form <- match.arg(form)
+  parser <- "all"
   if (section %in% c(
     "kovats retention index",
     "standard non-polar",
@@ -68,7 +69,7 @@ pc_sect <- function(
     stop("use nist_ri() to obtain more information on this.")
   }
   res <- lapply(id, function(x) pc_page(x, section, domain, verbose))
-  PARSEFUN <- paste0("pc_parse_", match.arg(parser))
+  PARSEFUN <- paste0("pc_parse_", parser)
   out <- lapply(res, function(x) {
     do.call(PARSEFUN, args = list(
       pg = x,
