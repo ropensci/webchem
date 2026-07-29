@@ -46,11 +46,12 @@
 #' pc_sect("1ZHY_A", "Sequence", "protein")
 #' }
 #' @export
-pc_sect <- function(id,
-                    section,
-                    domain = c("compound", "substance", "assay", "gene",
-                                "protein", "patent"),
-                    verbose = getOption("verbose")) {
+pc_sect <- function(
+  id,
+  section,
+  domain = c("compound", "substance", "assay", "gene", "protein", "patent"),
+  verbose = getOption("verbose")
+) {
   domain <- match.arg(domain)
   section <- tolower(gsub(" +", "+", section))
   if (section %in% c("standard non-polar",
@@ -58,23 +59,9 @@ pc_sect <- function(id,
                      "Standard polar")) {
     stop("use nist_ri() to obtain more information on this.")
   }
-  res <- lapply(id, function(x) {
-    cont <- pc_page(x, section, domain, verbose)
-    tree <- data.tree::as.Node(cont, nameName = "TOCHeading")
-    tree$Do(function(node) node$name <- tolower(node$name))
-    return(tree)
-  })
-  names(res) <- id
-  attr(res, "id") <- switch(
-    domain,
-    compound = "CID",
-    substance = "SID",
-    assay = "AID",
-    gene = "GeneID",
-    protein = "pdbID",
-    patent = "PatentID"
-  )
-  out <- pc_extract(res, section)
+  res <- lapply(id, function(x) pc_page(x, section, domain, verbose))
+  out <- lapply(res, function(x) pc_parse_table(x, section))
+  out <- dplyr::bind_rows(out)
   return(out)
 }
 
