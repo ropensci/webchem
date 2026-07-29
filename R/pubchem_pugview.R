@@ -265,3 +265,74 @@ pc_find_section <- function(pg, section) {
   result <- search_sections(pg$Record$Section, section)
   return(result)
 }
+
+#' Parse data from a PubChem content page section into a tibble
+#' 
+#' Extracts tabular data from a PubChem content page section by retrieving
+#' values, reference numbers, and source information from the "Information"
+#' field. Returns a tibble with NA values if the section is not found or
+#' contains no information.
+#' @param pg list; a PubChem content page.
+#' @param section character; the name of the section from which to extract the
+#' table. Not case sensitive.
+#' @return A tibble containing the ID, name, result value, source name, and 
+#' source ID for each piece of information found in the specified section, or a 
+#' tibble with NA values if the section is not found or contains no information.
+#' @noRd
+pc_parse_table <- function(pg, section) {
+  name <- pg$Record$RecordTitle
+  id <- pg$Record$RecordNumber |> as.integer()
+  domain <- pg$Record$RecordType
+  empty_row <- data.frame(
+    ID = id,
+    Name = name,
+    Result = NA_character_,
+    SourceName = NA_character_,
+    SourceID = NA_character_
+  )
+  names(empty_row)[1] <- domain
+  sect <- pc_find_section(pg, section)
+  if (is.null(sect)) return(empty_row)
+  if (!is.null(sect$Information)) {
+    info <- lapply(sect$Information, function(x) {
+      refnum <- if (!is.null(x$ReferenceNumber)) x$ReferenceNumber else NA
+      if (!is.null(x$Value$StringWithMarkup)) {
+        values <- sapply(x$Value$StringWithMarkup, function(y) y$String)
+      } else {
+        values <- NA_character_
+      }
+      data.frame(value  = values, refnum = refnum)
+    })
+    info <- do.call(rbind, info)
+    if (!is.null(pg$Record$Reference)) {
+      refs <- lapply(pg$Record$Reference, function(x) {
+        data.frame(
+          ReferenceNumber = x$ReferenceNumber,
+          SourceName = x$SourceName,
+          SourceID = x$SourceID
+        )
+      })
+      refs <- do.call(rbind, refs)
+      info <- dplyr::left_join(
+        info,
+        refs,
+        by = c("refnum" = "ReferenceNumber")
+      )
+    } else {
+      info$SourceName <- NA_character_
+      info$SourceID <- NA_character_
+    }
+    info <- info[, -which(names(info) == "refnum")]
+    out <- tibble::tibble(
+      ID = id,
+      Name = name,
+      Result = info$value,
+      SourceName = info$SourceName,
+      SourceID = info$SourceID
+    )
+    names(out)[1] <- domain
+    return(out)
+  } else {
+    return(empty_row)
+  }
+}
