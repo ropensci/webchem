@@ -19,6 +19,129 @@ connect_eup <- function(...) {
   return(con)
 }
 
+#' Convert identifiers in the local EU Pesticides database
+#'
+#' @param query character; a character of compound identifiers to convert.
+#' @param from character; the type of identifier to conver from. Can be one of
+#' \code{"substance_id"}, \code{"substance_name"}, or \code{"as_cas_number"}.
+#' @param to character; the type of identifier to convert to. Can be one of
+#' \code{"substance_id"}, \code{"substance_name"}, or \code{"as_cas_number"}.
+#' @param resource character; the EU Pesticides resource to query. Can be one of
+#' \code{"active_substances"} or \code{"residues"}.
+#' ... Further args passed on to [DBI::dbConnect()]
+#' @return A data frame of converted identifiers, in the same order as
+#' the input \code{query}. If an identifier could not be converted, the
+#' corresponding output will be \code{NA}. If multiple matches are found for a
+#' query, all matches will be returned in separate rows.
+#' @details \code{"substance_id"} is the unique identifier for each active
+#' substance in the EU Pesticides database. \code{"substance_name"} is the name
+#' of the active substance, and \code{"as_cas_number"} is the CAS number of the
+#' active substance.
+#' @examples
+#' \dontrun{
+#' # Download database
+#' db_download_eup(verbose = TRUE)
+#'
+#' # Query downloaded database
+#' eup_convert(1313, from = "substance_id", to = "substance_name")
+#' eup_convert("Monolinuron", from = "substance_name", to = "as_cas_number")
+#'
+#' eup_convert()
+#' }
+#' @export
+eup_convert <- function(
+  query,
+  from,
+  to,
+  resource = "active_substances",
+  mode = "offline",
+  ...
+) {
+  resource <- match.arg(resource, choices = c(
+    "active_substances",
+    "residues"
+  ))
+  if (resource == "active_substances") {
+    idtypes <- c(
+      "substance_id",
+      "substance_name",
+      "as_cas_number"
+    )
+  } else {
+    idtypes <- c(
+      "pesticide_residue_id",
+      "pesticide_residue_name"
+    )
+  }
+  from <- match.arg(from, choices = idtypes)
+  to <- match.arg(to, choices = idtypes)
+  if (from == to) {
+    stop("From and to identifier types must be different.")
+  }
+  mode <- match.arg(mode, choices = c("ws", "offline"))
+  if (mode == "ws") {
+    stop("Web service mode is not implemented. Please use mode = 'offline'.")
+  } else {
+    eup_convert_offline(
+      query = query,
+      from = from,
+      to = to,
+      resource,
+      ...
+    )
+  }
+}
+
+#' Convert identifiers in the local EU Pesticides database (offline mode)
+#'
+#' @param query character; a character of compound identifiers to convert.
+#' @param from character; the type of identifier to conver from. Can be one of
+#' \code{"substance_id"}, \code{"substance_name"}, or \code{"as_cas_number"}.
+#' @param to character; the type of identifier to convert to. Can be one of
+#' \code{"substance_id"}, \code{"substance_name"}, or \code{"as_cas_number"}.
+#' @param resource character; the EU Pesticides resource to query. Can be one of
+#' \code{"active_substances"} or \code{"residues"}.
+#' @param ... Further args passed on to [DBI::dbConnect()]
+#' @return A data frame of converted identifiers, in the same order as
+#' the input \code{query}. If an identifier could not be converted, the
+#' corresponding output will be \code{NA}. If multiple matches are found for a
+#' query, all matches will be returned in separate rows.
+#' @noRd
+eup_convert_offline <- function(
+  query,
+  from,
+  to,
+  resource,
+  ...
+) {
+  if (from %in% c("substance_id", "pesticide_residue_id") && !is.numeric(query)) {
+    stop("query must be a vector of numbers.")
+  }
+  if (from != "substance_id" && !is.character(query)) {
+    stop("query must be a vector of strings.")
+  }
+  con <- connect_eup(...)
+  on.exit(DBI::dbDisconnect(con))
+  if (resource == "active_substances") {
+    out <- fetch_table(
+      con = con,
+      table = "active_substances",
+      id_col = from,
+      ids = query,
+      select_cols = c(from, to)
+    )
+  } else {
+    out <- fetch_table(
+      con = con,
+      table = "residues",
+      id_col = from,
+      ids = query,
+      select_cols = c(from, to)
+    )
+  }
+  return(out)
+}
+
 #' Download the EU Pesticides database and convert to SQLite
 #'
 #' This function downloads the EU Pesticides database in JSON format and
