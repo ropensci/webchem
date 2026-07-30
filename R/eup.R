@@ -184,6 +184,78 @@ eup_list_entries <- function(
   return(ids)
 }
 
+#' Query EU Pesticides
+#'
+#' @param query numeric; a vector of IDs. The type of ID depends on the
+#' resource. See examples for more information.
+#' @param resource character; the EU Pesticides resource to query. Can be one of
+#' \code{"active_substances"} or \code{"residues"}.
+#' @param mode character; the mode of operation. Can be one of \code{"offline"} 
+#' (offline access) or \code{"ws"} (web service access). Currently only offline 
+#' mode is implemented.
+#' @param ... Further args passed on to [DBI::dbConnect()]
+#' @return A data frame containing information about the specified entry.
+#' @examples
+#' \dontrun{
+#' # Download database
+#' db_download_eup(verbose = TRUE)
+#'
+#' # Retrieve information about active substances
+#' eup_query(query = c(1313, 1314), resource = "active_substances")
+#'
+#' # Retrieve information about residues
+#' eup_query(query = c(1, 2), resource = "residues")
+#' }
+#' @export
+eup_query <- function(
+  query, 
+  resource, 
+  mode = "offline",
+  ...) {
+  if (!is.numeric(query)) {
+    stop("query must be a vector of numbers.")
+  }
+  resource <- match.arg(resource, choices = c(
+    "active_substances",
+    "residues"
+  ))
+  mode <- match.arg(mode, choices = c("ws", "offline"))
+  if (mode == "ws") {
+    stop("Web service mode is not implemented. Please use mode = 'offline'.")
+  } else {
+    eup_query_offline(
+      query = query,
+      resource = resource,
+      ...
+    )
+  }
+}
+
+eup_query_offline <- function(
+  query,
+  resource,
+  ...
+) {
+  con <- connect_eup(...)
+  on.exit(DBI::dbDisconnect(con))
+  if (resource == "active_substances") {
+    out <- fetch_table(
+      con = con,
+      table = "active_substances",
+      id_col = "substance_id",
+      ids = query
+    )
+  } else {
+    out <- fetch_table(
+      con = con,
+      table = "residues",
+      id_col = "pesticide_residue_id",
+      ids = query
+    )
+  }
+  return(out)
+}
+
 #' Download the EU Pesticides database and convert to SQLite
 #'
 #' This function downloads the EU Pesticides database in JSON format and
