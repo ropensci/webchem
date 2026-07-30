@@ -142,6 +142,48 @@ eup_convert_offline <- function(
   return(out)
 }
 
+#' List available entries in the local EU Pesticides database
+#' 
+#' @param idtype character; the type of identifier to list. Allowed values are:
+#' "substance_id", "substance_name", "as_cas_number", "pesticide_residue_id", 
+#' "pesticide_residue_name".
+#' @param verbose logical; should verbose messages be printed to the console?
+#' @return A character vector of unique identifiers of the specified type that 
+#' are present in the EU Pesticides database.
+#' @examples
+#' \dontrun{
+#' eup_list_entries("substance_name")
+#' eup_list_entries("pesticide_residue_name")
+#' }
+#' @export
+eup_list_entries <- function(
+  idtype,
+  verbose = getOption("verbose")
+) {
+  idtypes <- c(
+    "substance_id",
+    "substance_name",
+    "as_cas_number",
+    "pesticide_residue_id",
+    "pesticide_residue_name"
+  )
+  idtype <- match.arg(idtype, choices = idtypes)
+  con <- connect_eup()
+  on.exit(DBI::dbDisconnect(con))
+  if (idtype %in% c("substance_id", "substance_name", "as_cas_number")) {
+    table <- "active_substances"
+  } else {
+    table <- "residues"
+  }
+  if (verbose) message("Retrieving entries from table '", table, "'...")
+  ids <- dplyr::tbl(con, table) |>
+    dplyr::select(idtype) |>
+    dplyr::distinct() |>
+    dplyr::pull() |>
+    sort()
+  return(ids)
+}
+
 #' Download the EU Pesticides database and convert to SQLite
 #'
 #' This function downloads the EU Pesticides database in JSON format and
