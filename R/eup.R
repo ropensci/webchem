@@ -86,7 +86,7 @@ eup_convert <- function(
       query = query,
       from = from,
       to = to,
-      resource,
+      resource = resource,
       ...
     )
   }
