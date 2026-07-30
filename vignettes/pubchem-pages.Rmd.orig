@@ -1,0 +1,148 @@
+---
+title: "pubchem-pages"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pubchem-sections}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(webchem)
+```
+
+# Retrieve the data behind PubChem web pages
+
+When we manually search for a compound on PubChem (https://pubchem.ncbi.nlm.nih.gov/), we get a web page like this one: https://pubchem.ncbi.nlm.nih.gov/compound/1983. This vignette explains how most of this data can be retrieved programmatically using `webchem`.
+
+## Getting started
+
+First, we need to get the PubChem ID (CID) of the compound. This can be done using the `get_cid()` function. Throughout this vignette, we will mostly work with paracetamol, so let's get its CID:
+
+```{r}
+get_cid("paracetamol")
+```
+
+Now that we know the CID, we can retrieve any section of the PubChem web page using `pc_sect()` (short for PubChem Section). Here is an example:
+
+```{r}
+pc_sect(1983, section = "smiles") |> dplyr::select(1:6)
+```
+
+Notice that the function returns a data frame rather than a string. `pc_sect()` always returns a data frame but the variables it contains depends on the section. The first five variable names shown above are common because they follow a standard schema for sections whose data consists of a single string, number, or similar value: the queried section, domain, ID (e.g., CID or SID), name, and result. For simplicity, this vignette only shows the first six variables of each tibble. Check the full output if you want to see all available variables.
+
+Returning a data frame offers several advantages over returning only the result string. For example, we can query multiple compounds at the same time and simply get a data frame with additional rows:
+
+```{r}
+pc_sect(c(1983, 3672), section = "smiles") |> dplyr::select(1:6)
+```
+
+Another advantage of the data frame structure is that it also includes any reference data stored in PubChem for each data element.
+
+The `section` argument is not case sensitive but it is sensitive to typing errors and requires the full name of the section as it is printed on the content page. The PubChem Table of Contents Tree can also be found at https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72. As a general rule, `pc_sect()` works with the lowest level section before the data. For example, it works with "IUPAC Name" but not with "Names and Identifiers".
+
+Let's look at some of the sections in more detail.
+
+## Names and Identifiers
+
+Here are a few more examples from the "Names and Identifiers" section:
+
+```{r}
+pc_sect(1983, "IUPAC Name") |> dplyr::select(1:6)
+```
+
+```{r}
+pc_sect(1983, "CAS") |> dplyr::select(1:6)
+```
+
+```{r}
+pc_sect(1983, "ChEMBL ID") |> dplyr::select(1:6)
+```
+
+## Synonyms
+
+Let's look at "Depositor-Supplied Synonyms":
+
+```{r}
+pc_sect(1983, "depositor-supplied synonyms") |> head(5) |> dplyr::select(1:6)
+```
+
+Notice that the dash is needed for the section to work.
+
+Now this one is a little trickier:
+
+```{r}
+pc_sect(1983, "MeSH Entry Terms", form = "long") |> dplyr::select(1:6)
+```
+
+Notice that we need to use `form = "long"` to get the desired result. So far "MeSH Entry Terms" appear to be the only section where where `form` needs to be set manually, but let us know if you find other sections.
+
+## Chemical and Physical Properties
+
+In the "Computed Properties" section, the lowest-level section names that can be retrieved are the property names. For example:
+
+```{r}
+pc_sect(1983, "xlogp3") |> dplyr::select(1:6)
+```
+
+There are also sections that contain textual data, such as "Color/Form":
+
+```{r}
+pc_sect(1983, "color/form") |> dplyr::select(1:6)
+```
+Notice that the forward slash is needed for the section name to work.
+
+## Spectral Information
+
+Here is how we can retrieve "1H NMR Spectra":
+
+```{r}
+pc_sect(1983, "1H NMR Spectra") |> dplyr::select(1:6)
+```
+
+The PubChem web page also displays a figure, which can be retrieved from the URL in the `Thumbnail` variable. However, if we want to generate the figure ourselves, the peaks are available in the `Shifts [ppm]:Intensity` variable. Notice that this section returns several data variables instead of a single `Result` variable. This is because the retrieved data set is a data frame, so `form = "auto"` detects this and converts the output to wide format.
+
+## Drug and Medical Information
+
+I included this section in the vignette because its output is a little more complicated. When we look at this section of the PubChem web page (https://pubchem.ncbi.nlm.nih.gov/compound/1983#section=Drug-Indication) we see that it contains both a table and textual data. When we retrieve the data, `pc_sect()` returns the table in wide format while using the standard schema with the `Result` column for the textual data. Downstream processing of this data frame may require some extra attention.
+
+```{r}
+pc_sect(1983, "drug indication") |> head(5) |> dplyr::select(1:6)
+```
+## Clinical Trials
+
+We can retrieve clinical trial information from "EU Clinical Trials Register".
+
+```{r}
+pc_sect(1983, "EU Clinical Trials Register") |> head(5) |> dplyr::select(1:6)
+```
+## Toxicity
+
+Let's look at some toxicity data:
+
+```{r}
+pc_sect(1983, "Acute Effects") |> dplyr::select(1:6)
+```
+
+```{r}
+pc_sect(1983, "Lethal Concentration") |> dplyr::select(1:6)
+```
+
+```{r}
+pc_sect(1983, "Lethal Dose") |> dplyr::select(1:6)
+```
+
+```{r}
+pc_sect(1983, "Other Toxicity Values") |> dplyr::select(1:6)
+```
+
+## Help Us Improve PubChem Access
+
+PubChem web pages contain a huge amount of information about chemicals. Most of this data can be retrieved in `webchem` using `pc_sect()`. However, there may still be cases that are not handled properly. If you find any examples where you are not satisfied with the output from `pc_sect()`, please open an issue and we will look into it.

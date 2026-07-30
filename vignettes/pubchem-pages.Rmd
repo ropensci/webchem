@@ -1,0 +1,273 @@
+---
+title: "pubchem-pages"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pubchem-sections}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+``` r
+library(webchem)
+```
+
+# Retrieve the data behind PubChem web pages
+
+When we manually search for a compound on PubChem (https://pubchem.ncbi.nlm.nih.gov/), we get a web page like this one: https://pubchem.ncbi.nlm.nih.gov/compound/1983. This vignette explains how most of this data can be retrieved programmatically using `webchem`.
+
+## Getting started
+
+First, we need to get the PubChem ID (CID) of the compound. This can be done using the `get_cid()` function. Throughout this vignette, we will mostly work with paracetamol, so let's get its CID:
+
+
+``` r
+get_cid("paracetamol")
+#> # A tibble: 1 × 2
+#>   query       cid  
+#>   <chr>       <chr>
+#> 1 paracetamol 1983
+```
+
+Now that we know the CID, we can retrieve any section of the PubChem web page using `pc_sect()` (short for PubChem Section). Here is an example:
+
+
+``` r
+pc_sect(1983, section = "smiles") |> dplyr::select(1:6)
+#> # A tibble: 1 × 6
+#>   Section Domain   ID    Name          Result                SourceName
+#>   <chr>   <chr>    <chr> <chr>         <chr>                 <chr>     
+#> 1 smiles  compound 1983  Acetaminophen CC(=O)NC1=CC=C(C=C1)O PubChem
+```
+
+Notice that the function returns a data frame rather than a string. `pc_sect()` always returns a data frame but the variables it contains depends on the section. The first five variable names shown above are common because they follow a standard schema for sections whose data consists of a single string, number, or similar value: the queried section, domain, ID (e.g., CID or SID), name, and result. For simplicity, this vignette only shows the first six variables of each tibble. Check the full output if you want to see all available variables.
+
+Returning a data frame offers several advantages over returning only the result string. For example, we can query multiple compounds at the same time and simply get a data frame with additional rows:
+
+
+``` r
+pc_sect(c(1983, 3672), section = "smiles") |> dplyr::select(1:6)
+#> # A tibble: 2 × 6
+#>   Section Domain   ID    Name             Result                        SourceName
+#>   <chr>   <chr>    <chr> <chr>            <chr>                         <chr>     
+#> 1 smiles  compound 1983  Acetaminophen    CC(=O)NC1=CC=C(C=C1)O         PubChem   
+#> 2 smiles  compound 3672  Ibuprofen, (+-)- CC(C)CC1=CC=C(C=C1)C(C)C(=O)O PubChem
+```
+
+Another advantage of the data frame structure is that it also includes any reference data stored in PubChem for each data element.
+
+The `section` argument is not case sensitive but it is sensitive to typing errors and requires the full name of the section as it is printed on the content page. The PubChem Table of Contents Tree can also be found at https://pubchem.ncbi.nlm.nih.gov/classification/#hid=72. As a general rule, `pc_sect()` works with the lowest level section before the data. For example, it works with "IUPAC Name" but not with "Names and Identifiers".
+
+Let's look at some of the sections in more detail.
+
+## Names and Identifiers
+
+Here are a few more examples from the "Names and Identifiers" section:
+
+
+``` r
+pc_sect(1983, "IUPAC Name") |> dplyr::select(1:6)
+#> # A tibble: 1 × 6
+#>   Section    Domain   ID    Name          Result                       SourceName
+#>   <chr>      <chr>    <chr> <chr>         <chr>                        <chr>     
+#> 1 iupac name compound 1983  Acetaminophen N-(4-hydroxyphenyl)acetamide PubChem
+```
+
+
+``` r
+pc_sect(1983, "CAS") |> dplyr::select(1:6)
+#> # A tibble: 19 × 6
+#>    Section Domain   ID    Name          Result   SourceName                                                 
+#>    <chr>   <chr>    <chr> <chr>         <chr>    <chr>                                                      
+#>  1 cas     compound 1983  Acetaminophen 103-90-2 Australian Industrial Chemicals Introduction Scheme (AICIS)
+#>  2 cas     compound 1983  Acetaminophen 103-90-2 CAMEO Chemicals                                            
+#>  3 cas     compound 1983  Acetaminophen 103-90-2 CAS Common Chemistry                                       
+#>  4 cas     compound 1983  Acetaminophen 103-90-2 ChemIDplus                                                 
+#>  5 cas     compound 1983  Acetaminophen 103-90-2 DrugBank                                                   
+#>  6 cas     compound 1983  Acetaminophen 103-90-2 DTP/NCI                                                    
+#>  7 cas     compound 1983  Acetaminophen 103-90-2 DTP/NCI                                                    
+#>  8 cas     compound 1983  Acetaminophen 103-90-2 DTP/NCI                                                    
+#>  9 cas     compound 1983  Acetaminophen 103-90-2 EFSA OpenFoodTox                                           
+#> 10 cas     compound 1983  Acetaminophen 103-90-2 EPA Chemicals under the TSCA                               
+#> 11 cas     compound 1983  Acetaminophen 103-90-2 EPA DSSTox                                                 
+#> 12 cas     compound 1983  Acetaminophen 103-90-2 European Chemicals Agency (ECHA)                           
+#> 13 cas     compound 1983  Acetaminophen 103-90-2 FDA Global Substance Registration System (GSRS)            
+#> 14 cas     compound 1983  Acetaminophen 103-90-2 Hazardous Substances Data Bank (HSDB)                      
+#> 15 cas     compound 1983  Acetaminophen 103-90-2 Human Metabolome Database (HMDB)                           
+#> 16 cas     compound 1983  Acetaminophen 103-90-2 ILO-WHO International Chemical Safety Cards (ICSCs)        
+#> 17 cas     compound 1983  Acetaminophen 103-90-2 New Zealand Environmental Protection Authority (EPA)       
+#> 18 cas     compound 1983  Acetaminophen 103-90-2 NIAID ChemDB                                               
+#> 19 cas     compound 1983  Acetaminophen 103-90-2 Risk Assessment Information System (RAIS)
+```
+
+
+``` r
+pc_sect(1983, "ChEMBL ID") |> dplyr::select(1:6)
+#> # A tibble: 2 × 6
+#>   Section   Domain   ID    Name          Result    SourceName  
+#>   <chr>     <chr>    <chr> <chr>         <chr>     <chr>       
+#> 1 chembl id compound 1983  Acetaminophen CHEMBL112 ChEMBL      
+#> 2 chembl id compound 1983  Acetaminophen CHEMBL112 Open Targets
+```
+
+## Synonyms
+
+Let's look at "Depositor-Supplied Synonyms":
+
+
+``` r
+pc_sect(1983, "depositor-supplied synonyms") |> head(5) |> dplyr::select(1:6)
+#> # A tibble: 5 × 6
+#>   Section                     Domain   ID    Name          Result                       SourceName
+#>   <chr>                       <chr>    <chr> <chr>         <chr>                        <chr>     
+#> 1 depositor-supplied synonyms compound 1983  Acetaminophen acetaminophen                PubChem   
+#> 2 depositor-supplied synonyms compound 1983  Acetaminophen Paracetamol                  PubChem   
+#> 3 depositor-supplied synonyms compound 1983  Acetaminophen 4-Acetamidophenol            PubChem   
+#> 4 depositor-supplied synonyms compound 1983  Acetaminophen 103-90-2                     PubChem   
+#> 5 depositor-supplied synonyms compound 1983  Acetaminophen N-(4-Hydroxyphenyl)acetamide PubChem
+```
+
+Notice that the dash is needed for the section to work.
+
+Now this one is a little trickier:
+
+
+``` r
+pc_sect(1983, "MeSH Entry Terms", form = "long") |> dplyr::select(1:6)
+```
+
+Notice that we need to use `form = "long"` to get the desired result. So far "MeSH Entry Terms" appear to be the only section where where `form` needs to be set manually, but let us know if you find other sections.
+
+## Chemical and Physical Properties
+
+In the "Computed Properties" section, the lowest-level section names that can be retrieved are the property names. For example:
+
+
+``` r
+pc_sect(1983, "xlogp3") |> dplyr::select(1:6)
+#> # A tibble: 1 × 6
+#>   Section Domain   ID    Name          Result SourceName
+#>   <chr>   <chr>    <chr> <chr>         <chr>  <chr>     
+#> 1 xlogp3  compound 1983  Acetaminophen 0.5    PubChem
+```
+
+There are also sections that contain textual data, such as "Color/Form":
+
+
+``` r
+pc_sect(1983, "color/form") |> dplyr::select(1:6)
+#> # A tibble: 1 × 6
+#>   Section    Domain   ID    Name          Result                             SourceName                           
+#>   <chr>      <chr>    <chr> <chr>         <chr>                              <chr>                                
+#> 1 color/form compound 1983  Acetaminophen Large monoclinic prisms from water Hazardous Substances Data Bank (HSDB)
+```
+Notice that the forward slash is needed for the section name to work.
+
+## Spectral Information
+
+Here is how we can retrieve "1H NMR Spectra":
+
+
+``` r
+pc_sect(1983, "1H NMR Spectra") |> dplyr::select(1:6)
+#> # A tibble: 3 × 6
+#>   Section        Domain   ID    Name          `Spectra ID` `Instrument Type`
+#>   <chr>          <chr>    <chr> <chr>         <chr>        <chr>            
+#> 1 1h nmr spectra compound 1983  Acetaminophen 1761         Varian           
+#> 2 1h nmr spectra compound 1983  Acetaminophen 2079         JEOL             
+#> 3 1h nmr spectra compound 1983  Acetaminophen <NA>         <NA>
+```
+
+The PubChem web page also displays a figure, which can be retrieved from the URL in the `Thumbnail` variable. However, if we want to generate the figure ourselves, the peaks are available in the `Shifts [ppm]:Intensity` variable. Notice that this section returns several data variables instead of a single `Result` variable. This is because the retrieved data set is a data frame, so `form = "auto"` detects this and converts the output to wide format.
+
+## Drug and Medical Information
+
+I included this section in the vignette because its output is a little more complicated. When we look at this section of the PubChem web page (https://pubchem.ncbi.nlm.nih.gov/compound/1983#section=Drug-Indication) we see that it contains both a table and textual data. When we retrieve the data, `pc_sect()` returns the table in wide format while using the standard schema with the `Result` column for the textual data. Downstream processing of this data frame may require some extra attention.
+
+
+``` r
+pc_sect(1983, "drug indication") |> head(5) |> dplyr::select(1:6)
+#> # A tibble: 5 × 6
+#>   Section         Domain   ID    Name          gid   refchemids
+#>   <chr>           <chr>    <chr> <chr>         <chr> <chr>     
+#> 1 drug indication compound 1983  Acetaminophen <NA>  37        
+#> 2 drug indication compound 1983  Acetaminophen <NA>  37        
+#> 3 drug indication compound 1983  Acetaminophen <NA>  37        
+#> 4 drug indication compound 1983  Acetaminophen <NA>  37        
+#> 5 drug indication compound 1983  Acetaminophen <NA>  37
+```
+## Clinical Trials
+
+We can retrieve clinical trial information from "EU Clinical Trials Register".
+
+
+``` r
+pc_sect(1983, "EU Clinical Trials Register") |> head(5) |> dplyr::select(1:6)
+#> # A tibble: 5 × 6
+#>   Section                     Domain   ID    Name          gid   EudraCT       
+#>   <chr>                       <chr>    <chr> <chr>         <chr> <chr>         
+#> 1 eu clinical trials register compound 1983  Acetaminophen <NA>  2013-004955-19
+#> 2 eu clinical trials register compound 1983  Acetaminophen <NA>  2016-001596-75
+#> 3 eu clinical trials register compound 1983  Acetaminophen <NA>  2017-001014-28
+#> 4 eu clinical trials register compound 1983  Acetaminophen <NA>  2020-002908-39
+#> 5 eu clinical trials register compound 1983  Acetaminophen <NA>  2022-003559-32
+```
+## Toxicity
+
+Let's look at some toxicity data:
+
+
+``` r
+pc_sect(1983, "Acute Effects") |> dplyr::select(1:6)
+#> # A tibble: 31 × 6
+#>    Section       Domain   ID    Name          gid   Compound_CID
+#>    <chr>         <chr>    <chr> <chr>         <chr> <chr>       
+#>  1 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  2 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  3 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  4 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  5 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  6 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  7 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  8 acute effects compound 1983  Acetaminophen <NA>  1983        
+#>  9 acute effects compound 1983  Acetaminophen <NA>  1983        
+#> 10 acute effects compound 1983  Acetaminophen <NA>  1983        
+#> # ℹ 21 more rows
+```
+
+
+``` r
+pc_sect(1983, "Lethal Concentration") |> dplyr::select(1:6)
+#> # A tibble: 1 × 6
+#>   Section              Domain   ID    Name          gid   refchemids
+#>   <chr>                <chr>    <chr> <chr>         <chr> <chr>     
+#> 1 lethal concentration compound 1983  Acetaminophen <NA>  37
+```
+
+
+``` r
+pc_sect(1983, "Lethal Dose") |> dplyr::select(1:6)
+#> # A tibble: 5 × 6
+#>   Section     Domain   ID    Name          gid   refchemids
+#>   <chr>       <chr>    <chr> <chr>         <chr> <chr>     
+#> 1 lethal dose compound 1983  Acetaminophen <NA>  37        
+#> 2 lethal dose compound 1983  Acetaminophen <NA>  37        
+#> 3 lethal dose compound 1983  Acetaminophen <NA>  37        
+#> 4 lethal dose compound 1983  Acetaminophen <NA>  37        
+#> 5 lethal dose compound 1983  Acetaminophen <NA>  37
+```
+
+
+``` r
+pc_sect(1983, "Other Toxicity Values") |> dplyr::select(1:6)
+#> # A tibble: 1 × 6
+#>   Section               Domain   ID    Name          gid   refchemids
+#>   <chr>                 <chr>    <chr> <chr>         <chr> <chr>     
+#> 1 other toxicity values compound 1983  Acetaminophen <NA>  37
+```
+
+## Help Us Improve PubChem Access
+
+PubChem web pages contain a huge amount of information about chemicals. Most of this data can be retrieved in `webchem` using `pc_sect()`. However, there may still be cases that are not handled properly. If you find any examples where you are not satisfied with the output from `pc_sect()`, please open an issue and we will look into it.
