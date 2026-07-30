@@ -28,6 +28,9 @@ connect_eup <- function(...) {
 #' \code{"substance_id"}, \code{"substance_name"}, or \code{"as_cas_number"}.
 #' @param resource character; the EU Pesticides resource to query. Can be one of
 #' \code{"active_substances"} or \code{"residues"}.
+#' @param mode character; the mode of operation. Can be one of \code{"offline"} 
+#' (offline access) or \code{"ws"} (web service access). Currently only offline 
+#' mode is implemented.
 #' ... Further args passed on to [DBI::dbConnect()]
 #' @return A data frame of converted identifiers, in the same order as
 #' the input \code{query}. If an identifier could not be converted, the
@@ -37,6 +40,8 @@ connect_eup <- function(...) {
 #' substance in the EU Pesticides database. \code{"substance_name"} is the name
 #' of the active substance, and \code{"as_cas_number"} is the CAS number of the
 #' active substance.
+#' @references You can find more information about the EU Pesticides database at
+#' \url{https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en}.
 #' @examples
 #' \dontrun{
 #' # Download database
@@ -92,21 +97,6 @@ eup_convert <- function(
   }
 }
 
-#' Convert identifiers in the local EU Pesticides database (offline mode)
-#'
-#' @param query character; a character of compound identifiers to convert.
-#' @param from character; the type of identifier to conver from. Can be one of
-#' \code{"substance_id"}, \code{"substance_name"}, or \code{"as_cas_number"}.
-#' @param to character; the type of identifier to convert to. Can be one of
-#' \code{"substance_id"}, \code{"substance_name"}, or \code{"as_cas_number"}.
-#' @param resource character; the EU Pesticides resource to query. Can be one of
-#' \code{"active_substances"} or \code{"residues"}.
-#' @param ... Further args passed on to [DBI::dbConnect()]
-#' @return A data frame of converted identifiers, in the same order as
-#' the input \code{query}. If an identifier could not be converted, the
-#' corresponding output will be \code{NA}. If multiple matches are found for a
-#' query, all matches will be returned in separate rows.
-#' @noRd
 eup_convert_offline <- function(
   query,
   from,
@@ -150,6 +140,8 @@ eup_convert_offline <- function(
 #' @param verbose logical; should verbose messages be printed to the console?
 #' @return A character vector of unique identifiers of the specified type that 
 #' are present in the EU Pesticides database.
+#' @references You can find more information about the EU Pesticides database at
+#' \url{https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en}.
 #' @examples
 #' \dontrun{
 #' eup_list_entries("substance_name")
@@ -195,6 +187,8 @@ eup_list_entries <- function(
 #' mode is implemented.
 #' @param ... Further args passed on to [DBI::dbConnect()]
 #' @return A data frame containing information about the specified entry.
+#' @references You can find more information about the EU Pesticides database at
+#' \url{https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en}.
 #' @examples
 #' \dontrun{
 #' # Download database
@@ -269,6 +263,8 @@ eup_query_offline <- function(
 #' webchem package. You can view the current cache directory by using the
 #' `wc_cache$cache_path_get()` function, and you can change the cache directory
 #' by using the `wc_cache$cache_path_set()` function.
+#' @references You can find more information about the EU Pesticides database at
+#' \url{https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en}.
 #' @examples
 #' \dontrun{
 #' # Set cache path to a temporary directory
