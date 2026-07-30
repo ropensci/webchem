@@ -2837,7 +2837,7 @@ fetch_table <- function(
   if (!is.null(select_cols)) {
     out <- out |> dplyr::select(dplyr::all_of(select_cols))
   }
-  out |> dplyr::collect()
+  out |> dplyr::collect() |> dplyr::distinct()
 }
 
 chembl_validate_id_offline <- function(
