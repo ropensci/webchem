@@ -1,3 +1,24 @@
+#' Connect local EU Pesticides database
+#'
+#' @param ... Further args passed on to [DBI::dbConnect()]
+#' @return an object of class "SQLiteConnection".
+#' @examples
+#' \dontrun{
+#'   con <- connect_eup()
+#' }
+#' @noRd
+connect_eup <- function(...) {
+  db_path <- file.path(
+    wc_cache$cache_path_get(),
+    "eup/eup.sqlite"
+  ) |> path.expand()
+  if (!file.exists(db_path)) {
+    stop("Database not found. Use db_download_eup() to download the database.")
+  }
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = db_path, ...)
+  return(con)
+}
+
 #' Download the EU Pesticides database and convert to SQLite
 #'
 #' This function downloads the EU Pesticides database in JSON format and
