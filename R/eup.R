@@ -104,10 +104,14 @@ eup_convert_offline <- function(
   resource,
   ...
 ) {
-  if (from %in% c("substance_id", "pesticide_residue_id") && !is.numeric(query)) {
+  numeric_idtypes <- c("substance_id", "pesticide_residue_id")
+  if (from %in% numeric_idtypes && !is.numeric(query)) {
     stop("query must be a vector of numbers.")
   }
-  if (from != "substance_id" && !is.character(query)) {
+  character_idtypes <- c(
+    "substance_name", "as_cas_number", "pesticide_residue_name"
+  )
+  if (from %in% character_idtypes && !is.character(query)) {
     stop("query must be a vector of strings.")
   }
   con <- connect_eup(...)
