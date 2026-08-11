@@ -2,6 +2,7 @@
 
 ## NEW FEATURES
 
+* `webchem` can now access the EU Pesticides database (https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en), implemented in offline mode.
 * `webchem` can now access FooDB (https://foodb.ca/), a database of food constituents, chemistry and biology, implemented in offline mode. 
 * Added `db_download_foodb()` to download the database, `foodb_list_compounds()` to list all compounds, and `foodb_convert()` to convert between IDs and `foodb_query()` to query the database.
 * `pc_sect()` can now retrieve data from previously inaccessible PubChem sections including spectral data and data that come from separate subsystems.

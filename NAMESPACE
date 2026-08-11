@@ -50,11 +50,16 @@ export(cts_compinfo)
 export(cts_convert)
 export(cts_from)
 export(cts_to)
+export(db_connect)
 export(db_download_chembl)
+export(db_download_eup)
 export(db_download_foodb)
 export(etox_basic)
 export(etox_targets)
 export(etox_tests)
+export(eup_convert)
+export(eup_list_entries)
+export(eup_query)
 export(find_db)
 export(fn_percept)
 export(foodb_convert)
@@ -94,32 +99,46 @@ import(rvest)
 import(stringr)
 import(tibble)
 import(xml2)
-importFrom(data.tree,Do)
-importFrom(data.tree,as.Node)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,everything)
-importFrom(dplyr,select)
-importFrom(httr,RETRY)
-importFrom(httr,content)
-importFrom(httr,message_for_status)
-importFrom(httr,user_agent)
+importFrom(data.tree,
+  Do,
+  as.Node
+)
+importFrom(dplyr,
+  bind_rows,
+  everything,
+  select
+)
+importFrom(httr,
+  RETRY,
+  content,
+  message_for_status,
+  user_agent
+)
 importFrom(jsonlite,fromJSON)
 importFrom(methods,is)
-importFrom(purrr,map)
-importFrom(purrr,map2)
-importFrom(purrr,map_df)
-importFrom(purrr,map_dfr)
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(rlang,as_function)
-importFrom(rlang,fn_fmls)
+importFrom(purrr,
+  map,
+  map2,
+  map_df,
+  map_dfr
+)
+importFrom(rlang,
+  ":=",
+  .data,
+  as_function,
+  fn_fmls
+)
 importFrom(rvest,html_table)
 importFrom(stringr,str_trunc)
-importFrom(tibble,as_tibble)
-importFrom(tibble,enframe)
-importFrom(tibble,tibble)
-importFrom(utils,URLdecode)
-importFrom(utils,URLencode)
-importFrom(utils,globalVariables)
-importFrom(utils,menu)
-importFrom(utils,read.table)
+importFrom(tibble,
+  as_tibble,
+  enframe,
+  tibble
+)
+importFrom(utils,
+  URLdecode,
+  URLencode,
+  globalVariables,
+  menu,
+  read.table
+)

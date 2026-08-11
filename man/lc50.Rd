@@ -15,7 +15,7 @@ A data frame with 124 rows and 2 variables:
 \url{https://cfpub.epa.gov/ecotox/}
 }
 \usage{
-data(lc50)
+lc50
 }
 \description{
 This dataset comprises acute ecotoxicity data of 124 insecticides.

@@ -46,6 +46,7 @@ documentation
 | [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | ✅ | ❌ |
 | [ChemSpider](https://www.chemspider.com/) (requires an [API token](https://developer.rsc.org/)) | ✅ | ❌ |
 | [ETOX](http://webetox.uba.de/webETOX/index.do) | ✅ | ❌ |
+| [EU Pesticides](https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en)| ❌ | ✅ |
 | [Flavornet](http://www.flavornet.org) | ✅ | ❌ |
 | [FooDB](https://foodb.ca/) | ❌ | ✅ |
 | [NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only) | ✅ | ❌ |
