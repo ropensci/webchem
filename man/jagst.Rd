@@ -17,7 +17,7 @@ A data frame with 442 rows and 4 variables:
 \url{https://udo.lubw.baden-wuerttemberg.de/public/}
 }
 \usage{
-data(jagst)
+jagst
 }
 \description{
 This dataset comprises environmental monitoring data of organic plant protection products

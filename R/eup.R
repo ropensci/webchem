@@ -31,7 +31,7 @@ connect_eup <- function(...) {
 #' @param mode character; the mode of operation. Can be one of \code{"offline"} 
 #' (offline access) or \code{"ws"} (web service access). Currently only offline 
 #' mode is implemented.
-#' ... Further args passed on to [DBI::dbConnect()]
+#' @param ... Further args passed on to [DBI::dbConnect()]
 #' @return A data frame of converted identifiers, in the same order as
 #' the input \code{query}. If an identifier could not be converted, the
 #' corresponding output will be \code{NA}. If multiple matches are found for a

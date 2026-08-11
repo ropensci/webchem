@@ -27,8 +27,9 @@ eup_convert(
 
 \item{mode}{character; the mode of operation. Can be one of \code{"offline"} 
 (offline access) or \code{"ws"} (web service access). Currently only offline 
-mode is implemented.
-... Further args passed on to [DBI::dbConnect()]}
+mode is implemented.}
+
+\item{...}{Further args passed on to [DBI::dbConnect()]}
 }
 \value{
 A data frame of converted identifiers, in the same order as
