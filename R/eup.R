@@ -173,9 +173,8 @@ eup_list_entries <- function(
   }
   if (verbose) message("Retrieving entries from table '", table, "'...")
   ids <- dplyr::tbl(con, table) |>
-    dplyr::select(idtype) |>
-    dplyr::distinct() |>
-    dplyr::pull() |>
+    dplyr::pull(var = idtype) |>
+    unique() |>
     sort()
   return(ids)
 }
