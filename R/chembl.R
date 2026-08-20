@@ -882,21 +882,17 @@ format_chembl <- function(cont) {
 
 #' Validate ChEMBL version
 #'
-#' @description Validates the provided ChEMBL version. If "latest" (default),
-#' returns the number of the lastest supported version (as a string). If the
-#' provided version is lower than the earliest supported version, stops with
-#' an error.
+#' @description Validates the provided ChEMBL version.
 #' @param version character; the ChEMBL version to validate.
 #' @return Validated version number as a string.
 #' @noRd
-validate_chembl_version <- function(version = "latest") {
+validate_chembl_version <- function(version) {
   assert(version, "character")
   stopifnot(length(version) == 1)
-  if (version == "latest") version <- "36"
   version_num <- suppressWarnings(as.numeric(version))
   version_base <- as.character(floor(version_num))
   if (is.na(version_num)) {
-    stop("Version must be 'latest' or coercible to numeric.")
+    stop("Version must be coercible to numeric.")
   }
   if (version_num < 20) {
     stop("Version not supported. Try a more recent version.")
