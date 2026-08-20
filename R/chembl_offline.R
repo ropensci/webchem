@@ -2821,7 +2821,8 @@ chembl_compare_service <- function(
     query = query,
     resource = resource,
     mode = "offline",
-    verbose = verbose
+    verbose = verbose,
+    version = version
   )
   all.equal(ws_result, offline_result)
 }
