@@ -29,7 +29,9 @@ chembl_check_db_version <- function() {
 #' @param query character; activity ID to retrieve
 #' @param resource character; ChEMBL resource to query
 #' @param verbose logical; print verbose messages to the console?
-#' @param version character; version of the ChEMBL database
+#' @param version character; version of the ChEMBL database. If `NULL`
+#' (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile.
 #' @param output character; either "raw" or "tidy"
 #' @examples
 #' \dontrun{
@@ -42,9 +44,10 @@ chembl_query_offline <- function(
     output = "raw",
     verbose = getOption("verbose"),
     similarity = 70,
-    version = "latest"
+    version = NULL
 ) {
   resource <- match.arg(resource, chembl_resources())
+  if (is.null(version)) version <- chembl_check_db_version()
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
@@ -2759,11 +2762,13 @@ chembl_offline_xref_source <- function(
 #' information: table names, field names, field types, and (non-NA) example
 #' values for each field. This is an internal function to help construct offline
 #' functions that mimic the schema of the web service.
-#' @param version character; version of the ChEMBL database.
+#' @param version character; version of the ChEMBL database. If `NULL`
+#' (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile.
 #' @return A data frame with columns: \code{table}, \code{field}, \code{type}
 #' and \code{example}.
 #' @noRd
-chembl_offline_schema <- function(version = "latest") {
+chembl_offline_schema <- function(version = NULL) {
   con <- connect_chembl(version = version)
   on.exit(DBI::dbDisconnect(con), add = TRUE)
   tables <- DBI::dbListTables(con)

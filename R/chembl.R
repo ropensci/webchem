@@ -220,8 +220,9 @@ chembl_files <- function(version = "latest") {
 #'   used when mode = "ws". If NULL (default), results are not cached.
 #' @param similarity numeric; similarity threshold for similarity searches
 #'   (default 70).
-#' @param version character; database version to use in "offline" mode (default
-#'   "latest").
+#' @param version character; database version to use in "offline" mode. If
+#' `NULL` (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile. Ignored when `mode = "ws"`.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... additional arguments, only used for internal testing.
 #' @return The function returns a list of lists, where each element of the list
@@ -364,7 +365,7 @@ chembl_query <- function(
   output = "raw",
   cache_file = NULL,
   similarity = 70,
-  version = "latest",
+  version = NULL,
   verbose = getOption("verbose"),
   ...) {
   resource <- match.arg(resource, chembl_resources())
@@ -757,16 +758,18 @@ chembl_resources <- function() {
 #' Connect local ChEMBL database
 #'
 #' @importFrom rlang .data
-#' @param version character; version of the database. Either "latest" (default)
-#' or a specific version number, e.g. "30".
+#' @param version character; version of the database. If `NULL` (default),
+#' [chembl_check_db_version()] resolves a default set via .Renviron or
+#' .Rprofile.
 #' @param ... Further args passed on to [DBI::dbConnect()]
 #' @return an object of class "SQLiteConnection".
 #' @examples
 #' \dontrun{
-#'   con <- connect_chembl(version = "latest")
+#'   con <- connect_chembl(version = "37")
 #' }
 #' @noRd
-connect_chembl <- function(version = "latest", ...) {
+connect_chembl <- function(version = NULL, ...) {
+  if (is.null(version)) version <- chembl_check_db_version()
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
