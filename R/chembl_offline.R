@@ -1,3 +1,29 @@
+#' Retrieve the default ChEMBL database version
+#'
+#' Look for a default ChEMBL database version set via .Renviron or .Rprofile.
+#' @details Set a default version to avoid specifying `version` on every call
+#' to an offline ChEMBL function (e.g. [connect_chembl()], [chembl_query()],
+#' [db_download_chembl()]): store it as \code{CHEMBL_DB_VERSION = "37"} in
+#' .Renviron, or as \code{options(chembl_db_version = "37")} in .Rprofile or
+#' at runtime. A version passed directly to a function always overrides this
+#' default. This also lets a project's ChEMBL database version be pinned in
+#' one place (e.g. alongside an `renv` lockfile) for reproducibility.
+#' @seealso [usethis::edit_r_environ()], [usethis::edit_r_profile()]
+#' @return the pinned version as a character string
+#' @export
+#' @examples
+#' \dontrun{
+#' chembl_check_db_version()
+#' }
+chembl_check_db_version <- function() {
+  x <- Sys.getenv("CHEMBL_DB_VERSION", "")
+  if (x == "") x <- getOption("chembl_db_version", "")
+  if (x == "") {
+    stop("No default ChEMBL database version set. See ?chembl_check_db_version() for details.")
+  }
+  x
+}
+
 #' Replicate ChEMBL resource using a local ChEMBL database
 #'
 #' @param query character; activity ID to retrieve
