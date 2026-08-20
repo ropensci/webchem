@@ -123,12 +123,11 @@ db_download_chembl <- function(
 #' @param version character; release version
 #' @return FTP URL for ChEMBL databas files
 #' @examples {
-#' chembl_dir_url(version = "latest")
 #' chembl_dir_url(version = "34")
 #' chembl_dir_url(version = "24.1")
 #' }
 #' @noRd
-chembl_dir_url <- function(version = "latest") {
+chembl_dir_url <- function(version) {
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
@@ -153,17 +152,17 @@ chembl_dir_url <- function(version = "latest") {
 
 #' Retrieve paths for ChEMBL database files
 #'
-#' @param version character; version of the database. Either "latest" (default)
-#' or a specific version number, e.g. "30".
+#' @param version character; version of the database.
 #' @return a data frame with three columns "url", "file" and "type". "url" is
 #' the download URL. "file" is the final path to the file within the download
 #' directory of the requested database version. "type" is the file type which
 #' guides further processing.
 #' @examples
-#' chembl_files("chembl", version = "latest")
-#' chembl_files("chembl", version = "30")
+#' \dontrun{
+#' chembl_files("chembl", version = "35")
+#' }
 #' @noRd
-chembl_files <- function(version = "latest") {
+chembl_files <- function(version) {
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }

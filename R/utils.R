@@ -53,14 +53,14 @@ db_connect <- function(db, version = NULL, ...) {
 #' Get URLs and file names of local database files
 #'
 #' @param db character; database name. Currently only "chembl" is supported.
-#' @param version character; version of the database. Either "latest" (default)
-#' or a specific version number, e.g. "30".
+#' @param version character; version of the database.
 #' @return A data frame. Variables depend on the database.
 #' @examples
-#' db_files("chembl", version = "latest")
-#' db_files("chembl", version = "30")
+#' \dontrun{
+#' db_files("chembl", version = "35")
+#' }
 #' @noRd
-db_files <- function(db, version = "latest") {
+db_files <- function(db, version) {
   db <- match.arg(db, choices = c("chembl"))
   if (db == "chembl") {
     chembl_files(version = version)
