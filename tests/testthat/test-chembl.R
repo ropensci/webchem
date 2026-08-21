@@ -5,12 +5,9 @@ test_that("chembl_dir_url()", {
   skip_if_not(up, "ChEMBL service is down")
   skip_if_not(Sys.getenv("RUN_ONLINE_TESTS") == "true", "Skipping online tests")
 
-  # latest versions
-  expect_equal(chembl_dir_url(), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_36")
-  expect_equal(chembl_dir_url("latest"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_36")
+  # valid versions
+  expect_equal(chembl_dir_url("37"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_37")
   expect_equal(chembl_dir_url("35"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_35")
-  # previous versions
-  expect_equal(chembl_dir_url("34"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_34")
   expect_equal(chembl_dir_url("24.1"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_24_1")
   # archived versions
   expect_equal(chembl_dir_url("24"), "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_24/archived")
@@ -23,12 +20,7 @@ test_that("chembl_dir_url()", {
 })
 
 test_that("chembl_files()", {
-  # latest versions
-  o1 <- chembl_files()
-  o2 <- chembl_files("latest")
-  o3 <- chembl_files("35")
-  # previous versions
-  for (i in 20:34) {
+  for (i in 20:35) {
     out <- i |> as.character() |> chembl_files() |> suppressWarnings()
     expect_true(all(url_exists(out$url)[-1]))
   }
@@ -37,9 +29,6 @@ test_that("chembl_files()", {
   o6 <- chembl_files("24")
   o7 <- chembl_files("22")
 
-  expect_true(all(url_exists(o1$url)))
-  expect_true(all(url_exists(o2$url)))
-  expect_true(all(url_exists(o3$url)))
   expect_true(all(url_exists(o4$url)))
   expect_true(all(url_exists(o5$url[-1])))
   expect_true(all(url_exists(o6$url)))
@@ -244,15 +233,16 @@ test_that("chembl_atc_classes()", {
 })
 
 test_that("validate_chembl_version()", {
-  expect_equal(validate_chembl_version()$version, "36")
-  expect_equal(validate_chembl_version("latest")$version, "36")
-  expect_equal(validate_chembl_version("34")$version, "34")
+  expect_equal(validate_chembl_version("35")$version, "35")
   expect_equal(validate_chembl_version("24.1")$version, "24.1")
   expect_equal(validate_chembl_version("24.1")$version_path, "24_1")
   expect_equal(validate_chembl_version("24.1")$version_base, "24")
   expect_error(validate_chembl_version("19"))
   expect_error(validate_chembl_version(c("34", "35")))
   expect_error(validate_chembl_version(NA))
+  expect_error(validate_chembl_version(NULL))
+  expect_error(validate_chembl_version("pinned"))
+  expect_error(validate_chembl_version("latest"))
   expect_error(validate_chembl_version("thirtyfour"))
 })
 

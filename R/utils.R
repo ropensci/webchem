@@ -23,21 +23,22 @@ assert <- function(x, y) {
 #' This function connects to a database and returns a connection object. 
 #' Currently, it supports the following databases: "chembl", "eup", and "foodb".
 #' @param db character; database name. Must be one of "chembl", "eup", or "foodb".
-#' @param version character; version of the database. Either "latest" (default)
-#' or a specific version number, e.g. "30". Only applicable for "chembl".
+#' @param version character; version of the database. Only applicable for
+#' "chembl". If `NULL` (default), [chembl_check_db_version()] resolves a default
+#' set via .Renviron or .Rprofile.
 #' @param ... Further args passed on to [DBI::dbConnect()]
 #' @return an object of class "SQLiteConnection".
 #' @examples
 #' \dontrun{
-#' # Connect to the latest version of the ChEMBL database
-#' con <- db_connect("chembl", version = "latest")
+#' # Connect to a specific version of the ChEMBL database
+#' con <- db_connect("chembl", version = "37")
 #' # Connect to the EU Pesticides database
 #' con <- db_connect("eup")
 #' # Connect to the FooDB database
 #' con <- db_connect("foodb")
 #' }
 #' @export
-db_connect <- function(db, version = "latest", ...) {
+db_connect <- function(db, version = NULL, ...) {
   assert(db, "character")
   db <- match.arg(db, choices = c("chembl", "eup", "foodb"))
   con <- switch(
@@ -52,14 +53,14 @@ db_connect <- function(db, version = "latest", ...) {
 #' Get URLs and file names of local database files
 #'
 #' @param db character; database name. Currently only "chembl" is supported.
-#' @param version character; version of the database. Either "latest" (default)
-#' or a specific version number, e.g. "30".
+#' @param version character; version of the database.
 #' @return A data frame. Variables depend on the database.
 #' @examples
-#' db_files("chembl", version = "latest")
-#' db_files("chembl", version = "30")
+#' \dontrun{
+#' db_files("chembl", version = "35")
+#' }
 #' @noRd
-db_files <- function(db, version = "latest") {
+db_files <- function(db, version) {
   db <- match.arg(db, choices = c("chembl"))
   if (db == "chembl") {
     chembl_files(version = version)

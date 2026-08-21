@@ -11,7 +11,7 @@ chembl_query(
   output = "raw",
   cache_file = NULL,
   similarity = 70,
-  version = "latest",
+  version = NULL,
   verbose = getOption("verbose"),
   ...
 )
@@ -37,8 +37,9 @@ used when mode = "ws". If NULL (default), results are not cached.}
 \item{similarity}{numeric; similarity threshold for similarity searches
 (default 70).}
 
-\item{version}{character; database version to use in "offline" mode (default
-"latest").}
+\item{version}{character; database version to use in "offline" mode. If
+`NULL` (default), [chembl_check_db_version()] resolves a default set via
+.Renviron or .Rprofile. Ignored when `mode = "ws"`.}
 
 \item{verbose}{logical; should a verbose output be printed on the console?}
 

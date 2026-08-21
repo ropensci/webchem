@@ -4,13 +4,14 @@
 \alias{db_connect}
 \title{Connect to a database}
 \usage{
-db_connect(db, version = "latest", ...)
+db_connect(db, version = NULL, ...)
 }
 \arguments{
 \item{db}{character; database name. Must be one of "chembl", "eup", or "foodb".}
 
-\item{version}{character; version of the database. Either "latest" (default)
-or a specific version number, e.g. "30". Only applicable for "chembl".}
+\item{version}{character; version of the database. Only applicable for
+"chembl". If `NULL` (default), [chembl_check_db_version()] resolves a default
+set via .Renviron or .Rprofile.}
 
 \item{...}{Further args passed on to [DBI::dbConnect()]}
 }
@@ -23,8 +24,8 @@ Currently, it supports the following databases: "chembl", "eup", and "foodb".
 }
 \examples{
 \dontrun{
-# Connect to the latest version of the ChEMBL database
-con <- db_connect("chembl", version = "latest")
+# Connect to a specific version of the ChEMBL database
+con <- db_connect("chembl", version = "37")
 # Connect to the EU Pesticides database
 con <- db_connect("eup")
 # Connect to the FooDB database

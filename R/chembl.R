@@ -1,9 +1,15 @@
 #' Download ChEMBL database
 #'
 #' Download a version of the ChEMBL database for offline access.
-#' @param version character, the database release version.
+#' @param version character, the database release version. See Details for more 
+#' information.
 #' @param verbose logical; should verbose messages be printed to the console?
 #' @return Downloads the requested database files.
+#' @details If \code{version = NULL} (default), the function calls 
+#' [chembl_check_db_version()] to look for a pinned version to download, or 
+#' stops with an error if it cannot find any. If \code{version = "latest"}, the 
+#' function downloads the newest  version currently published by ChEMBL.  If a 
+#' specific version is requested, the function downloads that version.
 #' @note If a checksum file is available for the requested version it will be
 #' used to check data integrity. To save storage space, webchem only retrieves
 #' those files that are used by the package. If you need other files as well,
@@ -12,13 +18,27 @@
 #' \url{https://chembl.gitbook.io/chembl-interface-documentation/downloads}
 #' @examples
 #' \dontrun{
-#' db_download_chembl(version = "35", verbose = TRUE)
+#' db_download_chembl()
+#' db_download_chembl(version = "latest")
+#' db_download_chembl(version = "35")
 #' }
 #' @export
 db_download_chembl <- function(
-    version = "latest",
+    version = NULL,
     verbose = getOption("verbose")
 ) {
+  if (is.null(version)) {
+    version <- try(chembl_check_db_version(), silent = TRUE)
+    if (inherits(version, "try-error")) {
+      stop("No default ChEMBL database version set. See ?db_download_chembl for more details.")
+    }
+  } else if (version == "latest") {
+    status <- chembl_status(verbose = verbose)
+    if (!is.list(status) && is.na(status)) {
+      stop("Service not available.")
+    }
+    version <- strsplit(status$chembl_db_version, "_")[[1]][2]
+  }
   # input validation
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
@@ -105,12 +125,11 @@ db_download_chembl <- function(
 #' @param version character; release version
 #' @return FTP URL for ChEMBL databas files
 #' @examples {
-#' chembl_dir_url(version = "latest")
 #' chembl_dir_url(version = "34")
 #' chembl_dir_url(version = "24.1")
 #' }
 #' @noRd
-chembl_dir_url <- function(version = "latest") {
+chembl_dir_url <- function(version) {
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
@@ -135,17 +154,17 @@ chembl_dir_url <- function(version = "latest") {
 
 #' Retrieve paths for ChEMBL database files
 #'
-#' @param version character; version of the database. Either "latest" (default)
-#' or a specific version number, e.g. "30".
+#' @param version character; version of the database.
 #' @return a data frame with three columns "url", "file" and "type". "url" is
 #' the download URL. "file" is the final path to the file within the download
 #' directory of the requested database version. "type" is the file type which
 #' guides further processing.
 #' @examples
-#' chembl_files("chembl", version = "latest")
-#' chembl_files("chembl", version = "30")
+#' \dontrun{
+#' chembl_files(version = "35")
+#' }
 #' @noRd
-chembl_files <- function(version = "latest") {
+chembl_files <- function(version) {
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
@@ -202,8 +221,9 @@ chembl_files <- function(version = "latest") {
 #'   used when mode = "ws". If NULL (default), results are not cached.
 #' @param similarity numeric; similarity threshold for similarity searches
 #'   (default 70).
-#' @param version character; database version to use in "offline" mode (default
-#'   "latest").
+#' @param version character; database version to use in "offline" mode. If
+#' `NULL` (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile. Ignored when `mode = "ws"`.
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @param ... additional arguments, only used for internal testing.
 #' @return The function returns a list of lists, where each element of the list
@@ -346,7 +366,7 @@ chembl_query <- function(
   output = "raw",
   cache_file = NULL,
   similarity = 70,
-  version = "latest",
+  version = NULL,
   verbose = getOption("verbose"),
   ...) {
   resource <- match.arg(resource, chembl_resources())
@@ -739,16 +759,18 @@ chembl_resources <- function() {
 #' Connect local ChEMBL database
 #'
 #' @importFrom rlang .data
-#' @param version character; version of the database. Either "latest" (default)
-#' or a specific version number, e.g. "30".
+#' @param version character; version of the database. If `NULL` (default),
+#' [chembl_check_db_version()] resolves a default set via .Renviron or
+#' .Rprofile.
 #' @param ... Further args passed on to [DBI::dbConnect()]
 #' @return an object of class "SQLiteConnection".
 #' @examples
 #' \dontrun{
-#'   con <- connect_chembl(version = "latest")
+#'   con <- connect_chembl(version = "37")
 #' }
 #' @noRd
-connect_chembl <- function(version = "latest", ...) {
+connect_chembl <- function(version = NULL, ...) {
+  if (is.null(version)) version <- chembl_check_db_version()
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
@@ -861,21 +883,17 @@ format_chembl <- function(cont) {
 
 #' Validate ChEMBL version
 #'
-#' @description Validates the provided ChEMBL version. If "latest" (default),
-#' returns the number of the lastest supported version (as a string). If the
-#' provided version is lower than the earliest supported version, stops with
-#' an error.
+#' @description Validates the provided ChEMBL version.
 #' @param version character; the ChEMBL version to validate.
 #' @return Validated version number as a string.
 #' @noRd
-validate_chembl_version <- function(version = "latest") {
+validate_chembl_version <- function(version) {
   assert(version, "character")
   stopifnot(length(version) == 1)
-  if (version == "latest") version <- "36"
   version_num <- suppressWarnings(as.numeric(version))
   version_base <- as.character(floor(version_num))
   if (is.na(version_num)) {
-    stop("Version must be 'latest' or coercible to numeric.")
+    stop("Version must be coercible to numeric.")
   }
   if (version_num < 20) {
     stop("Version not supported. Try a more recent version.")

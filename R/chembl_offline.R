@@ -1,9 +1,37 @@
+#' Retrieve the default ChEMBL database version
+#'
+#' Look for a default ChEMBL database version set via .Renviron or .Rprofile.
+#' @details Set a default version to avoid specifying `version` on every call
+#' to an offline ChEMBL function (e.g. [connect_chembl()], [chembl_query()],
+#' [db_download_chembl()]): store it as \code{CHEMBL_DB_VERSION = "37"} in
+#' .Renviron, or as \code{options(chembl_db_version = "37")} in .Rprofile or
+#' at runtime. A version passed directly to a function always overrides this
+#' default. This also lets a project's ChEMBL database version be pinned in
+#' one place (e.g. alongside an `renv` lockfile) for reproducibility.
+#' @seealso [usethis::edit_r_environ()], [usethis::edit_r_profile()]
+#' @return the pinned version as a character string
+#' @export
+#' @examples
+#' \dontrun{
+#' chembl_check_db_version()
+#' }
+chembl_check_db_version <- function() {
+  x <- Sys.getenv("CHEMBL_DB_VERSION", "")
+  if (x == "") x <- getOption("chembl_db_version", "")
+  if (x == "") {
+    stop("No default ChEMBL database version set. See ?chembl_check_db_version for details.")
+  }
+  x
+}
+
 #' Replicate ChEMBL resource using a local ChEMBL database
 #'
 #' @param query character; activity ID to retrieve
 #' @param resource character; ChEMBL resource to query
 #' @param verbose logical; print verbose messages to the console?
-#' @param version character; version of the ChEMBL database
+#' @param version character; version of the ChEMBL database. If `NULL`
+#' (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile.
 #' @param output character; either "raw" or "tidy"
 #' @examples
 #' \dontrun{
@@ -16,9 +44,10 @@ chembl_query_offline <- function(
     output = "raw",
     verbose = getOption("verbose"),
     similarity = 70,
-    version = "latest"
+    version = NULL
 ) {
   resource <- match.arg(resource, chembl_resources())
+  if (is.null(version)) version <- chembl_check_db_version()
   if (!inherits(version, "chembl_version")) {
     version <- validate_chembl_version(version = version)
   }
@@ -35,7 +64,6 @@ chembl_query_offline <- function(
       query = query,
       verbose = verbose,
       similarity = similarity,
-      version = version,
       output = output,
       con = con
     ))
@@ -43,7 +71,6 @@ chembl_query_offline <- function(
     do.call(FUN, args = list(
       query = query,
       verbose = verbose,
-      version = version,
       output = output,
       con = con
     ))
@@ -60,7 +87,6 @@ chembl_query_offline <- function(
 chembl_offline_activity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -471,7 +497,6 @@ chembl_offline_activity <- function(
 chembl_offline_assay <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -838,7 +863,6 @@ chembl_offline_assay <- function(
 chembl_offline_atc_class <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -925,7 +949,6 @@ chembl_offline_atc_class <- function(
 chembl_offline_binding_site <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1007,7 +1030,6 @@ chembl_offline_binding_site <- function(
 chembl_offline_biotherapeutic <- function(
     query,
     verbose = getOption("verbose"),
-    version = "latest",
     output = "raw",
     nested = FALSE,
     con
@@ -1136,7 +1158,6 @@ chembl_offline_biotherapeutic <- function(
 chembl_offline_cell_line <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1186,7 +1207,6 @@ chembl_offline_cell_line <- function(
 chembl_offline_chembl_id_lookup <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1214,7 +1234,6 @@ chembl_offline_chembl_id_lookup <- function(
 chembl_offline_compound_record <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1309,7 +1328,6 @@ chembl_offline_compound_record <- function(
 chembl_offline_compound_structural_alert <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1346,7 +1364,6 @@ chembl_offline_compound_structural_alert <- function(
 chembl_offline_document <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1454,7 +1471,6 @@ chembl_offline_document <- function(
 chembl_offline_document_similarity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1489,7 +1505,6 @@ chembl_offline_document_similarity <- function(
 chembl_offline_drug <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1648,7 +1663,6 @@ chembl_offline_drug <- function(
       biotherapeutic = chembl_offline_biotherapeutic(
         query = q,
         verbose = verbose,
-        version = version,
         output = "raw",
         nested = TRUE,
         con = con
@@ -1754,7 +1768,6 @@ chembl_offline_drug <- function(
 chembl_offline_drug_indication <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -1877,7 +1890,6 @@ chembl_offline_drug_indication <- function(
 chembl_offline_drug_warning <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2005,7 +2017,6 @@ chembl_offline_drug_warning <- function(
 chembl_offline_go_slim <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2065,7 +2076,6 @@ chembl_offline_go_slim <- function(
 chembl_offline_mechanism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2093,7 +2103,6 @@ chembl_offline_mechanism <- function(
 chembl_offline_metabolism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2121,7 +2130,6 @@ chembl_offline_metabolism <- function(
 chembl_offline_molecule <- function(
     query,
     verbose = getOption("verbose"),
-    version = "latest",
     output = "raw",
     con
   ){
@@ -2331,7 +2339,6 @@ chembl_offline_molecule <- function(
       biotherapeutic = chembl_offline_biotherapeutic(
         query = q,
         verbose = verbose,
-        version = version,
         output = "raw",
         nested = TRUE,
         con = con
@@ -2441,7 +2448,6 @@ chembl_offline_molecule <- function(
 chembl_offline_molecule_form <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2475,7 +2481,6 @@ chembl_offline_molecule_form <- function(
 chembl_offline_organism <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2503,7 +2508,6 @@ chembl_offline_organism <- function(
 chembl_offline_protein_classification <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2531,7 +2535,6 @@ chembl_offline_protein_classification <- function(
 chembl_offline_source <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2559,7 +2562,6 @@ chembl_offline_source <- function(
 chembl_offline_similarity <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   similarity = 70,
   con
@@ -2588,7 +2590,6 @@ chembl_offline_similarity <- function(
 chembl_offline_substructure <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2616,7 +2617,6 @@ chembl_offline_substructure <- function(
 chembl_offline_target <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2650,7 +2650,6 @@ chembl_offline_target <- function(
 chembl_offline_target_component <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2678,7 +2677,6 @@ chembl_offline_target_component <- function(
 chembl_offline_target_relation <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2706,7 +2704,6 @@ chembl_offline_target_relation <- function(
 chembl_offline_tissue <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2740,7 +2737,6 @@ chembl_offline_tissue <- function(
 chembl_offline_xref_source <- function(
   query,
   verbose = getOption("verbose"),
-  version = "latest",
   output = "raw",
   con
   ){
@@ -2764,11 +2760,13 @@ chembl_offline_xref_source <- function(
 #' information: table names, field names, field types, and (non-NA) example
 #' values for each field. This is an internal function to help construct offline
 #' functions that mimic the schema of the web service.
-#' @param version character; version of the ChEMBL database.
+#' @param version character; version of the ChEMBL database. If `NULL`
+#' (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile.
 #' @return A data frame with columns: \code{table}, \code{field}, \code{type}
 #' and \code{example}.
 #' @noRd
-chembl_offline_schema <- function(version = "latest") {
+chembl_offline_schema <- function(version = NULL) {
   con <- connect_chembl(version = version)
   on.exit(DBI::dbDisconnect(con), add = TRUE)
   tables <- DBI::dbListTables(con)
@@ -2802,13 +2800,15 @@ chembl_offline_schema <- function(version = "latest") {
 #' an example query, to compare their results. List differences.
 #'
 #' @param resource character; ChEMBL resource to query.
-#' @param version character; version of the ChEMBL database.
+#' @param version character; version of the ChEMBL database. If `NULL`
+#' (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile.
 #' @param verbose logical; print verbose messages to the console?
 #' @noRd
 chembl_compare_service <- function(
   query,
   resource,
-  version = "latest",
+  version = NULL,
   verbose = getOption("verbose")
   ) {
   ws_result <- chembl_query(
@@ -2821,7 +2821,8 @@ chembl_compare_service <- function(
     query = query,
     resource = resource,
     mode = "offline",
-    verbose = verbose
+    verbose = verbose,
+    version = version
   )
   all.equal(ws_result, offline_result)
 }
