@@ -2824,6 +2824,20 @@ chembl_compare_service <- function(
     verbose = verbose,
     version = version
   )
+  ws_names <- ws_result[[1]] |> names()
+  off_names <- offline_result[[1]] |> names()
+  missing_in_off <- setdiff(ws_names, off_names)
+  extra_in_off <- setdiff(off_names, ws_names)
+  
+  if (length(missing_in_off) > 0 || length(extra_in_off) > 0) {
+    if (length(missing_in_off) > 0) {
+      message("Missing in offline: ", paste(missing_in_off, collapse = ", "))
+    }
+    if (length(extra_in_off) > 0) {
+      message("Extra in offline: ", paste(extra_in_off, collapse = ", "))
+    }
+    return(invisible(NULL))
+  }
   all.equal(ws_result, offline_result)
 }
 
