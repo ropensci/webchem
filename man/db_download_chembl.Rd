@@ -4,10 +4,11 @@
 \alias{db_download_chembl}
 \title{Download ChEMBL database}
 \usage{
-db_download_chembl(version = "latest", verbose = getOption("verbose"))
+db_download_chembl(version = NULL, verbose = getOption("verbose"))
 }
 \arguments{
-\item{version}{character, the database release version.}
+\item{version}{character, the database release version. See Details for more 
+information.}
 
 \item{verbose}{logical; should verbose messages be printed to the console?}
 }
@@ -17,6 +18,13 @@ Downloads the requested database files.
 \description{
 Download a version of the ChEMBL database for offline access.
 }
+\details{
+If \code{version = NULL} (default), the function calls 
+[chembl_check_db_version()] to look for a pinned version to download, or 
+stops with an error if it cannot find any. If \code{version = "latest"}, the 
+function downloads the newest  version currently published by ChEMBL.  If a 
+specific version is requested, the function downloads that version.
+}
 \note{
 If a checksum file is available for the requested version it will be
 used to check data integrity. To save storage space, webchem only retrieves
@@ -25,7 +33,9 @@ please download them manually.
 }
 \examples{
 \dontrun{
-db_download_chembl(version = "35", verbose = TRUE)
+db_download_chembl()
+db_download_chembl(version = "latest")
+db_download_chembl(version = "35")
 }
 }
 \references{

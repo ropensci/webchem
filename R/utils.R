@@ -24,7 +24,7 @@ assert <- function(x, y) {
 #' Currently, it supports the following databases: "chembl", "eup", and "foodb".
 #' @param db character; database name. Must be one of "chembl", "eup", or "foodb".
 #' @param version character; version of the database. Only applicable for
-#' "chembl". If `NULL` (default), [chembl_check_version()] resolves a default
+#' "chembl". If `NULL` (default), [chembl_check_db_version()] resolves a default
 #' set via .Renviron or .Rprofile.
 #' @param ... Further args passed on to [DBI::dbConnect()]
 #' @return an object of class "SQLiteConnection".
