@@ -1663,7 +1663,6 @@ chembl_offline_drug <- function(
       biotherapeutic = chembl_offline_biotherapeutic(
         query = q,
         verbose = verbose,
-        version = version,
         output = "raw",
         nested = TRUE,
         con = con
@@ -2340,7 +2339,6 @@ chembl_offline_molecule <- function(
       biotherapeutic = chembl_offline_biotherapeutic(
         query = q,
         verbose = verbose,
-        version = version,
         output = "raw",
         nested = TRUE,
         con = con
