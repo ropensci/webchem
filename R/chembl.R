@@ -161,7 +161,7 @@ chembl_dir_url <- function(version) {
 #' guides further processing.
 #' @examples
 #' \dontrun{
-#' chembl_files("chembl", version = "35")
+#' chembl_files(version = "35")
 #' }
 #' @noRd
 chembl_files <- function(version) {
