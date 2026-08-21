@@ -30,7 +30,7 @@ db_download_chembl <- function(
   if (is.null(version)) {
     version <- try(chembl_check_db_version(), silent = TRUE)
     if (inherits(version, "try-error")) {
-      stop("No default ChEMBL database version set. See ?db_download_chembl() for more details.")
+      stop("No default ChEMBL database version set. See ?db_download_chembl for more details.")
     }
   } else if (version == "latest") {
     status <- chembl_status(verbose = verbose)

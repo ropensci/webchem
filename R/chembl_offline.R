@@ -19,7 +19,7 @@ chembl_check_db_version <- function() {
   x <- Sys.getenv("CHEMBL_DB_VERSION", "")
   if (x == "") x <- getOption("chembl_db_version", "")
   if (x == "") {
-    stop("No default ChEMBL database version set. See ?chembl_check_db_version() for details.")
+    stop("No default ChEMBL database version set. See ?chembl_check_db_version for details.")
   }
   x
 }
