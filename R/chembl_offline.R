@@ -2802,13 +2802,15 @@ chembl_offline_schema <- function(version = NULL) {
 #' an example query, to compare their results. List differences.
 #'
 #' @param resource character; ChEMBL resource to query.
-#' @param version character; version of the ChEMBL database.
+#' @param version character; version of the ChEMBL database. If `NULL`
+#' (default), [chembl_check_db_version()] resolves a default set via
+#' .Renviron or .Rprofile.
 #' @param verbose logical; print verbose messages to the console?
 #' @noRd
 chembl_compare_service <- function(
   query,
   resource,
-  version = "latest",
+  version = NULL,
   verbose = getOption("verbose")
   ) {
   ws_result <- chembl_query(
