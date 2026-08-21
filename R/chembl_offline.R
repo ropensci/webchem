@@ -90,42 +90,51 @@ chembl_offline_activity <- function(
   output = "raw",
   con
   ){
+  # 'modality' appeared in later ChEMBL API versions, offline databases may or
+  # may not have this column. Check if the column exists before querying.
+  has_modality <- "modality" %in% DBI::dbListFields(con, "activities")
+
+  activity_select_cols <- c(
+    "activity_id",           # query column
+    "assay_id",              # link column (assays)
+    "doc_id",                # link column (docs)
+    "record_id",             # output column
+    "molregno",              # link column (molecule_dictionary)
+    "standard_relation",     # output column
+    "standard_value",        # output column
+    "standard_units",        # output column
+    "standard_flag",         # output column
+    "standard_type",         # output column
+    "activity_comment",      # output column
+    "data_validity_comment", # link column (data_validity_lookup)
+    "potential_duplicate",   # output column
+    "pchembl_value",         # output column
+    "bao_endpoint",          # output column
+    "uo_units",              # output column
+    "qudt_units",            # output column
+    "toid",                  # output column
+    "upper_value",           # output column
+    "standard_upper_value",  # output column
+    "src_id",                # output column
+    "type",                  # output column
+    "relation",              # output column
+    "value",                 # output column
+    "units",                 # output column
+    "text_value",            # output column
+    "standard_text_value",   # output column
+    "action_type"            # link column (action_type)
+  )
+  if (has_modality) {
+    activity_select_cols <- c(activity_select_cols, "modality")
+  }
+
   # Fetch main activities table
   activities <- fetch_table(
     con = con,
     table = "activities",
     id_col = "activity_id",
     ids = as.integer(query),
-    select_cols = c(
-      "activity_id",           # query column
-      "assay_id",              # link column (assays)
-      "doc_id",                # link column (docs)
-      "record_id",             # output column
-      "molregno",              # link column (molecule_dictionary)
-      "standard_relation",     # output column
-      "standard_value",        # output column
-      "standard_units",        # output column
-      "standard_flag",         # output column
-      "standard_type",         # output column
-      "activity_comment",      # output column
-      "data_validity_comment", # link column (data_validity_lookup)
-      "potential_duplicate",   # output column
-      "pchembl_value",         # output column
-      "bao_endpoint",          # output column
-      "uo_units",              # output column
-      "qudt_units",            # output column
-      "toid",                  # output column
-      "upper_value",           # output column
-      "standard_upper_value",  # output column
-      "src_id",                # output column
-      "type",                  # output column
-      "relation",              # output column
-      "value",                 # output column
-      "units",                 # output column
-      "text_value",            # output column
-      "standard_text_value",   # output column
-      "action_type"            # link column (action_type)
-    )
+    select_cols = activity_select_cols
   )
 
   # Fetch assay data
@@ -447,6 +456,7 @@ chembl_offline_activity <- function(
       document_journal = if (nrow(doc) > 0) as.character(doc$journal) else NA_character_,
       document_year = if (nrow(doc) > 0) as.numeric(doc$year) else NA_real_,
       ligand_efficiency = ligand_efficiency_out,
+      modality = if (has_modality) as.character(activity$modality) else NA_character_,
       molecule_chembl_id = if (nrow(molecule) > 0) as.character(molecule$chembl_id) else NA_character_,
       molecule_pref_name = if (nrow(molecule) > 0) as.character(molecule$pref_name) else NA_character_,
       parent_molecule_chembl_id = if (nrow(parent_molecule) > 0) as.character(parent_molecule$chembl_id) else NA_character_,
@@ -475,7 +485,6 @@ chembl_offline_activity <- function(
       upper_value = as.numeric(activity$upper_value),
       value = as.numeric(activity$value)
     )
-
     result[sort(names(result))]
   })
 
