@@ -32,15 +32,12 @@ db_download_chembl <- function(
     if (inherits(version, "try-error")) {
       stop("No default ChEMBL database version set. See ?db_download_chembl() for more details.")
     }
-  }
-  if (version == "latest") {
+  } else if (version == "latest") {
     status <- chembl_status(verbose = verbose)
     if (!is.list(status) && is.na(status)) {
       stop("Service not available.")
     }
     version <- strsplit(status$chembl_db_version, "_")[[1]][2]
-  } else if (version == "pinned") {
-    version <- chembl_check_db_version()
   }
   # input validation
   if (!inherits(version, "chembl_version")) {
