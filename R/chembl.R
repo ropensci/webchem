@@ -1,16 +1,15 @@
 #' Download ChEMBL database
 #'
 #' Download a version of the ChEMBL database for offline access.
-#' @param version character, the database release version. Can be "latest" 
-#' (default), "pinned" or a string that matches a specific version, e.g. "35". 
-#' See Details for more information.
+#' @param version character, the database release version. See Details for more 
+#' information.
 #' @param verbose logical; should verbose messages be printed to the console?
 #' @return Downloads the requested database files.
-#' @details If \code{version = "latest"}, the function downloads the newest 
-#' version currently published by ChEMBL. If \code{version == "pinned"}, the 
-#' function calls [chembl_check_db_version()] to look for a pinned version to 
-#' download, or stops with an error if it cannot find any. If a specific version 
-#' is requested, the function downloads that version.
+#' @details If \code{version = NULL} (default), the function calls 
+#' [chembl_check_db_version()] to look for a pinned version to download, or 
+#' stops with an error if it cannot find any. If \code{version = "latest"}, the 
+#' function downloads the newest  version currently published by ChEMBL.  If a 
+#' specific version is requested, the function downloads that version.
 #' @note If a checksum file is available for the requested version it will be
 #' used to check data integrity. To save storage space, webchem only retrieves
 #' those files that are used by the package. If you need other files as well,
@@ -19,15 +18,21 @@
 #' \url{https://chembl.gitbook.io/chembl-interface-documentation/downloads}
 #' @examples
 #' \dontrun{
-#' db_download_chembl(version = "latest", verbose = TRUE)
-#' db_download_chembl(version = "pinned", verbose = TRUE)
-#' db_download_chembl(version = "35", verbose = TRUE)
+#' db_download_chembl()
+#' db_download_chembl(version = "latest")
+#' db_download_chembl(version = "35")
 #' }
 #' @export
 db_download_chembl <- function(
-    version = "latest",
+    version = NULL,
     verbose = getOption("verbose")
 ) {
+  if (is.null(version)) {
+    version <- try(chembl_check_db_version(), silent = TRUE)
+    if (inherits(version, "try-error")) {
+      stop("No default ChEMBL database version set. See ?db_download_chembl() for more details.")
+    }
+  }
   if (version == "latest") {
     status <- chembl_status(verbose = verbose)
     if (!is.list(status) && is.na(status)) {

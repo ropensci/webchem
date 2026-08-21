@@ -6,7 +6,7 @@ options(chembl_db_version = "36")
 
 if (Sys.getenv("RUN_ONLINE_TESTS") == "true") {
   # Download ChEMBL database if not already downloaded
-  db_download_chembl(version = "pinned", verbose = FALSE)
+  db_download_chembl(verbose = FALSE)
 }
 
 db_exists <- function() {
