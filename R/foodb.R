@@ -885,9 +885,8 @@ foodb_list_compounds <- function(
   con <- connect_foodb()
   on.exit(DBI::dbDisconnect(con))
   compounds <- dplyr::tbl(con, "Compound") |>
-    dplyr::select(idtype) |>
-    dplyr::distinct() |>
-    dplyr::pull()
+    dplyr::distinct(!!rlang::sym(idtype)) |>
+    dplyr::pull(!!rlang::sym(idtype))
   if (idtype == "name" && include_synonyms) {
     synonyms <- dplyr::tbl(con, "CompoundSynonym") |>
       dplyr::select("synonym") |>
