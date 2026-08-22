@@ -2,7 +2,7 @@ skip_on_cran()
 skip_on_ci()
 
 if (Sys.getenv("RUN_ONLINE_TESTS") == "true") {
-  db_download_foodb(verbose = TRUE)
+  db_download_eup(verbose = FALSE)
 }
 
 db_exists <- function() {
