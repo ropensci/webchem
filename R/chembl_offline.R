@@ -1190,7 +1190,6 @@ chembl_offline_cell_line <- function(
       "cell_source_tissue",
       "cellosaurus_id",
       "chembl_id",
-      "cl_lincs_id",
       "clo_id",
       "efo_id"
     )
