@@ -79,7 +79,7 @@ Notice that the dash is needed for the section to work.
 Now this one is a little trickier:
 
 ```{r}
-pc_sect(1983, "MeSH Entry Terms", form = "long") |> dplyr::select(1:6)
+pc_sect(1983, "MeSH Entry Terms", form = "long") |> head(5) |> dplyr::select(1:6)
 ```
 
 Notice that we need to use `form = "long"` to get the desired result. So far "MeSH Entry Terms" appear to be the only section where where `form` needs to be set manually, but let us know if you find other sections.
