@@ -1,8 +1,8 @@
 ---
-title: "pubchem-pages"
+title: "Working with offline databases"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{webchem-offline}
+  %\VignetteIndexEntry{Working with offline databases}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,17 +14,16 @@ vignette: >
 library(webchem)
 ```
 
-# Working with offline databases
 
 Webchem provides offline access to three databases: ChEMBL, FooDB, and the EU Pesticides database. This means you download them once, and then you can query them locally without an internet connection. Reliable and lightning fast! 
 
-# Downloading a database
+## Downloading a database
 
 `webchem` uses the `hoardr` package for managing database files. By default, `hoardr` will save into a users `.cache/R/webchem` directory. We can set a custom directory for databases using `wc_cache$cache_path_set()`. This can be useful when we work on a long running project and we want to store database files in the project directory. The current cache path can be retrieved using `wc_cache$cache_path_get()`.
 
 Databases can be downloaded using `db_download_chembl()`, `db_download_foodb()` or `db_download_eup()`. Note that ChEMBL maintainers regularly issue new releases. We can pin a ChEMBL release for our project using `chembl_check_db_version()` or download the latest version. At the time of writing the other two databases only had one version so their downloaders do not have a `version` argument yet.
 
-# Querying the database
+## Querying the database
 
 ChEMBL's main query function is `chembl_query()`. It will use the webservice by default but `mode = "offline"` will use the offline database instead. It is intended to be a drop-in replacement so you can expect the structure of the offline response to be at least very similar to the webservice response. Fields that are missing from the offline response are listed in a warning message.
 

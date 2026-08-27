@@ -1,8 +1,8 @@
 ---
-title: "pubchem-pages"
+title: "Retrieving data from PubChem pages"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{pubchem-pages}
+  %\VignetteIndexEntry{Retrieving data from PubChem pages}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,8 +17,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(webchem)
 ```
-
-# Retrieve the data behind PubChem web pages
 
 When we manually search for a compound on PubChem (https://pubchem.ncbi.nlm.nih.gov/), we get a web page like this one: https://pubchem.ncbi.nlm.nih.gov/compound/1983. This vignette explains how most of this data can be retrieved programmatically using `webchem`.
 
