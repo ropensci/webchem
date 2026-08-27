@@ -2,7 +2,7 @@
 title: "pubchem-pages"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{pubchem-sections}
+  %\VignetteIndexEntry{pubchem-pages}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
