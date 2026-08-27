@@ -34,6 +34,13 @@
 #' \code{NucleotideGI} | \code{TaxonomyID} | \code{MIMID} | \code{GeneID} |
 #' \code{ProbeID} | \code{PatentID})", e.g. \code{from = "xref/RN"} will query
 #' by CAS RN.
+#' @note \code{from = "cas"} (equivalently \code{from = "xref/rn"}) relies on
+#' PubChem's registry ID cross-reference, which is occasionally affected by
+#' upstream data quality issues, i.e. a CAS RN can be incorrectly associated
+#' with the wrong compound(s). If results look wrong, try \code{from = "name"} 
+#' instead: PubChem will then look up the CAS RN as a synonym, which often 
+#' (but not always, since not every CAS RN is registered as a synonym) returns 
+#' the expected compound.
 #' @details <fast search> is either \code{fastformula} or it is assembled as
 #' "(\code{fastidentity} | \code{fastsimilarity_2d} | \code{fastsimilarity_3d} |
 #' \code{fastsubstructure} | \code{fastsuperstructure})/(\code{smiles} |

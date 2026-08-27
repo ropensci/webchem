@@ -87,6 +87,14 @@ Depositor names and Data Source IDs can be found at
 e.g. \code{from = "target/geneid"} will query by GeneID.
 }
 \note{
+\code{from = "cas"} (equivalently \code{from = "xref/rn"}) relies on
+PubChem's registry ID cross-reference, which is occasionally affected by
+upstream data quality issues, i.e. a CAS RN can be incorrectly associated
+with the wrong compound(s). If results look wrong, try \code{from = "name"} 
+instead: PubChem will then look up the CAS RN as a synonym, which often 
+(but not always, since not every CAS RN is registered as a synonym) returns 
+the expected compound.
+
 Please respect the Terms and Conditions of the National Library of
 Medicine, \url{https://www.nlm.nih.gov/databases/download.html} the data
 usage policies of National Center for Biotechnology Information,
