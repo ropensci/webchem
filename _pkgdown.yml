@@ -55,6 +55,7 @@ reference:
   - ping_service
   - cs_datasources
   - chembl_atc_classes
+  - chembl_check_db_version
   - chembl_status
   - chembl_resources
   - parse_mol
