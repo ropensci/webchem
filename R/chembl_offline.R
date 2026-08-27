@@ -126,6 +126,12 @@ chembl_offline_activity <- function(
   )
   if (has_modality) {
     activity_select_cols <- c(activity_select_cols, "modality")
+  } else {
+    warning(paste0(
+      "Offline database does not contain 'modality' data. ",
+      "Returning NA for modality. ",
+      "Consider updating your offline database to a newer version."
+    ))
   }
 
   # Fetch main activities table
