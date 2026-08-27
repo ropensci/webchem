@@ -114,12 +114,12 @@ test_that("chembl_query() examples", {
     chembl_query("CHEMBL1082", resource = "molecule", verbose = TRUE)) |>
     suppressWarnings()
 
-  expect_true(inherits(o1, "list") & length(o1[[1]]) == 46)
+  expect_true(inherits(o1, "list") & length(o1[[1]]) == 47)
   expect_true(inherits(o2, "list") & length(o2[[1]]) == 29)
   expect_true(inherits(o3, "list") & length(o3[[1]][[1]]) == 10)
   expect_true(inherits(o4, "list") & length(o4[[1]]) == 3)
   expect_true(inherits(o5, "list") & length(o5[[1]]) == 4)
-  expect_true(inherits(o6, "list") & length(o6[[1]]) == 11)
+  expect_true(inherits(o6, "list") & length(o6[[1]]) == 10)
   expect_true(inherits(o7, "list") & length(o7[[1]]) == 5)
   expect_true(inherits(o8, "list") & length(o8[[1]]) == 6)
   expect_true(inherits(o9, "list") & length(o9[[1]][[1]]) == 7)

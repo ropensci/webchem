@@ -4,7 +4,7 @@ skip_on_ci()
 
 if (Sys.getenv("RUN_ONLINE_TESTS") == "true") {
   # Download database if not already downloaded
-  db_download_foodb(verbose = TRUE)
+  db_download_foodb(verbose = FALSE)
 }
 
 db_exists <- function() {

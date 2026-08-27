@@ -2,7 +2,7 @@
 skip_on_cran()
 skip_on_ci()
 
-options(chembl_db_version = "36")
+options(chembl_db_version = "37")
 
 if (Sys.getenv("RUN_ONLINE_TESTS") == "true") {
   # Download ChEMBL database if not already downloaded

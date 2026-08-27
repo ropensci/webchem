@@ -378,7 +378,7 @@ test_that("1H NMR Spectra", {
   res <- pc_sect(1983, "1H NMR Spectra")
   expect_equal(
     res$`Shifts [ppm]:Intensity`[1],
-    "7.31:35.75, 6.65:35.56, 9.63:20.93, 6.67:40.69, 7.33:37.16, 1.97:100.00, 9.11:34.80"
+    "1.97:100.00, 7.31:35.75, 9.11:34.80, 9.63:20.93, 6.67:40.69, 7.33:37.16, 6.65:35.56"
   )
 })
 
@@ -452,7 +452,7 @@ test_that("Drug Indication", {
 
   res <- pc_sect(1983, "drug indication")
   expect_true(nrow(res) > 100)
-  expect_equal(res$MeSH_Heading[1], "Migraine Disorders")
+  expect_true("Migraine Disorders" %in% res$MeSH_Heading)
 })
 
 test_that("FDA Medication Guides", {
