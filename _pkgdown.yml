@@ -35,6 +35,7 @@ reference:
 - title: Download databases for offline use and connect to them
 - contents:
   - starts_with("db_download_")
+  - chembl_check_db_version
   - db_connect
 - title: Molecular structure images
 - contents:

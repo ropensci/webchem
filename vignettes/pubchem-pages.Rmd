@@ -1,8 +1,8 @@
 ---
-title: "pubchem-pages"
+title: "Retrieving data from PubChem pages"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{pubchem-sections}
+  %\VignetteIndexEntry{Retrieving data from PubChem pages}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,8 +13,6 @@ vignette: >
 ``` r
 library(webchem)
 ```
-
-# Retrieve the data behind PubChem web pages
 
 When we manually search for a compound on PubChem (https://pubchem.ncbi.nlm.nih.gov/), we get a web page like this one: https://pubchem.ncbi.nlm.nih.gov/compound/1983. This vignette explains how most of this data can be retrieved programmatically using `webchem`.
 
@@ -135,7 +133,15 @@ Now this one is a little trickier:
 
 
 ``` r
-pc_sect(1983, "MeSH Entry Terms", form = "long") |> dplyr::select(1:6)
+pc_sect(1983, "MeSH Entry Terms", form = "long") |> head(5) |> dplyr::select(1:6)
+#> # A tibble: 5 × 6
+#>   Section          Domain   ID    Name          Result                 SourceName                     
+#>   <chr>            <chr>    <chr> <chr>         <chr>                  <chr>                          
+#> 1 mesh entry terms compound 1983  Acetaminophen Acetaminophen          Medical Subject Headings (MeSH)
+#> 2 mesh entry terms compound 1983  Acetaminophen Acetamidophenol        Medical Subject Headings (MeSH)
+#> 3 mesh entry terms compound 1983  Acetaminophen Acetominophen          Medical Subject Headings (MeSH)
+#> 4 mesh entry terms compound 1983  Acetaminophen Hydroxyacetanilide     Medical Subject Headings (MeSH)
+#> 5 mesh entry terms compound 1983  Acetaminophen N-Acetyl-p-aminophenol Medical Subject Headings (MeSH)
 ```
 
 Notice that we need to use `form = "long"` to get the desired result. So far "MeSH Entry Terms" appear to be the only section where where `form` needs to be set manually, but let us know if you find other sections.
@@ -208,11 +214,11 @@ pc_sect(1983, "EU Clinical Trials Register") |> head(5) |> dplyr::select(1:6)
 #> # A tibble: 5 × 6
 #>   Section                     Domain   ID    Name          gid   EudraCT       
 #>   <chr>                       <chr>    <chr> <chr>         <chr> <chr>         
-#> 1 eu clinical trials register compound 1983  Acetaminophen <NA>  2013-004955-19
-#> 2 eu clinical trials register compound 1983  Acetaminophen <NA>  2016-001596-75
-#> 3 eu clinical trials register compound 1983  Acetaminophen <NA>  2017-001014-28
-#> 4 eu clinical trials register compound 1983  Acetaminophen <NA>  2020-002908-39
-#> 5 eu clinical trials register compound 1983  Acetaminophen <NA>  2022-003559-32
+#> 1 eu clinical trials register compound 1983  Acetaminophen <NA>  2007-000271-42
+#> 2 eu clinical trials register compound 1983  Acetaminophen <NA>  2007-005619-24
+#> 3 eu clinical trials register compound 1983  Acetaminophen <NA>  2004-001637-41
+#> 4 eu clinical trials register compound 1983  Acetaminophen <NA>  2006-005956-34
+#> 5 eu clinical trials register compound 1983  Acetaminophen <NA>  2006-006526-26
 ```
 ## Toxicity
 
