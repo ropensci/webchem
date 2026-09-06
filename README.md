@@ -46,7 +46,7 @@ documentation
 | [Chemical Translation Service (CTS)](http://cts.fiehnlab.ucdavis.edu/) | ✅ | ❌ |
 | [ChemSpider](https://www.chemspider.com/) (requires an [API token](https://developer.rsc.org/)) | ✅ | ❌ |
 | [ETOX](https://recherche.chemikalieninfo.de/etox) | ✅ | ❌ |
-| [EU Pesticides](https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en)| ❌ | ✅ |
+| [EU Pesticides](https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en) | ❌ | ✅ |
 | [Flavornet](http://www.flavornet.org) | ✅ | ❌ |
 | [FooDB](https://foodb.ca/) | ❌ | ✅ |
 | [NIST](https://webbook.nist.gov) (currently gas chromatography retention indices only) | ✅ | ❌ |
@@ -110,7 +110,10 @@ here](https://github.com/ropensci/webchem/blob/master/CONTRIBUTING.md).
 
 ### Meta
 
-`webchem` provides interfaces to external databases and web services. Users should review and comply with the terms of use and licensing conditions of each external resource before using its data or services through `webchem`.
+`webchem` provides interfaces to external databases and web services.
+Users should review and comply with the terms of use and licensing
+conditions of each external resource before using its data or services
+through `webchem`.
 
 - Please [report any issues, bugs or feature
   requests](https://github.com/ropensci/webchem/issues).
