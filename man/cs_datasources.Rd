@@ -23,8 +23,9 @@ faster.
 }
 \note{
 An API key is needed. Register at \url{https://developer.rsc.org/}
-for an API key. Please respect the Terms & Conditions. The Terms & Conditions
-can be found at \url{https://developer.rsc.org/terms}.
+for an API key.
+
+Terms and Conditions: \url{https://developer.rsc.org/terms}
 }
 \examples{
 \dontrun{

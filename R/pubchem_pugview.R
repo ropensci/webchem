@@ -451,15 +451,40 @@ pc_build_sdq_query <- function(pointer, idtype, query) {
 pc_sdq_query <- function(pointer, idtype, query) {
   base_url <- "https://pubchem.ncbi.nlm.nih.gov/sdq/sphinxql.cgi"
   sdq_json <- pc_build_sdq_query(pointer, idtype = idtype, query = query)
-  response <- httr::GET(
+  response <- try(httr::GET(
     base_url,
     query = list(
       infmt = "json",
       outfmt = "csv",
       query = sdq_json,
       showcolumndisplayname = 1
-    )
+    ),
+    user_agent(webchem_url())
+  ), silent = TRUE)
+  if (inherits(response, "try-error")) {
+    if (isTRUE(verbose)) webchem_message("service_down")
+    return(NA)
+  }
+  if (response$status_code != 200) {
+    if (isTRUE(verbose)) message(httr::message_for_status(response))
+    return(NA)
+  }
+  # parse response
+  text <- httr::content(response, as = "text", encoding = "UTF-8")
+  parsed <- try(
+    utils::read.csv(
+      text = text,
+      header = TRUE,
+      stringsAsFactors = FALSE,
+      check.names = FALSE,
+      fill = TRUE,
+      row.names = NULL
+    ),
+    silent = TRUE
   )
-  httr::stop_for_status(response)
-  utils::read.csv(text = content(response, "text")) |> tibble::as_tibble()
+  if (inherits(parsed, "try-error")) {
+    if (isTRUE(verbose)) message("Failed to parse CSV response.")
+    return(NA)
+  }
+  return(tibble::as_tibble(parsed))
 }

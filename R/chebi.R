@@ -2,8 +2,7 @@
 #'
 #' Returns a data.frame with a ChEBI entity ID (chebiid),
 #' a ChEBI entity name (chebiasciiname), a search score (searchscore) and
-#' stars (stars) using the SOAP protocol:
-#' \url{https://www.ebi.ac.uk/chebi/webServices.do}
+#' stars (stars)
 #' @import httr xml2
 #'
 #' @param query character; search term.
@@ -27,6 +26,10 @@
 #' @return returns a list of data.frames containing a chebiid, a chebiasciiname,
 #'   a searchscore and stars if matches were found. If not, data.frame(NA) is
 #'   returned
+#' @note ChEBI is temporarily unavailable in webchem because the API previously 
+#' used by these functions is no longer available. ChEBI provides a new API, but
+#' it has not yet been implemented in webchem. The functionality will be 
+#' restored in a future release.
 #'
 #' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
 #'   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
@@ -75,6 +78,10 @@ get_chebiid <- function(query,
                         stars =  c('all', 'two only', 'three only'),
                         verbose = getOption("verbose"),
                         ...) {
+  
+  stop(
+    "ChEBI is temporarily unavailable. This functionality will be restored in a future release of webchem. See Notes for more information."
+  )
 
   if (!ping_service("chebi")) stop(webchem_message("service_down"))
 
@@ -191,7 +198,6 @@ get_chebiid <- function(query,
 #' "synonyms", "iupacnames", "formulae", "regnumbers", "citations", "dblinks",
 #' "parents", "children", "comments", "origins") or
 #' as a list ("chem_structure") in the list.
-#' The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
 #'
 #' @import httr xml2
 #'
@@ -200,6 +206,11 @@ get_chebiid <- function(query,
 #' @param ... optional arguments
 #' @return returns a list of data.frames or lists containing a complete ChEBI
 #' entity
+#' 
+#' @note ChEBI is temporarily unavailable in webchem because the API previously 
+#' used by these functions is no longer available. ChEBI provides a new API, but
+#' it has not yet been implemented in webchem. The functionality will be 
+#' restored in a future release.
 #'
 #' @references Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V,
 #'   Turner S, Swainston N, Mendes P, Steinbeck C. (2016). ChEBI in 2016:
@@ -240,6 +251,10 @@ get_chebiid <- function(query,
 chebi_comp_entity <- function(chebiid,
                               verbose = getOption("verbose"),
                               ...) {
+  
+  stop(
+    "ChEBI is temporarily unavailable. This functionality will be restored in a future release of webchem. See Notes for more information."
+  )
 
   if (!ping_service("chebi")) stop(webchem_message("service_down"))
 

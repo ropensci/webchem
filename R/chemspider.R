@@ -4,8 +4,8 @@
 #'
 #' @details To use the any of the functions in \code{webchem} that access the
 #' ChemSpider database, you'll need to obtain an API key. Register at
-#' \url{https://developer.rsc.org/} for an API key. Please respect the Terms &
-#' Conditions \url{https://developer.rsc.org/terms}.
+#' \url{https://developer.rsc.org/} for an API key.
+#' @note Terms and Conditions: \url{https://developer.rsc.org/terms}
 #' @details You can store your API key as \code{CHEMSPIDER_KEY = <your key>} in
 #' .Renviron or as \code{options(chemspider_key = <your key>)} in .Rprofile.
 #' This will allow you to use ChemSpider without adding your API key in the
@@ -40,8 +40,8 @@ cs_check_key <- function() {
 #' @param verbose should a verbose output be printed on the console?
 #' @return Returns a character vector.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
-#' can be found at \url{https://developer.rsc.org/terms}.
+#' for an API key.
+#' @note Terms and Conditions: \url{https://developer.rsc.org/terms}
 #' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @export
 #' @examples
@@ -158,8 +158,8 @@ cs_control <- function(datasources = vector(),
 #' @details \code{formula} can be expressed with and without LaTeX syntax.
 #' @return Returns a tibble.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/} for
-#'   an API key. Please respect the Terms & conditions:
-#'   \url{https://developer.rsc.org/terms}.
+#'   an API key.
+#' @note Terms and Conditions: \url{https://developer.rsc.org/terms}
 #' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
@@ -333,8 +333,8 @@ get_csid <- function(query,
 #' }
 #' @return Returns a vector containing the converted identifier(s).
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
-#' can be found at \url{https://developer.rsc.org/terms}.
+#' for an API key.
+#' @note Terms and Conditions: \url{https://developer.rsc.org/terms}
 #' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @references Eduard Szöcs, Tamás Stirling, Eric R. Scott, Andreas Scharmüller,
 #' Ralf B. Schäfer (2020). webchem: An R Package to Retrieve Chemical
@@ -465,8 +465,8 @@ cs_convert <- function(query, from, to, verbose = getOption("verbose"),
 #' number of fields.
 #' @return Returns a data frame.
 #' @note An API key is needed. Register at \url{https://developer.rsc.org/}
-#' for an API key. Please respect the Terms & Conditions. The Terms & Conditions
-#' can be found at \url{https://developer.rsc.org/terms}.
+#' for an API key.
+#' @note Terms and Conditions: \url{https://developer.rsc.org/terms}
 #' @references \url{https://developer.rsc.org/docs/compounds-v1-trial/1/overview}
 #' @export
 #' @examples
@@ -541,11 +541,10 @@ cs_compinfo <- function(csid, fields, verbose = getOption("verbose"),
 #' 'smiles', 'inchi' (non-standard), 'inchikey' (non-standard), 'average_mass',
 #' 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass), nominal_mass',
 #' 'alogp', 'xlogp', 'common_name' and 'source_url'
-#' @note A security token is needed. Please register at RSC
-#' \url{https://www.rsc.org/rsc-id/register}
+#' @note An API key is needed. Register at \url{https://developer.rsc.org/}
+#' for an API key.
 #' for a security token.
-#' Please respect the Terms & conditions
-#' \url{https://www.rsc.org/help-legal/legal/terms-conditions/}.
+#' @note Terms and Conditions: \url{https://developer.rsc.org/terms}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,
 #' \code{\link{cs_compinfo}} for extended compound information.
 #' @note use \code{\link{cs_compinfo}} to retrieve standard inchikey.
