@@ -210,7 +210,7 @@ cts_convert <- function(query,
 #' @import jsonlite
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
-#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #'
 #' @seealso \code{\link{cts_convert}}
 #'
@@ -247,7 +247,7 @@ cts_from <- function(verbose = getOption("verbose")){
 #' @import jsonlite
 #' @param verbose logical; should a verbose output be printed on the console?
 #' @return a character vector.
-#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/services}
+#' @details See also \url{http://cts.fiehnlab.ucdavis.edu/}
 #'
 #' @seealso \code{\link{cts_convert}}
 #'

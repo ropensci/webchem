@@ -2,8 +2,7 @@
 #'
 #' Returns a data.frame with a ChEBI entity ID (chebiid),
 #' a ChEBI entity name (chebiasciiname), a search score (searchscore) and
-#' stars (stars) using the SOAP protocol:
-#' \url{https://www.ebi.ac.uk/chebi/webServices.do}
+#' stars (stars)
 #' @import httr xml2
 #'
 #' @param query character; search term.
@@ -191,7 +190,6 @@ get_chebiid <- function(query,
 #' "synonyms", "iupacnames", "formulae", "regnumbers", "citations", "dblinks",
 #' "parents", "children", "comments", "origins") or
 #' as a list ("chem_structure") in the list.
-#' The SOAP protocol is used \url{https://www.ebi.ac.uk/chebi/webServices.do}.
 #'
 #' @import httr xml2
 #'

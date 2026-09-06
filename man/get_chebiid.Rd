@@ -50,8 +50,8 @@ returns a list of data.frames containing a chebiid, a chebiasciiname,
 \description{
 Returns a data.frame with a ChEBI entity ID (chebiid),
 a ChEBI entity name (chebiasciiname), a search score (searchscore) and
-stars (stars) using the SOAP protocol:
-\url{https://www.ebi.ac.uk/chebi/webServices.do}
+stars (stars)
+}
 }
 \examples{
 \dontrun{

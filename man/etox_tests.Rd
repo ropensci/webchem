@@ -16,11 +16,10 @@ A list of lists of two: A data.frame with test results from the ETOX database an
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-\url{https://webetox.uba.de/webETOX/index.do} for tests
+\url{https://recherche.chemikalieninfo.de/etox} for tests
 }
 \note{
-Before using this function, please read the disclaimer
-\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 }
 \examples{
 \dontrun{
