@@ -541,8 +541,8 @@ cs_compinfo <- function(csid, fields, verbose = getOption("verbose"),
 #' 'smiles', 'inchi' (non-standard), 'inchikey' (non-standard), 'average_mass',
 #' 'mw' (Molecular weight), 'monoiso_mass' (MonoisotopicMass), nominal_mass',
 #' 'alogp', 'xlogp', 'common_name' and 'source_url'
-#' @note A security token is needed. Please register at RSC
-#' \url{https://www.rsc.org/rsc-id/register}
+#' @note An API key is needed. Register at \url{https://developer.rsc.org/}
+#' for an API key.
 #' for a security token.
 #' @note Terms and Conditions: \url{https://developer.rsc.org/terms}
 #' @seealso \code{\link{get_csid}} to retrieve ChemSpider IDs,

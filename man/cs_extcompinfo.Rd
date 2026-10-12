@@ -25,8 +25,8 @@ a data.frame with entries: 'csid', 'mf' (molecular formula),
 Get extended info from ChemSpider, see \url{https://www.chemspider.com/}
 }
 \note{
-A security token is needed. Please register at RSC
-\url{https://www.rsc.org/rsc-id/register}
+An API key is needed. Register at \url{https://developer.rsc.org/}
+for an API key.
 for a security token.
 
 Terms and Conditions: \url{https://developer.rsc.org/terms}
