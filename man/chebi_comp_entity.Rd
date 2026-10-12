@@ -24,6 +24,11 @@ ChEBI data are parsed as data.frames ("properties", "chebiid_snd",
 "parents", "children", "comments", "origins") or
 as a list ("chem_structure") in the list.
 }
+\note{
+ChEBI is temporarily unavailable in webchem because the API previously 
+used by these functions is no longer available. ChEBI provides a new API, but
+it has not yet been implemented in webchem. The functionality will be 
+restored in a future release.
 }
 \examples{
 \dontrun{

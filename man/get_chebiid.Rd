@@ -52,6 +52,11 @@ Returns a data.frame with a ChEBI entity ID (chebiid),
 a ChEBI entity name (chebiasciiname), a search score (searchscore) and
 stars (stars)
 }
+\note{
+ChEBI is temporarily unavailable in webchem because the API previously 
+used by these functions is no longer available. ChEBI provides a new API, but
+it has not yet been implemented in webchem. The functionality will be 
+restored in a future release.
 }
 \examples{
 \dontrun{
