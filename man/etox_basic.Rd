@@ -18,11 +18,10 @@ a list with lists of four entries: cas (the CAS numbers), ec (the EC
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality
-Targets \url{https://webetox.uba.de/webETOX/index.do} for basic information
+Targets \url{https://recherche.chemikalieninfo.de/etox} for basic information
 }
 \note{
-Before using this function, please read the disclaimer
-  \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 }
 \examples{
 \dontrun{

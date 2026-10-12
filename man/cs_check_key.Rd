@@ -15,14 +15,16 @@ Look for and retrieve ChemSpider API key stored in .Renviron or .Rprofile.
 \details{
 To use the any of the functions in \code{webchem} that access the
 ChemSpider database, you'll need to obtain an API key. Register at
-\url{https://developer.rsc.org/} for an API key. Please respect the Terms &
-Conditions \url{https://developer.rsc.org/terms}.
+\url{https://developer.rsc.org/} for an API key.
 
 You can store your API key as \code{CHEMSPIDER_KEY = <your key>} in
 .Renviron or as \code{options(chemspider_key = <your key>)} in .Rprofile.
 This will allow you to use ChemSpider without adding your API key in the
 beginning of each session, and will also allow you to share your analysis
 without sharing your API key. Keeping your API key hidden is good practice.
+}
+\note{
+Terms and Conditions: \url{https://developer.rsc.org/terms}
 }
 \examples{
 \dontrun{

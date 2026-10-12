@@ -1,38 +1,29 @@
-# dev
+# webchem 2.0.0
 
 ## NEW FEATURES
 
-* `webchem` can now access the EU Pesticides database (https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en), implemented in offline mode.
-* `webchem` can now access FooDB (https://foodb.ca/), a database of food constituents, chemistry and biology, implemented in offline mode. 
-* Added `db_download_foodb()` to download the database, `foodb_list_compounds()` to list all compounds, and `foodb_convert()` to convert between IDs and `foodb_query()` to query the database.
-* `pc_sect()` can now retrieve data from previously inaccessible PubChem sections including spectral data and data that come from separate subsystems.
+* Added offline access to the EU Pesticides Database. Use `db_download_eup()` to download the database, `eup_list_entries()` to list all entries, `eup_convert()` to convert between identifiers, and `eup_query()` to query the database.
+* Added offline access to FooDB, a database of food constituents. Use `db_download_foodb()` to download the database, `foodb_list_compounds()` to list all compounds, `foodb_convert()` to convert between identifiers, and `foodb_query()` to query the database.
+* `pc_sect()` can now retrieve previously inaccessible PubChem sections, including spectral data and data from separate subsystems.
+* Added `chembl_status()` to retrieve status information about the ChEMBL webservice, including database version, release date, and entity counts.
+* Added `chembl_atc_classes()` to retrieve all available ATC classifications from ChEMBL.
+* Added `chembl_img()` for downloading SVG images from ChEMBL.
 
-## OFFLINE ACCESS
+## OFFLINE ACCESS TO CHEMBL
 
-* `chembl_query()` can now perform both online queries (`mode = "ws"`, default) and offline retrievals (`mode = "offline"`) from a local ChEMBL database. Offline mode currently supports the following resources: `activity`, `assay`, `atc_class`, `binding_site`, `biotherapeutic`, `cell_line`, `chembl_id_lookup`, `compound_record`, `document`, `drug`,`drug_indication`, `drug_warning`, `go_slim`, `molecule`.
-* Results for online and offline queries are identical for most resources. If there are differences, the offline version throws informative warnings.
-* Added a new function `db_download_chembl()` for downloading ChEMBL for fully offline access.
-* Added a new function `chembl_check_db_version()` which retrieves a pinned default ChEMBL database version from .Renviron or .Rprofile and throws an error if none is set. Used for working with pinned versions of ChEMBL in offline mode.
-
-## OTHER
-
-* Added a new function `chembl_status()` which returns status information about the ChEMBL webservice (database version, release date, and entity counts).
-* Added a new function `chembl_atc_classes()` to retrieve all available ATC classifications from ChEMBL.
-* `chembl_query()` now works with the "similarity" resource (note: currently limited to 20 results).
-* `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds.
-* Added a new function `chembl_img()` for downloading SVG images from ChEMBL.
-* Added a new vignette about retrieving data from PubChem pages.
+* `chembl_query()` now supports both online queries (`mode = "ws"`, default) and offline retrieval from a local ChEMBL database (`mode = "offline"`). Offline mode currently supports the following resources: "activity", "assay", "atc_class", "binding_site", "biotherapeutic", "cell_line", "chembl_id_lookup", "compound_record", "document", "drug", "drug_indication", "drug_warning", "go_slim", "and molecule".
+* Results for online and offline queries are identical for most resources. Where they differ, the offline version throws informative warnings.
+* Added `db_download_chembl()` for downloading ChEMBL for fully offline access. The function supports a `version` argument for downloading a specific version of ChEMBL.
+* Added `chembl_check_db_version()` to retrieve a pinned default ChEMBL database version from .Renviron or .Rprofile. An error is thrown if no version is configured. This can be used to work with pinned ChEMBL versions in offline mode.
 
 ## MINOR IMPROVEMENTS
 
+* `bcpc_query()` now also looks for derivatives (esters and salts) of active compounds.
 * `chembl_query()` now returns a named list with improved formatting for nested output when `output = "tidy"`.
+* `chembl_query()` now supports the "similarity" resource (currently limited to 20 results).
+* `chembl_query()` now supports the "compound_structural_alert" resource.
+* `chembl_query()` now retrieves the ChEMBL schema for each resource (once per session) and enforces it. Also NULL values are replaced with typed NA values.
 * Added new argument `output` to `chembl_query()` (values: "raw" or "tidy") to control output format. Raw format returns the full nested structure; tidy format attempts to flatten the results.
-* Added new `options` argument to `chembl_query()` for passing resource- and mode-specific options (cache file name, similarity threshold, database version, etc.).
-* `chembl_query()` can now replace NULL values with typed NA values (`NA_character_`, `NA_integer_`, `NA_real_`) based on the field schema when `replace_nulls = TRUE` in options. For this, the schema is retrieved from ChEMBL and cached for the session.
-
-## BUG FIXES
-
-* `chembl_query()` did not work with the "compound_structural_alert" resource. This has been fixed.
 
 # webchem 1.3.1
 

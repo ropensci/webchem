@@ -49,8 +49,9 @@ Queries by SMILES, InChI or InChiKey do not use \code{cs_control}
 }
 \note{
 An API key is needed. Register at \url{https://developer.rsc.org/} for
-  an API key. Please respect the Terms & conditions:
-  \url{https://developer.rsc.org/terms}.
+  an API key.
+
+Terms and Conditions: \url{https://developer.rsc.org/terms}
 }
 \examples{
 \dontrun{
