@@ -20,7 +20,10 @@ Authors@R: c(person("Eduard", "Szöcs", role = "aut"),
     person("João Vitor", "F Cavalcante", role = "ctb"),
     person("Gordon", "Getzinger", role = "ctb"),
     person("Ethan", "Bass", role="ctb"),
-    person("Tamás", "Stirling", email = "stirling.tamas@gmail.com", role = c("ctb", "cre")))
+    person("Tamás", "Stirling", email = "stirling.tamas@gmail.com", 
+           role = c("ctb", "cre"), comment = c(ORCID = "0000-0002-8964-6443")),
+    person("R Consortium", role = "fnd",
+       comment = c("https://r-consortium.org/", ROR = "01z833950")))
 Maintainer: Tamás Stirling <stirling.tamas@gmail.com>
 LazyLoad: yes
 LazyData: yes

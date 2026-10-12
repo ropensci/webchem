@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Tamás Stirling \email{stirling.tamas@gmail.com} [contributor]
+\strong{Maintainer}: Tamás Stirling \email{stirling.tamas@gmail.com} (\href{https://orcid.org/0000-0002-8964-6443}{ORCID}) [contributor]
 
 Authors:
 \itemize{
@@ -37,6 +37,7 @@ Other contributors:
   \item João Vitor F Cavalcante [contributor]
   \item Gordon Getzinger [contributor]
   \item Ethan Bass [contributor]
+  \item R Consortium (\href{https://ror.org/01z833950}{ROR}) (https://r-consortium.org/) [funder]
 }
 
 }
