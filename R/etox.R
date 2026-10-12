@@ -1,7 +1,7 @@
 #' Get ETOX ID
 #'
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality
-#' Targets \url{https://webetox.uba.de/webETOX/index.do} for their substance ID
+#' Targets \url{https://recherche.chemikalieninfo.de/etox} for their substance ID
 #'
 #' @import xml2 httr
 #' @importFrom dplyr bind_rows
@@ -18,8 +18,7 @@
 #' returns \code{NA} if multiple hits are found.
 #' @param verbose logical; print message during processing to console?
 #' @return a tibble with 3 columns: the query, the match, and the etoxID
-#' @note Before using this function, please read the disclaimer
-#' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+#' @note Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 #' @seealso \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and
 #' \code{\link{etox_tests}} for test results.
@@ -138,7 +137,7 @@ get_etoxid <- function(query,
 #' Get basic information from a ETOX ID
 #'
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality
-#' Targets \url{https://webetox.uba.de/webETOX/index.do} for basic information
+#' Targets \url{https://recherche.chemikalieninfo.de/etox} for basic information
 #'
 #' @import xml2
 #' @importFrom rvest html_table
@@ -148,9 +147,7 @@ get_etoxid <- function(query,
 #' @return a list with lists of four entries: cas (the CAS numbers), ec (the EC
 #'   number), gsbl (the gsbl number), a data.frame synonys with synonyms and the
 #'   source url.
-#'
-#' @note Before using this function, please read the disclaimer
-#'   \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+#' @note Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 #'
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
 #'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
@@ -265,7 +262,7 @@ etox_basic <- function(id, verbose = getOption("verbose")) {
 #' Get Quality Targets from a ETOX ID
 #'
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality
-#' Targets \url{https://webetox.uba.de/webETOX/index.do} for quality targets
+#' Targets \url{https://recherche.chemikalieninfo.de/etox} for quality targets
 #'
 #' @import xml2
 #' @importFrom utils read.table
@@ -274,9 +271,7 @@ etox_basic <- function(id, verbose = getOption("verbose")) {
 #'
 #' @return A list of lists of two: \code{res} a data.frame with quality targets
 #'   from the ETOX database, and source_url.
-#'
-#' @note Before using this function, please read the disclaimer
-#'   \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+#' @note Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs,
 #'   \code{\link{etox_basic}} for basic information, \code{\link{etox_targets}}
 #'   for quality targets and \code{\link{etox_tests}} for test results
@@ -367,7 +362,7 @@ etox_targets <- function(id, verbose = getOption("verbose")) {
 #' Get Tests from a ETOX ID
 #'
 #' Query ETOX: Information System Ecotoxicology and Environmental Quality Targets
-#' \url{https://webetox.uba.de/webETOX/index.do} for tests
+#' \url{https://recherche.chemikalieninfo.de/etox} for tests
 #'
 #' @import xml2
 #' @importFrom utils read.table
@@ -375,8 +370,7 @@ etox_targets <- function(id, verbose = getOption("verbose")) {
 #' @param verbose logical; print message during processing to console?
 #'
 #' @return A list of lists of two: A data.frame with test results from the ETOX database and the source_url.
-#' @note Before using this function, please read the disclaimer
-#' \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+#' @note Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 #'
 #' @seealso \code{\link{get_etoxid}} to retrieve ETOX IDs, \code{\link{etox_basic}} for basic information,
 #' \code{\link{etox_targets}} for quality targets and \code{\link{etox_tests}} for test results

@@ -32,11 +32,10 @@ a tibble with 3 columns: the query, the match, and the etoxID
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality
-Targets \url{https://webetox.uba.de/webETOX/index.do} for their substance ID
+Targets \url{https://recherche.chemikalieninfo.de/etox} for their substance ID
 }
 \note{
-Before using this function, please read the disclaimer
-\url{https://webetox.uba.de/webETOX/disclaimer.do}.
+Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 }
 \examples{
 \dontrun{

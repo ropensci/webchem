@@ -17,11 +17,10 @@ A list of lists of two: \code{res} a data.frame with quality targets
 }
 \description{
 Query ETOX: Information System Ecotoxicology and Environmental Quality
-Targets \url{https://webetox.uba.de/webETOX/index.do} for quality targets
+Targets \url{https://recherche.chemikalieninfo.de/etox} for quality targets
 }
 \note{
-Before using this function, please read the disclaimer
-  \url{https://webetox.uba.de/webETOX/disclaimer.do}.
+Terms and Conditions: https://www.chemikalieninfo.de/termsofuse.html
 }
 \examples{
 \dontrun{
