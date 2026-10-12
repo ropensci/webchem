@@ -17,8 +17,8 @@ test_that("fn_percept()", {
   expect_equal(length(c), 3)
 
   expect_equal(a, structure("cocoa, roasted nut, roast beef, medicine",
-                            .Names = "123-32-0"))
+                            names = "123-32-0"))
   expect_equal(b, structure(c("pungent, ether", "cocoa, roasted nut, roast beef, medicine"
-  ), .Names = c("75-07-0", "123-32-0")))
+  ), names = c("75-07-0", "123-32-0")))
   expect_true(is.na(c[[3]]))
 })
