@@ -34,7 +34,7 @@ Imports:
     hoardr,
     xml2,
     httr,
-    rvest,
+    rvest (>= 1.0.0),
     jsonlite,
     stringr,
     methods,

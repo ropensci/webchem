@@ -203,7 +203,7 @@ etox_basic <- function(id, verbose = getOption("verbose")) {
         if (verbose) webchem_message("not_found")
         return(NA)
       }
-      tabs <- try(suppressWarnings(html_table(tt, fill = TRUE)), silent = TRUE)
+      tabs <- try(suppressWarnings(html_table(tt)), silent = TRUE)
       if (inherits(tabs, 'try-error')) {
         webchem_message("not_found")
         return(NA)
