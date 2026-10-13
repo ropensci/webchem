@@ -127,7 +127,4 @@ cir_img(query,
 \code{cir} relies on the great CIR web service created by the CADD
 Group at NCI/NIH! \cr
 \url{https://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
-\url{https://cactus.nci.nih.gov/blog/?cat=10}, \cr
-\url{https://cactus.nci.nih.gov/blog/?p=1386}, \cr
-\url{https://cactus.nci.nih.gov/blog/?p=1456}, \cr
 }

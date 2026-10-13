@@ -96,13 +96,11 @@ CIR can resolve can be of the following \code{identifier}: Chemical Names,
  \itemize{
    \item \code{'name_by_cir'} (Lookup in name index of CIR),
    \item \code{'name_by_opsin'} (Lookup in OPSIN),
-   \item \code{'name_by_chemspider'} (Lookup in ChemSpider,
-   \url{https://cactus.nci.nih.gov/blog/?p=1386}),
+   \item \code{'name_by_chemspider'} (Lookup in ChemSpider),
    \item \code{'smiles'} (Lookup SMILES),
    \item \code{'stdinchikey'}, \code{'stdinchi'} (InChI),
    \item \code{'cas_number'} (CAS Number),
-   \item \code{'name_pattern'} (Google-like pattern search
-   (\url{https://cactus.nci.nih.gov/blog/?p=1456})
+   \item \code{'name_pattern'} (Google-like pattern search)
    Note, that the pattern search can be combined with other resolvers,
    e.g. \code{resolver = 'name_by_chemspider,name_pattern'}.
 
@@ -130,7 +128,4 @@ cir_query(comp, "cas", match = "first")
 \code{cir} relies on the great CIR web service created by the CADD
 Group at NCI/NIH! \cr
 \url{https://cactus.nci.nih.gov/chemical/structure_documentation}, \cr
-\url{https://cactus.nci.nih.gov/blog/?cat=10}, \cr
-\url{https://cactus.nci.nih.gov/blog/?p=1386}, \cr
-\url{https://cactus.nci.nih.gov/blog/?p=1456}, \cr
 }
