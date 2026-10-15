@@ -128,7 +128,10 @@ If you use `webchem` in a publication, please cite our paper:
 
 
 ### Acknowledgements
-Without the fantastic web services `webchem` wouldn't be here. Therefore, kudos to the web service providers and developers! Please remember to acknowledge these data resources in your work using `webchem`.
+
+This work was supported by R Consortium ISC grants in [2019](https://r-consortium.org/all-projects/2019-group-2.html#webchem-accessing-chemical-information-from-the-web) and [2025](https://r-consortium.org/all-projects/2025-group-1.html#enhancing-webchem).
+
+Without the fantastic web services `webchem` wouldn't be here. Therefore, kudos to the web service providers and developers! Please remember to acknowledge these data resources in your work while using `webchem`. 
 
 ### Want to contribute?
 
