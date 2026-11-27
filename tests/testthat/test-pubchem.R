@@ -33,6 +33,9 @@ test_that("get_cid()", {
   #from inchi
   expect_equal(get_cid("InChI=1S/CH5N/c1-2/h2H2,1H3", from = "inchi")$cid,
                "6329")
+  # "+" in a charge or protonation layer must be encoded
+  expect_equal(get_cid("InChI=1S/C5H5N/c1-2-4-6-5-3-1/h1-5H/p+1",
+                       from = "inchi")$cid, "4989215")
   #from inchikey
   expect_equal(get_cid("BPGDAMSIGCZZLK-UHFFFAOYSA-N", from = "inchikey")$cid,
                "12345")

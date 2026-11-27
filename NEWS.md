@@ -1,3 +1,9 @@
+# webchem (development version)
+
+## BUG FIXES
+
+* `get_cid(from = "inchi")` now URL-encodes the InChI it posts to PubChem. A "+" in a charge or protonation layer (e.g. "/p+1") was read as a space, and the query returned `NA`.
+
 # webchem 2.0.0
 
 ## NEW FEATURES
