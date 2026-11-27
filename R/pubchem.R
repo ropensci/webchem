@@ -229,7 +229,10 @@ get_cid <-
         res <- try(httr::RETRY("POST",
                                qurl,
                                user_agent(webchem_url()),
-                               body = paste0("inchi=", query),
+                               body = paste0(
+                                 "inchi=",
+                                 URLencode(as.character(query), reserved = TRUE)
+                               ),
                                terminate_on = 404,
                                quiet = TRUE), silent = TRUE)
       } else {
